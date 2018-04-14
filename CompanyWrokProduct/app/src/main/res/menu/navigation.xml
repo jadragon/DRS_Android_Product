@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_w"
+        android:title="首頁" />
+
+    <item
+        android:id="@+id/navigation_shop"
+        android:icon="@drawable/ic_shop_w"
+        android:title="購物" />
+    <item
+        android:id="@+id/navigation_my_favor"
+        android:icon="@drawable/ic_my_favor_w"
+        android:title="喜好紀錄" />
+    <item
+        android:id="@+id/navigation_member"
+        android:icon="@drawable/ic_member_w"
+        android:title="會員中心" />
+
+
+</menu>
