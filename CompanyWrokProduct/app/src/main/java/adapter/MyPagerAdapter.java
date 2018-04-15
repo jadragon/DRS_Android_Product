@@ -1,5 +1,6 @@
 package adapter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.json.JSONObject;
 
@@ -33,10 +37,16 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
     TimerTask task;
     Timer timer;
     JSONObject json;
-    public MyPagerAdapter( JSONObject json, final ViewPager viewPager, TextView... dot) {
+    Context ctx;
+    ImageLoader imageLoader;
+    ImageView imageView;
+
+    public MyPagerAdapter(Context ctx, ImageLoader imageLoader, JSONObject json, final ViewPager viewPager, TextView... dot) {
         this.json = json;
         this.dot = dot;
+        this.ctx = ctx;
         this.viewPager = viewPager;
+        this.imageLoader = imageLoader;
         getImageView();
         handler = new Handler();
         runnable = new Runnable() {
@@ -56,23 +66,30 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         timer.schedule(task, 4000, 4000);
         viewPager.addOnPageChangeListener(new MyPagerAdapter.MyPageChangeListener());
     }
-public void getImageView(){
 
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            ArrayList<Map<String, String>> bitmaps= ResolveJsonData.getJSONData(json);
-            String[] urls=new String[bitmaps.size()];
-            for(int i=0;i<bitmaps.size();i++) {
-                urls[i] = bitmaps.get(i).get("image");
-                ArrayList<Bitmap> bimaps = GetBitmap.getBitmaps(urls);
+    public void getImageView() {
+        ArrayList<Map<String, String>> bitmaps = ResolveJsonData.getJSONData(json);
+        mListViews = new ArrayList<>();
+        for (int i = 0; i < bitmaps.size(); i++) {
 
-            }
+            imageLoader.loadImage(bitmaps.get(i).get("image"), new SimpleImageLoadingListener() {
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view,
+                                              Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+                    imageView = new ImageView(ctx);
+                    mListViews.add(imageView);
+                    imageView.setImageBitmap(loadedImage);
+
+                }
+
+            });
 
         }
-    }).start();
 
-}
+    }
+
     @Override
     public int getCount() {
         return Integer.MAX_VALUE;
@@ -91,7 +108,6 @@ public void getImageView(){
     @Override
     public void finishUpdate(ViewGroup container) {
     }
-
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
@@ -122,7 +138,6 @@ public void getImageView(){
         }
         return null;
 
-
     }
 
     @Override
@@ -136,9 +151,8 @@ public void getImageView(){
 
     @Override
     public void startUpdate(ViewGroup container) {
-        Log.e("startUpdate", "startUpdate");
+        //Log.e("startUpdate", "startUpdate");
     }
-
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -203,7 +217,7 @@ public void getImageView(){
                     break;
 
             }
-            Log.e("onPageSelected", "onPageSelected");
+            //Log.e("onPageSelected", "onPageSelected");
         }
 
         @Override
@@ -211,8 +225,8 @@ public void getImageView(){
 
         }
 
-
     }
+
     public void setFilter(JSONObject json) {
         notifyDataSetChanged();
 
