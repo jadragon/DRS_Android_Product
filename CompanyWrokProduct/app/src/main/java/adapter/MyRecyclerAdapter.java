@@ -11,21 +11,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.R;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Map;
-
-import library.GetBitmap;
 import library.ResolveJsonData;
 
-public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder> {
+public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.RecycleHolder> {
     private Context ctx;
     int type;
     int layout_width, layout_heigh;
@@ -34,13 +29,12 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder>
     ArrayList<Map<String, String>> list;
     DisplayMetrics dm;
     Bitmap[] images;
-    TestAdapter.RecycleHolder recycleHolder;
+    MyRecyclerAdapter.RecycleHolder recycleHolder;
     LinearLayout.LayoutParams layoutParams;
-    ImageLoader imageLoader;
-    public TestAdapter(Context ctx, JSONObject json,ImageLoader imageLoader, int layout_width, int layout_heigh, int type) {
+
+    public MyRecyclerAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int type) {
         this.json = json;
         this.ctx = ctx;
-        this.imageLoader = imageLoader;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
         this.type = type;
@@ -51,9 +45,9 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder>
     }
 
     @Override
-    public TestAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_home, parent, false);
-        recycleHolder = new TestAdapter.RecycleHolder(ctx, view, json,imageLoader);
+        recycleHolder = new MyRecyclerAdapter.RecycleHolder(ctx, view, json);
         return recycleHolder;
     }
 
@@ -75,7 +69,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder>
         if (images[position] != null) {
             holder.imageView.setImageBitmap(images[position]);
         } else {
-            holder.imageLoader.loadImage(list.get(position).get("image"), new SimpleImageLoadingListener() {
+
+            ImageLoader.getInstance().loadImage(list.get(position).get("image"), new SimpleImageLoadingListener() {
 
                 @Override
                 public void onLoadingComplete(String imageUri, View view,
@@ -86,24 +81,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder>
                 }
 
             });
-            /*
-            new Thread(
-                    runnable=new Runnable() {
-                @Override
-                public void run() {
-                    bitmap= GetBitmap.getBitmap(list.get(position).get("image"));
-                    images[position] = bitmap;
-                    holder.imageView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.imageView.setImageBitmap(images[position]);
 
-                        }
-                    });
-
-                }
-           }).start();
-           */
         }
 
         holder.tv1.setText(list.get(position).get("title"));
@@ -120,13 +98,12 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder>
         TextView tv1;
         Context ctx;
         JSONObject json;
-        ImageLoader imageLoader;
 
-        public RecycleHolder(Context ctx, View view, JSONObject json,ImageLoader imageLoader) {
+        public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
             this.json = json;
             this.ctx = ctx;
-            this.imageLoader = imageLoader;
+
             frameLayout = view.findViewById(R.id.frame_layout);
             imageView = view.findViewById(R.id.imView);
             tv1 = view.findViewById(R.id.tV1);
@@ -136,6 +113,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.RecycleHolder>
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
+            Toast.makeText(ctx, ""+list.get(position).get("title"), Toast.LENGTH_SHORT).show();
         }
 
     }

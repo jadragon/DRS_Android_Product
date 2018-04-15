@@ -1,7 +1,7 @@
 package adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -13,19 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
+import com.test.tw.wrokproduct.R;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import library.GetBitmap;
 import library.ResolveJsonData;
 
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
@@ -38,15 +34,25 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
     Timer timer;
     JSONObject json;
     Context ctx;
-    ImageLoader imageLoader;
     ImageView imageView;
+    ArrayList<Map<String, String>> bitmaps;
 
-    public MyPagerAdapter(Context ctx, ImageLoader imageLoader, JSONObject json, final ViewPager viewPager, TextView... dot) {
+    public MyPagerAdapter(final Context ctx, JSONObject json) {
         this.json = json;
-        this.dot = dot;
         this.ctx = ctx;
-        this.viewPager = viewPager;
-        this.imageLoader = imageLoader;
+        dot = new TextView[3];
+/*
+   View view = View.inflate(ctx, R.layout.viewitem_homeheader, null);
+        dot[0] = view.findViewById(R.id.dot1);
+        dot[1] = view.findViewById(R.id.dot2);
+        dot[2] = view.findViewById(R.id.dot3);
+
+        */
+        dot[0] = ((Activity) ctx).findViewById(R.id.dot1);
+        dot[1] = ((Activity) ctx).findViewById(R.id.dot2);
+        dot[2] = ((Activity) ctx).findViewById(R.id.dot3);
+
+        viewPager = ((Activity) ctx).findViewById(R.id.adView);
         getImageView();
         handler = new Handler();
         runnable = new Runnable() {
@@ -55,6 +61,10 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
             }
         };
+        viewPager.addOnPageChangeListener(new MyPagerAdapter.MyPageChangeListener());
+    }
+
+    private void initTimer() {
         timer = new Timer(true);
         task = new TimerTask() {
             @Override
@@ -64,30 +74,19 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
             }
         };
         timer.schedule(task, 4000, 4000);
-        viewPager.addOnPageChangeListener(new MyPagerAdapter.MyPageChangeListener());
     }
 
     public void getImageView() {
-        ArrayList<Map<String, String>> bitmaps = ResolveJsonData.getJSONData(json);
+        bitmaps = ResolveJsonData.getJSONData(json);
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {
-
-            imageLoader.loadImage(bitmaps.get(i).get("image"), new SimpleImageLoadingListener() {
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view,
-                                              Bitmap loadedImage) {
-                    super.onLoadingComplete(imageUri, view, loadedImage);
-                    imageView = new ImageView(ctx);
-                    mListViews.add(imageView);
-                    imageView.setImageBitmap(loadedImage);
-
-                }
-
-            });
+            imageView = new ImageView(ctx);
+            imageView.setTag(i);
+            ImageLoader.getInstance().displayImage(bitmaps.get(i).get("image"), imageView);
+            mListViews.add(imageView);
 
         }
-
+        initTimer();
     }
 
     @Override
@@ -166,25 +165,15 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
                 break;
             case MotionEvent.ACTION_UP:
                 Log.e("ACTION_UP", "ACTION_UP");
-                timer = new Timer(true);
-                task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(runnable);
-                    }
-                };
-                timer.schedule(task, 4000, 4000);
+                int position = (int) view.getTag();
+
+                Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
+
+                initTimer();
                 break;
             case MotionEvent.ACTION_CANCEL:
                 Log.e("ACTION_CANCEL", "ACTION_CANCEL");
-                timer = new Timer(true);
-                task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(runnable);
-                    }
-                };
-                timer.schedule(task, 4000, 4000);
+                initTimer();
                 break;
         }
 
@@ -199,25 +188,21 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         @Override
         public void onPageSelected(int position) {
             position = position % mListViews.size();
+            dot[0].setTextColor(Color.BLACK);
+            dot[1].setTextColor(Color.BLACK);
+            dot[2].setTextColor(Color.BLACK);
             switch (position) {
                 case 0:
                     dot[0].setTextColor(Color.WHITE);
-                    dot[1].setTextColor(Color.BLACK);
-                    dot[2].setTextColor(Color.BLACK);
                     break;
                 case 1:
-                    dot[0].setTextColor(Color.BLACK);
                     dot[1].setTextColor(Color.WHITE);
-                    dot[2].setTextColor(Color.BLACK);
                     break;
                 case 2:
-                    dot[0].setTextColor(Color.BLACK);
-                    dot[1].setTextColor(Color.BLACK);
                     dot[2].setTextColor(Color.WHITE);
                     break;
 
             }
-            //Log.e("onPageSelected", "onPageSelected");
         }
 
         @Override

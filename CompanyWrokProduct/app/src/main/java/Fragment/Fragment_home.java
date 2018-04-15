@@ -17,20 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.test.tw.wrokproduct.R;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import adapter.MyPagerAdapter;
-import adapter.TestAdapter;
+import adapter.MyRecyclerAdapter;
 import library.GetInformationByPHP;
 
 /**
@@ -40,8 +36,7 @@ import library.GetInformationByPHP;
 public class Fragment_home extends Fragment {
     DisplayMetrics dm;
     List<ImageView> list;
-    View include;
-    TextView dot1, dot2, dot3;
+    RelativeLayout relativeLayout;
     ViewPager viewPager;
     Runnable runnable;
     ScrollView mainScrollView;
@@ -50,8 +45,8 @@ public class Fragment_home extends Fragment {
     SwipeRefreshLayout mSwipeLayout;
     RecyclerView recyclerView, recyclerView2, recyclerView3;
     JSONObject json, json1, json2, json3;
-    TestAdapter testAdapter1, testAdapter2, testAdapter3;
-    ImageLoader imageLoader;
+    MyRecyclerAdapter myRecyclerAdapter1, myRecyclerAdapter2, myRecyclerAdapter3;
+    ImageLoaderConfiguration config;
 
     @Nullable
     @Override
@@ -60,9 +55,48 @@ public class Fragment_home extends Fragment {
         getID(v);
         init();
         initSwipeLayout();
-        getAllImage();
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+        initViewPagerAndRecyclerView();
+        config = new ImageLoaderConfiguration
+                .Builder(getActivity())
+                .memoryCacheExtraOptions(480, 800) //保存每個緩存圖片的最大寬高
+                .threadPriority(Thread.NORM_PRIORITY - 2) //線池中的緩存數
+                .denyCacheImageMultipleSizesInMemory() //禁止緩存多張圖片
+                //               .memoryCache(new FIFOLimitedMemoryCache(2 * 1024 * 1024))//缓存策略
+//                .memoryCacheSize(50 * 1024 * 1024) //設置內存緩存的大小
+                //              .diskCacheFileNameGenerator(new Md5FileNameGenerator()) //缓存文件名的保存方式
+//                .diskCacheSize(200 * 1024 * 1024) //緩存大小
+                //             .tasksProcessingOrder(QueueProcessingType.LIFO) //工作序列
+                .diskCacheFileCount(200) //緩存的文件數量
+                .build();
+        if (!ImageLoader.getInstance().isInited()) {//偵測如果imagloader已經init，就不再init
+            ImageLoader.getInstance().init(config);
+        }
+        //  ImageLoader.getInstance().displayImage(url, imageView, ImageUsing);
+
+//    UsingFreqLimitedMemoryCache（如果緩存的圖片總量超過限定值，先刪除使用頻率最小的bitmap）
+//    LRULimitedMemoryCache（這個也是使用的lru算法，和LruMemoryCache不同的是，他緩存的是bitmap的弱引用）
+//    FIFOLimitedMemoryCache（先進先出的緩存策略，當超過設定值，先刪除最先加入緩存的bitmap）
+//    LargestLimitedMemoryCache(當超過緩存限定值，先刪除最大的bitmap對象)
+//    LimitedAgeMemoryCache（當bitmap加入緩存中的時間超過我們設定的值，將其刪除）
+
+//    Universal-Image-Loader的硬盤緩存策略
+//    詳細的硬盤緩存策略可以移步：http://blog.csdn.net/xiaanming/article/details/27525741，下方是總結的結果：
+
+//    FileCountLimitedDiscCache（可以設定緩存圖片的個數，當超過設定值，刪除掉最先加入到硬盤的文件）
+//    LimitedAgeDiscCache（設定文件存活的最長時間，當超過這個值，就刪除該文件）
+//    TotalSizeLimitedDiscCache（設定緩存bitmap的最大值，當超過這個值，刪除最先加入到硬盤的文件）
+//    UnlimitedDiscCache（這個緩存類沒有任何的限制）
+
+//    DisplayImageOptions ImageUsing = new DisplayImageOptions.Builder()
+//            .showImageOnLoading(R.drawable.loading)//圖片還沒下載好時跑的臨時圖片
+//            .showImageForEmptyUri(R.drawable.loading)
+//            .showImageOnFail(R.drawable.loading).cacheInMemory(true)//緩存
+//            .cacheOnDisc(true).bitmapConfig(Bitmap.Config.RGB_565)
+//            .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+//            .build();
+
+//.showImageOnLoading(R.drawable.loading)//圖片還沒下載好時跑的臨時圖片
+//.showImageOnFail(R.drawable.loading)//圖片讀取失敗時跑的臨時圖片
 
         return v;
     }
@@ -81,9 +115,9 @@ public class Fragment_home extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                testAdapter1.setFilter(json1);
-                                testAdapter2.setFilter(json2);
-                                testAdapter3.setFilter(json3);
+                                myRecyclerAdapter1.setFilter(json1);
+                                myRecyclerAdapter2.setFilter(json2);
+                                myRecyclerAdapter3.setFilter(json3);
                                 mSwipeLayout.setRefreshing(false);// 結束更新動畫
                             }
                         });
@@ -95,7 +129,7 @@ public class Fragment_home extends Fragment {
         });
     }
 
-    private void getAllImage() {
+    private void initViewPagerAndRecyclerView() {
 
         new Thread(new Runnable() {
             @Override
@@ -114,8 +148,8 @@ public class Fragment_home extends Fragment {
                             public void run() {
                                 //高度等比縮放[   圖片高度/(圖片寬度/手機寬度)    ]
                                 // float real_heigh = bitmaps1.get(0).getImage().getHeight() / (bitmaps1.get(0).getImage().getWidth() / (float) dm.widthPixels);
-                                include.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, real_heigh));
-                                myPagerAdapter = new MyPagerAdapter(getActivity(), imageLoader, json, viewPager, dot1, dot2, dot3);
+                                relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, real_heigh));
+                                myPagerAdapter = new MyPagerAdapter(getActivity(), json);
                                 viewPager.setAdapter(myPagerAdapter);
                             }
                         });
@@ -135,11 +169,11 @@ public class Fragment_home extends Fragment {
 
                                 //recycleView
                                 real_heigh = (int) ((dm.widthPixels - 40 * dm.density) / (float) 3.5);
-                                testAdapter1 = new TestAdapter(getActivity(), json1, imageLoader, real_heigh, real_heigh * 3 / 4, 0);
+                                myRecyclerAdapter1 = new MyRecyclerAdapter(getActivity(), json1, real_heigh, real_heigh * 3 / 4, 0);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                                 recyclerView.setLayoutManager(layoutManager);
-                                recyclerView.setAdapter(testAdapter1);
+                                recyclerView.setAdapter(myRecyclerAdapter1);
                             }
                         });
                     }
@@ -156,11 +190,11 @@ public class Fragment_home extends Fragment {
                             @Override
                             public void run() {
                                 real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 3.5);
-                                testAdapter2 = new TestAdapter(getActivity(), json2, imageLoader, real_heigh, dm.widthPixels / 4, 1);
+                                myRecyclerAdapter2 = new MyRecyclerAdapter(getActivity(), json2, real_heigh, dm.widthPixels / 4, 1);
                                 GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
                                 layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
                                 recyclerView2.setLayoutManager(layoutManager);
-                                recyclerView2.setAdapter(testAdapter2);
+                                recyclerView2.setAdapter(myRecyclerAdapter2);
                             }
                         });
                     }
@@ -177,11 +211,11 @@ public class Fragment_home extends Fragment {
                             @Override
                             public void run() {
                                 real_heigh = (int) ((dm.widthPixels - 25 * dm.density) / (float) 4);
-                                testAdapter3 = new TestAdapter(getActivity(), json3, imageLoader, real_heigh, real_heigh / 4 * 3, 2);
+                                myRecyclerAdapter3 = new MyRecyclerAdapter(getActivity(), json3, real_heigh, real_heigh / 4 * 3, 2);
                                 GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
                                 layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
                                 recyclerView3.setLayoutManager(layoutManager);
-                                recyclerView3.setAdapter(testAdapter3);
+                                recyclerView3.setAdapter(myRecyclerAdapter3);
 
                             }
                         });
@@ -223,10 +257,7 @@ public class Fragment_home extends Fragment {
         recyclerView2 = v.findViewById(R.id.reView2);
         recyclerView3 = v.findViewById(R.id.reView3);
         viewPager = v.findViewById(R.id.adView);
-        include = v.findViewById(R.id.RelateView);
-        dot1 = v.findViewById(R.id.dot1);
-        dot2 = v.findViewById(R.id.dot2);
-        dot3 = v.findViewById(R.id.dot3);
+        relativeLayout = v.findViewById(R.id.RelateView);
     }
 
 }
