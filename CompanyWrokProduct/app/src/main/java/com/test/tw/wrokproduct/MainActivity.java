@@ -7,18 +7,25 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ScrollView;
+
 import Fragment.Fragment_home;
 import library.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
     ScrollView mainScrollView;
     BottomNavigationView navigation;
+    FragmentManager fm = getSupportFragmentManager();
+    FragmentTransaction ft = fm.beginTransaction();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+        ft.add(R.id.content_layout, new Fragment_home(), "fh");
+        ft.commit();
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
 
@@ -32,16 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        Fragment_home fh = new Fragment_home();
-                        ft.replace(R.id.content_layout, fh);
+                        ft.show(fm.findFragmentByTag("fh"));
                         ft.commit();
                         return true;
                     case R.id.navigation_shop:
-
+                        ft.hide(fm.findFragmentByTag("fh"));
+                        ft.commit();
                         return true;
                     case R.id.navigation_my_favor:
 
@@ -55,8 +61,37 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        navigation.setSelectedItemId(R.id.navigation_home);
+        //  navigation.setSelectedItemId(R.id.navigation_home);
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e("onStop","onStop");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e("onStart","onStart");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("onPause","onPause");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("onRestart","onRestart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("onResume","onResume");
+    }
 }
