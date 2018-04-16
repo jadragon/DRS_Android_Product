@@ -12,35 +12,41 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import library.ResolveJsonData;
 
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
     private List<ImageView> mListViews;
-    private TextView[] dot;
+    private List<TextView> dots;
     Handler handler;
     Runnable runnable;
     ViewPager viewPager;
     TimerTask task;
     Timer timer;
-    JSONObject json;
     Context ctx;
     ImageView imageView;
     ArrayList<Map<String, String>> bitmaps;
+    LinearLayout linearLayout;
+    TextView textView;
+    private int mChildCount = 0;
+    View view;
 
     public MyPagerAdapter(final Context ctx, JSONObject json) {
-        this.json = json;
         this.ctx = ctx;
-        dot = new TextView[3];
 /*
    View view = View.inflate(ctx, R.layout.viewitem_homeheader, null);
         dot[0] = view.findViewById(R.id.dot1);
@@ -48,12 +54,14 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         dot[2] = view.findViewById(R.id.dot3);
 
         */
+/*
         dot[0] = ((Activity) ctx).findViewById(R.id.dot1);
         dot[1] = ((Activity) ctx).findViewById(R.id.dot2);
         dot[2] = ((Activity) ctx).findViewById(R.id.dot3);
-
+*/
         viewPager = ((Activity) ctx).findViewById(R.id.adView);
-        getImageView();
+        getImageView(json);
+        initDot();
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -76,7 +84,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         timer.schedule(task, 4000, 4000);
     }
 
-    public void getImageView() {
+    public void getImageView(JSONObject json) {
         bitmaps = ResolveJsonData.getJSONData(json);
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {
@@ -87,6 +95,28 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
         }
         initTimer();
+    }
+
+    private void initDot() {
+        dots = new ArrayList<>();
+        linearLayout = ((Activity) ctx).findViewById(R.id.dot_layout);
+        linearLayout.removeAllViews();
+        //添加第一個dot
+        textView = new TextView(ctx);
+        textView.setText(".");
+        textView.setTextSize(50);
+        textView.setTextColor(Color.WHITE);
+        linearLayout.addView(textView);
+        dots.add(textView);
+        //添加後面的dots
+        for (int i = 0; i < bitmaps.size() - 1; i++) {
+            textView = new TextView(ctx);
+            textView.setText(".");
+            textView.setTextSize(50);
+            textView.setTextColor(Color.BLACK);
+            linearLayout.addView(textView);
+            dots.add(textView);
+        }
     }
 
     @Override
@@ -127,7 +157,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         */
         if (mListViews.size() > 0) {
             //position % view.size()是指虚拟的position会在[0，view.size()）之间循环
-            View view = mListViews.get(position % mListViews.size());
+           view = mListViews.get(position % mListViews.size());
             if (container.equals(view.getParent())) {
                 container.removeView(view);
             }
@@ -188,21 +218,10 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         @Override
         public void onPageSelected(int position) {
             position = position % mListViews.size();
-            dot[0].setTextColor(Color.BLACK);
-            dot[1].setTextColor(Color.BLACK);
-            dot[2].setTextColor(Color.BLACK);
-            switch (position) {
-                case 0:
-                    dot[0].setTextColor(Color.WHITE);
-                    break;
-                case 1:
-                    dot[1].setTextColor(Color.WHITE);
-                    break;
-                case 2:
-                    dot[2].setTextColor(Color.WHITE);
-                    break;
-
+            for (int i = 0; i < mListViews.size(); i++) {
+                dots.get(i).setTextColor(Color.BLACK);
             }
+            dots.get(position).setTextColor(Color.WHITE);
         }
 
         @Override
@@ -212,9 +231,29 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
     }
 
-    public void setFilter(JSONObject json) {
-        notifyDataSetChanged();
+    /**
+     * 覆盖getItemPosition()方法，当调用notifyDataSetChanged时，让getItemPosition方法人为的返回POSITION_NONE，从而达到强迫viewpager重绘所有item的目的。
+     */
+    @Override
+    public void notifyDataSetChanged() {
+        mChildCount = getCount();
+        super.notifyDataSetChanged();
+    }
 
+    @Override
+    public int getItemPosition(Object object) {
+        if (mChildCount > 0) {
+            mChildCount--;
+            return POSITION_NONE;
+        }
+        return super.getItemPosition(object);
+    }
+
+    public void setFilter(JSONObject json) {
+        timer.cancel();
+        getImageView(json);
+        initDot();
+        notifyDataSetChanged();
     }
 
 }

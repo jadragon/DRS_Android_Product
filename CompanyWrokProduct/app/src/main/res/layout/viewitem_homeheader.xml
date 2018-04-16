@@ -18,6 +18,7 @@
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
+        android:id="@+id/dot_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -25,34 +26,6 @@
         android:layout_marginBottom="1sp"
         android:orientation="horizontal"
         android:paddingBottom="1dp">
-
-        <TextView
-            android:id="@+id/dot1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="."
-            android:textColor="#FFFFFF"
-            android:textSize="50sp" />
-
-        <TextView
-            android:id="@+id/dot2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="."
-            android:textColor="#000000"
-            android:textSize="50sp" />
-
-        <TextView
-            android:id="@+id/dot3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="."
-            android:textColor="#000000"
-            android:textSize="50sp" />
-
 
     </LinearLayout>
 </RelativeLayout>

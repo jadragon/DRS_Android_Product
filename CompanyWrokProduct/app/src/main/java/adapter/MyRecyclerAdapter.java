@@ -12,12 +12,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.R;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Map;
+
 import library.ResolveJsonData;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.RecycleHolder> {
@@ -78,6 +82,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
                     super.onLoadingComplete(imageUri, view, loadedImage);
                     images[position] = loadedImage;
                     holder.imageView.setImageBitmap(loadedImage);
+
                 }
 
             });
@@ -113,7 +118,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Toast.makeText(ctx, ""+list.get(position).get("title"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "" + list.get(position).get("title"), Toast.LENGTH_SHORT).show();
         }
 
     }

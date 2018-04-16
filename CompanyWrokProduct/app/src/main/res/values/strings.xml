@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WrokProduct</string>
+    <string-array name="shop_header_title">
+        <item>每日新品</item>
+        <item>熱門商品</item>
+        <item>價格由低至高</item>
+        <item>價格由高至低</item>
+    </string-array>
 </resources>

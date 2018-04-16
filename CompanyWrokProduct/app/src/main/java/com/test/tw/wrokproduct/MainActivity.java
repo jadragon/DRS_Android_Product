@@ -4,50 +4,48 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ScrollView;
 
 import Fragment.Fragment_home;
+import Fragment.Fragment_shop;
 import library.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
-    ScrollView mainScrollView;
-    BottomNavigationView navigation;
-    FragmentManager fm = getSupportFragmentManager();
-    FragmentTransaction ft = fm.beginTransaction();
-
+    private Fragment_home fragment_home;
+    private Fragment_shop fragment_shop;
+    private Fragment[] fragments;
+    private int lastShowFragment = 0;
+    BottomNavigationView  navigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        ft.add(R.id.content_layout, new Fragment_home(), "fh");
-        ft.commit();
+        initFragments();
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
 
     }
 
     protected void initBtnNav() {//BottomLayout
-        navigation = findViewById(R.id.tab_layout);
+       navigation = findViewById(R.id.tab_layout);
         new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
 
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {//監聽事件
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentTransaction ft = fm.beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        ft.show(fm.findFragmentByTag("fh"));
-                        ft.commit();
+                        switchFrament(lastShowFragment,0);
+                        lastShowFragment=0;
                         return true;
                     case R.id.navigation_shop:
-                        ft.hide(fm.findFragmentByTag("fh"));
-                        ft.commit();
+                        switchFrament(lastShowFragment,1);
+                        lastShowFragment=1;
                         return true;
                     case R.id.navigation_my_favor:
 
@@ -68,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
         Log.e("onStop","onStop");
     }
 
@@ -93,5 +92,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.e("onResume","onResume");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("onDestroy","onDestroy");
+    }
+    /**
+     * 切换Fragment
+     *
+     * @param lastIndex 上个显示Fragment的索引
+     * @param index     需要显示的Fragment的索引
+     */
+    public void switchFrament(int lastIndex, int index) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.hide(fragments[lastIndex]);
+        if (!fragments[index].isAdded()) {
+            transaction.add(R.id.content_layout, fragments[index]);
+        }
+        transaction.show(fragments[index]).commitAllowingStateLoss();
+    }
+
+    private void initFragments() {
+        fragment_home = new Fragment_home();
+        fragment_shop = new Fragment_shop();
+        fragments = new Fragment[]{fragment_home, fragment_shop};
+        lastShowFragment = 0;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.content_layout, fragment_home)
+                .show(fragment_home)
+                .commit();
     }
 }
