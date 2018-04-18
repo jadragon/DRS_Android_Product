@@ -3,27 +3,21 @@ package adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import Fragment.Fragment_home;
-import Fragment.Fragment_shop;
+import android.view.ViewGroup;
 
 public class ShopViewPagerAdapter  extends FragmentPagerAdapter {
 
-
-    public ShopViewPagerAdapter(FragmentManager fm) {
+    private String[] mTabtitle;
+    private Fragment[] fragments;
+    public ShopViewPagerAdapter(FragmentManager fm, String[] mTabtitle,Fragment[] fragments) {
         super(fm);
+        this.mTabtitle=mTabtitle;
+        this.fragments=fragments;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
-            case 0:
-                return new Fragment_home();
-            case 1:
-                return new Fragment_shop();
-            default:
-                return null;
-        }
+        return  fragments[position];
     }
 
     @Override
@@ -33,6 +27,16 @@ public class ShopViewPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return mTabtitle.length;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return this.mTabtitle[position];
     }
 }

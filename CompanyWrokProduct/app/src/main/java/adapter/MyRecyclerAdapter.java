@@ -42,7 +42,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
         this.type = type;
-        list = ResolveJsonData.getJSONData(json);
+        list = ResolveJsonData.getJSONData1(json);
         images = new Bitmap[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
 

@@ -13,12 +13,11 @@
         android:gravity="center"
         android:text="購物" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/shop_header_recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="25dp">
-
-    </android.support.v7.widget.RecyclerView>
+   <android.support.design.widget.TabLayout
+       android:id="@+id/shop_header_tablayout"
+       android:layout_width="match_parent"
+       android:layout_height="25dp"
+       />
 
    <android.support.v4.view.ViewPager
        android:id="@+id/shop_viewpager"

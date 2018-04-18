@@ -12,7 +12,7 @@ private static final String slider_url= "http://api.gok1945.com/main/index/slide
     private static final String hotkeywords_url= "http://api.gok1945.com/main/index/hotkeywords.php";
     private static final String ptype_url= "http://api.gok1945.com/main/index/ptype.php";
     private static final String brands_url= "http://api.gok1945.com/main/index/brands.php";
-
+    private static final String iplist_url= "http://api.gok1945.com/main/index/iplist.php";
     private  JSONParser jsonParser;
     List<NameValuePair> params;
     public GetInformationByPHP() {
@@ -21,7 +21,42 @@ private static final String slider_url= "http://api.gok1945.com/main/index/slide
         params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
         params.add(new BasicNameValuePair("lang", "0"));
     }
+    /*
+public JSONObject test() {
+    StringRequest stringRequest = new StringRequest(Request.Method.PUT,
+            slider_url, new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            try {
+                myJsonObject = new JSONObject(response);
+                Toast.makeText(ctx, "" + myJsonObject, Toast.LENGTH_SHORT).show();
+                Log.d("Response", response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // error
+            Log.d("Error.Response", "" + error);
+        }
+    }) {
 
+        @Override
+        protected Map<String, String> getParams() {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("gok", "Dr@_K4y51G2A0w26B8OWkfQ==");
+            params.put("lang", "0");
+
+            return params;
+        }
+
+    };
+    MySingleton.getInstance(ctx).addToRequestQue(stringRequest);
+    return myJsonObject;
+}
+*/
     /**
      *取得廣告欄資料
      * */
@@ -45,5 +80,13 @@ private static final String slider_url= "http://api.gok1945.com/main/index/slide
      * */
     public JSONObject getBrands() {
         return  jsonParser.getJSONFromUrl(brands_url, params);
+    }
+    /**
+     *取得每日新品欄資料
+     * */
+    public JSONObject getIplist(int type,int page) {
+        params.add(new BasicNameValuePair("type", ""+type));
+        params.add(new BasicNameValuePair("page", "0"+page));
+        return  jsonParser.getJSONFromUrl(iplist_url, params);
     }
 }

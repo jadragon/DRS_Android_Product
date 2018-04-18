@@ -3,7 +3,6 @@ package adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -32,10 +31,7 @@ import library.ResolveJsonData;
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
     private List<ImageView> mListViews;
     private List<TextView> dots;
-    Handler handler;
-    Runnable runnable;
     ViewPager viewPager;
-    TimerTask task;
     Timer timer;
     Context ctx;
     ImageView imageView;
@@ -45,8 +41,8 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
     private int mChildCount = 0;
     View view;
 
-    public MyPagerAdapter(final Context ctx, JSONObject json) {
-        this.ctx = ctx;
+    public MyPagerAdapter(View  view, JSONObject json) {
+        this.view = view;
 /*
    View view = View.inflate(ctx, R.layout.viewitem_homeheader, null);
         dot[0] = view.findViewById(R.id.dot1);
@@ -59,36 +55,33 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         dot[1] = ((Activity) ctx).findViewById(R.id.dot2);
         dot[2] = ((Activity) ctx).findViewById(R.id.dot3);
 */
-        viewPager = ((Activity) ctx).findViewById(R.id.adView);
+        viewPager = view.findViewById(R.id.adView);
         getImageView(json);
         initDot();
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-            }
-        };
         viewPager.addOnPageChangeListener(new MyPagerAdapter.MyPageChangeListener());
     }
 
     private void initTimer() {
-        timer = new Timer(true);
-        task = new TimerTask() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
-                handler.post(runnable);
+                ((Activity)view.getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                    }
+                });
+
             }
-        };
-        timer.schedule(task, 4000, 4000);
+        }, 4000, 4000);
     }
 
     public void getImageView(JSONObject json) {
-        bitmaps = ResolveJsonData.getJSONData(json);
+        bitmaps = ResolveJsonData.getJSONData1(json);
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {
-            imageView = new ImageView(ctx);
+            imageView = new ImageView(view.getContext());
             imageView.setTag(i);
             ImageLoader.getInstance().displayImage(bitmaps.get(i).get("image"), imageView);
             mListViews.add(imageView);
@@ -99,10 +92,10 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
     private void initDot() {
         dots = new ArrayList<>();
-        linearLayout = ((Activity) ctx).findViewById(R.id.dot_layout);
+        linearLayout = view.findViewById(R.id.dot_layout);
         linearLayout.removeAllViews();
         //添加第一個dot
-        textView = new TextView(ctx);
+        textView = new TextView(view.getContext());
         textView.setText(".");
         textView.setTextSize(50);
         textView.setTextColor(Color.WHITE);
@@ -110,7 +103,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         dots.add(textView);
         //添加後面的dots
         for (int i = 0; i < bitmaps.size() - 1; i++) {
-            textView = new TextView(ctx);
+            textView = new TextView(view.getContext());
             textView.setText(".");
             textView.setTextSize(50);
             textView.setTextColor(Color.BLACK);
@@ -128,7 +121,6 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
     public boolean isViewFromObject(View view, Object object) {
         return view == (object);
     }
-
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         //container.removeView(mListViews.get(position));
@@ -155,9 +147,10 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         container.addView(view);
         return view;
         */
+
         if (mListViews.size() > 0) {
             //position % view.size()是指虚拟的position会在[0，view.size()）之间循环
-           view = mListViews.get(position % mListViews.size());
+            View view = mListViews.get(position % mListViews.size());
             if (container.equals(view.getParent())) {
                 container.removeView(view);
             }
@@ -185,7 +178,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        timer.cancel();
+       timer.cancel();
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.e("ACTION_DOWN", "ACTION_DOWN");
@@ -199,7 +192,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
                 Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
 
-                initTimer();
+               initTimer();
                 break;
             case MotionEvent.ACTION_CANCEL:
                 Log.e("ACTION_CANCEL", "ACTION_CANCEL");

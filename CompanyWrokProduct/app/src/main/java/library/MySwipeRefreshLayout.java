@@ -21,7 +21,6 @@ public class MySwipeRefreshLayout extends SwipeRefreshLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-
         final int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
