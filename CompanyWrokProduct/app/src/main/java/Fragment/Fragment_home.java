@@ -116,7 +116,7 @@ public class Fragment_home extends Fragment {
                             public void run() {
                                 //高度等比縮放[   圖片高度/(圖片寬度/手機寬度)    ]
                                 // float real_heigh = bitmaps1.get(0).getImage().getHeight() / (bitmaps1.get(0).getImage().getWidth() / (float) dm.widthPixels);
-                                relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, real_heigh));
+                                relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels*19/54));
                                 Log.e("real_heigh",""+real_heigh);
                                 myPagerAdapter = new MyPagerAdapter(v, json);
                                 viewPager.setAdapter(myPagerAdapter);

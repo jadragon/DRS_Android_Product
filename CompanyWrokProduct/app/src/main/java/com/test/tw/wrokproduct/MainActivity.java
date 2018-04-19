@@ -8,11 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Fragment.Fragment_home;
 import Fragment.Fragment_shop;
@@ -23,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_shop fragment_shop;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
-    BottomNavigationView  navigation;
+    BottomNavigationView navigation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         initImageLoader();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
     }
+
     private void initImageLoader() {
         if (ImageLoader.getInstance().isInited()) {
             ImageLoader.getInstance().clearMemoryCache();
@@ -40,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
         }
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
                 .Builder(getApplicationContext())
-                .memoryCache(new WeakMemoryCache()).threadPoolSize(5)
+                .memoryCache(new UsingFreqLimitedMemoryCache(50)).threadPoolSize(5)
                 .memoryCacheExtraOptions(480, 800) //保存每個緩存圖片的最大寬高
-                .threadPriority(Thread.NORM_PRIORITY) //線池中的緩存數
+                .threadPriority(Thread.NORM_PRIORITY - 1) //線池中的緩存數
                 .denyCacheImageMultipleSizesInMemory() //禁止緩存多張圖片
                 //               .memoryCache(new FIFOLimitedMemoryCache(2 * 1024 * 1024))//缓存策略
 //                .memoryCacheSize(50 * 1024 * 1024) //設置內存緩存的大小
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 .diskCacheFileCount(200) //緩存的文件數量
                 .build();
         if (!ImageLoader.getInstance().isInited()) {//偵測如果imagloader已經init，就不再init
+
             ImageLoader.getInstance().init(config);
         }
         //  ImageLoader.getInstance().displayImage(url, imageView, ImageUsing);
@@ -83,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void initBtnNav() {//BottomLayout
-       navigation = findViewById(R.id.tab_layout);
+        navigation = findViewById(R.id.tab_layout);
         new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
 
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {//監聽事件
@@ -92,12 +100,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        switchFrament(lastShowFragment,0);
-                        lastShowFragment=0;
+                        switchFrament(lastShowFragment, 0);
+                        lastShowFragment = 0;
                         return true;
                     case R.id.navigation_shop:
-                        switchFrament(lastShowFragment,1);
-                        lastShowFragment=1;
+                        switchFrament(lastShowFragment, 1);
+                        lastShowFragment = 1;
                         return true;
                     case R.id.navigation_my_favor:
 
@@ -119,38 +127,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        Log.e("onStop","onStop");
+        Log.e("onStop", "onStop");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e("onStart","onStart");
+        Log.e("onStart", "onStart");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("onPause","onPause");
+        Log.e("onPause", "onPause");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e("onRestart","onRestart");
+        Log.e("onRestart", "onRestart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("onResume","onResume");
+        Log.e("onResume", "onResume");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("onDestroy","onDestroy");
+        Log.e("onDestroy", "onDestroy");
     }
+
     /**
      * 切换Fragment
      *
@@ -176,6 +185,36 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.content_layout, fragment_home)
                 .show(fragment_home)
                 .commit();
+    }
+/**
+ * 迴車鍵離開程式
+ * */
+    private static Boolean isExit = false;
+    private static Boolean hasTask = false;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Timer tExit = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                isExit = false;
+                hasTask = false;
+            }
+        };
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isExit == false) {
+                isExit = true;
+                Toast.makeText(this, "再按一次後退鍵退出應用程式"
+                        , Toast.LENGTH_SHORT).show();
+                if (!hasTask) {
+                    tExit.schedule(task, 2000);
+                }
+            } else {
+                finish();
+                System.exit(0);
+            }
+        }
+        return false;
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class GetInformationByPHP {
 private static final String slider_url= "http://api.gok1945.com/main/index/slider.php";
+    private static final String banner_url= "http://api.gok1945.com/main/product/banner.php";
     private static final String hotkeywords_url= "http://api.gok1945.com/main/index/hotkeywords.php";
     private static final String ptype_url= "http://api.gok1945.com/main/index/ptype.php";
     private static final String brands_url= "http://api.gok1945.com/main/index/brands.php";
@@ -62,6 +63,13 @@ public JSONObject test() {
      * */
     public JSONObject getSlider() {
       return  jsonParser.getJSONFromUrl(slider_url, params);
+    }
+    /**
+     *取得購物廣告欄資料
+     * */
+    public JSONObject getBanner(int type) {
+        params.add(new BasicNameValuePair("type", ""+type));
+        return  jsonParser.getJSONFromUrl(banner_url, params);
     }
     /**
      *取得廣告欄資料

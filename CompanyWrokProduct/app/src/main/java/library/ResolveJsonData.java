@@ -28,6 +28,7 @@ public class ResolveJsonData {
                     } catch (Exception e) {
                         map.put("image", json_obj.getString("bimg"));
                     }
+
                     arrayList.add(map);
                 }
                 return arrayList;
@@ -63,6 +64,19 @@ public class ResolveJsonData {
                         map.put("image", json_obj.getString("img"));
                     } catch (Exception e) {
                         map.put("image", json_obj.getString("bimg"));
+                    }
+
+                    try {
+                        map.put("descs", json_obj.getString("descs"));
+                        map.put("rprice", json_obj.getString("rprice"));
+                        map.put("rsprice", json_obj.getString("rsprice"));
+                        map.put("isnew", json_obj.getString("isnew"));
+                        map.put("ishot", json_obj.getString("ishot"));
+                        map.put("istime", json_obj.getString("istime"));
+                        map.put("discount", json_obj.getString("discount"));
+                        map.put("shipping", json_obj.getString("shipping"));
+                        map.put("score", json_obj.getString("score"));
+                    } catch (Exception e) {
                     }
                     arrayList.add(map);
                 }

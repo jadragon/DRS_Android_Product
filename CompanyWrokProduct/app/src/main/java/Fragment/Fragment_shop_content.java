@@ -12,15 +12,16 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
 import adapter.ShopRecyclerViewAdapter;
-import library.GetInformationByPHP;
 
-public class Freagment_shop_content extends Fragment {
+public class Fragment_shop_content extends Fragment {
     RecyclerView recyclerView;
     ShopRecyclerViewAdapter myRecyclerAdapter1;
     ViewPager viewPager;
@@ -45,14 +46,6 @@ public class Freagment_shop_content extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        /**
-                                           * //取得Slider圖片
-                                          * */
-                        json1 = new GetInformationByPHP().getSlider();
-                        /**
-                                          * //取得HotkeyWords圖片
-                                          * */
-                        json2 = new GetInformationByPHP().getIplist(0, 1);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -78,6 +71,7 @@ public class Freagment_shop_content extends Fragment {
                                 */
                                 recyclerView.setAdapter(myRecyclerAdapter1);
                                 setHeaderView(recyclerView);
+                                setFooterView(recyclerView);
                             }
                         });
                     }
@@ -92,10 +86,22 @@ public class Freagment_shop_content extends Fragment {
     private void setHeaderView(RecyclerView view) {
         View header = LayoutInflater.from(getActivity()).inflate(R.layout.viewitem_homeheader, view, false);
         myRecyclerAdapter1.setmHeaderView(header);
-
-
     }
-
+    private void setFooterView(RecyclerView view) {
+        View footer = new LinearLayout(getActivity());
+        footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,50));
+        myRecyclerAdapter1.setmFooterViewView(footer);
+    }
+public void setJson( JSONObject json1, JSONObject json2){
+    /**
+     * //取得Slider圖片
+     * */
+   this. json1 = json1;
+    /**
+     * //取得Iplist圖片
+     * */
+    this.json2 = json2;
+}
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -2,6 +2,7 @@ package adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import library.ImageLoaderUtils;
 import library.ResolveJsonData;
 
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
@@ -41,24 +44,22 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
     private int mChildCount = 0;
     View view;
 
-    public MyPagerAdapter(View  view, JSONObject json) {
+    public MyPagerAdapter(View view, JSONObject json) {
         this.view = view;
+        this.ctx = view.getContext();
 /*
    View view = View.inflate(ctx, R.layout.viewitem_homeheader, null);
         dot[0] = view.findViewById(R.id.dot1);
-        dot[1] = view.findViewById(R.id.dot2);
-        dot[2] = view.findViewById(R.id.dot3);
-
-        */
-/*
-        dot[0] = ((Activity) ctx).findViewById(R.id.dot1);
         dot[1] = ((Activity) ctx).findViewById(R.id.dot2);
-        dot[2] = ((Activity) ctx).findViewById(R.id.dot3);
 */
         viewPager = view.findViewById(R.id.adView);
         getImageView(json);
-        initDot();
-        viewPager.addOnPageChangeListener(new MyPagerAdapter.MyPageChangeListener());
+        //兩張圖以上才放dot及定時翻頁
+        if (bitmaps.size() > 1) {
+            initTimer();
+            initDot();
+            viewPager.addOnPageChangeListener(new MyPagerAdapter.MyPageChangeListener());
+        }
     }
 
     private void initTimer() {
@@ -66,7 +67,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ((Activity)view.getContext()).runOnUiThread(new Runnable() {
+                ((Activity) view.getContext()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
@@ -82,12 +83,25 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {
             imageView = new ImageView(view.getContext());
+
             imageView.setTag(i);
-            ImageLoader.getInstance().displayImage(bitmaps.get(i).get("image"), imageView);
             mListViews.add(imageView);
+            final int finalI = i;
+            ImageLoader.getInstance().loadImage(bitmaps.get(i).get("image"), ImageLoaderUtils.getWholeOptions(), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view,
+                                              Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+                    mListViews.get(finalI).setImageBitmap(loadedImage);
+
+                }
+
+            });
+            // ImageLoader.getInstance().displayImage(bitmaps.get(i).get("image"), imageView);
+
 
         }
-        initTimer();
+
     }
 
     private void initDot() {
@@ -98,7 +112,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         textView = new TextView(view.getContext());
         textView.setText(".");
         textView.setTextSize(50);
-        textView.setTextColor(Color.WHITE);
+        textView.setTextColor(Color.BLACK);
         linearLayout.addView(textView);
         dots.add(textView);
         //添加後面的dots
@@ -106,7 +120,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
             textView = new TextView(view.getContext());
             textView.setText(".");
             textView.setTextSize(50);
-            textView.setTextColor(Color.BLACK);
+            textView.setTextColor(Color.WHITE);
             linearLayout.addView(textView);
             dots.add(textView);
         }
@@ -114,13 +128,18 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        if (bitmaps.size() > 1)
+            return Integer.MAX_VALUE;
+        else
+            return 1;
+
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == (object);
     }
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         //container.removeView(mListViews.get(position));
@@ -178,26 +197,45 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-       timer.cancel();
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                Log.e("ACTION_DOWN", "ACTION_DOWN");
-                break;
-            case MotionEvent.ACTION_MOVE:
-                Log.e("ACTION_MOVE", "ACTION_MOVE");
-                break;
-            case MotionEvent.ACTION_UP:
-                Log.e("ACTION_UP", "ACTION_UP");
-                int position = (int) view.getTag();
+        if(bitmaps.size()>1) {
+            timer.cancel();
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.e("ACTION_DOWN", "ACTION_DOWN");
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    Log.e("ACTION_MOVE", "ACTION_MOVE");
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.e("ACTION_UP", "ACTION_UP");
+                    int position = (int) view.getTag();
 
-                Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
 
-               initTimer();
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                Log.e("ACTION_CANCEL", "ACTION_CANCEL");
-                initTimer();
-                break;
+                    initTimer();
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    Log.e("ACTION_CANCEL", "ACTION_CANCEL");
+                    initTimer();
+                    break;
+            }
+        }else{
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.e("ACTION_DOWN", "ACTION_DOWN");
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    Log.e("ACTION_MOVE", "ACTION_MOVE");
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.e("ACTION_UP", "ACTION_UP");
+                    int position = (int) view.getTag();
+                    Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    Log.e("ACTION_CANCEL", "ACTION_CANCEL");
+                    break;
+            }
         }
 
         return true;
@@ -212,9 +250,9 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         public void onPageSelected(int position) {
             position = position % mListViews.size();
             for (int i = 0; i < mListViews.size(); i++) {
-                dots.get(i).setTextColor(Color.BLACK);
+                dots.get(i).setTextColor(Color.WHITE);
             }
-            dots.get(position).setTextColor(Color.WHITE);
+            dots.get(position).setTextColor(Color.BLACK);
         }
 
         @Override
