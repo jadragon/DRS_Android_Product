@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         initBtnNav();
         initImageLoader();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
+        GlobalVariable gv = (GlobalVariable)getApplicationContext();
+        gv.setToken("zI6OIYlbhfPKyhbchdOiGg==");
     }
 
     private void initImageLoader() {

@@ -49,6 +49,7 @@ public class Fragment_home extends Fragment {
     MyRecyclerAdapter myRecyclerAdapter1, myRecyclerAdapter2, myRecyclerAdapter3;
     Handler handler;
     View v;
+    com.nostra13.universalimageloader.core.ImageLoader imageLoader= com.nostra13.universalimageloader.core.ImageLoader.getInstance();
 
     @Nullable
     @Override
@@ -60,9 +61,9 @@ public class Fragment_home extends Fragment {
         init();
         initSwipeLayout();
         initViewPagerAndRecyclerView();
+
         return v;
     }
-
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
@@ -205,7 +206,7 @@ public class Fragment_home extends Fragment {
 
     private void init() {
         list = new ArrayList<>();
-        dm = getResources().getDisplayMetrics();
+        dm = getActivity().getResources().getDisplayMetrics();
         real_heigh = (int) ((dm.widthPixels - 20 * dm.density) / (float) 3.5 / 4 * 3);
         recyclerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, real_heigh));
         recyclerView.setHasFixedSize(true);
@@ -234,4 +235,6 @@ public class Fragment_home extends Fragment {
         handler.getLooper().quit();
         Log.e("onDestroyView","onDestroyView");
     }
+
+
 }

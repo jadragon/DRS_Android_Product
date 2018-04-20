@@ -3,7 +3,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.test.tw.wrokproduct"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -37,4 +37,5 @@ dependencies {
     implementation files('third_jar/volley.jar')
     implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.0'
+    implementation 'com.youth.banner:banner:1.4.10'
 }

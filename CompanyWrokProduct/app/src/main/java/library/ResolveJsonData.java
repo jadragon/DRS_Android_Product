@@ -67,6 +67,7 @@ public class ResolveJsonData {
                     }
 
                     try {
+                        map.put("pno", json_obj.getString("pno"));
                         map.put("descs", json_obj.getString("descs"));
                         map.put("rprice", json_obj.getString("rprice"));
                         map.put("rsprice", json_obj.getString("rsprice"));
@@ -89,5 +90,13 @@ public class ResolveJsonData {
         }
         return arrayList;
     }
-
+    public static String isFavorate(JSONObject json) {
+        String success="";
+        try {
+             success = json.getString("Success");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
 }

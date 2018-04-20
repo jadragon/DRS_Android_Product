@@ -34,15 +34,15 @@ import library.ResolveJsonData;
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
     private List<ImageView> mListViews;
     private List<TextView> dots;
-    ViewPager viewPager;
-    Timer timer;
-    Context ctx;
-    ImageView imageView;
-    ArrayList<Map<String, String>> bitmaps;
-    LinearLayout linearLayout;
-    TextView textView;
+    private ViewPager viewPager;
+    private Timer timer;
+    private Context ctx;
+    private ImageView imageView;
+    private ArrayList<Map<String, String>> bitmaps;
+    private LinearLayout linearLayout;
+    private TextView textView;
     private int mChildCount = 0;
-    View view;
+    private  View view;
 
     public MyPagerAdapter(View view, JSONObject json) {
         this.view = view;
@@ -142,7 +142,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        //container.removeView(mListViews.get(position));
+      //container.removeView(mListViews.get(position % mListViews.size()));
     }
 
     @Override
@@ -170,7 +170,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
         if (mListViews.size() > 0) {
             //position % view.size()是指虚拟的position会在[0，view.size()）之间循环
             View view = mListViews.get(position % mListViews.size());
-            if (container.equals(view.getParent())) {
+           if (container.equals(view.getParent())) {
                 container.removeView(view);
             }
             container.addView(view);

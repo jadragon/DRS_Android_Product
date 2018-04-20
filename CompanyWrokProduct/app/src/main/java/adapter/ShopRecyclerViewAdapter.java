@@ -3,7 +3,6 @@ package adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -14,12 +13,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -39,37 +38,42 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View mHeaderView;
     private View mFooterView;
     private Context ctx;
-    int type;
-    int layout_width, layout_heigh;
-    JSONObject json1, json2;
-    View view;
-    ArrayList<Map<String, String>> list;
-    DisplayMetrics dm;
-    Bitmap[] images;
-    ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
-    LinearLayout.LayoutParams layoutParams;
+    private int layout_width, layout_heigh;
+    private JSONObject json1, json2;
+    private View view;
+    private ArrayList<Map<String, String>> list;
+    private DisplayMetrics dm;
+    private Bitmap[] images;
+    private boolean[] isfavorate;
+    private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
+    private LinearLayout.LayoutParams layoutParams;
     private ImageLoader loader;
+    GlobalVariable gv;
+
     public void setmHeaderView(View mHeaderView) {
 
         this.mHeaderView = mHeaderView;
     }
+
     public void setmFooterViewView(View mFooterView) {
 
         this.mFooterView = mFooterView;
     }
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json1, JSONObject json2, int layout_width, int layout_heigh, int type) {
+
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json1, JSONObject json2, int layout_width, int layout_heigh) {
         this.json1 = json1;
         this.json2 = json2;
         this.ctx = ctx;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
-        this.type = type;
         loader = ImageLoader.getInstance();
         list = ResolveJsonData.getJSONData1(json2);
         Log.e("IPLIST", "" + list);
         images = new Bitmap[list.size()];
+        isfavorate=new boolean[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
-
+        gv = (GlobalVariable) ctx.getApplicationContext();
+        Toast.makeText(ctx, "" + gv.getToken(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -79,7 +83,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mHeaderView, json2);
         }
 
-        if(mFooterView != null && viewType == TYPE_FOOTER){
+        if (mFooterView != null && viewType == TYPE_FOOTER) {
             return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mFooterView, json2);
         }
 
@@ -92,12 +96,10 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_NORMAL) {
             layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
-            //layouy
+            //layout
             holder.frameLayout.setLayoutParams(layoutParams);
             holder.item_linear.setLayoutParams(new FrameLayout.LayoutParams((int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density + 110 * dm.density)));
-
             //圖片
-
             resizeImageView(holder.imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
             resizeImageView(holder.count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
             resizeImageView(holder.count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
@@ -117,7 +119,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                         super.onLoadingComplete(imageUri, view, loadedImage);
                         images[position - 1] = loadedImage;
                         holder.imageView.setImageBitmap(loadedImage);
-
                     }
 
                 });
@@ -146,10 +147,12 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 holder.count0.setVisibility(View.VISIBLE);
                 holder.count1.setVisibility(View.VISIBLE);
                 holder.discount.setVisibility(View.VISIBLE);
+                // holder.discount.setTextSize(dm.heightPixels/dm.widthPixels*18);
+                holder.discount.setText(list.get(position - 1).get("discount"));
             }
             //原價
             //特價
-            if (!list.get(position - 1).get("rprice").equals(list.get(position - 1).get("rsprice"))) {
+            if (list.get(position - 1).get("rprice").equals(list.get(position - 1).get("rsprice"))) {
                 holder.rprice.setVisibility(View.INVISIBLE);
                 holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
             } else {
@@ -181,15 +184,48 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                     holder.score.setImageResource(R.drawable.star0);
                     break;
             }
-
+            //判斷是否點過最愛
+            if(isfavorate[position-1])
+                holder.heart.setImageResource(R.drawable.heart_on);
+            else
+                holder.heart.setImageResource(R.drawable.heart_off);
             holder.linear_heart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (holder.heart.getDrawable().getCurrent().getConstantState().equals(view.getResources().getDrawable(R.drawable.heart_off).getConstantState())) {
-                        holder.heart.setImageResource(R.drawable.heart_on);
-                    } else {
+                    if (isfavorate[position-1]) {
                         holder.heart.setImageResource(R.drawable.heart_off);
+                        isfavorate[position-1]=false;
+                    } else {
+                        holder.heart.setImageResource(R.drawable.heart_on);
+                        isfavorate[position-1]=true;
                     }
+                 /*
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            json1= new GetInformationByPHP().setFavorite(gv.getToken(),list.get(position-1).get("pno"));
+                            ((Activity)ctx).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if(ResolveJsonData.isFavorate(json1).equals("true")){
+                                        holder.heart.setImageResource(R.drawable.heart_on);
+                                    }else{
+                                        holder.heart.setImageResource(R.drawable.heart_off);
+                                    }
+
+//                                    if (holder.heart.getDrawable().getCurrent().getConstantState().equals(ctx.getResources().getDrawable(R.drawable.heart_off).getConstantState())) {
+//                                        holder.heart.setImageResource(R.drawable.heart_on);
+//                                    } else {
+//                                        holder.heart.setImageResource(R.drawable.heart_off);
+//                                    }
+
+                                }
+                            });
+
+                        }
+                    }).start();
+*/
                 }
             });
         } else if (getItemViewType(position) == TYPE_HEADER) {
@@ -202,11 +238,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         return df.format(Double.parseDouble(str));
     }
 
-    private void resizeImageView(ImageView imageView, int width, int heigh) {//重構圖片大小
-        ViewGroup.LayoutParams params = imageView.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
+    private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
+        ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
         params.width = width;
         params.height = heigh;
-        imageView.setLayoutParams(params);
+        view.setLayoutParams(params);
     }
 
     @Override
@@ -256,9 +292,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         TextView tv1, rprice, rsprice, discount;
         Context ctx;
         JSONObject json;
-        ViewPager viewPager;
         LinearLayout item_linear;
-        RelativeLayout relativeLayout;
 
         public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
@@ -266,13 +300,14 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             this.json = json;
             this.ctx = ctx;
             if (view == mHeaderView) {
+                /*
                 viewPager = view.findViewById(R.id.adView);
                 relativeLayout = view.findViewById(R.id.RelateView);
                 relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
                 viewPager.setAdapter(new MyPagerAdapter(view, json1));
+                */
             }
             if (view == mFooterView) {
-
             }
             frameLayout = view.findViewById(R.id.shop_frame);
             item_linear = view.findViewById(R.id.item_linear);
@@ -290,14 +325,15 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             linear_heart = view.findViewById(R.id.linear_heart);
             heart = view.findViewById(R.id.heart);
             score = view.findViewById(R.id.score);
-                itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if(position!=list.size()+1)
-            Toast.makeText(ctx, ""+list.get(position-1).get("title"), Toast.LENGTH_SHORT).show();
+            if (position != list.size() + 1) {
+                Toast.makeText(ctx, "" + list.get(position - 1).get("title"), Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -307,7 +343,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         list = ResolveJsonData.getJSONData(json);
         images = new Bitmap[list.size()];
         notifyDataSetChanged();
-
     }
 
 }
