@@ -116,7 +116,7 @@ public class Fragment_shop_content extends Fragment {
             }
         });
         List<String> images=new ArrayList<>();
-        for(Map<String,String> map: ResolveJsonData.getJSONData1(json1))
+        for(Map<String,String> map: ResolveJsonData.getJSONData(json1))
             images.add(map.get("image"));
         header.setImages(images);
         //banner设置方法全部调用完毕时最后调用
@@ -135,4 +135,5 @@ public class Fragment_shop_content extends Fragment {
         if(myRecyclerAdapter1!=null)
      myRecyclerAdapter1.setFilter(json);
     }
+
 }

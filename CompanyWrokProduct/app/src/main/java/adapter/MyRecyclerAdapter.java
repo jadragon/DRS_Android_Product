@@ -46,7 +46,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
         this.type = type;
-        list = ResolveJsonData.getJSONData1(json);
+        list = ResolveJsonData.getJSONData(json);
         images = new Bitmap[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
 
@@ -73,10 +73,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
             holder.tv1.setVisibility(View.INVISIBLE);
         }
         holder.frameLayout.setLayoutParams(layoutParams);
-        holder.imageView.setImageBitmap(null);
-        if (images[position] != null) {
-            holder.imageView.setImageBitmap(images[position]);
-        } else {
 
             ImageLoader.getInstance().loadImage(list.get(position).get("image"),getWholeOptions(),new SimpleImageLoadingListener() {
 
@@ -84,14 +80,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
                 public void onLoadingComplete(String imageUri, View view,
                                               Bitmap loadedImage) {
                     super.onLoadingComplete(imageUri, view, loadedImage);
-                    images[position] = loadedImage;
                     holder.imageView.setImageBitmap(loadedImage);
 
                 }
 
             });
-
-        }
 
         holder.tv1.setText(list.get(position).get("title"));
     }

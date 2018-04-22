@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         initBtnNav();
         initImageLoader();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
-        GlobalVariable gv = (GlobalVariable)getApplicationContext();
+        GlobalVariable gv = (GlobalVariable) getApplicationContext();
         gv.setToken("zI6OIYlbhfPKyhbchdOiGg==");
     }
 
@@ -162,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
         Log.e("onDestroy", "onDestroy");
     }
 
+
+
     /**
      * 切换Fragment
      *
@@ -169,12 +171,15 @@ public class MainActivity extends AppCompatActivity {
      * @param index     需要显示的Fragment的索引
      */
     public void switchFrament(int lastIndex, int index) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(
+                android.R.anim.fade_in, android.R.anim.fade_out);
         transaction.hide(fragments[lastIndex]);
         if (!fragments[index].isAdded()) {
             transaction.add(R.id.content_layout, fragments[index]);
+            transaction.show(fragments[index]).commitAllowingStateLoss();
+        } else {
+            transaction.show(fragments[index]).commitAllowingStateLoss();
         }
-        transaction.show(fragments[index]).commitAllowingStateLoss();
     }
 
     private void initFragments() {
@@ -188,11 +193,13 @@ public class MainActivity extends AppCompatActivity {
                 .show(fragment_home)
                 .commit();
     }
-/**
- * 迴車鍵離開程式
- * */
+
+    /**
+     * 迴車鍵離開程式
+     */
     private static Boolean isExit = false;
     private static Boolean hasTask = false;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Timer tExit = new Timer();

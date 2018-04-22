@@ -79,7 +79,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
     }
 
     public void getImageView(JSONObject json) {
-        bitmaps = ResolveJsonData.getJSONData1(json);
+        bitmaps = ResolveJsonData.getJSONData(json);
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {
             imageView = new ImageView(view.getContext());

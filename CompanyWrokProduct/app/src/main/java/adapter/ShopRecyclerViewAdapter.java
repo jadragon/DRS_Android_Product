@@ -43,7 +43,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
-    private Bitmap[] images;
     private boolean[] isfavorate;
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
@@ -67,13 +66,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
         loader = ImageLoader.getInstance();
-        list = ResolveJsonData.getJSONData1(json2);
+        list = ResolveJsonData.getJSONData(json2);
         Log.e("IPLIST", "" + list);
-        images = new Bitmap[list.size()];
         isfavorate=new boolean[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
         gv = (GlobalVariable) ctx.getApplicationContext();
-        Toast.makeText(ctx, "" + gv.getToken(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -107,22 +104,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
             resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
             resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-            holder.imageView.setImageBitmap(null);
-            if (images[position - 1] != null) {
-                holder.imageView.setImageBitmap(images[position - 1]);
-            } else {
-                loader.loadImage(list.get(position - 1).get("image"), ImageLoaderUtils.getWholeOptions(), new SimpleImageLoadingListener() {
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view,
-                                                  Bitmap loadedImage) {
-                        super.onLoadingComplete(imageUri, view, loadedImage);
-                        images[position - 1] = loadedImage;
-                        holder.imageView.setImageBitmap(loadedImage);
-                    }
-
-                });
-            }
+            ImageLoader.getInstance().displayImage(list.get(position - 1).get("image"),   holder.imageView);
             holder.free.setVisibility(View.INVISIBLE);
             holder.freash.setVisibility(View.INVISIBLE);
             holder.hot.setVisibility(View.INVISIBLE);
@@ -341,7 +323,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     public void setFilter(JSONObject json) {
         this.json2 = json;
         list = ResolveJsonData.getJSONData(json);
-        images = new Bitmap[list.size()];
+        isfavorate=new boolean[list.size()];
         notifyDataSetChanged();
     }
 
