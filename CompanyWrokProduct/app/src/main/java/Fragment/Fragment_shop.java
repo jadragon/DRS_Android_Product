@@ -50,7 +50,6 @@ public class Fragment_shop extends Fragment {
                         viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getActivity().getResources().getStringArray(R.array.shop_header_title), new Fragment[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4}));
                         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
                         tabLayout.setupWithViewPager(viewPager, true);
-
                     }
                 });
             }

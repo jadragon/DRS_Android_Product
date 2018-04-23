@@ -16,7 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
@@ -28,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import library.ImageLoaderUtils;
 import library.ResolveJsonData;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> {
@@ -43,6 +46,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
+    private Bitmap[] images;
     private boolean[] isfavorate;
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
@@ -68,7 +72,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         loader = ImageLoader.getInstance();
         list = ResolveJsonData.getJSONData(json2);
         Log.e("IPLIST", "" + list);
-        isfavorate=new boolean[list.size()];
+        isfavorate = new boolean[list.size()];
+        images = new Bitmap[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
         gv = (GlobalVariable) ctx.getApplicationContext();
     }
@@ -104,7 +109,24 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
             resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
             resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-            ImageLoader.getInstance().displayImage(list.get(position - 1).get("image"),   holder.imageView);
+            holder.imageView.setImageBitmap(null);
+            if (images[position - 1] != null) {
+                holder.imageView.setImageBitmap(images[position - 1]);
+            } else {
+                ImageLoader.getInstance().loadImage(list.get(position - 1).get("image"), getWholeOptions(), new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        super.onLoadingCancelled(imageUri, view);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                        images[position - 1] = loadedImage;
+                        holder.imageView.setImageBitmap(images[position - 1]);
+                    }
+                });
+            }
             holder.free.setVisibility(View.INVISIBLE);
             holder.freash.setVisibility(View.INVISIBLE);
             holder.hot.setVisibility(View.INVISIBLE);
@@ -113,106 +135,103 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             holder.count1.setVisibility(View.INVISIBLE);
             holder.discount.setVisibility(View.INVISIBLE);
             //免運
-            if (list.get(position - 1).get("shipping").equals("true"))
-                holder.free.setVisibility(View.VISIBLE);
-            //新品
-            if (list.get(position - 1).get("isnew").equals("true"))
-                holder.freash.setVisibility(View.VISIBLE);
-            //熱門
-            if (list.get(position - 1).get("ishot").equals("true"))
-                holder.hot.setVisibility(View.VISIBLE);
-            //限時
-            if (list.get(position - 1).get("istime").equals("true"))
-                holder.limit.setVisibility(View.VISIBLE);
-            //count0+count1
-            if (!list.get(position - 1).get("discount").equals("")) {
-                holder.count0.setVisibility(View.VISIBLE);
-                holder.count1.setVisibility(View.VISIBLE);
-                holder.discount.setVisibility(View.VISIBLE);
-                // holder.discount.setTextSize(dm.heightPixels/dm.widthPixels*18);
-                holder.discount.setText(list.get(position - 1).get("discount"));
-            }
-            //原價
-            //特價
-            if (list.get(position - 1).get("rprice").equals(list.get(position - 1).get("rsprice"))) {
-                holder.rprice.setVisibility(View.INVISIBLE);
-                holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
-            } else {
-                holder.rprice.setPaintFlags(holder.rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.rprice.setText("$" + getString(list.get(position - 1).get("rprice")));
-                holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
-            }
-            //title
-            holder.tv1.setText(list.get(position - 1).get("title"));
-
-            //score
-            switch (list.get(position - 1).get("score")) {
-                case "1":
-                    holder.score.setImageResource(R.drawable.star1);
-                    break;
-                case "2":
-                    holder.score.setImageResource(R.drawable.star2);
-                    break;
-                case "3":
-                    holder.score.setImageResource(R.drawable.star3);
-                    break;
-                case "4":
-                    holder.score.setImageResource(R.drawable.star4);
-                    break;
-                case "5":
-                    holder.score.setImageResource(R.drawable.star5);
-                    break;
-                default:
-                    holder.score.setImageResource(R.drawable.star0);
-                    break;
-            }
-            //判斷是否點過最愛
-            if(isfavorate[position-1])
-                holder.heart.setImageResource(R.drawable.heart_on);
-            else
-                holder.heart.setImageResource(R.drawable.heart_off);
-            holder.linear_heart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isfavorate[position-1]) {
-                        holder.heart.setImageResource(R.drawable.heart_off);
-                        isfavorate[position-1]=false;
-                    } else {
-                        holder.heart.setImageResource(R.drawable.heart_on);
-                        isfavorate[position-1]=true;
-                    }
-                 /*
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            json1= new GetInformationByPHP().setFavorite(gv.getToken(),list.get(position-1).get("pno"));
-                            ((Activity)ctx).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if(ResolveJsonData.isFavorate(json1).equals("true")){
-                                        holder.heart.setImageResource(R.drawable.heart_on);
-                                    }else{
-                                        holder.heart.setImageResource(R.drawable.heart_off);
-                                    }
-
-//                                    if (holder.heart.getDrawable().getCurrent().getConstantState().equals(ctx.getResources().getDrawable(R.drawable.heart_off).getConstantState())) {
-//                                        holder.heart.setImageResource(R.drawable.heart_on);
-//                                    } else {
-//                                        holder.heart.setImageResource(R.drawable.heart_off);
-//                                    }
-
-                                }
-                            });
-
-                        }
-                    }).start();
-*/
+            if (list != null) {
+                if (list.get(position - 1).get("shipping").equals("true"))
+                    holder.free.setVisibility(View.VISIBLE);
+                //新品
+                if (list.get(position - 1).get("isnew").equals("true"))
+                    holder.freash.setVisibility(View.VISIBLE);
+                //熱門
+                if (list.get(position - 1).get("ishot").equals("true"))
+                    holder.hot.setVisibility(View.VISIBLE);
+                //限時
+                if (list.get(position - 1).get("istime").equals("true"))
+                    holder.limit.setVisibility(View.VISIBLE);
+                //count0+count1
+                if (!list.get(position - 1).get("discount").equals("")) {
+                    holder.count0.setVisibility(View.VISIBLE);
+                    holder.count1.setVisibility(View.VISIBLE);
+                    holder.discount.setVisibility(View.VISIBLE);
+                    // holder.discount.setTextSize(dm.heightPixels/dm.widthPixels*18);
+                    holder.discount.setText(list.get(position - 1).get("discount"));
                 }
-            });
-        } else if (getItemViewType(position) == TYPE_HEADER) {
-        }
+                //原價
+                //特價
+                if (list.get(position - 1).get("rprice").equals(list.get(position - 1).get("rsprice"))) {
+                    holder.rprice.setVisibility(View.INVISIBLE);
+                    holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
+                } else {
+                    holder.rprice.setPaintFlags(holder.rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    holder.rprice.setText("$" + getString(list.get(position - 1).get("rprice")));
+                    holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
+                }
+                //title
+                holder.tv1.setText(list.get(position - 1).get("title"));
 
+                //score
+                switch (list.get(position - 1).get("score")) {
+                    case "1":
+                        holder.score.setImageResource(R.drawable.star1);
+                        break;
+                    case "2":
+                        holder.score.setImageResource(R.drawable.star2);
+                        break;
+                    case "3":
+                        holder.score.setImageResource(R.drawable.star3);
+                        break;
+                    case "4":
+                        holder.score.setImageResource(R.drawable.star4);
+                        break;
+                    case "5":
+                        holder.score.setImageResource(R.drawable.star5);
+                        break;
+                    default:
+                        holder.score.setImageResource(R.drawable.star0);
+                        break;
+                }
+                //判斷是否點過最愛
+                if (isfavorate[position - 1])
+                    holder.heart.setImageResource(R.drawable.heart_on);
+                else
+                    holder.heart.setImageResource(R.drawable.heart_off);
+                holder.linear_heart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isfavorate[position - 1]) {
+                            holder.heart.setImageResource(R.drawable.heart_off);
+                            isfavorate[position - 1] = false;
+                        } else {
+                            holder.heart.setImageResource(R.drawable.heart_on);
+                            isfavorate[position - 1] = true;
+                        }
+
+                    }
+                });
+            } else if (getItemViewType(position) == TYPE_HEADER) {
+            }
+        }
+    }
+
+    private DisplayImageOptions getWholeOptions() {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
+                //.showImageForEmptyUri(R.drawable.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
+                // .showImageOnFail(R.drawable.error)  //设置图片加载/解码过程中错误时候显示的图片
+                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
+                .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)//设置图片以如何的编码方式显示
+                .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型
+                //.decodingOptions(BitmapFactory.Options decodingOptions)//设置图片的解码配置
+                .delayBeforeLoading(0)//int delayInMillis为你设置的下载前的延迟时间
+                //设置图片加入缓存前，对bitmap进行设置
+                //.preProcessor(BitmapProcessor preProcessor)
+                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
+                .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
+                .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间，可能会出现闪动
+                .build();//构建完成
+
+        return options;
     }
 
     private static String getString(String str) {
@@ -323,7 +342,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     public void setFilter(JSONObject json) {
         this.json2 = json;
         list = ResolveJsonData.getJSONData(json);
-        isfavorate=new boolean[list.size()];
+        isfavorate = new boolean[list.size()];
         notifyDataSetChanged();
     }
 

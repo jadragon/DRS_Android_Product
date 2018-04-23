@@ -16,12 +16,16 @@ import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemor
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import org.json.JSONObject;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import Fragment.Fragment_home;
 import Fragment.Fragment_shop;
 import library.BottomNavigationViewHelper;
+import library.GetInformationByPHP;
+import library.ResolveJsonData;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
@@ -34,12 +38,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+        testJson();
         initFragments();
         initBtnNav();
         initImageLoader();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
         gv.setToken("zI6OIYlbhfPKyhbchdOiGg==");
+    }
+
+    private void testJson() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final JSONObject json= new GetInformationByPHP().getPtype();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("array",ResolveJsonData.getPtypeDetail(json,0)+"");
+                    }
+                });
+            }
+        }).start();
+
+
     }
 
     private void initImageLoader() {
@@ -110,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                         lastShowFragment = 1;
                         return true;
                     case R.id.navigation_my_favor:
-
                         return true;
                     case R.id.navigation_member:
 
@@ -185,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFragments() {
         fragment_home = new Fragment_home();
         fragment_shop = new Fragment_shop();
+
         fragments = new Fragment[]{fragment_home, fragment_shop};
         lastShowFragment = 0;
         getSupportFragmentManager()

@@ -1,5 +1,6 @@
 package Fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,17 +21,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import adapter.MyPagerAdapter;
 import adapter.MyRecyclerAdapter;
 import library.GetInformationByPHP;
 import library.MySwipeRefreshLayout;
+import library.ResolveJsonData;
 
 /**
  * Created by user on 2017/5/30.
@@ -49,7 +53,6 @@ public class Fragment_home extends Fragment {
     MyRecyclerAdapter myRecyclerAdapter1, myRecyclerAdapter2, myRecyclerAdapter3;
     Handler handler;
     View v;
-    com.nostra13.universalimageloader.core.ImageLoader imageLoader= com.nostra13.universalimageloader.core.ImageLoader.getInstance();
 
     @Nullable
     @Override
@@ -83,9 +86,9 @@ public class Fragment_home extends Fragment {
                             @Override
                             public void run() {
                                 myPagerAdapter.setFilter(json);
-                                myRecyclerAdapter1.setFilter(json1);
-                                myRecyclerAdapter2.setFilter(json2);
-                                myRecyclerAdapter3.setFilter(json3);
+                                myRecyclerAdapter1.setFilter(ResolveJsonData.getJSONData(json1));
+                                myRecyclerAdapter2.setFilter(ResolveJsonData.getJSONData(json2));
+                                myRecyclerAdapter3.setFilter(ResolveJsonData.getJSONData(json3));
                                 mSwipeLayout.setRefreshing(false);// 結束更新動畫
                             }
                         });
@@ -139,7 +142,7 @@ public class Fragment_home extends Fragment {
                             public void run() {
                                 //recycleView
                                 real_heigh = (int) ((dm.widthPixels - 40 * dm.density) / (float) 3.5);
-                                myRecyclerAdapter1 = new MyRecyclerAdapter(getActivity(), json1, real_heigh, real_heigh * 3 / 4, 0);
+                                myRecyclerAdapter1 = new MyRecyclerAdapter(getActivity(), ResolveJsonData.getJSONData(json1), real_heigh, real_heigh * 3 / 4, 0);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                                 recyclerView.setLayoutManager(layoutManager);
@@ -161,11 +164,17 @@ public class Fragment_home extends Fragment {
                             @Override
                             public void run() {
                                 real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 3.5);
-                                myRecyclerAdapter2 = new MyRecyclerAdapter(getActivity(), json2, real_heigh, dm.widthPixels / 4, 1);
+                                myRecyclerAdapter2 = new MyRecyclerAdapter(getActivity(), ResolveJsonData.getJSONData(json2), real_heigh, dm.widthPixels / 4, 1);
                                 GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
                                 layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
                                 recyclerView2.setLayoutManager(layoutManager);
                                 recyclerView2.setAdapter(myRecyclerAdapter2);
+                                myRecyclerAdapter2.setClickListener(new MyRecyclerAdapter.ClickListener() {
+                                    @Override
+                                    public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
+                                        startActivity(new Intent(getActivity(), PtypeActivity.class));
+                                    }
+                                });
                             }
                         });
                     }
@@ -184,7 +193,7 @@ public class Fragment_home extends Fragment {
                             @Override
                             public void run() {
                                 real_heigh = (int) ((dm.widthPixels - 25 * dm.density) / (float) 4);
-                                myRecyclerAdapter3 = new MyRecyclerAdapter(getActivity(), json3, real_heigh, real_heigh / 4 * 3, 2);
+                                myRecyclerAdapter3 = new MyRecyclerAdapter(getActivity(), ResolveJsonData.getJSONData(json3), real_heigh, real_heigh / 4 * 3, 2);
                                 GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
                                 layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
                                 recyclerView3.setLayoutManager(layoutManager);

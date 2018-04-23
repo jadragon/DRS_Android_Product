@@ -10,7 +10,6 @@ import java.util.Map;
 public class ResolveJsonData {
 
 
-
     public static ArrayList<Map<String, String>> getJSONData(JSONObject json) {
         ArrayList<Map<String, String>> arrayList = new ArrayList<>();
         Map<String, String> map;
@@ -61,4 +60,33 @@ public class ResolveJsonData {
         return arrayList;
     }
 
+    public static ArrayList<Map<String, String>> getPtypeDetail(JSONObject json,int index) {
+
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            String success = json.getString("Success");
+            if (success.equals("true")) {
+                JSONArray json_data = json.getJSONArray("Data");
+                    JSONObject json_obj = json_data.getJSONObject(index);
+                    JSONArray l2array = json_obj.getJSONArray("l2array");
+                    for (int j = 0; j < l2array.length(); j++) {
+                        map = new HashMap<>();
+                        try {
+                            JSONObject l2array_obj = l2array.getJSONObject(j);
+                            map.put("title", l2array_obj.getString("title"));
+                            map.put("image", l2array_obj.getString("bimg"));
+                            map.put("aimg", l2array_obj.getString("aimg"));
+                            arrayList.add(map);
+                        } catch (Exception e) {
+                        }
+                    }
+
+                return arrayList;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return arrayList;
+    }
 }

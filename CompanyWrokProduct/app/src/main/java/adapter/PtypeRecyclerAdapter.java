@@ -7,7 +7,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,24 +24,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.RecycleHolder> {
+public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    int type;
     int layout_width, layout_heigh;
     JSONObject json;
     View view;
     ArrayList<Map<String, String>> list;
     DisplayMetrics dm;
     Bitmap[] images_a, images_b;
-    MyRecyclerAdapter.RecycleHolder recycleHolder;
+    PtypeRecyclerAdapter.RecycleHolder recycleHolder;
     LinearLayout.LayoutParams layoutParams;
-    private MyRecyclerAdapter.ClickListener clickListener;
+    private PtypeRecyclerAdapter.ClickListener clickListener;
+    int lastposition;
 
-    public MyRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int layout_width, int layout_heigh, int type) {
+    public PtypeRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int layout_width, int layout_heigh) {
         this.ctx = ctx;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
-        this.type = type;
         this.list = list;
         images_a = new Bitmap[list.size()];
         images_b = new Bitmap[list.size()];
@@ -51,37 +49,43 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
     }
 
     @Override
-    public MyRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_home, parent, false);
-        recycleHolder = new MyRecyclerAdapter.RecycleHolder(ctx, view, json);
+    public PtypeRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_ptype, parent, false);
+        recycleHolder = new PtypeRecyclerAdapter.RecycleHolder(ctx, view, json);
         return recycleHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
-        if (type == 0) {
-            layoutParams.setMargins(0, 0, (int) (10 * dm.density), 0);
-        } else if (type == 1) {
-            layoutParams.setMargins(0, 0, 0, 0);
-            holder.tv1.setTextColor(ctx.getResources().getColor(R.color.colorBlack));
-            holder.tv1.setBackgroundColor(ctx.getResources().getColor(R.color.colorInvisible));
-        } else if (type == 2) {
-            layoutParams.setMargins(0, 0, (int) (5 * dm.density), 0);
-            holder.tv1.setVisibility(View.INVISIBLE);
-        }
-        holder.frameLayout.setLayoutParams(layoutParams);
-        ImageLoader.getInstance().loadImage(list.get(position).get("image"), getWholeOptions(), new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view,
-                                          Bitmap loadedImage) {
-                super.onLoadingComplete(imageUri, view, loadedImage);
-                images_a[position] = loadedImage;
-                holder.imageView.setImageBitmap(loadedImage);
+        holder.ptype_title_linear.setLayoutParams(layoutParams);
+        if (images_a[position] == null) {
+            ImageLoader.getInstance().loadImage(list.get(position).get("image"), getWholeOptions(), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view,
+                                              Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+                    images_a[position] = loadedImage;
+                    holder.imageView.setImageBitmap(loadedImage);
+                }
+            });
+        } else {
+            if (lastposition==position) {
+                holder.imageView.setImageBitmap(images_b[position]);
+            } else {
+                holder.imageView.setImageBitmap(images_a[position]);
             }
-        });
-
-        holder.tv1.setText(list.get(position).get("title"));
+        }
+        if (images_b[position] == null)
+            ImageLoader.getInstance().loadImage(list.get(position).get("aimg"), getWholeOptions(), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view,
+                                              Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+                    images_b[position] = loadedImage;
+                }
+            });
+        holder.tv.setText(list.get(position).get("title"));
     }
 
     private DisplayImageOptions getWholeOptions() {
@@ -89,8 +93,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
                 //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
                 //.showImageForEmptyUri(R.drawable.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
                 // .showImageOnFail(R.drawable.error)  //设置图片加载/解码过程中错误时候显示的图片
-                .cacheInMemory(false)//设置下载的图片是否缓存在内存中
-                .cacheOnDisk(false)//设置下载的图片是否缓存在SD卡中
+                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
                 .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)//设置图片以如何的编码方式显示
                 .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型
@@ -113,8 +117,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
 
     public class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
-        FrameLayout frameLayout;
-        TextView tv1;
+        LinearLayout ptype_title_linear;
+        TextView tv;
         Context ctx;
         JSONObject json;
 
@@ -122,22 +126,29 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
             super(view);
             this.json = json;
             this.ctx = ctx;
-            frameLayout = view.findViewById(R.id.frame_layout);
-            imageView = view.findViewById(R.id.imView);
-            tv1 = view.findViewById(R.id.tV1);
+            ptype_title_linear = view.findViewById(R.id.ptype_title_linear);
+            imageView = view.findViewById(R.id.ptype_title_image);
+            tv = view.findViewById(R.id.ptype_title_tv);
             imageView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+
             int position = getAdapterPosition();
+
+            if (lastposition != position) {
+                notifyItemChanged(lastposition);
+                imageView.setImageBitmap(images_b[position]);
+                lastposition = position;
+            }
             if (clickListener != null) {
                 clickListener.ItemClicked(view, position, list);
             }
         }
     }
 
-    public void setClickListener(MyRecyclerAdapter.ClickListener clickListener) {
+    public void setClickListener(PtypeRecyclerAdapter.ClickListener clickListener) {
         this.clickListener = clickListener;
     }
 

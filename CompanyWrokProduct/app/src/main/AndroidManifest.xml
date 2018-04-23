@@ -23,6 +23,9 @@
         <activity android:name=".LoadingPage">
 
         </activity>
+        <activity android:name=".PtypeActivity">
+
+        </activity>
     </application>
 
 </manifest>
