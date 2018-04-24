@@ -172,7 +172,9 @@ public class Fragment_home extends Fragment {
                                 myRecyclerAdapter2.setClickListener(new MyRecyclerAdapter.ClickListener() {
                                     @Override
                                     public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
-                                        startActivity(new Intent(getActivity(), PtypeActivity.class));
+                                        Intent intent=new Intent(getActivity().getApplicationContext(), PtypeActivity.class);
+                                        intent.putExtra("position",postion);
+                                        startActivity(intent);
                                     }
                                 });
                             }

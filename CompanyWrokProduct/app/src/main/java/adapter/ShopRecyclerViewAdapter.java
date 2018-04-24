@@ -1,7 +1,6 @@
 package adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -42,15 +36,13 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View mFooterView;
     private Context ctx;
     private int layout_width, layout_heigh;
-    private JSONObject json1, json2;
+    private JSONObject json2;
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
-    private Bitmap[] images;
     private boolean[] isfavorate;
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
-    private ImageLoader loader;
     GlobalVariable gv;
 
     public void setmHeaderView(View mHeaderView) {
@@ -63,17 +55,14 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.mFooterView = mFooterView;
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json1, JSONObject json2, int layout_width, int layout_heigh) {
-        this.json1 = json1;
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json2, int layout_width, int layout_heigh) {
         this.json2 = json2;
         this.ctx = ctx;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
-        loader = ImageLoader.getInstance();
         list = ResolveJsonData.getJSONData(json2);
         Log.e("IPLIST", "" + list);
         isfavorate = new boolean[list.size()];
-        images = new Bitmap[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
         gv = (GlobalVariable) ctx.getApplicationContext();
     }
@@ -110,6 +99,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
             resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
             holder.imageView.setImageBitmap(null);
+            ImageLoader.getInstance().displayImage(list.get(position - 1).get("image"), holder.imageView);
+            /*
             if (images[position - 1] != null) {
                 holder.imageView.setImageBitmap(images[position - 1]);
             } else {
@@ -127,6 +118,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                     }
                 });
             }
+            */
             holder.free.setVisibility(View.INVISIBLE);
             holder.freash.setVisibility(View.INVISIBLE);
             holder.hot.setVisibility(View.INVISIBLE);
@@ -134,8 +126,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             holder.count0.setVisibility(View.INVISIBLE);
             holder.count1.setVisibility(View.INVISIBLE);
             holder.discount.setVisibility(View.INVISIBLE);
-            //免運
+
             if (list != null) {
+                //免運
                 if (list.get(position - 1).get("shipping").equals("true"))
                     holder.free.setVisibility(View.VISIBLE);
                 //新品
@@ -212,27 +205,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
     }
 
-    private DisplayImageOptions getWholeOptions() {
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
-                //.showImageForEmptyUri(R.drawable.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
-                // .showImageOnFail(R.drawable.error)  //设置图片加载/解码过程中错误时候显示的图片
-                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
-                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
-                .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)//设置图片以如何的编码方式显示
-                .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型
-                //.decodingOptions(BitmapFactory.Options decodingOptions)//设置图片的解码配置
-                .delayBeforeLoading(0)//int delayInMillis为你设置的下载前的延迟时间
-                //设置图片加入缓存前，对bitmap进行设置
-                //.preProcessor(BitmapProcessor preProcessor)
-                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-                .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
-                .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间，可能会出现闪动
-                .build();//构建完成
-
-        return options;
-    }
 
     private static String getString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");
@@ -346,4 +318,17 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         notifyDataSetChanged();
     }
 
+    public void recycleBitmaps() {
+        mHeaderView = null;
+        mFooterView = null;
+        ctx = null;
+        json2 = null;
+        view = null;
+        list = null;
+        dm = null;
+        isfavorate = null;
+        recycleHolder = null;
+        layoutParams = null;
+        gv = null;
+    }
 }

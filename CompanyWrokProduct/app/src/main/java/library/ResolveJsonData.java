@@ -74,6 +74,7 @@ public class ResolveJsonData {
                         map = new HashMap<>();
                         try {
                             JSONObject l2array_obj = l2array.getJSONObject(j);
+                            map.put("ptno", l2array_obj.getString("ptno"));
                             map.put("title", l2array_obj.getString("title"));
                             map.put("image", l2array_obj.getString("bimg"));
                             map.put("aimg", l2array_obj.getString("aimg"));

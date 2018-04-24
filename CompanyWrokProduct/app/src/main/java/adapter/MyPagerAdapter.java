@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import library.ImageLoaderUtils;
 import library.ResolveJsonData;
 
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
@@ -87,7 +86,7 @@ public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener
             imageView.setTag(i);
             mListViews.add(imageView);
             final int finalI = i;
-            ImageLoader.getInstance().loadImage(bitmaps.get(i).get("image"), ImageLoaderUtils.getWholeOptions(), new SimpleImageLoadingListener() {
+            ImageLoader.getInstance().loadImage(bitmaps.get(i).get("image"), new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view,
                                               Bitmap loadedImage) {

@@ -14,19 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import adapter.PtypeRecyclerAdapter;
 import adapter.ShopViewPagerAdapter;
 import library.GetInformationByPHP;
-import library.ResolveJsonData;
 
 public class Fragment_ptype extends Fragment {
     View v;
@@ -35,7 +29,8 @@ public class Fragment_ptype extends Fragment {
     ViewPager viewPager;
     JSONObject json1, json2, json3, json4;
     Fragment_shop_content fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4;
-RecyclerView recyclerView;
+    RecyclerView recyclerView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,16 +73,17 @@ RecyclerView recyclerView;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONObject json=new GetInformationByPHP().getPtype();
+                final JSONObject json = new GetInformationByPHP().getPtype();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView=v.findViewById(R.id.ptype_title);
+                        recyclerView = v.findViewById(R.id.ptype_title);
                         recyclerView.setHasFixedSize(true);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int)(dm.widthPixels/4+20*dm.density)));
+                        recyclerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (dm.widthPixels / 4 + 20 * dm.density)));
+                        /*
                         PtypeRecyclerAdapter adapter=new PtypeRecyclerAdapter(getActivity().getApplicationContext(), ResolveJsonData.getPtypeDetail(json,0),(dm.widthPixels/4),(int)(dm.widthPixels/4+20*dm.density));
                         recyclerView.setAdapter(adapter);
                         adapter.setClickListener(new PtypeRecyclerAdapter.ClickListener() {
@@ -96,7 +92,7 @@ RecyclerView recyclerView;
                                 Toast.makeText(getContext(), ""+list.get(postion).get("title"), Toast.LENGTH_SHORT).show();
                             }
                         });
-
+*/
                     }
                 });
             }

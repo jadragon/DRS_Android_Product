@@ -2,10 +2,7 @@ package Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -19,11 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.R;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -40,19 +32,23 @@ import library.ResolveJsonData;
 
 public class Fragment_shop_content extends Fragment {
     RecyclerView recyclerView;
-    ShopRecyclerViewAdapter myRecyclerAdapter1;
+    ShopRecyclerViewAdapter myRecyclerAdapter;
     ViewPager viewPager;
     JSONObject json1, json2;
     View v;
-    Handler handler;
     DisplayMetrics dm;
-    com.nostra13.universalimageloader.core.ImageLoader imageLoader = com.nostra13.universalimageloader.core.ImageLoader.getInstance();
+    Banner header;
 
     public Fragment_shop_content() {
     }
 
     @SuppressLint("ValidFragment")
     public Fragment_shop_content(JSONObject json1, JSONObject json2) {
+        this.json1 = json1;
+        this.json2 = json2;
+    }
+
+    public void setJson(JSONObject json1, JSONObject json2) {
         this.json1 = json1;
         this.json2 = json2;
     }
@@ -69,21 +65,19 @@ public class Fragment_shop_content extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();
-                handler = new Handler();
-                handler.post(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //recycleView
-                                dm = getResources().getDisplayMetrics();
-                                int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-                                myRecyclerAdapter1 = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json1, json2, real_heigh, (int) (real_heigh + (110 * dm.density)));
-                                GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
-                                recyclerView.setLayoutManager(layoutManager);
-                                /*
+                        //recycleView
+                        dm = getResources().getDisplayMetrics();
+                        int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+                        myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)));
+                        GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(myRecyclerAdapter);
+                        setHeaderView(myRecyclerAdapter);
+                        setFooterView(myRecyclerAdapter);
+                                   /*
                                 recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                                     @Override
                                     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -97,14 +91,8 @@ public class Fragment_shop_content extends Fragment {
                                     }
                                 });
                                 */
-                                recyclerView.setAdapter(myRecyclerAdapter1);
-                                setHeaderView(myRecyclerAdapter1);
-                                setFooterView(myRecyclerAdapter1);
-                            }
-                        });
                     }
                 });
-                Looper.loop();
             }
         }).start();
 
@@ -112,26 +100,14 @@ public class Fragment_shop_content extends Fragment {
     }
 
     private void setHeaderView(ShopRecyclerViewAdapter adapter) {
-        Banner header = (Banner) LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.testbanner, recyclerView, false);
+        header = (Banner) LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.testbanner, recyclerView, false);
         // Banner header=new Banner(getActivity());
         header.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
         header.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         header.setImageLoader(new ImageLoader() {
             @Override
             public void displayImage(Context context, final Object path, final ImageView imageView) {
-                imageLoader.displayImage(path.toString(), imageView);
-                com.nostra13.universalimageloader.core.ImageLoader.getInstance().loadImage(path.toString(), getWholeOptions(), new SimpleImageLoadingListener() {
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        super.onLoadingCancelled(imageUri, view);
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        super.onLoadingComplete(imageUri, view, loadedImage);
-                        imageView.setImageBitmap(loadedImage);
-                    }
-                });
+                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(path.toString(), imageView);
             }
         });
         List<String> images = new ArrayList<>();
@@ -140,7 +116,6 @@ public class Fragment_shop_content extends Fragment {
         header.setImages(images);
         //banner设置方法全部调用完毕时最后调用
         header.start();
-
         adapter.setmHeaderView(header);
     }
 
@@ -152,29 +127,36 @@ public class Fragment_shop_content extends Fragment {
 
 
     public void setFilter(JSONObject json) {
-        if (myRecyclerAdapter1 != null)
-            myRecyclerAdapter1.setFilter(json);
+        if (myRecyclerAdapter != null) {
+            myRecyclerAdapter.setFilter(json);
+            /*
+            List<String> images = new ArrayList<>();
+            for (Map<String, String> map : ResolveJsonData.getJSONData(banner))
+                images.add(map.get("image"));
+            header.update(images);
+            */
+        }
     }
 
-    private DisplayImageOptions getWholeOptions() {
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
-                //.showImageForEmptyUri(R.drawable.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
-                // .showImageOnFail(R.drawable.error)  //设置图片加载/解码过程中错误时候显示的图片
-                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
-                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
-                .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)//设置图片以如何的编码方式显示
-                .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型
-                //.decodingOptions(BitmapFactory.Options decodingOptions)//设置图片的解码配置
-                .delayBeforeLoading(0)//int delayInMillis为你设置的下载前的延迟时间
-                //设置图片加入缓存前，对bitmap进行设置
-                //.preProcessor(BitmapProcessor preProcessor)
-                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-                .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
-                .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间，可能会出现闪动
-                .build();//构建完成
 
-        return options;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        recycleBitamps();
     }
+
+    public void recycleBitamps() {
+        if (myRecyclerAdapter != null)
+            myRecyclerAdapter.recycleBitmaps();
+        recyclerView = null;
+        myRecyclerAdapter = null;
+        viewPager = null;
+        json1 = null;
+        json2 = null;
+        v = null;
+        dm = null;
+        header.releaseBanner();
+        System.gc();
+    }
+
 }

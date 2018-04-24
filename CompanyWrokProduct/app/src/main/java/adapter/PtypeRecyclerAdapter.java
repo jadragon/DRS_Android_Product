@@ -12,11 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -31,19 +29,18 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
     View view;
     ArrayList<Map<String, String>> list;
     DisplayMetrics dm;
-    Bitmap[] images_a, images_b;
+    Bitmap[][] bitmaps;
     PtypeRecyclerAdapter.RecycleHolder recycleHolder;
     LinearLayout.LayoutParams layoutParams;
     private PtypeRecyclerAdapter.ClickListener clickListener;
     int lastposition;
 
-    public PtypeRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int layout_width, int layout_heigh) {
+    public PtypeRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list,Bitmap[][] bitmaps, int layout_width, int layout_heigh) {
         this.ctx = ctx;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
         this.list = list;
-        images_a = new Bitmap[list.size()];
-        images_b = new Bitmap[list.size()];
+        this.bitmaps=bitmaps;
         dm = ctx.getResources().getDisplayMetrics();
 
     }
@@ -58,7 +55,14 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
+        layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), 0);
         holder.ptype_title_linear.setLayoutParams(layoutParams);
+        if (lastposition == position) {
+            holder.imageView.setImageBitmap(bitmaps[1][position]);
+        } else {
+            holder.imageView.setImageBitmap(bitmaps[0][position]);
+        }
+        /*
         if (images_a[position] == null) {
             ImageLoader.getInstance().loadImage(list.get(position).get("image"), getWholeOptions(), new SimpleImageLoadingListener() {
                 @Override
@@ -70,12 +74,13 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
                 }
             });
         } else {
-            if (lastposition==position) {
+            if (lastposition == position) {
                 holder.imageView.setImageBitmap(images_b[position]);
             } else {
                 holder.imageView.setImageBitmap(images_a[position]);
             }
         }
+
         if (images_b[position] == null)
             ImageLoader.getInstance().loadImage(list.get(position).get("aimg"), getWholeOptions(), new SimpleImageLoadingListener() {
                 @Override
@@ -85,6 +90,7 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
                     images_b[position] = loadedImage;
                 }
             });
+            */
         holder.tv.setText(list.get(position).get("title"));
     }
 
@@ -134,12 +140,10 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
 
         @Override
         public void onClick(View view) {
-
             int position = getAdapterPosition();
-
             if (lastposition != position) {
                 notifyItemChanged(lastposition);
-                imageView.setImageBitmap(images_b[position]);
+                imageView.setImageBitmap(bitmaps[1][position]);
                 lastposition = position;
             }
             if (clickListener != null) {
@@ -154,14 +158,6 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
 
     public interface ClickListener {
         void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list);
-    }
-
-    public void setFilter(ArrayList<Map<String, String>> list) {
-        this.list = list;
-        images_a = new Bitmap[list.size()];
-        images_b = new Bitmap[list.size()];
-        notifyDataSetChanged();
-
     }
 
 }

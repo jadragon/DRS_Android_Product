@@ -16,7 +16,7 @@ public class GetInformationByPHP {
     private static final String iplist_url = "http://api.gok1945.com/main/index/iplist.php";
     private static final String delFavoriteProduct_url = "http://api.gok1945.com/main/record/delFavoriteProduct.php";
     private static final String setFavorite_url = "http://api.gok1945.com/main/record/setFavorite.php";
-
+    private static final String plist_url = "http://api.gok1945.com/main/product/plist.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -122,7 +122,16 @@ public JSONObject test() {
      */
     public JSONObject getIplist(int type, int page) {
         params.add(new BasicNameValuePair("type", "" + type));
-        params.add(new BasicNameValuePair("page", "0" + page));
+        params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(iplist_url, params);
+    }
+    /**
+     * 取得商品列表欄資料
+     */
+    public JSONObject getPlist(String ptno,int type, int page) {
+        params.add(new BasicNameValuePair("ptno", "" + ptno));
+        params.add(new BasicNameValuePair("type", "" + type));
+        params.add(new BasicNameValuePair("page", "" + page));
+        return jsonParser.getJSONFromUrl(plist_url, params);
     }
 }

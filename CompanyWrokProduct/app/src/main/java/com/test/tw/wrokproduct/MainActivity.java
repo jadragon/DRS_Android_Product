@@ -12,10 +12,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 import org.json.JSONObject;
 
 import java.util.Timer;
@@ -25,7 +21,6 @@ import Fragment.Fragment_home;
 import Fragment.Fragment_shop;
 import library.BottomNavigationViewHelper;
 import library.GetInformationByPHP;
-import library.ResolveJsonData;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
@@ -41,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         testJson();
         initFragments();
         initBtnNav();
-        initImageLoader();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
         gv.setToken("zI6OIYlbhfPKyhbchdOiGg==");
@@ -51,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONObject json= new GetInformationByPHP().getPtype();
+                final JSONObject json= new GetInformationByPHP().getPlist("H4SKWOHIywLDkKAKx1lRNQ==",0,1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("array",ResolveJsonData.getPtypeDetail(json,0)+"");
+                        Log.e("TestJSONONONONON",json+"");
                     }
                 });
             }
@@ -64,55 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initImageLoader() {
-        if (ImageLoader.getInstance().isInited()) {
-            ImageLoader.getInstance().clearMemoryCache();
-            ImageLoader.getInstance().destroy();
-        }
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration
-                .Builder(getApplicationContext())
-                .memoryCache(new UsingFreqLimitedMemoryCache(50)).threadPoolSize(5)
-                .memoryCacheExtraOptions(480, 800) //保存每個緩存圖片的最大寬高
-                .threadPriority(Thread.NORM_PRIORITY - 1) //線池中的緩存數
-                .denyCacheImageMultipleSizesInMemory() //禁止緩存多張圖片
-                //               .memoryCache(new FIFOLimitedMemoryCache(2 * 1024 * 1024))//缓存策略
-//                .memoryCacheSize(50 * 1024 * 1024) //設置內存緩存的大小
-                //              .diskCacheFileNameGenerator(new Md5FileNameGenerator()) //缓存文件名的保存方式
-//                .diskCacheSize(200 * 1024 * 1024) //緩存大小
-                //             .tasksProcessingOrder(QueueProcessingType.LIFO) //工作序列
-                .diskCacheFileCount(200) //緩存的文件數量
-                .build();
-        if (!ImageLoader.getInstance().isInited()) {//偵測如果imagloader已經init，就不再init
 
-            ImageLoader.getInstance().init(config);
-        }
-        //  ImageLoader.getInstance().displayImage(url, imageView, ImageUsing);
-
-//    UsingFreqLimitedMemoryCache（如果緩存的圖片總量超過限定值，先刪除使用頻率最小的bitmap）
-//    LRULimitedMemoryCache（這個也是使用的lru算法，和LruMemoryCache不同的是，他緩存的是bitmap的弱引用）
-//    FIFOLimitedMemoryCache（先進先出的緩存策略，當超過設定值，先刪除最先加入緩存的bitmap）
-//    LargestLimitedMemoryCache(當超過緩存限定值，先刪除最大的bitmap對象)
-//    LimitedAgeMemoryCache（當bitmap加入緩存中的時間超過我們設定的值，將其刪除）
-
-//    Universal-Image-Loader的硬盤緩存策略
-//    詳細的硬盤緩存策略可以移步：http://blog.csdn.net/xiaanming/article/details/27525741，下方是總結的結果：
-
-//    FileCountLimitedDiscCache（可以設定緩存圖片的個數，當超過設定值，刪除掉最先加入到硬盤的文件）
-//    LimitedAgeDiscCache（設定文件存活的最長時間，當超過這個值，就刪除該文件）
-//    TotalSizeLimitedDiscCache（設定緩存bitmap的最大值，當超過這個值，刪除最先加入到硬盤的文件）
-//    UnlimitedDiscCache（這個緩存類沒有任何的限制）
-
-//    DisplayImageOptions ImageUsing = new DisplayImageOptions.Builder()
-//            .showImageOnLoading(R.drawable.loading)//圖片還沒下載好時跑的臨時圖片
-//            .showImageForEmptyUri(R.drawable.loading)
-//            .showImageOnFail(R.drawable.loading).cacheInMemory(true)//緩存
-//            .cacheOnDisc(true).bitmapConfig(Bitmap.Config.RGB_565)
-//            .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-//            .build();
-
-//.showImageOnLoading(R.drawable.loading)//圖片還沒下載好時跑的臨時圖片
-//.showImageOnFail(R.drawable.loading)//圖片讀取失敗時跑的臨時圖片
-    }
 
     protected void initBtnNav() {//BottomLayout
         navigation = findViewById(R.id.tab_layout);

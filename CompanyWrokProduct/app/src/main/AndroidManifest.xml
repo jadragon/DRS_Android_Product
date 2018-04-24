@@ -24,8 +24,8 @@
 
         </activity>
         <activity android:name=".PtypeActivity">
-
         </activity>
+
     </application>
 
 </manifest>
