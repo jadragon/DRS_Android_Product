@@ -19,7 +19,6 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import adapter.ShopViewPagerAdapter;
 import library.GetInformationByPHP;
 
 public class Fragment_ptype extends Fragment {
@@ -45,18 +44,12 @@ public class Fragment_ptype extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                fragment_shop_content1 = new Fragment_shop_content(new GetInformationByPHP().getBanner(0), new GetInformationByPHP().getIplist(0, 1));
-                // fragment_shop_content1.setJson( new GetInformationByPHP().getBanner(0),new GetInformationByPHP().getIplist(0,1));
-                fragment_shop_content2 = new Fragment_shop_content(new GetInformationByPHP().getBanner(1), new GetInformationByPHP().getIplist(1, 1));
-                //fragment_shop_content2.setJson( new GetInformationByPHP().getBanner(1),new GetInformationByPHP().getIplist(1,1));
-                fragment_shop_content3 = new Fragment_shop_content(new GetInformationByPHP().getBanner(2), new GetInformationByPHP().getIplist(2, 1));
-                //  fragment_shop_content3.setJson( new GetInformationByPHP().getBanner(2),new GetInformationByPHP().getIplist(2,1));
-                fragment_shop_content4 = new Fragment_shop_content(new GetInformationByPHP().getBanner(3), new GetInformationByPHP().getIplist(3, 1));
+
                 // fragment_shop_content4.setJson( new GetInformationByPHP().getBanner(3),new GetInformationByPHP().getIplist(3,1));
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getActivity().getApplicationContext().getResources().getStringArray(R.array.shop_header_title), new Fragment[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4}));
+                       // viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getActivity().getApplicationContext().getResources().getStringArray(R.array.shop_header_title), new Fragment[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4}));
                         tabLayout.setTabMode(TabLayout.MODE_FIXED);
                         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
                         tabLayout.setupWithViewPager(viewPager, true);

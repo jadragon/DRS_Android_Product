@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -45,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONObject json= new GetInformationByPHP().getPlist("H4SKWOHIywLDkKAKx1lRNQ==",0,1);
+                final JSONObject json= new GetInformationByPHP().getPlist("H4SKWOHIywLDkKAKx1lRNQ==",3,1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("TestJSONONONONON",json+"");
+                     //   Log.e("TestJSONONONONON",json+"");
                     }
                 });
             }
@@ -95,38 +94,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
-        Log.e("onStop", "onStop");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e("onStart", "onStart");
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("onPause", "onPause");
+
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e("onRestart", "onRestart");
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("onResume", "onResume");
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("onDestroy", "onDestroy");
+
     }
 
 

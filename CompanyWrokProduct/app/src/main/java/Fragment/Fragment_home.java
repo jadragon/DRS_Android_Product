@@ -1,5 +1,6 @@
 package Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,9 @@ import android.widget.RelativeLayout;
 
 import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.loader.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -120,10 +123,22 @@ public class Fragment_home extends Fragment {
                             public void run() {
                                 //高度等比縮放[   圖片高度/(圖片寬度/手機寬度)    ]
                                 // float real_heigh = bitmaps1.get(0).getImage().getHeight() / (bitmaps1.get(0).getImage().getWidth() / (float) dm.widthPixels);
-                                relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels*19/54));
-                                Log.e("real_heigh",""+real_heigh);
-                                myPagerAdapter = new MyPagerAdapter(v, json);
-                                viewPager.setAdapter(myPagerAdapter);
+                                Banner  header =v.findViewById(R.id.testbanner);
+                                // Banner header=new Banner(getActivity());
+                                header.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
+                                header.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+                                header.setImageLoader(new ImageLoader() {
+                                    @Override
+                                    public void displayImage(Context context, final Object path, final ImageView imageView) {
+                                        com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(path.toString(), imageView);
+                                    }
+                                });
+                                List<String> images = new ArrayList<>();
+                                for (Map<String, String> map : ResolveJsonData.getJSONData(json))
+                                    images.add(map.get("image"));
+                                header.setImages(images);
+                                //banner设置方法全部调用完毕时最后调用
+                                header.start();
                             }
                         });
                     }
@@ -244,7 +259,6 @@ public class Fragment_home extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         handler.getLooper().quit();
-        Log.e("onDestroyView","onDestroyView");
     }
 
 

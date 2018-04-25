@@ -38,6 +38,10 @@ public class Fragment_shop_content extends Fragment {
     View v;
     DisplayMetrics dm;
     Banner header;
+    int banner = 1;
+    public final static int HIDE_BANNER = 0;
+    public final static int SHOW_BANNER = 1;
+
 
     public Fragment_shop_content() {
     }
@@ -46,6 +50,11 @@ public class Fragment_shop_content extends Fragment {
     public Fragment_shop_content(JSONObject json1, JSONObject json2) {
         this.json1 = json1;
         this.json2 = json2;
+    }
+
+    @SuppressLint("ValidFragment")
+    public Fragment_shop_content(int banner) {
+        this.banner = banner;
     }
 
     public void setJson(JSONObject json1, JSONObject json2) {
@@ -62,21 +71,20 @@ public class Fragment_shop_content extends Fragment {
     private void initViewPagerAndRecyclerView() {
         recyclerView = v.findViewById(R.id.shop_conttent_re);
         viewPager = v.findViewById(R.id.adView);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //recycleView
-                        dm = getResources().getDisplayMetrics();
-                        int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-                        myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)));
-                        GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(myRecyclerAdapter);
-                        setHeaderView(myRecyclerAdapter);
-                        setFooterView(myRecyclerAdapter);
+        //recycleView
+        dm = getResources().getDisplayMetrics();
+        int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
+        recyclerView.setLayoutManager(layoutManager);
+        if (banner == HIDE_BANNER) {
+            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+        }
+        else{
+            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)));
+            setHeaderView(myRecyclerAdapter);
+        }
+        recyclerView.setAdapter(myRecyclerAdapter);
+        setFooterView(myRecyclerAdapter);
                                    /*
                                 recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                                     @Override
@@ -91,10 +99,6 @@ public class Fragment_shop_content extends Fragment {
                                     }
                                 });
                                 */
-                    }
-                });
-            }
-        }).start();
 
 
     }
@@ -126,7 +130,10 @@ public class Fragment_shop_content extends Fragment {
     }
 
 
+
+
     public void setFilter(JSONObject json) {
+        this.json2 = json;
         if (myRecyclerAdapter != null) {
             myRecyclerAdapter.setFilter(json);
             /*
@@ -137,8 +144,6 @@ public class Fragment_shop_content extends Fragment {
             */
         }
     }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -155,7 +160,8 @@ public class Fragment_shop_content extends Fragment {
         json2 = null;
         v = null;
         dm = null;
-        header.releaseBanner();
+        if (header != null)
+            header.releaseBanner();
         System.gc();
     }
 

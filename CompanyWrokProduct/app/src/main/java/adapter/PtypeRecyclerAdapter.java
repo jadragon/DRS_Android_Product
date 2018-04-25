@@ -11,10 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -54,8 +50,9 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
-        layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), 0);
+        layoutParams = new LinearLayout.LayoutParams((int)(layout_width+20* dm.density), layout_heigh);
+     //   layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), 0);
+        resizeImageView(holder.imageView,(int)(layout_width),(int)(layout_width));
         holder.ptype_title_linear.setLayoutParams(layoutParams);
         if (lastposition == position) {
             holder.imageView.setImageBitmap(bitmaps[1][position]);
@@ -93,27 +90,11 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
             */
         holder.tv.setText(list.get(position).get("title"));
     }
-
-    private DisplayImageOptions getWholeOptions() {
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
-                //.showImageForEmptyUri(R.drawable.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
-                // .showImageOnFail(R.drawable.error)  //设置图片加载/解码过程中错误时候显示的图片
-                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
-                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
-                .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)//设置图片以如何的编码方式显示
-                .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型
-                //.decodingOptions(BitmapFactory.Options decodingOptions)//设置图片的解码配置
-                .delayBeforeLoading(0)//int delayInMillis为你设置的下载前的延迟时间
-                //设置图片加入缓存前，对bitmap进行设置
-                //.preProcessor(BitmapProcessor preProcessor)
-                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-                .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
-                .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间，可能会出现闪动
-                .build();//构建完成
-
-        return options;
+    private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
+        ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
+        params.width = width;
+        params.height = heigh;
+        view.setLayoutParams(params);
     }
 
     @Override

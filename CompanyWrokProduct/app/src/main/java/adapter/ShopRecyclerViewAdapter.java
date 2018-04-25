@@ -29,14 +29,15 @@ import butterknife.ButterKnife;
 import library.ResolveJsonData;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> {
-    public static final int TYPE_HEADER = 0;  //说明是带有Header的
-    public static final int TYPE_FOOTER = 1;  //说明是带有Footer的
-    public static final int TYPE_NORMAL = 2;  //说明是不带有header和footer的
+    public static final int TYPE_NORMAL = 0;  //说明是不带有header和footer的
+    public static final int TYPE_HEADER = 1;  //说明是带有Header的
+    public static final int TYPE_FOOTER = 2;  //说明是带有Footer的
+
     private View mHeaderView;
     private View mFooterView;
     private Context ctx;
-    private int layout_width, layout_heigh;
-    private JSONObject json2;
+    private int layout_width, layout_heigh, had_header = 1;
+    private JSONObject json;
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
@@ -55,13 +56,28 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.mFooterView = mFooterView;
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json2, int layout_width, int layout_heigh) {
-        this.json2 = json2;
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int had_header) {
         this.ctx = ctx;
+        this.had_header = had_header;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
-        list = ResolveJsonData.getJSONData(json2);
+        if (json != null)
+            list = ResolveJsonData.getJSONData(json);
+        else
+            list = new ArrayList<>();
+        isfavorate = new boolean[list.size()];
         Log.e("IPLIST", "" + list);
+        dm = ctx.getResources().getDisplayMetrics();
+        gv = (GlobalVariable) ctx.getApplicationContext();
+    }
+
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh) {
+        this.json = json;
+        this.ctx = ctx;
+        this.json = json;
+        this.layout_width = layout_width;
+        this.layout_heigh = layout_heigh;
+        list = ResolveJsonData.getJSONData(json);
         isfavorate = new boolean[list.size()];
         dm = ctx.getResources().getDisplayMetrics();
         gv = (GlobalVariable) ctx.getApplicationContext();
@@ -71,35 +87,36 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     public ShopRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //頁面
         if (mHeaderView != null && viewType == TYPE_HEADER) {
-            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mHeaderView, json2);
+            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mHeaderView, json);
         }
 
         if (mFooterView != null && viewType == TYPE_FOOTER) {
-            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mFooterView, json2);
+            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mFooterView, json);
         }
 
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shop, parent, false);
-        recycleHolder = new ShopRecyclerViewAdapter.RecycleHolder(ctx, view, json2);
+        recycleHolder = new ShopRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         return recycleHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        if (getItemViewType(position) == TYPE_NORMAL) {
-            layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
-            //layout
-            holder.frameLayout.setLayoutParams(layoutParams);
-            holder.item_linear.setLayoutParams(new FrameLayout.LayoutParams((int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density + 110 * dm.density)));
-            //圖片
-            resizeImageView(holder.imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
-            resizeImageView(holder.count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
-            resizeImageView(holder.count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
-            resizeImageView(holder.free, (layout_width / 3), (layout_width / 3));
-            resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-            resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-            resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-            holder.imageView.setImageBitmap(null);
-            ImageLoader.getInstance().displayImage(list.get(position - 1).get("image"), holder.imageView);
+        if (list != null && list.size() > 0) {
+            if (getItemViewType(position) == TYPE_NORMAL) {
+                layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
+                //layout
+                holder.frameLayout.setLayoutParams(layoutParams);
+                holder.item_linear.setLayoutParams(new FrameLayout.LayoutParams((int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density + 110 * dm.density)));
+                //圖片
+                resizeImageView(holder.imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
+                resizeImageView(holder.count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
+                resizeImageView(holder.count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
+                resizeImageView(holder.free, (layout_width / 3), (layout_width / 3));
+                resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
+                resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
+                resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
+                holder.imageView.setImageBitmap(null);
+                ImageLoader.getInstance().displayImage(list.get(position - had_header).get("image"), holder.imageView);
             /*
             if (images[position - 1] != null) {
                 holder.imageView.setImageBitmap(images[position - 1]);
@@ -119,50 +136,49 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 });
             }
             */
-            holder.free.setVisibility(View.INVISIBLE);
-            holder.freash.setVisibility(View.INVISIBLE);
-            holder.hot.setVisibility(View.INVISIBLE);
-            holder.limit.setVisibility(View.INVISIBLE);
-            holder.count0.setVisibility(View.INVISIBLE);
-            holder.count1.setVisibility(View.INVISIBLE);
-            holder.discount.setVisibility(View.INVISIBLE);
+                holder.free.setVisibility(View.INVISIBLE);
+                holder.freash.setVisibility(View.INVISIBLE);
+                holder.hot.setVisibility(View.INVISIBLE);
+                holder.limit.setVisibility(View.INVISIBLE);
+                holder.count0.setVisibility(View.INVISIBLE);
+                holder.count1.setVisibility(View.INVISIBLE);
+                holder.discount.setVisibility(View.INVISIBLE);
 
-            if (list != null) {
                 //免運
-                if (list.get(position - 1).get("shipping").equals("true"))
+                if (list.get(position - had_header).get("shipping").equals("true"))
                     holder.free.setVisibility(View.VISIBLE);
                 //新品
-                if (list.get(position - 1).get("isnew").equals("true"))
+                if (list.get(position - had_header).get("isnew").equals("true"))
                     holder.freash.setVisibility(View.VISIBLE);
                 //熱門
-                if (list.get(position - 1).get("ishot").equals("true"))
+                if (list.get(position - had_header).get("ishot").equals("true"))
                     holder.hot.setVisibility(View.VISIBLE);
                 //限時
-                if (list.get(position - 1).get("istime").equals("true"))
+                if (list.get(position - had_header).get("istime").equals("true"))
                     holder.limit.setVisibility(View.VISIBLE);
                 //count0+count1
-                if (!list.get(position - 1).get("discount").equals("")) {
+                if (!list.get(position - had_header).get("discount").equals("")) {
                     holder.count0.setVisibility(View.VISIBLE);
                     holder.count1.setVisibility(View.VISIBLE);
                     holder.discount.setVisibility(View.VISIBLE);
                     // holder.discount.setTextSize(dm.heightPixels/dm.widthPixels*18);
-                    holder.discount.setText(list.get(position - 1).get("discount"));
+                    holder.discount.setText(list.get(position - had_header).get("discount"));
                 }
                 //原價
                 //特價
-                if (list.get(position - 1).get("rprice").equals(list.get(position - 1).get("rsprice"))) {
+                if (list.get(position - had_header).get("rprice").equals(list.get(position - had_header).get("rsprice"))) {
                     holder.rprice.setVisibility(View.INVISIBLE);
-                    holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
+                    holder.rsprice.setText("$" + getString(list.get(position - had_header).get("rsprice")));
                 } else {
                     holder.rprice.setPaintFlags(holder.rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.rprice.setText("$" + getString(list.get(position - 1).get("rprice")));
-                    holder.rsprice.setText("$" + getString(list.get(position - 1).get("rsprice")));
+                    holder.rprice.setText("$" + getString(list.get(position - had_header).get("rprice")));
+                    holder.rsprice.setText("$" + getString(list.get(position - had_header).get("rsprice")));
                 }
                 //title
-                holder.tv1.setText(list.get(position - 1).get("title"));
+                holder.tv1.setText(list.get(position - had_header).get("title"));
 
                 //score
-                switch (list.get(position - 1).get("score")) {
+                switch (list.get(position - had_header).get("score")) {
                     case "1":
                         holder.score.setImageResource(R.drawable.star1);
                         break;
@@ -183,19 +199,19 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                         break;
                 }
                 //判斷是否點過最愛
-                if (isfavorate[position - 1])
+                if (isfavorate[position - had_header])
                     holder.heart.setImageResource(R.drawable.heart_on);
                 else
                     holder.heart.setImageResource(R.drawable.heart_off);
                 holder.linear_heart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (isfavorate[position - 1]) {
+                        if (isfavorate[position - had_header]) {
                             holder.heart.setImageResource(R.drawable.heart_off);
-                            isfavorate[position - 1] = false;
+                            isfavorate[position - had_header] = false;
                         } else {
                             holder.heart.setImageResource(R.drawable.heart_on);
-                            isfavorate[position - 1] = true;
+                            isfavorate[position - had_header] = true;
                         }
 
                     }
@@ -203,6 +219,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             } else if (getItemViewType(position) == TYPE_HEADER) {
             }
         }
+
     }
 
 
@@ -305,16 +322,17 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (position != list.size() + 1) {
-                Toast.makeText(ctx, "" + list.get(position - 1).get("title"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, "" + list.get(position - had_header).get("title"), Toast.LENGTH_SHORT).show();
             }
         }
 
     }
 
     public void setFilter(JSONObject json) {
-        this.json2 = json;
+        this.json = json;
         list = ResolveJsonData.getJSONData(json);
         isfavorate = new boolean[list.size()];
+        Log.e("IPLIST", "" + list);
         notifyDataSetChanged();
     }
 
@@ -322,7 +340,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         mHeaderView = null;
         mFooterView = null;
         ctx = null;
-        json2 = null;
+        json = null;
         view = null;
         list = null;
         dm = null;
