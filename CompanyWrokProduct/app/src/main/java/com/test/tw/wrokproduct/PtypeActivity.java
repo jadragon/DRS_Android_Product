@@ -66,7 +66,6 @@ public class PtypeActivity extends AppCompatActivity {
                     bitmaps[0][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("image"));
                     bitmaps[1][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("aimg"));
                 }
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -93,10 +92,11 @@ public class PtypeActivity extends AppCompatActivity {
             @Override
             public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
                 index = postion;
+                viewPager.setCurrentItem(0);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        setFilter(index);
+                        resetRecyclerView(index);
                     }
                 }).start();
 
@@ -133,6 +133,10 @@ public class PtypeActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        fragment_shop_content1.resetRecyclerView(json1);
+                        fragment_shop_content2.resetRecyclerView(json2);
+                        fragment_shop_content3.resetRecyclerView(json3);
+                        fragment_shop_content4.resetRecyclerView(json4);
                     }
                 });
             }

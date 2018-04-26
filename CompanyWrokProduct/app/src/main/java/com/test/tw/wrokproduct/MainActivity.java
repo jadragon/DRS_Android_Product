@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import Fragment.Fragment_home;
 import Fragment.Fragment_shop;
 import library.BottomNavigationViewHelper;
 import library.GetInformationByPHP;
+import library.ResolveJsonData;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
@@ -44,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONObject json= new GetInformationByPHP().getPlist("H4SKWOHIywLDkKAKx1lRNQ==",3,1);
+                final JSONObject json= new GetInformationByPHP().getPcontent("URwlZEnZscDdnIJN4vjczw==");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                     //   Log.e("TestJSONONONONON",json+"");
+                       Log.e("TestJSONONONONON", ResolveJsonData.getPcContent(json)+"");
                     }
                 });
             }

@@ -17,6 +17,7 @@ public class GetInformationByPHP {
     private static final String delFavoriteProduct_url = "http://api.gok1945.com/main/record/delFavoriteProduct.php";
     private static final String setFavorite_url = "http://api.gok1945.com/main/record/setFavorite.php";
     private static final String plist_url = "http://api.gok1945.com/main/product/plist.php";
+    private static final String pcontent_url ="http://api.gok1945.com/main/product/pcontent.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -80,7 +81,13 @@ public JSONObject test() {
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(setFavorite_url, params);
     }
-
+    /**
+     * 設為最愛
+     */
+    public JSONObject getPcontent(String pno) {
+        params.add(new BasicNameValuePair("pno", pno));
+        return jsonParser.getJSONFromUrl(pcontent_url, params);
+    }
     /**
      * 取得廣告欄資料
      */

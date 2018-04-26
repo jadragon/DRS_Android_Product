@@ -78,8 +78,7 @@ public class Fragment_shop_content extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         if (banner == HIDE_BANNER) {
             myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
-        }
-        else{
+        } else {
             myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)));
             setHeaderView(myRecyclerAdapter);
         }
@@ -129,7 +128,13 @@ public class Fragment_shop_content extends Fragment {
         adapter.setmFooterViewView(footer);
     }
 
-
+    public void resetRecyclerView(JSONObject json) {
+        if (myRecyclerAdapter != null) {
+            int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+            recyclerView.setAdapter(myRecyclerAdapter);
+        }
+    }
 
 
     public void setFilter(JSONObject json) {
@@ -144,6 +149,7 @@ public class Fragment_shop_content extends Fragment {
             */
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
