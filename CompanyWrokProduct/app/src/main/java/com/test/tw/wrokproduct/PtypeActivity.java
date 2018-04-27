@@ -37,11 +37,14 @@ public class PtypeActivity extends AppCompatActivity {
     ShopViewPagerAdapter shopViewPagerAdapter;
     Bitmap[][] bitmaps;
     int index;
+    int POSITION;
     PtypeRecyclerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_ptype_layout);
+        POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();
         //setupTabIcons();
         tabLayout = findViewById(R.id.ptype_header_tablayout);
@@ -51,7 +54,7 @@ public class PtypeActivity extends AppCompatActivity {
         fragment_shop_content2 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
         fragment_shop_content3 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
         fragment_shop_content4 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-        shopViewPagerAdapter=new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), new Fragment_shop_content[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4});
+        shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), new Fragment_shop_content[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4});
         viewPager.setAdapter(shopViewPagerAdapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -60,7 +63,7 @@ public class PtypeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 json = new GetInformationByPHP().getPtype();
-                list = ResolveJsonData.getPtypeDetail(json, getIntent().getIntExtra("position", 0));
+                list = ResolveJsonData.getPtypeDetail(json, POSITION);
                 bitmaps = new Bitmap[2][list.size()];
                 for (int i = 0; i < list.size(); i++) {
                     bitmaps[0][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("image"));
@@ -121,8 +124,9 @@ public class PtypeActivity extends AppCompatActivity {
         });
 
     }
+
     public void resetRecyclerView(int position) {
-        this.index=position;
+        this.index = position;
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -104,16 +104,25 @@ public class ResolveJsonData {
      * 解析首頁:
      * 分類中的細項
      */
-    public static ArrayList<Map<String, String>> getPcContent(JSONObject json) {
+    public static Map<String, Object> getPcContent(JSONObject json) {
 
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, Object> arrayList = new HashMap<>();
         Map<String, String> map;
         try {
             String success = json.getString("Success");
             if (success.equals("true")) {
                 JSONArray json_data = json.getJSONArray("Data");
                 JSONObject json_obj = json_data.getJSONObject(0);
-
+                String pno = json_obj.getString("pno");
+                String pname = json_obj.getString("pname");
+                String descs = json_obj.getString("descs");
+                String img = json_obj.getString("img");
+                String content = json_obj.getString("content");
+                String rprice = json_obj.getString("rprice");
+                String rsprice = json_obj.getString("rsprice");
+                String isnew = json_obj.getString("isnew");
+                String ishot = json_obj.getString("ishot");
+                String istime = json_obj.getString("istime");
                 JSONArray itemArray = json_obj.getJSONArray("itemArray");
                 JSONArray imgArray = json_obj.getJSONArray("imgArray");
                 for (int j = 0; j < imgArray.length(); j++) {
@@ -121,7 +130,6 @@ public class ResolveJsonData {
                     try {
                         JSONObject imgArray_obj = imgArray.getJSONObject(j);
                         map.put("img", imgArray_obj.getString("img"));
-                        arrayList.add(map);
                     } catch (Exception e) {
                     }
                 }
@@ -144,8 +152,9 @@ public class ResolveJsonData {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return arrayList;
+        return null;
     }
+
 
     /**
      * 解析首頁:

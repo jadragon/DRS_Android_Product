@@ -2,6 +2,7 @@ package Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.test.tw.wrokproduct.PcContentActivity;
 import com.test.tw.wrokproduct.R;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -83,7 +86,17 @@ public class Fragment_shop_content extends Fragment {
             setHeaderView(myRecyclerAdapter);
         }
         recyclerView.setAdapter(myRecyclerAdapter);
+
         setFooterView(myRecyclerAdapter);
+        myRecyclerAdapter.setClickListener(new ShopRecyclerViewAdapter.ClickListener() {
+            @Override
+            public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
+                Intent intent=new Intent(getActivity().getApplicationContext(), PcContentActivity.class);
+                intent.putExtra("pno",list.get(postion-1).get("pno"));
+                startActivity(intent);
+                Toast.makeText(getContext(), list.get(postion).get("pno"), Toast.LENGTH_SHORT).show();
+            }
+        });
                                    /*
                                 recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                                     @Override

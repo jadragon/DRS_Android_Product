@@ -45,6 +45,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
     GlobalVariable gv;
+    private ShopRecyclerViewAdapter.ClickListener clickListener;
 
     public void setmHeaderView(View mHeaderView) {
 
@@ -324,9 +325,20 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             if (position != list.size() + 1) {
                 Toast.makeText(ctx, "" + list.get(position - had_header).get("title"), Toast.LENGTH_SHORT).show();
             }
+            if (clickListener != null) {
+                clickListener.ItemClicked(view, position, list);
+            }
         }
-
     }
+
+    public void setClickListener(ShopRecyclerViewAdapter.ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list);
+    }
+
 
     public void setFilter(JSONObject json) {
         this.json = json;
