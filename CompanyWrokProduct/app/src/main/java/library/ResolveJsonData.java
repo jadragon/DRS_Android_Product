@@ -1,11 +1,18 @@
 package library;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.widget.Switch;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 public class ResolveJsonData {
 
@@ -101,60 +108,61 @@ public class ResolveJsonData {
     }
 
     /**
-     * 解析首頁:
-     * 分類中的細項
+     * 解析產品內頁:
+     * 產品名稱、產品描述、產品原價、產品售價
      */
-    public static Map<String, Object> getPcContent(JSONObject json) {
+    public static Map<String, String> getPcContentInformation(JSONObject json) {
+        Map<String, String> maps = new HashMap<>();
+        try {
+            if (json.getBoolean("Success")) {
+                JSONObject json_obj = json.getJSONArray("Data").getJSONObject(0);
+                maps.put("pname", json_obj.getString("pname"));
+                maps.put("descs", json_obj.getString("descs"));
+                maps.put("rprice", json_obj.getString("rprice"));
+                maps.put("rsprice", json_obj.getString("rsprice"));
+                return maps;
+            }
 
-        Map<String, Object> arrayList = new HashMap<>();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+        /*
+        Iterator itt = json.keys();
+        while (itt.hasNext()) {
+
+            String key = itt.next().toString();
+            Object value = json.get(key);
+        }
+        */
+
+    }
+
+    /**
+     * 解析產品內頁:
+     * 產品圖片
+     */
+    public static ArrayList<Map<String, String>> getPcContentImgArray(JSONObject json) {
+
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
         Map<String, String> map;
         try {
             String success = json.getString("Success");
             if (success.equals("true")) {
-                JSONArray json_data = json.getJSONArray("Data");
-                JSONObject json_obj = json_data.getJSONObject(0);
-                String pno = json_obj.getString("pno");
-                String pname = json_obj.getString("pname");
-                String descs = json_obj.getString("descs");
-                String img = json_obj.getString("img");
-                String content = json_obj.getString("content");
-                String rprice = json_obj.getString("rprice");
-                String rsprice = json_obj.getString("rsprice");
-                String isnew = json_obj.getString("isnew");
-                String ishot = json_obj.getString("ishot");
-                String istime = json_obj.getString("istime");
-                JSONArray itemArray = json_obj.getJSONArray("itemArray");
-                JSONArray imgArray = json_obj.getJSONArray("imgArray");
+                JSONArray imgArray = json.getJSONArray("Data").getJSONObject(0).getJSONArray("imgArray");
                 for (int j = 0; j < imgArray.length(); j++) {
                     map = new HashMap<>();
-                    try {
-                        JSONObject imgArray_obj = imgArray.getJSONObject(j);
-                        map.put("img", imgArray_obj.getString("img"));
-                    } catch (Exception e) {
-                    }
+                    JSONObject imgArray_obj = imgArray.getJSONObject(j);
+                    map.put("img", imgArray_obj.getString("img"));
+                    arrayList.add(map);
                 }
-                JSONArray shippingArray = json_obj.getJSONArray("shippingArray");
-                /*
-                for (int j = 0; j < itemArray.length(); j++) {
-                    map = new HashMap<>();
-                    try {
-                        JSONObject l2array_obj = itemArray.getJSONObject(j);
-                        map.put("ptno", l2array_obj.getString("ptno"));
-                        map.put("title", l2array_obj.getString("title"));
-                        map.put("image", l2array_obj.getString("bimg"));
-                        map.put("aimg", l2array_obj.getString("aimg"));
-                        arrayList.add(map);
-                    } catch (Exception e) {
-                    }
-                }
-                */
+                return arrayList;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return arrayList;
     }
-
 
     /**
      * 解析首頁:
@@ -166,27 +174,9 @@ public class ResolveJsonData {
         try {
             String success = json.getString("Success");
             if (success.equals("true")) {
-                JSONArray json_data = json.getJSONArray("Data");
-                JSONObject json_obj = json_data.getJSONObject(0);
-
-                String content = json_obj.getString("content");
-                map.put("content", content);
-                String rpolicy = json_obj.getString("rpolicy");
-                map.put("rpolicy", rpolicy);
-                /*
-                for (int j = 0; j < itemArray.length(); j++) {
-                    map = new HashMap<>();
-                    try {
-                        JSONObject l2array_obj = itemArray.getJSONObject(j);
-                        map.put("ptno", l2array_obj.getString("ptno"));
-                        map.put("title", l2array_obj.getString("title"));
-                        map.put("image", l2array_obj.getString("bimg"));
-                        map.put("aimg", l2array_obj.getString("aimg"));
-                        arrayList.add(map);
-                    } catch (Exception e) {
-                    }
-                }
-                */
+                JSONObject json_obj = json.getJSONArray("Data").getJSONObject(0);
+                map.put("content", json_obj.getString("content"));
+                map.put("rpolicy", json_obj.getString("rpolicy"));
             }
         } catch (Exception e) {
             e.printStackTrace();

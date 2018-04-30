@@ -20,9 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoadingPage"></activity>
-        <activity android:name=".PtypeActivity"></activity>
+        <activity android:name=".LoadingPage" />
+        <activity android:name=".PtypeActivity" />
         <activity android:name=".PcContentActivity">
+
+        </activity>
+        <activity android:name=".TestActivity">
 
         </activity>
     </application>

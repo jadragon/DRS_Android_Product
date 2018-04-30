@@ -5,6 +5,8 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
+import Fragment.Fragment_WebView;
+
 public class ContentViewPager extends ViewPager {
     View v;
     public ContentViewPager(Context context) {
@@ -17,7 +19,9 @@ public class ContentViewPager extends ViewPager {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int index = getCurrentItem();
         int height = 0;
-        v = getChildAt(index);
+        if(getAdapter()!=null) {
+            v = ((Fragment_WebView) getAdapter().instantiateItem(this, index)).getView();
+        }
         if (v != null) {
             v.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
             height = v.getMeasuredHeight();
@@ -26,3 +30,4 @@ public class ContentViewPager extends ViewPager {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }
+

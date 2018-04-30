@@ -45,7 +45,6 @@ public class Fragment_shop_content extends Fragment {
     public final static int HIDE_BANNER = 0;
     public final static int SHOW_BANNER = 1;
 
-
     public Fragment_shop_content() {
     }
 
@@ -91,8 +90,13 @@ public class Fragment_shop_content extends Fragment {
         myRecyclerAdapter.setClickListener(new ShopRecyclerViewAdapter.ClickListener() {
             @Override
             public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
-                Intent intent=new Intent(getActivity().getApplicationContext(), PcContentActivity.class);
-                intent.putExtra("pno",list.get(postion-1).get("pno"));
+                Intent intent = new Intent(getActivity().getApplicationContext(), PcContentActivity.class);
+                if (banner == HIDE_BANNER) {
+                    intent.putExtra("pno", list.get(postion).get("pno"));
+                } else {
+                    intent.putExtra("pno", list.get(postion - 1).get("pno"));
+                }
+
                 startActivity(intent);
                 Toast.makeText(getContext(), list.get(postion).get("pno"), Toast.LENGTH_SHORT).show();
             }
@@ -111,7 +115,6 @@ public class Fragment_shop_content extends Fragment {
                                     }
                                 });
                                 */
-
 
     }
 
@@ -148,7 +151,6 @@ public class Fragment_shop_content extends Fragment {
             recyclerView.setAdapter(myRecyclerAdapter);
         }
     }
-
 
     public void setFilter(JSONObject json) {
         this.json2 = json;

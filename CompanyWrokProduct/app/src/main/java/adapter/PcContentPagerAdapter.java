@@ -65,7 +65,7 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
     }
 
     public void getImageView(JSONObject json) {
-        bitmaps = ResolveJsonData.getPcContent(json);
+        bitmaps = ResolveJsonData.getPcContentImgArray(json);
         Log.e("Image",bitmaps+"");
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {

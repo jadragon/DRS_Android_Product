@@ -34,32 +34,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        testJson();
+
         initFragments();
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
         gv.setToken("zI6OIYlbhfPKyhbchdOiGg==");
     }
-
-    private void testJson() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final JSONObject json= new GetInformationByPHP().getPcontent("URwlZEnZscDdnIJN4vjczw==");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                       Log.e("TestJSONONONONON", ResolveJsonData.getPcContent(json)+"");
-                    }
-                });
-            }
-        }).start();
-
-
-    }
-
-
 
     protected void initBtnNav() {//BottomLayout
         navigation = findViewById(R.id.tab_layout);
@@ -127,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
-
-
 
     /**
      * 切换Fragment

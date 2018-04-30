@@ -94,7 +94,6 @@ public class Fragment_WebView extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getActivity(), height + "", Toast.LENGTH_LONG).show();
                 //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
                 luntanListview.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
             }

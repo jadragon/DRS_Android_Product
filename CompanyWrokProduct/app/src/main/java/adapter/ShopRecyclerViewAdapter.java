@@ -67,7 +67,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         else
             list = new ArrayList<>();
         isfavorate = new boolean[list.size()];
-        Log.e("IPLIST", "" + list);
         dm = ctx.getResources().getDisplayMetrics();
         gv = (GlobalVariable) ctx.getApplicationContext();
     }
@@ -101,8 +100,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        if (list != null && list.size() > 0) {
+    public  void onBindViewHolder(final RecycleHolder holder, final int position) {
+        if (list.size() > 0) {
             if (getItemViewType(position) == TYPE_NORMAL) {
                 layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
                 //layout
@@ -144,7 +143,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 holder.count0.setVisibility(View.INVISIBLE);
                 holder.count1.setVisibility(View.INVISIBLE);
                 holder.discount.setVisibility(View.INVISIBLE);
-
+Log.e("GGGGGGGG",list+"");
                 //免運
                 if (list.get(position - had_header).get("shipping").equals("true"))
                     holder.free.setVisibility(View.VISIBLE);
@@ -169,11 +168,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 //特價
                 if (list.get(position - had_header).get("rprice").equals(list.get(position - had_header).get("rsprice"))) {
                     holder.rprice.setVisibility(View.INVISIBLE);
-                    holder.rsprice.setText("$" + getString(list.get(position - had_header).get("rsprice")));
+                    holder.rsprice.setText("$" + getDeciamlString(list.get(position - had_header).get("rsprice")));
                 } else {
                     holder.rprice.setPaintFlags(holder.rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.rprice.setText("$" + getString(list.get(position - had_header).get("rprice")));
-                    holder.rsprice.setText("$" + getString(list.get(position - had_header).get("rsprice")));
+                    holder.rprice.setText("$" + getDeciamlString(list.get(position - had_header).get("rprice")));
+                    holder.rsprice.setText("$" + getDeciamlString(list.get(position - had_header).get("rsprice")));
                 }
                 //title
                 holder.tv1.setText(list.get(position - had_header).get("title"));
@@ -224,7 +223,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     }
 
 
-    private static String getString(String str) {
+    private  String getDeciamlString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
     }
@@ -344,7 +343,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.json = json;
         list = ResolveJsonData.getJSONData(json);
         isfavorate = new boolean[list.size()];
-        Log.e("IPLIST", "" + list);
         notifyDataSetChanged();
     }
 
