@@ -1,18 +1,12 @@
 package library;
 
-import android.widget.Switch;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 public class ResolveJsonData {
 
@@ -165,8 +159,8 @@ public class ResolveJsonData {
     }
 
     /**
-     * 解析首頁:
-     * 分類中的細項
+     * 解析產品內頁:
+     * WebView
      */
     public static Map<String, String> getWebView(JSONObject json) {
         Map<String, String> map = new HashMap<>();
@@ -184,4 +178,56 @@ public class ResolveJsonData {
         return map;
     }
 
+    /**
+     * 解析產品內頁:
+     * 運送方式
+     */
+    public static ArrayList<Map<String, String>> getShippingArray(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            String success = json.getString("Success");
+            if (success.equals("true")) {
+                JSONArray shippingArray = json.getJSONArray("Data").getJSONObject(0).getJSONArray("shippingArray");
+                for (int j = 0; j < shippingArray.length(); j++) {
+                    map = new HashMap<>();
+                    JSONObject imgArray_obj = shippingArray.getJSONObject(j);
+                    map.put("land", imgArray_obj.getString("land"));
+                    map.put("logistics", imgArray_obj.getString("logistics"));
+                    map.put("lpay", imgArray_obj.getString("lpay"));
+                    map.put("info", imgArray_obj.getString("info"));
+                    arrayList.add(map);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return arrayList;
+    }
+    /**
+     * 解析產品內頁:
+     * 運送方式
+     */
+    public static ArrayList<Map<String, String>> getItemArray(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            String success = json.getString("Success");
+            if (success.equals("true")) {
+                JSONArray itemArray = json.getJSONArray("Data").getJSONObject(0).getJSONArray("itemArray");
+                for (int j = 0; j < itemArray.length(); j++) {
+                    map = new HashMap<>();
+                    JSONObject imgArray_obj = itemArray.getJSONObject(j);
+                    map.put("land", imgArray_obj.getString("land"));
+                    map.put("logistics", imgArray_obj.getString("logistics"));
+                    map.put("lpay", imgArray_obj.getString("lpay"));
+                    map.put("info", imgArray_obj.getString("info"));
+                    arrayList.add(map);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return arrayList;
+    }
 }

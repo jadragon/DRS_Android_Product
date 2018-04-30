@@ -92,7 +92,8 @@
                             android:layout_weight="6"
                             android:gravity="center_vertical"
                             android:text="$100"
-                            android:textSize="30sp" />
+                            android:textSize="30sp"
+                            android:textColor="@color/colorRed"/>
                     </LinearLayout>
 
                     <ImageView
@@ -103,13 +104,14 @@
                         android:src="@drawable/star5_2" />
 
                     <ImageView
+                        android:id="@+id/pccontent_heart"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/heart_on" />
+                        android:src="@drawable/heart_off" />
 
 
                 </LinearLayout>
@@ -131,7 +133,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="運送方式"
-                    android:textSize="50sp" />
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -192,11 +194,12 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
 
                     <library.CircleImageView
                         android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:src="@drawable/ship_seven_elaven"
                         app:border_color="@color/colorWhite" />
@@ -205,26 +208,28 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="我是賣家，賣家是我"
-                        android:textSize="20sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="5"
                     android:gravity="center_vertical|right">
 
-                    <Button
-                        android:layout_width="100dp"
-                        android:layout_height="35dp"
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/chaw_chaw" />
+                        android:src="@drawable/chaw_chaw" />
 
-                    <Button
-                        android:layout_width="100dp"
-                        android:layout_height="35dp"
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/goto_buy" />
+                        android:src="@drawable/goto_buy" />
                 </LinearLayout>
 
 
