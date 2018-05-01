@@ -17,8 +17,12 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,10 +54,15 @@ public class PcContentActivity extends AppCompatActivity {
     private View inflate;
     RecyclerView recyclerView;
     ImageView heart;
+    View enable_background;
+    LinearLayout shipways_layout;
+    private PopupWindow popWin = null; // 弹出窗口
+    private View popView = null; // 保存弹出窗口布局
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // pno = getIntent().getStringExtra("pno");
         pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
@@ -73,6 +82,8 @@ public class PcContentActivity extends AppCompatActivity {
             }
 
         });
+        initEnableBackground();
+        initShipWay();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -85,13 +96,25 @@ public class PcContentActivity extends AppCompatActivity {
                         initViewPager();
                         initTabLayout();
                         initToo();
-                        initShipWay();
+
                     }
                 });
 
             }
         }).start();
+    }
 
+    private void initEnableBackground() {
+        enable_background = findViewById(R.id.enable_background);
+        enable_background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                popWin.dismiss();
+                enable_background.setVisibility(View.INVISIBLE);
+            }
+        });
+        enable_background.setVisibility(View.INVISIBLE);
     }
 
     private void toastFavorate(int yes_or_not) {
@@ -118,10 +141,25 @@ public class PcContentActivity extends AppCompatActivity {
         ship_ways.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PcContentActivity.this, "ShipWays", Toast.LENGTH_SHORT).show();
-                showShipways();
+
+                popView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.shipways_layout, null);
+                recyclerView = popView.findViewById(R.id.ship_ways_review);
+                recyclerView.setHasFixedSize(true);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
+                popWin = new PopupWindow(popView,
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, false); // 实例化PopupWindow
+                // 设置PopupWindow的弹出和消失效果
+
+                popWin.setAnimationStyle(R.style.dialogWindowAnim);
+
+                popWin.showAtLocation(enable_background, Gravity.BOTTOM, 0, 0); // 显示弹出窗口
+                enable_background.setVisibility(View.VISIBLE);
             }
         });
+
     }
 
     private String getDeciamlString(String str) {
@@ -212,5 +250,4 @@ public class PcContentActivity extends AppCompatActivity {
         adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().widthPixels);
         viewPager.setAdapter(adapter);
     }
-
 }
