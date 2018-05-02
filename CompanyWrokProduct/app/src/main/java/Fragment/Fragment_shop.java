@@ -15,7 +15,7 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import adapter.ShopViewPagerAdapter;
+import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetInformationByPHP;
 
 public class Fragment_shop extends Fragment {

@@ -1,11 +1,11 @@
-package adapter;
+package adapter.viewpager;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.View;
 import android.view.ViewGroup;
-import Fragment.*;
+
+import Fragment.Fragment_WebView;
 public class PcContentWebViewPagerAdapter extends FragmentPagerAdapter {
 
     private String[] mTabtitle;

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,28 +16,27 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Map;
 
-import adapter.PcContentPagerAdapter;
-import adapter.PcContentWebViewPagerAdapter;
-import adapter.ShipsWaysRecyclerViewAdapter;
-import library.ContentViewPager;
+import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
+import adapter.recyclerview.ShopCartRecyclerViewAdapter;
+import adapter.viewpager.PcContentPagerAdapter;
+import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.GetInformationByPHP;
 import library.ResolveJsonData;
+import library.component.ContentViewPager;
 
 public class PcContentActivity extends AppCompatActivity {
     DisplayMetrics dm;
@@ -46,9 +46,8 @@ public class PcContentActivity extends AppCompatActivity {
     private PcContentPagerAdapter adapter;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    public DisplayMetrics displayMetrics;
     LinearLayout ship_ways;
-    TextView pccontent_txt_title, pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice;
+    TextView pccontent_txt_title, pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
     String pno;
     Dialog dialog;
     private View inflate;
@@ -58,6 +57,10 @@ public class PcContentActivity extends AppCompatActivity {
     LinearLayout shipways_layout;
     private PopupWindow popWin = null; // 弹出窗口
     private View popView = null; // 保存弹出窗口布局
+    Button pccontent_btn_addshopcart, pccontent_btn_buynow;
+    Map<String, String> product_info;
+    int count, max = 0;
+    Button shopcart_btn_increase, shopcart_btn_decrease;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +85,7 @@ public class PcContentActivity extends AppCompatActivity {
             }
 
         });
-        initEnableBackground();
-        initShipWay();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -92,10 +94,12 @@ public class PcContentActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         setText();
-                        displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
                         initViewPager();
                         initTabLayout();
                         initToo();
+                        initEnableBackground();
+                        initShipWay();
+                        initAddShopcart();
 
                     }
                 });
@@ -104,6 +108,77 @@ public class PcContentActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void initAddShopcart() {
+        pccontent_btn_addshopcart = findViewById(R.id.pccontent_btn_addshopcart);
+
+        pccontent_btn_addshopcart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                max=0;
+                count=0;
+                product_info = ResolveJsonData.getPcContentInformation(json);
+                GridLayoutManager layoutManager = new GridLayoutManager(getBaseContext(), 3);
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shopcart_layout, null);
+                recyclerView = popView.findViewById(R.id.shop_cart_review);
+                ImageLoader.getInstance().displayImage(product_info.get("img"), ((ImageView) popView.findViewById(R.id.shopcart_img)));
+                ((TextView) popView.findViewById(R.id.shopcart_txt_title)).setText(product_info.get("pname"));
+                ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$"+product_info.get("rsprice"));
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(layoutManager);
+                shopcart_txt_count = popView.findViewById(R.id.shopcart_txt_count);
+                ShopCartRecyclerViewAdapter recylcerAdapter = new ShopCartRecyclerViewAdapter(getBaseContext(), json);
+                recylcerAdapter.setItemSelectListener(new ShopCartRecyclerViewAdapter.ItemSelectListener() {
+                    @Override
+                    public void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list) {
+                        ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + list.get(postion).get("sprice"));
+                        try {
+                            max = Integer.parseInt(list.get(postion).get("total"));
+                        } catch (Exception e) {
+                            max = 0;
+                        }
+                        ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
+
+                    }
+
+                    @Override
+                    public void ItemCancelSelect(View view, int postion, ArrayList<Map<String, String>> list) {
+                        ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + product_info.get("rsprice"));
+                        max=0;
+                        count=0;
+                        ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:"+max);
+                        shopcart_txt_count.setText(max+"");
+
+                    }
+                });
+
+                shopcart_btn_increase = popView.findViewById(R.id.shopcart_btn_increase);
+                shopcart_btn_increase.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ( count< max) {
+                            count++;
+                            shopcart_txt_count.setText(count + "");
+                        }
+                    }
+                });
+                shopcart_btn_decrease = popView.findViewById(R.id.shopcart_btn_decrease);
+                shopcart_btn_decrease.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (count > 0) {
+                            count--;
+                            shopcart_txt_count.setText(count + "");
+                        }
+                    }
+                });
+                recyclerView.setAdapter(recylcerAdapter);
+                showShipways(popView);
+            }
+        });
+    }
+
+    //初始化隱藏背景
     private void initEnableBackground() {
         enable_background = findViewById(R.id.enable_background);
         enable_background.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +192,7 @@ public class PcContentActivity extends AppCompatActivity {
         enable_background.setVisibility(View.INVISIBLE);
     }
 
+    //設定
     private void toastFavorate(int yes_or_not) {
         dialog = new Dialog(this);
         inflate = LayoutInflater.from(this).inflate(R.layout.favorate_layout, null);
@@ -136,27 +212,21 @@ public class PcContentActivity extends AppCompatActivity {
         }, 1500);
     }
 
+    //初始化運送方式
     private void initShipWay() {
         ship_ways = findViewById(R.id.ship_ways);
         ship_ways.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                popView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.shipways_layout, null);
-                recyclerView = popView.findViewById(R.id.ship_ways_review);
-                recyclerView.setHasFixedSize(true);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shipways_layout, null);
+                recyclerView = popView.findViewById(R.id.ship_ways_review);
+                recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
-                popWin = new PopupWindow(popView,
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, false); // 实例化PopupWindow
-                // 设置PopupWindow的弹出和消失效果
+                showShipways(popView);
 
-                popWin.setAnimationStyle(R.style.dialogWindowAnim);
-
-                popWin.showAtLocation(enable_background, Gravity.BOTTOM, 0, 0); // 显示弹出窗口
-                enable_background.setVisibility(View.VISIBLE);
             }
         });
 
@@ -167,6 +237,7 @@ public class PcContentActivity extends AppCompatActivity {
         return df.format(Double.parseDouble(str));
     }
 
+    //設定價錢
     public void setText() {
         Map<String, String> information = ResolveJsonData.getPcContentInformation(json);
         Log.e("information", information + "");
@@ -183,6 +254,7 @@ public class PcContentActivity extends AppCompatActivity {
 
     }
 
+    //初始化詳細說明及退換貨須知
     private void initTabLayout() {
         webviewpager = findViewById(R.id.pccontent_web_viewpager);
         tabLayout = findViewById(R.id.pccontent_tablayout);
@@ -195,7 +267,14 @@ public class PcContentActivity extends AppCompatActivity {
         //   webviewpager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,6500));
     }
 
-    public void showShipways() {
+    //顯示下方彈出視窗
+    public void showShipways(View popView) {
+        popWin = new PopupWindow(popView, LinearLayout.LayoutParams.MATCH_PARENT, (int) (450 * dm.density), false); // 实例化PopupWindow
+        // 设置PopupWindow的弹出和消失效果
+        popWin.setAnimationStyle(R.style.dialogWindowAnim);
+        popWin.showAtLocation(enable_background, Gravity.BOTTOM, 0, 0); // 显示弹出窗口
+        enable_background.setVisibility(View.VISIBLE);
+        /*
         dialog = new Dialog(this, R.style.Theme_Design_Light_BottomSheetDialog);
         //填充对话框的布局
         inflate = LayoutInflater.from(this).inflate(R.layout.shipways_layout, null);
@@ -221,6 +300,7 @@ public class PcContentActivity extends AppCompatActivity {
 //       将属性设置给窗体
         dialogWindow.setAttributes(lp);
         dialog.show();//显示对话框
+        */
     }
 
     private void initToo() {
@@ -247,7 +327,20 @@ public class PcContentActivity extends AppCompatActivity {
 
     private void initViewPager() {
         viewPager = findViewById(R.id.adView);
-        adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().widthPixels);
+        adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, dm.widthPixels, dm.widthPixels);
         viewPager.setAdapter(adapter);
+    }
+
+    //增加產品數量
+    public void increaseProduct(View view) {
+        count++;
+        shopcart_txt_count.setText(count);
+
+    }
+
+    //減少產品數量
+    public void decreaseProduct(View view) {
+        count--;
+        shopcart_txt_count.setText(count);
     }
 }

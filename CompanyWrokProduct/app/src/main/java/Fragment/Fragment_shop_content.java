@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.PcContentActivity;
 import com.test.tw.wrokproduct.R;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import adapter.ShopRecyclerViewAdapter;
+import adapter.recyclerview.ShopRecyclerViewAdapter;
 import library.ResolveJsonData;
 
 public class Fragment_shop_content extends Fragment {
@@ -96,9 +95,7 @@ public class Fragment_shop_content extends Fragment {
                 } else {
                     intent.putExtra("pno", list.get(postion - 1).get("pno"));
                 }
-
                 startActivity(intent);
-                Toast.makeText(getContext(), list.get(postion).get("pno"), Toast.LENGTH_SHORT).show();
             }
         });
                                    /*

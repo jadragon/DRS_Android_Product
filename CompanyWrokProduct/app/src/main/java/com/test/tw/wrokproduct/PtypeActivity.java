@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import Fragment.Fragment_shop_content;
-import adapter.PtypeRecyclerAdapter;
-import adapter.ShopViewPagerAdapter;
+import adapter.recyclerview.PtypeRecyclerAdapter;
+import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetInformationByPHP;
 import library.ResolveJsonData;
 
@@ -103,7 +102,6 @@ public class PtypeActivity extends AppCompatActivity {
                     }
                 }).start();
 
-                Toast.makeText(getApplicationContext(), "" + list.get(postion).get("title"), Toast.LENGTH_SHORT).show();
             }
         });
     }

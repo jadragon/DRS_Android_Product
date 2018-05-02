@@ -13,7 +13,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
@@ -43,7 +42,7 @@ public class Fragment_WebView extends Fragment {
         luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8",
                 null);
         luntanListview.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
-        luntanListview.requestFocus(); //触摸焦点起作用.如果不设置，则在点击网页文本输入框时，不能弹出软键盘及不响应其他的一些事件。
+        //luntanListview.requestFocus(); //触摸焦点起作用.如果不设置，则在点击网页文本输入框时，不能弹出软键盘及不响应其他的一些事件。
                luntanListview.getSettings().setBuiltInZoomControls(true); //页面添加缩放按钮
         luntanListview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         luntanListview.setVerticalScrollBarEnabled(false);

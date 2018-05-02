@@ -33,10 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import adapter.MyPagerAdapter;
-import adapter.MyRecyclerAdapter;
+import adapter.viewpager.MyPagerAdapter;
+import adapter.recyclerview.MyRecyclerAdapter;
 import library.GetInformationByPHP;
-import library.MySwipeRefreshLayout;
+import library.component.MySwipeRefreshLayout;
 import library.ResolveJsonData;
 
 /**

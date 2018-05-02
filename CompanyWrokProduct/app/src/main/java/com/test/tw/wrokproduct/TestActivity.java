@@ -30,7 +30,7 @@ public class TestActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        test_textview.setText("" + ResolveJsonData.getShippingArray(json));
+                        test_textview.setText("" + ResolveJsonData.getItemArray(json));
                         Log.e("TestJSONONONONON", ResolveJsonData.getPcContentInformation(json) + "");
 
                     }

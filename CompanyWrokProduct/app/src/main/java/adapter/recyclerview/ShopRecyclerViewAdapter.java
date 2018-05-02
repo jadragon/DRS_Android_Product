@@ -1,11 +1,10 @@
-package adapter;
+package adapter.recyclerview;
 
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -143,7 +141,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 holder.count0.setVisibility(View.INVISIBLE);
                 holder.count1.setVisibility(View.INVISIBLE);
                 holder.discount.setVisibility(View.INVISIBLE);
-Log.e("GGGGGGGG",list+"");
                 //免運
                 if (list.get(position - had_header).get("shipping").equals("true"))
                     holder.free.setVisibility(View.VISIBLE);
@@ -322,7 +319,7 @@ Log.e("GGGGGGGG",list+"");
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (position != list.size() + 1) {
-                Toast.makeText(ctx, "" + list.get(position - had_header).get("title"), Toast.LENGTH_SHORT).show();
+
             }
             if (clickListener != null) {
                 clickListener.ItemClicked(view, position, list);

@@ -1,4 +1,4 @@
-package adapter;
+package adapter.viewpager;
 
 import android.app.Activity;
 import android.content.Context;

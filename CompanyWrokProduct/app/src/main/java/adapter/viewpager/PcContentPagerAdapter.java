@@ -1,4 +1,4 @@
-package adapter;
+package adapter.viewpager;
 
 import android.content.Context;
 import android.graphics.Color;

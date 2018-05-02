@@ -110,6 +110,7 @@ public class ResolveJsonData {
         try {
             if (json.getBoolean("Success")) {
                 JSONObject json_obj = json.getJSONArray("Data").getJSONObject(0);
+                maps.put("img", json_obj.getString("img"));
                 maps.put("pname", json_obj.getString("pname"));
                 maps.put("descs", json_obj.getString("descs"));
                 maps.put("rprice", json_obj.getString("rprice"));
@@ -206,7 +207,7 @@ public class ResolveJsonData {
     }
     /**
      * 解析產品內頁:
-     * 運送方式
+     * 商品款式
      */
     public static ArrayList<Map<String, String>> getItemArray(JSONObject json) {
         ArrayList<Map<String, String>> arrayList = new ArrayList<>();
@@ -218,10 +219,11 @@ public class ResolveJsonData {
                 for (int j = 0; j < itemArray.length(); j++) {
                     map = new HashMap<>();
                     JSONObject imgArray_obj = itemArray.getJSONObject(j);
-                    map.put("land", imgArray_obj.getString("land"));
-                    map.put("logistics", imgArray_obj.getString("logistics"));
-                    map.put("lpay", imgArray_obj.getString("lpay"));
-                    map.put("info", imgArray_obj.getString("info"));
+                    map.put("color", imgArray_obj.getString("color"));
+                    map.put("size", imgArray_obj.getString("size"));
+                    map.put("price", imgArray_obj.getString("price"));
+                    map.put("sprice", imgArray_obj.getString("sprice"));
+                    map.put("total", imgArray_obj.getString("total"));
                     arrayList.add(map);
                 }
             }

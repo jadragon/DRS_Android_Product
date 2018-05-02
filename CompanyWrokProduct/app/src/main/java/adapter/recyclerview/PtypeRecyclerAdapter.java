@@ -1,4 +1,4 @@
-package adapter;
+package adapter.recyclerview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
