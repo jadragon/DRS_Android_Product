@@ -55,7 +55,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
             layoutParams.setMargins(0, 0, (int) (10 * dm.density), 0);
         } else if (type == 1) {
             layoutParams.setMargins(0, 0, 0, 0);
-            holder.tv1.setTextColor(ctx.getResources().getColor(R.color.colorBlack));
+            holder.tv1.setTextColor(ctx.getResources().getColor(R.color.black));
             holder.tv1.setBackgroundColor(ctx.getResources().getColor(R.color.colorInvisible));
         } else if (type == 2) {
             layoutParams.setMargins(0, 0, (int) (5 * dm.density), 0);

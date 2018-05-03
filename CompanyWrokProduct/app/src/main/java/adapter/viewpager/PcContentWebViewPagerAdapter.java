@@ -3,6 +3,7 @@ package adapter.viewpager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import Fragment.Fragment_WebView;
@@ -10,21 +11,31 @@ public class PcContentWebViewPagerAdapter extends FragmentPagerAdapter {
 
     private String[] mTabtitle;
     private String[] htmls;
-    private Fragment[] fragments;
+    private Fragment_WebView[] fragments;
+    int[] heigh;
     public PcContentWebViewPagerAdapter(FragmentManager fm, String[] mTabtitle, String[] htmls) {
         super(fm);
-
         this.mTabtitle=mTabtitle;
         this.htmls=htmls;
-        fragments=new Fragment[mTabtitle.length];
+        fragments=new Fragment_WebView[mTabtitle.length];
+        heigh=new int[mTabtitle.length];
     }
 
 
 
     @Override
-    public Fragment getItem(int position) {
-        if(fragments[position]==null)
-        fragments[position]=new Fragment_WebView(htmls[position]);
+    public Fragment getItem(final int position) {
+        if(fragments[position]==null) {
+            fragments[position] = new Fragment_WebView(htmls[position]);
+            fragments[position].setOnHeighChangerListener(new Fragment_WebView.OnHeighChangerListener() {
+                @Override
+                public void valueChanged(int Height) {
+                    heigh[position]=Height;
+                    Log.e("GGGGGGGGGGGGGG",  heigh[position]+"");
+                }
+            });
+        }
+
         return  fragments[position];
     }
 

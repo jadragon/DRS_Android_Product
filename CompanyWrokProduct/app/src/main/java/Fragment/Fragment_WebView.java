@@ -20,9 +20,23 @@ public class Fragment_WebView extends Fragment {
     private WebView luntanListview;
     String html;
     private View v;
-
+    ViewGroup container;
+    int webviewHeigh;
+    Fragment_WebView.OnHeighChangerListener onHeighChangerListener;
 
     public Fragment_WebView() {
+    }
+
+    public interface OnHeighChangerListener {
+        void valueChanged(int Height);
+    }
+
+    public void setOnHeighChangerListener(Fragment_WebView.OnHeighChangerListener onHeighChangerListener) {
+        this.onHeighChangerListener = onHeighChangerListener;
+    }
+
+    public int getWebviewHeigh() {
+        return webviewHeigh;
     }
 
     @SuppressLint("ValidFragment")
@@ -31,19 +45,28 @@ public class Fragment_WebView extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.container = container;
         v = inflater.inflate(R.layout.webview_layout, container, false);
         showWebView();
         return v;
     }
+
     private void showWebView() {
         Log.e("html", html);
-        luntanListview=v.findViewById(R.id.pccontent_webview);
+        luntanListview = v.findViewById(R.id.pccontent_webview);
         // 设置WevView要显示的网页
         luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8",
                 null);
         luntanListview.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
-        //luntanListview.requestFocus(); //触摸焦点起作用.如果不设置，则在点击网页文本输入框时，不能弹出软键盘及不响应其他的一些事件。
-               luntanListview.getSettings().setBuiltInZoomControls(true); //页面添加缩放按钮
+        // 设置可以支持缩放
+        // luntanListview.getSettings().setSupportZoom(true);
+        // 设置出现缩放工具
+        //   luntanListview.getSettings().setBuiltInZoomControls(true);
+        //设置可在大视野范围内上下左右拖动，并且可以任意比例缩放
+        luntanListview.getSettings().setUseWideViewPort(true);
+        //设置默认加载的可视范围是大视野范围
+        //luntanListview.getSettings().setLoadWithOverviewMode(true);
+        //自适应屏幕
         luntanListview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         luntanListview.setVerticalScrollBarEnabled(false);
         luntanListview.setVerticalScrollbarOverlay(false);
@@ -58,6 +81,7 @@ public class Fragment_WebView extends Fragment {
                 view.loadUrl(url);
                 return true;
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -88,6 +112,20 @@ public class Fragment_WebView extends Fragment {
         //            }
         //        });
     }
+
+    public void clearWebViewResource(ViewGroup container, WebView webView) {
+        if (webView != null) {
+            webView.removeAllViews();
+            // in android 5.1(sdk:21) we should invoke this to avoid memory leak
+            // see (https://coolpers.github.io/webview/memory/leak/2015/07/16/
+            // android-5.1-webview-memory-leak.html)
+            container.removeView(webView);
+            webView.setTag(null);
+            webView.clearHistory();
+            webView.destroy();
+        }
+    }
+
     @JavascriptInterface
     public void resize(final float height) {
         getActivity().runOnUiThread(new Runnable() {
@@ -95,7 +133,16 @@ public class Fragment_WebView extends Fragment {
             public void run() {
                 //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
                 luntanListview.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+                webviewHeigh = (int) (height);
+                if(onHeighChangerListener!=null)
+                onHeighChangerListener.valueChanged(webviewHeigh);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        clearWebViewResource(container, luntanListview);
     }
 }

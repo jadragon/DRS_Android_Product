@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     android:text="9折"
                     android:paddingRight="5dp"
@@ -91,7 +91,7 @@
                 android:orientation="vertical"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@color/colorWhite">
+                android:background="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                             android:layout_weight="1"
                             android:text="$250000"
                             android:textSize="15sp"
-                            android:textColor="@color/colorRed"
+                            android:textColor="@color/red"
                             android:paddingLeft="5dp" />
                     </LinearLayout>
                     <LinearLayout

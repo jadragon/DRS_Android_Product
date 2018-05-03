@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,12 +37,12 @@ import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.GetInformationByPHP;
 import library.ResolveJsonData;
-import library.component.ContentViewPager;
+import library.component.MyViewPager;
 
 public class PcContentActivity extends AppCompatActivity {
     DisplayMetrics dm;
     private ViewPager viewPager;
-    private ContentViewPager webviewpager;
+    private MyViewPager webviewpager;
     private JSONObject json;
     private PcContentPagerAdapter adapter;
     private Toolbar toolbar;
@@ -57,17 +58,19 @@ public class PcContentActivity extends AppCompatActivity {
     LinearLayout shipways_layout;
     private PopupWindow popWin = null; // 弹出窗口
     private View popView = null; // 保存弹出窗口布局
-    Button pccontent_btn_addshopcart, pccontent_btn_buynow;
+    Button pccontent_btn_addshopcart, pccontent_btn_buynow,shop_cart_confirm;
     Map<String, String> product_info;
     int count, max = 0;
+    int default_color;
     Button shopcart_btn_increase, shopcart_btn_decrease;
+    int myRecylcerViewHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // pno = getIntent().getStringExtra("pno");
-        pno = "URwlZEnZscDdnIJN4vjczw==";
+         pno = getIntent().getStringExtra("pno");
+       // pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
         setContentView(R.layout.activity_pccontent);
         heart = findViewById(R.id.pccontent_heart);
@@ -99,8 +102,8 @@ public class PcContentActivity extends AppCompatActivity {
                         initToo();
                         initEnableBackground();
                         initShipWay();
-                        initAddShopcart();
-
+                        initAddShopCart();
+                        initBuyNow();
                     }
                 });
 
@@ -108,74 +111,160 @@ public class PcContentActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void initAddShopcart() {
+    //初始化加入購物車
+    private void initAddShopCart() {
         pccontent_btn_addshopcart = findViewById(R.id.pccontent_btn_addshopcart);
 
         pccontent_btn_addshopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                max=0;
-                count=0;
-                product_info = ResolveJsonData.getPcContentInformation(json);
-                GridLayoutManager layoutManager = new GridLayoutManager(getBaseContext(), 3);
-                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shopcart_layout, null);
-                recyclerView = popView.findViewById(R.id.shop_cart_review);
-                ImageLoader.getInstance().displayImage(product_info.get("img"), ((ImageView) popView.findViewById(R.id.shopcart_img)));
-                ((TextView) popView.findViewById(R.id.shopcart_txt_title)).setText(product_info.get("pname"));
-                ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$"+product_info.get("rsprice"));
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(layoutManager);
-                shopcart_txt_count = popView.findViewById(R.id.shopcart_txt_count);
-                ShopCartRecyclerViewAdapter recylcerAdapter = new ShopCartRecyclerViewAdapter(getBaseContext(), json);
-                recylcerAdapter.setItemSelectListener(new ShopCartRecyclerViewAdapter.ItemSelectListener() {
-                    @Override
-                    public void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list) {
-                        ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + list.get(postion).get("sprice"));
-                        try {
-                            max = Integer.parseInt(list.get(postion).get("total"));
-                        } catch (Exception e) {
-                            max = 0;
-                        }
-                        ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
-
-                    }
-
-                    @Override
-                    public void ItemCancelSelect(View view, int postion, ArrayList<Map<String, String>> list) {
-                        ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + product_info.get("rsprice"));
-                        max=0;
-                        count=0;
-                        ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:"+max);
-                        shopcart_txt_count.setText(max+"");
-
-                    }
-                });
-
-                shopcart_btn_increase = popView.findViewById(R.id.shopcart_btn_increase);
-                shopcart_btn_increase.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ( count< max) {
-                            count++;
-                            shopcart_txt_count.setText(count + "");
-                        }
-                    }
-                });
-                shopcart_btn_decrease = popView.findViewById(R.id.shopcart_btn_decrease);
-                shopcart_btn_decrease.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (count > 0) {
-                            count--;
-                            shopcart_txt_count.setText(count + "");
-                        }
-                    }
-                });
-                recyclerView.setAdapter(recylcerAdapter);
-                showShipways(popView);
+                popUpView(getResources().getColor(R.color.orange));
             }
         });
+    }
+
+    //初始化加入購物車
+    private void initBuyNow() {
+        pccontent_btn_buynow = findViewById(R.id.pccontent_btn_buynow);
+
+        pccontent_btn_buynow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popUpView(getResources().getColor(R.color.red));
+            }
+        });
+    }
+
+    //設定彈出視窗
+    public void popUpView(int color) {
+        this.default_color=color;
+        max = 0;
+        count = 0;
+        product_info = ResolveJsonData.getPcContentInformation(json);
+        popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shopcart_layout, null);
+        //設定產品資訊
+        ImageLoader.getInstance().displayImage(product_info.get("img"), ((ImageView) popView.findViewById(R.id.shopcart_img)));
+        ((TextView) popView.findViewById(R.id.shopcart_txt_title)).setText(product_info.get("pname"));
+        ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + product_info.get("rsprice"));
+        //設定款式
+        GridLayoutManager layoutManager = new GridLayoutManager(getBaseContext(), 3);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView = popView.findViewById(R.id.shop_cart_review);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        shopcart_txt_count = popView.findViewById(R.id.shopcart_txt_count);
+        //此項為當recyclerview描繪完後，再執行
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        myRecylcerViewHeight = recyclerView.getHeight();
+                        ShopCartRecyclerViewAdapter recylcerAdapter = new ShopCartRecyclerViewAdapter(getBaseContext(), json, myRecylcerViewHeight, default_color);
+                        recylcerAdapter.setItemSelectListener(new ShopCartRecyclerViewAdapter.ItemSelectListener() {
+                            @Override
+                            public void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list) {
+                                ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + list.get(postion).get("sprice"));
+                                try {
+                                    max = Integer.parseInt(list.get(postion).get("total"));
+                                } catch (Exception e) {
+                                    max = 0;
+                                }
+                                ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
+                            }
+
+                            @Override
+                            public void ItemCancelSelect(View view, int postion, ArrayList<Map<String, String>> list) {
+                                ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + product_info.get("rsprice"));
+                                max = 0;
+                                count = 0;
+                                ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
+                                shopcart_txt_count.setText(max + "");
+                            }
+                        });
+                        recyclerView.setAdapter(recylcerAdapter);
+                        recyclerView.getViewTreeObserver()
+                                .removeGlobalOnLayoutListener(this);
+                    }
+                });
+        //設定增加及減少產品數量
+        shopcart_btn_increase = popView.findViewById(R.id.shopcart_btn_increase);
+        shopcart_btn_increase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (count < max) {
+                    count++;
+                    shopcart_txt_count.setText(count + "");
+                }
+            }
+        });
+        shopcart_btn_decrease = popView.findViewById(R.id.shopcart_btn_decrease);
+        shopcart_btn_decrease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (count > 0) {
+                    count--;
+                    shopcart_txt_count.setText(count + "");
+                }
+            }
+        });
+        shop_cart_confirm = popView.findViewById(R.id.shop_cart_confirm);
+        shop_cart_confirm.setBackgroundColor(default_color);
+        //設定POP UP
+        showPopUp(popView);
+    }
+
+    //初始化運送方式
+    private void initShipWay() {
+        ship_ways = findViewById(R.id.ship_ways);
+        ship_ways.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shipways_layout, null);
+                recyclerView = popView.findViewById(R.id.ship_ways_review);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
+                showPopUp(popView);
+            }
+        });
+    }
+
+    //顯示POP UP
+    public void showPopUp(View popView) {
+        popWin = new PopupWindow(popView, LinearLayout.LayoutParams.MATCH_PARENT, (int) (450 * dm.density), false); // 实例化PopupWindow
+        // 设置PopupWindow的弹出和消失效果
+        popWin.setAnimationStyle(R.style.dialogWindowAnim);
+        popWin.showAtLocation(enable_background, Gravity.BOTTOM, 0, 0); // 显示弹出窗口
+        enable_background.setVisibility(View.VISIBLE);
+        /*
+        dialog = new Dialog(this, R.style.Theme_Design_Light_BottomSheetDialog);
+        //填充对话框的布局
+        inflate = LayoutInflater.from(this).inflate(R.layout.shipways_layout, null);
+        //init控件
+        recyclerView = inflate.findViewById(R.id.ship_ways_review);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
+        //将布局设置给Dialog
+        dialog.setContentView(inflate);
+        //获取当前Activity所在的窗体
+        Window dialogWindow = dialog.getWindow();
+        //设置Dialog从窗体底部弹出
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        //获得窗体的属性
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+
+        lp.windowAnimations = R.style.dialogWindowAnim;
+        lp.width = dm.widthPixels;
+        lp.height = (int) (dm.heightPixels - 200 * dm.density);
+//       将属性设置给窗体
+        dialogWindow.setAttributes(lp);
+        dialog.show();//显示对话框
+        */
     }
 
     //初始化隱藏背景
@@ -212,30 +301,6 @@ public class PcContentActivity extends AppCompatActivity {
         }, 1500);
     }
 
-    //初始化運送方式
-    private void initShipWay() {
-        ship_ways = findViewById(R.id.ship_ways);
-        ship_ways.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shipways_layout, null);
-                recyclerView = popView.findViewById(R.id.ship_ways_review);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
-                showShipways(popView);
-
-            }
-        });
-
-    }
-
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
 
     //設定價錢
     public void setText() {
@@ -260,48 +325,12 @@ public class PcContentActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.pccontent_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         Map<String, String> map = ResolveJsonData.getWebView(json);
-
         webviewpager.setAdapter(new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知"}, new String[]{map.get("content"), map.get("rpolicy")}));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(webviewpager, true);
         //   webviewpager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,6500));
     }
 
-    //顯示下方彈出視窗
-    public void showShipways(View popView) {
-        popWin = new PopupWindow(popView, LinearLayout.LayoutParams.MATCH_PARENT, (int) (450 * dm.density), false); // 实例化PopupWindow
-        // 设置PopupWindow的弹出和消失效果
-        popWin.setAnimationStyle(R.style.dialogWindowAnim);
-        popWin.showAtLocation(enable_background, Gravity.BOTTOM, 0, 0); // 显示弹出窗口
-        enable_background.setVisibility(View.VISIBLE);
-        /*
-        dialog = new Dialog(this, R.style.Theme_Design_Light_BottomSheetDialog);
-        //填充对话框的布局
-        inflate = LayoutInflater.from(this).inflate(R.layout.shipways_layout, null);
-        //init控件
-        recyclerView = inflate.findViewById(R.id.ship_ways_review);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
-        //将布局设置给Dialog
-        dialog.setContentView(inflate);
-        //获取当前Activity所在的窗体
-        Window dialogWindow = dialog.getWindow();
-        //设置Dialog从窗体底部弹出
-        dialogWindow.setGravity(Gravity.BOTTOM);
-        //获得窗体的属性
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-
-        lp.windowAnimations = R.style.dialogWindowAnim;
-        lp.width = dm.widthPixels;
-        lp.height = (int) (dm.heightPixels - 200 * dm.density);
-//       将属性设置给窗体
-        dialogWindow.setAttributes(lp);
-        dialog.show();//显示对话框
-        */
-    }
 
     private void initToo() {
         //Toolbar 建立
@@ -331,16 +360,8 @@ public class PcContentActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    //增加產品數量
-    public void increaseProduct(View view) {
-        count++;
-        shopcart_txt_count.setText(count);
-
-    }
-
-    //減少產品數量
-    public void decreaseProduct(View view) {
-        count--;
-        shopcart_txt_count.setText(count);
+    private String getDeciamlString(String str) {
+        DecimalFormat df = new DecimalFormat("###,###");
+        return df.format(Double.parseDouble(str));
     }
 }

@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,17 +31,21 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
-    private LinearLayout.LayoutParams layoutParams;
+    private FrameLayout.LayoutParams layoutParams;
     private ShopCartRecyclerViewAdapter.RecycleHolder recycleHolder;
     private ShopCartRecyclerViewAdapter.ItemSelectListener clickListener;
     private boolean[] ischoice;
     GradientDrawable drawable;
-    public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
+    int color_values;
+
+    public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json, int heigh, int color_values) {
         this.ctx = ctx;
+        this.color_values = color_values;
         dm = ctx.getResources().getDisplayMetrics();
         int lenth = (int) (dm.widthPixels / 3 - 20 * dm.density);
-
-        layoutParams = new LinearLayout.LayoutParams(lenth, lenth / 2);
+        Log.e("hhhhhhhh", heigh + "");
+        layoutParams = new FrameLayout.LayoutParams(lenth, (int) (heigh - 50 * dm.density) / 4);
+        layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), (int) (10 * dm.density));
         if (json != null) {
             list = ResolveJsonData.getItemArray(json);
             ischoice = new boolean[list.size()];
@@ -59,10 +65,10 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         drawable = (GradientDrawable) holder.linearLayout.getBackground();
-        if(!ischoice[position])
-        drawable.setStroke((int) (2 * dm.density), Color.BLACK);
+        if (!ischoice[position])
+            drawable.setStroke((int) (2 * dm.density), Color.BLACK);
         else
-            drawable.setStroke((int) (2 * dm.density), Color.RED);
+            drawable.setStroke((int) (4 * dm.density), color_values);
         holder.linearLayout.setLayoutParams(layoutParams);
         holder.color.setText(list.get(position).get("color"));
         holder.size.setText(list.get(position).get("size"));
@@ -110,9 +116,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (!ischoice[position]) {
-                drawable.setStroke((int) (2 * dm.density), Color.RED);
-                color.setTextColor(Color.RED);
-                size.setTextColor(Color.RED);
+                drawable.setStroke((int) (4 * dm.density), color_values);
+                color.setTextColor(color_values);
+                size.setTextColor(color_values);
                 if (clickListener != null)
                     clickListener.ItemSelected(view, position, list);
 
