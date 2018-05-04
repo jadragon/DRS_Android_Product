@@ -21,6 +21,7 @@ import java.util.Map;
 import Fragment.Fragment_shop_content;
 import adapter.recyclerview.PtypeRecyclerAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
+import library.AppManager;
 import library.GetInformationByPHP;
 import library.ResolveJsonData;
 
@@ -43,6 +44,7 @@ public class PtypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_ptype_layout);
+        AppManager.getAppManager().addActivity(this);
         POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();
         //setupTabIcons();
@@ -64,18 +66,26 @@ public class PtypeActivity extends AppCompatActivity {
                 json = new GetInformationByPHP().getPtype();
                 list = ResolveJsonData.getPtypeDetail(json, POSITION);
                 bitmaps = new Bitmap[2][list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                    bitmaps[0][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("image"));
-                    bitmaps[1][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("aimg"));
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initRecyclerView();
+                try {
+                    for (int i = 0; i < list.size(); i++) {
+                        bitmaps[0][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("image"));
+                        bitmaps[1][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("aimg"));
                     }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                initRecyclerView();
+                            } catch (NullPointerException e) {
+                                e.getMessage();
+                            }
+                        }
+                    });
+                    setFilter(0);
+                } catch (NullPointerException e) {
+                    e.getMessage();
+                }
 
-                });
-                setFilter(0);
             }
         }).start();
     }
@@ -114,10 +124,15 @@ public class PtypeActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                fragment_shop_content1.setFilter(json1);
-                fragment_shop_content2.setFilter(json2);
-                fragment_shop_content3.setFilter(json3);
-                fragment_shop_content4.setFilter(json4);
+                try {
+                    fragment_shop_content1.setFilter(json1);
+                    fragment_shop_content2.setFilter(json2);
+                    fragment_shop_content3.setFilter(json3);
+                    fragment_shop_content4.setFilter(json4);
+                } catch (NullPointerException e) {
+                    e.getMessage();
+                }
+
             }
         });
 
@@ -185,14 +200,19 @@ public class PtypeActivity extends AppCompatActivity {
         fragment_shop_content3 = null;
         fragment_shop_content4 = null;
         recyclerView = null;
-        for (int i = 0; i < bitmaps[0].length; i++) {
-            if (bitmaps[0][i] != null && !bitmaps[0][i].isRecycled()) {
-                bitmaps[0][i].recycle();
+        try {
+            for (int i = 0; i < bitmaps[0].length; i++) {
+                if (bitmaps[0][i] != null && !bitmaps[0][i].isRecycled()) {
+                    bitmaps[0][i].recycle();
+                }
+                if (bitmaps[1][i] != null && !bitmaps[1][i].isRecycled()) {
+                    bitmaps[1][i].recycle();
+                }
             }
-            if (bitmaps[1][i] != null && !bitmaps[1][i].isRecycled()) {
-                bitmaps[1][i].recycle();
-            }
+        } catch (NullPointerException e) {
+            e.getMessage();
         }
+
         bitmaps = null;
         json = null;
         System.gc();

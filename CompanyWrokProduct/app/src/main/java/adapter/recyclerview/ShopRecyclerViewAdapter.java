@@ -1,7 +1,9 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.PcContentActivity;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -25,6 +28,7 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import library.ResolveJsonData;
+import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> {
     public static final int TYPE_NORMAL = 0;  //说明是不带有header和footer的
@@ -98,7 +102,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     }
 
     @Override
-    public  void onBindViewHolder(final RecycleHolder holder, final int position) {
+    public void onBindViewHolder(final RecycleHolder holder, final int position) {
         if (list.size() > 0) {
             if (getItemViewType(position) == TYPE_NORMAL) {
                 layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
@@ -220,7 +224,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     }
 
 
-    private  String getDeciamlString(String str) {
+    private String getDeciamlString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
     }
@@ -321,6 +325,17 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             if (position != list.size() + 1) {
 
             }
+            Intent intent = new Intent(ctx, PcContentActivity.class);
+            Bundle bundle = new Bundle();
+            ProductInfoPojo productInfoPojo;
+            if (had_header != 0) {
+                position--;
+            }
+            productInfoPojo = new ProductInfoPojo(list.get(position).get("pno"), list.get(position).get("pname"), list.get(position).get("descs"), list.get(position).get("img"), list.get(position).get("rprice"), list.get(position).get("rsprice"), list.get(position).get("score"));
+            bundle.putSerializable("productInfoPojo", productInfoPojo);
+            intent.putExtras(bundle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent);
             if (clickListener != null) {
                 clickListener.ItemClicked(view, position, list);
             }

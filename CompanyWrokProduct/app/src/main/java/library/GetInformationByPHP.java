@@ -17,7 +17,9 @@ public class GetInformationByPHP {
     private static final String delFavoriteProduct_url = "http://api.gok1945.com/main/record/delFavoriteProduct.php";
     private static final String setFavorite_url = "http://api.gok1945.com/main/record/setFavorite.php";
     private static final String plist_url = "http://api.gok1945.com/main/product/plist.php";
-    private static final String pcontent_url ="http://api.gok1945.com/main/product/pcontent.php";
+    private static final String pcontent_url = "http://api.gok1945.com/main/product/pcontent.php";
+    private static final String setCart_url = "http://api.gok1945.com/main/cart/setCart.php";
+    private static final String getCart_url = "http://api.gok1945.com/main/cart/getCart.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -67,7 +69,7 @@ public JSONObject test() {
     /**
      * 取消最愛
      */
-    public JSONObject delFavoriteProduct(String token,String pno) {
+    public JSONObject delFavoriteProduct(String token, String pno) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(delFavoriteProduct_url, params);
@@ -76,11 +78,12 @@ public JSONObject test() {
     /**
      * 設為最愛
      */
-    public JSONObject setFavorite(String token,String pno) {
+    public JSONObject setFavorite(String token, String pno) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(setFavorite_url, params);
     }
+
     /**
      * 設為最愛
      */
@@ -88,6 +91,7 @@ public JSONObject test() {
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(pcontent_url, params);
     }
+
     /**
      * 取得廣告欄資料
      */
@@ -132,13 +136,33 @@ public JSONObject test() {
         params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(iplist_url, params);
     }
+
     /**
      * 取得商品列表欄資料
      */
-    public JSONObject getPlist(String ptno,int type, int page) {
+    public JSONObject getPlist(String ptno, int type, int page) {
         params.add(new BasicNameValuePair("ptno", "" + ptno));
         params.add(new BasicNameValuePair("type", "" + type));
         params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(plist_url, params);
+    }
+
+    /**
+     * 加入購物車
+     */
+    public JSONObject setCart(String token, String pno, String pino, int total) {
+        params.add(new BasicNameValuePair("token", "" + token));
+        params.add(new BasicNameValuePair("pno", "" + pno));
+        params.add(new BasicNameValuePair("pino", "" + pino));
+        params.add(new BasicNameValuePair("total", "" + total));
+        return jsonParser.getJSONFromUrl(setCart_url, params);
+    }
+
+    /**
+     * 購買清單 - 讀取購買資訊
+     */
+    public JSONObject getCart(String token) {
+        params.add(new BasicNameValuePair("token", "" + token));
+        return jsonParser.getJSONFromUrl(getCart_url, params);
     }
 }

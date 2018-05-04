@@ -6,8 +6,16 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
     </style>
     <style name="MyTabLayoutTextAppearanceInverse" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">17sp</item>
     </style>
+
+    <style name="ActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
+        <item name="android:minWidth">30dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+
 </resources>

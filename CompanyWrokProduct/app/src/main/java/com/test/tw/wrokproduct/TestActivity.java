@@ -13,7 +13,6 @@ import library.ResolveJsonData;
 public class TestActivity extends AppCompatActivity {
     JSONObject json;
     TextView test_textview;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +25,12 @@ public class TestActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getPcontent("URwlZEnZscDdnIJN4vjczw==");
+                json = new GetInformationByPHP().getCart("zI6OIYlbhfPKyhbchdOiGg==");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        test_textview.setText("" + ResolveJsonData.getItemArray(json));
-                        Log.e("TestJSONONONONON", ResolveJsonData.getPcContentInformation(json) + "");
+                        test_textview.setText("" + ResolveJsonData.getCartItemArray(json));
+                        Log.e("TestJSONONONONON", ResolveJsonData.getCartItemArray(json) + "");
 
                     }
                 });

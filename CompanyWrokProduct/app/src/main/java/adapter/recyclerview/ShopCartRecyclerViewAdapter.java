@@ -47,7 +47,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         layoutParams = new FrameLayout.LayoutParams(lenth, (int) (heigh - 50 * dm.density) / 4);
         layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), (int) (10 * dm.density));
         if (json != null) {
-            list = ResolveJsonData.getItemArray(json);
+            list = ResolveJsonData.getPcContentItemArray(json);
             ischoice = new boolean[list.size()];
         } else
             list = new ArrayList<>();
@@ -66,9 +66,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         drawable = (GradientDrawable) holder.linearLayout.getBackground();
         if (!ischoice[position])
-            drawable.setStroke((int) (2 * dm.density), Color.BLACK);
+            drawable.setStroke((int) (1 * dm.density), Color.BLACK);
         else
-            drawable.setStroke((int) (4 * dm.density), color_values);
+            drawable.setStroke((int) (3 * dm.density), color_values);
         holder.linearLayout.setLayoutParams(layoutParams);
         holder.color.setText(list.get(position).get("color"));
         holder.size.setText(list.get(position).get("size"));
@@ -116,14 +116,14 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (!ischoice[position]) {
-                drawable.setStroke((int) (4 * dm.density), color_values);
+                drawable.setStroke((int) (3 * dm.density), color_values);
                 color.setTextColor(color_values);
                 size.setTextColor(color_values);
                 if (clickListener != null)
                     clickListener.ItemSelected(view, position, list);
 
             } else {
-                drawable.setStroke((int) (2 * dm.density), Color.BLACK);
+                drawable.setStroke((int) (1 * dm.density), Color.BLACK);
                 color.setTextColor(Color.BLACK);
                 size.setTextColor(Color.BLACK);
                 if (clickListener != null)

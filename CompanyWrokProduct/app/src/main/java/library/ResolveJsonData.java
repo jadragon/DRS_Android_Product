@@ -183,7 +183,7 @@ public class ResolveJsonData {
      * 解析產品內頁:
      * 運送方式
      */
-    public static ArrayList<Map<String, String>> getShippingArray(JSONObject json) {
+    public static ArrayList<Map<String, String>> getPcContentShippingArray(JSONObject json) {
         ArrayList<Map<String, String>> arrayList = new ArrayList<>();
         Map<String, String> map;
         try {
@@ -205,11 +205,12 @@ public class ResolveJsonData {
         }
         return arrayList;
     }
+
     /**
      * 解析產品內頁:
      * 商品款式
      */
-    public static ArrayList<Map<String, String>> getItemArray(JSONObject json) {
+    public static ArrayList<Map<String, String>> getPcContentItemArray(JSONObject json) {
         ArrayList<Map<String, String>> arrayList = new ArrayList<>();
         Map<String, String> map;
         try {
@@ -219,6 +220,7 @@ public class ResolveJsonData {
                 for (int j = 0; j < itemArray.length(); j++) {
                     map = new HashMap<>();
                     JSONObject imgArray_obj = itemArray.getJSONObject(j);
+                    map.put("pino", imgArray_obj.getString("pino"));
                     map.put("color", imgArray_obj.getString("color"));
                     map.put("size", imgArray_obj.getString("size"));
                     map.put("price", imgArray_obj.getString("price"));
@@ -231,5 +233,84 @@ public class ResolveJsonData {
             e.printStackTrace();
         }
         return arrayList;
+    }
+
+    /**
+     * 解析購物車:
+     * 商家碼
+     * 商家名稱
+     * 商家圖
+     * 商家小計
+     * 優惠標題
+     * 運費資訊
+     * 商品項目
+     */
+    public static ArrayList<Map<String, String>> getCartInformation(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("sno", json_obj.getString("sno"));
+                    map.put("sname", json_obj.getString("sname"));
+                    map.put("simg", json_obj.getString("simg"));
+                    map.put("subtotal", json_obj.getString("subtotal"));
+                    map.put("discountInfo", json_obj.getString("discountInfo"));
+                    map.put("shippingInfo", json_obj.getString("shippingInfo"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 解析購物車:
+     * 購物碼
+     * 訂購數量
+     * 商品名
+     * 商品圖
+     * 顏色
+     * 尺寸
+     * 重量
+     * 牌價
+     * 售價
+     * 庫存
+     */
+    public static ArrayList<Map<String, String>> getCartItemArray(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                for (int i = 0; i < json.getJSONArray("Data").length(); i++) {
+                    JSONArray jsonArray = json.getJSONArray("Data").getJSONObject(i).getJSONArray("itemArray");
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        map = new HashMap<>();
+                        JSONObject jsonObject = jsonArray.getJSONObject(j);
+                        map.put("morno", jsonObject.getString("morno"));
+                        map.put("stotal", jsonObject.getString("stotal"));
+                        map.put("pname", jsonObject.getString("pname"));
+                        map.put("img", jsonObject.getString("img"));
+                        map.put("color", jsonObject.getString("color"));
+                        map.put("size", jsonObject.getString("size"));
+                        map.put("weight", jsonObject.getString("weight"));
+                        map.put("price", jsonObject.getString("price"));
+                        map.put("sprice", jsonObject.getString("sprice"));
+                        map.put("mtotal", jsonObject.getString("mtotal"));
+                        arrayList.add(map);
+                    }
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

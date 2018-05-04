@@ -34,7 +34,7 @@ public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWays
     public ShipsWaysRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         if (json != null)
-            list = ResolveJsonData.getShippingArray(json);
+            list = ResolveJsonData.getPcContentShippingArray(json);
         else
             list = new ArrayList<>();
     }

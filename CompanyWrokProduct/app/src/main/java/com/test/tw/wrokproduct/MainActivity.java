@@ -7,21 +7,17 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import Fragment.Fragment_home;
 import Fragment.Fragment_shop;
+import library.AppManager;
 import library.BottomNavigationViewHelper;
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
@@ -34,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-
+        AppManager.getAppManager().addActivity(this);
         initFragments();
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));

@@ -59,13 +59,13 @@ public class Fragment_WebView extends Fragment {
                 null);
         luntanListview.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
         // 设置可以支持缩放
-        // luntanListview.getSettings().setSupportZoom(true);
+         luntanListview.getSettings().setSupportZoom(true);
         // 设置出现缩放工具
-        //   luntanListview.getSettings().setBuiltInZoomControls(true);
+           luntanListview.getSettings().setBuiltInZoomControls(true);
         //设置可在大视野范围内上下左右拖动，并且可以任意比例缩放
         luntanListview.getSettings().setUseWideViewPort(true);
         //设置默认加载的可视范围是大视野范围
-        //luntanListview.getSettings().setLoadWithOverviewMode(true);
+        luntanListview.getSettings().setLoadWithOverviewMode(true);
         //自适应屏幕
         luntanListview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         luntanListview.setVerticalScrollBarEnabled(false);

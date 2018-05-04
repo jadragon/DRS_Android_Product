@@ -3,40 +3,60 @@ package adapter.viewpager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import Fragment.Fragment_WebView;
+
 public class PcContentWebViewPagerAdapter extends FragmentPagerAdapter {
 
     private String[] mTabtitle;
     private String[] htmls;
     private Fragment_WebView[] fragments;
     int[] heigh;
-    public PcContentWebViewPagerAdapter(FragmentManager fm, String[] mTabtitle, String[] htmls) {
-        super(fm);
-        this.mTabtitle=mTabtitle;
-        this.htmls=htmls;
-        fragments=new Fragment_WebView[mTabtitle.length];
-        heigh=new int[mTabtitle.length];
+    ViewPager viewPager;
+
+    public ViewPager getViewPager() {
+        return viewPager;
     }
 
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
 
+    public PcContentWebViewPagerAdapter(FragmentManager fm, String[] mTabtitle, String[] htmls) {
+        super(fm);
+        this.mTabtitle = mTabtitle;
+        this.htmls = htmls;
+        fragments = new Fragment_WebView[mTabtitle.length];
+        heigh = new int[mTabtitle.length];
+    }
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        if (viewPager != null && heigh[position] != 0)
+            viewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, heigh[position]));
+        super.setPrimaryItem(container, position, object);
+    }
 
     @Override
     public Fragment getItem(final int position) {
-        if(fragments[position]==null) {
+        if (fragments[position] == null) {
             fragments[position] = new Fragment_WebView(htmls[position]);
             fragments[position].setOnHeighChangerListener(new Fragment_WebView.OnHeighChangerListener() {
                 @Override
                 public void valueChanged(int Height) {
-                    heigh[position]=Height;
-                    Log.e("GGGGGGGGGGGGGG",  heigh[position]+"");
+                    heigh[position] = Height;
+                    Log.e("GGGGGGGGGGGGGG", heigh[position] + "");
+                    if(position==0)
+                        viewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, heigh[position]));
                 }
             });
         }
 
-        return  fragments[position];
+        return fragments[position];
     }
 
     @Override

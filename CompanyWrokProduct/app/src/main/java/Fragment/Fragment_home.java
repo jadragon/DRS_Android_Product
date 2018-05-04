@@ -56,7 +56,7 @@ public class Fragment_home extends Fragment {
     MyRecyclerAdapter myRecyclerAdapter1, myRecyclerAdapter2, myRecyclerAdapter3;
     Handler handler;
     View v;
-
+    Banner  header;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,7 +88,11 @@ public class Fragment_home extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                myPagerAdapter.setFilter(json);
+                               //myPagerAdapter.setFilter(json);
+                                List<String> images = new ArrayList<>();
+                                for (Map<String, String> map : ResolveJsonData.getJSONData(json))
+                                    images.add(map.get("image"));
+                                header.update(images);
                                 myRecyclerAdapter1.setFilter(ResolveJsonData.getJSONData(json1));
                                 myRecyclerAdapter2.setFilter(ResolveJsonData.getJSONData(json2));
                                 myRecyclerAdapter3.setFilter(ResolveJsonData.getJSONData(json3));
@@ -123,7 +127,7 @@ public class Fragment_home extends Fragment {
                             public void run() {
                                 //高度等比縮放[   圖片高度/(圖片寬度/手機寬度)    ]
                                 // float real_heigh = bitmaps1.get(0).getImage().getHeight() / (bitmaps1.get(0).getImage().getWidth() / (float) dm.widthPixels);
-                                Banner  header =v.findViewById(R.id.testbanner);
+                                header =v.findViewById(R.id.testbanner);
                                 // Banner header=new Banner(getActivity());
                                 header.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
                                 header.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);

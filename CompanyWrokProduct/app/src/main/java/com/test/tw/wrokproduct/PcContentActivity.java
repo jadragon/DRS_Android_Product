@@ -22,9 +22,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -35,9 +37,11 @@ import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.recyclerview.ShopCartRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
+import library.AppManager;
 import library.GetInformationByPHP;
 import library.ResolveJsonData;
 import library.component.MyViewPager;
+import pojo.ProductInfoPojo;
 
 public class PcContentActivity extends AppCompatActivity {
     DisplayMetrics dm;
@@ -53,26 +57,31 @@ public class PcContentActivity extends AppCompatActivity {
     Dialog dialog;
     private View inflate;
     RecyclerView recyclerView;
-    ImageView heart;
+    ImageView heart, pccontent_btn_home, pccontent_img_star;
     View enable_background;
     LinearLayout shipways_layout;
     private PopupWindow popWin = null; // 弹出窗口
     private View popView = null; // 保存弹出窗口布局
-    Button pccontent_btn_addshopcart, pccontent_btn_buynow,shop_cart_confirm;
+    Button pccontent_btn_addshopcart, pccontent_btn_buynow, shop_cart_confirm;
     Map<String, String> product_info;
     int count, max = 0;
     int default_color;
     Button shopcart_btn_increase, shopcart_btn_decrease;
     int myRecylcerViewHeight;
+    ProductInfoPojo productInfoPojo;
+    int[] stars = {R.drawable.star0_2, R.drawable.star1_2, R.drawable.star2_2, R.drawable.star3_2, R.drawable.star4_2, R.drawable.star5_2};
+    String pino;
+    String Message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-         pno = getIntent().getStringExtra("pno");
-       // pno = "URwlZEnZscDdnIJN4vjczw==";
+        productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
+        pno = productInfoPojo.getPno();
+        //pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
         setContentView(R.layout.activity_pccontent);
+        AppManager.getAppManager().addActivity(this);
         heart = findViewById(R.id.pccontent_heart);
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +97,19 @@ public class PcContentActivity extends AppCompatActivity {
             }
 
         });
+        pccontent_btn_home = findViewById(R.id.pccontent_btn_home);
+        pccontent_btn_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppManager.getAppManager().finishActivity(PtypeActivity.class);
+                AppManager.getAppManager().finishActivity(PcContentActivity.class);
 
+
+            }
+        });
+        pccontent_img_star = findViewById(R.id.pccontent_img_star);
+
+        pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -137,7 +158,7 @@ public class PcContentActivity extends AppCompatActivity {
 
     //設定彈出視窗
     public void popUpView(int color) {
-        this.default_color=color;
+        this.default_color = color;
         max = 0;
         count = 0;
         product_info = ResolveJsonData.getPcContentInformation(json);
@@ -170,6 +191,7 @@ public class PcContentActivity extends AppCompatActivity {
                                     max = 0;
                                 }
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
+                                pino = list.get(postion).get("pino");
                             }
 
                             @Override
@@ -179,6 +201,7 @@ public class PcContentActivity extends AppCompatActivity {
                                 count = 0;
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
                                 shopcart_txt_count.setText(max + "");
+                                pino = null;
                             }
                         });
                         recyclerView.setAdapter(recylcerAdapter);
@@ -209,6 +232,38 @@ public class PcContentActivity extends AppCompatActivity {
         });
         shop_cart_confirm = popView.findViewById(R.id.shop_cart_confirm);
         shop_cart_confirm.setBackgroundColor(default_color);
+        shop_cart_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (count>0) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GlobalVariable gv = (GlobalVariable) getApplicationContext();
+                            try {
+                                JSONObject jsonObject = new GetInformationByPHP().setCart(gv.getToken(), pno, pino, count);
+                                boolean success = jsonObject.getBoolean("Success");
+                                Message = jsonObject.getString("Message");
+                                if (success) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "" + Message, Toast.LENGTH_SHORT).show();
+                                            popWin.dismiss();
+                                            enable_background.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }).start();
+
+                }
+            }
+        });
         //設定POP UP
         showPopUp(popView);
     }
@@ -325,7 +380,9 @@ public class PcContentActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.pccontent_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         Map<String, String> map = ResolveJsonData.getWebView(json);
-        webviewpager.setAdapter(new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知"}, new String[]{map.get("content"), map.get("rpolicy")}));
+        PcContentWebViewPagerAdapter adapter = new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知"}, new String[]{map.get("content"), map.get("rpolicy")});
+        adapter.setViewPager(webviewpager);
+        webviewpager.setAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(webviewpager, true);
         //   webviewpager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,6500));
@@ -340,6 +397,8 @@ public class PcContentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        toolbar.setContentInsetsRelative(0, 50);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -364,4 +423,6 @@ public class PcContentActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
     }
+
+
 }
