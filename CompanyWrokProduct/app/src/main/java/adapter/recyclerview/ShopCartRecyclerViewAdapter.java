@@ -1,18 +1,23 @@
 package adapter.recyclerview;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.PcContentActivity;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -21,60 +26,71 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import library.ResolveJsonData;
+import pojo.ProductInfoPojo;
 
 public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRecyclerViewAdapter.RecycleHolder> {
-
-
+    public static final int TYPE_NORMAL = 0;
+    public static final int TYPE_HEADER = 1;
     private Context ctx;
     private JSONObject json;
     private View view;
-    private ArrayList<Map<String, String>> list;
-    private DisplayMetrics dm;
-    private FrameLayout.LayoutParams layoutParams;
+    private ArrayList<ArrayList<Map<String, String>>> alllist;
     private ShopCartRecyclerViewAdapter.RecycleHolder recycleHolder;
-    private ShopCartRecyclerViewAdapter.ItemSelectListener clickListener;
-    private boolean[] ischoice;
-    GradientDrawable drawable;
-    int color_values;
+    private ShopCartRecyclerViewAdapter.ClickListener clickListener;
 
-    public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json, int heigh, int color_values) {
+    public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        this.color_values = color_values;
-        dm = ctx.getResources().getDisplayMetrics();
-        int lenth = (int) (dm.widthPixels / 3 - 20 * dm.density);
-        Log.e("hhhhhhhh", heigh + "");
-        layoutParams = new FrameLayout.LayoutParams(lenth, (int) (heigh - 50 * dm.density) / 4);
-        layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), (int) (10 * dm.density));
-        if (json != null) {
-            list = ResolveJsonData.getPcContentItemArray(json);
-            ischoice = new boolean[list.size()];
-        } else
-            list = new ArrayList<>();
-    }
+        this.json = json;
 
+    }
 
     @Override
     public ShopCartRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //頁面
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shopcart, parent, false);
+        if (viewType == TYPE_HEADER) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shop, parent, false);
+            return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+        }
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shop, parent, false);
         recycleHolder = new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         return recycleHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        drawable = (GradientDrawable) holder.linearLayout.getBackground();
-        if (!ischoice[position])
-            drawable.setStroke((int) (1 * dm.density), Color.BLACK);
-        else
-            drawable.setStroke((int) (3 * dm.density), color_values);
-        holder.linearLayout.setLayoutParams(layoutParams);
-        holder.color.setText(list.get(position).get("color"));
-        holder.size.setText(list.get(position).get("size"));
+        if (getItemViewType(position) == TYPE_NORMAL) {
+
+        } else if (getItemViewType(position) == TYPE_HEADER) {
+
+        }
 
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        int count = 0;
+        if (position == count)
+            return TYPE_HEADER;
+
+        for (int i = 0; i < alllist.size(); i++) {
+            count += (i + alllist.get(i).size());
+            if (position == count)
+                return TYPE_HEADER;
+        }
+        return TYPE_NORMAL;
+    }
+
+    @Override
+    public int getItemCount() {
+        int count = 0;
+        for (int i = 0; i < alllist.size(); i++) {
+            count += alllist.get(i).size();
+        }
+        return count;
+
+    }
 
     private String getDeciamlString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");
@@ -88,66 +104,40 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         view.setLayoutParams(params);
     }
 
+  class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    public class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView color, size;
         Context ctx;
         JSONObject json;
-        LinearLayout linearLayout;
-
 
         public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
+            ButterKnife.bind(this, view);
             this.json = json;
             this.ctx = ctx;
-            color = view.findViewById(R.id.shopcart_txt_color);
-            size = view.findViewById(R.id.shopcart_txt_size);
-            linearLayout = view.findViewById(R.id.shopcart_linearlayout);
-            drawable = (GradientDrawable) linearLayout.getBackground();
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if (!ischoice[position]) {
-                drawable.setStroke((int) (3 * dm.density), color_values);
-                color.setTextColor(color_values);
-                size.setTextColor(color_values);
-                if (clickListener != null)
-                    clickListener.ItemSelected(view, position, list);
 
-            } else {
-                drawable.setStroke((int) (1 * dm.density), Color.BLACK);
-                color.setTextColor(Color.BLACK);
-                size.setTextColor(Color.BLACK);
-                if (clickListener != null)
-                    clickListener.ItemCancelSelect(view, position, list);
+            if (clickListener != null) {
+                clickListener.ItemClicked(view, position, alllist);
             }
-            ischoice[position] = !ischoice[position];
-
         }
     }
 
-    public void setItemSelectListener(ShopCartRecyclerViewAdapter.ItemSelectListener clickListener) {
+    public void setClickListener(ShopCartRecyclerViewAdapter.ClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
-    public interface ItemSelectListener {
-        void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list);
-
-        void ItemCancelSelect(View view, int postion, ArrayList<Map<String, String>> list);
+    public interface ClickListener {
+        void ItemClicked(View view, int postion, ArrayList<ArrayList<Map<String, String>>> alllist);
     }
-
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        list = ResolveJsonData.getJSONData(json);
+        alllist = ResolveJsonData.getCartItemArray(json);
         notifyDataSetChanged();
     }
 

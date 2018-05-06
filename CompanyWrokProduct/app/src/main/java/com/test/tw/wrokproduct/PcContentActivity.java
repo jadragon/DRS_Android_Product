@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
-import adapter.recyclerview.ShopCartRecyclerViewAdapter;
+import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.AppManager;
@@ -180,8 +180,8 @@ public class PcContentActivity extends AppCompatActivity {
                     @Override
                     public void onGlobalLayout() {
                         myRecylcerViewHeight = recyclerView.getHeight();
-                        ShopCartRecyclerViewAdapter recylcerAdapter = new ShopCartRecyclerViewAdapter(getBaseContext(), json, myRecylcerViewHeight, default_color);
-                        recylcerAdapter.setItemSelectListener(new ShopCartRecyclerViewAdapter.ItemSelectListener() {
+                        AddCartRecyclerViewAdapter recylcerAdapter = new AddCartRecyclerViewAdapter(getBaseContext(), json, myRecylcerViewHeight, default_color);
+                        recylcerAdapter.setItemSelectListener(new AddCartRecyclerViewAdapter.ItemSelectListener() {
                             @Override
                             public void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list) {
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + list.get(postion).get("sprice"));

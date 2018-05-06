@@ -73,7 +73,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         return list.size();
     }
 
-    public class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+   class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         FrameLayout frameLayout;
         TextView tv1;

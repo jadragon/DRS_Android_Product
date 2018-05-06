@@ -102,7 +102,7 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
         return list.size();
     }
 
-    public class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+   class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         LinearLayout ptype_title_linear;
         TextView tv;

@@ -49,7 +49,6 @@ public class PcContentWebViewPagerAdapter extends FragmentPagerAdapter {
                 @Override
                 public void valueChanged(int Height) {
                     heigh[position] = Height;
-                    Log.e("GGGGGGGGGGGGGG", heigh[position] + "");
                     if(position==0)
                         viewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, heigh[position]));
                 }

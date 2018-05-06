@@ -283,13 +283,16 @@ public class ResolveJsonData {
      * 售價
      * 庫存
      */
-    public static ArrayList<Map<String, String>> getCartItemArray(JSONObject json) {
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+    public static ArrayList<ArrayList<Map<String, String>>> getCartItemArray(JSONObject json) {
+        ArrayList<ArrayList<Map<String, String>>> alllist;
+        ArrayList<Map<String, String>> arrayList;
         Map<String, String> map;
         try {
+            alllist = new ArrayList<>();
             if (json.getBoolean("Success")) {
                 for (int i = 0; i < json.getJSONArray("Data").length(); i++) {
                     JSONArray jsonArray = json.getJSONArray("Data").getJSONObject(i).getJSONArray("itemArray");
+                    arrayList = new ArrayList<>();
                     for (int j = 0; j < jsonArray.length(); j++) {
                         map = new HashMap<>();
                         JSONObject jsonObject = jsonArray.getJSONObject(j);
@@ -305,8 +308,9 @@ public class ResolveJsonData {
                         map.put("mtotal", jsonObject.getString("mtotal"));
                         arrayList.add(map);
                     }
+                    alllist.add(arrayList);
                 }
-                return arrayList;
+                return alllist;
             }
         } catch (JSONException e) {
             e.printStackTrace();

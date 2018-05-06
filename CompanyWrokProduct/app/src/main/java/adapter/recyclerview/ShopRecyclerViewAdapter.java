@@ -74,7 +74,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     }
 
     public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh) {
-        this.json = json;
         this.ctx = ctx;
         this.json = json;
         this.layout_width = layout_width;
@@ -277,7 +276,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
     }
 
-    public class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+   class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView, count0, count1, free, freash, hot, limit, heart, score;
         LinearLayout frameLayout, linear_heart;
         TextView tv1, rprice, rsprice, discount;

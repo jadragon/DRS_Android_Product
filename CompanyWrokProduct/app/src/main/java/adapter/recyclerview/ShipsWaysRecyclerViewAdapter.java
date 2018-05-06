@@ -78,7 +78,7 @@ public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWays
         return list.size();
     }
 
-    public class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+  class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         TextView name, location, price, forfree;
         Context ctx;
