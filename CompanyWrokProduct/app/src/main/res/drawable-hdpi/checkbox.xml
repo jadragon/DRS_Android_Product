@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:constantSize="true">
+
+    <item android:drawable="@color/colorInvisibleGray" android:state_pressed="true" />
+    <item android:drawable="@drawable/shopcart_check_on" android:state_checked="true" />
+    <item android:drawable="@drawable/shopcart_check_off" />
+
+</selector>

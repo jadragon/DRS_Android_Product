@@ -18,18 +18,17 @@
         </activity>
         <activity android:name=".LoadingPage" />
         <activity android:name=".PtypeActivity" />
-        <activity android:name=".PcContentActivity">
+        <activity android:name=".PcContentActivity"></activity>
+        <activity android:name=".TestActivity">
 
         </activity>
-        <activity android:name=".TestActivity">
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".ShopCartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".LoginActivity">
-
         </activity>
     </application>
 

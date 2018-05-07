@@ -33,11 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import adapter.viewpager.MyPagerAdapter;
 import adapter.recyclerview.MyRecyclerAdapter;
 import library.GetInformationByPHP;
-import library.component.MySwipeRefreshLayout;
 import library.ResolveJsonData;
+import library.component.MySwipeRefreshLayout;
 
 /**
  * Created by user on 2017/5/30.
@@ -49,7 +48,6 @@ public class Fragment_home extends Fragment {
     RelativeLayout relativeLayout;
     ViewPager viewPager;
     int real_heigh;
-    MyPagerAdapter myPagerAdapter;
     MySwipeRefreshLayout mSwipeLayout;
     RecyclerView recyclerView, recyclerView2, recyclerView3;
     JSONObject json, json1, json2, json3;

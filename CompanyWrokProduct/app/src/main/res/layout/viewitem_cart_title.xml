@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal"
+    android:background="@color/lightgray">
+    <CheckBox
+        android:id="@+id/viewitem_cart_title_checkbox"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+      android:button="@null"
+        android:background="@drawable/checkbox"
+        android:padding="5dp"/>
+    <ImageView
+        android:layout_weight="1"
+        android:id="@+id/viewitem_cart_title_img"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ship_post_office"
+        android:padding="5dp"/>
+
+    <TextView
+        android:layout_weight="5"
+        android:id="@+id/viewitem_cart_title_txt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="標題"
+        android:textSize="20sp"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>

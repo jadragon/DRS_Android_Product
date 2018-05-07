@@ -317,4 +317,32 @@ public class ResolveJsonData {
         }
         return null;
     }
+
+    /**
+     * 解析購物車:
+     * 現金折扣碼
+     * 現金折扣條碼
+     * 現金折扣金
+     */
+    public static ArrayList<Map<String, String>> getCartCoupon(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Coupon");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("moprno", json_obj.getString("moprno"));
+                    map.put("mcoupon", json_obj.getString("mcoupon"));
+                    map.put("mdiscount", json_obj.getString("mdiscount"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
