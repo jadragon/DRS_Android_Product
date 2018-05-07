@@ -2,13 +2,17 @@ package adapter.recyclerview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,6 +36,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private Context ctx;
     private JSONObject json;
     private View view;
+    private DisplayMetrics dm;
     private ArrayList<Map<String, String>> title_list;
     private ArrayList<ArrayList<Map<String, String>>> content_list;
     private ShopCartRecyclerViewAdapter.RecycleHolder recycleHolder;
@@ -43,6 +48,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         this.json = json;
+        dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
             title_list = ResolveJsonData.getCartInformation(json);
             content_list = ResolveJsonData.getCartItemArray(json);
@@ -71,6 +77,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
 
     @Override
     public ShopCartRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,(int) (50*dm.density));
+        params.setMarginStart((int) (70*dm.density));
+        params.setMarginEnd((int) (10*dm.density));
         //頁面
         if (viewType == TYPE_HEADER) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_title, parent, false);
@@ -78,18 +87,36 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         }
         if (viewType == TYPE_FOOTER1) {
+            FrameLayout layout=new FrameLayout(ctx);
             view = new TextView(ctx);
-            view.setTag("footer1");
-            return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+            view.setTag("footer1_total");
+            ((TextView)view).setTextSize(8*dm.density);
+            ((TextView)view).setGravity(Gravity.CENTER_VERTICAL + Gravity.END);
+            layout.addView(view);
+            view = new TextView(ctx);
+            view.setTag("footer1_title");
+            ((TextView)view).setText("小計:");
+            ((TextView)view).setTextSize(10*dm.density);
+            ((TextView)view).setGravity(Gravity.CENTER_VERTICAL + Gravity.START);
+            layout.addView(view);
+            layout.setLayoutParams(params);
+            layout.setTag("footer1");
+            return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, layout, json);
         }
         if (viewType == TYPE_FOOTER2) {
             view = new TextView(ctx);
             view.setTag("footer2");
+            ((TextView)view).setTextSize(8*dm.density);
+            view.setLayoutParams(params);
+            ((TextView)view).setGravity(Gravity.CENTER_VERTICAL);
             return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         }
         if (viewType == TYPE_FOOTER3) {
             view = new TextView(ctx);
             view.setTag("footer3");
+            ((TextView)view).setTextSize(8*dm.density);
+            view.setLayoutParams(params);
+            ((TextView)view).setGravity(Gravity.CENTER_VERTICAL);
             return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_content, parent, false);
@@ -109,7 +136,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         holder.viewitem_cart_content_color.setText(content_list.get(i).get(position - (i + 1)).get("color"));
                         holder.viewitem_cart_content_size.setText(content_list.get(i).get(position - (i + 1)).get("size"));
                         holder.viewitem_cart_content_total.setText(content_list.get(i).get(position - (i + 1)).get("stotal"));
-                        holder.viewitem_cart_content_price.setText(content_list.get(i).get(position - (i + 1)).get("sprice"));
+                        holder.viewitem_cart_content_price.setText("$"+getDeciamlString(content_list.get(i).get(position - (i + 1)).get("sprice")));
 
                         if (items.get(position).isCheck())
                             holder.viewitem_cart_content_checkbox.setChecked(true);
@@ -130,14 +157,15 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     }
 
             } else if (getItemViewType(position) == TYPE_FOOTER1) {
-                holder.footer1.setText(title_list.get(0).get("subtotal"));
-                holder.footer1.setTextColor(ctx.getResources().getColor(R.color.black));
+                holder.footer1_title.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
+                holder.footer1_total.setText("$"+getDeciamlString(title_list.get(0).get("subtotal")));
+                holder.footer1_total.setTextColor(ctx.getResources().getColor(R.color.red));
             } else if (getItemViewType(position) == TYPE_FOOTER2) {
                 holder.footer2.setText(title_list.get(0).get("discountInfo"));
-                holder.footer2.setTextColor(ctx.getResources().getColor(R.color.black));
+                holder.footer2.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
             } else if (getItemViewType(position) == TYPE_FOOTER3) {
                 holder.footer3.setText(title_list.get(0).get("shippingInfo"));
-                holder.footer3.setTextColor(ctx.getResources().getColor(R.color.black));
+                holder.footer3.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -215,7 +243,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         ImageView viewitem_cart_content_img;
         TextView viewitem_cart_title_txt;
         TextView viewitem_cart_content_title, viewitem_cart_content_color, viewitem_cart_content_size, viewitem_cart_content_total, viewitem_cart_content_price;
-        TextView footer1, footer2, footer3;
+        TextView footer1_title,footer1_total, footer2, footer3;
 
         public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
@@ -235,7 +263,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                 viewitem_cart_title_checkbox.setOnCheckedChangeListener(this);
                 viewitem_cart_title_checkbox.setTag("header");
             } else if (view.getTag().equals("footer1")) {
-                footer1 = (TextView) view;
+                footer1_title =  view.findViewWithTag("footer1_title");
+                footer1_total =  view.findViewWithTag("footer1_total");
             } else if (view.getTag().equals("footer2")) {
                 footer2 = (TextView) view;
             } else if (view.getTag().equals("footer3")) {

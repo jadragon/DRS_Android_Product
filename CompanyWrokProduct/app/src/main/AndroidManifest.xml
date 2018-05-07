@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".LoadingPage" />
         <activity android:name=".PtypeActivity" />
@@ -22,13 +26,11 @@
         <activity android:name=".TestActivity">
 
         </activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".ShopCartActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".LoginActivity">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".ShopCartActivity">
+
         </activity>
     </application>
 

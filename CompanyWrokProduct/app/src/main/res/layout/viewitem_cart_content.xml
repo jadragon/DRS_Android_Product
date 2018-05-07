@@ -2,38 +2,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frame_layout"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="150dp"
     android:orientation="horizontal">
+
     <CheckBox
         android:id="@+id/viewitem_cart_content_checkbox"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        android:button="@null"
+        android:layout_margin="5dp"
         android:background="@drawable/checkbox"
-        android:padding="5dp"/>
+        android:button="@null" />
+
     <ImageView
         android:id="@+id/viewitem_cart_content_img"
-        android:layout_width="170dp"
+        android:layout_width="150dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ship_post_office" />
+        android:src="@drawable/ship_post_office"
+        android:padding="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/viewitem_cart_content_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="標題"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/viewitem_cart_content_color"
@@ -54,26 +64,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
 
             <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:text="-" />
 
             <TextView
-                android:layout_weight="5"
                 android:id="@+id/viewitem_cart_content_total"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="數量"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="數量" />
 
             <Button
-                android:layout_weight="1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:text="+" />
         </LinearLayout>
 
@@ -81,11 +90,11 @@
             android:id="@+id/viewitem_cart_content_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="$100" />
+            android:text="$100"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_weight="1"
+            android:gravity="center_vertical"/>
 
     </LinearLayout>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1px"
-    android:background="@color/gray"/>
 </LinearLayout>

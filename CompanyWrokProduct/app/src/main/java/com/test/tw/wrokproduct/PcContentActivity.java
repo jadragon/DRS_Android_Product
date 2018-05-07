@@ -1,9 +1,12 @@
 package com.test.tw.wrokproduct;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -104,7 +108,6 @@ public class PcContentActivity extends AppCompatActivity {
                 AppManager.getAppManager().finishActivity(PtypeActivity.class);
                 AppManager.getAppManager().finishActivity(PcContentActivity.class);
 
-
             }
         });
         pccontent_img_star = findViewById(R.id.pccontent_img_star);
@@ -139,7 +142,7 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_btn_addshopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popUpView(getResources().getColor(R.color.orange));
+                popUpView(getResources().getColor(R.color.orange),0);
             }
         });
     }
@@ -151,13 +154,13 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_btn_buynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popUpView(getResources().getColor(R.color.red));
+                popUpView(getResources().getColor(R.color.red),1);
             }
         });
     }
 
     //設定彈出視窗
-    public void popUpView(int color) {
+    public void popUpView(int color, final int type) {
         this.default_color = color;
         max = 0;
         count = 0;
@@ -235,7 +238,7 @@ public class PcContentActivity extends AppCompatActivity {
         shop_cart_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count>0) {
+                if (count > 0) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -251,6 +254,10 @@ public class PcContentActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "" + Message, Toast.LENGTH_SHORT).show();
                                             popWin.dismiss();
                                             enable_background.setVisibility(View.INVISIBLE);
+                                            if(type==1){
+                                                startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+                                            }
+
                                         }
                                     });
                                 }
@@ -356,7 +363,6 @@ public class PcContentActivity extends AppCompatActivity {
         }, 1500);
     }
 
-
     //設定價錢
     public void setText() {
         Map<String, String> information = ResolveJsonData.getPcContentInformation(json);
@@ -388,7 +394,6 @@ public class PcContentActivity extends AppCompatActivity {
         //   webviewpager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,6500));
     }
 
-
     private void initToo() {
         //Toolbar 建立
         toolbar = findViewById(R.id.pccontent_toolbar);
@@ -413,6 +418,17 @@ public class PcContentActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //會員區
+        if (item.getItemId() == R.id.pccontent_menu_shopcart) {
+            startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+            return true;
+        }
+
+        return false;
+    }
+
     private void initViewPager() {
         viewPager = findViewById(R.id.adView);
         adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, dm.widthPixels, dm.widthPixels);
@@ -423,6 +439,5 @@ public class PcContentActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
     }
-
 
 }
