@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -20,12 +21,13 @@ public class ShopCartActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
     private Toolbar toolbar;
-
+TextView shop_cart_needpay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopcart);
         initToo();
+        shop_cart_needpay=findViewById(R.id.shop_cart_needpay);
         testJson();
     }
 
@@ -42,6 +44,12 @@ public class ShopCartActivity extends AppCompatActivity {
                         recyclerView.setHasFixedSize(true);
                         //recyclerView.setItemAnimator(new DefaultItemAnimatorV2());
                         shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(getApplicationContext(), json);
+                        shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
+                            @Override
+                            public void ItemClicked(View view, int postion, int count) {
+                                shop_cart_needpay.setText("$"+count);
+                            }
+                        });
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);

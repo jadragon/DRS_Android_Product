@@ -115,11 +115,12 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/shop_cart_needpay"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="bottom|right"
-                android:text="$100"
+                android:text="$0"
 
                 android:textColor="@color/red"
                 android:textSize="18sp" />

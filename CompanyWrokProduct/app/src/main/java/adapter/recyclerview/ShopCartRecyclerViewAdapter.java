@@ -298,38 +298,52 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                 viewitem_cart_content_checkbox.setOnClickListener(this);
                 viewitem_cart_content_checkbox.setTag("content");
             }
-            itemView.setOnClickListener(this);
+           // itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
+            for (int index : title_position) {
+                if (position >= index) {
+                    position = index;
+                    break;
+                }
+            }
+
             switch (view.getTag() + "") {
                 case "header":
-                    if (items.get(position).isCheck()) {
+                    if (!items.get(position).isCheck()) {
+                        position=position+(title_position.indexOf(position));
+                        items.get(position).setCheck(true);
+                        for (int i = 0; i < content_list.get(title_position.indexOf(getAdapterPosition())).size(); i++) {
+                            items.get(position+i+1).setCheck(true);
+                            items.get(position+i+1).setPrice(
+                                    Integer.parseInt(content_list.get(title_position.indexOf(getAdapterPosition())).get(position+i).get("sprice"))*
+                                    Integer.parseInt(content_list.get(title_position.indexOf(getAdapterPosition())).get(position+i).get("stotal")));
+                        }
+                    } else {
                         items.get(position).setCheck(false);
                         for (int i = 0; i < content_list.get(title_position.indexOf(position)).size(); i++) {
-                            items.get( position + (i + 1)).setCheck(false);
-                            items.get( position + (i + 1)).setPrice(0);
+                            items.get(position+i+1).setCheck(false);
+                            items.get(position+i+1).setPrice(0);
                         }
-                        notifyItemRangeChanged(getAdapterPosition(), content_list.get(title_position.indexOf(getAdapterPosition())).size() + 1, 0);
-                    } else {
-                        items.get(position).setCheck(true);
-                        for (int i = 0; i < content_list.get(title_position.indexOf(position)).size(); i++) {
-                            items.get( position + (i + 1)).setCheck(true);
-                            items.get( position + (i + 1) ).setPrice(Integer.parseInt(content_list.get(title_position.indexOf(position)).get(position +i ).get("sprice"))*Integer.parseInt(content_list.get(title_position.indexOf(position)).get(position +i ).get("mtotal")));
-                        }
-                        notifyItemRangeChanged(getAdapterPosition(), content_list.get(title_position.indexOf(getAdapterPosition())).size() + 1, 0);
                     }
+                    notifyItemRangeChanged(position, content_list.get(title_position.indexOf(position)).size() + 1, 0);
                     break;
                 case "content":
-
-                    if (items.get(getAdapterPosition()).isCheck()) {
-
-                        items.get(getAdapterPosition()).setCheck(false);
+                    position=getAdapterPosition()-(position+1);
+                    if (!items.get(getAdapterPosition()).isCheck()) {
+                        items.get(getAdapterPosition()).setCheck(true);
+                        viewitem_cart_content_checkbox.setChecked(true);
+                        items.get(getAdapterPosition()).setPrice(
+                                Integer.parseInt(content_list.get(0).get(position).get("sprice")) *
+                                Integer.parseInt(content_list.get(0).get(position).get("stotal")));
 
                     } else {
-                        items.get(getAdapterPosition()).setCheck(true);
+                        items.get(getAdapterPosition()).setCheck(false);
+                        viewitem_cart_content_checkbox.setChecked(false);
+                        items.get(getAdapterPosition()).setPrice(0);
                     }
                     break;
             }
@@ -337,12 +351,10 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             for(int i=0;i<items.size();i++){
                 count+=items.get(i).getPrice();
             }
-            Toast.makeText(ctx, ""+count, Toast.LENGTH_SHORT).show();
             if (clickListener != null) {
-                clickListener.ItemClicked(view, position, content_list);
+                clickListener.ItemClicked(view, position, count);
             }
         }
-
 
     }
 
@@ -351,7 +363,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     }
 
     public interface ClickListener {
-        void ItemClicked(View view, int postion, ArrayList<ArrayList<Map<String, String>>> alllist);
+        void ItemClicked(View view, int postion, int count);
     }
 
     public void setFilter(JSONObject json) {
