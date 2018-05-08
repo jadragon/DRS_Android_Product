@@ -46,7 +46,9 @@ public class ShopCartActivity extends AppCompatActivity {
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(shopCartRecyclerViewAdapter);
-                        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+                        DividerItemDecoration decoration=new DividerItemDecoration(getApplicationContext(),LinearLayoutManager.VERTICAL);
+                        decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
+                        recyclerView.addItemDecoration(decoration);
                     }
                 });
             }
@@ -71,4 +73,5 @@ public class ShopCartActivity extends AppCompatActivity {
         });
 
     }
+
 }

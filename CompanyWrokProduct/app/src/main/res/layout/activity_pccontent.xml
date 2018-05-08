@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:text="露得清"
+            android:text=""
             android:textSize="20sp" />
 
 

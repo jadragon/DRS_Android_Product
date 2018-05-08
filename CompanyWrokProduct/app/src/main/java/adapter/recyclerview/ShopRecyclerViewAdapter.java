@@ -330,7 +330,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             if (had_header != 0) {
                 position--;
             }
-            productInfoPojo = new ProductInfoPojo(list.get(position).get("pno"), list.get(position).get("pname"), list.get(position).get("descs"), list.get(position).get("img"), list.get(position).get("rprice"), list.get(position).get("rsprice"), list.get(position).get("score"));
+            productInfoPojo = new ProductInfoPojo(list.get(position).get("pno"), list.get(position).get("title"), list.get(position).get("descs"), list.get(position).get("img"), list.get(position).get("rprice"), list.get(position).get("rsprice"), list.get(position).get("score"));
             bundle.putSerializable("productInfoPojo", productInfoPojo);
             intent.putExtras(bundle);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

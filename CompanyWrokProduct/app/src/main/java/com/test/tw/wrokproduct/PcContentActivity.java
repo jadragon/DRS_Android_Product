@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,8 +34,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
-import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.recyclerview.AddCartRecyclerViewAdapter;
+import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.AppManager;
@@ -80,39 +77,16 @@ public class PcContentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pccontent);
         productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
         pno = productInfoPojo.getPno();
         //pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
-        setContentView(R.layout.activity_pccontent);
         AppManager.getAppManager().addActivity(this);
-        heart = findViewById(R.id.pccontent_heart);
-        heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (heart.getDrawable().getCurrent().getConstantState().equals(getResources().getDrawable(R.drawable.heart_off).getConstantState())) {
-                    heart.setImageResource(R.drawable.heart_on);
-                    toastFavorate(0);
-                } else {
-                    heart.setImageResource(R.drawable.heart_off);
-                    toastFavorate(1);
-                }
-
-            }
-
-        });
-        pccontent_btn_home = findViewById(R.id.pccontent_btn_home);
-        pccontent_btn_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppManager.getAppManager().finishActivity(PtypeActivity.class);
-                AppManager.getAppManager().finishActivity(PcContentActivity.class);
-
-            }
-        });
-        pccontent_img_star = findViewById(R.id.pccontent_img_star);
-
-        pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
+        initToo();
+        setText();
+        initHome();
+        initFavorate();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -120,19 +94,63 @@ public class PcContentActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setText();
                         initViewPager();
                         initTabLayout();
-                        initToo();
-                        initEnableBackground();
                         initShipWay();
                         initAddShopCart();
                         initBuyNow();
+                        initEnableBackground();
                     }
                 });
 
             }
         }).start();
+    }
+
+    //設定價錢
+    public void setText() {
+        //商品名
+        pccontent_txt_title = findViewById(R.id.pccontent_txt_title);
+        pccontent_txt_title.setText(productInfoPojo.getPname());
+        //描述
+        pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
+        pccontent_txt_descs.setText(productInfoPojo.getDescs());
+        //牌價
+        pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
+        pccontent_txt_rprice.setText("$" + getDeciamlString(productInfoPojo.getRprice()));
+        //售價
+        pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
+        pccontent_txt_rsprice.setText("$" + getDeciamlString(productInfoPojo.getRsprice()));
+        if (productInfoPojo.getRsprice().equals(productInfoPojo.getRprice()))
+            pccontent_txt_rsprice.setVisibility(View.INVISIBLE);
+        //星星
+        pccontent_img_star = findViewById(R.id.pccontent_img_star);
+        pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
+        /*
+        Map<String, String> information = ResolveJsonData.getPcContentInformation(json);
+        Log.e("information", information + "");
+        pccontent_txt_title = findViewById(R.id.pccontent_txt_title);
+        pccontent_txt_title.setText(information.get("pname"));
+        pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
+        pccontent_txt_descs.setText(information.get("descs"));
+        pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
+        pccontent_txt_rsprice.setText("$" + getDeciamlString(information.get("rsprice")));
+        if (information.get("rsprice").equals(information.get("rprice")))
+            pccontent_txt_rsprice.setVisibility(View.INVISIBLE);
+        pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
+        pccontent_txt_rprice.setText("$" + getDeciamlString(information.get("rprice")));
+        //星星
+        pccontent_img_star = findViewById(R.id.pccontent_img_star);
+        pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
+        */
+
+    }
+
+    //產品圖片
+    private void initViewPager() {
+        viewPager = findViewById(R.id.adView);
+        adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, dm.widthPixels, dm.widthPixels);
+        viewPager.setAdapter(adapter);
     }
 
     //初始化加入購物車
@@ -142,19 +160,23 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_btn_addshopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popUpView(getResources().getColor(R.color.orange),0);
+                max = 0;
+                count = 0;
+                popUpView(getResources().getColor(R.color.orange), 0);
             }
         });
     }
 
-    //初始化加入購物車
+    //初始化立即購買
     private void initBuyNow() {
         pccontent_btn_buynow = findViewById(R.id.pccontent_btn_buynow);
 
         pccontent_btn_buynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popUpView(getResources().getColor(R.color.red),1);
+                max = 0;
+                count = 1;
+                popUpView(getResources().getColor(R.color.red), 1);
             }
         });
     }
@@ -162,8 +184,6 @@ public class PcContentActivity extends AppCompatActivity {
     //設定彈出視窗
     public void popUpView(int color, final int type) {
         this.default_color = color;
-        max = 0;
-        count = 0;
         product_info = ResolveJsonData.getPcContentInformation(json);
         popView = LayoutInflater.from(getBaseContext()).inflate(R.layout.shopcart_layout, null);
         //設定產品資訊
@@ -177,6 +197,7 @@ public class PcContentActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         shopcart_txt_count = popView.findViewById(R.id.shopcart_txt_count);
+        shopcart_txt_count.setText(count + "");
         //此項為當recyclerview描繪完後，再執行
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -238,7 +259,7 @@ public class PcContentActivity extends AppCompatActivity {
         shop_cart_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count > 0) {
+                if (count > 0 && max != 0) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -254,7 +275,7 @@ public class PcContentActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "" + Message, Toast.LENGTH_SHORT).show();
                                             popWin.dismiss();
                                             enable_background.setVisibility(View.INVISIBLE);
-                                            if(type==1){
+                                            if (type == 1) {
                                                 startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
                                             }
 
@@ -335,12 +356,44 @@ public class PcContentActivity extends AppCompatActivity {
         enable_background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 popWin.dismiss();
                 enable_background.setVisibility(View.INVISIBLE);
             }
         });
         enable_background.setVisibility(View.INVISIBLE);
+    }
+
+    //home鍵
+    private void initHome() {
+
+        pccontent_btn_home = findViewById(R.id.pccontent_btn_home);
+        pccontent_btn_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppManager.getAppManager().finishActivity(PtypeActivity.class);
+                AppManager.getAppManager().finishActivity(PcContentActivity.class);
+
+            }
+        });
+    }
+
+    //加入我的最愛
+    private void initFavorate() {
+        heart = findViewById(R.id.pccontent_heart);
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (heart.getDrawable().getCurrent().getConstantState().equals(getResources().getDrawable(R.drawable.heart_off).getConstantState())) {
+                    heart.setImageResource(R.drawable.heart_on);
+                    toastFavorate(0);
+                } else {
+                    heart.setImageResource(R.drawable.heart_off);
+                    toastFavorate(1);
+                }
+
+            }
+
+        });
     }
 
     //設定
@@ -363,22 +416,6 @@ public class PcContentActivity extends AppCompatActivity {
         }, 1500);
     }
 
-    //設定價錢
-    public void setText() {
-        Map<String, String> information = ResolveJsonData.getPcContentInformation(json);
-        Log.e("information", information + "");
-        pccontent_txt_title = findViewById(R.id.pccontent_txt_title);
-        pccontent_txt_title.setText(information.get("pname"));
-        pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
-        pccontent_txt_descs.setText(information.get("descs"));
-        pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
-        pccontent_txt_rsprice.setText("$" + getDeciamlString(information.get("rsprice")));
-        if (information.get("rsprice").equals(information.get("rprice")))
-            pccontent_txt_rsprice.setVisibility(View.INVISIBLE);
-        pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
-        pccontent_txt_rprice.setText("$" + getDeciamlString(information.get("rprice")));
-
-    }
 
     //初始化詳細說明及退換貨須知
     private void initTabLayout() {
@@ -429,11 +466,6 @@ public class PcContentActivity extends AppCompatActivity {
         return false;
     }
 
-    private void initViewPager() {
-        viewPager = findViewById(R.id.adView);
-        adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, dm.widthPixels, dm.widthPixels);
-        viewPager.setAdapter(adapter);
-    }
 
     private String getDeciamlString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");

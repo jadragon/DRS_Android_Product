@@ -11,6 +11,7 @@
     <color name="black">#000000</color>
     <color name="green">#008000</color>
 
+    <color name="default_gray">#FF808080</color>
     <color name="ivory">#FFFFF0</color><!-- 象牙色 -->
     <color name="lightyellow">#FFFFE0</color><!--亮黃色 -->
     <color name="yellow">#FFFF00</color><!--黃色 -->
