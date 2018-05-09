@@ -20,6 +20,8 @@ public class GetInformationByPHP {
     private static final String pcontent_url = "http://api.gok1945.com/main/product/pcontent.php";
     private static final String setCart_url = "http://api.gok1945.com/main/cart/setCart.php";
     private static final String getCart_url = "http://api.gok1945.com/main/cart/getCart.php";
+    private static final String addCartProduct_url = "http://api.gok1945.com/main/cart/addCartProduct.php";
+    private static final String updatePortrait_url = "http://api.gok1945.com/main/mcenter/person/updatePortrait.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -141,7 +143,7 @@ public JSONObject test() {
      * 取得商品列表欄資料
      */
     public JSONObject getPlist(String ptno, int type, int page) {
-        params.add(new BasicNameValuePair("ptno", "" + ptno));
+        params.add(new BasicNameValuePair("ptno", ptno));
         params.add(new BasicNameValuePair("type", "" + type));
         params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(plist_url, params);
@@ -151,9 +153,9 @@ public JSONObject test() {
      * 加入購物車
      */
     public JSONObject setCart(String token, String pno, String pino, int total) {
-        params.add(new BasicNameValuePair("token", "" + token));
-        params.add(new BasicNameValuePair("pno", "" + pno));
-        params.add(new BasicNameValuePair("pino", "" + pino));
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("pno", pno));
+        params.add(new BasicNameValuePair("pino", pino));
         params.add(new BasicNameValuePair("total", "" + total));
         return jsonParser.getJSONFromUrl(setCart_url, params);
     }
@@ -162,7 +164,25 @@ public JSONObject test() {
      * 購買清單 - 讀取購買資訊
      */
     public JSONObject getCart(String token) {
-        params.add(new BasicNameValuePair("token", "" + token));
+        params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(getCart_url, params);
+    }
+
+    /**
+     * 購買清單 - 商品增加數量或減少數量
+     */
+    public JSONObject addCartProduct(String token, String morno, int total) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("morno", "" + morno));
+        params.add(new BasicNameValuePair("total", "" + total));
+        return jsonParser.getJSONFromUrl(addCartProduct_url, params);
+    }
+    /**
+     * 上傳圖片
+     */
+    public JSONObject updatePortrait(String token, String img) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("img", "" + img));
+        return jsonParser.getJSONFromUrl(updatePortrait_url, params);
     }
 }

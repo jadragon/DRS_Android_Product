@@ -22,10 +22,12 @@ public class ShopCartActivity extends AppCompatActivity {
     ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
     private Toolbar toolbar;
 TextView shop_cart_needpay;
+    String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopcart);
+        token="zI6OIYlbhfPKyhbchdOiGg==";
         initToo();
         shop_cart_needpay=findViewById(R.id.shop_cart_needpay);
         testJson();
@@ -35,7 +37,7 @@ TextView shop_cart_needpay;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getCart("zI6OIYlbhfPKyhbchdOiGg==");
+                json = new GetInformationByPHP().getCart(token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -43,17 +45,19 @@ TextView shop_cart_needpay;
                         recyclerView = findViewById(R.id.shop_cart_review);
                         recyclerView.setHasFixedSize(true);
                         //recyclerView.setItemAnimator(new DefaultItemAnimatorV2());
-                        shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(getApplicationContext(), json);
+                        shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(getApplicationContext(), json,token);
                         shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
                             @Override
-                            public void ItemClicked(View view, int postion, int count) {
+                            public void ItemClicked(int count) {
                                 shop_cart_needpay.setText("$"+count);
                             }
                         });
+
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(shopCartRecyclerViewAdapter);
+                        shop_cart_needpay.setText(shopCartRecyclerViewAdapter.showPrice()+"");
                         DividerItemDecoration decoration=new DividerItemDecoration(getApplicationContext(),LinearLayoutManager.VERTICAL);
                         decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
                         recyclerView.addItemDecoration(decoration);

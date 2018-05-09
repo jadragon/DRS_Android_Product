@@ -1,6 +1,7 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -9,12 +10,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import library.GetInformationByPHP;
 import library.ResolveJsonData;
 import library.component.AutoHorizontalTextView;
 
@@ -42,9 +44,16 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private ArrayList<Map<String, String>> title_list;
     private ArrayList<ArrayList<Map<String, String>>> content_list;
     private ShopCartRecyclerViewAdapter.ClickListener clickListener;
-    private ArrayList<Integer> title_position;
     private List<Item> items;
     private Item item;
+    String token;
+    int size;
+
+    public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json, String token) {
+        this(ctx, json);
+        this.token = token;
+
+    }
 
     public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
@@ -57,22 +66,56 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             title_list = new ArrayList<>();
             content_list = new ArrayList<>();
         }
-        //廠商標題位置
-        title_position = new ArrayList<>();
-        int count = 0;
-        title_position.add(count);
-        for (int i = 0; i < content_list.size() - 1; i++) {
-            count += (1 + content_list.get(i).size());
-            title_position.add(count);
-        }
         //初始化checkbox
+        initItems();
+    }
 
+    public void initItems() {
         items = new ArrayList<>();
-        for (int i = 0; i < getItemCount(); i++) {
-            item = new Item();
+        size = 0;
+        //確認是否要footer
+        for (int i = 0; i < title_list.size(); i++) {
+            item = new Item(TYPE_HEADER, title_list.get(i).get("sno"), title_list.get(i).get("sname"), title_list.get(i).get("simg"));
+            item.setCheck(true);
+            item.setIndex(i);
             items.add(item);
+            size++;
+            for (int j = 0; j < content_list.get(i).size(); j++) {
+                item = new Item(TYPE_NORMAL,
+                        content_list.get(i).get(j).get("morno"),
+                        content_list.get(i).get(j).get("stotal"),
+                        content_list.get(i).get(j).get("pname"),
+                        content_list.get(i).get(j).get("img"),
+                        content_list.get(i).get(j).get("color"),
+                        content_list.get(i).get(j).get("size"),
+                        content_list.get(i).get(j).get("weight"),
+                        content_list.get(i).get(j).get("price"),
+                        content_list.get(i).get(j).get("sprice"),
+                        content_list.get(i).get(j).get("mtotal"));
+                item.setCheck(true);
+                item.setIndex(i);
+                items.add(item);
+                size++;
+            }
+            item = new Item(TYPE_FOOTER1, title_list.get(i).get("subtotal"));
+            item.setIndex(i);
+            items.add(item);
+            size++;
+            if (!title_list.get(i).get("discountInfo").equals("")) {
+                item = new Item(TYPE_FOOTER2, title_list.get(i).get("discountInfo"));
+                item.setIndex(i);
+                items.add(item);
+                size++;
+            }
+            if (!title_list.get(i).get("shippingInfo").equals("")) {
+                item = new Item(TYPE_FOOTER3, title_list.get(i).get("shippingInfo"));
+                item.setIndex(i);
+                items.add(item);
+                size++;
+            }
+
+            Log.e("VS", getItemCount() + ":" + size + ":" + items.size());
         }
-        Log.e("count", items + "");
 
     }
 
@@ -135,60 +178,33 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     public void onBindViewHolder(RecycleHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {//payloads为空 即不是调用notifyItemChanged(position,payloads)方法执行的
             if (getItemViewType(position) == TYPE_NORMAL) {
-                for (int i = 0; i < title_position.size(); i++) {
-                    if (title_position.get(i) < position) {
-                        ImageLoader.getInstance().displayImage(content_list.get(i).get(position - (i + 1)).get("img"), holder.viewitem_cart_content_img);
-                        holder.viewitem_cart_content_title.setText(content_list.get(i).get(position - (i + 1)).get("pname"));
-                        holder.viewitem_cart_content_color.setText(content_list.get(i).get(position - (i + 1)).get("color"));
-                        holder.viewitem_cart_content_size.setText(content_list.get(i).get(position - (i + 1)).get("size"));
-                        holder.viewitem_cart_content_total.setText(content_list.get(i).get(position - (i + 1)).get("stotal"));
-                        holder.viewitem_cart_content_price.setText("$" + getDeciamlString(content_list.get(i).get(position - (i + 1)).get("sprice")));
-
-                        if (items.get(position).isCheck())
-                            holder.viewitem_cart_content_checkbox.setChecked(true);
-                        else
-                            holder.viewitem_cart_content_checkbox.setChecked(false);
-
-                    }
-                }
+                ImageLoader.getInstance().displayImage(items.get(position).getImg(), holder.viewitem_cart_content_img);
+                holder.viewitem_cart_content_title.setText(items.get(position).getPname());
+                holder.viewitem_cart_content_color.setText(items.get(position).getColor());
+                holder.viewitem_cart_content_size.setText(items.get(position).getSize());
+                holder.viewitem_cart_content_total.setText(items.get(position).getStotal());
+                holder.viewitem_cart_content_price.setText("$" + getDeciamlString(items.get(position).getSprice()));
+                if (items.get(position).isCheck())
+                    holder.viewitem_cart_content_checkbox.setChecked(true);
+                else
+                    holder.viewitem_cart_content_checkbox.setChecked(false);
             } else if (getItemViewType(position) == TYPE_HEADER) {
-                for (int i = 0; i < title_position.size(); i++)
-                    if (title_position.get(i) == position) {
-                        ImageLoader.getInstance().displayImage(title_list.get(i).get("simg"), holder.viewitem_cart_title_img);
-                        holder.viewitem_cart_title_txt.setText(title_list.get(i).get("sname"));
-                        if (items.get(position).isCheck())
-                            holder.viewitem_cart_title_checkbox.setChecked(true);
-                        else
-                            holder.viewitem_cart_title_checkbox.setChecked(false);
-                    }
+                ImageLoader.getInstance().displayImage(items.get(position).getSimg(), holder.viewitem_cart_title_img);
+                holder.viewitem_cart_title_txt.setText(items.get(position).getSname());
+                if (items.get(position).isCheck())
+                    holder.viewitem_cart_title_checkbox.setChecked(true);
+                else
+                    holder.viewitem_cart_title_checkbox.setChecked(false);
 
             } else if (getItemViewType(position) == TYPE_FOOTER1) {
-                for (int index : title_position) {
-                    if (position > index) {
-                        position = index;
-                        break;
-                    }
-                }
                 holder.footer1_title.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
-                holder.footer1_total.setText("$" + getDeciamlString(title_list.get(position).get("subtotal")));
+                holder.footer1_total.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
                 holder.footer1_total.setTextColor(ctx.getResources().getColor(R.color.red));
             } else if (getItemViewType(position) == TYPE_FOOTER2) {
-                for (int index : title_position) {
-                    if (position > index) {
-                        position = index;
-                        break;
-                    }
-                }
-                holder.footer2.setText(title_list.get(position).get("discountInfo"));
+                holder.footer2.setText(items.get(position).getDiscountInfo());
                 holder.footer2.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
             } else if (getItemViewType(position) == TYPE_FOOTER3) {
-                for (int index : title_position) {
-                    if (position > index) {
-                        position = index;
-                        break;
-                    }
-                }
-                holder.footer3.setText(title_list.get(position).get("shippingInfo"));
+                holder.footer3.setText(items.get(position).getShippingInfo());
                 holder.footer3.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
@@ -198,7 +214,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             switch (type) {
                 case 0:
                     if (getItemViewType(position) == TYPE_HEADER) {
-
                         if (items.get(position).isCheck())
                             holder.viewitem_cart_title_checkbox.setChecked(true);
                         else
@@ -224,27 +239,20 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
 
     @Override
     public int getItemViewType(int position) {
-        for (int i = 0; i < title_position.size(); i++) {
-            if (position == title_position.get(i))
-                return TYPE_HEADER;
-            if (position == title_position.get(i) + content_list.get(i).size() + i + 1)
-                return TYPE_FOOTER1;
-            if (position == title_position.get(i) + content_list.get(i).size() + i + 2)
-                return TYPE_FOOTER2;
-            if (position == title_position.get(i) + content_list.get(i).size() + i + 3)
-                return TYPE_FOOTER3;
-        }
+        if (items.get(position).getType() == TYPE_HEADER)
+            return TYPE_HEADER;
+        if (items.get(position).getType() == TYPE_FOOTER1)
+            return TYPE_FOOTER1;
+        if (items.get(position).getType() == TYPE_FOOTER2)
+            return TYPE_FOOTER2;
+        if (items.get(position).getType() == TYPE_FOOTER3)
+            return TYPE_FOOTER3;
         return TYPE_NORMAL;
     }
 
     @Override
     public int getItemCount() {
-        int count = 0;
-        for (int i = 0; i < content_list.size(); i++) {
-            count += content_list.get(i).size();
-        }
-        count += content_list.size() * 4;
-        return count;
+        return items.size();
 
     }
 
@@ -269,6 +277,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         TextView viewitem_cart_title_txt;
         TextView viewitem_cart_content_title, viewitem_cart_content_color, viewitem_cart_content_size, viewitem_cart_content_total, viewitem_cart_content_price;
         TextView footer1_title, footer1_total, footer2, footer3;
+        Button viewitem_cart_content_increase, viewitem_cart_content_decrease;
+        int position;
 
         public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
@@ -281,6 +291,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             viewitem_cart_content_total = view.findViewById(R.id.viewitem_cart_content_total);
             viewitem_cart_content_price = view.findViewById(R.id.viewitem_cart_content_price);
             viewitem_cart_content_checkbox = view.findViewById(R.id.viewitem_cart_content_checkbox);
+            viewitem_cart_content_increase = view.findViewById(R.id.viewitem_cart_content_increase);
+            viewitem_cart_content_decrease = view.findViewById(R.id.viewitem_cart_content_decrease);
             if (view.getTag().equals("header")) {
                 viewitem_cart_title_img = view.findViewById(R.id.viewitem_cart_title_img);
                 viewitem_cart_title_txt = view.findViewById(R.id.viewitem_cart_title_txt);
@@ -295,93 +307,398 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             } else if (view.getTag().equals("footer3")) {
                 footer3 = (TextView) view;
             } else if (view.getTag().equals("content")) {
+                viewitem_cart_content_increase.setOnClickListener(this);
+                viewitem_cart_content_increase.setTag("increase");
+                viewitem_cart_content_decrease.setOnClickListener(this);
+                viewitem_cart_content_decrease.setTag("decrease");
                 viewitem_cart_content_checkbox.setOnClickListener(this);
                 viewitem_cart_content_checkbox.setTag("content");
             }
-           // itemView.setOnClickListener(this);
+            // itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition();
-            for (int index : title_position) {
-                if (position >= index) {
-                    position = index;
-                    break;
-                }
-            }
-
+        public void onClick(final View view) {
+            position = getAdapterPosition();
             switch (view.getTag() + "") {
-                case "header":
-                    if (!items.get(position).isCheck()) {
-                        position=position+(title_position.indexOf(position));
+                case "header"://當header點擊時
+                    if (!items.get(position).isCheck()) {//當header為非選取狀態
                         items.get(position).setCheck(true);
-                        for (int i = 0; i < content_list.get(title_position.indexOf(getAdapterPosition())).size(); i++) {
-                            items.get(position+i+1).setCheck(true);
-                            items.get(position+i+1).setPrice(
-                                    Integer.parseInt(content_list.get(title_position.indexOf(getAdapterPosition())).get(position+i).get("sprice"))*
-                                    Integer.parseInt(content_list.get(title_position.indexOf(getAdapterPosition())).get(position+i).get("stotal")));
+                        for (int i = 1; i < content_list.get(items.get(position).getIndex()).size() + 1; i++) {
+                            items.get(position + i).setCheck(true);
+                            items.get(position + i).setTotal_price(
+                                    Integer.parseInt(items.get(position + i).getSprice()) *
+                                            Integer.parseInt(items.get(position + i).getStotal()));
                         }
-                    } else {
+                    } else {//當header為選取狀態
                         items.get(position).setCheck(false);
-                        for (int i = 0; i < content_list.get(title_position.indexOf(position)).size(); i++) {
-                            items.get(position+i+1).setCheck(false);
-                            items.get(position+i+1).setPrice(0);
+                        for (int i = 1; i < content_list.get(items.get(position).getIndex()).size() + 1; i++) {
+                            items.get(position + i).setCheck(false);
+                            items.get(position + i).setTotal_price(0);
                         }
                     }
-                    notifyItemRangeChanged(position, content_list.get(title_position.indexOf(position)).size() + 1, 0);
+                    notifyItemRangeChanged(position, content_list.get(items.get(position).getIndex()).size() + 1, 0);
+                    updatePrice();
                     break;
-                case "content":
-                    position=getAdapterPosition()-(position+1);
-                    if (!items.get(getAdapterPosition()).isCheck()) {
-                        items.get(getAdapterPosition()).setCheck(true);
-                        viewitem_cart_content_checkbox.setChecked(true);
-                        items.get(getAdapterPosition()).setPrice(
-                                Integer.parseInt(content_list.get(0).get(position).get("sprice")) *
-                                Integer.parseInt(content_list.get(0).get(position).get("stotal")));
+                case "content"://當content點擊時
+                    if (!items.get(position).isCheck()) {//當content為非選取狀態
 
-                    } else {
+                        for (int i = 0; i < items.size(); i++) {
+                            if (items.get(i).getType() == TYPE_HEADER && position > i) {
+                                position = i;
+                                break;
+                            }
+                        }
+                        //判斷當前header的子itemu全選時，header轉為選取狀態
+                        items.get(position).setCheck(true);
+                        items.get(getAdapterPosition()).setCheck(true);
+                        for (int i = 1; i < content_list.get(items.get(position).getIndex()).size() + 1; i++) {
+                            if (!items.get(position + i).isCheck()) {
+                                items.get(position).setCheck(false);
+                                break;
+                            }
+                        }
+                        notifyItemChanged(position, 0);
+
+                        viewitem_cart_content_checkbox.setChecked(true);
+                        items.get(getAdapterPosition()).setTotal_price(
+                                Integer.parseInt(items.get(getAdapterPosition()).getSprice()) *
+                                        Integer.parseInt(items.get(getAdapterPosition()).getStotal()));
+                    } else {//當content為選取狀態
+                        //header
+                        for (int i = 0; i < items.size(); i++) {
+                            if (items.get(i).getType() == TYPE_HEADER && position > i) {
+                                position = i;
+                                break;
+                            }
+                        }
+                        items.get(position).setCheck(false);
+                        notifyItemChanged(position, 0);
+                        //content
                         items.get(getAdapterPosition()).setCheck(false);
                         viewitem_cart_content_checkbox.setChecked(false);
-                        items.get(getAdapterPosition()).setPrice(0);
+                        items.get(getAdapterPosition()).setTotal_price(0);
+
                     }
+                    updatePrice();
                     break;
-            }
-            int count=0;
-            for(int i=0;i<items.size();i++){
-                count+=items.get(i).getPrice();
-            }
-            if (clickListener != null) {
-                clickListener.ItemClicked(view, position, count);
+                case "increase"://當increase點擊時
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int total = Integer.parseInt(items.get(position).getStotal()) + 1;
+                            new GetInformationByPHP().addCartProduct(token, items.get(position).getMorno(),
+                                    total);
+                            json = new GetInformationByPHP().getCart(token);
+                            new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < items.size(); i++) {
+                                        items.get(i).setCheck(false);
+                                        items.get(i).setTotal_price(0);
+                                    }
+                                    setFilter(json);
+
+                                    updatePrice();
+                                }
+                            });
+                        }
+                    }).start();
+                    break;
+                case "decrease"://當decrease點擊時
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int total = Integer.parseInt(items.get(position).getStotal()) -1;
+                            new GetInformationByPHP().addCartProduct(token,items.get(position).getMorno(),
+                                    total);
+                            json = new GetInformationByPHP().getCart(token);
+                            new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < items.size(); i++) {
+                                        items.get(i).setCheck(false);
+                                        items.get(i).setTotal_price(0);
+                                    }
+                                    setFilter(json);
+                                    updatePrice();
+                                }
+                            });
+
+
+                        }
+                    }).start();
+                    break;
             }
         }
 
-    }
 
+    }
+    private void updatePrice() {
+       int count = 0;
+        for (int i = 0; i < items.size(); i++) {
+            count += items.get(i).getTotal_price();
+        }
+        clickListener.ItemClicked(count);
+    }
+    public int showPrice() {
+        int count = 0;
+        for (int i = 0; i < items.size(); i++) {
+            count += items.get(i).getTotal_price();
+        }
+      return count;
+    }
     public void setClickListener(ShopCartRecyclerViewAdapter.ClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
     public interface ClickListener {
-        void ItemClicked(View view, int postion, int count);
+        void ItemClicked(int count);
     }
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        content_list = ResolveJsonData.getCartItemArray(json);
+        if (json != null) {
+            title_list = ResolveJsonData.getCartInformation(json);
+            content_list = ResolveJsonData.getCartItemArray(json);
+        } else {
+            title_list = new ArrayList<>();
+            content_list = new ArrayList<>();
+        }
+        initItems();
         notifyDataSetChanged();
     }
 
     private class Item {
-        boolean check;
-        int price;
+        int type;
+        int index;
 
-        public int getPrice() {
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        //=======header
+        String sno;
+        String sname;
+        String simg;
+        //=======footer
+        String subtotal;
+        String discountInfo;
+        String shippingInfo;
+        //=======content
+        boolean check;
+        int total_price;
+        String morno;
+        String stotal;
+        String pname;
+        String img;
+        String color;
+        String size;
+        String weight;
+        String price;
+        String sprice;
+        String mtotal;
+
+        public Item() {
+        }
+
+        public Item(int type) {
+            this.type = type;
+        }
+
+        /**
+         * header
+         */
+        public Item(int type, String sno, String sname, String simg) {
+            this.type = type;
+            this.sno = sno;
+            this.sname = sname;
+            this.simg = simg;
+        }
+
+
+        /**
+         * footer
+         */
+        public Item(int type, String footer) {
+            this.type = type;
+            switch (type) {
+                case TYPE_FOOTER1:
+                    this.subtotal = footer;
+                    break;
+                case TYPE_FOOTER2:
+                    this.discountInfo = footer;
+                    break;
+                case TYPE_FOOTER3:
+                    this.shippingInfo = footer;
+                    break;
+            }
+        }
+
+
+        /**
+         * content
+         */
+        public Item(int type, String morno, String stotal, String pname, String img, String color, String size, String weight, String price, String sprice, String mtotal) {
+            this.type = type;
+            this.morno = morno;
+            this.stotal = stotal;
+            this.pname = pname;
+            this.img = img;
+            this.color = color;
+            this.size = size;
+            this.weight = weight;
+            this.price = price;
+            this.sprice = sprice;
+            this.mtotal = mtotal;
+        }
+
+        public String getSno() {
+            return sno;
+        }
+
+        public void setSno(String sno) {
+            this.sno = sno;
+        }
+
+        public String getSname() {
+            return sname;
+        }
+
+        public void setSname(String sname) {
+            this.sname = sname;
+        }
+
+        public String getSimg() {
+            return simg;
+        }
+
+        public void setSimg(String simg) {
+            this.simg = simg;
+        }
+
+        public String getSubtotal() {
+            return subtotal;
+        }
+
+        public void setSubtotal(String subtotal) {
+            this.subtotal = subtotal;
+        }
+
+        public String getDiscountInfo() {
+            return discountInfo;
+        }
+
+        public void setDiscountInfo(String discountInfo) {
+            this.discountInfo = discountInfo;
+        }
+
+        public String getShippingInfo() {
+            return shippingInfo;
+        }
+
+        public void setShippingInfo(String shippingInfo) {
+            this.shippingInfo = shippingInfo;
+        }
+
+        public String getMorno() {
+            return morno;
+        }
+
+        public void setMorno(String morno) {
+            this.morno = morno;
+        }
+
+        public String getStotal() {
+            return stotal;
+        }
+
+        public void setStotal(String stotal) {
+            this.stotal = stotal;
+        }
+
+        public String getPname() {
+            return pname;
+        }
+
+        public void setPname(String pname) {
+            this.pname = pname;
+        }
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
+        public void setColor(String color) {
+            this.color = color;
+        }
+
+        public String getSize() {
+            return size;
+        }
+
+        public void setSize(String size) {
+            this.size = size;
+        }
+
+        public String getWeight() {
+            return weight;
+        }
+
+        public void setWeight(String weight) {
+            this.weight = weight;
+        }
+
+        public String getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(String price) {
             this.price = price;
+        }
+
+        public String getSprice() {
+            return sprice;
+        }
+
+        public void setSprice(String sprice) {
+            this.sprice = sprice;
+        }
+
+        public String getMtotal() {
+            return mtotal;
+        }
+
+        public void setMtotal(String mtotal) {
+            this.mtotal = mtotal;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public int getTotal_price() {
+            return total_price;
+        }
+
+        public void setTotal_price(int total_price) {
+            this.total_price = total_price;
         }
 
         public boolean isCheck() {
@@ -392,4 +709,5 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             this.check = check;
         }
     }
+
 }

@@ -18,8 +18,8 @@
         android:id="@+id/viewitem_cart_content_img"
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:src="@drawable/ship_post_office"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:src="@drawable/ship_post_office" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,19 +31,19 @@
             android:id="@+id/viewitem_cart_content_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="標題"
-            android:textSize="18sp"
             android:layout_weight="1"
+            android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:ellipsize="end"/>
+            android:text="標題"
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_weight="1"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/viewitem_cart_content_color"
@@ -64,15 +64,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_weight="1"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/viewitem_cart_content_decrease"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="-"
                 android:gravity="center"
+                android:text="-"
                 android:textSize="16sp" />
 
             <TextView
@@ -84,10 +85,11 @@
                 android:textSize="20sp" />
 
             <Button
+                android:id="@+id/viewitem_cart_content_increase"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="+"
                 android:gravity="center"
+                android:text="+"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -95,11 +97,11 @@
             android:id="@+id/viewitem_cart_content_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="$100"
-            android:textSize="20sp"
-            android:textColor="@color/red"
             android:layout_weight="1"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:text="$100"
+            android:textColor="@color/red"
+            android:textSize="20sp" />
 
     </LinearLayout>
 </LinearLayout>
