@@ -43,4 +43,5 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.android.databinding:adapters:3.2.0-alpha11'
     implementation 'com.android.support:percent:23.1.1'
+    implementation 'com.github.XanderWang:elasticity:1.0.0'
 }

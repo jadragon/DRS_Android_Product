@@ -276,7 +276,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
     }
 
-   class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView, count0, count1, free, freash, hot, limit, heart, score;
         LinearLayout frameLayout, linear_heart;
         TextView tv1, rprice, rsprice, discount;
@@ -352,8 +352,10 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        list = ResolveJsonData.getJSONData(json);
-        isfavorate = new boolean[list.size()];
+        if (json != null) {
+            list = ResolveJsonData.getJSONData(json);
+            isfavorate = new boolean[list.size()];
+        }
         notifyDataSetChanged();
     }
 

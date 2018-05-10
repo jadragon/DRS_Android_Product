@@ -39,9 +39,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <ImageView
                 android:layout_width="35dp"
@@ -49,20 +49,21 @@
                 android:src="@drawable/discount_coupon" />
 
             <EditText
+                android:id="@+id/shopcart_edit_coupon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="7"
-                android:background="@color/gainsboro"
+                android:layout_weight="9"
+                android:background="@color/default_gray"
                 android:hint="請輸入折扣碼"
-                android:inputType="number"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"/>
 
             <Button
+                android:id="@+id/shopcart_btn_coupon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:background="@color/red"
+                android:background="@drawable/arcangle_button_red"
                 android:text="發送"
                 android:textColor="@color/white" />
         </LinearLayout>
@@ -71,8 +72,8 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,14 +82,15 @@
                 android:gravity="center_vertical"
                 android:paddingStart="50dp"
                 android:text="折扣金額:"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/shopcart_txt_discount"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical|right"
-                android:text="$100"
+                android:text="$0"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -102,8 +104,8 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -112,7 +114,8 @@
                 android:gravity="bottom"
                 android:paddingStart="50dp"
                 android:text="應付小計:"
-                android:textSize="20sp" />
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/shop_cart_needpay"
@@ -121,16 +124,16 @@
                 android:layout_weight="1"
                 android:gravity="bottom|right"
                 android:text="$0"
-
                 android:textColor="@color/red"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,7 +143,10 @@
                 android:text="可賺取的"
                 android:textSize="15dp"
                 android:textColor="@color/orange"/>
-
+<ImageView
+    android:layout_width="15dp"
+    android:layout_height="15dp"
+    android:layout_gravity="center" />
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -166,27 +172,27 @@
             android:layout_gravity="bottom"
             android:background="@color/white"
             android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:paddingBottom="10dp">
 
             <Button
-                android:id="@+id/pccontent_btn_addshopcart"
+                android:id="@+id/shopcart_btn_continue"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:background="@color/orange"
+                android:background="@drawable/arcangle_button_orange"
                 android:text="繼續購物"
                 android:textColor="@color/white"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp" />
 
             <Button
-                android:id="@+id/pccontent_btn_buynow"
+                android:id="@+id/shopcart_gotobuy"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:background="@color/red"
+                android:background="@drawable/arcangle_button_red"
                 android:text="去結帳"
                 android:textColor="@color/white"
                 android:layout_marginLeft="10dp"/>

@@ -78,7 +78,7 @@ public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWays
         return list.size();
     }
 
-  class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         TextView name, location, price, forfree;
         Context ctx;
@@ -114,7 +114,9 @@ public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWays
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        list = ResolveJsonData.getJSONData(json);
+        if (json != null) {
+            list = ResolveJsonData.getJSONData(json);
+        }
         notifyDataSetChanged();
     }
 

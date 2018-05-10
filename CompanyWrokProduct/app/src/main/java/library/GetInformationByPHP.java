@@ -22,6 +22,9 @@ public class GetInformationByPHP {
     private static final String getCart_url = "http://api.gok1945.com/main/cart/getCart.php";
     private static final String addCartProduct_url = "http://api.gok1945.com/main/cart/addCartProduct.php";
     private static final String updatePortrait_url = "http://api.gok1945.com/main/mcenter/person/updatePortrait.php";
+    private static final String delCartProduct_url = "http://api.gok1945.com/main/cart/delCartProduct.php";
+    private static final String setCartDiscount_url = "http://api.gok1945.com/main/cart/setCartDiscount.php";
+    private static final String delCartDiscount_url = "http://api.gok1945.com/main/cart/delCartDiscount.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -177,6 +180,34 @@ public JSONObject test() {
         params.add(new BasicNameValuePair("total", "" + total));
         return jsonParser.getJSONFromUrl(addCartProduct_url, params);
     }
+
+    /**
+     * 購買清單 - 移除購買商品
+     */
+    public JSONObject delCartProduct(String token, String morno) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("morno", morno));
+        return jsonParser.getJSONFromUrl(delCartProduct_url, params);
+    }
+
+    /**
+     * 購買清單 - 輸入折扣代碼
+     */
+    public JSONObject setCartDiscount(String token, String coupon) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("coupon", coupon));
+        return jsonParser.getJSONFromUrl(setCartDiscount_url, params);
+    }
+
+    /**
+     * 購買清單 - 移除購買商品
+     */
+    public JSONObject delCartDiscount(String token, String moprno) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("moprno", moprno));
+        return jsonParser.getJSONFromUrl(delCartDiscount_url, params);
+    }
+
     /**
      * 上傳圖片
      */

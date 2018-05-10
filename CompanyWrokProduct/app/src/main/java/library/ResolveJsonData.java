@@ -9,6 +9,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResolveJsonData {
+    /**
+     * 判斷是否成功
+     */
+    public static Boolean checkSuccess(JSONObject json) {
+        try {
+            return json.getBoolean("Success");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     /**
      * 解析首頁:
@@ -339,6 +350,31 @@ public class ResolveJsonData {
                     arrayList.add(map);
                 }
                 return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 解析購買清單 - 輸入折扣代碼:
+     * 現金折扣碼
+     * 現金折扣條碼
+     * 現金折扣金
+     */
+    public static Map<String, String> getCartDiscount(JSONObject json) {
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Data");
+                map = new HashMap<>();
+                JSONObject json_obj = jsonArray.getJSONObject(0);
+                map.put("moprno", json_obj.getString("moprno"));
+                map.put("mcoupon", json_obj.getString("mcoupon"));
+                map.put("mdiscount", json_obj.getString("mdiscount"));
+
+                return map;
             }
         } catch (JSONException e) {
             e.printStackTrace();

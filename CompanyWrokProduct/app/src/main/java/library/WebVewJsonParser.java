@@ -1,8 +1,3 @@
-/**
- * Author: Ravi Tamada
- * URL: www.androidhive.info
- * twitter: http://twitter.com/ravitamada
- */
 package library;
 
 import android.util.Log;
@@ -14,8 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,22 +17,20 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-/**
- *透過URL及Params取得資料庫的資料(JSON)
- *
- * */
-public class JSONParser {
+public class WebVewJsonParser {
+    /**
+     * 透過URL及Params取得資料庫的資料(JSON)
+     */
 
     static InputStream is = null;
-    static JSONObject jObj = null;
     static String json = "";
 
     // constructor
-    public JSONParser() {
+    public WebVewJsonParser() {
 
     }
 
-    public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) {
+    public String getJSONFromUrl(String url, List<NameValuePair> params) {
 
         // Making HTTP request
         try {
@@ -84,15 +75,9 @@ public class JSONParser {
 
         }
 
-        // try parse the string to a JSON object
-        try {
-            jObj = new JSONObject(json);
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
-
-        // return JSON String
-        return jObj;
+        return json;
 
     }
 }
+
+

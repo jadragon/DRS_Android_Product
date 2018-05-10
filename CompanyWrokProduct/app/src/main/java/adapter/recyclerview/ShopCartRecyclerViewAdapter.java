@@ -1,6 +1,9 @@
 package adapter.recyclerview;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -16,10 +19,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -60,6 +65,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         this.json = json;
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
+
             title_list = ResolveJsonData.getCartInformation(json);
             content_list = ResolveJsonData.getCartItemArray(json);
         } else {
@@ -74,6 +80,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         items = new ArrayList<>();
         size = 0;
         //確認是否要footer
+        //checkJsonData();
         for (int i = 0; i < title_list.size(); i++) {
             item = new Item(TYPE_HEADER, title_list.get(i).get("sno"), title_list.get(i).get("sname"), title_list.get(i).get("simg"));
             item.setCheck(true);
@@ -94,6 +101,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         content_list.get(i).get(j).get("mtotal"));
                 item.setCheck(true);
                 item.setIndex(i);
+                item.countTotal_price();
                 items.add(item);
                 size++;
             }
@@ -121,9 +129,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
 
     @Override
     public ShopCartRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (40 * dm.density));
-        params.setMarginStart((int) (70 * dm.density));
-        params.setMarginEnd((int) (10 * dm.density));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (36 * dm.density));
+        params.setMargins((int) (55 * dm.density), 0, (int) (30 * dm.density), 0);
         //頁面
         if (viewType == TYPE_HEADER) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_title, parent, false);
@@ -134,13 +141,14 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             FrameLayout layout = new FrameLayout(ctx);
             view = new TextView(ctx);
             view.setTag("footer1_total");
-            ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            ((TextView) view).setTypeface(((TextView) view).getTypeface(), Typeface.BOLD);
             ((TextView) view).setGravity(Gravity.CENTER_VERTICAL + Gravity.END);
             layout.addView(view);
             view = new TextView(ctx);
             view.setTag("footer1_title");
             ((TextView) view).setText("小計:");
-            ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            ((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             ((TextView) view).setGravity(Gravity.CENTER_VERTICAL + Gravity.START);
             layout.addView(view);
             layout.setLayoutParams(params);
@@ -201,7 +209,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                 holder.footer1_total.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
                 holder.footer1_total.setTextColor(ctx.getResources().getColor(R.color.red));
             } else if (getItemViewType(position) == TYPE_FOOTER2) {
-                holder.footer2.setText(items.get(position).getDiscountInfo());
+                holder.footer2.setText("店家優惠:" + items.get(position).getDiscountInfo());
                 holder.footer2.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
             } else if (getItemViewType(position) == TYPE_FOOTER3) {
                 holder.footer3.setText(items.get(position).getShippingInfo());
@@ -268,7 +276,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         view.setLayoutParams(params);
     }
 
-    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         Context ctx;
         JSONObject json;
         CheckBox viewitem_cart_title_checkbox, viewitem_cart_content_checkbox;
@@ -279,42 +287,122 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         TextView footer1_title, footer1_total, footer2, footer3;
         Button viewitem_cart_content_increase, viewitem_cart_content_decrease;
         int position;
+        AlertDialog.Builder builder;
 
         public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
             this.json = json;
             this.ctx = ctx;
-            viewitem_cart_content_img = view.findViewById(R.id.viewitem_cart_content_img);
-            viewitem_cart_content_title = view.findViewById(R.id.viewitem_cart_content_title);
-            viewitem_cart_content_color = view.findViewById(R.id.viewitem_cart_content_color);
-            viewitem_cart_content_size = view.findViewById(R.id.viewitem_cart_content_size);
-            viewitem_cart_content_total = view.findViewById(R.id.viewitem_cart_content_total);
-            viewitem_cart_content_price = view.findViewById(R.id.viewitem_cart_content_price);
-            viewitem_cart_content_checkbox = view.findViewById(R.id.viewitem_cart_content_checkbox);
-            viewitem_cart_content_increase = view.findViewById(R.id.viewitem_cart_content_increase);
-            viewitem_cart_content_decrease = view.findViewById(R.id.viewitem_cart_content_decrease);
+            itemView.setOnLongClickListener(this);
             if (view.getTag().equals("header")) {
                 viewitem_cart_title_img = view.findViewById(R.id.viewitem_cart_title_img);
                 viewitem_cart_title_txt = view.findViewById(R.id.viewitem_cart_title_txt);
                 viewitem_cart_title_checkbox = view.findViewById(R.id.viewitem_cart_title_checkbox);
                 viewitem_cart_title_checkbox.setOnClickListener(this);
                 viewitem_cart_title_checkbox.setTag("header");
+                itemView.setTag("header");
             } else if (view.getTag().equals("footer1")) {
                 footer1_title = view.findViewWithTag("footer1_title");
                 footer1_total = view.findViewWithTag("footer1_total");
+                itemView.setTag("footer1");
             } else if (view.getTag().equals("footer2")) {
                 footer2 = (TextView) view;
+                itemView.setTag("footer2");
             } else if (view.getTag().equals("footer3")) {
                 footer3 = (TextView) view;
+                itemView.setTag("footer3");
             } else if (view.getTag().equals("content")) {
+                viewitem_cart_content_img = view.findViewById(R.id.viewitem_cart_content_img);
+                viewitem_cart_content_title = view.findViewById(R.id.viewitem_cart_content_title);
+                viewitem_cart_content_color = view.findViewById(R.id.viewitem_cart_content_color);
+                viewitem_cart_content_size = view.findViewById(R.id.viewitem_cart_content_size);
+                viewitem_cart_content_total = view.findViewById(R.id.viewitem_cart_content_total);
+                viewitem_cart_content_price = view.findViewById(R.id.viewitem_cart_content_price);
+                viewitem_cart_content_checkbox = view.findViewById(R.id.viewitem_cart_content_checkbox);
+                viewitem_cart_content_increase = view.findViewById(R.id.viewitem_cart_content_increase);
+                viewitem_cart_content_decrease = view.findViewById(R.id.viewitem_cart_content_decrease);
                 viewitem_cart_content_increase.setOnClickListener(this);
                 viewitem_cart_content_increase.setTag("increase");
                 viewitem_cart_content_decrease.setOnClickListener(this);
                 viewitem_cart_content_decrease.setTag("decrease");
                 viewitem_cart_content_checkbox.setOnClickListener(this);
                 viewitem_cart_content_checkbox.setTag("content");
+                itemView.setTag("content");
             }
-            // itemView.setOnClickListener(this);
+
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            position = getAdapterPosition();
+            switch (v.getTag() + "") {
+                case "content":
+                    builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage("是否要取消此商品?").setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        final JSONObject jsonObject = new GetInformationByPHP().delCartProduct(token, items.get(position).getMorno());
+                                        json = new GetInformationByPHP().getCart(token);
+                                        if (jsonObject.getBoolean("Success")) {
+                                            new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    setFilter(json);
+                                                    try {
+                                                        Toast.makeText(ctx, "" + jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    updatePrice();
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(ctx, "取消", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //填充对话框的布局
+                    /*
+                    builder .setItems(new String[]{"刪除", "取消"}, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    break;
+                                case 1:
+                                    builder.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+                    */
+                    AlertDialog dialog = builder.create();
+                    //点击dialog之外的区域禁止取消dialog
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                    break;
+                case "header":
+                    break;
+                case "footer1":
+                    break;
+                case "footer2":
+                    break;
+                case "footer3":
+                    break;
+
+            }
+            return false;
         }
 
         @Override
@@ -326,9 +414,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         items.get(position).setCheck(true);
                         for (int i = 1; i < content_list.get(items.get(position).getIndex()).size() + 1; i++) {
                             items.get(position + i).setCheck(true);
-                            items.get(position + i).setTotal_price(
-                                    Integer.parseInt(items.get(position + i).getSprice()) *
-                                            Integer.parseInt(items.get(position + i).getStotal()));
+                            items.get(position + i).countTotal_price();
                         }
                     } else {//當header為選取狀態
                         items.get(position).setCheck(false);
@@ -361,9 +447,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         notifyItemChanged(position, 0);
 
                         viewitem_cart_content_checkbox.setChecked(true);
-                        items.get(getAdapterPosition()).setTotal_price(
-                                Integer.parseInt(items.get(getAdapterPosition()).getSprice()) *
-                                        Integer.parseInt(items.get(getAdapterPosition()).getStotal()));
+                        items.get(getAdapterPosition()).countTotal_price();
                     } else {//當content為選取狀態
                         //header
                         for (int i = 0; i < items.size(); i++) {
@@ -383,71 +467,80 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     updatePrice();
                     break;
                 case "increase"://當increase點擊時
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int total = Integer.parseInt(items.get(position).getStotal()) + 1;
-                            new GetInformationByPHP().addCartProduct(token, items.get(position).getMorno(),
-                                    total);
-                            json = new GetInformationByPHP().getCart(token);
-                            new Handler(ctx.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    for (int i = 0; i < items.size(); i++) {
-                                        items.get(i).setCheck(false);
-                                        items.get(i).setTotal_price(0);
-                                    }
-                                    setFilter(json);
+                    if (position != -1 && Integer.parseInt(items.get(position).getStotal()) < Integer.parseInt(items.get(position).getMtotal())) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int total = Integer.parseInt(items.get(position).getStotal()) + 1;
+                                new GetInformationByPHP().addCartProduct(token, items.get(position).getMorno(),
+                                        total);
+                                json = new GetInformationByPHP().getCart(token);
+                                new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 0; i < items.size(); i++) {
+                                            items.get(i).setCheck(false);
+                                            items.get(i).setTotal_price(0);
+                                        }
+                                        setFilter(json);
 
-                                    updatePrice();
-                                }
-                            });
-                        }
-                    }).start();
+                                        updatePrice();
+                                    }
+                                });
+                            }
+                        }).start();
+                    }
+
                     break;
                 case "decrease"://當decrease點擊時
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int total = Integer.parseInt(items.get(position).getStotal()) -1;
-                            new GetInformationByPHP().addCartProduct(token,items.get(position).getMorno(),
-                                    total);
-                            json = new GetInformationByPHP().getCart(token);
-                            new Handler(ctx.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    for (int i = 0; i < items.size(); i++) {
-                                        items.get(i).setCheck(false);
-                                        items.get(i).setTotal_price(0);
+                    if (position != -1 && Integer.parseInt(items.get(position).getStotal()) > 1) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int total = Integer.parseInt(items.get(position).getStotal()) - 1;
+                                new GetInformationByPHP().addCartProduct(token, items.get(position).getMorno(),
+                                        total);
+                                json = new GetInformationByPHP().getCart(token);
+                                new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 0; i < items.size(); i++) {
+                                            items.get(i).setCheck(false);
+                                            items.get(i).setTotal_price(0);
+                                        }
+                                        setFilter(json);
+                                        updatePrice();
                                     }
-                                    setFilter(json);
-                                    updatePrice();
-                                }
-                            });
+                                });
 
 
-                        }
-                    }).start();
+                            }
+                        }).start();
+                    }
+
                     break;
             }
         }
 
 
     }
+
     private void updatePrice() {
-       int count = 0;
+        int count = 0;
         for (int i = 0; i < items.size(); i++) {
             count += items.get(i).getTotal_price();
         }
         clickListener.ItemClicked(count);
     }
+
     public int showPrice() {
         int count = 0;
         for (int i = 0; i < items.size(); i++) {
             count += items.get(i).getTotal_price();
         }
-      return count;
+        return count;
     }
+
     public void setClickListener(ShopCartRecyclerViewAdapter.ClickListener clickListener) {
         this.clickListener = clickListener;
     }
@@ -458,12 +551,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        if (json != null) {
+        if (ResolveJsonData.getCartInformation(json)!=null) {
             title_list = ResolveJsonData.getCartInformation(json);
             content_list = ResolveJsonData.getCartItemArray(json);
-        } else {
-            title_list = new ArrayList<>();
-            content_list = new ArrayList<>();
         }
         initItems();
         notifyDataSetChanged();
@@ -708,6 +798,13 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         public void setCheck(boolean check) {
             this.check = check;
         }
+
+        public int countTotal_price() {
+            total_price = Integer.parseInt(stotal) * Integer.parseInt(sprice);
+            return total_price;
+        }
+
+
     }
 
 }

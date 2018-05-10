@@ -10,7 +10,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/checkbox"
         android:button="@null" />
 
@@ -36,7 +36,8 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="標題"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,14 +51,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="顏色"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginRight="5dp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/viewitem_cart_content_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="規格"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
 
@@ -70,11 +74,13 @@
 
             <Button
                 android:id="@+id/viewitem_cart_content_decrease"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:gravity="center"
                 android:text="-"
-                android:textSize="16sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:background="@color/default_gray"/>
 
             <TextView
                 android:id="@+id/viewitem_cart_content_total"
@@ -86,11 +92,13 @@
 
             <Button
                 android:id="@+id/viewitem_cart_content_increase"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:gravity="center"
                 android:text="+"
-                android:textSize="16sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:background="@color/default_gray"/>
         </LinearLayout>
 
         <TextView
@@ -101,7 +109,8 @@
             android:gravity="center_vertical"
             android:text="$100"
             android:textColor="@color/red"
-            android:textSize="20sp" />
+            android:textSize="17sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 </LinearLayout>
