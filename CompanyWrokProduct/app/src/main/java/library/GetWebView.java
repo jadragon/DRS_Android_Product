@@ -24,14 +24,45 @@ public class GetWebView {
         jsonParser = new WebVewJsonParser();
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
         params.add(new BasicNameValuePair("device", "3"));
+    }
+
+    public String getHtmlByPosition(String token, int position) {
+        switch (position) {
+            case 0:
+                return register(token);
+
+            case 1:
+                return inactivated(token);
+
+            case 2:
+                return activation(token);
+
+            case 3:
+                return directPush(token);
+
+            case 4:
+                return placement(token);
+
+            case 5:
+                return upgrade(token);
+
+            case 6:
+                return recommend(token);
+
+            case 7:
+                return agency(token);
+
+            default:
+                return null;
+
+        }
     }
 
     /**
      * 會員註冊
      */
-    public String register(String token) {
+    private String register(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(register_url, params);
     }
@@ -40,7 +71,7 @@ public class GetWebView {
      * 未激活會員
      */
 
-    public String activation(String token) {
+    private String activation(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(activation_url, params);
     }
@@ -48,7 +79,7 @@ public class GetWebView {
     /**
      * 激活會員
      */
-    public String inactivated(String token) {
+    private String inactivated(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(inactivated_url, params);
     }
@@ -56,7 +87,7 @@ public class GetWebView {
     /**
      * 直推會員
      */
-    public String directPush(String token) {
+    private String directPush(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(directPush_url, params);
     }
@@ -64,7 +95,7 @@ public class GetWebView {
     /**
      * 接點網路
      */
-    public String placement(String token) {
+    private String placement(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(placement_url, params);
     }
@@ -72,7 +103,7 @@ public class GetWebView {
     /**
      * 原點升級
      */
-    public String upgrade(String token) {
+    private String upgrade(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(upgrade_url, params);
     }
@@ -80,7 +111,7 @@ public class GetWebView {
     /**
      * 推薦會員
      */
-    public String recommend(String token) {
+    private String recommend(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(recommend_url, params);
     }
@@ -88,7 +119,7 @@ public class GetWebView {
     /**
      * 申請區域代理
      */
-    public String agency(String token) {
+    private String agency(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(agency_url, params);
     }

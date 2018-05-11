@@ -1,8 +1,8 @@
 package com.test.tw.wrokproduct;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -11,45 +11,24 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import Fragment.Fragment_WebView;
-import library.GetWebView;
 
-public class communityActivity extends AppCompatActivity {
+public class CommunityActivity extends AppCompatActivity {
     private WebView luntanListview;
     String html;
     ViewGroup container;
     int webviewHeigh;
+    Intent intent;
     Fragment_WebView.OnHeighChangerListener onHeighChangerListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
-        test();
+        intent=getIntent();
+        html=intent.getStringExtra("html");
+        showWebView();
     }
-
-    private void test() {
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-             final String json = new GetWebView().register("zI6OIYlbhfPKyhbchdOiGg==");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        html=json;
-                        Log.e("TestJSONONONONON", json + "");
-                        showWebView();
-                    }
-                });
-            }
-        }).start();
-    }
-
-
-
 
     private void showWebView() {
-        Log.e("html", html);
         luntanListview = findViewById(R.id.community_webview);
         // 设置WevView要显示的网页
         luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8",
@@ -58,7 +37,7 @@ public class communityActivity extends AppCompatActivity {
         // 设置可以支持缩放
         luntanListview.getSettings().setSupportZoom(true);
         // 设置出现缩放工具
-        luntanListview.getSettings().setBuiltInZoomControls(true);
+        //luntanListview.getSettings().setBuiltInZoomControls(true);
         //设置可在大视野范围内上下左右拖动，并且可以任意比例缩放
         luntanListview.getSettings().setUseWideViewPort(true);
         //设置默认加载的可视范围是大视野范围

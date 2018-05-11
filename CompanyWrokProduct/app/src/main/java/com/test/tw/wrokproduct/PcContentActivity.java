@@ -83,7 +83,7 @@ public class PcContentActivity extends AppCompatActivity {
         //pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
         AppManager.getAppManager().addActivity(this);
-        initToo();
+        initToolbar();
         setText();
         initHome();
         initFavorate();
@@ -431,7 +431,7 @@ public class PcContentActivity extends AppCompatActivity {
         //   webviewpager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,6500));
     }
 
-    private void initToo() {
+    private void initToolbar() {
         //Toolbar 建立
         toolbar = findViewById(R.id.pccontent_toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);

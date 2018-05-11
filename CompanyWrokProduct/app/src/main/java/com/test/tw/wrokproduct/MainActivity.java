@@ -13,15 +13,14 @@ import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import Fragment.Fragment_home;
-import Fragment.Fragment_shop;
+import Fragment.*;
 import library.AppManager;
 import library.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
     private Fragment_shop fragment_shop;
+    private Fragment_community fragment_community;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
     BottomNavigationView navigation;
@@ -56,9 +55,12 @@ public class MainActivity extends AppCompatActivity {
                         lastShowFragment = 1;
                         return true;
                     case R.id.navigation_my_favor:
+                        switchFrament(lastShowFragment, 2);
+                        lastShowFragment = 2;
                         return true;
                     case R.id.navigation_member:
-
+                        switchFrament(lastShowFragment, 3);
+                        lastShowFragment = 3;
                         return true;
 
                 }
@@ -126,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     private void initFragments() {
         fragment_home = new Fragment_home();
         fragment_shop = new Fragment_shop();
-
-        fragments = new Fragment[]{fragment_home, fragment_shop};
+        fragment_community=new Fragment_community();
+        fragments = new Fragment[]{fragment_home, fragment_shop,fragment_shop,fragment_community};
         lastShowFragment = 0;
         getSupportFragmentManager()
                 .beginTransaction()

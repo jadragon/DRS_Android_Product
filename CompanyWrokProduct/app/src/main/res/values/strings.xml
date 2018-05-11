@@ -6,4 +6,22 @@
         <item>價格由低至高</item>
         <item>價格由高至低</item>
     </string-array>
+    <string-array name="community_title">
+        <item>會員註冊</item>
+        <item>未激活會員</item>
+        <item>已激活會員</item>
+        <item>直通列表</item>
+        <item>接點網路</item>
+        <item>原點升級</item>
+        <item>推薦會員</item>
+    </string-array>
+    <array name="community_image">
+        <item>@drawable/member_register</item>
+        <item>@drawable/inactmember</item>
+        <item>@drawable/actmember</item>
+        <item>@drawable/directpush_list</item>
+        <item>@drawable/connpont_internet</item>
+        <item>@drawable/pointup</item>
+        <item>@drawable/recommended_members</item>
+    </array>
 </resources>

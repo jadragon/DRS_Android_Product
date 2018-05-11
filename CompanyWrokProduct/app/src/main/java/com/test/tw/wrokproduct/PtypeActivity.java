@@ -59,7 +59,7 @@ public class PtypeActivity extends AppCompatActivity {
         viewPager.setAdapter(shopViewPagerAdapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager(viewPager, true);
+       // tabLayout.setupWithViewPager(viewPager, true);
         new Thread(new Runnable() {
             @Override
             public void run() {
