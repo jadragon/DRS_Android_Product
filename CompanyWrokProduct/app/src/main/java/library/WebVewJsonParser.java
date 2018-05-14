@@ -1,5 +1,6 @@
 package library;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -21,13 +22,16 @@ public class WebVewJsonParser {
     /**
      * 透過URL及Params取得資料庫的資料(JSON)
      */
-
+    Context context;
     static InputStream is = null;
     static String json = "";
-
     // constructor
     public WebVewJsonParser() {
 
+    }
+    // constructor
+    public WebVewJsonParser(Context context) {
+        this.context = context;
     }
 
     public String getJSONFromUrl(String url, List<NameValuePair> params) {
@@ -61,7 +65,8 @@ public class WebVewJsonParser {
             }
             is.close();
             json = sb.toString();
-            Log.e("JSON", json);
+
+
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         } finally {

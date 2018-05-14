@@ -67,7 +67,7 @@ public class Fragment_community extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final String json = new GetWebView().getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==",position);
+                        final String json = new GetWebView(getActivity()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==",position);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

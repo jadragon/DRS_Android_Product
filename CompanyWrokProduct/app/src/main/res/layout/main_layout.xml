@@ -14,16 +14,17 @@
     android:layout_weight="8"/>
 
 
-    <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.BottomNavigationView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="70dp"
         android:layout_gravity="bottom"
-        android:layout_weight="1"
         android:elevation="6dp"
         android:background="#ccc9c9"
-        app:itemTextColor="#686868"
+        app:itemIconTint="@color/navigation_home"
+        app:itemTextColor="@color/navigation_home"
         app:menu="@menu/navigation"/>
 
     </LinearLayout>

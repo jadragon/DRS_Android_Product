@@ -1,6 +1,8 @@
 package library;
 
 
+import android.content.Context;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -16,17 +18,22 @@ public class GetWebView {
     private static final String upgrade_url = "http://api.gok1945.com/main/snetwork/upgrade.php";
     private static final String recommend_url = "http://api.gok1945.com/main/snetwork/recommend.php";
     private static final String agency_url = "http://api.gok1945.com/main/snetwork/agency.php";
-
+    private static final String getMap_url = "http://api.gok1945.com/main/cart/getMap.php";
     private WebVewJsonParser jsonParser;
     List<NameValuePair> params;
 
-    public GetWebView() {
-        jsonParser = new WebVewJsonParser();
+    public GetWebView(Context context) {
+        jsonParser = new WebVewJsonParser(context);
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
         params.add(new BasicNameValuePair("device", "3"));
     }
-
+    public GetWebView(String google) {
+        jsonParser = new WebVewJsonParser();
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("logistics", "1"));
+        params.add(new BasicNameValuePair("device", "1"));
+    }
     public String getHtmlByPosition(String token, int position) {
         switch (position) {
             case 0:
@@ -123,5 +130,10 @@ public class GetWebView {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(agency_url, params);
     }
-
+    /**
+     * 申請區域代理
+     */
+    public String getMap() {
+        return jsonParser.getJSONFromUrl(getMap_url, params);
+    }
 }
