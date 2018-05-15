@@ -58,11 +58,8 @@ public class Fragment_home extends Fragment {
     Banner header;
     int what = 0;
     //宣告特約工人的經紀人
-
     private Handler mThreadHandler;
-
     //宣告特約工人
-
     private HandlerThread mThread;
 
     @Nullable

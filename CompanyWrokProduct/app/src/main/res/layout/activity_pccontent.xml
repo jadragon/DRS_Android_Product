@@ -10,7 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/pccontent_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
 
@@ -300,7 +300,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="5"
-                android:background="@color/orange"
+                android:background="@drawable/arcangle_button_orange"
                 android:text="加入購物車"
                 android:textColor="@color/white" />
 
@@ -310,7 +310,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="5"
-                android:background="@color/red"
+                android:background="@drawable/arcangle_button_red"
                 android:text="立即結帳"
                 android:textColor="@color/white" />
 

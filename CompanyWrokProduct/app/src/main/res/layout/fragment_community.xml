@@ -10,7 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/pccontent_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
 

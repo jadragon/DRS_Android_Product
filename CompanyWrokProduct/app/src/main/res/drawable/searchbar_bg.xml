@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-<!--內容 solid實心-->
-<solid android:color="@color/red"/>
-<!--邊框-->
-<corners
-    android:radius="5dp"/>
-
+    <!--內容 solid實心-->
+    <solid android:color="@color/white"/>
+    <!--邊框-->
+    <corners
+        android:radius="5dp"/>
 </shape>

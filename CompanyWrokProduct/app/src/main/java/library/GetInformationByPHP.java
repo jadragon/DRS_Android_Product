@@ -25,6 +25,9 @@ public class GetInformationByPHP {
     private static final String delCartProduct_url = "http://api.gok1945.com/main/cart/delCartProduct.php";
     private static final String setCartDiscount_url = "http://api.gok1945.com/main/cart/setCartDiscount.php";
     private static final String delCartDiscount_url = "http://api.gok1945.com/main/cart/delCartDiscount.php";
+
+    private static final String goCheckout_url = "http://api.gok1945.com/main/cart/goCheckout.php";
+    private static final String getCheckout_url = "http://api.gok1945.com/main/cart/getCheckout.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -215,5 +218,22 @@ public JSONObject test() {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("img", "" + img));
         return jsonParser.getJSONFromUrl(updatePortrait_url, params);
+    }
+
+    /**
+     * 1.3.8	結帳清單 - 讀取結帳資訊
+     */
+    public JSONObject goCheckout(String token, String mornoArray) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mornoArray", mornoArray));
+        return jsonParser.getJSONFromUrl(goCheckout_url, params);
+    }
+
+    /**
+     * 1.3.8	結帳清單 - 讀取結帳資訊
+     */
+    public JSONObject getCheckout(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getCheckout_url, params);
     }
 }

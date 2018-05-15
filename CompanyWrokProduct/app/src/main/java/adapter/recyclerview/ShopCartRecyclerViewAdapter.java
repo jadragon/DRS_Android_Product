@@ -541,6 +541,26 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         return count;
     }
 
+    public ArrayList<String> showMornoArray() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).isCheck()&&items.get(i).getMorno()!=null)
+                arrayList.add(items.get(i).getMorno());
+        }
+        return arrayList;
+    }
+    public String showMornoString() {
+       StringBuilder stringBuilder=new StringBuilder();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).isCheck()&&items.get(i).getMorno()!=null) {
+                if(stringBuilder.length()!=0)
+                    stringBuilder.append(",");
+                stringBuilder.append(items.get(i).getMorno());
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     public void setClickListener(ShopCartRecyclerViewAdapter.ClickListener clickListener) {
         this.clickListener = clickListener;
     }
@@ -551,7 +571,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        if (ResolveJsonData.getCartInformation(json)!=null) {
+        if (ResolveJsonData.getCartInformation(json) != null) {
             title_list = ResolveJsonData.getCartInformation(json);
             content_list = ResolveJsonData.getCartItemArray(json);
         }

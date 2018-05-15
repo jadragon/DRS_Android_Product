@@ -7,10 +7,9 @@
     tools:context=".LoadingPage">
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:scaleType="fitXY"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
         app:srcCompat="@drawable/loading_page" />
 </LinearLayout>
