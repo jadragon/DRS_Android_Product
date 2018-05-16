@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:constantSize="true">
+
+    <item android:drawable="@drawable/shipway_select_on" android:state_selected="true" />
+    <item android:drawable="@drawable/shipway_select_off" />
+
+</selector>

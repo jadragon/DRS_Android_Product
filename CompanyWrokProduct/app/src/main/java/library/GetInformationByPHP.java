@@ -25,9 +25,9 @@ public class GetInformationByPHP {
     private static final String delCartProduct_url = "http://api.gok1945.com/main/cart/delCartProduct.php";
     private static final String setCartDiscount_url = "http://api.gok1945.com/main/cart/setCartDiscount.php";
     private static final String delCartDiscount_url = "http://api.gok1945.com/main/cart/delCartDiscount.php";
-
     private static final String goCheckout_url = "http://api.gok1945.com/main/cart/goCheckout.php";
     private static final String getCheckout_url = "http://api.gok1945.com/main/cart/getCheckout.php";
+    private static final String setStoreNote_url = "http://api.gok1945.com/main/cart/setStoreNote.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -235,5 +235,15 @@ public JSONObject test() {
     public JSONObject getCheckout(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(getCheckout_url, params);
+    }
+
+    /**
+     * 1.3.14	結帳清單 – 設定商家備註
+     */
+    public JSONObject setStoreNote(String token, String sno, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("sno", sno));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(setStoreNote_url, params);
     }
 }

@@ -19,16 +19,17 @@
         </activity>
         <activity android:name=".LoadingPage" />
         <activity android:name=".PtypeActivity" />
-        <activity android:name=".PcContentActivity"></activity>
-        <activity android:name=".TestActivity"></activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".ShopCartActivity">
+        <activity android:name=".PcContentActivity" />
+        <activity android:name=".TestActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ShopCartActivity"></activity>
+        <activity android:name=".CommunityActivity"></activity>
+        <activity
+            android:name=".CountActivity"
+            android:windowSoftInputMode="adjustPan">
 
         </activity>
-        <activity android:name=".CommunityActivity">
-
-        </activity>
-        <activity android:name=".CountActivity">
+        <activity android:name=".ShipWayActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

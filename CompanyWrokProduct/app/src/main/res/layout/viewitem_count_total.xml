@@ -2,52 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:orientation="vertical"
     android:background="@color/gainsboro"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="30dp">
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
+
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="7"
+            android:gravity="center_vertical"
             android:text="運送方式"
-            android:textSize="18sp"
-            android:gravity="center_vertical"/>
+            android:textSize="18sp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/viewitem_count_total_shippay"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="$30"
+            android:layout_gravity="right"
             android:gravity="right|center_vertical"
-            android:textSize="18sp"/>
+            android:text="$30"
+            android:textSize="18sp" />
 
-    </LinearLayout>
-    <LinearLayout
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
+
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="7"
+            android:gravity="center_vertical"
             android:text="小計"
-            android:textSize="18sp"
-            android:gravity="center_vertical"/>
+            android:textSize="18sp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/viewitem_count_total_subtotal"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="$30"
+            android:layout_gravity="right"
             android:gravity="right|center_vertical"
+            android:text="$30"
             android:textColor="@color/red"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

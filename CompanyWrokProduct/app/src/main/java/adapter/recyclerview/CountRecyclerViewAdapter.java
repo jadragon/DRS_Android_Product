@@ -10,15 +10,17 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -26,15 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import library.GetInformationByPHP;
 import library.ResolveJsonData;
 
 public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecyclerViewAdapter.RecycleHolder> {
     public static final int TYPE_CONTENT = 0;
     public static final int TYPE_HEADER = 1;
     public static final int TYPE_SHIPWAY = 2;
-    public static final int TYPE_NOTE = 3;
-    public static final int TYPE_DISCOUNT = 4;
-    public static final int TYPE_COUNT = 5;
+    public static final int TYPE_DISCOUNT = 3;
+    public static final int TYPE_COUNT = 4;
     private Context ctx;
     private JSONObject json;
     private DisplayMetrics dm;
@@ -95,24 +97,27 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 size++;
             }
             //收費方式
-            item = new Item(TYPE_SHIPWAY, title_list.get(i).get("shippingInfo"));
-            item.setIndex(i);
-            items.add(item);
-            size++;
-            //備註
-            item = new Item(TYPE_NOTE, title_list.get(i).get("subtotal"));
+            item = new Item(TYPE_SHIPWAY,
+                    title_list.get(i).get("shippingInfo"),
+                    title_list.get(i).get("shippingStyle"),
+                    title_list.get(i).get("shippingName"),
+                    title_list.get(i).get("shippingSname"),
+                    title_list.get(i).get("shippingSid"),
+                    title_list.get(i).get("shippingAddress"),
+                    Integer.parseInt(title_list.get(i).get("shippingPay")),
+                    title_list.get(i).get("note"));
             item.setIndex(i);
             items.add(item);
             size++;
             //優惠
-
             if (!title_list.get(i).get("discountInfo").equals("")) {
-                item = new Item(TYPE_DISCOUNT, title_list.get(i).get("discountInfo"));
+                item = new Item(TYPE_DISCOUNT, title_list.get(i).get("discountInfo"), title_list.get(i).get("discount"));
                 item.setIndex(i);
                 items.add(item);
                 size++;
             }
-            item = new Item(TYPE_COUNT);
+            //結帳
+            item = new Item(TYPE_COUNT, Integer.parseInt(title_list.get(i).get("shippingPay")), Integer.parseInt(title_list.get(i).get("subtotal")));
             item.setIndex(i);
             items.add(item);
             size++;
@@ -136,32 +141,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             params.height = (int) (60 * dm.density);
             tv.setLayoutParams(params);
             return new CountRecyclerViewAdapter.RecycleHolder(ctx, tv, json);
-        }
-        if (viewType == TYPE_NOTE) {
-            //layout
-            FrameLayout frameLayout = new FrameLayout(ctx);
-            params.height = (int) (50 * dm.density);
-            params.setMargins(0, 0, 0, 0);
-            frameLayout.setLayoutParams(params);
-            frameLayout.setPadding((int) (10 * dm.density), 0, (int) (30 * dm.density), 0);
-            frameLayout.setBackgroundColor(ctx.getResources().getColor(R.color.gainsboro));
-            frameLayout.setTag("note");
-            //edit
-            EditText ed = new EditText(ctx);
-            ed.setTag("note_total");
-            ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            ed.setHint("請輸入備註");
-            ed.setBackground(null);
-            ed.setGravity(Gravity.CENTER_VERTICAL + Gravity.END);
-            frameLayout.addView(ed);
-            //text
-            TextView tv = new TextView(ctx);
-            tv.setTag("footer1_title");
-            tv.setText("備註:");
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            tv.setGravity(Gravity.CENTER_VERTICAL + Gravity.START);
-            frameLayout.addView(tv);
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, frameLayout, json);
         }
         if (viewType == TYPE_SHIPWAY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_shipways, parent, false);
@@ -223,13 +202,18 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 holder.viewitem_count_content_price.setText("$" + getDeciamlString(items.get(position).getSprice()));
             } else if (getItemViewType(position) == TYPE_HEADER) {
                 holder.viewitem_count_title_txt.setText(items.get(position).getSname());
-            } else if (getItemViewType(position) == TYPE_NOTE) {
             } else if (getItemViewType(position) == TYPE_SHIPWAY) {
-
+                holder.viewitem_count_shipways_style.setText(items.get(position).getShippingStyle());
+                holder.viewitem_count_shipways_pay.setText("$" + items.get(position).getShippingPay());
+                holder.viewitem_count_shipways_address.setText(items.get(position).getShippingAddress());
+                holder.viewitem_count_shipways_name.setText(items.get(position).getShippingName());
             } else if (getItemViewType(position) == TYPE_DISCOUNT) {
-                holder.footer3.setText("店家優惠:" + items.get(position).getShippingInfo());
-                holder.footer3.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
+                holder.discount_title.setText("店家優惠:" + items.get(position).getDiscountInfo());
+                holder.discount_title.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
+                holder.discount_total.setText("$" + items.get(position).getDiscount());
             } else if (getItemViewType(position) == TYPE_COUNT) {
+                holder.viewitem_count_total_shippay.setText("$" + items.get(position).getShippingPay());
+                holder.viewitem_count_total_subtotal.setText("$" + items.get(position).getSubtotal());
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -258,8 +242,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     public int getItemViewType(int position) {
         if (items.get(position).getType() == TYPE_HEADER)
             return TYPE_HEADER;
-        if (items.get(position).getType() == TYPE_NOTE)
-            return TYPE_NOTE;
         if (items.get(position).getType() == TYPE_SHIPWAY)
             return TYPE_SHIPWAY;
         if (items.get(position).getType() == TYPE_DISCOUNT)
@@ -287,30 +269,36 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         view.setLayoutParams(params);
     }
 
-    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnFocusChangeListener {
         Context ctx;
         JSONObject json;
         ImageView viewitem_count_content_img;
         TextView viewitem_count_title_txt;
         TextView viewitem_count_content_title, viewitem_count_content_color, viewitem_count_content_size, viewitem_count_content_total, viewitem_count_content_price;
-        TextView footer1_title, footer1_total, footer2, footer3;
+        TextView viewitem_count_shipways_style, viewitem_count_shipways_pay, viewitem_count_shipways_address, viewitem_count_shipways_name;
+        TextView viewitem_count_total_shippay, viewitem_count_total_subtotal;
+        TextView discount_title, discount_total;
+        EditText viewitem_count_shipways_note;
         int position;
 
-        public RecycleHolder(Context ctx, View view, JSONObject json) {
+        public RecycleHolder(final Context ctx, View view, JSONObject json) {
             super(view);
             this.json = json;
             this.ctx = ctx;
             if (view.getTag().equals("header")) {
                 viewitem_count_title_txt = (TextView) view;
-            } else if (view.getTag().equals("note")) {
-                footer1_title = view.findViewWithTag("footer1_title");
-                footer1_total = view.findViewWithTag("note_total");
-                itemView.setTag("note");
             } else if (view.getTag().equals("shipway")) {
+                viewitem_count_shipways_style = view.findViewById(R.id.viewitem_count_shipways_style);
+                viewitem_count_shipways_pay = view.findViewById(R.id.viewitem_count_shipways_pay);
+                viewitem_count_shipways_address = view.findViewById(R.id.viewitem_count_shipways_address);
+                viewitem_count_shipways_name = view.findViewById(R.id.viewitem_count_shipways_name);
+                viewitem_count_shipways_note = view.findViewById(R.id.viewitem_count_shipways_note);
+                viewitem_count_shipways_note.setOnFocusChangeListener(this);
+                viewitem_count_shipways_note.setTag("note");
                 itemView.setTag("shipway");
             } else if (view.getTag().equals("discount")) {
-                footer3 = view.findViewWithTag("discount_title");
-                itemView.setTag("discount");
+                discount_title = view.findViewWithTag("discount_title");
+                discount_total = view.findViewWithTag("discount_total");
             } else if (view.getTag().equals("content")) {
                 viewitem_count_content_img = view.findViewById(R.id.viewitem_count_content_img);
                 viewitem_count_content_title = view.findViewById(R.id.viewitem_count_content_title);
@@ -319,8 +307,11 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_content_total = view.findViewById(R.id.viewitem_count_content_total);
                 viewitem_count_content_price = view.findViewById(R.id.viewitem_count_content_price);
             } else if (view.getTag().equals("count")) {
+                viewitem_count_total_shippay = view.findViewById(R.id.viewitem_count_total_shippay);
+                viewitem_count_total_subtotal = view.findViewById(R.id.viewitem_count_total_subtotal);
             }
-
+            itemView.setFocusableInTouchMode(true);
+            itemView.setFocusable(true);
         }
 
 
@@ -328,15 +319,49 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         public void onClick(final View view) {
             position = getAdapterPosition();
             switch (view.getTag() + "") {
-                case "header"://當header點擊時
-                case "increase"://當increase點擊時
+                case "shipway"://當shipway點擊時
                     break;
-                case "decrease"://當decrease點擊時
-                    break;
+
             }
         }
 
 
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
+                    position = i;
+                    break;
+                }
+            }
+            if (!hasFocus) {
+                InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            boolean success = new GetInformationByPHP().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "").getBoolean("Success");
+                            if (success) {
+                                new android.os.Handler(ctx.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ctx, viewitem_count_shipways_note.getText(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }).start();
+
+            }
+        }
     }
 
     private void updatePrice() {
@@ -374,47 +399,40 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     }
 
     private class Item {
-        int type;
-        int index;
+        private int type;
+        private int index;
 
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
 
         //=======header
-        String sno;
-        String sname;
-        String simg;
+        private String sno;
+        private String sname;
+        private String simg;
         //=======footer
-        String subtotal;
-        String discountInfo;
-        String discount;
-        String shippingInfo;
+        private int subtotal;
+        private String discountInfo;
+        private String discount;
+        private String shippingInfo;
 
 
-        String shippingStyle;
-        String shippingName;
-        String shippingSname;
-        String shippingSid;
-        String shippingAddress;
-        String shippingPay;
-        String note;
+        private String shippingStyle;
+        private String shippingName;
+        private String shippingSname;
+        private String shippingSid;
+        private String shippingAddress;
+        private int shippingPay;
+        private String note;
 
         //=======content
-        int total_price;
-        String mcpno;
-        String stotal;
-        String pname;
-        String img;
-        String color;
-        String size;
-        String weight;
-        String price;
-        String sprice;
+        private int total_price;
+        private String mcpno;
+        private String stotal;
+        private String pname;
+        private String img;
+        private String color;
+        private String size;
+        private String weight;
+        private String price;
+        private String sprice;
 
         public Item() {
         }
@@ -433,23 +451,37 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             this.simg = simg;
         }
 
+        /**
+         * shipway
+         */
+        public Item(int type, String shippingInfo, String shippingStyle, String shippingName, String shippingSname, String shippingSid, String shippingAddress, int shippingPay, String note) {
+            this.type = type;
+            this.shippingInfo = shippingInfo;
+            this.shippingStyle = shippingStyle;
+            this.shippingName = shippingName;
+            this.shippingSname = shippingSname;
+            this.shippingSid = shippingSid;
+            this.shippingAddress = shippingAddress;
+            this.shippingPay = shippingPay;
+            this.note = note;
+        }
 
         /**
-         * footer
+         * discount
          */
-        public Item(int type, String footer) {
+        public Item(int type, String discountInfo, String discount) {
             this.type = type;
-            switch (type) {
-                case TYPE_NOTE:
-                    this.subtotal = footer;
-                    break;
-                case TYPE_SHIPWAY:
-                    this.discountInfo = footer;
-                    break;
-                case TYPE_DISCOUNT:
-                    this.shippingInfo = footer;
-                    break;
-            }
+            this.discountInfo = discountInfo;
+            this.discount = discount;
+        }
+
+        /**
+         * count
+         */
+        public Item(int type, int shippingPay, int subtotal) {
+            this.type = type;
+            this.shippingPay = shippingPay;
+            this.subtotal = subtotal;
         }
 
 
@@ -493,12 +525,84 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             this.simg = simg;
         }
 
-        public String getSubtotal() {
+        public int getSubtotal() {
             return subtotal;
         }
 
-        public void setSubtotal(String subtotal) {
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public void setSubtotal(int subtotal) {
             this.subtotal = subtotal;
+        }
+
+        public String getDiscount() {
+            return discount;
+        }
+
+        public void setDiscount(String discount) {
+            this.discount = discount;
+        }
+
+        public String getShippingStyle() {
+            return shippingStyle;
+        }
+
+        public void setShippingStyle(String shippingStyle) {
+            this.shippingStyle = shippingStyle;
+        }
+
+        public String getShippingName() {
+            return shippingName;
+        }
+
+        public void setShippingName(String shippingName) {
+            this.shippingName = shippingName;
+        }
+
+        public String getShippingSname() {
+            return shippingSname;
+        }
+
+        public void setShippingSname(String shippingSname) {
+            this.shippingSname = shippingSname;
+        }
+
+        public String getShippingSid() {
+            return shippingSid;
+        }
+
+        public void setShippingSid(String shippingSid) {
+            this.shippingSid = shippingSid;
+        }
+
+        public String getShippingAddress() {
+            return shippingAddress;
+        }
+
+        public void setShippingAddress(String shippingAddress) {
+            this.shippingAddress = shippingAddress;
+        }
+
+        public int getShippingPay() {
+            return shippingPay;
+        }
+
+        public void setShippingPay(int shippingPay) {
+            this.shippingPay = shippingPay;
+        }
+
+        public String getNote() {
+            return note;
+        }
+
+        public void setNote(String note) {
+            this.note = note;
         }
 
         public String getDiscountInfo() {
