@@ -1,4 +1,4 @@
-package library;
+package library.AnalyzeJSON;
 
 import org.json.JSONArray;
 import org.json.JSONException;

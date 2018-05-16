@@ -20,8 +20,9 @@ import java.text.DecimalFormat;
 import java.util.Map;
 
 import adapter.recyclerview.ShopCartRecyclerViewAdapter;
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
+import library.GetJsonData.GetInformationByPHP;
+import library.AnalyzeJSON.ResolveJsonData;
+import library.GetJsonData.ShopCartJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class ShopCartActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,14 +50,13 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getCart(token);
+                json = new ShopCartJsonData().getCart(token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Log.e("TestJSONONONONON", ResolveJsonData.getCartItemArray(json) + "");
                         recyclerView = findViewById(R.id.shop_cart_review);
                         recyclerView.setHasFixedSize(true);
-                        //recyclerView.setItemAnimator(new DefaultItemAnimatorV2());
                         shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, json, token);
                         shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
                             @Override
@@ -128,7 +128,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void run() {
                             //shopcart_edit_coupon.getText().toString()
-                            final Map<String, String> datas = ResolveJsonData.getCartDiscount(new GetInformationByPHP().setCartDiscount(token, shopcart_edit_coupon.getText().toString()));
+                            final Map<String, String> datas = ResolveJsonData.getCartDiscount(new ShopCartJsonData().setCartDiscount(token, shopcart_edit_coupon.getText().toString()));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -147,7 +147,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final boolean success = ResolveJsonData.checkSuccess(new GetInformationByPHP().delCartDiscount(token, moprno));
+                            final boolean success = ResolveJsonData.checkSuccess(new ShopCartJsonData().delCartDiscount(token, moprno));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -172,7 +172,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         try {
-                            boolean success = new GetInformationByPHP().goCheckout(token, shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
+                            boolean success = new ShopCartJsonData().goCheckout(token, shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
                             if (success)
                                 startActivity(new Intent(ShopCartActivity.this, CountActivity.class));
                         } catch (JSONException e) {

@@ -16,7 +16,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
-import library.ResolveJsonData;
+import library.AnalyzeJSON.ResolveJsonData;
 
 public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWaysRecyclerViewAdapter.RecycleHolder> {
 

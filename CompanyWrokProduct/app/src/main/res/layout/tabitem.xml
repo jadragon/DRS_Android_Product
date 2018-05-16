@@ -12,7 +12,7 @@
         android:layout_weight="5"
         tools:ignore="ContentDescription" />
 
-    <library.component.AutoVerticalTextView
+    <library.Component.AutoVerticalTextView
         android:id="@+id/viewitem_tabItem_txt"
         android:layout_width="match_parent"
         android:layout_height="0dp"

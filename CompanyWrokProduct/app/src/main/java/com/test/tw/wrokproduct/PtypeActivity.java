@@ -22,8 +22,8 @@ import Fragment.Fragment_shop_content;
 import adapter.recyclerview.PtypeRecyclerAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.AppManager;
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
+import library.GetJsonData.GetInformationByPHP;
+import library.AnalyzeJSON.ResolveJsonData;
 
 public class PtypeActivity extends AppCompatActivity {
     DisplayMetrics dm;

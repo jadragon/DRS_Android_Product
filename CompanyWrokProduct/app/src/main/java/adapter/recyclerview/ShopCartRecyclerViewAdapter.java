@@ -32,9 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
-import library.component.AutoHorizontalTextView;
+import library.GetJsonData.GetInformationByPHP;
+import library.AnalyzeJSON.ResolveJsonData;
+import library.Component.AutoHorizontalTextView;
+import library.GetJsonData.ShopCartJsonData;
 
 public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRecyclerViewAdapter.RecycleHolder> {
     public static final int TYPE_NORMAL = 0;
@@ -345,8 +346,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 @Override
                                 public void run() {
                                     try {
-                                        final JSONObject jsonObject = new GetInformationByPHP().delCartProduct(token, items.get(position).getMorno());
-                                        json = new GetInformationByPHP().getCart(token);
+                                        final JSONObject jsonObject = new ShopCartJsonData().delCartProduct(token, items.get(position).getMorno());
+                                        json = new ShopCartJsonData().getCart(token);
                                         if (jsonObject.getBoolean("Success")) {
                                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                                 @Override
@@ -472,9 +473,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                             @Override
                             public void run() {
                                 int total = Integer.parseInt(items.get(position).getStotal()) + 1;
-                                new GetInformationByPHP().addCartProduct(token, items.get(position).getMorno(),
+                                new ShopCartJsonData().addCartProduct(token, items.get(position).getMorno(),
                                         total);
-                                json = new GetInformationByPHP().getCart(token);
+                                json = new ShopCartJsonData().getCart(token);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -498,9 +499,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                             @Override
                             public void run() {
                                 int total = Integer.parseInt(items.get(position).getStotal()) - 1;
-                                new GetInformationByPHP().addCartProduct(token, items.get(position).getMorno(),
+                                new ShopCartJsonData().addCartProduct(token, items.get(position).getMorno(),
                                         total);
-                                json = new GetInformationByPHP().getCart(token);
+                                json = new ShopCartJsonData().getCart(token);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {

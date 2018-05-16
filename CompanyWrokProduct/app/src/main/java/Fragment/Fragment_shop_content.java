@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
-import library.ResolveJsonData;
+import library.AnalyzeJSON.ResolveJsonData;
 
 public class Fragment_shop_content extends Fragment {
     RecyclerView recyclerView;

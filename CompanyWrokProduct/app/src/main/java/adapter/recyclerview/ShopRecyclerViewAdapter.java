@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import library.ResolveJsonData;
+import library.AnalyzeJSON.ResolveJsonData;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> {

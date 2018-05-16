@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import adapter.listview.OneExpandAdapter;
+import library.GetJsonData.ShopCartJsonData;
 
 public class ShipWayActivity extends AppCompatActivity {
     String token;
@@ -17,6 +18,12 @@ public class ShipWayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipway);
         token = "zI6OIYlbhfPKyhbchdOiGg==";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new ShopCartJsonData().getStoreLogistics(token,"Yw7bgzg6UlyPDjwzOuAV2A==");
+            }
+        }).start();
         requestData();
     }
     private void requestData() {
@@ -31,7 +38,7 @@ public class ShipWayActivity extends AppCompatActivity {
             datas.add(item);
         }
 
-        ListView lvProduct = (ListView) findViewById(R.id.lv_products);
+        ListView lvProduct =findViewById(R.id.lv_products);
         OneExpandAdapter adapter = new OneExpandAdapter(this, datas);
         lvProduct.setAdapter(adapter);
     }

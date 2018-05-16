@@ -14,7 +14,8 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 
 import adapter.recyclerview.CountRecyclerViewAdapter;
-import library.GetInformationByPHP;
+import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ShopCartJsonData;
 
 public class CountActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
@@ -36,13 +37,12 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getCheckout(token);
+                json = new ShopCartJsonData().getCheckout(token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView = findViewById(R.id.count_review);
                         recyclerView.setHasFixedSize(true);
-                        //recyclerView.setItemAnimator(new DefaultItemAnimatorV2());
                         countRecyclerViewAdapter = new CountRecyclerViewAdapter(CountActivity.this, json, token);
                         countRecyclerViewAdapter.setClickListener(new CountRecyclerViewAdapter.ClickListener() {
                             @Override

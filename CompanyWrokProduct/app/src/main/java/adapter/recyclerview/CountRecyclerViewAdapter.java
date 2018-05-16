@@ -28,8 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
+import library.GetJsonData.GetInformationByPHP;
+import library.AnalyzeJSON.ResolveJsonData;
+import library.GetJsonData.ShopCartJsonData;
 
 public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecyclerViewAdapter.RecycleHolder> {
     public static final int TYPE_CONTENT = 0;
@@ -341,7 +342,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                     @Override
                     public void run() {
                         try {
-                            boolean success = new GetInformationByPHP().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "").getBoolean("Success");
+                            boolean success = new ShopCartJsonData().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "").getBoolean("Success");
                             if (success) {
                                 new android.os.Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override

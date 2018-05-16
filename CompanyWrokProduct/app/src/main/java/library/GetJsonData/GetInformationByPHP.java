@@ -1,4 +1,4 @@
-package library;
+package library.GetJsonData;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import library.Http.JSONParser;
 
 public class GetInformationByPHP {
     private static final String slider_url = "http://api.gok1945.com/main/index/slider.php";
@@ -18,16 +20,6 @@ public class GetInformationByPHP {
     private static final String setFavorite_url = "http://api.gok1945.com/main/record/setFavorite.php";
     private static final String plist_url = "http://api.gok1945.com/main/product/plist.php";
     private static final String pcontent_url = "http://api.gok1945.com/main/product/pcontent.php";
-    private static final String setCart_url = "http://api.gok1945.com/main/cart/setCart.php";
-    private static final String getCart_url = "http://api.gok1945.com/main/cart/getCart.php";
-    private static final String addCartProduct_url = "http://api.gok1945.com/main/cart/addCartProduct.php";
-    private static final String updatePortrait_url = "http://api.gok1945.com/main/mcenter/person/updatePortrait.php";
-    private static final String delCartProduct_url = "http://api.gok1945.com/main/cart/delCartProduct.php";
-    private static final String setCartDiscount_url = "http://api.gok1945.com/main/cart/setCartDiscount.php";
-    private static final String delCartDiscount_url = "http://api.gok1945.com/main/cart/delCartDiscount.php";
-    private static final String goCheckout_url = "http://api.gok1945.com/main/cart/goCheckout.php";
-    private static final String getCheckout_url = "http://api.gok1945.com/main/cart/getCheckout.php";
-    private static final String setStoreNote_url = "http://api.gok1945.com/main/cart/setStoreNote.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -155,95 +147,5 @@ public JSONObject test() {
         return jsonParser.getJSONFromUrl(plist_url, params);
     }
 
-    /**
-     * 加入購物車
-     */
-    public JSONObject setCart(String token, String pno, String pino, int total) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("pno", pno));
-        params.add(new BasicNameValuePair("pino", pino));
-        params.add(new BasicNameValuePair("total", "" + total));
-        return jsonParser.getJSONFromUrl(setCart_url, params);
-    }
 
-    /**
-     * 購買清單 - 讀取購買資訊
-     */
-    public JSONObject getCart(String token) {
-        params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(getCart_url, params);
-    }
-
-    /**
-     * 購買清單 - 商品增加數量或減少數量
-     */
-    public JSONObject addCartProduct(String token, String morno, int total) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("morno", "" + morno));
-        params.add(new BasicNameValuePair("total", "" + total));
-        return jsonParser.getJSONFromUrl(addCartProduct_url, params);
-    }
-
-    /**
-     * 購買清單 - 移除購買商品
-     */
-    public JSONObject delCartProduct(String token, String morno) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("morno", morno));
-        return jsonParser.getJSONFromUrl(delCartProduct_url, params);
-    }
-
-    /**
-     * 購買清單 - 輸入折扣代碼
-     */
-    public JSONObject setCartDiscount(String token, String coupon) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("coupon", coupon));
-        return jsonParser.getJSONFromUrl(setCartDiscount_url, params);
-    }
-
-    /**
-     * 購買清單 - 移除購買商品
-     */
-    public JSONObject delCartDiscount(String token, String moprno) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("moprno", moprno));
-        return jsonParser.getJSONFromUrl(delCartDiscount_url, params);
-    }
-
-    /**
-     * 上傳圖片
-     */
-    public JSONObject updatePortrait(String token, String img) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("img", "" + img));
-        return jsonParser.getJSONFromUrl(updatePortrait_url, params);
-    }
-
-    /**
-     * 1.3.8	結帳清單 - 讀取結帳資訊
-     */
-    public JSONObject goCheckout(String token, String mornoArray) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("mornoArray", mornoArray));
-        return jsonParser.getJSONFromUrl(goCheckout_url, params);
-    }
-
-    /**
-     * 1.3.8	結帳清單 - 讀取結帳資訊
-     */
-    public JSONObject getCheckout(String token) {
-        params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(getCheckout_url, params);
-    }
-
-    /**
-     * 1.3.14	結帳清單 – 設定商家備註
-     */
-    public JSONObject setStoreNote(String token, String sno, String note) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("sno", sno));
-        params.add(new BasicNameValuePair("note", note));
-        return jsonParser.getJSONFromUrl(setStoreNote_url, params);
-    }
 }

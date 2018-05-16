@@ -12,7 +12,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 
 import library.GetBitmap;
-import library.GetInformationByPHP;
+import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ShopCartJsonData;
 
 public class TestActivity extends AppCompatActivity {
     JSONObject json;
@@ -39,8 +40,6 @@ public class TestActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
                 encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-                json = new GetInformationByPHP().updatePortrait("zI6OIYlbhfPKyhbchdOiGg==",encoded);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

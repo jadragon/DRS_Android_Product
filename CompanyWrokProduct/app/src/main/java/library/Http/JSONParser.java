@@ -3,7 +3,7 @@
  * URL: www.androidhive.info
  * twitter: http://twitter.com/ravitamada
  */
-package library;
+package library.Http;
 
 import android.util.Log;
 

@@ -35,9 +35,9 @@ import java.util.List;
 import java.util.Map;
 
 import adapter.recyclerview.MyRecyclerAdapter;
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
-import library.component.MySwipeRefreshLayout;
+import library.GetJsonData.GetInformationByPHP;
+import library.AnalyzeJSON.ResolveJsonData;
+import library.Component.MySwipeRefreshLayout;
 
 /**
  * Created by user on 2017/5/30.

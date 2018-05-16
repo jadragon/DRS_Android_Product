@@ -1,4 +1,4 @@
-package library;
+package library.GetJsonData;
 
 
 import android.content.Context;
@@ -8,6 +8,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import library.Http.WebVewJsonParser;
 
 public class GetWebView {
     private static final String register_url = "http://api.gok1945.com/main/snetwork/register.php";

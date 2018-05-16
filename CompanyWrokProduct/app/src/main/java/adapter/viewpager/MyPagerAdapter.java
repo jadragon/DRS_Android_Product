@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import library.ResolveJsonData;
+import library.AnalyzeJSON.ResolveJsonData;
 
 public class MyPagerAdapter extends PagerAdapter implements View.OnTouchListener {
     private List<ImageView> mListViews;

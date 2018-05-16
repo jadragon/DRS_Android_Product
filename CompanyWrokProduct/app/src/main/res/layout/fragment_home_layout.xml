@@ -42,7 +42,7 @@
         android:layout_marginRight="12dp"/>
 
 </LinearLayout>
-<library.component.MySwipeRefreshLayout
+<library.Component.MySwipeRefreshLayout
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -103,5 +103,5 @@
 
         </LinearLayout>
     </ScrollView>
-</library.component.MySwipeRefreshLayout>
+</library.Component.MySwipeRefreshLayout>
     </LinearLayout>

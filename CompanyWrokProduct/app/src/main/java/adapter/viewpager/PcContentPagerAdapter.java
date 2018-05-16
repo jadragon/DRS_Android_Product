@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.ResolveJsonData;
+import library.AnalyzeJSON.ResolveJsonData;
 
 public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchListener {
     private List<View> mListViews;

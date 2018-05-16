@@ -22,7 +22,7 @@ import java.util.List;
 
 import adapter.listview.CommunityListViewAdapter;
 import adapter.viewpager.CommunityPagerAdapter;
-import library.GetWebView;
+import library.GetJsonData.GetWebView;
 
 public class Fragment_community extends Fragment {
     View v;

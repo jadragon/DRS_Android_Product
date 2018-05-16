@@ -39,9 +39,10 @@ import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.AppManager;
-import library.GetInformationByPHP;
-import library.ResolveJsonData;
-import library.component.MyViewPager;
+import library.GetJsonData.GetInformationByPHP;
+import library.AnalyzeJSON.ResolveJsonData;
+import library.Component.MyViewPager;
+import library.GetJsonData.ShopCartJsonData;
 import pojo.ProductInfoPojo;
 
 public class PcContentActivity extends AppCompatActivity {
@@ -265,7 +266,7 @@ public class PcContentActivity extends AppCompatActivity {
                         public void run() {
                             GlobalVariable gv = (GlobalVariable) getApplicationContext();
                             try {
-                                JSONObject jsonObject = new GetInformationByPHP().setCart(gv.getToken(), pno, pino, count);
+                                JSONObject jsonObject = new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
                                 boolean success = jsonObject.getBoolean("Success");
                                 Message = jsonObject.getString("Message");
                                 if (success) {
