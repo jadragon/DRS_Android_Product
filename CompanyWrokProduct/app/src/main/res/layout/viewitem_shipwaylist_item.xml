@@ -7,15 +7,42 @@
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground">
 
-  <Button
+  <ImageView
       android:id="@+id/shipwaylist_item_btn"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:background="@drawable/selectbox"
+      android:layout_width="75dp"
+      android:layout_height="75dp"
+      android:src="@drawable/selectbox"
+      android:padding="10dp"
       android:layout_gravity="center_vertical"/>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:paddingRight="20dp"
+      android:paddingTop="20dp"
+      android:paddingBottom="20dp">
+
     <TextView
+        android:id="@+id/shipwaylist_item_sname"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試"
-        android:textSize="20sp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="0912-345-678"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/shipwaylist_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="周子瑜"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/shipwaylist_item_address"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="330桃園市桃園區大興西路二段86號"
+        android:textSize="15sp"/>
+  </LinearLayout>
+
 </LinearLayout>

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>電子地圖</title>
+    <script type="text/javascript">
+    function onStoreMapAndroid(id,name,address){
+    	
+    }
+    
+    function onStoreMapIos(id,name,address){
+    	window.location  = "js-call://setDeliver?"+id+"&"+name+"&"+address;
+    }
+    
+    function setInit(){
+    	form1.submit();
+    }
+    </script>
+    </head>
+    <body>
+    <form name="form1" action="https://logistics.ecpay.com.tw/Express/map" method="post" target="allpay-storeselect">
+     	<input type="hidden" name="MerchantID" value="1144338">
+     	<input type="hidden" name="LogisticsType" value="CVS">
+       	<input type="hidden" name="LogisticsSubType" value="UNIMARTC2C">
+      	<input type="hidden" name="IsCollection" value="N">
+       	<input type="hidden" name="Device" value=1>
+        <input type="hidden" name="ExtraData" value="1">    
+       	<input type="hidden" name="ServerReplyURL" value="http://api.gok1945.com/main/cart/getMap.php">
+    </form>
+    <script type="text/javascript">
+    var CVSStoreID = "";
+    var CVSStoreName = "";
+    var CVSAddress = "";
+    var extraData = "1";
+    if(CVSStoreID == ""){
+    	setInit();
+    }else{
+    	 onStoreMapIos(CVSStoreID,CVSStoreName,CVSAddress);
+    }
+    </script>
+    </body>
+    </html>

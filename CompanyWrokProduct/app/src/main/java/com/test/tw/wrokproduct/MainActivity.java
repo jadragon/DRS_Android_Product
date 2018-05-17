@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        gv.setToken("zI6OIYlbhfPKyhbchdOiGg==");
+        gv.setToken("I0JN9@_fTxybt/YuH1j1Ceg==");
     }
 
     protected void initBtnNav() {//BottomLayout

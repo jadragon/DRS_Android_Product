@@ -2,44 +2,71 @@ package com.test.tw.wrokproduct;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.json.JSONObject;
 
 import adapter.listview.OneExpandAdapter;
 import library.GetJsonData.ShopCartJsonData;
 
-public class ShipWayActivity extends AppCompatActivity {
-    String token;
-
+public class ShipWayActivity extends AppCompatActivity implements View.OnClickListener {
+    JSONObject json;
+    String token,sno;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipway);
-        token = "zI6OIYlbhfPKyhbchdOiGg==";
+       // token = "I0JN9@_fTxybt/YuH1j1Ceg==";
+       // sno="QKwd9IJZjuUfKZa00V9CjQ==";
+        token=getIntent().getStringExtra("token");
+        sno=getIntent().getStringExtra("sno");
+        initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new ShopCartJsonData().getStoreLogistics(token,"Yw7bgzg6UlyPDjwzOuAV2A==");
+                json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        requestData();
+                    }
+                });
             }
         }).start();
-        requestData();
+
     }
+
     private void requestData() {
-        ArrayList<HashMap<String, String>> datas = new ArrayList<HashMap<String,String>>();
-        for(int i = 1; i <= 10; i++){
-            HashMap<String, String> item = new HashMap<String, String>();
-            item.put("phoneType", "HTC-M" + i + "");
-            item.put("discount", "9");
-            item.put("price", (2000 + i) + "");
-            item.put("time", "2016020" + i);
-            item.put("num", (300 - i) + "");
-            datas.add(item);
+        ListView lvProduct = findViewById(R.id.lv_products);
+        lvProduct.setDivider(null);
+        OneExpandAdapter adapter = new OneExpandAdapter(this, json);
+        lvProduct.setAdapter(adapter);
+    }
+
+    private void initToolbar() {
+        //Toolbar 建立
+        toolbar = findViewById(R.id.shipway_toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case -1://toolbar
+                finish();
+                break;
+            case R.id.shipway_confirm:
+                break;
         }
 
-        ListView lvProduct =findViewById(R.id.lv_products);
-        OneExpandAdapter adapter = new OneExpandAdapter(this, datas);
-        lvProduct.setAdapter(adapter);
     }
 }

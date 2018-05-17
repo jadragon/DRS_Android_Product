@@ -1,6 +1,7 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.ShipWayActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.GetJsonData.GetInformationByPHP;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.ShopCartJsonData;
 
@@ -280,6 +281,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         TextView viewitem_count_total_shippay, viewitem_count_total_subtotal;
         TextView discount_title, discount_total;
         EditText viewitem_count_shipways_note;
+       LinearLayout viewitem_count_shipways_goto;
         int position;
 
         public RecycleHolder(final Context ctx, View view, JSONObject json) {
@@ -289,6 +291,9 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             if (view.getTag().equals("header")) {
                 viewitem_count_title_txt = (TextView) view;
             } else if (view.getTag().equals("shipway")) {
+                viewitem_count_shipways_goto=view.findViewById(R.id.viewitem_count_shipways_goto);
+                viewitem_count_shipways_goto.setOnClickListener(this);
+                viewitem_count_shipways_goto.setTag("goto");
                 viewitem_count_shipways_style = view.findViewById(R.id.viewitem_count_shipways_style);
                 viewitem_count_shipways_pay = view.findViewById(R.id.viewitem_count_shipways_pay);
                 viewitem_count_shipways_address = view.findViewById(R.id.viewitem_count_shipways_address);
@@ -314,13 +319,27 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             itemView.setFocusableInTouchMode(true);
             itemView.setFocusable(true);
         }
-
+private int getHeaderPosition(){
+            int index=0;
+    for (int i = 0; i < items.size(); i++) {
+        if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
+            position = i;
+            break;
+        }
+    }
+    return index;
+}
 
         @Override
         public void onClick(final View view) {
-            position = getAdapterPosition();
+          position=getHeaderPosition();
+
             switch (view.getTag() + "") {
-                case "shipway"://當shipway點擊時
+                case "goto"://當shipway點擊時
+                    Intent intent = new Intent(ctx, ShipWayActivity.class);
+                    intent.putExtra("token",token);
+                    intent.putExtra("sno",items.get(position).getSno());
+                    ctx.startActivity(intent);
                     break;
 
             }
@@ -329,12 +348,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
-                    position = i;
-                    break;
-                }
-            }
+            position=getHeaderPosition();
             if (!hasFocus) {
                 InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

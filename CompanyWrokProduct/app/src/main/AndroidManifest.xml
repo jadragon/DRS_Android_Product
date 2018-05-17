@@ -15,26 +15,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".LoadingPage" />
         <activity android:name=".PtypeActivity" />
         <activity android:name=".PcContentActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ShopCartActivity"></activity>
-        <activity android:name=".CommunityActivity"></activity>
+        <activity android:name=".ShopCartActivity" />
+        <activity android:name=".CommunityActivity" />
         <activity
             android:name=".CountActivity"
             android:windowSoftInputMode="adjustPan">
 
         </activity>
         <activity android:name=".ShipWayActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".StoreWebViewActivity">
+
         </activity>
     </application>
 

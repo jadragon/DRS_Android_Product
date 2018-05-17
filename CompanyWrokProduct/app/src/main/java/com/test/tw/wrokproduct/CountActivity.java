@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 
 import adapter.recyclerview.CountRecyclerViewAdapter;
-import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.ShopCartJsonData;
 
 public class CountActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,7 +27,8 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
-        token = "zI6OIYlbhfPKyhbchdOiGg==";
+        GlobalVariable gv = (GlobalVariable) getApplicationContext();
+        token = gv.getToken();
         initToolbar();
         initRecycleView();
     }

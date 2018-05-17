@@ -20,7 +20,6 @@ import java.text.DecimalFormat;
 import java.util.Map;
 
 import adapter.recyclerview.ShopCartRecyclerViewAdapter;
-import library.GetJsonData.GetInformationByPHP;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
@@ -40,7 +39,8 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopcart);
-        token = "zI6OIYlbhfPKyhbchdOiGg==";
+        GlobalVariable gv = (GlobalVariable) getApplicationContext();
+       token = gv.getToken();
         initToolbar();
 
         initRecycleView();

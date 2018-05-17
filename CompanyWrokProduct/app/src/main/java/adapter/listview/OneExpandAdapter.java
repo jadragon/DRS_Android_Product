@@ -1,20 +1,27 @@
 package adapter.listview;
 
 import android.content.Context;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import library.AnalyzeJSON.AnalyzeShopCart;
 
 /**
  * 点击item展开隐藏部分,再次点击收起
@@ -25,24 +32,41 @@ import java.util.List;
  */
 public class OneExpandAdapter extends BaseAdapter implements View.OnClickListener {
     private Context context;
-    private ArrayList<HashMap<String, String>> list;
+    private JSONObject json;
     private int currentItem = -1; //用于记录点击的 Item 的 position，是控制 item 展开的核心
     ViewHolder holder;
+    ArrayList<Map<String, String>> title_list;
+    ArrayList<ArrayList<Map<String, String>>> items_list;
+    private List<HeaderPojo> datas;
+    String[] lanes = {"無", "本島", "離島", "海外"};
+    int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
+    View[] holderList;
 
-    public OneExpandAdapter(Context context, ArrayList<HashMap<String, String>> list) {
+    public OneExpandAdapter(Context context, JSONObject json) {
         super();
         this.context = context;
-        this.list = list;
+        this.json = json;
+
+        if (json != null) {
+            title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+            items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+        } else {
+            title_list = new ArrayList<>();
+            items_list = new ArrayList<>();
+        }
+        holderList = new View[title_list.size()];
+        Log.e("WWWWWWWWWWWW", items_list + "");
+        initData();
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return title_list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return title_list.get(position);
     }
 
     @Override
@@ -50,27 +74,12 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         return position;
     }
 
-    private View createView(View convertView, ViewGroup parent) {
+    private View createView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(
                 R.layout.vitem_shipwaylist, parent, false);
         holder = new ViewHolder();
+        //header
         holder.showArea = convertView.findViewById(R.id.layout_showArea);
-        holder.hideArea = convertView.findViewById(R.id.layout_hideArea);
-        holder.item_buttons = new ArrayList<>();
-        holder.item_layouts = new ArrayList<>();
-        LinearLayout linearLayout;
-        Button button;
-        View view;
-        for (int i = 0; i < 10; i++) {
-            view = LayoutInflater.from(context).inflate(R.layout.viewitem_shipwaylist_item, parent, false);
-            linearLayout = view.findViewById(R.id.shipwaylist_item_layout);
-            linearLayout.setTag(holder);
-            linearLayout.setOnClickListener(this);
-            button = view.findViewById(R.id.shipwaylist_item_btn);
-            holder.item_buttons.add(button);
-            holder.item_layouts.add(linearLayout);
-            holder.hideArea.addView(view);
-        }
         holder.showArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,21 +94,105 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
                 notifyDataSetChanged(); //必须有的一步
             }
         });
+        holder.vitem_shipwaylist_logisticsVal = holder.showArea.findViewById(R.id.vitem_shipwaylist_logisticsVal);
+        holder.vitem_shipwaylist_lpay = holder.showArea.findViewById(R.id.vitem_shipwaylist_lpay);
+        holder.vitem_shipwaylist_land = holder.showArea.findViewById(R.id.vitem_shipwaylist_land);
+        holder.vitem_shipwaylist_sname = holder.showArea.findViewById(R.id.vitem_shipwaylist_sname);
+        holder.vitem_shipwaylist_nike = holder.showArea.findViewById(R.id.vitem_shipwaylist_nike);
+        //content
+        holder.hideArea = convertView.findViewById(R.id.layout_hideArea);
+        holder.hideArea.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        holder.hideArea.setDividerDrawable(context.getResources().getDrawable(R.drawable.decoration_line));
+
+        LinearLayout linearLayout;
+        ImageView imageView;
+        TextView textView;
+        View view;
+        if (datas.get(position).getIsused())
+            holder.vitem_shipwaylist_nike.setVisibility(View.VISIBLE);
+        else
+            holder.vitem_shipwaylist_nike.setVisibility(View.INVISIBLE);
+        //item
+        holder.item_images = new ArrayList<>();
+        holder.item_layouts = new ArrayList<>();
+        holder.item_names = new ArrayList<>();
+        holder.item_snames = new ArrayList<>();
+        holder.item_addresses = new ArrayList<>();
+        for (int i = 0; i < items_list.get(position).size(); i++) {
+            view = LayoutInflater.from(context).inflate(R.layout.viewitem_shipwaylist_item, parent, false);
+            linearLayout = view.findViewById(R.id.shipwaylist_item_layout);
+            linearLayout.setTag(holder);
+            linearLayout.setOnClickListener(this);
+            holder.item_layouts.add(linearLayout);
+            imageView = view.findViewById(R.id.shipwaylist_item_btn);
+            holder.item_images.add(imageView);
+            textView = view.findViewById(R.id.shipwaylist_item_name);
+            holder.item_names.add(textView);
+            textView = view.findViewById(R.id.shipwaylist_item_sname);
+            holder.item_snames.add(textView);
+            textView = view.findViewById(R.id.shipwaylist_item_address);
+            holder.item_addresses.add(textView);
+            holder.hideArea.addView(view);
+        }
+        //addfooter
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setPadding(0,0,0,10);
+        imageView = new ImageView(context);
+        imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.shipway_select_add));
+        imageView.setPadding(5,5,5,5);
+        linearLayout.addView(imageView);
+        textView=new TextView(context);
+        textView.setText(datas.get(position).getLogisticsVal());
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        linearLayout.addView(textView);
+        //設定背景
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        linearLayout.setBackgroundResource(outValue.resourceId);
+        holder.footer = linearLayout;
+        holder.footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        holder.hideArea.addView(linearLayout);
+        if (datas.get(position).getIsused()) {
+            holder.hideArea.setVisibility(View.VISIBLE);
+            currentItem = position;
+        }
         convertView.setTag(holder);
         return convertView;
 
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = createView(convertView, parent);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (holderList[position] == null) {
+            convertView = createView(position, convertView, parent);
+            holderList[position] = convertView;
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) holderList[position].getTag();
         }
+        //header
+        holder.vitem_shipwaylist_logisticsVal.setText(datas.get(position).getLogisticsVal());
+        holder.vitem_shipwaylist_logisticsVal.setBackgroundColor(context.getResources().getColor(colors[datas.get(position).getLogistics()]));
+        holder.vitem_shipwaylist_lpay.setText("$" + datas.get(position).getLpay());
+        holder.vitem_shipwaylist_land.setText(lanes[datas.get(position).getLand()]);
+        holder.vitem_shipwaylist_sname.setText(datas.get(position).getSname());
+        //content
+        for (int i = 0; i < holder.item_images.size(); i++) {
+            if (datas.get(position).getMyLogisticsArray().get(i).getIsused()) {
+                holder.item_images.get(i).setSelected(true);
+            } else {
+                holder.item_images.get(i).setSelected(false);
+            }
 
-        for (int i = 0; i < holder.item_buttons.size(); i++) {
-            holder.item_buttons.get(i).setSelected(false);
+            holder.item_names.get(i).setText(datas.get(position).getMyLogisticsArray().get(i).getName());
+            holder.item_snames.get(i).setText(datas.get(position).getMyLogisticsArray().get(i).getSname());
+            holder.item_addresses.get(i).setText(datas.get(position).getMyLogisticsArray().get(i).getAddress());
         }
 
         // 注意：我们在此给响应点击事件的区域（我的例子里是 showArea 的线性布局）添加Tag，为了记录点击的 position，我们正好用 position 设置 Tag
@@ -111,13 +204,13 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             holder.hideArea.setVisibility(View.GONE);
         }
 
-        return convertView;
+        return holderList[position];
     }
 
     @Override
     public void onClick(View v) {
         holder = (ViewHolder) v.getTag();
-        int position=holder.item_layouts.indexOf(v);
+        int position = holder.item_layouts.indexOf(v);
         /*
         //取得header
         ViewParent viewGroup = v.getParent();
@@ -125,17 +218,234 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         //取得item總數
         int count = view.getChildCount();
         */
-        for(int i=0;i<holder.item_layouts.size();i++){
-            holder.item_buttons.get(i).setSelected(false);
+        for (int i = 0; i < holder.item_layouts.size(); i++) {
+            holder.item_images.get(i).setSelected(false);
         }
-        holder.item_buttons.get(position).setSelected(true);
+        holder.item_images.get(position).setSelected(true);
         Toast.makeText(context, position + "", Toast.LENGTH_SHORT).show();
     }
 
     private class ViewHolder {
         private LinearLayout showArea;
+        private TextView vitem_shipwaylist_logisticsVal;
+        private TextView vitem_shipwaylist_lpay;
+        private TextView vitem_shipwaylist_land;
+        private TextView vitem_shipwaylist_sname;
+        private ImageView vitem_shipwaylist_nike;
         private LinearLayout hideArea;
-        private List<Button> item_buttons;
+        private List<ImageView> item_images;
+        private List<TextView> item_names;
+        private List<TextView> item_snames;
+        private List<TextView> item_addresses;
         private List<LinearLayout> item_layouts;
+        private View footer;
+        private Context context;
+        private View convertView;
+        private JSONObject json;
+    }
+
+    public void initData() {
+        datas = new ArrayList<>();
+        HeaderPojo headerPojo;
+        List<ItemPojo> itemPojoList;
+        ItemPojo itemPojo;
+        for (int i = 0; i < title_list.size(); i++) {
+            headerPojo = new HeaderPojo();
+            headerPojo.setSno(title_list.get(i).get("sno"));
+            headerPojo.setSlno(title_list.get(i).get("slno"));
+            headerPojo.setPlno(title_list.get(i).get("plno"));
+            headerPojo.setType(title_list.get(i).get("type"));
+            headerPojo.setLand(Integer.parseInt(title_list.get(i).get("land")));
+            headerPojo.setLogistics(Integer.parseInt(title_list.get(i).get("logistics")));
+            headerPojo.setLogisticsVal(title_list.get(i).get("logisticsVal"));
+            headerPojo.setLpay(title_list.get(i).get("lpay"));
+            headerPojo.setIsused(title_list.get(i).get("isused").equals("1"));
+            headerPojo.setSname(title_list.get(i).get("sname"));
+            headerPojo.setIscom(title_list.get(i).get("iscom"));
+            itemPojoList = new ArrayList<>();
+            for (int j = 0; j < items_list.get(i).size(); j++) {
+                itemPojo = new ItemPojo();
+                itemPojo.setMlno(items_list.get(i).get(j).get("mlno"));
+                itemPojo.setName(items_list.get(i).get(j).get("name"));
+                itemPojo.setSname(items_list.get(i).get(j).get("sname"));
+                itemPojo.setSid(items_list.get(i).get(j).get("sid"));
+                itemPojo.setAddress(items_list.get(i).get(j).get("address"));
+                itemPojo.setIsused(items_list.get(i).get(j).get("isused").equals("1"));
+                itemPojoList.add(itemPojo);
+            }
+            headerPojo.setMyLogisticsArray(itemPojoList);
+            datas.add(headerPojo);
+        }
+        Log.e("Data", datas + "");
+
+    }
+
+    private class HeaderPojo {
+        private String sno;
+        private String slno;
+        private String plno;
+        private String type;
+        private int land;
+        private int logistics;
+        private String logisticsVal;
+        private String lpay;
+        private boolean isused;
+        private String sname;
+        private String iscom;
+        private List<ItemPojo> myLogisticsArray;
+
+        public String getSno() {
+            return sno;
+        }
+
+        public String getIscom() {
+            return iscom;
+        }
+
+        public void setIscom(String iscom) {
+            this.iscom = iscom;
+        }
+
+        public void setSno(String sno) {
+            this.sno = sno;
+        }
+
+        public String getSlno() {
+            return slno;
+        }
+
+        public void setSlno(String slno) {
+            this.slno = slno;
+        }
+
+        public String getPlno() {
+            return plno;
+        }
+
+        public void setPlno(String plno) {
+            this.plno = plno;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public int getLand() {
+            return land;
+        }
+
+        public void setLand(int land) {
+            this.land = land;
+        }
+
+        public int getLogistics() {
+            return logistics;
+        }
+
+        public void setLogistics(int logistics) {
+            this.logistics = logistics;
+        }
+
+        public String getLogisticsVal() {
+            return logisticsVal;
+        }
+
+        public void setLogisticsVal(String logisticsVal) {
+            this.logisticsVal = logisticsVal;
+        }
+
+        public String getLpay() {
+            return lpay;
+        }
+
+        public void setLpay(String lpay) {
+            this.lpay = lpay;
+        }
+
+        public boolean getIsused() {
+            return isused;
+        }
+
+        public void setIsused(boolean isused) {
+            this.isused = isused;
+        }
+
+        public String getSname() {
+            return sname;
+        }
+
+        public void setSname(String sname) {
+            this.sname = sname;
+        }
+
+        public List<ItemPojo> getMyLogisticsArray() {
+            return myLogisticsArray;
+        }
+
+        public void setMyLogisticsArray(List<ItemPojo> myLogisticsArray) {
+            this.myLogisticsArray = myLogisticsArray;
+        }
+    }
+
+    private class ItemPojo {
+        private String mlno;
+        private String name;
+        private String sname;
+        private String sid;
+        private String address;
+        private boolean isused;
+
+        public String getMlno() {
+            return mlno;
+        }
+
+        public void setMlno(String mlno) {
+            this.mlno = mlno;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSname() {
+            return sname;
+        }
+
+        public void setSname(String sname) {
+            this.sname = sname;
+        }
+
+        public String getSid() {
+            return sid;
+        }
+
+        public void setSid(String sid) {
+            this.sid = sid;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public boolean getIsused() {
+            return isused;
+        }
+
+        public void setIsused(boolean isused) {
+            this.isused = isused;
+        }
+
     }
 }

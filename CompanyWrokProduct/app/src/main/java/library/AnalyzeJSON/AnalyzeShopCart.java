@@ -252,4 +252,91 @@ public class AnalyzeShopCart {
         }
         return null;
     }
+
+    /**
+     * 1.3.9	結帳清單 - 讀取商家運送方式:Data[]
+     * sno      String	商家碼
+     * slno 	String	商家物流碼
+     * plno	String	買家物流碼
+     * type	    Number	類型0門市1宅配
+     * land	    Number	送貨島嶼0無1本島2離島3海外
+     * logistics    Number	送貨方式 0.無 1.7-11 2.全家 3.萊爾富 4.黑貓宅配 5.郵局 6.賣家宅配 7.海外配送
+     * logisticsVal	String	送貨名稱 “7-11”
+     * lpay	    Number	郵資
+     * isused	Number	物流使用狀態 0未使用1使用中(當第一次無啟用時, [0][‘isused’]為1)
+     * sname	String	門市名稱 “懿德門市”
+     * iscom	Number	NONE
+     */
+    public static ArrayList<Map<String, String>> getStoreLogisticsData(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("sno", json_obj.getString("sno"));
+                    map.put("slno", json_obj.getString("slno"));
+                    map.put("plno", json_obj.getString("plno"));
+                    map.put("type", json_obj.getString("type"));
+                    map.put("land", json_obj.getString("land"));
+                    map.put("logistics", json_obj.getString("logistics"));
+                    map.put("logisticsVal", json_obj.getString("logisticsVal"));
+                    map.put("lpay", json_obj.getString("lpay"));
+                    map.put("isused", json_obj.getString("isused"));
+                    map.put("sname", json_obj.getString("sname"));
+                    map.put("iscom", json_obj.getString("iscom"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 1.3.9	結帳清單 - 讀取商家運送方式:myLogisticsArray[]
+     * mlno	String	我的物流碼
+     * name	String	姓名+電話
+     * sname	String	門市名稱 “懿德門市”
+     * sid	String	門市店號
+     * address	String	地址
+     * isused	Number	物流使用狀態 0未使用1使用中
+     */
+    public static ArrayList<ArrayList<Map<String, String>>> getmyLogisticsArray(JSONObject json) {
+        ArrayList<ArrayList<Map<String, String>>> alllist;
+        ArrayList<Map<String, String>> arrayList;
+        Map<String, String> map;
+        try {
+            alllist = new ArrayList<>();
+            if (json.getBoolean("Success")) {
+                for (int i = 0; i < json.getJSONArray("Data").length(); i++) {
+                    arrayList = new ArrayList<>();
+                    if (!json.getJSONArray("Data").getJSONObject(i).getString("myLogisticsArray").equals("null")) {
+                        JSONArray jsonArray = json.getJSONArray("Data").getJSONObject(i).getJSONArray("myLogisticsArray");
+                        for (int j = 0; j < jsonArray.length(); j++) {
+                            map = new HashMap<>();
+                            JSONObject jsonObject = jsonArray.getJSONObject(j);
+                            map.put("mlno", jsonObject.getString("mlno"));
+                            map.put("name", jsonObject.getString("name"));
+                            map.put("sname", jsonObject.getString("sname"));
+                            map.put("sid", jsonObject.getString("sid"));
+                            map.put("address", jsonObject.getString("address"));
+                            map.put("isused", jsonObject.getString("isused"));
+                            arrayList.add(map);
+                        }
+                    }
+
+                    alllist.add(arrayList);
+                }
+                return alllist;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
