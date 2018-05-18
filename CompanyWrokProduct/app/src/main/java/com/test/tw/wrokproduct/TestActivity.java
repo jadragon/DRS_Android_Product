@@ -1,31 +1,34 @@
 package com.test.tw.wrokproduct;
 
-import android.graphics.Bitmap;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-
-import library.GetBitmap;
-import library.GetJsonData.GetInformationByPHP;
-import library.GetJsonData.ShopCartJsonData;
+import library.GetJsonData.GetFileJsonByPHP;
 
 public class TestActivity extends AppCompatActivity {
-    JSONObject json;
     TextView test_textview;
-    Bitmap bitmap;
-    String encoded;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         test_textview = findViewById(R.id.test_textview);
-
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                    return;
+                }
+            }
+        }
         testJson();
     }
 
@@ -35,17 +38,11 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                bitmap= GetBitmap.returnBitmap("http://www.rcam.nchu.edu.tw/upload/menu/1397614599.jpg");
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
-                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+          final String json=   new GetFileJsonByPHP(getApplicationContext()).getAddress();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("TestJSONONONONON", encoded + "");
                         Log.e("TestJSONONONONON", json + "");
-
                     }
                 });
             }

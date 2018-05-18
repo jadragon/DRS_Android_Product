@@ -10,6 +10,7 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class GetInformationByPHP {
+    private static final String getAddress_url = "http://api.gok1945.com/main/cart/getAddress.php";
     private static final String slider_url = "http://api.gok1945.com/main/index/slider.php";
     private static final String banner_url = "http://api.gok1945.com/main/product/banner.php";
     private static final String hotkeywords_url = "http://api.gok1945.com/main/index/hotkeywords.php";

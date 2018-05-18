@@ -64,8 +64,6 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
             case -1://toolbar
                 finish();
                 break;
-            case R.id.shipway_confirm:
-                break;
         }
 
     }

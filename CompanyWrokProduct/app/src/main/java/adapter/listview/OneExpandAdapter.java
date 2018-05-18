@@ -1,6 +1,8 @@
 package adapter.listview;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeShopCart;
+import library.GetJsonData.ShopCartJsonData;
 
 /**
  * 点击item展开隐藏部分,再次点击收起
@@ -33,6 +37,7 @@ import library.AnalyzeJSON.AnalyzeShopCart;
 public class OneExpandAdapter extends BaseAdapter implements View.OnClickListener {
     private Context context;
     private JSONObject json;
+    private DisplayMetrics dm;
     private int currentItem = -1; //用于记录点击的 Item 的 position，是控制 item 展开的核心
     ViewHolder holder;
     ArrayList<Map<String, String>> title_list;
@@ -41,12 +46,15 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
     String[] lanes = {"無", "本島", "離島", "海外"};
     int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
     View[] holderList;
+    String token;
 
     public OneExpandAdapter(Context context, JSONObject json) {
         super();
+        dm = context.getResources().getDisplayMetrics();
         this.context = context;
         this.json = json;
-
+        GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
+        token = gv.getToken();
         if (json != null) {
             title_list = AnalyzeShopCart.getStoreLogisticsData(json);
             items_list = AnalyzeShopCart.getmyLogisticsArray(json);
@@ -55,7 +63,6 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             items_list = new ArrayList<>();
         }
         holderList = new View[title_list.size()];
-        Log.e("WWWWWWWWWWWW", items_list + "");
         initData();
     }
 
@@ -121,7 +128,8 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         for (int i = 0; i < items_list.get(position).size(); i++) {
             view = LayoutInflater.from(context).inflate(R.layout.viewitem_shipwaylist_item, parent, false);
             linearLayout = view.findViewById(R.id.shipwaylist_item_layout);
-            linearLayout.setTag(holder);
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dm.heightPixels/7));
+            linearLayout.setTag(position);
             linearLayout.setOnClickListener(this);
             holder.item_layouts.add(linearLayout);
             imageView = view.findViewById(R.id.shipwaylist_item_btn);
@@ -138,13 +146,9 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setGravity(Gravity.CENTER);
-        linearLayout.setPadding(0,0,0,10);
-        imageView = new ImageView(context);
-        imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.shipway_select_add));
-        imageView.setPadding(5,5,5,5);
-        linearLayout.addView(imageView);
-        textView=new TextView(context);
-        textView.setText(datas.get(position).getLogisticsVal());
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(50*dm.density)));
+        textView = new TextView(context);
+        textView.setText("新增" + datas.get(position).getLogisticsVal());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         linearLayout.addView(textView);
         //設定背景
@@ -199,8 +203,10 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         holder.showArea.setTag(position);
         //根据 currentItem 记录的点击位置来设置"对应Item"的可见性（在list依次加载列表数据时，每加载一个时都看一下是不是需改变可见性的那一条）
         if (currentItem == position) {
+            holder.vitem_shipwaylist_nike.setVisibility(View.VISIBLE);
             holder.hideArea.setVisibility(View.VISIBLE);
         } else {
+            holder.vitem_shipwaylist_nike.setVisibility(View.INVISIBLE);
             holder.hideArea.setVisibility(View.GONE);
         }
 
@@ -209,7 +215,8 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        holder = (ViewHolder) v.getTag();
+        int header_position = (int) v.getTag();
+        holder = (ViewHolder) holderList[header_position].getTag();
         int position = holder.item_layouts.indexOf(v);
         /*
         //取得header
@@ -222,7 +229,28 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             holder.item_images.get(i).setSelected(false);
         }
         holder.item_images.get(position).setSelected(true);
-        Toast.makeText(context, position + "", Toast.LENGTH_SHORT).show();
+        final String sno = datas.get(header_position).getSno();
+        final String plno = datas.get(header_position).getPlno();
+        final String mino = datas.get(header_position).getMyLogisticsArray().get(position).getMlno();
+        final String sname = datas.get(header_position).getMyLogisticsArray().get(position).getSname();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
+                json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                new Handler(context.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.vitem_shipwaylist_sname.setText(sname);
+                        setFilter(json);
+                    }
+                });
+            }
+        }).start();
+
+        Toast.makeText(context, "token:" + token + "\nsno:" + sno + "\nplno:" + plno + "\nmino" + mino, Toast.LENGTH_SHORT).show();
+
+
     }
 
     private class ViewHolder {
@@ -244,6 +272,19 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         private JSONObject json;
     }
 
+    public void setFilter(JSONObject json) {
+        this.json = json;
+        if (json != null) {
+            title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+            items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+        } else {
+            title_list = new ArrayList<>();
+            items_list = new ArrayList<>();
+        }
+        holderList = new View[title_list.size()];
+        initData();
+        notifyDataSetChanged();
+    }
     public void initData() {
         datas = new ArrayList<>();
         HeaderPojo headerPojo;

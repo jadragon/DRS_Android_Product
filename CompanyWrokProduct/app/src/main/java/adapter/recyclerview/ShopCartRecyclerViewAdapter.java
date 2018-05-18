@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.GetJsonData.GetInformationByPHP;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.AutoHorizontalTextView;
 import library.GetJsonData.ShopCartJsonData;
@@ -174,12 +173,12 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_content, parent, false);
-        params.height = dm.heightPixels / 5;
+        params.height =(int)(dm.heightPixels / 5.5);
         params.setMarginStart(0);
         params.setMarginEnd(0);
         view.setLayoutParams(params);
         view.setTag("content");
-        resizeImageView(view.findViewById(R.id.viewitem_cart_content_img), dm.heightPixels / 5, dm.heightPixels / 5);
+        resizeImageView(view.findViewById(R.id.viewitem_cart_content_img), (int)(dm.heightPixels / 5.5), (int)(dm.heightPixels / 5.5));
         return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
     }
 

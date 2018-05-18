@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shipwaylist_item_layout"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground">
 
   <ImageView
       android:id="@+id/shipwaylist_item_btn"
-      android:layout_width="75dp"
-      android:layout_height="75dp"
+      android:layout_width="80dp"
+      android:layout_height="80dp"
       android:src="@drawable/selectbox"
       android:padding="10dp"
       android:layout_gravity="center_vertical"/>
@@ -18,9 +18,9 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
-      android:paddingRight="20dp"
-      android:paddingTop="20dp"
-      android:paddingBottom="20dp">
+      android:paddingRight="10dp"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/shipwaylist_item_sname"
@@ -42,7 +42,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="330桃園市桃園區大興西路二段86號"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
   </LinearLayout>
 
 </LinearLayout>

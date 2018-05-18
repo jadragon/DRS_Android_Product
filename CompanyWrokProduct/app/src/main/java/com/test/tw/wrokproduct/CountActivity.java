@@ -104,4 +104,25 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
         return df.format(Double.parseDouble(str));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json = new ShopCartJsonData().getCheckout(token);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        countRecyclerViewAdapter.setFilter(json);
+                    }
+                });
+            }
+        }).start();
+    }
 }

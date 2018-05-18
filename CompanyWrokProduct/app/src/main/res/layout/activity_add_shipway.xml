@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/decoration_line"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    tools:context=".AddShipWayActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@color/gainsboro"
+        android:gravity="center_vertical"
+        android:text="收件人資訊"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="收件人姓名"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="收件人連絡電話"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@color/gainsboro"
+        android:gravity="center_vertical"
+        android:text="門市資訊"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/addshipway_store"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:gravity="center_vertical"
+        android:text="請選擇門市"
+        android:textSize="20sp" />
+
+</LinearLayout>

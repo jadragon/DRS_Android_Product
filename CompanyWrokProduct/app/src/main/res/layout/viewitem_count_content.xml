@@ -26,7 +26,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="標題"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"/>
 
         <LinearLayout
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="規格:"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="顏色"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_marginRight="5dp"
                 android:textStyle="bold"/>
 
@@ -56,8 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="規格"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="13sp"
+                android:textStyle="bold"/>
         </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
@@ -71,8 +71,8 @@
             android:gravity="left"
             android:text="$100"
             android:textColor="@color/red"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/viewitem_count_content_total"
                 android:layout_width="match_parent"
@@ -80,9 +80,9 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="X15"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginRight="30dp"/>
+                android:textSize="18sp"
+                android:layout_marginRight="30dp"
+                android:textStyle="bold"/>
         </FrameLayout>
 
 

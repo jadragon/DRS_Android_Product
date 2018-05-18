@@ -2,7 +2,6 @@ package adapter.recyclerview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import library.AnalyzeJSON.AnalyzeShopCart;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.ShopCartJsonData;
 
@@ -61,7 +61,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         this.json = json;
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
-
             title_list = ResolveJsonData.getCountInformation(json);
             content_list = ResolveJsonData.getCountItemArray(json);
         } else {
@@ -106,7 +105,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                     title_list.get(i).get("shippingSname"),
                     title_list.get(i).get("shippingSid"),
                     title_list.get(i).get("shippingAddress"),
-                    Integer.parseInt(title_list.get(i).get("shippingPay")),
+                    title_list.get(i).get("shippingPay"),
                     title_list.get(i).get("note"));
             item.setIndex(i);
             items.add(item);
@@ -119,7 +118,9 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 size++;
             }
             //結帳
-            item = new Item(TYPE_COUNT, Integer.parseInt(title_list.get(i).get("shippingPay")), Integer.parseInt(title_list.get(i).get("subtotal")));
+            item = new Item(TYPE_COUNT);
+            item.setShippingPay(title_list.get(i).get("shippingPay"));
+            item.setSubtotal(title_list.get(i).get("subtotal"));
             item.setIndex(i);
             items.add(item);
             size++;
@@ -135,11 +136,11 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         if (viewType == TYPE_HEADER) {
             TextView tv = new TextView(ctx);
             tv.setTag("header");
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            tv.setTypeface(tv.getTypeface(), Typeface.BOLD);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setBackgroundColor(ctx.getResources().getColor(R.color.default_gray));
-            params.setMargins((int) (10 * dm.density), 0, 0, 0);
+            params.setMargins(0, 0, 0, 0);
+            tv.setPadding((int)(dm.density*10),0,0,0);
             params.height = (int) (60 * dm.density);
             tv.setLayoutParams(params);
             return new CountRecyclerViewAdapter.RecycleHolder(ctx, tv, json);
@@ -161,16 +162,17 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             //text
             linearLayout.setTag("discount");
             TextView tv = new TextView(ctx);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             tv.setLayoutParams(params);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setMaxLines(1);
+            tv.setTextColor(ctx.getResources().getColor(R.color.black));
             tv.setText("店家優惠:");
             tv.setTag("discount_title");
             linearLayout.addView(tv);
             //text
             tv = new TextView(ctx);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             tv.setTag("discount_total");
             tv.setText("0");
             linearLayout.addView(tv);
@@ -182,12 +184,12 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             return new CountRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_content, parent, false);
-        params.height = dm.heightPixels / 5;
+        params.height = (int)(dm.heightPixels / 5.5);
         params.setMarginStart(0);
         params.setMarginEnd(0);
         view.setLayoutParams(params);
         view.setTag("content");
-        resizeImageView(view.findViewById(R.id.viewitem_count_content_img), dm.heightPixels / 5, dm.heightPixels / 5);
+        resizeImageView(view.findViewById(R.id.viewitem_count_content_img),  (int)(dm.heightPixels / 5.5),  (int)(dm.heightPixels / 5.5));
         return new CountRecyclerViewAdapter.RecycleHolder(ctx, view, json);
 
     }
@@ -200,22 +202,21 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 holder.viewitem_count_content_title.setText(items.get(position).getPname());
                 holder.viewitem_count_content_color.setText(items.get(position).getColor());
                 holder.viewitem_count_content_size.setText(items.get(position).getSize());
-                holder.viewitem_count_content_total.setText("x" + items.get(position).getStotal());
+                holder.viewitem_count_content_total.setText("x" + getDeciamlString(items.get(position).getStotal()));
                 holder.viewitem_count_content_price.setText("$" + getDeciamlString(items.get(position).getSprice()));
             } else if (getItemViewType(position) == TYPE_HEADER) {
                 holder.viewitem_count_title_txt.setText(items.get(position).getSname());
             } else if (getItemViewType(position) == TYPE_SHIPWAY) {
                 holder.viewitem_count_shipways_style.setText(items.get(position).getShippingStyle());
-                holder.viewitem_count_shipways_pay.setText("$" + items.get(position).getShippingPay());
+                holder.viewitem_count_shipways_pay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_shipways_address.setText(items.get(position).getShippingAddress());
                 holder.viewitem_count_shipways_name.setText(items.get(position).getShippingName());
             } else if (getItemViewType(position) == TYPE_DISCOUNT) {
                 holder.discount_title.setText("店家優惠:" + items.get(position).getDiscountInfo());
-                holder.discount_title.setTextColor(ctx.getResources().getColor(android.R.color.tertiary_text_dark));
-                holder.discount_total.setText("$" + items.get(position).getDiscount());
+                holder.discount_total.setText("$" + getDeciamlString(items.get(position).getDiscount()));
             } else if (getItemViewType(position) == TYPE_COUNT) {
-                holder.viewitem_count_total_shippay.setText("$" + items.get(position).getShippingPay());
-                holder.viewitem_count_total_subtotal.setText("$" + items.get(position).getSubtotal());
+                holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
+                holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -281,7 +282,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         TextView viewitem_count_total_shippay, viewitem_count_total_subtotal;
         TextView discount_title, discount_total;
         EditText viewitem_count_shipways_note;
-       LinearLayout viewitem_count_shipways_goto;
+        LinearLayout viewitem_count_shipways_goto;
         int position;
 
         public RecycleHolder(final Context ctx, View view, JSONObject json) {
@@ -291,7 +292,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             if (view.getTag().equals("header")) {
                 viewitem_count_title_txt = (TextView) view;
             } else if (view.getTag().equals("shipway")) {
-                viewitem_count_shipways_goto=view.findViewById(R.id.viewitem_count_shipways_goto);
+                viewitem_count_shipways_goto = view.findViewById(R.id.viewitem_count_shipways_goto);
                 viewitem_count_shipways_goto.setOnClickListener(this);
                 viewitem_count_shipways_goto.setTag("goto");
                 viewitem_count_shipways_style = view.findViewById(R.id.viewitem_count_shipways_style);
@@ -319,26 +320,27 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             itemView.setFocusableInTouchMode(true);
             itemView.setFocusable(true);
         }
-private int getHeaderPosition(){
-            int index=0;
-    for (int i = 0; i < items.size(); i++) {
-        if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
-            position = i;
-            break;
+
+        private int getHeaderPosition() {
+            int index = 0;
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
+                    position = i;
+                    break;
+                }
+            }
+            return index;
         }
-    }
-    return index;
-}
 
         @Override
         public void onClick(final View view) {
-          position=getHeaderPosition();
+            position = getHeaderPosition();
 
             switch (view.getTag() + "") {
                 case "goto"://當shipway點擊時
                     Intent intent = new Intent(ctx, ShipWayActivity.class);
-                    intent.putExtra("token",token);
-                    intent.putExtra("sno",items.get(position).getSno());
+                    intent.putExtra("token", token);
+                    intent.putExtra("sno", items.get(position).getSno());
                     ctx.startActivity(intent);
                     break;
 
@@ -348,7 +350,7 @@ private int getHeaderPosition(){
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            position=getHeaderPosition();
+            position = getHeaderPosition();
             if (!hasFocus) {
                 InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -405,11 +407,12 @@ private int getHeaderPosition(){
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        if (ResolveJsonData.getCartInformation(json) != null) {
-            title_list = ResolveJsonData.getCartInformation(json);
-            content_list = ResolveJsonData.getCartItemArray(json);
+        if (json!=null) {
+            title_list = AnalyzeShopCart.getCountInformation(json);
+            content_list = AnalyzeShopCart.getCountItemArray(json);
+            initItems();
         }
-        initItems();
+
         notifyDataSetChanged();
     }
 
@@ -423,7 +426,7 @@ private int getHeaderPosition(){
         private String sname;
         private String simg;
         //=======footer
-        private int subtotal;
+        private String subtotal;
         private String discountInfo;
         private String discount;
         private String shippingInfo;
@@ -434,7 +437,7 @@ private int getHeaderPosition(){
         private String shippingSname;
         private String shippingSid;
         private String shippingAddress;
-        private int shippingPay;
+        private String shippingPay;
         private String note;
 
         //=======content
@@ -469,7 +472,7 @@ private int getHeaderPosition(){
         /**
          * shipway
          */
-        public Item(int type, String shippingInfo, String shippingStyle, String shippingName, String shippingSname, String shippingSid, String shippingAddress, int shippingPay, String note) {
+        public Item(int type, String shippingInfo, String shippingStyle, String shippingName, String shippingSname, String shippingSid, String shippingAddress, String shippingPay, String note) {
             this.type = type;
             this.shippingInfo = shippingInfo;
             this.shippingStyle = shippingStyle;
@@ -488,15 +491,6 @@ private int getHeaderPosition(){
             this.type = type;
             this.discountInfo = discountInfo;
             this.discount = discount;
-        }
-
-        /**
-         * count
-         */
-        public Item(int type, int shippingPay, int subtotal) {
-            this.type = type;
-            this.shippingPay = shippingPay;
-            this.subtotal = subtotal;
         }
 
 
@@ -540,7 +534,7 @@ private int getHeaderPosition(){
             this.simg = simg;
         }
 
-        public int getSubtotal() {
+        public String getSubtotal() {
             return subtotal;
         }
 
@@ -552,7 +546,7 @@ private int getHeaderPosition(){
             this.index = index;
         }
 
-        public void setSubtotal(int subtotal) {
+        public void setSubtotal(String subtotal) {
             this.subtotal = subtotal;
         }
 
@@ -604,11 +598,11 @@ private int getHeaderPosition(){
             this.shippingAddress = shippingAddress;
         }
 
-        public int getShippingPay() {
+        public String getShippingPay() {
             return shippingPay;
         }
 
-        public void setShippingPay(int shippingPay) {
+        public void setShippingPay(String shippingPay) {
             this.shippingPay = shippingPay;
         }
 

@@ -30,28 +30,29 @@ public class GetWebView {
         params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
         params.add(new BasicNameValuePair("device", "3"));
     }
+
     public GetWebView(String google) {
         jsonParser = new WebVewJsonParser();
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("logistics", "1"));
         params.add(new BasicNameValuePair("device", "1"));
     }
+
     public String getHtmlByPosition(String token, int position) {
         switch (position) {
             case 0:
+                return placement(token);
+            case 1:
                 return register(token);
 
-            case 1:
+            case 2:
                 return inactivated(token);
 
-            case 2:
+            case 3:
                 return activation(token);
 
-            case 3:
-                return directPush(token);
-
             case 4:
-                return placement(token);
+                return directPush(token);
 
             case 5:
                 return upgrade(token);
@@ -132,6 +133,7 @@ public class GetWebView {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(agency_url, params);
     }
+
     /**
      * 申請區域代理
      */

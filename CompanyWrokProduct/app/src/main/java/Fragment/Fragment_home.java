@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.ShopCartActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoader;
@@ -56,6 +57,7 @@ public class Fragment_home extends Fragment {
     Handler handler;
     View v;
     Banner header;
+    ImageView home_shopcart;
     int what = 0;
     //宣告特約工人的經紀人
     private Handler mThreadHandler;
@@ -80,6 +82,13 @@ public class Fragment_home extends Fragment {
         //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
 
         mThreadHandler = new Handler(mThread.getLooper());
+        home_shopcart=v.findViewById(R.id.home_shopcart);
+        home_shopcart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+            }
+        });
         initSwipeLayout();
         initViewPagerAndRecyclerView();
 
