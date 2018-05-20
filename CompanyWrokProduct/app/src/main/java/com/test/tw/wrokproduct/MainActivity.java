@@ -11,11 +11,19 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import Fragment.*;
+import library.AnalyzeJSON.GetAddress;
 import library.AppManager;
 import library.BottomNavigationViewHelper;
+import library.GetJsonData.GetInformationByPHP;
+import library.SQLiteDatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
@@ -30,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         AppManager.getAppManager().addActivity(this);
+        initAddressDB();
         initFragments();
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
@@ -128,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
     private void initFragments() {
         fragment_home = new Fragment_home();
         fragment_shop = new Fragment_shop();
-        fragment_community=new Fragment_community();
-        fragments = new Fragment[]{fragment_home, fragment_shop,fragment_shop,fragment_community};
+        fragment_community = new Fragment_community();
+        fragments = new Fragment[]{fragment_home, fragment_shop, fragment_shop, fragment_community};
         lastShowFragment = 0;
         getSupportFragmentManager()
                 .beginTransaction()
@@ -170,4 +179,23 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    private void initAddressDB() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                JSONObject json = new GetInformationByPHP().getAddress("0");
+                ArrayList<Map<String, String>> datas = GetAddress.getAddress(json);
+                String lastestmodifydate = GetAddress.checkModifydate(json);
+                int sqlmodifydate = db.getModifydate(lastestmodifydate);
+                if (datas.size() > 0 && sqlmodifydate == 0) {
+                    db.resetTables();
+                    db.addAddressAll(datas, lastestmodifydate);
+                    db.close();
+                }
+            }
+        }).start();
+
+    }
 }

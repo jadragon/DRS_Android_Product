@@ -125,16 +125,6 @@ public class ShopCartJsonData {
         return jsonParser.getJSONFromUrl(setStoreMemberLogistics_url, params);
     }
 
-    /**
-     * 1.3.10	結帳清單 - 設定商家中, 買家運送方式
-     */
-    public JSONObject setMemberLogistics(String token, String sno, String plno, String mlno) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("sno", sno));
-        params.add(new BasicNameValuePair("plno", plno));
-        params.add(new BasicNameValuePair("mlno", mlno));
-        return jsonParser.getJSONFromUrl(setMemberLogistics_url, params);
-    }
 
     /**
      * 1.3.11	結帳清單 - 新增買家物流資訊

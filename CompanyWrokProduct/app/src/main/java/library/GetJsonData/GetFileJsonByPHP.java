@@ -25,7 +25,7 @@ public class GetFileJsonByPHP {
 
 
     /**
-     * 會員註冊
+     * 取得住址
      */
     public String getAddress() {
         params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));

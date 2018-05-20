@@ -1,6 +1,7 @@
 package adapter.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.tw.wrokproduct.AddShipWayActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -81,7 +83,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         return position;
     }
 
-    private View createView(int position, View convertView, ViewGroup parent) {
+    private View createView(final int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(
                 R.layout.vitem_shipwaylist, parent, false);
         holder = new ViewHolder();
@@ -159,7 +161,13 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         holder.footer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(context, AddShipWayActivity.class);
+                intent.putExtra("sno",title_list.get(position).get("sno"));
+                intent.putExtra("plno",title_list.get(position).get("plno"));
+                intent.putExtra("type",title_list.get(position).get("type"));
+                intent.putExtra("land",title_list.get(position).get("land"));
+                intent.putExtra("logistics",title_list.get(position).get("logistics"));
+                context.startActivity(intent);
             }
         });
         holder.hideArea.addView(linearLayout);

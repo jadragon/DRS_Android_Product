@@ -148,5 +148,16 @@ public JSONObject test() {
         return jsonParser.getJSONFromUrl(plist_url, params);
     }
 
+    /**
+     * 取得住址
+     */
+    public JSONObject getAddress(String modifydate) {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
+        params.add(new BasicNameValuePair("lang", "0"));
+        params.add(new BasicNameValuePair("modifydate", modifydate));
+        return jsonParser.getJSONFromUrl(getAddress_url, params);
+    }
+
 
 }
