@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,20 +23,21 @@ public class StoreWebViewActivity extends AppCompatActivity {
     TextView textView;
     String name, address, deliver;
     Intent intent;
+    String logistics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_webview);
         intent = getIntent();
+        logistics = intent.getStringExtra("logistics");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                html = new GetWebView("").getMap();
+                html = new GetWebView(logistics).getMap();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         showWebView();
                     }
                 });
@@ -67,7 +69,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
         webSettings.setDisplayZoomControls(false); //隐藏原生的缩放控件
 
         //其他细节操作
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存
+      //  webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存
         webSettings.setAllowFileAccess(true); //设置可以访问文件
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
         webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
@@ -84,16 +86,17 @@ public class StoreWebViewActivity extends AppCompatActivity {
         //                点击链接由自己处理，而不是新开Android的系统browser响应该链接。
         //webSettings.setAllowUniversalAccessFromFileURLs(true);
         luntanListview.clearCache(true);//清除暫存
-        luntanListview.setWebViewClient(new WebViewClient() {
+        luntanListview.setWebChromeClient(new WebChromeClient());
+                luntanListview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("js-call")) {
                     String[] uuu = url.split("&");
                     try {
-                        deliver=uuu[0].replace("js-call://setDeliver?","");
+                        deliver = uuu[0].replace("js-call://setDeliver?", "");
                         name = URLDecoder.decode(uuu[1], "UTF-8");
                         address = URLDecoder.decode(uuu[2], "UTF-8");
-                        Log.e("JS", deliver+"\n"+name + "\n" + address);
+                        Log.e("JS", deliver + "\n" + name + "\n" + address);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -109,7 +112,6 @@ public class StoreWebViewActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
             }
         });
     }

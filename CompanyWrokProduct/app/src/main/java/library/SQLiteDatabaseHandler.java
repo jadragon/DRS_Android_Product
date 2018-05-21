@@ -216,6 +216,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      */
     public Map<String, String> getZipcodeByCityAndArea(String city, String area) {
         Map<String, String> data;
+        city=city.substring(0,1).equals("台")?city.replace("台","臺"):city;
         String selectQuery = "SELECT  * FROM " + TABLE_ADDRESS + " where " + KEY_CITY + "='" + city + "'" + " and " + KEY_AREA + " like '%" + area + "%'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

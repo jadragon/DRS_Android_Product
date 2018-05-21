@@ -9,41 +9,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="10dp">
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="7"
                 android:text="運送方式"
                 android:textSize="18sp"
                 android:gravity="center_vertical"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/viewitem_count_shipways_style"
-                android:layout_width="0dp"
+                android:textColor="@color/black"
+                android:layout_gravity="left"/>
+            <LinearLayout
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="7-11"
-                android:gravity="right|center_vertical"
-                android:textSize="18sp"/>
-            <TextView
-                android:id="@+id/viewitem_count_shipways_pay"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="$30"
-                android:gravity="right|center_vertical"
-                android:textSize="18sp"/>
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_chevron_left_black_24dp"
-                android:rotation="180" />
-        </LinearLayout>
+                android:layout_gravity="right">
+                <TextView
+                    android:id="@+id/viewitem_count_shipways_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:text="7-11"
+                    android:gravity="right|center_vertical"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/viewitem_count_shipways_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="$30"
+                    android:gravity="right|center_vertical"
+                    android:textSize="18sp"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_chevron_left_black_24dp"
+                    android:rotation="180" />
+            </LinearLayout>
+
+        </FrameLayout>
         <TextView
             android:id="@+id/viewitem_count_shipways_address"
             android:layout_width="match_parent"

@@ -3,6 +3,7 @@ package com.test.tw.wrokproduct;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,8 @@ import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
 public class AddShipWayActivity extends AppCompatActivity {
+    Toolbar toolbar;
+    TextView toolbar_title;
     TextView addshipway_store, addshipway_test;
     EditText addshipway_name, addshipway_phone;
     Button confirm;
@@ -33,12 +36,15 @@ public class AddShipWayActivity extends AppCompatActivity {
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
         token = gv.getToken();
         setContentView(R.layout.activity_add_shipway);
+
         intent = getIntent();
         sno = intent.getStringExtra("sno");
         plno = intent.getStringExtra("plno");
         type = intent.getStringExtra("type");
         land = intent.getStringExtra("land");
         logistics = intent.getStringExtra("logistics");
+
+        initToolbar();
         Log.e("ADD", "\nsno:" + sno + "\nplno:" + plno + "\ntype:" + type + "\nland:" + land + "\nlogistics:" + logistics);
         addshipway_store = findViewById(R.id.addshipway_store);
         addshipway_test = findViewById(R.id.addshipway_test);
@@ -46,6 +52,7 @@ public class AddShipWayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddShipWayActivity.this, StoreWebViewActivity.class);
+                intent.putExtra("logistics",logistics);
                 startActivityForResult(intent, 0);
             }
         });
@@ -76,7 +83,35 @@ public class AddShipWayActivity extends AppCompatActivity {
             }
         });
     }
+    private void initToolbar() {
+        //Toolbar 建立
+        toolbar = findViewById(R.id.addshipway_toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+        toolbar_title=findViewById(R.id.addshipway_title);
+        switch (logistics){
+            case "1":
+                toolbar_title.setText("新增7-11門市");
+                break;
+            case "2":
+                toolbar_title.setText("新增全家門市");
+                break;
+            case "3":
+                toolbar_title.setText("新增萊爾富門市");
+                break;
+        }
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -88,7 +123,7 @@ public class AddShipWayActivity extends AppCompatActivity {
             address = bundle.getString("address");
             addshipway_store.setText(sname);
             Map<String, String> address_data = db.getZipcodeByCityAndArea(address.substring(0, 3), address.substring(3, 5));
-            city = address_data.get("city");
+            city = address_data.get("city").replace("臺","台");
             area = address_data.get("area");
             zipcode = address_data.get("zipcode");
             address = address.substring(city.length() + area.length());

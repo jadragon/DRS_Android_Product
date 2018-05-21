@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -275,9 +274,6 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         private List<TextView> item_addresses;
         private List<LinearLayout> item_layouts;
         private View footer;
-        private Context context;
-        private View convertView;
-        private JSONObject json;
     }
 
     public void setFilter(JSONObject json) {
@@ -325,8 +321,6 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             headerPojo.setMyLogisticsArray(itemPojoList);
             datas.add(headerPojo);
         }
-        Log.e("Data", datas + "");
-
     }
 
     private class HeaderPojo {

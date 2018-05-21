@@ -31,10 +31,10 @@ public class GetWebView {
         params.add(new BasicNameValuePair("device", "3"));
     }
 
-    public GetWebView(String google) {
+    public GetWebView(String logistics) {
         jsonParser = new WebVewJsonParser();
         params = new ArrayList<>();
-        params.add(new BasicNameValuePair("logistics", "1"));
+        params.add(new BasicNameValuePair("logistics", logistics));
         params.add(new BasicNameValuePair("device", "1"));
     }
 

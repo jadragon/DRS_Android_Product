@@ -15,6 +15,8 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     JSONObject json;
     String token,sno;
     Toolbar toolbar;
+    OneExpandAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     private void requestData() {
         ListView lvProduct = findViewById(R.id.lv_products);
         lvProduct.setDivider(null);
-        OneExpandAdapter adapter = new OneExpandAdapter(this, json);
+       adapter = new OneExpandAdapter(this, json);
         lvProduct.setAdapter(adapter);
     }
 
@@ -65,6 +67,24 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
         }
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.setFilter(json);
+                    }
+                });
+            }
+        }).start();
 
     }
 }
