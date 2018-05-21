@@ -43,7 +43,6 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
 
     private void requestData() {
         ListView lvProduct = findViewById(R.id.lv_products);
-        lvProduct.setDivider(null);
        adapter = new OneExpandAdapter(this, json);
         lvProduct.setAdapter(adapter);
     }
@@ -80,7 +79,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.setFilter(json);
+                        adapter.setFilterAfterAdd(json);
                     }
                 });
             }

@@ -27,5 +27,9 @@
     android:id="@+id/lv_products"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"/>
+    android:layout_weight="1"
+    android:divider="@color/gainsboro"
+    android:dividerHeight="10dp"
+    android:footerDividersEnabled="true"
+    android:headerDividersEnabled="true"/>
 </LinearLayout>

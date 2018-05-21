@@ -13,9 +13,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.test.tw.wrokproduct.AddShipWayActivity;
+import com.test.tw.wrokproduct.AddDeliveryShipWayActivity;
+import com.test.tw.wrokproduct.AddStoreShipWayActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -48,6 +48,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
     int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
     View[] holderList;
     String token;
+    String sno, plno, mino, sname;
 
     public OneExpandAdapter(Context context, JSONObject json) {
         super();
@@ -82,7 +83,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         return position;
     }
 
-    private View createView(final int position, View convertView, ViewGroup parent) {
+    private View createView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(
                 R.layout.vitem_shipwaylist, parent, false);
         holder = new ViewHolder();
@@ -93,9 +94,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             public void onClick(View view) {
                 //用 currentItem 记录点击位置
                 int tag = (Integer) view.getTag();
-                if (tag == currentItem) { //再次点击
-                    currentItem = -1; //给 currentItem 一个无效值
-                } else {
+                if (tag != currentItem) { //再次点击
                     currentItem = tag;
                 }
                 //通知adapter数据改变需要重新加载
@@ -116,10 +115,11 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         ImageView imageView;
         TextView textView;
         View view;
-        if (datas.get(position).getIsused())
+        if (datas.get(position).getIsused()) {
             holder.vitem_shipwaylist_nike.setVisibility(View.VISIBLE);
-        else
+        } else {
             holder.vitem_shipwaylist_nike.setVisibility(View.INVISIBLE);
+        }
         //item
         holder.item_images = new ArrayList<>();
         holder.item_layouts = new ArrayList<>();
@@ -129,7 +129,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         for (int i = 0; i < items_list.get(position).size(); i++) {
             view = LayoutInflater.from(context).inflate(R.layout.viewitem_shipwaylist_item, parent, false);
             linearLayout = view.findViewById(R.id.shipwaylist_item_layout);
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dm.heightPixels/7));
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dm.heightPixels / 7));
             linearLayout.setTag(position);
             linearLayout.setOnClickListener(this);
             holder.item_layouts.add(linearLayout);
@@ -147,7 +147,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setGravity(Gravity.CENTER);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(50*dm.density)));
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (50 * dm.density)));
         textView = new TextView(context);
         textView.setText("新增" + datas.get(position).getLogisticsVal());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
@@ -157,21 +157,30 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         linearLayout.setBackgroundResource(outValue.resourceId);
         holder.footer = linearLayout;
+        holder.footer.setTag(position);
+        //新增運送方式
         holder.footer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, AddShipWayActivity.class);
-                intent.putExtra("sno",title_list.get(position).get("sno"));
-                intent.putExtra("plno",title_list.get(position).get("plno"));
-                intent.putExtra("type",title_list.get(position).get("type"));
-                intent.putExtra("land",title_list.get(position).get("land"));
-                intent.putExtra("logistics",title_list.get(position).get("logistics"));
+                int index = (int) v.getTag();
+                Intent intent;
+                if (datas.get(index).getLogistics() <= 3) {
+                    intent = new Intent(context, AddStoreShipWayActivity.class);
+                } else {
+                    intent = new Intent(context, AddDeliveryShipWayActivity.class);
+                }
+                intent.putExtra("sno", title_list.get(index).get("sno"));
+                intent.putExtra("plno", title_list.get(index).get("plno"));
+                intent.putExtra("type", title_list.get(index).get("type"));
+                intent.putExtra("land", title_list.get(index).get("land"));
+                intent.putExtra("logistics", title_list.get(index).get("logistics"));
                 context.startActivity(intent);
             }
         });
         holder.hideArea.addView(linearLayout);
         if (datas.get(position).getIsused()) {
             holder.hideArea.setVisibility(View.VISIBLE);
+            //設定目前選取的item位置
             currentItem = position;
         }
         convertView.setTag(holder);
@@ -236,10 +245,11 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             holder.item_images.get(i).setSelected(false);
         }
         holder.item_images.get(position).setSelected(true);
-        final String sno = datas.get(header_position).getSno();
-        final String plno = datas.get(header_position).getPlno();
-        final String mino = datas.get(header_position).getMyLogisticsArray().get(position).getMlno();
-        final String sname = datas.get(header_position).getMyLogisticsArray().get(position).getSname();
+        //設定運送方式
+        sno = datas.get(header_position).getSno();
+        plno = datas.get(header_position).getPlno();
+        mino = datas.get(header_position).getMyLogisticsArray().get(position).getMlno();
+        sname = datas.get(header_position).getMyLogisticsArray().get(position).getSname();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -254,9 +264,6 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
                 });
             }
         }).start();
-
-        Toast.makeText(context, "token:" + token + "\nsno:" + sno + "\nplno:" + plno + "\nmino" + mino, Toast.LENGTH_SHORT).show();
-
 
     }
 
@@ -276,8 +283,8 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         private View footer;
     }
 
-    public void setFilter(JSONObject json) {
-        this.json = json;
+    public void setFilter(JSONObject newjson) {
+        this.json = newjson;
         if (json != null) {
             title_list = AnalyzeShopCart.getStoreLogisticsData(json);
             items_list = AnalyzeShopCart.getmyLogisticsArray(json);
@@ -285,10 +292,45 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
             title_list = new ArrayList<>();
             items_list = new ArrayList<>();
         }
+
         holderList = new View[title_list.size()];
         initData();
         notifyDataSetChanged();
     }
+
+    public void setFilterAfterAdd(JSONObject newjson) {
+        this.json = newjson;
+        if (json != null) {
+            title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+            items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+        } else {
+            title_list = new ArrayList<>();
+            items_list = new ArrayList<>();
+        }
+
+        holderList = new View[title_list.size()];
+        initData();
+        //新增後做登陸動作
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).getIsused() && (datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getIsused())) {
+                sno = datas.get(i).getSno();
+                plno = datas.get(i).getPlno();
+                mino = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getMlno();
+                sname = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getSname();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
+                        json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                    }
+                }).start();
+                break;
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
     public void initData() {
         datas = new ArrayList<>();
         HeaderPojo headerPojo;

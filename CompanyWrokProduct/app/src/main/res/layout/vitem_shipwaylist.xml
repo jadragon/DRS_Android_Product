@@ -8,8 +8,7 @@
         android:id="@+id/layout_showArea"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/vitem_shipwaylist_logisticsVal"

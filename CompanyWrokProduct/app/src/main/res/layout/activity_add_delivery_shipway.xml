@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddStoreShipWayActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/addshipway_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:elevation="5dp">
+
+        <TextView
+            android:id="@+id/add_delivery_txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="新增黑貓宅配地址"
+            android:textSize="20sp" />
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/decoration_line">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@color/gainsboro"
+        android:gravity="center_vertical"
+        android:text="收件人資訊"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
+
+    <EditText
+        android:id="@+id/add_delivery_edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="收件人姓名"
+        android:textColorHint="@color/gainsboro"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
+
+    <EditText
+        android:id="@+id/add_delivery_edit_phone"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="收件人連絡電話"
+        android:textColorHint="@color/gainsboro"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"
+        android:inputType="phone"/>
+
+    <EditText
+        android:id="@+id/add_delivery_edit_zipcode"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="郵遞區號"
+        android:textColorHint="@color/gainsboro"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"
+        android:inputType="number"/>
+    <TextView
+        android:id="@+id/add_delivery_txt_city"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:gravity="center_vertical"
+        android:text="請選擇縣市"
+        android:textColor="@color/gainsboro"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
+    <TextView
+        android:id="@+id/add_delivery_txt_area"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:gravity="center_vertical"
+        android:text="請選擇鄉鎮市區"
+        android:textColor="@color/gainsboro"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
+    <EditText
+        android:id="@+id/add_delivery_edit_address"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="地址"
+        android:textSize="16sp"
+        android:textColorHint="@color/gainsboro"
+        android:paddingLeft="10dp"/>
+
+</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/gainsboro"/>
+    <Button
+        android:id="@+id/add_delivery_btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
+        android:background="@color/red"
+        android:text="確認"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>

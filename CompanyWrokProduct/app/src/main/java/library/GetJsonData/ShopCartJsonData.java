@@ -127,7 +127,7 @@ public class ShopCartJsonData {
 
 
     /**
-     * 1.3.11	結帳清單 - 新增買家物流資訊
+     * 1.3.11-1	結帳清單 - 新增買家物流資訊
      */
     public JSONObject setMemberLogistics(String token, String sno, String plno, String type, String land,
                                          String logistics, String name, String mpcode, String mp, String sname, String sid,
@@ -149,6 +149,28 @@ public class ShopCartJsonData {
         params.add(new BasicNameValuePair("zipcode", zipcode));
         params.add(new BasicNameValuePair("address", address));
 
+        return jsonParser.getJSONFromUrl(setMemberLogistics_url, params);
+    }
+    /**
+     * 1.3.11-2	結帳清單 - 新增買家物流資訊
+     */
+    public JSONObject setMemberLogistics(String token, String sno, String plno, String type, String land,
+                                         String logistics, String name, String mpcode, String mp,
+                                         String shit, String city, String area, String zipcode, String address) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("sno", sno));
+        params.add(new BasicNameValuePair("plno", plno));
+        params.add(new BasicNameValuePair("type", type));
+        params.add(new BasicNameValuePair("land", land));
+        params.add(new BasicNameValuePair("logistics", logistics));
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("mpcode", mpcode));
+        params.add(new BasicNameValuePair("mp", mp));
+        params.add(new BasicNameValuePair("shit", shit));
+        params.add(new BasicNameValuePair("city", city));
+        params.add(new BasicNameValuePair("area", area));
+        params.add(new BasicNameValuePair("zipcode", zipcode));
+        params.add(new BasicNameValuePair("address", address));
         return jsonParser.getJSONFromUrl(setMemberLogistics_url, params);
     }
 

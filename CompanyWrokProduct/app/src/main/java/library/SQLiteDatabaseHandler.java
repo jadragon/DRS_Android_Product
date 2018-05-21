@@ -233,7 +233,23 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return data;
     }
-
+    /**
+     * Getting user data from database
+     */
+    public ArrayList<String> getAreaByCity(String city) {
+        ArrayList<String> data=new ArrayList<>();
+        String selectQuery = "SELECT "+KEY_AREA+"  FROM " + TABLE_ADDRESS + " where " + KEY_CITY + "='" + city + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        while (cursor.moveToNext()) {
+            data.add( cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return data;
+    }
     /**
      * Getting user data from database
      */

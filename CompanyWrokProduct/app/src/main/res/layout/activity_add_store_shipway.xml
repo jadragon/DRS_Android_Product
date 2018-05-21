@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="@drawable/decoration_line"
     android:orientation="vertical"
-    android:showDividers="middle"
-    tools:context=".AddShipWayActivity">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".AddStoreShipWayActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/addshipway_toolbar"
         android:layout_width="match_parent"
@@ -26,16 +19,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:text="運送方式"
+            android:text="門市"
             android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:divider="@drawable/decoration_line"
+    android:orientation="vertical"
+    android:showDividers="middle">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40sp"
         android:background="@color/gainsboro"
         android:gravity="center_vertical"
         android:text="收件人資訊"
-        android:textSize="20sp" />
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
 
     <EditText
         android:id="@+id/addshipway_name"
@@ -44,7 +45,8 @@
         android:background="@null"
         android:gravity="center_vertical"
         android:hint="收件人姓名"
-        android:textSize="20sp" />
+        android:textSize="16sp"
+        android:paddingLeft="10dp" />
 
     <EditText
         android:id="@+id/addshipway_phone"
@@ -53,7 +55,9 @@
         android:background="@null"
         android:gravity="center_vertical"
         android:hint="收件人連絡電話"
-        android:textSize="20sp" />
+        android:textSize="16sp"
+        android:paddingLeft="10dp"
+        android:inputType="phone"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -61,7 +65,8 @@
         android:background="@color/gainsboro"
         android:gravity="center_vertical"
         android:text="門市資訊"
-        android:textSize="20sp" />
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/addshipway_store"
@@ -69,25 +74,26 @@
         android:layout_height="40sp"
         android:gravity="center_vertical"
         android:text="請選擇門市"
-        android:textSize="20sp" />
-    <TextView
-        android:id="@+id/addshipway_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="地址:"
-        android:textSize="20sp" />
+        android:textSize="16sp"
+        android:paddingLeft="10dp"/>
 
 </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/gainsboro"/>
     <Button
         android:id="@+id/addshipway_confirm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_height="40dp"
         android:textColor="@color/white"
         android:background="@color/red"
         android:text="確認"
         android:textSize="20sp"
-        android:layout_margin="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"/>
 
-</FrameLayout>
+</LinearLayout>
