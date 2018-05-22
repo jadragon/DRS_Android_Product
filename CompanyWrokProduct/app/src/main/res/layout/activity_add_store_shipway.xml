@@ -6,22 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".AddStoreShipWayActivity">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/addshipway_toolbar"
+    <include
+        layout="@layout/include_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white"
-        android:elevation="5dp">
-
-        <TextView
-            android:id="@+id/addshipway_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:singleLine="true"
-            android:text="門市"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content" />
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -46,7 +34,9 @@
         android:gravity="center_vertical"
         android:hint="收件人姓名"
         android:textSize="16sp"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"
+        android:maxLines="1"
+        android:singleLine="true"  />
 
     <EditText
         android:id="@+id/addshipway_phone"
@@ -57,7 +47,9 @@
         android:hint="收件人連絡電話"
         android:textSize="16sp"
         android:paddingLeft="10dp"
-        android:inputType="phone"/>
+        android:inputType="phone"
+        android:maxLines="1"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="match_parent"

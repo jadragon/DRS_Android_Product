@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 
 import adapter.recyclerview.CountRecyclerViewAdapter;
 import library.GetJsonData.ShopCartJsonData;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CountActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
@@ -58,7 +59,7 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                         decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
                         recyclerView.addItemDecoration(decoration);
                         //IOS like
-                       // OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+                        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
                         //第三方 彈跳效果
                       //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
                         initButton();

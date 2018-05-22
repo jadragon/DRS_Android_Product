@@ -56,7 +56,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     public void run() {
                         Log.e("TestJSONONONONON", ResolveJsonData.getCartItemArray(json) + "");
                         recyclerView = findViewById(R.id.shop_cart_review);
-                        recyclerView.setHasFixedSize(true);
+
                         shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, json, token);
                         shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
                             @Override
@@ -65,6 +65,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                                 shop_cart_needpay.setText("$" + getDeciamlString((total + discount) + ""));
                             }
                         });
+                        recyclerView.setHasFixedSize(true);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);

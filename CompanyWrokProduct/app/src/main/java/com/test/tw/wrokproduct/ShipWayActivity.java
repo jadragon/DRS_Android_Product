@@ -2,21 +2,24 @@ package com.test.tw.wrokproduct;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 
 import org.json.JSONObject;
 
-import adapter.listview.OneExpandAdapter;
+import adapter.recyclerview.ShowShipWayRecyclerViewAdapter;
 import library.GetJsonData.ShopCartJsonData;
 
 public class ShipWayActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
     String token,sno;
     Toolbar toolbar;
-    OneExpandAdapter adapter;
-
+    RecyclerView recyclerView;
+    ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
+    LinearLayoutManager layoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +45,13 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void requestData() {
-        ListView lvProduct = findViewById(R.id.lv_products);
-       adapter = new OneExpandAdapter(this, json);
-        lvProduct.setAdapter(adapter);
+        recyclerView = findViewById(R.id.lv_products);
+       showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json);
+        recyclerView.setHasFixedSize(true);
+      layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(showShipWayRecyclerViewAdapter);
     }
 
     private void initToolbar() {
@@ -72,6 +79,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.e("onRestart","onRestart");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -79,7 +87,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.setFilterAfterAdd(json);
+                        showShipWayRecyclerViewAdapter.setFilterAfterAdd(json);
                     }
                 });
             }

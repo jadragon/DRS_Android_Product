@@ -29,7 +29,7 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
     String mpcode = "+886", shit = "TW";
     String token, sno, plno, type, land, logistics;
     Intent intent;
-
+    String prezipcode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +61,9 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                         add_delivery_txt_area.setTextColor(Color.BLACK);
                         add_delivery_txt_city.setText(map.get("city"));
                         add_delivery_txt_city.setTextColor(Color.BLACK);
+                        prezipcode=add_delivery_edit_zipcode.getText().toString();
+                    }else{
+                        add_delivery_edit_zipcode.setText(prezipcode);
                     }
                     db.close();
                 }
@@ -119,21 +122,10 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.addshipway_toolbar);
+        toolbar = findViewById(R.id.include_toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        toolbar_title = findViewById(R.id.add_delivery_txt_title);
-        switch (logistics) {
-            case "1":
-                toolbar_title.setText("新增7-11門市");
-                break;
-            case "2":
-                toolbar_title.setText("新增全家門市");
-                break;
-            case "3":
-                toolbar_title.setText("新增萊爾富門市");
-                break;
-        }
-
+        toolbar_title = findViewById(R.id.include_toolbar_title);
+        toolbar_title.setText("新增黑貓宅配地址");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -144,7 +136,6 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     @Override
@@ -160,7 +151,9 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                 add_delivery_edit_zipcode.setText(null);
                 add_delivery_txt_area.setText(data.getStringExtra("area"));
                 add_delivery_txt_area.setTextColor(Color.BLACK);
-                add_delivery_edit_zipcode.setText(data.getStringExtra("zipcode"));
+                prezipcode=data.getStringExtra("zipcode");
+                add_delivery_edit_zipcode.setText(prezipcode);
+
             }
         }
     }

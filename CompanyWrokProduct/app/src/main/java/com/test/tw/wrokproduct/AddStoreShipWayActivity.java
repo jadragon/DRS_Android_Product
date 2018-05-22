@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +18,7 @@ import java.util.Map;
 import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
-public class AddStoreShipWayActivity extends AppCompatActivity implements TextWatcher {
+public class AddStoreShipWayActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView toolbar_title;
     TextView addshipway_store;
@@ -57,8 +55,6 @@ public class AddStoreShipWayActivity extends AppCompatActivity implements TextWa
         });
         addshipway_name = findViewById(R.id.addshipway_name);
         addshipway_phone = findViewById(R.id.addshipway_phone);
-        addshipway_name.addTextChangedListener(this);
-        addshipway_phone.addTextChangedListener(this);
         confirm = findViewById(R.id.addshipway_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +84,9 @@ public class AddStoreShipWayActivity extends AppCompatActivity implements TextWa
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.addshipway_toolbar);
+        toolbar = findViewById(R.id.include_toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        toolbar_title = findViewById(R.id.addshipway_title);
+        toolbar_title = findViewById(R.id.include_toolbar_title);
         switch (logistics) {
             case "1":
                 toolbar_title.setText("新增7-11門市");
@@ -136,37 +132,4 @@ public class AddStoreShipWayActivity extends AppCompatActivity implements TextWa
 
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        /*
-        // TODO Auto-generated method stub
-        int lines = editText.getLineCount();
-        // 限制最大输入行数
-        if (lines > MAXLINES) {
-            String str = s.toString();
-            int cursorStart = editText.getSelectionStart();
-            int cursorEnd = editText.getSelectionEnd();
-            if (cursorStart == cursorEnd && cursorStart < str.length() && cursorStart >= 1) {
-                str = str.substring(0, cursorStart-1) + str.substring(cursorStart);
-            } else {
-                str = str.substring(0, s.length()-1);
-            }
-            // setText会触发afterTextChanged的递归
-            editText.setText(str);
-            // setSelection用的索引不能使用str.length()否则会越界
-            editText.setSelection(editText.getText().length());
-
-        }
- */
-    }
 }
