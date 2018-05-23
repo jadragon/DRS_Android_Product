@@ -158,23 +158,23 @@ public class AnalyzeShopCart {
     }
 
     /**
-     * 解析結帳清單:
-     * 商家碼
-     * 商家名稱
-     * 商家圖
-     * 商家小計
-     * 優惠標題
-     * 優惠折扣
-     * 運費資訊(滿$299，宅配、7-11免運)
-     * 運送方式(7-11,全家……)
-     * 收件人姓名+電話
-     * 門市名稱 “懿德門市”
-     * 門市店號
-     * 地址資訊
-     * 郵資
-     * 備註
+     * 1.3.8	結帳清單-讀取結帳資訊:
+     * sno	String	商家碼
+     * sname	String	商家名稱
+     * simg	String	商家圖
+     * subtotal	Number	商家小計
+     * discountInfo	String	優惠標題
+     * discount	Number	優惠折扣
+     * shippingInfo	String	運費資訊(滿$299，宅配、7-11免運)
+     * shippingStyle	String	運送方式(7-11,全家……)
+     * shippingName	String	收件人姓名+電話
+     * shippingSname	String	門市名稱“懿德門市”
+     * shippingSid	String	門市店號
+     * shippingAddress	String	地址資訊
+     * shippingPay	Number	郵資
+     * note	String	備註
      */
-    public static ArrayList<Map<String, String>> getCountInformation(JSONObject json) {
+    public static ArrayList<Map<String, String>> getCheckoutData(JSONObject json) {
         ArrayList<Map<String, String>> arrayList = new ArrayList<>();
         Map<String, String> map;
         try {
@@ -208,18 +208,18 @@ public class AnalyzeShopCart {
     }
 
     /**
-     * 解析結帳清單:
-     * 購物碼
-     * 訂購數量
-     * 商品名
-     * 商品圖
-     * 顏色
-     * 尺寸
-     * 重量
-     * 牌價
-     * 售價
+     * 1.3.8	結帳清單-讀取結帳資訊
+     * mcrno	String	購物碼
+     * stotal	String	訂購數量
+     * pname	String	商品名
+     * img	String	商品圖
+     * color	String	顏色
+     * size	String	尺寸
+     * weight	String	重量
+     * price	Number	牌價
+     * sprice	Number	售價
      */
-    public static ArrayList<ArrayList<Map<String, String>>> getCountItemArray(JSONObject json) {
+    public static ArrayList<ArrayList<Map<String, String>>> getCheckoutItemArray(JSONObject json) {
         ArrayList<ArrayList<Map<String, String>>> alllist;
         ArrayList<Map<String, String>> arrayList;
         Map<String, String> map;
@@ -246,6 +246,107 @@ public class AnalyzeShopCart {
                     alllist.add(arrayList);
                 }
                 return alllist;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 1.3.8	結帳清單-讀取結帳資訊:
+     * sno	String	商家碼
+     * sname	String	商家名稱
+     * simg	String	商家圖
+     * subtotal	Number	商家小計
+     * discountInfo	String	優惠標題
+     * discount	Number	優惠折扣
+     * shippingInfo	String	運費資訊(滿$299，宅配、7-11免運)
+     * shippingStyle	String	運送方式(7-11,全家……)
+     * shippingName	String	收件人姓名+電話
+     * shippingSname	String	門市名稱“懿德門市”
+     * shippingSid	String	門市店號
+     * shippingAddress	String	地址資訊
+     * shippingPay	Number	郵資
+     * note	String	備註
+     */
+    public static ArrayList<Map<String, String>> getCheckoutCoupon(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Coupon");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("moprno", json_obj.getString("moprno"));
+                    map.put("mcoupon", json_obj.getString("mcoupon"));
+                    map.put("mdiscount", json_obj.getString("mdiscount"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 1.3.8	結帳清單-讀取結帳資訊:
+     * opay	Number	應付小計
+     * pterms	String	付款方式(無,線上刷卡,ATM…..)
+     * xmoney	Number	波克折抵
+     * ymoney	Number	庫瓦折抵
+     * ewallet	Number	電子錢包折抵
+     * rpay	Number	總付款金額
+     */
+    public static ArrayList<Map<String, String>> getCheckoutPay(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Pay");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("opay", json_obj.getString("opay"));
+                    map.put("pterms", json_obj.getString("pterms"));
+                    map.put("xmoney", json_obj.getString("xmoney"));
+                    map.put("ymoney", json_obj.getString("ymoney"));
+                    map.put("ewallet", json_obj.getString("ewallet"));
+                    map.put("rpay", json_obj.getString("rpay"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 1.3.8	結帳清單-讀取結帳資訊:
+     * invoice	Number	發票種類(0紙本發票,1捐贈發票,2電子發票)
+     * ctitle	String	公司抬頭
+     * vat	String	公司統編
+     */
+    public static ArrayList<Map<String, String>> getCheckoutInvoice(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Invoice");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("invoice", json_obj.getString("invoice"));
+                    map.put("ctitle", json_obj.getString("ctitle"));
+                    map.put("vat", json_obj.getString("vat"));
+                    arrayList.add(map);
+                }
+                return arrayList;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -333,6 +434,76 @@ public class AnalyzeShopCart {
                     alllist.add(arrayList);
                 }
                 return alllist;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 1.3.12	結帳清單 - 讀取商家運送方式:Data[]
+     * pno	String	付款碼
+     * pname	String	付款名稱
+     * info	String	說明
+     * isused	Number	付款使用狀態 0未使用1使用中
+     */
+    public static ArrayList<Map<String, String>> getMemberPaymentsData(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("pno", json_obj.getString("pno"));
+                    map.put("pname", json_obj.getString("pname"));
+                    map.put("info", json_obj.getString("info"));
+                    map.put("isused", json_obj.getString("isused"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 1.3.12	結帳清單 - 讀取商家運送方式:Pay[]
+     * opay	Number	應付小計
+     * xmoney	Number	X剩餘點數
+     * xkeyin	Number	X 輸入點數
+     * ymoney	Number	Y剩餘點數
+     * ykeyin	Number	Y 輸入點數
+     * ewallet	Number	電子錢包餘額
+     * ekeyin	Number	電子錢輸入金額
+     * xtrans	Number	X值, 金額 = X輸入點數 / X值
+     * ytrans	Number	Y值, 金額 = Y輸入點數/Y值
+     */
+    public static ArrayList<Map<String, String>> getMemberPaymentsPay(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        Map<String, String> map;
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Pay");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    map.put("opay", json_obj.getString("opay"));
+                    map.put("xmoney", json_obj.getString("xmoney"));
+                    map.put("xkeyin", json_obj.getString("xkeyin"));
+                    map.put("ymoney", json_obj.getString("ymoney"));
+                    map.put("ykeyin", json_obj.getString("ykeyin"));
+                    map.put("ewallet", json_obj.getString("ewallet"));
+                    map.put("ekeyin", json_obj.getString("ekeyin"));
+                    map.put("xtrans", json_obj.getString("xtrans"));
+                    map.put("ytrans", json_obj.getString("ytrans"));
+                    arrayList.add(map);
+                }
+                return arrayList;
             }
         } catch (JSONException e) {
             e.printStackTrace();

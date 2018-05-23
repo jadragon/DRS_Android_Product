@@ -86,7 +86,7 @@
                                 android:layout_weight="2" />
 
                             <library.Component.AutoHorizontalTextView
-                                android:id="@+id/pccontent_txt_rsprice"
+                                android:id="@+id/pccontent_txt_rprice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="0dp"
                                 android:layout_weight="3"
@@ -94,7 +94,7 @@
                                 android:textSize="15sp" />
 
                             <library.Component.AutoHorizontalTextView
-                                android:id="@+id/pccontent_txt_rprice"
+                                android:id="@+id/pccontent_txt_rsprice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="0dp"
                                 android:layout_weight="6"

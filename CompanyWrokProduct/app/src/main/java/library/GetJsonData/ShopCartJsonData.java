@@ -22,6 +22,8 @@ public class ShopCartJsonData {
     private static final String getStoreLogistics_url = "http://api.gok1945.com/main/cart/getStoreLogistics.php";
     private static final String setStoreMemberLogistics_url = "http://api.gok1945.com/main/cart/setStoreMemberLogistics.php";
     private static final String setMemberLogistics_url = "http://api.gok1945.com/main/cart/setMemberLogistics.php";
+
+    private static final String getMemberPayments_url = "http://api.gok1945.com/main/cart/getMemberPayment.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -173,7 +175,13 @@ public class ShopCartJsonData {
         params.add(new BasicNameValuePair("address", address));
         return jsonParser.getJSONFromUrl(setMemberLogistics_url, params);
     }
-
+    /**
+     *1.3.12	結帳清單–讀取買家可付款方式
+     */
+    public JSONObject getMemberPayments(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getMemberPayments_url, params);
+    }
     /**
      * 1.3.14	結帳清單 – 設定商家備註
      */
@@ -182,6 +190,18 @@ public class ShopCartJsonData {
         params.add(new BasicNameValuePair("sno", sno));
         params.add(new BasicNameValuePair("note", note));
         return jsonParser.getJSONFromUrl(setStoreNote_url, params);
+    }
+    /**
+     *1.3.13	結帳清單–設定買家付款方式
+     */
+    public JSONObject setMemberPayment(String token,String xkeyin,String ykeyin,String ekeyin,String pno) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("xkeyin", xkeyin));
+        params.add(new BasicNameValuePair("ykeyin", ykeyin));
+        params.add(new BasicNameValuePair("ekeyin", ekeyin));
+        params.add(new BasicNameValuePair("pno", pno));
+
+        return jsonParser.getJSONFromUrl(getMemberPayments_url, params);
     }
 
 }

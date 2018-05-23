@@ -2,6 +2,7 @@ package com.test.tw.wrokproduct;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -38,10 +39,10 @@ import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
-import library.AppManager;
-import library.GetJsonData.GetInformationByPHP;
 import library.AnalyzeJSON.ResolveJsonData;
+import library.AppManager;
 import library.Component.MyViewPager;
+import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.ShopCartJsonData;
 import pojo.ProductInfoPojo;
 
@@ -118,6 +119,7 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_txt_descs.setText(productInfoPojo.getDescs());
         //牌價
         pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
+        pccontent_txt_rprice.setPaintFlags(pccontent_txt_rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         pccontent_txt_rprice.setText("$" + getDeciamlString(productInfoPojo.getRprice()));
         //售價
         pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);

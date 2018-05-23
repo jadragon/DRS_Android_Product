@@ -6,22 +6,11 @@
     tools:context=".ShipWayActivity"
     android:orientation="vertical"
     android:background="@color/gainsboro">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/shipway_toolbar"
+    <include
+        layout="@layout/include_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white"
-        android:elevation="5dp">
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:singleLine="true"
-            android:text="運送方式"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
 <android.support.v7.widget.RecyclerView
     android:id="@+id/lv_products"
     android:layout_width="match_parent"

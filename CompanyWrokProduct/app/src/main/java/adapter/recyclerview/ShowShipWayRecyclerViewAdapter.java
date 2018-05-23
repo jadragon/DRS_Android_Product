@@ -244,6 +244,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 break;
             }
         }
+        currentItem=-1;
         notifyDataSetChanged();
     }
     private void initItemView(final RecycleHolder holder, ViewGroup parent, final int position) {

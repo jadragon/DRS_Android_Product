@@ -7,21 +7,10 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/shopcart_toolbar"
+    <include
+        layout="@layout/include_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white"
-        android:elevation="5dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:singleLine="true"
-            android:text="購物車"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_review"

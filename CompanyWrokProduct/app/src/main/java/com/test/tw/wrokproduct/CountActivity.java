@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -21,9 +22,11 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
     JSONObject json;
     RecyclerView recyclerView;
     CountRecyclerViewAdapter countRecyclerViewAdapter;
-    private Toolbar toolbar;
+    Toolbar toolbar;
+    TextView toolbar_title;
     String token;
-    Button  count_gotobuy;
+    Button count_gotobuy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +47,7 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         recyclerView = findViewById(R.id.count_review);
                         recyclerView.setHasFixedSize(true);
-                        countRecyclerViewAdapter = new CountRecyclerViewAdapter(CountActivity.this, json, token);
-                        countRecyclerViewAdapter.setClickListener(new CountRecyclerViewAdapter.ClickListener() {
-                            @Override
-                            public void ItemClicked(int count) {
-
-                            }
-                        });
+                        countRecyclerViewAdapter = new CountRecyclerViewAdapter(CountActivity.this, json);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);
@@ -61,7 +58,7 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                         //IOS like
                         OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
                         //第三方 彈跳效果
-                      //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
+                        //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
                         initButton();
 
                     }
@@ -79,13 +76,16 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.count_toolbar);
+        toolbar = findViewById(R.id.include_toolbar);
+        toolbar_title = findViewById(R.id.include_toolbar_title);
+        toolbar_title.setText("結帳");
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationOnClickListener(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
@@ -100,6 +100,7 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
     private String getDeciamlString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
@@ -117,6 +118,7 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 json = new ShopCartJsonData().getCheckout(token);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

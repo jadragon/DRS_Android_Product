@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.PayWayActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShipWayActivity;
 
@@ -30,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeShopCart;
-import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.ShopCartJsonData;
 
 public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecyclerViewAdapter.RecycleHolder> {
@@ -39,36 +40,39 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     public static final int TYPE_SHIPWAY = 2;
     public static final int TYPE_DISCOUNT = 3;
     public static final int TYPE_COUNT = 4;
+    public static final int TYPE_PAY = 5;
     private Context ctx;
-    private JSONObject json;
     private DisplayMetrics dm;
-    private ArrayList<Map<String, String>> title_list;
+    private ArrayList<Map<String, String>> title_list, footer_coupon_list, footer_pay_list, footer_invoice_list;
     private ArrayList<ArrayList<Map<String, String>>> content_list;
-    private CountRecyclerViewAdapter.ClickListener clickListener;
     private List<Item> items;
+    private FooterItem footerItem;
     private Item item;
     String token;
     int size;
 
-    public CountRecyclerViewAdapter(Context ctx, JSONObject json, String token) {
-        this(ctx, json);
-        this.token = token;
-
-    }
-
     public CountRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        this.json = json;
+        GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
+        token = gv.getToken();
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
-            title_list = ResolveJsonData.getCountInformation(json);
-            content_list = ResolveJsonData.getCountItemArray(json);
+            title_list = AnalyzeShopCart.getCheckoutData(json);
+            content_list = AnalyzeShopCart.getCheckoutItemArray(json);
+            footer_coupon_list = AnalyzeShopCart.getCheckoutCoupon(json);
+            footer_pay_list = AnalyzeShopCart.getCheckoutPay(json);
+            footer_invoice_list = AnalyzeShopCart.getCheckoutInvoice(json);
         } else {
             title_list = new ArrayList<>();
             content_list = new ArrayList<>();
+            footer_coupon_list = new ArrayList<>();
+            footer_pay_list = new ArrayList<>();
+            footer_invoice_list = new ArrayList<>();
         }
+
         //初始化checkbox
         initItems();
+        initFooterItem();
     }
 
     public void initItems() {
@@ -140,15 +144,15 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setBackgroundColor(ctx.getResources().getColor(R.color.default_gray));
             params.setMargins(0, 0, 0, 0);
-            tv.setPadding((int)(dm.density*10),0,0,0);
+            tv.setPadding((int) (dm.density * 10), 0, 0, 0);
             params.height = (int) (60 * dm.density);
             tv.setLayoutParams(params);
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, tv, json);
+            return new CountRecyclerViewAdapter.RecycleHolder(ctx, tv);
         }
         if (viewType == TYPE_SHIPWAY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_shipways, parent, false);
             view.setTag("shipway");
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
         }
         if (viewType == TYPE_DISCOUNT) {
             //layout
@@ -176,21 +180,26 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             tv.setTag("discount_total");
             tv.setText("0");
             linearLayout.addView(tv);
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, linearLayout, json);
+            return new CountRecyclerViewAdapter.RecycleHolder(ctx, linearLayout);
         }
         if (viewType == TYPE_COUNT) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_total, parent, false);
             view.setTag("count");
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
+        }
+        if (viewType == TYPE_PAY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_paydetail, parent, false);
+            view.setTag("pay");
+            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
         }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_content, parent, false);
-        params.height = (int)(dm.heightPixels / 5.5);
+        params.height = (int) (dm.heightPixels / 5.5);
         params.setMarginStart(0);
         params.setMarginEnd(0);
         view.setLayoutParams(params);
         view.setTag("content");
-        resizeImageView(view.findViewById(R.id.viewitem_count_content_img),  (int)(dm.heightPixels / 5.5),  (int)(dm.heightPixels / 5.5));
-        return new CountRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+        resizeImageView(view.findViewById(R.id.viewitem_count_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));
+        return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
 
     }
 
@@ -217,6 +226,17 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             } else if (getItemViewType(position) == TYPE_COUNT) {
                 holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
+            } else if (getItemViewType(position) == TYPE_PAY) {
+                holder.viewitem_count_coupon_mdiscount.setText(footerItem.getMdiscount()+"");
+                holder.viewitem_count_pay_opay.setText(footerItem.getOpay()+"");
+                holder.viewitem_count_pay_pterms.setText(footerItem.getPterms()+"");
+                holder.viewitem_count_pay_xmoney.setText(footerItem.getXmoney()+"");
+                holder.viewitem_count_pay_ymoney.setText(footerItem.getYmoney()+"");
+                holder.viewitem_count_pay_ewallet.setText(footerItem.getEwallet()+"");
+                holder.viewitem_count_pay_rpay.setText(footerItem.getRpay()+"");
+                holder.viewitem_count_invoice_invoice.setText(footerItem.getInvoice()+"");
+                holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle()+"");
+                holder.viewitem_count_invoice_vat.setText(footerItem.getVat()+"");
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -243,6 +263,8 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
     @Override
     public int getItemViewType(int position) {
+        if (position == getItemCount() - 1)
+            return TYPE_PAY;
         if (items.get(position).getType() == TYPE_HEADER)
             return TYPE_HEADER;
         if (items.get(position).getType() == TYPE_SHIPWAY)
@@ -256,7 +278,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items.size() + 1;
 
     }
 
@@ -274,20 +296,23 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnFocusChangeListener {
         Context ctx;
-        JSONObject json;
         ImageView viewitem_count_content_img;
-        TextView viewitem_count_title_txt;
-        TextView viewitem_count_content_title, viewitem_count_content_color, viewitem_count_content_size, viewitem_count_content_total, viewitem_count_content_price;
-        TextView viewitem_count_shipways_style, viewitem_count_shipways_pay, viewitem_count_shipways_address, viewitem_count_shipways_name;
-        TextView viewitem_count_total_shippay, viewitem_count_total_subtotal;
-        TextView discount_title, discount_total;
+        TextView viewitem_count_title_txt,
+                viewitem_count_content_title, viewitem_count_content_color, viewitem_count_content_size, viewitem_count_content_total, viewitem_count_content_price,
+                viewitem_count_shipways_style, viewitem_count_shipways_pay, viewitem_count_shipways_address, viewitem_count_shipways_name,
+                viewitem_count_total_shippay, viewitem_count_total_subtotal,
+                discount_title, discount_total,
+                viewitem_count_coupon_mdiscount,
+                viewitem_count_pay_opay, viewitem_count_pay_pterms, viewitem_count_pay_xmoney, viewitem_count_pay_ymoney, viewitem_count_pay_ewallet, viewitem_count_pay_rpay,
+                viewitem_count_invoice_invoice, viewitem_count_invoice_ctitle, viewitem_count_invoice_vat;
         EditText viewitem_count_shipways_note;
-        LinearLayout viewitem_count_shipways_goto;
+        LinearLayout viewitem_count_shipways_goto,viewitem_count_linear;
+
+
         int position;
 
-        public RecycleHolder(final Context ctx, View view, JSONObject json) {
+        public RecycleHolder(final Context ctx, View view) {
             super(view);
-            this.json = json;
             this.ctx = ctx;
             if (view.getTag().equals("header")) {
                 viewitem_count_title_txt = (TextView) view;
@@ -316,6 +341,24 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             } else if (view.getTag().equals("count")) {
                 viewitem_count_total_shippay = view.findViewById(R.id.viewitem_count_total_shippay);
                 viewitem_count_total_subtotal = view.findViewById(R.id.viewitem_count_total_subtotal);
+            } else if (view.getTag().equals("pay")) {
+                viewitem_count_coupon_mdiscount = view.findViewById(R.id.viewitem_count_coupon_mdiscount);
+                viewitem_count_pay_opay = view.findViewById(R.id.viewitem_count_pay_opay);
+                viewitem_count_pay_pterms = view.findViewById(R.id.viewitem_count_pay_pterms);
+                viewitem_count_linear=view.findViewById(R.id.viewitem_count_linear);
+                viewitem_count_linear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                       ctx.startActivity(new Intent(ctx, PayWayActivity.class));
+                    }
+                });
+                viewitem_count_pay_xmoney = view.findViewById(R.id.viewitem_count_pay_xmoney);
+                viewitem_count_pay_ymoney = view.findViewById(R.id.viewitem_count_pay_ymoney);
+                viewitem_count_pay_ewallet = view.findViewById(R.id.viewitem_count_pay_ewallet);
+                viewitem_count_pay_rpay = view.findViewById(R.id.viewitem_count_pay_rpay);
+                viewitem_count_invoice_invoice = view.findViewById(R.id.viewitem_count_invoice_invoice);
+                viewitem_count_invoice_ctitle = view.findViewById(R.id.viewitem_count_invoice_ctitle);
+                viewitem_count_invoice_vat = view.findViewById(R.id.viewitem_count_invoice_vat);
             }
             itemView.setFocusableInTouchMode(true);
             itemView.setFocusable(true);
@@ -381,38 +424,20 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         }
     }
 
-    private void updatePrice() {
-        int count = 0;
-        for (int i = 0; i < items.size(); i++) {
-            count += items.get(i).getTotal_price();
-        }
-        clickListener.ItemClicked(count);
-    }
-
-    public int showPrice() {
-        int count = 0;
-        for (int i = 0; i < items.size(); i++) {
-            count += items.get(i).getTotal_price();
-        }
-        return count;
-    }
-
-    public void setClickListener(CountRecyclerViewAdapter.ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void ItemClicked(int count);
-    }
-
     public void setFilter(JSONObject json) {
-        this.json = json;
-        if (json!=null) {
-            title_list = AnalyzeShopCart.getCountInformation(json);
-            content_list = AnalyzeShopCart.getCountItemArray(json);
-            initItems();
+        if (json != null) {
+            title_list = AnalyzeShopCart.getCheckoutData(json);
+            content_list = AnalyzeShopCart.getCheckoutItemArray(json);
+            footer_coupon_list = AnalyzeShopCart.getCheckoutCoupon(json);
+            footer_pay_list = AnalyzeShopCart.getCheckoutPay(json);
+            footer_invoice_list = AnalyzeShopCart.getCheckoutInvoice(json);
+        } else {
+            title_list = new ArrayList<>();
+            content_list = new ArrayList<>();
+            footer_coupon_list = new ArrayList<>();
+            footer_pay_list = new ArrayList<>();
+            footer_invoice_list = new ArrayList<>();
         }
-
         notifyDataSetChanged();
     }
 
@@ -725,6 +750,148 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         }
 
 
+    }
+
+    private void initFooterItem() {
+        /*
+        FooterItemPay = new FooterItemPay(Float.parseFloat(footer_pay_list.get(0).get("opay")), Float.parseFloat(footer_pay_list.get(0).get("xmoney")), Float.parseFloat(footer_pay_list.get(0).get("xkeyin")),
+                Float.parseFloat(footer_pay_list.get(0).get("ymoney")), Float.parseFloat(footer_pay_list.get(0).get("ykeyin")), Float.parseFloat(footer_pay_list.get(0).get("ewallet")),
+                Float.parseFloat(footer_pay_list.get(0).get("ekeyin")), Float.parseFloat(footer_pay_list.get(0).get("xtrans")), Float.parseFloat(footer_pay_list.get(0).get("ytrans")));
+*/
+        footerItem = new FooterItem(footer_coupon_list.get(0).get("moprno"), footer_coupon_list.get(0).get("mcoupon"), Float.parseFloat(footer_coupon_list.get(0).get("mdiscount")),
+                Float.parseFloat(footer_pay_list.get(0).get("opay")), footer_pay_list.get(0).get("pterms"), Float.parseFloat(footer_pay_list.get(0).get("xmoney")), Float.parseFloat(footer_pay_list.get(0).get("ymoney")),
+                Float.parseFloat(footer_pay_list.get(0).get("ewallet")), Float.parseFloat(footer_pay_list.get(0).get("rpay")),
+                Integer.parseInt(footer_invoice_list.get(0).get("invoice")), footer_invoice_list.get(0).get("invoice"), footer_invoice_list.get(0).get("invoice")
+        );
+    }
+
+    private class FooterItem {
+        String moprno;
+        String mcoupon;
+        float mdiscount;
+        float opay;
+        String pterms;
+        float xmoney;
+        float ymoney;
+        float ewallet;
+        float rpay;
+        int invoice;
+        String ctitle;
+        String vat;
+
+        public FooterItem() {
+        }
+
+        public FooterItem(String moprno, String mcoupon, float mdiscount, float opay, String pterms, float xmoney, float ymoney, float ewallet, float rpay, int invoice, String ctitle, String vat) {
+            this.moprno = moprno;
+            this.mcoupon = mcoupon;
+            this.mdiscount = mdiscount;
+            this.opay = opay;
+            this.pterms = pterms;
+            this.xmoney = xmoney;
+            this.ymoney = ymoney;
+            this.ewallet = ewallet;
+            this.rpay = rpay;
+            this.invoice = invoice;
+            this.ctitle = ctitle;
+            this.vat = vat;
+        }
+
+        public String getMoprno() {
+            return moprno;
+        }
+
+        public void setMoprno(String moprno) {
+            this.moprno = moprno;
+        }
+
+        public String getMcoupon() {
+            return mcoupon;
+        }
+
+        public void setMcoupon(String mcoupon) {
+            this.mcoupon = mcoupon;
+        }
+
+        public float getMdiscount() {
+            return mdiscount;
+        }
+
+        public void setMdiscount(float mdiscount) {
+            this.mdiscount = mdiscount;
+        }
+
+        public float getOpay() {
+            return opay;
+        }
+
+        public void setOpay(float opay) {
+            this.opay = opay;
+        }
+
+        public String getPterms() {
+            return pterms;
+        }
+
+        public void setPterms(String pterms) {
+            this.pterms = pterms;
+        }
+
+        public float getXmoney() {
+            return xmoney;
+        }
+
+        public void setXmoney(float xmoney) {
+            this.xmoney = xmoney;
+        }
+
+        public float getYmoney() {
+            return ymoney;
+        }
+
+        public void setYmoney(float ymoney) {
+            this.ymoney = ymoney;
+        }
+
+        public float getEwallet() {
+            return ewallet;
+        }
+
+        public void setEwallet(float ewallet) {
+            this.ewallet = ewallet;
+        }
+
+        public float getRpay() {
+            return rpay;
+        }
+
+        public void setRpay(float rpay) {
+            this.rpay = rpay;
+        }
+
+        public int getInvoice() {
+            return invoice;
+        }
+
+        public void setInvoice(int invoice) {
+            this.invoice = invoice;
+        }
+
+        public String getCtitle() {
+            return ctitle;
+        }
+
+        public void setCtitle(String ctitle) {
+            this.ctitle = ctitle;
+        }
+
+        public String getVat() {
+            return vat;
+        }
+
+        public void setVat(String vat) {
+            this.vat = vat;
+        }
     }
 
 }

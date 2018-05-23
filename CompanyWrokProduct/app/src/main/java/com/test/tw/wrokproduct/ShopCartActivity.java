@@ -28,7 +28,8 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     JSONObject json;
     RecyclerView recyclerView;
     ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
-    private Toolbar toolbar;
+    Toolbar toolbar;
+    TextView toolbar_title;
     TextView shop_cart_needpay, shopcart_txt_discount;
     String token, moprno;
     Button shopcart_btn_coupon, shopcart_btn_continue, shopcart_gotobuy;
@@ -107,16 +108,18 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.shopcart_toolbar);
+        toolbar = findViewById(R.id.include_toolbar);
+        toolbar_title = findViewById(R.id.include_toolbar_title);
+        toolbar_title.setText("購物車");
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationOnClickListener(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

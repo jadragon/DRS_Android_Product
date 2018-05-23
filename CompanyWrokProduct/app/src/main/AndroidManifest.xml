@@ -24,7 +24,7 @@
         <activity android:name=".LoadingPage" />
         <activity android:name=".PtypeActivity" />
         <activity android:name=".PcContentActivity" />
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".TestActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ShopCartActivity" />
         <activity android:name=".CommunityActivity" />
@@ -32,10 +32,11 @@
             android:name=".CountActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ShipWayActivity" />
-        <activity android:name=".StoreWebViewActivity"></activity>
-        <activity android:name=".AddStoreShipWayActivity"></activity>
-        <activity android:name=".AddDeliveryShipWayActivity"></activity>
-        <activity android:name=".ListVIewActivity">
+        <activity android:name=".StoreWebViewActivity" />
+        <activity android:name=".AddStoreShipWayActivity" />
+        <activity android:name=".AddDeliveryShipWayActivity" />
+        <activity android:name=".ListVIewActivity"></activity>
+        <activity android:name=".PayWayActivity">
 
         </activity>
     </application>

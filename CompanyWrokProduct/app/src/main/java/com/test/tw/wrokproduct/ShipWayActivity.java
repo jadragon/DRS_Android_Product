@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -17,6 +18,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     JSONObject json;
     String token,sno;
     Toolbar toolbar;
+    TextView toolbar_title;
     RecyclerView recyclerView;
     ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
     LinearLayoutManager layoutManager;
@@ -53,16 +55,18 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(showShipWayRecyclerViewAdapter);
     }
-
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.shipway_toolbar);
+        toolbar = findViewById(R.id.include_toolbar);
+        toolbar_title = findViewById(R.id.include_toolbar_title);
+        toolbar_title.setText("運送方式");
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationOnClickListener(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
