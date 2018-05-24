@@ -232,8 +232,8 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
             } else if (getItemViewType(position) == TYPE_PAY) {
-                if( footerItem.getMdiscount()!=0)
-                holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
+                if (footerItem.getMdiscount() != 0)
+                    holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
                 else
                     holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
                 holder.viewitem_count_pay_opay.setText((int) footerItem.getOpay() + "");
@@ -241,20 +241,17 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 if (footerItem.getXmoney() != 0) {
                     holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
                     holder.viewitem_count_frame_xmoney.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                     holder.viewitem_count_frame_xmoney.setVisibility(View.GONE);
                 if (footerItem.getYmoney() != 0) {
                     holder.viewitem_count_pay_ymoney.setText((int) footerItem.getYmoney() + "");
                     holder.viewitem_count_frame_ymoney.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                     holder.viewitem_count_frame_ymoney.setVisibility(View.GONE);
                 if (footerItem.getEwallet() != 0) {
                     holder.viewitem_count_pay_ewallet.setText((int) footerItem.getEwallet() + "");
                     holder.viewitem_count_frame_ewallet.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                     holder.viewitem_count_frame_ewallet.setVisibility(View.GONE);
                 holder.viewitem_count_pay_rpay.setText((int) footerItem.getRpay() + "");
                 holder.viewitem_count_invoice_invoice.setText(invoiceType[footerItem.getInvoice()]);
@@ -268,7 +265,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             switch (type) {
                 case 0:
                     if (getItemViewType(position) == TYPE_HEADER) {
-
 
                     } else if (getItemViewType(position) == TYPE_CONTENT) {
 
@@ -330,10 +326,12 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_invoice_invoice, viewitem_count_invoice_ctitle, viewitem_count_invoice_vat;
         EditText viewitem_count_shipways_note;
         LinearLayout viewitem_count_shipways_goto, viewitem_count_linear;
-        FrameLayout viewitem_count_frame_mdiscount,viewitem_count_frame_xmoney, viewitem_count_frame_ymoney, viewitem_count_frame_ewallet;
+        FrameLayout viewitem_count_frame_mdiscount, viewitem_count_frame_xmoney, viewitem_count_frame_ymoney, viewitem_count_frame_ewallet;
         int position;
         NumberPicker numberPicker;
+        AlertDialog alertDialog;
         AlertDialog.Builder builder;
+
         public RecycleHolder(final Context ctx, View view) {
             super(view);
             this.ctx = ctx;
@@ -379,7 +377,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_total_shippay = view.findViewById(R.id.viewitem_count_total_shippay);
                 viewitem_count_total_subtotal = view.findViewById(R.id.viewitem_count_total_subtotal);
             } else if (view.getTag().equals("pay")) {
-                viewitem_count_frame_mdiscount= view.findViewById(R.id.viewitem_count_frame_mdiscount);
+                viewitem_count_frame_mdiscount = view.findViewById(R.id.viewitem_count_frame_mdiscount);
                 viewitem_count_coupon_mdiscount = view.findViewById(R.id.viewitem_count_coupon_mdiscount);
                 viewitem_count_pay_opay = view.findViewById(R.id.viewitem_count_pay_opay);
                 viewitem_count_pay_pterms = view.findViewById(R.id.viewitem_count_pay_pterms);
@@ -397,30 +395,31 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_pay_ymoney = view.findViewById(R.id.viewitem_count_pay_ymoney);
                 viewitem_count_pay_ewallet = view.findViewById(R.id.viewitem_count_pay_ewallet);
                 viewitem_count_pay_rpay = view.findViewById(R.id.viewitem_count_pay_rpay);
-
-                numberPicker=new NumberPicker(ctx);
+                //===============================彈出視窗正解
+                numberPicker = new NumberPicker(ctx);
                 numberPicker.setMinValue(0);
                 numberPicker.setMaxValue(invoiceType.length - 1);
                 numberPicker.setDisplayedValues(invoiceType);
                 numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                numberPicker.getValue();
                 numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker numberPicker, int oldone, int newone) {
-                        viewitem_count_invoice_invoice.setText(invoiceType[ newone]);
+                        viewitem_count_invoice_invoice.setText(invoiceType[newone]);
                         footerItem.setInvoice(newone);
                     }
                 });
+                builder = new AlertDialog.Builder(ctx);
+                builder.setPositiveButton("完成", null);
+                builder.setView(numberPicker);
+                alertDialog = builder.create();  //创建对话框
                 viewitem_count_invoice_invoice = view.findViewById(R.id.viewitem_count_invoice_invoice);
                 viewitem_count_invoice_invoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        builder=new AlertDialog.Builder(ctx);
-                        builder.setView(numberPicker);
-                        builder.setPositiveButton("完成",null);
-                        builder.show();
+                        alertDialog.show();
                     }
                 });
+                //===============================彈出視窗正解
                 viewitem_count_invoice_ctitle = view.findViewById(R.id.viewitem_count_invoice_ctitle);
                 viewitem_count_invoice_ctitle.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -470,7 +469,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             }
             return index;
         }
-
 
         @Override
         public void onClick(final View view) {
@@ -524,7 +522,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         private int type;
         private int index;
 
-
         //=======header
         private String sno;
         private String sname;
@@ -534,7 +531,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         private String discountInfo;
         private String discount;
         private String shippingInfo;
-
 
         private String shippingStyle;
         private String shippingName;
@@ -596,7 +592,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             this.discountInfo = discountInfo;
             this.discount = discount;
         }
-
 
         /**
          * content
@@ -806,7 +801,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             this.sprice = sprice;
         }
 
-
         public int getType() {
             return type;
         }
@@ -827,7 +821,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             total_price = Integer.parseInt(stotal) * Integer.parseInt(sprice);
             return total_price;
         }
-
 
     }
 
