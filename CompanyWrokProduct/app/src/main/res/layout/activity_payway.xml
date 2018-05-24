@@ -255,6 +255,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/choice1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
@@ -304,7 +305,7 @@
                 android:layout_gravity="center"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:src="@drawable/nike_red" />
+                android:src="@drawable/select_nike_red" />
         </LinearLayout>
 
         <View
@@ -313,6 +314,7 @@
             android:background="@color/default_gray" />
 
         <LinearLayout
+            android:id="@+id/choice2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
@@ -362,7 +364,7 @@
                 android:layout_gravity="center"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:src="@drawable/nike_red" />
+                android:src="@drawable/select_nike_red" />
 
         </LinearLayout>
 
@@ -380,7 +382,7 @@
         android:elevation="20dp">
 
         <Button
-            android:id="@+id/add_delivery_btn_confirm"
+            android:id="@+id/payway_activity_btn_confirm"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginBottom="10dp"

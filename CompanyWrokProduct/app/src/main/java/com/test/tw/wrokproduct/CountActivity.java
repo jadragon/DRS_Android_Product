@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -96,6 +97,8 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.count_gotobuy:
+                Toast.makeText(this, ""+  countRecyclerViewAdapter.getInvoice()+"\n"+  countRecyclerViewAdapter.getCtitle()+"\n"+countRecyclerViewAdapter.getVat(), Toast.LENGTH_SHORT).show();
+
                 break;
         }
 

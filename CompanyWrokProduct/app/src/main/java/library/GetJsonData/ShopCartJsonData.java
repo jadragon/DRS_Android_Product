@@ -24,6 +24,8 @@ public class ShopCartJsonData {
     private static final String setMemberLogistics_url = "http://api.gok1945.com/main/cart/setMemberLogistics.php";
 
     private static final String getMemberPayments_url = "http://api.gok1945.com/main/cart/getMemberPayment.php";
+    private static final String setMemberPayment_url = "http://api.gok1945.com/main/cart/setMemberPayment.php";
+    private static final String setVat_url = "http://api.gok1945.com/main/cart/setVat.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -153,6 +155,7 @@ public class ShopCartJsonData {
 
         return jsonParser.getJSONFromUrl(setMemberLogistics_url, params);
     }
+
     /**
      * 1.3.11-2	結帳清單 - 新增買家物流資訊
      */
@@ -175,13 +178,15 @@ public class ShopCartJsonData {
         params.add(new BasicNameValuePair("address", address));
         return jsonParser.getJSONFromUrl(setMemberLogistics_url, params);
     }
+
     /**
-     *1.3.12	結帳清單–讀取買家可付款方式
+     * 1.3.12	結帳清單–讀取買家可付款方式
      */
     public JSONObject getMemberPayments(String token) {
         params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(getMemberPayments_url, params);
     }
+
     /**
      * 1.3.14	結帳清單 – 設定商家備註
      */
@@ -191,17 +196,29 @@ public class ShopCartJsonData {
         params.add(new BasicNameValuePair("note", note));
         return jsonParser.getJSONFromUrl(setStoreNote_url, params);
     }
+
     /**
-     *1.3.13	結帳清單–設定買家付款方式
+     * 1.3.13	結帳清單–設定買家付款方式
      */
-    public JSONObject setMemberPayment(String token,String xkeyin,String ykeyin,String ekeyin,String pno) {
+    public JSONObject setMemberPayment(String token, int xkeyin, int ykeyin, int ekeyin, String pno) {
         params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("xkeyin", xkeyin));
-        params.add(new BasicNameValuePair("ykeyin", ykeyin));
-        params.add(new BasicNameValuePair("ekeyin", ekeyin));
+        params.add(new BasicNameValuePair("xkeyin", xkeyin + ""));
+        params.add(new BasicNameValuePair("ykeyin", ykeyin + ""));
+        params.add(new BasicNameValuePair("ekeyin", ekeyin + ""));
         params.add(new BasicNameValuePair("pno", pno));
 
-        return jsonParser.getJSONFromUrl(getMemberPayments_url, params);
+        return jsonParser.getJSONFromUrl(setMemberPayment_url, params);
+    }
+
+    /**
+     * 1.3.13	結帳清單–設定買家付款方式
+     */
+    public JSONObject setVat(String token, int invoice, String ctitle, String vat) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("invoice", invoice + ""));
+        params.add(new BasicNameValuePair("ctitle", ctitle));
+        params.add(new BasicNameValuePair("vat", vat));
+        return jsonParser.getJSONFromUrl(setVat_url, params);
     }
 
 }

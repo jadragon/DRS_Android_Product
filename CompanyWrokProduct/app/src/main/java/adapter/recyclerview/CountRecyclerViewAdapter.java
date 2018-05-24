@@ -1,8 +1,11 @@
 package adapter.recyclerview;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -10,12 +13,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -23,7 +26,6 @@ import com.test.tw.wrokproduct.PayWayActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShipWayActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -50,6 +52,9 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     private Item item;
     String token;
     int size;
+    String[] invoiceType = {
+            "紙本發票", "捐贈發票", "電子發票"
+    };
 
     public CountRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
@@ -227,16 +232,34 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
             } else if (getItemViewType(position) == TYPE_PAY) {
-                holder.viewitem_count_coupon_mdiscount.setText(footerItem.getMdiscount()+"");
-                holder.viewitem_count_pay_opay.setText(footerItem.getOpay()+"");
-                holder.viewitem_count_pay_pterms.setText(footerItem.getPterms()+"");
-                holder.viewitem_count_pay_xmoney.setText(footerItem.getXmoney()+"");
-                holder.viewitem_count_pay_ymoney.setText(footerItem.getYmoney()+"");
-                holder.viewitem_count_pay_ewallet.setText(footerItem.getEwallet()+"");
-                holder.viewitem_count_pay_rpay.setText(footerItem.getRpay()+"");
-                holder.viewitem_count_invoice_invoice.setText(footerItem.getInvoice()+"");
-                holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle()+"");
-                holder.viewitem_count_invoice_vat.setText(footerItem.getVat()+"");
+                if( footerItem.getMdiscount()!=0)
+                holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
+                else
+                    holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
+                holder.viewitem_count_pay_opay.setText((int) footerItem.getOpay() + "");
+                holder.viewitem_count_pay_pterms.setText(footerItem.getPterms() + "");
+                if (footerItem.getXmoney() != 0) {
+                    holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
+                    holder.viewitem_count_frame_xmoney.setVisibility(View.VISIBLE);
+                }
+                else
+                    holder.viewitem_count_frame_xmoney.setVisibility(View.GONE);
+                if (footerItem.getYmoney() != 0) {
+                    holder.viewitem_count_pay_ymoney.setText((int) footerItem.getYmoney() + "");
+                    holder.viewitem_count_frame_ymoney.setVisibility(View.VISIBLE);
+                }
+                else
+                    holder.viewitem_count_frame_ymoney.setVisibility(View.GONE);
+                if (footerItem.getEwallet() != 0) {
+                    holder.viewitem_count_pay_ewallet.setText((int) footerItem.getEwallet() + "");
+                    holder.viewitem_count_frame_ewallet.setVisibility(View.VISIBLE);
+                }
+                else
+                    holder.viewitem_count_frame_ewallet.setVisibility(View.GONE);
+                holder.viewitem_count_pay_rpay.setText((int) footerItem.getRpay() + "");
+                holder.viewitem_count_invoice_invoice.setText(invoiceType[footerItem.getInvoice()]);
+                holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle() + "");
+                holder.viewitem_count_invoice_vat.setText(footerItem.getVat() + "");
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -294,7 +317,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         view.setLayoutParams(params);
     }
 
-    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnFocusChangeListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         ImageView viewitem_count_content_img;
         TextView viewitem_count_title_txt,
@@ -306,11 +329,11 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_pay_opay, viewitem_count_pay_pterms, viewitem_count_pay_xmoney, viewitem_count_pay_ymoney, viewitem_count_pay_ewallet, viewitem_count_pay_rpay,
                 viewitem_count_invoice_invoice, viewitem_count_invoice_ctitle, viewitem_count_invoice_vat;
         EditText viewitem_count_shipways_note;
-        LinearLayout viewitem_count_shipways_goto,viewitem_count_linear;
-
-
+        LinearLayout viewitem_count_shipways_goto, viewitem_count_linear;
+        FrameLayout viewitem_count_frame_mdiscount,viewitem_count_frame_xmoney, viewitem_count_frame_ymoney, viewitem_count_frame_ewallet;
         int position;
-
+        NumberPicker numberPicker;
+        AlertDialog.Builder builder;
         public RecycleHolder(final Context ctx, View view) {
             super(view);
             this.ctx = ctx;
@@ -325,7 +348,21 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_shipways_address = view.findViewById(R.id.viewitem_count_shipways_address);
                 viewitem_count_shipways_name = view.findViewById(R.id.viewitem_count_shipways_name);
                 viewitem_count_shipways_note = view.findViewById(R.id.viewitem_count_shipways_note);
-                viewitem_count_shipways_note.setOnFocusChangeListener(this);
+                viewitem_count_shipways_note.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                   /*
+                               InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                                     */
+                                new ShopCartJsonData().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
+                            }
+                        }).start();
+                    }
+                });
                 viewitem_count_shipways_note.setTag("note");
                 itemView.setTag("shipway");
             } else if (view.getTag().equals("discount")) {
@@ -342,23 +379,82 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_total_shippay = view.findViewById(R.id.viewitem_count_total_shippay);
                 viewitem_count_total_subtotal = view.findViewById(R.id.viewitem_count_total_subtotal);
             } else if (view.getTag().equals("pay")) {
+                viewitem_count_frame_mdiscount= view.findViewById(R.id.viewitem_count_frame_mdiscount);
                 viewitem_count_coupon_mdiscount = view.findViewById(R.id.viewitem_count_coupon_mdiscount);
                 viewitem_count_pay_opay = view.findViewById(R.id.viewitem_count_pay_opay);
                 viewitem_count_pay_pterms = view.findViewById(R.id.viewitem_count_pay_pterms);
-                viewitem_count_linear=view.findViewById(R.id.viewitem_count_linear);
+                viewitem_count_linear = view.findViewById(R.id.viewitem_count_linear);
                 viewitem_count_linear.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                       ctx.startActivity(new Intent(ctx, PayWayActivity.class));
+                        ctx.startActivity(new Intent(ctx, PayWayActivity.class));
                     }
                 });
+                viewitem_count_frame_xmoney = view.findViewById(R.id.viewitem_count_frame_xmoney);
+                viewitem_count_frame_ymoney = view.findViewById(R.id.viewitem_count_frame_ymoney);
+                viewitem_count_frame_ewallet = view.findViewById(R.id.viewitem_count_frame_ewallet);
                 viewitem_count_pay_xmoney = view.findViewById(R.id.viewitem_count_pay_xmoney);
                 viewitem_count_pay_ymoney = view.findViewById(R.id.viewitem_count_pay_ymoney);
                 viewitem_count_pay_ewallet = view.findViewById(R.id.viewitem_count_pay_ewallet);
                 viewitem_count_pay_rpay = view.findViewById(R.id.viewitem_count_pay_rpay);
+
+                numberPicker=new NumberPicker(ctx);
+                numberPicker.setMinValue(0);
+                numberPicker.setMaxValue(invoiceType.length - 1);
+                numberPicker.setDisplayedValues(invoiceType);
+                numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                numberPicker.getValue();
+                numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                    @Override
+                    public void onValueChange(NumberPicker numberPicker, int oldone, int newone) {
+                        viewitem_count_invoice_invoice.setText(invoiceType[ newone]);
+                        footerItem.setInvoice(newone);
+                    }
+                });
                 viewitem_count_invoice_invoice = view.findViewById(R.id.viewitem_count_invoice_invoice);
+                viewitem_count_invoice_invoice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder=new AlertDialog.Builder(ctx);
+                        builder.setView(numberPicker);
+                        builder.setPositiveButton("完成",null);
+                        builder.show();
+                    }
+                });
                 viewitem_count_invoice_ctitle = view.findViewById(R.id.viewitem_count_invoice_ctitle);
+                viewitem_count_invoice_ctitle.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        footerItem.setCtitle(editable.toString());
+                    }
+                });
                 viewitem_count_invoice_vat = view.findViewById(R.id.viewitem_count_invoice_vat);
+                viewitem_count_invoice_vat.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        footerItem.setVat(editable.toString());
+                    }
+                });
             }
             itemView.setFocusableInTouchMode(true);
             itemView.setFocusable(true);
@@ -375,6 +471,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             return index;
         }
 
+
         @Override
         public void onClick(final View view) {
             position = getHeaderPosition();
@@ -390,38 +487,18 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             }
         }
 
+    }
 
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            position = getHeaderPosition();
-            if (!hasFocus) {
-                InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            boolean success = new ShopCartJsonData().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "").getBoolean("Success");
-                            if (success) {
-                                new android.os.Handler(ctx.getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(ctx, viewitem_count_shipways_note.getText(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+    public int getInvoice() {
+        return footerItem.getInvoice();
+    }
 
+    public String getCtitle() {
+        return footerItem.getCtitle();
+    }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                }).start();
-
-            }
-        }
+    public String getVat() {
+        return footerItem.getVat();
     }
 
     public void setFilter(JSONObject json) {
@@ -438,6 +515,8 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             footer_pay_list = new ArrayList<>();
             footer_invoice_list = new ArrayList<>();
         }
+        initItems();
+        initFooterItem();
         notifyDataSetChanged();
     }
 

@@ -447,6 +447,8 @@ public class AnalyzeShopCart {
      * pname	String	付款名稱
      * info	String	說明
      * isused	Number	付款使用狀態 0未使用1使用中
+     *
+     * NoneUse	String	無使用付款方式代碼
      */
     public static ArrayList<Map<String, String>> getMemberPaymentsData(JSONObject json) {
         ArrayList<Map<String, String>> arrayList = new ArrayList<>();
@@ -463,6 +465,9 @@ public class AnalyzeShopCart {
                     map.put("isused", json_obj.getString("isused"));
                     arrayList.add(map);
                 }
+                map = new HashMap<>();
+                map.put("pno", json.getString("NoneUse"));
+                arrayList.add(map);
                 return arrayList;
             }
         } catch (JSONException e) {

@@ -20,6 +20,7 @@
             android:textSize="16sp" />
 
         <FrameLayout
+            android:id="@+id/viewitem_count_frame_mdiscount"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal"
@@ -136,6 +137,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/viewitem_count_frame_xmoney"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:orientation="horizontal"
@@ -168,6 +170,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/viewitem_count_frame_ymoney"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:orientation="horizontal"
@@ -200,6 +203,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/viewitem_count_frame_ewallet"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:orientation="horizontal"
@@ -288,7 +292,8 @@
         android:layout_height="50dp"
         android:background="@color/gainsboro"
         android:paddingLeft="10dp"
-        android:paddingRight="30dp">
+        android:paddingRight="30dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
