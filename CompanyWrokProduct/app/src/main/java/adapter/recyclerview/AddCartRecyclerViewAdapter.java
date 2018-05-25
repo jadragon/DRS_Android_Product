@@ -114,20 +114,19 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (!ischoice[position]) {
-                drawable.setStroke((int) (3 * dm.density), color_values);
-                color.setTextColor(color_values);
-                size.setTextColor(color_values);
+                for (int i = 0; i < ischoice.length; i++) {
+                    ischoice[i] = false;
+                }
+                ischoice[position]=true;
                 if (clickListener != null)
                     clickListener.ItemSelected(view, position, list);
-
             } else {
-                drawable.setStroke((int) (1 * dm.density), Color.BLACK);
-                color.setTextColor(Color.BLACK);
-                size.setTextColor(Color.BLACK);
+                ischoice[position]=false;
                 if (clickListener != null)
                     clickListener.ItemCancelSelect(view, position, list);
             }
-            ischoice[position] = !ischoice[position];
+
+            notifyDataSetChanged();
 
         }
     }

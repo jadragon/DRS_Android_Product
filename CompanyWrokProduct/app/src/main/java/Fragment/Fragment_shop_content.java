@@ -29,6 +29,8 @@ import java.util.Map;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
+import library.EndLessOnScrollListener;
+import library.GetJsonData.GetInformationByPHP;
 
 public class Fragment_shop_content extends Fragment {
     RecyclerView recyclerView;
@@ -38,6 +40,12 @@ public class Fragment_shop_content extends Fragment {
     View v;
     DisplayMetrics dm;
     Banner header;
+    int type;
+int nextpage=2;
+    public void setType(int type) {
+        this.type = type;
+    }
+
     int banner = 1;
     public final static int HIDE_BANNER = 0;
     public final static int SHOW_BANNER = 1;
@@ -82,7 +90,24 @@ public class Fragment_shop_content extends Fragment {
             setHeaderView(myRecyclerAdapter);
         }
         recyclerView.setAdapter(myRecyclerAdapter);
-
+        recyclerView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        json2 = new GetInformationByPHP().getIplist(type, nextpage);
+                        nextpage++;
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myRecyclerAdapter.setFilterMore(json2);
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
         setFooterView(myRecyclerAdapter);
         /*
         myRecyclerAdapter.setClickListener(new ShopRecyclerViewAdapter.ClickListener() {
@@ -153,12 +178,6 @@ public class Fragment_shop_content extends Fragment {
         this.json2 = json;
         if (myRecyclerAdapter != null) {
             myRecyclerAdapter.setFilter(json);
-            /*
-            List<String> images = new ArrayList<>();
-            for (Map<String, String> map : ResolveJsonData.getJSONData(banner))
-                images.add(map.get("image"));
-            header.update(images);
-            */
         }
     }
 

@@ -428,8 +428,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     break;
                 case "content"://當content點擊時
                     if (!items.get(position).isCheck()) {//當content為非選取狀態
-
-                        for (int i = 0; i < items.size(); i++) {
+                        for (int i = items.size()-1; i >= 0; i--) {
                             if (items.get(i).getType() == TYPE_HEADER && position > i) {
                                 position = i;
                                 break;
@@ -450,7 +449,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         items.get(getAdapterPosition()).countTotal_price();
                     } else {//當content為選取狀態
                         //header
-                        for (int i = 0; i < items.size(); i++) {
+                        for (int i = items.size()-1; i >= 0; i--) {
                             if (items.get(i).getType() == TYPE_HEADER && position > i) {
                                 position = i;
                                 break;

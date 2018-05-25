@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -223,7 +224,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
 
     private String getDeciamlString(String str) {
-      //  DecimalFormat df = new DecimalFormat("###,###");
+        //  DecimalFormat df = new DecimalFormat("###,###");
         //return df.format(Double.parseDouble(str));
         return str;
     }
@@ -355,6 +356,16 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         if (json != null) {
             list = ResolveJsonData.getJSONData(json);
             isfavorate = new boolean[list.size()];
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setFilterMore(JSONObject json) {
+        if (json != null&&ResolveJsonData.getJSONData(json).size()>0) {
+            list.addAll(ResolveJsonData.getJSONData(json));
+            isfavorate = new boolean[list.size()];
+        }else{
+            Toast.makeText(ctx, "沒有更多了", Toast.LENGTH_SHORT).show();
         }
         notifyDataSetChanged();
     }

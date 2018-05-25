@@ -29,6 +29,17 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_brightness_1_black_24dp.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="image">
                                         <value>
                                           <PersistentState>
@@ -55,9 +66,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="C:\Users\jadragon\Desktop\工作用\運送方式\加號&amp;選取_工作區域 1.png" />
-                                      <entry key="outputName" value="shipway_select_add" />
+                                      <entry key="outputName" value="notification_badge" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="e5000d" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -472,9 +472,9 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
         private int getHeaderPosition() {
             int index = 0;
-            for (int i = 0; i < items.size(); i++) {
+            for (int i = items.size()-1; i >= 0; i--) {
                 if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
-                    position = i;
+                    index = i;
                     break;
                 }
             }

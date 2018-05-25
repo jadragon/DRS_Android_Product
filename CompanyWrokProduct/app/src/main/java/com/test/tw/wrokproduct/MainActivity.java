@@ -3,12 +3,16 @@ package com.test.tw.wrokproduct;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -18,7 +22,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Fragment.*;
+import Fragment.Fragment_community;
+import Fragment.Fragment_home;
+import Fragment.Fragment_shop;
 import library.AnalyzeJSON.GetAddress;
 import library.AppManager;
 import library.BottomNavigationViewHelper;
@@ -48,8 +54,16 @@ public class MainActivity extends AppCompatActivity {
 
     protected void initBtnNav() {//BottomLayout
         navigation = findViewById(R.id.tab_layout);
-        new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) navigation.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(3);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
 
+        View badge = LayoutInflater.from(this)
+                .inflate(R.layout.notification_badge, bottomNavigationMenuView, false);
+
+        itemView.addView(badge);
+        new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {//監聽事件
 
             @Override
