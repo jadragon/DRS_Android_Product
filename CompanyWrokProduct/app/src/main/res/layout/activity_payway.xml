@@ -26,13 +26,19 @@
             android:text="應付金額:"
             android:textColor="@color/black"
             android:textSize="16sp" />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="$"
+            android:textColor="@color/red"
+            android:textSize="16sp" />
         <TextView
             android:id="@+id/payway_activity_txt_opay"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="$0"
+            android:text="0"
             android:textColor="@color/red"
             android:textSize="16sp" />
     </LinearLayout>
@@ -44,12 +50,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:paddingBottom="7dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp">
+            android:paddingRight="10dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -91,10 +95,12 @@
                 android:layout_weight="3"
                 android:background="@drawable/edittext_background1"
                 android:gravity="right|center_vertical"
-                android:hint="0"
                 android:inputType="number"
                 android:lines="1"
                 android:maxLines="1"
+                android:textColor="@color/red"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:paddingRight="2dp" />
         </LinearLayout>
 
@@ -105,12 +111,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:paddingBottom="7dp"
+
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp">
+            android:paddingRight="10dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -152,10 +157,12 @@
                 android:layout_weight="3"
                 android:background="@drawable/edittext_background1"
                 android:gravity="right|center_vertical"
-                android:hint="0"
                 android:inputType="number"
                 android:lines="1"
                 android:maxLines="1"
+                android:textColor="@color/red"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:paddingRight="2dp" />
         </LinearLayout>
 
@@ -166,12 +173,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:paddingBottom="7dp"
+
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp">
+            android:paddingRight="10dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -213,10 +219,12 @@
                 android:layout_weight="3"
                 android:background="@drawable/edittext_background1"
                 android:gravity="right|center_vertical"
-                android:hint="0"
                 android:inputType="number"
                 android:lines="1"
                 android:maxLines="1"
+                android:textColor="@color/red"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:paddingRight="2dp" />
         </LinearLayout>
     </LinearLayout>
@@ -236,13 +244,19 @@
             android:text="應付金額:"
             android:textColor="@color/black"
             android:textSize="16sp" />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="$"
+            android:textColor="@color/red"
+            android:textSize="16sp" />
         <TextView
             android:id="@+id/payway_activity_txt_total"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="$0"
+            android:text="0"
             android:textColor="@color/red"
             android:textSize="16sp" />
 
@@ -257,12 +271,10 @@
         <LinearLayout
             android:id="@+id/choice1"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:paddingBottom="7dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp">
+            android:paddingRight="10dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -285,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:text="信用卡"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -316,12 +328,10 @@
         <LinearLayout
             android:id="@+id/choice2"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:paddingBottom="7dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp">
+            android:paddingRight="10dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -344,7 +354,7 @@
                     android:layout_height="wrap_content"
                     android:text="轉帳"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -384,7 +394,7 @@
         <Button
             android:id="@+id/payway_activity_btn_confirm"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"

@@ -26,6 +26,7 @@ public class ShopCartJsonData {
     private static final String getMemberPayments_url = "http://api.gok1945.com/main/cart/getMemberPayment.php";
     private static final String setMemberPayment_url = "http://api.gok1945.com/main/cart/setMemberPayment.php";
     private static final String setVat_url = "http://api.gok1945.com/main/cart/setVat.php";
+    private static final String setGoldFlow_url = "http://api.gok1945.com/main/cart/setGoldFlow.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -188,16 +189,6 @@ public class ShopCartJsonData {
     }
 
     /**
-     * 1.3.14	結帳清單 – 設定商家備註
-     */
-    public JSONObject setStoreNote(String token, String sno, String note) {
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("sno", sno));
-        params.add(new BasicNameValuePair("note", note));
-        return jsonParser.getJSONFromUrl(setStoreNote_url, params);
-    }
-
-    /**
      * 1.3.13	結帳清單–設定買家付款方式
      */
     public JSONObject setMemberPayment(String token, int xkeyin, int ykeyin, int ekeyin, String pno) {
@@ -211,7 +202,17 @@ public class ShopCartJsonData {
     }
 
     /**
-     * 1.3.13	結帳清單–設定買家付款方式
+     * 1.3.14	結帳清單 – 設定商家備註
+     */
+    public JSONObject setStoreNote(String token, String sno, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("sno", sno));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(setStoreNote_url, params);
+    }
+
+    /**
+     * 1.3.18	結帳清單–設定發票資訊
      */
     public JSONObject setVat(String token, int invoice, String ctitle, String vat) {
         params.add(new BasicNameValuePair("token", token));
@@ -219,6 +220,15 @@ public class ShopCartJsonData {
         params.add(new BasicNameValuePair("ctitle", ctitle));
         params.add(new BasicNameValuePair("vat", vat));
         return jsonParser.getJSONFromUrl(setVat_url, params);
+    }
+
+    /**
+     * 1.3.15	訂單完成 - 處理金流流程
+     */
+    public JSONObject setGoldFlow(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("device", "2"));
+        return jsonParser.getJSONFromUrl(setGoldFlow_url, params);
     }
 
 }

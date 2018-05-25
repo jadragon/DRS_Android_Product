@@ -1,6 +1,5 @@
 package com.test.tw.wrokproduct;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,32 +8,30 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import library.GetJsonData.GetWebView;
 
-public class StoreWebViewActivity extends AppCompatActivity {
+public class GoldFlowActivity extends AppCompatActivity {
+
     private WebView luntanListview;
     String html;
     ViewGroup container;
-    TextView textView;
-    String name, address, deliver;
-    Intent intent;
-    String logistics;
+    String success, msg;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store_webview);
-        intent = getIntent();
-        logistics = intent.getStringExtra("logistics");
+        setContentView(R.layout.activity_goldflow);
+        GlobalVariable gv = (GlobalVariable) getApplicationContext();
+        token = gv.getToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                html = new GetWebView(logistics).getMap();
+                html = new GetWebView().setGoldFlow(token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -48,7 +45,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
 
 
     private void showWebView() {
-        luntanListview = findViewById(R.id.store_webview);
+        luntanListview = findViewById(R.id.goldflow_activity_webview);
         // 设置WevView要显示的网页
         WebSettings webSettings = luntanListview.getSettings();
         //声明WebSettings子
@@ -69,7 +66,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
         webSettings.setDisplayZoomControls(false); //隐藏原生的缩放控件
 
         //其他细节操作
-      //  webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存
+        //  webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存
         webSettings.setAllowFileAccess(true); //设置可以访问文件
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
         webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
@@ -87,25 +84,22 @@ public class StoreWebViewActivity extends AppCompatActivity {
         //webSettings.setAllowUniversalAccessFromFileURLs(true);
         luntanListview.clearCache(true);//清除暫存
         luntanListview.setWebChromeClient(new WebChromeClient());
-                luntanListview.setWebViewClient(new WebViewClient() {
+        luntanListview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+                Log.e("URL", url);
                 if (url.contains("js-call")) {
+                    url = url.replace("js-call://setDeliver?", "");
                     String[] uuu = url.split("&");
                     try {
-                        deliver = uuu[0].replace("js-call://setDeliver?", "");
-                        name = URLDecoder.decode(uuu[1], "UTF-8");
-                        address = URLDecoder.decode(uuu[2], "UTF-8");
-                        Log.e("JS", deliver + "\n" + name + "\n" + address);
+                        success = URLDecoder.decode(uuu[0], "UTF-8");
+                        msg = URLDecoder.decode(uuu[1], "UTF-8");
+                        Log.e("JS", "\n" + success + "\n" + msg);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    intent.putExtra("deliver", deliver);
-                    intent.putExtra("name", name);
-                    intent.putExtra("address", address);
-                    setResult(0, intent);
-                    StoreWebViewActivity.this.finish();
+
+                    GoldFlowActivity.this.finish();
                 }
                 return false;
             }
@@ -113,6 +107,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                Log.e("URL", url);
             }
         });
     }
@@ -137,6 +132,4 @@ public class StoreWebViewActivity extends AppCompatActivity {
         super.onDestroy();
         clearWebViewResource(container, luntanListview);
     }
-
-
 }

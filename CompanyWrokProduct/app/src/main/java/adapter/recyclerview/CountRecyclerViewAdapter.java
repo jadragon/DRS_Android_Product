@@ -28,6 +28,7 @@ import com.test.tw.wrokproduct.ShipWayActivity;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,15 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         initItems();
         initFooterItem();
     }
-
+    private void initFooterItem() {
+        for(int i=0;i<footer_pay_list.size();i++) {
+            footerItem = new FooterItem(footer_coupon_list.get(i).get("moprno"), footer_coupon_list.get(i).get("mcoupon"), Float.parseFloat(footer_coupon_list.get(i).get("mdiscount")),
+                    Float.parseFloat(footer_pay_list.get(i).get("opay")), footer_pay_list.get(i).get("pterms"), Float.parseFloat(footer_pay_list.get(i).get("xmoney")), Float.parseFloat(footer_pay_list.get(i).get("ymoney")),
+                    Float.parseFloat(footer_pay_list.get(i).get("ewallet")), Float.parseFloat(footer_pay_list.get(i).get("rpay")),
+                    Integer.parseInt(footer_invoice_list.get(i).get("invoice")), footer_invoice_list.get(i).get("ctitle"), footer_invoice_list.get(i).get("vat")
+            );
+        }
+    }
     public void initItems() {
         items = new ArrayList<>();
         size = 0;
@@ -232,31 +241,33 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
             } else if (getItemViewType(position) == TYPE_PAY) {
-                if (footerItem.getMdiscount() != 0)
-                    holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
-                else
-                    holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
-                holder.viewitem_count_pay_opay.setText((int) footerItem.getOpay() + "");
-                holder.viewitem_count_pay_pterms.setText(footerItem.getPterms() + "");
-                if (footerItem.getXmoney() != 0) {
-                    holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
-                    holder.viewitem_count_frame_xmoney.setVisibility(View.VISIBLE);
-                } else
-                    holder.viewitem_count_frame_xmoney.setVisibility(View.GONE);
-                if (footerItem.getYmoney() != 0) {
-                    holder.viewitem_count_pay_ymoney.setText((int) footerItem.getYmoney() + "");
-                    holder.viewitem_count_frame_ymoney.setVisibility(View.VISIBLE);
-                } else
-                    holder.viewitem_count_frame_ymoney.setVisibility(View.GONE);
-                if (footerItem.getEwallet() != 0) {
-                    holder.viewitem_count_pay_ewallet.setText((int) footerItem.getEwallet() + "");
-                    holder.viewitem_count_frame_ewallet.setVisibility(View.VISIBLE);
-                } else
-                    holder.viewitem_count_frame_ewallet.setVisibility(View.GONE);
-                holder.viewitem_count_pay_rpay.setText((int) footerItem.getRpay() + "");
-                holder.viewitem_count_invoice_invoice.setText(invoiceType[footerItem.getInvoice()]);
-                holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle() + "");
-                holder.viewitem_count_invoice_vat.setText(footerItem.getVat() + "");
+                if(footerItem!=null) {
+                    if (footerItem.getMdiscount() != 0)
+                        holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
+                    else
+                        holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
+                    holder.viewitem_count_pay_opay.setText("$"+(int) footerItem.getOpay() );
+                    holder.viewitem_count_pay_pterms.setText(footerItem.getPterms());
+                    if (footerItem.getXmoney() != 0) {
+                        holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
+                        holder.viewitem_count_frame_xmoney.setVisibility(View.VISIBLE);
+                    } else
+                        holder.viewitem_count_frame_xmoney.setVisibility(View.GONE);
+                    if (footerItem.getYmoney() != 0) {
+                        holder.viewitem_count_pay_ymoney.setText((int) footerItem.getYmoney() + "");
+                        holder.viewitem_count_frame_ymoney.setVisibility(View.VISIBLE);
+                    } else
+                        holder.viewitem_count_frame_ymoney.setVisibility(View.GONE);
+                    if (footerItem.getEwallet() != 0) {
+                        holder.viewitem_count_pay_ewallet.setText((int) footerItem.getEwallet() + "");
+                        holder.viewitem_count_frame_ewallet.setVisibility(View.VISIBLE);
+                    } else
+                        holder.viewitem_count_frame_ewallet.setVisibility(View.GONE);
+                    holder.viewitem_count_pay_rpay.setText(new BigDecimal( footerItem.getRpay()) + "");
+                    holder.viewitem_count_invoice_invoice.setText(invoiceType[footerItem.getInvoice()]);
+                    holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle() + "");
+                    holder.viewitem_count_invoice_vat.setText("$"+footerItem.getVat());
+                }
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -824,18 +835,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
     }
 
-    private void initFooterItem() {
-        /*
-        FooterItemPay = new FooterItemPay(Float.parseFloat(footer_pay_list.get(0).get("opay")), Float.parseFloat(footer_pay_list.get(0).get("xmoney")), Float.parseFloat(footer_pay_list.get(0).get("xkeyin")),
-                Float.parseFloat(footer_pay_list.get(0).get("ymoney")), Float.parseFloat(footer_pay_list.get(0).get("ykeyin")), Float.parseFloat(footer_pay_list.get(0).get("ewallet")),
-                Float.parseFloat(footer_pay_list.get(0).get("ekeyin")), Float.parseFloat(footer_pay_list.get(0).get("xtrans")), Float.parseFloat(footer_pay_list.get(0).get("ytrans")));
-*/
-        footerItem = new FooterItem(footer_coupon_list.get(0).get("moprno"), footer_coupon_list.get(0).get("mcoupon"), Float.parseFloat(footer_coupon_list.get(0).get("mdiscount")),
-                Float.parseFloat(footer_pay_list.get(0).get("opay")), footer_pay_list.get(0).get("pterms"), Float.parseFloat(footer_pay_list.get(0).get("xmoney")), Float.parseFloat(footer_pay_list.get(0).get("ymoney")),
-                Float.parseFloat(footer_pay_list.get(0).get("ewallet")), Float.parseFloat(footer_pay_list.get(0).get("rpay")),
-                Integer.parseInt(footer_invoice_list.get(0).get("invoice")), footer_invoice_list.get(0).get("invoice"), footer_invoice_list.get(0).get("invoice")
-        );
-    }
+
 
     private class FooterItem {
         String moprno;

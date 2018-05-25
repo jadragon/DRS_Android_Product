@@ -22,7 +22,6 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -224,8 +223,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
 
     private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
+      //  DecimalFormat df = new DecimalFormat("###,###");
+        //return df.format(Double.parseDouble(str));
+        return str;
     }
 
     private void resizeImageView(View view, int width, int heigh) {//重構圖片大小

@@ -31,7 +31,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -471,8 +470,9 @@ public class PcContentActivity extends AppCompatActivity {
 
 
     private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
+       // DecimalFormat df = new DecimalFormat("###,###");
+       // return df.format(Double.parseDouble(str));
+        return  str;
     }
 
 }

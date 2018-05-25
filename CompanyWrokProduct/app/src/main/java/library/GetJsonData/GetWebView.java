@@ -21,8 +21,17 @@ public class GetWebView {
     private static final String recommend_url = "http://api.gok1945.com/main/snetwork/recommend.php";
     private static final String agency_url = "http://api.gok1945.com/main/snetwork/agency.php";
     private static final String getMap_url = "http://api.gok1945.com/main/cart/getMap.php";
+    private static final String setGoldFlow_url = "http://api.gok1945.com/main/cart/setGoldFlow.php";
     private WebVewJsonParser jsonParser;
     List<NameValuePair> params;
+
+    public GetWebView() {
+        jsonParser = new WebVewJsonParser();
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
+        params.add(new BasicNameValuePair("lang", "0"));
+        params.add(new BasicNameValuePair("device", "2"));
+    }
 
     public GetWebView(Context context) {
         jsonParser = new WebVewJsonParser(context);
@@ -135,9 +144,17 @@ public class GetWebView {
     }
 
     /**
-     * 申請區域代理
+     * 超商位置
      */
     public String getMap() {
         return jsonParser.getJSONFromUrl(getMap_url, params);
+    }
+
+    /**
+     * 1.3.15	訂單完成 - 處理金流流程
+     */
+    public String setGoldFlow(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(setGoldFlow_url, params);
     }
 }

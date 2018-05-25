@@ -194,10 +194,10 @@ Button payway_activity_btn_confirm;
     }
 
     private void initText() {
-        payway_activity_txt_opay.setText(opay + "");
-        payway_activity_txt_xmoney.setText(xmoney + "");
-        payway_activity_txt_ymoney.setText(ymoney + "");
-        payway_activity_txt_ewallet.setText(ewallet + "");
+        payway_activity_txt_opay.setText(  ""+opay);
+        payway_activity_txt_xmoney.setText("(餘額:"+xmoney + "點)");
+        payway_activity_txt_ymoney.setText("(餘額:"+ymoney  + "點)");
+        payway_activity_txt_ewallet.setText("(餘額:"+ewallet + "點)");
         payway_activity_txt_pname1.setText(data_list.get(0).get("pname") + "");
         payway_activity_txt_info1.setText(data_list.get(0).get("info") + "");
         payway_activity_txt_pname2.setText(data_list.get(1).get("pname") + "");
@@ -205,7 +205,7 @@ Button payway_activity_btn_confirm;
         payway_activity_edit_ekeyin.setText(ekeyin + "");
         payway_activity_edit_xkeyin.setText(xkeyin + "");
         payway_activity_edit_ykeyin.setText(ykeyin + "");
-        payway_activity_txt_total.setText(total + "");
+        payway_activity_txt_total.setText(""+total);
     }
 
     private void setAnimation() {

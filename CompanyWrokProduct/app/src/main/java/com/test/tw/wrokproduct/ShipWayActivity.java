@@ -2,6 +2,7 @@ package com.test.tw.wrokproduct;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +53,9 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setHasFixedSize(true);
       layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        DividerItemDecoration decoration=new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.divider_10dp_invisble));
+        recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(showShipWayRecyclerViewAdapter);
     }

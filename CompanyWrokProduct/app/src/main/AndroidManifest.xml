@@ -35,10 +35,9 @@
         <activity android:name=".StoreWebViewActivity" />
         <activity android:name=".AddStoreShipWayActivity" />
         <activity android:name=".AddDeliveryShipWayActivity" />
-        <activity android:name=".ListVIewActivity"></activity>
-        <activity android:name=".PayWayActivity">
-
-        </activity>
+        <activity android:name=".ListVIewActivity" />
+        <activity android:name=".PayWayActivity"></activity>
+        <activity android:name=".GoldFlowActivity"></activity>
     </application>
 
 </manifest>

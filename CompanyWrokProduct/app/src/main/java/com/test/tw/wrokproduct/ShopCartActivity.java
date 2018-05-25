@@ -189,6 +189,24 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json = new ShopCartJsonData().getCart(token);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        shopCartRecyclerViewAdapter.setFilter(json);
+                    }
+                });
+            }
+        }).start();
+
+    }
+
     private String getDeciamlString(String str) {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));

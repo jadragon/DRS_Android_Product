@@ -1,5 +1,6 @@
 package com.test.tw.wrokproduct;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -9,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -97,8 +97,19 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.count_gotobuy:
-                Toast.makeText(this, ""+  countRecyclerViewAdapter.getInvoice()+"\n"+  countRecyclerViewAdapter.getCtitle()+"\n"+countRecyclerViewAdapter.getVat(), Toast.LENGTH_SHORT).show();
-
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ShopCartJsonData().setVat(token,countRecyclerViewAdapter.getInvoice(),countRecyclerViewAdapter.getCtitle(),countRecyclerViewAdapter.getVat());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(CountActivity.this, GoldFlowActivity.class));
+                                finish();
+                            }
+                        });
+                    }
+                }).start();
                 break;
         }
 
