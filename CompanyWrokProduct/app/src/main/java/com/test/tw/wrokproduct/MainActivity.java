@@ -29,6 +29,7 @@ import library.AnalyzeJSON.GetAddress;
 import library.AppManager;
 import library.BottomNavigationViewHelper;
 import library.GetJsonData.GetInformationByPHP;
+import library.LoadingView;
 import library.SQLiteDatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,15 +38,16 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_community fragment_community;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
+    private View loading;
     BottomNavigationView navigation;
-private View loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         AppManager.getAppManager().addActivity(this);
-        loading=findViewById(R.id.loading);
-        loading.setVisibility(View.INVISIBLE);
+        LoadingView.setContext(getApplicationContext());
+        LoadingView.getInstance();
         initAddressDB();
         initFragments();
         initBtnNav();

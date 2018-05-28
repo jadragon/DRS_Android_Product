@@ -62,6 +62,7 @@ public class ResolveJsonData {
                         map.put("istime", json_obj.getString("istime"));
                         map.put("discount", json_obj.getString("discount"));
                         map.put("shipping", json_obj.getString("shipping"));
+                        map.put("favorite", json_obj.getString("favorite"));
                         map.put("score", json_obj.getString("score"));
                     } catch (Exception e) {
                     }

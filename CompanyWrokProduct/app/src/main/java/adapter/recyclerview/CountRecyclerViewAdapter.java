@@ -28,7 +28,6 @@ import com.test.tw.wrokproduct.ShipWayActivity;
 
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,15 +79,17 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         initItems();
         initFooterItem();
     }
+
     private void initFooterItem() {
-        for(int i=0;i<footer_pay_list.size();i++) {
+        for (int i = 0; i < footer_pay_list.size(); i++) {
             footerItem = new FooterItem(footer_coupon_list.get(i).get("moprno"), footer_coupon_list.get(i).get("mcoupon"), Float.parseFloat(footer_coupon_list.get(i).get("mdiscount")),
-                    Float.parseFloat(footer_pay_list.get(i).get("opay")), footer_pay_list.get(i).get("pterms"), Float.parseFloat(footer_pay_list.get(i).get("xmoney")), Float.parseFloat(footer_pay_list.get(i).get("ymoney")),
-                    Float.parseFloat(footer_pay_list.get(i).get("ewallet")), Float.parseFloat(footer_pay_list.get(i).get("rpay")),
+                    footer_pay_list.get(i).get("opay"), footer_pay_list.get(i).get("pterms"), Float.parseFloat(footer_pay_list.get(i).get("xmoney")), Float.parseFloat(footer_pay_list.get(i).get("ymoney")),
+                    Float.parseFloat(footer_pay_list.get(i).get("ewallet")), footer_pay_list.get(i).get("rpay"),
                     Integer.parseInt(footer_invoice_list.get(i).get("invoice")), footer_invoice_list.get(i).get("ctitle"), footer_invoice_list.get(i).get("vat")
             );
         }
     }
+
     public void initItems() {
         items = new ArrayList<>();
         size = 0;
@@ -241,12 +242,12 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
             } else if (getItemViewType(position) == TYPE_PAY) {
-                if(footerItem!=null) {
+                if (footerItem != null) {
                     if (footerItem.getMdiscount() != 0)
                         holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
                     else
                         holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
-                    holder.viewitem_count_pay_opay.setText("$"+(int) footerItem.getOpay() );
+                    holder.viewitem_count_pay_opay.setText("$" + getDeciamlString( footerItem.getOpay()));
                     holder.viewitem_count_pay_pterms.setText(footerItem.getPterms());
                     if (footerItem.getXmoney() != 0) {
                         holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
@@ -263,10 +264,10 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                         holder.viewitem_count_frame_ewallet.setVisibility(View.VISIBLE);
                     } else
                         holder.viewitem_count_frame_ewallet.setVisibility(View.GONE);
-                    holder.viewitem_count_pay_rpay.setText(new BigDecimal( footerItem.getRpay()) + "");
+                    holder.viewitem_count_pay_rpay.setText("$" + getDeciamlString(footerItem.getRpay()) + "");
                     holder.viewitem_count_invoice_invoice.setText(invoiceType[footerItem.getInvoice()]);
                     holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle() + "");
-                    holder.viewitem_count_invoice_vat.setText("$"+footerItem.getVat());
+                    holder.viewitem_count_invoice_vat.setText(footerItem.getVat());
                 }
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
@@ -472,7 +473,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
         private int getHeaderPosition() {
             int index = 0;
-            for (int i = items.size()-1; i >= 0; i--) {
+            for (int i = items.size() - 1; i >= 0; i--) {
                 if (items.get(i).getType() == TYPE_HEADER && getAdapterPosition() > i) {
                     index = i;
                     break;
@@ -836,17 +837,16 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     }
 
 
-
     private class FooterItem {
         String moprno;
         String mcoupon;
         float mdiscount;
-        float opay;
+        String opay;
         String pterms;
         float xmoney;
         float ymoney;
         float ewallet;
-        float rpay;
+        String rpay;
         int invoice;
         String ctitle;
         String vat;
@@ -854,7 +854,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         public FooterItem() {
         }
 
-        public FooterItem(String moprno, String mcoupon, float mdiscount, float opay, String pterms, float xmoney, float ymoney, float ewallet, float rpay, int invoice, String ctitle, String vat) {
+        public FooterItem(String moprno, String mcoupon, float mdiscount, String opay, String pterms, float xmoney, float ymoney, float ewallet, String rpay, int invoice, String ctitle, String vat) {
             this.moprno = moprno;
             this.mcoupon = mcoupon;
             this.mdiscount = mdiscount;
@@ -893,11 +893,11 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             this.mdiscount = mdiscount;
         }
 
-        public float getOpay() {
+        public String getOpay() {
             return opay;
         }
 
-        public void setOpay(float opay) {
+        public void setOpay(String opay) {
             this.opay = opay;
         }
 
@@ -933,11 +933,11 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             this.ewallet = ewallet;
         }
 
-        public float getRpay() {
+        public String getRpay() {
             return rpay;
         }
 
-        public void setRpay(float rpay) {
+        public void setRpay(String rpay) {
             this.rpay = rpay;
         }
 

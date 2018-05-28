@@ -5,12 +5,23 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorGray">#515050</color>
     <color name="colorInvisibleGray">#64000000</color>
+    <color name="colorInvisibleGrayDark">#96000000</color>
     <color name="colorInvisible">#00ffffff</color>
     <color name="darkgray">#A9A9A9</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="green">#008000</color>
-
+    <!-- 運送方式 -->
+    <color name="shipway_yellow">#ffff00</color>
+    <color name="shipway_green_dark">#39b54a</color>
+    <color name="shipway_blue_light">#29abe2</color>
+    <color name="shipway_pink">#ff7bac</color>
+    <color name="shipway_orange_light">#f7b52c</color>
+    <color name="shipway_green_light">#8cc600</color>
+    <color name="shipway_orange_dark">#f7931e</color>
+    <color name="shipway_blue_dark">#2e3192</color>
+    <color name="shipway_gray">#808080</color>
+    <!-- 運送方式 -->
     <color name="default_gray">#f2f2f2</color>
     <color name="ivory">#FFFFF0</color><!-- 象牙色 -->
     <color name="lightyellow">#FFFFE0</color><!--亮黃色 -->

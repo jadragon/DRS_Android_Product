@@ -2,10 +2,12 @@ package Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -31,6 +33,7 @@ import adapter.recyclerview.ShopRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.EndLessOnScrollListener;
 import library.GetJsonData.GetInformationByPHP;
+import library.LoadingView;
 
 public class Fragment_shop_content extends Fragment {
     RecyclerView recyclerView;
@@ -40,9 +43,11 @@ public class Fragment_shop_content extends Fragment {
     View v;
     DisplayMetrics dm;
     Banner header;
-    View loading;
     int type;
-int nextpage=2;
+    int nextpage = 2;
+    library.Component.MySwipeRefreshLayout mSwipeLayout;
+    EndLessOnScrollListener endLessOnScrollListener;
+
     public void setType(int type) {
         this.type = type;
     }
@@ -72,9 +77,50 @@ int nextpage=2;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
-        loading = getActivity().findViewById(R.id.loading);
         initViewPagerAndRecyclerView();
+        initSwipeLayout();
+
         return v;
+    }
+
+    private void initSwipeLayout() {
+        mSwipeLayout = v.findViewById(R.id.swipe_refresh);
+        mSwipeLayout.setColorSchemeColors(Color.RED);
+        //設定靈敏度
+        mSwipeLayout.setTouchSlop(400);
+        //設定刷新動作
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadingView.show(v);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (banner == SHOW_BANNER)
+                        json1 = new GetInformationByPHP().getBanner(type);
+                        json2 = new GetInformationByPHP().getIplist(type, 1);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (banner == SHOW_BANNER) {
+                                    List<String> images = new ArrayList<>();
+                                    for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
+                                        images.add(map.get("image"));
+                                    header.update(images);
+                                }
+                                myRecyclerAdapter.setFilter(json2);
+                                mSwipeLayout.setRefreshing(false);
+                                LoadingView.hide();
+                                nextpage = 2;
+                                endLessOnScrollListener.reset();
+                            }
+                        });
+                    }
+                }).start();
+            }
+
+        });
     }
 
     private void initViewPagerAndRecyclerView() {
@@ -85,17 +131,63 @@ int nextpage=2;
         int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
+
         if (banner == HIDE_BANNER) {
-            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
         } else {
-            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)));
+            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), type);
             setHeaderView(myRecyclerAdapter);
         }
         recyclerView.setAdapter(myRecyclerAdapter);
-        recyclerView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
+        // OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        /*重複一直刷
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == SCROLL_STATE_IDLE) {
+                    if (recyclerView.computeVerticalScrollOffset() > 0) {// 有滚动距离，说明可以加载更多，解决了 items 不能充满 RecyclerView   的问题及滑动方向问题
+                        boolean isBottom = false;
+                        isBottom = recyclerView.computeVerticalScrollExtent()
+                                + recyclerView.computeVerticalScrollOffset()
+                                == recyclerView.computeVerticalScrollRange();
+                        // 也可以使用 方法2
+                        // isBottom = !recyclerView.canScrollVertically(1) ;
+                        if (isBottom) {
+                            LoadingView.show(v);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    json2 = new GetInformationByPHP().getIplist(type, nextpage);
+                                    nextpage++;
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (!myRecyclerAdapter.setFilterMore(json2)) {
+                                                nextpage--;
+                                            }
+                                            LoadingView.hide();
+                                        }
+                                    });
+                                }
+                            }).start();
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+        */
+//只刷一次
+        endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-                loading.setVisibility(View.VISIBLE);
+                LoadingView.show(v);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -104,14 +196,18 @@ int nextpage=2;
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                myRecyclerAdapter.setFilterMore(json2);
-                                loading.setVisibility(View.INVISIBLE);
+                                if (!myRecyclerAdapter.setFilterMore(json2)) {
+                                    nextpage--;
+                                }
+                                LoadingView.hide();
                             }
                         });
                     }
                 }).start();
             }
-        });
+        };
+        recyclerView.addOnScrollListener(endLessOnScrollListener);
+
         setFooterView(myRecyclerAdapter);
         /*
         myRecyclerAdapter.setClickListener(new ShopRecyclerViewAdapter.ClickListener() {

@@ -42,7 +42,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     ArrayList<ArrayList<Map<String, String>>> items_list;
     private List<HeaderPojo> datas;
     String[] lanes = {"無", "本島", "離島", "海外"};
-    int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
+    int[] colors = {R.color.shipway_yellow, R.color.shipway_green_dark, R.color.shipway_blue_light, R.color.shipway_pink, R.color.shipway_orange_light, R.color.shipway_green_light, R.color.shipway_orange_dark, R.color.shipway_blue_dark};
     String token;
     String sno, plno, mino, sname;
 
@@ -59,8 +59,13 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
         if (json != null) {
-            title_list = AnalyzeShopCart.getStoreLogisticsData(json);
-            items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+          if( AnalyzeShopCart.getStoreLogisticsData(json)!=null) {
+              title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+              items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+          }else {
+              title_list = new ArrayList<>();
+              items_list = new ArrayList<>();
+          }
         } else {
             title_list = new ArrayList<>();
             items_list = new ArrayList<>();
@@ -207,8 +212,13 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     public void setFilter(JSONObject newjson) {
         this.json = newjson;
         if (json != null) {
-            title_list = AnalyzeShopCart.getStoreLogisticsData(json);
-            items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+            if( AnalyzeShopCart.getStoreLogisticsData(json)!=null) {
+                title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+                items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+            }else {
+                title_list = new ArrayList<>();
+                items_list = new ArrayList<>();
+            }
         } else {
             title_list = new ArrayList<>();
             items_list = new ArrayList<>();
@@ -220,8 +230,13 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     public void setFilterAfterAdd(JSONObject newjson) {
         this.json = newjson;
         if (json != null) {
-            title_list = AnalyzeShopCart.getStoreLogisticsData(json);
-            items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+            if( AnalyzeShopCart.getStoreLogisticsData(json)!=null) {
+                title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+                items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+            }else {
+                title_list = new ArrayList<>();
+                items_list = new ArrayList<>();
+            }
         } else {
             title_list = new ArrayList<>();
             items_list = new ArrayList<>();

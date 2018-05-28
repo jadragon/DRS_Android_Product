@@ -14,13 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeShopCart;
 import library.GetJsonData.ShopCartJsonData;
 
@@ -40,7 +40,8 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     ImageView payway_activity_txt_isused1, payway_activity_txt_isused2;
     Animation animation;
     String pno;
-Button payway_activity_btn_confirm;
+    Button payway_activity_btn_confirm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +73,9 @@ Button payway_activity_btn_confirm;
                     public void run() {
                         payway_activity_txt_isused1.setTag(data_list.get(0).get("pno"));
                         payway_activity_txt_isused2.setTag(data_list.get(1).get("pno"));
-                        if(data_list.get(0).get("isused").equals("1")){
+                        if (data_list.get(0).get("isused").equals("1")) {
                             payway_activity_txt_isused1.setSelected(true);
-                        } else if(data_list.get(1).get("isused").equals("1")){
+                        } else if (data_list.get(1).get("isused").equals("1")) {
                             payway_activity_txt_isused2.setSelected(true);
                         }
                         initText();
@@ -152,7 +153,7 @@ Button payway_activity_btn_confirm;
 
             @Override
             public void afterTextChanged(Editable editable) {
-                int number = Integer.parseInt(editable.toString());
+                int number = Integer.parseInt(editable.toString().replace(",",""));
                 if (number <= 0) {
                     choice1.setVisibility(View.INVISIBLE);
                     choice2.setVisibility(View.INVISIBLE);
@@ -171,14 +172,14 @@ Button payway_activity_btn_confirm;
                 }
             }
         });
-        payway_activity_btn_confirm=findViewById(R.id.payway_activity_btn_confirm);
+        payway_activity_btn_confirm = findViewById(R.id.payway_activity_btn_confirm);
         payway_activity_btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ShopCartJsonData().setMemberPayment(token,xkeyin,ykeyin,ekeyin,pno);
+                        new ShopCartJsonData().setMemberPayment(token, xkeyin, ykeyin, ekeyin, pno);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -187,17 +188,15 @@ Button payway_activity_btn_confirm;
                         });
                     }
                 }).start();
-
-                Toast.makeText(PayWayActivity.this, pno, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void initText() {
-        payway_activity_txt_opay.setText(  ""+opay);
-        payway_activity_txt_xmoney.setText("(餘額:"+xmoney + "點)");
-        payway_activity_txt_ymoney.setText("(餘額:"+ymoney  + "點)");
-        payway_activity_txt_ewallet.setText("(餘額:"+ewallet + "點)");
+        payway_activity_txt_opay.setText(StringUtil.getDeciamlString("" + opay));
+        payway_activity_txt_xmoney.setText("(餘額:" + xmoney + "點)");
+        payway_activity_txt_ymoney.setText("(餘額:" + ymoney + "點)");
+        payway_activity_txt_ewallet.setText("(餘額:" + ewallet + "點)");
         payway_activity_txt_pname1.setText(data_list.get(0).get("pname") + "");
         payway_activity_txt_info1.setText(data_list.get(0).get("info") + "");
         payway_activity_txt_pname2.setText(data_list.get(1).get("pname") + "");
@@ -205,7 +204,7 @@ Button payway_activity_btn_confirm;
         payway_activity_edit_ekeyin.setText(ekeyin + "");
         payway_activity_edit_xkeyin.setText(xkeyin + "");
         payway_activity_edit_ykeyin.setText(ykeyin + "");
-        payway_activity_txt_total.setText(""+total);
+        payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
     }
 
     private void setAnimation() {
@@ -232,7 +231,7 @@ Button payway_activity_btn_confirm;
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             payway_activity_txt_isused1.setSelected(true);
-                            pno=payway_activity_txt_isused1.getTag().toString();
+                            pno = payway_activity_txt_isused1.getTag().toString();
                         }
                     });
                     choice2.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_enter_anim_left));
@@ -255,7 +254,7 @@ Button payway_activity_btn_confirm;
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             payway_activity_txt_isused2.setSelected(true);
-                            pno=payway_activity_txt_isused2.getTag().toString();
+                            pno = payway_activity_txt_isused2.getTag().toString();
                         }
                     });
                     choice1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_enter_anim_left));
@@ -288,7 +287,7 @@ Button payway_activity_btn_confirm;
                     xkeyin = number - number % xtrans;
                     textView.setText(xkeyin + "");
                     total = opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin;
-                    payway_activity_txt_total.setText(total + "");
+                    payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
                 } else {
                     textView.setText(xkeyin + "");
                 }
@@ -298,7 +297,7 @@ Button payway_activity_btn_confirm;
                     ykeyin = number - number % ytrans;
                     textView.setText(ykeyin + "");
                     total = opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin;
-                    payway_activity_txt_total.setText(total + "");
+                    payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
                 } else {
                     textView.setText(ykeyin + "");
                 }
@@ -308,7 +307,7 @@ Button payway_activity_btn_confirm;
                     ekeyin = number;
                     textView.setText(ekeyin + "");
                     total = opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin;
-                    payway_activity_txt_total.setText(total + "");
+                    payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
                 } else {
                     textView.setText(ekeyin + "");
                 }

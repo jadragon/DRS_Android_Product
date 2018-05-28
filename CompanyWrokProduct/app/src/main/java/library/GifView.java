@@ -3,6 +3,7 @@ package library;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Movie;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -24,19 +25,41 @@ public class GifView extends View {
     private int movieWidth,movieHeigh;  //Gif寬和高
     private long movieDuration;         //Gif延遲時間
     private long movieStart;            //Gif開始
+
     public GifView(Context context) {
         super(context);
+        /**
+         * Starting from HONEYCOMB have to turn off HW acceleration to draw
+         * Movie on Canvas.
+         */
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
         init(context);
     }
 
     public GifView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        /**
+         * Starting from HONEYCOMB have to turn off HW acceleration to draw
+         * Movie on Canvas.
+         */
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
         dm = context.getResources().getDisplayMetrics();
         init(context);
     }
 
     public GifView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        /**
+         * Starting from HONEYCOMB have to turn off HW acceleration to draw
+         * Movie on Canvas.
+         */
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
         dm = context.getResources().getDisplayMetrics();
         init(context);
     }
@@ -47,13 +70,11 @@ public class GifView extends View {
     */
     private void init(Context context){
         setFocusable(true);
-        inputStream=context.getResources().openRawResource(R.raw.loader);
+        inputStream=context.getResources().openRawResource(R.raw.yloading);
         movie= Movie.decodeStream(inputStream);
         movieWidth=movie.width();
         movieHeigh=movie.height();
         movieDuration=movie.duration();
-
-
     }
 
     @Override

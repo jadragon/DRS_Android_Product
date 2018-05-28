@@ -59,6 +59,14 @@ public abstract class EndLessOnScrollListener extends RecyclerView.OnScrollListe
         }
     }
 
+    public void reset() {
+        //当前页，从0开始
+        currentPage = 0;
+        //主要用来存储上一个totalItemCount
+       previousTotal = 0;
+        loading = true;
+    }
+
     /**
      * 提供一个抽闲方法，在Activity中监听到这个EndLessOnScrollListener
      * 并且实现这个方法

@@ -112,7 +112,7 @@ public class PcContentActivity extends AppCompatActivity {
     public void setText() {
         //商品名
         pccontent_txt_title = findViewById(R.id.pccontent_txt_title);
-        pccontent_txt_title.setText(productInfoPojo.getPname());
+        pccontent_txt_title.setText(productInfoPojo.getTitle());
         //描述
         pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
         pccontent_txt_descs.setText(productInfoPojo.getDescs());

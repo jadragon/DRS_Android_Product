@@ -11,11 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="always">
-
+        <library.Component.MySwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/shop_conttent_re"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+        </library.Component.MySwipeRefreshLayout>
 
     </FrameLayout>
 

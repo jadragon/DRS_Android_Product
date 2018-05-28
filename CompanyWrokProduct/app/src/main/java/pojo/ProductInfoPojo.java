@@ -10,15 +10,53 @@ import java.io.Serializable;
  */
 public class ProductInfoPojo implements Serializable {
 
-    private String pno;
-    private String pname;
-    private String descs;
-    private String img;
-    private String rprice;
-    private String rsprice;
-    private String score;
+    String title;
+    String image;
+    String pno;
+    String descs;
+    String rprice;
+    String rsprice;
+    String isnew;
+    String ishot;
+    String istime;
+    String discount;
+    String shipping;
+    String score;
+    boolean favorite;
 
     public ProductInfoPojo() {
+    }
+
+    public ProductInfoPojo(String title, String image, String pno, String descs, String rprice, String rsprice, String isnew, String ishot, String istime, String discount, String shipping, boolean favorite, String score) {
+        this.title = title;
+        this.image = image;
+        this.pno = pno;
+        this.descs = descs;
+        this.rprice = rprice;
+        this.rsprice = rsprice;
+        this.isnew = isnew;
+        this.ishot = ishot;
+        this.istime = istime;
+        this.discount = discount;
+        this.shipping = shipping;
+        this.favorite = favorite;
+        this.score = score;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getPno() {
@@ -29,28 +67,12 @@ public class ProductInfoPojo implements Serializable {
         this.pno = pno;
     }
 
-    public String getPname() {
-        return pname;
-    }
-
-    public void setPname(String pname) {
-        this.pname = pname;
-    }
-
     public String getDescs() {
         return descs;
     }
 
     public void setDescs(String descs) {
         this.descs = descs;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
     }
 
     public String getRprice() {
@@ -69,6 +91,54 @@ public class ProductInfoPojo implements Serializable {
         this.rsprice = rsprice;
     }
 
+    public String getIsnew() {
+        return isnew;
+    }
+
+    public void setIsnew(String isnew) {
+        this.isnew = isnew;
+    }
+
+    public String getIshot() {
+        return ishot;
+    }
+
+    public void setIshot(String ishot) {
+        this.ishot = ishot;
+    }
+
+    public String getIstime() {
+        return istime;
+    }
+
+    public void setIstime(String istime) {
+        this.istime = istime;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public String getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(String shipping) {
+        this.shipping = shipping;
+    }
+
+    public boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public String getScore() {
         return score;
     }
@@ -77,14 +147,5 @@ public class ProductInfoPojo implements Serializable {
         this.score = score;
     }
 
-    public ProductInfoPojo(String pno, String pname, String descs, String img, String rprice, String rsprice, String score) {
-        this.pno = pno;
-        this.pname = pname;
-        this.descs = descs;
-        this.img = img;
-        this.rprice = rprice;
-        this.rsprice = rsprice;
-        this.score = score;
-    }
 }
 
