@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--在Android中，規定以160dpi（即螢幕解析度為320x480）為基準：1dp=1px-->
+<?xml version="1.0" encoding="utf-8"?><!--在Android中，規定以160dpi（即螢幕解析度為320x480）為基準：1dp=1px-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,24 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-<FrameLayout
-    android:id="@+id/content_layout"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="8"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <library.GifView
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/colorInvisibleGray" />
+    </FrameLayout>
 
 
-    <android.support.design.widget.BottomNavigationView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:elevation="6dp"
         android:background="@color/default_gray"
+        android:elevation="6dp"
         app:itemIconTint="@color/navigation_home"
         app:itemTextColor="@color/navigation_home"
-        app:menu="@menu/navigation"/>
+        app:menu="@menu/navigation" />
 
-    </LinearLayout>
+</LinearLayout>

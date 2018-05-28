@@ -40,6 +40,7 @@ public class Fragment_shop_content extends Fragment {
     View v;
     DisplayMetrics dm;
     Banner header;
+    View loading;
     int type;
 int nextpage=2;
     public void setType(int type) {
@@ -71,6 +72,7 @@ int nextpage=2;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
+        loading = getActivity().findViewById(R.id.loading);
         initViewPagerAndRecyclerView();
         return v;
     }
@@ -93,6 +95,7 @@ int nextpage=2;
         recyclerView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
+                loading.setVisibility(View.VISIBLE);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -102,6 +105,7 @@ int nextpage=2;
                             @Override
                             public void run() {
                                 myRecyclerAdapter.setFilterMore(json2);
+                                loading.setVisibility(View.INVISIBLE);
                             }
                         });
                     }

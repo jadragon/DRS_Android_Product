@@ -38,12 +38,14 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] fragments;
     private int lastShowFragment = 0;
     BottomNavigationView navigation;
-
+private View loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         AppManager.getAppManager().addActivity(this);
+        loading=findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
         initAddressDB();
         initFragments();
         initBtnNav();

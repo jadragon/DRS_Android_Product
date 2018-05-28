@@ -63,6 +63,7 @@ public class Fragment_home extends Fragment {
     private Handler mThreadHandler;
     //宣告特約工人
     private HandlerThread mThread;
+    private View loading;
 
     @Nullable
     @Override
@@ -72,6 +73,7 @@ public class Fragment_home extends Fragment {
         getID(v);
         //起始方法
         init();
+        loading = getActivity().findViewById(R.id.loading);
         handler = new Handler(Looper.getMainLooper());
         mThread = new HandlerThread("name");
 
@@ -82,7 +84,7 @@ public class Fragment_home extends Fragment {
         //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
 
         mThreadHandler = new Handler(mThread.getLooper());
-        home_shopcart=v.findViewById(R.id.home_shopcart);
+        home_shopcart = v.findViewById(R.id.home_shopcart);
         home_shopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +105,7 @@ public class Fragment_home extends Fragment {
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                loading.setVisibility(View.VISIBLE);
                 what = 1;
                 mThreadHandler.post(r1);
             }
@@ -221,6 +224,7 @@ public class Fragment_home extends Fragment {
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView3.setLayoutManager(gridLayoutManager);
             recyclerView3.setAdapter(myRecyclerAdapter3);
+            loading.setVisibility(View.INVISIBLE);
             //顯示畫面的動作
         }
     };
@@ -236,6 +240,7 @@ public class Fragment_home extends Fragment {
             myRecyclerAdapter2.setFilter(ResolveJsonData.getJSONData(json2));
             myRecyclerAdapter3.setFilter(ResolveJsonData.getJSONData(json3));
             mSwipeLayout.setRefreshing(false);// 結束更新動畫
+            loading.setVisibility(View.INVISIBLE);
         }
     };
 
@@ -260,6 +265,5 @@ public class Fragment_home extends Fragment {
         myRecyclerAdapter3 = null;
         handler.getLooper().quit();
     }
-
 
 }
