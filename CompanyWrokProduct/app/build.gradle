@@ -46,4 +46,6 @@ dependencies {
     implementation 'com.github.XanderWang:elasticity:1.0.0'
     implementation 'me.everything:overscroll-decor-android:1.0.4'
     implementation 'com.github.Cutta:GifView:1.1'
+    // Here FB
+    implementation 'com.facebook.android:facebook-android-sdk:4.33.0'
 }

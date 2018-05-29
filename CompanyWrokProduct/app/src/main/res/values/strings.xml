@@ -24,4 +24,6 @@
         <item>@drawable/pointup</item>
         <item>@drawable/recommended_members</item>
     </array>
+    <string name="facebook_app_id">172989503377924</string>
+    <string name="fb_login_protocol_scheme">fb172989503377924</string>
 </resources>
