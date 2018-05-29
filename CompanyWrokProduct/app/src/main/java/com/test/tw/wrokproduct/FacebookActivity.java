@@ -111,7 +111,7 @@ public class FacebookActivity extends AppCompatActivity {
         /**
          * 權限在此設定
          */
-        loginManager.setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
+        loginManager.setLoginBehavior(LoginBehavior.WEB_VIEW_ONLY);
         // 設定要跟用戶取得的權限，以下3個是基本可以取得，不需要經過FB的審核
         List<String> permissions = new ArrayList<>();
         permissions.add("public_profile");
@@ -149,23 +149,26 @@ public class FacebookActivity extends AppCompatActivity {
                                 String email = object.getString("email");
                                 //      String gender = object.getString("gender");
                                 String birthday = object.getString("birthday");
+                                String picture = "https://graph.facebook.com/" + id + "/picture?width=" + 300 +"&height=" + 300;
                                 Log.d(TAG, "Facebook id:" + object);
                                 Log.d(TAG, "Facebook id:" + id);
                                 Log.d(TAG, "Facebook name:" + name);
                                 Log.d(TAG, "Facebook email:" + email);
                                 //    Log.d(TAG, "Facebook gender:" + gender);
                                 Log.d(TAG, "Facebook birthday:" + birthday);
+                                /*
                                 // 此時如果登入成功，就可以順便取得用戶大頭照
                                 Profile profile = Profile.getCurrentProfile();
                                 // 設定大頭照大小
                                 Uri userPhoto = profile.getProfilePictureUri(300, 300);
+                                */
                                     /*
                                 Glide.with(FacebookActivity.this)
                                         .load(userPhoto.toString())
                                       //  .crossFade()
                                         .into(mImgPhoto);
                                     */
-                                ImageLoader.getInstance().displayImage(userPhoto.toString(), mImgPhoto);
+                                ImageLoader.getInstance().displayImage(picture, mImgPhoto);
                                 mTextDescription.setText(String.format(Locale.TAIWAN, "Name:%s\nE-mail:%s", name, email));
                             }
                         } catch (IOException e) {

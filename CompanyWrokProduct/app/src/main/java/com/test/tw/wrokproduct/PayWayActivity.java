@@ -35,7 +35,7 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     JSONObject json;
     ArrayList<Map<String, String>> data_list, pay_list;
     int xtrans, ytrans;
-    int opay, xmoney, xkeyin, ymoney, ykeyin, ewallet, ekeyin, total;
+    long opay, xmoney, xkeyin, ymoney, ykeyin, ewallet, ekeyin, total;
     LinearLayout choice1, choice2;
     ImageView payway_activity_txt_isused1, payway_activity_txt_isused2;
     Animation animation;
@@ -59,13 +59,13 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 pay_list = AnalyzeShopCart.getMemberPaymentsPay(json);
                 xtrans = Integer.parseInt(pay_list.get(0).get("xtrans"));
                 ytrans = Integer.parseInt(pay_list.get(0).get("ytrans"));
-                opay = Integer.parseInt(pay_list.get(0).get("opay"));
-                xmoney = Integer.parseInt(pay_list.get(0).get("xmoney"));
-                ymoney = Integer.parseInt(pay_list.get(0).get("ymoney"));
-                ewallet = Integer.parseInt(pay_list.get(0).get("ewallet"));
-                ekeyin = Integer.parseInt(pay_list.get(0).get("ekeyin"));
-                xkeyin = Integer.parseInt(pay_list.get(0).get("xkeyin"));
-                ykeyin = Integer.parseInt(pay_list.get(0).get("ykeyin"));
+                opay = Long.parseLong(pay_list.get(0).get("opay"));
+                xmoney = Long.parseLong(pay_list.get(0).get("xmoney"));
+                ymoney = Long.parseLong(pay_list.get(0).get("ymoney"));
+                ewallet = Long.parseLong(pay_list.get(0).get("ewallet"));
+                ekeyin = Long.parseLong(pay_list.get(0).get("ekeyin"));
+                xkeyin = Long.parseLong(pay_list.get(0).get("xkeyin"));
+                ykeyin = Long.parseLong(pay_list.get(0).get("ykeyin"));
 
                 total = (opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin);
                 runOnUiThread(new Runnable() {
@@ -153,8 +153,7 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
 
             @Override
             public void afterTextChanged(Editable editable) {
-                int number = Integer.parseInt(editable.toString().replace(",",""));
-                if (number <= 0) {
+                if (total <= 0) {
                     choice1.setVisibility(View.INVISIBLE);
                     choice2.setVisibility(View.INVISIBLE);
                     pno = data_list.get(data_list.size() - 1).get("pno");
@@ -268,19 +267,23 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
         CountTotal(textView);
+        EditText editText = ((EditText) textView);
+        editText.setSelection(editText.getText().length());
         return false;
     }
 
     @Override
     public void onFocusChange(View view, boolean b) {
+        EditText editText = ((EditText) view);
         if (!b) {
-            TextView textView = ((TextView) view);
-            CountTotal(textView);
+            CountTotal(editText);
+        } else {
+            editText.setText(null);
         }
     }
 
     public void CountTotal(TextView textView) {
-        int number = textView.getText().toString().equals("") ? 0 : Integer.parseInt(textView.getText().toString());
+        long number = textView.getText().toString().equals("") ? 0 : Long.parseLong(textView.getText().toString());
         switch (textView.getId()) {
             case R.id.payway_activity_edit_xkeyin:
                 if (number <= xmoney && (opay - ((number - number % xtrans) / xtrans) - (ykeyin / ytrans) - ekeyin) >= 0) {

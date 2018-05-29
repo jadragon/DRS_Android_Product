@@ -191,7 +191,7 @@ public class ShopCartJsonData {
     /**
      * 1.3.13	結帳清單–設定買家付款方式
      */
-    public JSONObject setMemberPayment(String token, int xkeyin, int ykeyin, int ekeyin, String pno) {
+    public JSONObject setMemberPayment(String token, long xkeyin, long ykeyin, long ekeyin, String pno) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("xkeyin", xkeyin + ""));
         params.add(new BasicNameValuePair("ykeyin", ykeyin + ""));
