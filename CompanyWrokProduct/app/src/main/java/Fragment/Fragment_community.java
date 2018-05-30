@@ -6,15 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.test.tw.wrokproduct.CommunityActivity;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
 
 import java.util.ArrayList;
@@ -28,9 +31,12 @@ public class Fragment_community extends Fragment {
     View v;
     TabLayout tabLayout;
     ViewPager viewPager;
+    Toolbar toolbar;
+    Button fragment_community_btn_login;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_community, container, false);
+        initToolbar(v);
         tabLayout = v.findViewById(R.id.fragment_community_tablayout);
         TabLayout.Tab tab = tabLayout.newTab();//获得每一个tab
         tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
@@ -83,7 +89,13 @@ public class Fragment_community extends Fragment {
         });
         list.add(listView);
         viewPager.setAdapter(new CommunityPagerAdapter(list));
-
+        fragment_community_btn_login=v.findViewById(R.id.fragment_community_btn_login);
+        fragment_community_btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+        });
         return v;
     }
 
@@ -100,5 +112,18 @@ public class Fragment_community extends Fragment {
         }
     }
 
+
+    private void initToolbar(View view) {
+        //Toolbar 建立
+        toolbar = view.findViewById(R.id.include_toolbar);
+        ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("登入");
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
 
 }

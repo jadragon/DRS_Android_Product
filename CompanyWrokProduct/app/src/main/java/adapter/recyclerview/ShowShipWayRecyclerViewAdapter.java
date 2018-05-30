@@ -243,22 +243,22 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         }
         initData();
         //新增後做登陸動作
-        for (int i = 0; i < datas.size(); i++) {
-            if (datas.get(i).getIsused() && (datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getIsused())) {
-                sno = datas.get(i).getSno();
-                plno = datas.get(i).getPlno();
-                mino = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getMlno();
-                sname = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getSname();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
-                        json = new ShopCartJsonData().getStoreLogistics(token, sno);
-                    }
-                }).start();
-                break;
+            for (int i = 0; i < datas.size(); i++) {
+                if (datas.get(i).getIsused() && (datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getIsused())) {
+                    sno = datas.get(i).getSno();
+                    plno = datas.get(i).getPlno();
+                    mino = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getMlno();
+                    sname = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getSname();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
+                            json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                        }
+                    }).start();
+                    break;
+                }
             }
-        }
         currentItem=-1;
         notifyDataSetChanged();
     }

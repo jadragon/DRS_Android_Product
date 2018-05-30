@@ -52,7 +52,7 @@ public class AutoVerticalTextView extends AppCompatTextView {
             float trySize = mMaxTextSize;
             mTextPaint.setTextSize(trySize);
             while (mTextPaint.descent()-mTextPaint.ascent() > availableHeight) {   //测量的字体高度过大，不断地缩放
-                trySize -= 1;  //字体不断地减小来适应
+                trySize -= 2;  //字体不断地减小来适应
                 if (trySize <= mMinTextSize) {
                     trySize = mMinTextSize;  //最小为这个
                     break;

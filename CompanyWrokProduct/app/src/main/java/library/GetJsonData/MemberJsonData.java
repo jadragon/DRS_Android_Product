@@ -1,5 +1,7 @@
 package library.GetJsonData;
 
+import android.util.Log;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
@@ -53,11 +55,13 @@ public class MemberJsonData {
     /**
      * 2.1.3	會員登入
      */
-    public JSONObject login(int type, String account, String pawd, String mpcode) {
-        params.add(new BasicNameValuePair("type", type + ""));
+    public JSONObject login(int type,String mpcode, String account, String pawd) {
+        Log.e("gggggg",type+"\n"+mpcode+"\n"+account+"\n"+pawd);
+        params.add(new BasicNameValuePair("type", type+""));
+        params.add(new BasicNameValuePair("mpcode", mpcode));
         params.add(new BasicNameValuePair("account", account));
         params.add(new BasicNameValuePair("pawd", pawd));
-        params.add(new BasicNameValuePair("mpcode", mpcode));
+
         return jsonParser.getJSONFromUrl(login_url, params);
     }
 }
