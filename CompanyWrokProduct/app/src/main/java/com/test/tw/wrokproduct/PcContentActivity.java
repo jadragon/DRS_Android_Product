@@ -74,12 +74,14 @@ public class PcContentActivity extends AppCompatActivity {
     int[] stars = {R.drawable.star0_2, R.drawable.star1_2, R.drawable.star2_2, R.drawable.star3_2, R.drawable.star4_2, R.drawable.star5_2};
     String pino;
     String Message;
-
+String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pccontent);
         productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
+        GlobalVariable gv = (GlobalVariable) getApplicationContext();
+        token=gv.getToken();
         pno = productInfoPojo.getPno();
         //pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
@@ -265,9 +267,9 @@ public class PcContentActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            GlobalVariable gv = (GlobalVariable) getApplicationContext();
+
                             try {
-                                JSONObject jsonObject = new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
+                                JSONObject jsonObject = new ShopCartJsonData().setCart(token, pno, pino, count);
                                 boolean success = jsonObject.getBoolean("Success");
                                 Message = jsonObject.getString("Message");
                                 if (success) {

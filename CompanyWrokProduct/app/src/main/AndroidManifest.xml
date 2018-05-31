@@ -26,9 +26,7 @@
         <activity android:name=".PtypeActivity" />
         <activity android:name=".PcContentActivity" />
         <activity android:name=".TestActivity" />
-        <activity android:name=".LoginActivity" >
-
-        </activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".ShopCartActivity" />
         <activity android:name=".CommunityActivity" />
         <activity
@@ -39,16 +37,15 @@
         <activity android:name=".AddStoreShipWayActivity" />
         <activity android:name=".AddDeliveryShipWayActivity" />
         <activity android:name=".ListVIewActivity" />
-        <activity android:name=".PayWayActivity"></activity>
-        <activity android:name=".GoldFlowActivity"></activity>
-        <activity android:name=".FacebookActivity">
-        </activity>
+        <activity android:name=".PayWayActivity" />
+        <activity android:name=".GoldFlowActivity" />
+        <activity android:name=".FacebookActivity" />
         <!-- Facebook Start -->
         <!-- FB Login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <!-- FB Share ex:photo、video、webLink-->
+        <!-- FB Share ex:photo、video、webLink -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider172989503377924"
@@ -71,9 +68,9 @@
             </intent-filter>
         </activity>
         <!-- Facebook End -->
-        <activity android:name=".GoogleSignInActivity">
-
-        </activity>
+        <activity android:name=".GoogleSignInActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegisterDetailActivity"></activity>
     </application>
 
 </manifest>

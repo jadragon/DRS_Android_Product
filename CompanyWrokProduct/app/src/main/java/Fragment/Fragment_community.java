@@ -15,10 +15,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.test.tw.wrokproduct.CommunityActivity;
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.RegisterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +29,21 @@ import java.util.List;
 import adapter.listview.CommunityListViewAdapter;
 import adapter.viewpager.CommunityPagerAdapter;
 import library.GetJsonData.GetWebView;
+import library.SQLiteDatabaseHandler;
+
 
 public class Fragment_community extends Fragment {
     View v;
     TabLayout tabLayout;
     ViewPager viewPager;
     Toolbar toolbar;
-    Button fragment_community_btn_login;
+    Button fragment_community_btn_login,fragment_community_btn_logout,fragment_community_btn_register;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_community, container, false);
         initToolbar(v);
+
+
         tabLayout = v.findViewById(R.id.fragment_community_tablayout);
         TabLayout.Tab tab = tabLayout.newTab();//获得每一个tab
         tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
@@ -89,11 +96,31 @@ public class Fragment_community extends Fragment {
         });
         list.add(listView);
         viewPager.setAdapter(new CommunityPagerAdapter(list));
+
+        fragment_community_btn_register=v.findViewById(R.id.fragment_community_btn_register);
+        fragment_community_btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), RegisterActivity.class));
+            }
+        });
         fragment_community_btn_login=v.findViewById(R.id.fragment_community_btn_login);
         fragment_community_btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+        });
+        fragment_community_btn_logout=v.findViewById(R.id.fragment_community_btn_logout);
+        fragment_community_btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabaseHandler db=new SQLiteDatabaseHandler(getContext());
+                db.resetLoginTables();
+                db.close();
+                GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
+                gv.setToken(null);
+                Toast.makeText(getContext(), "登出", Toast.LENGTH_SHORT).show();
             }
         });
         return v;

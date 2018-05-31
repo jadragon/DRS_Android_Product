@@ -33,13 +33,14 @@
                 android:padding="10dp">
 
                 <TextView
+                    android:id="@+id/register_txt_account"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="帳號"
+                    android:text="手機號碼"
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/login_edit_account"
+                    android:id="@+id/register_edit_account"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
@@ -63,16 +64,23 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="密碼"
+                    android:text="認證碼"
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/login_edit_password"
+                    android:id="@+id/register_edit_password"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
-                    android:background="@null"
-                    android:hint="請輸入密碼" />
+                    android:background="@null" />
+                <Button
+                    android:id="@+id/register_btn_gvcode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:text="取得認證碼"
+                    android:textColor="@color/white"
+                    android:background="@drawable/arcangle_button_red"/>
             </LinearLayout>
 
             <View
@@ -91,38 +99,16 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/login_button"
+                android:id="@+id/register_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/arcangle_button_red"
                 android:gravity="center"
-                android:text="登入"
+                android:text="下一步"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="立即註冊"
-                    android:textColor="@color/red" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="忘記密碼"
-                    android:textColor="@color/red" />
-            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -169,31 +155,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/login_img_account"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@drawable/quick_login_account" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="帳號"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/login_img_mobile"
+                android:id="@+id/register_img_mobile"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -218,7 +180,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/login_img_email"
+                android:id="@+id/register_img_email"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -243,7 +205,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/login_img_fb"
+                android:id="@+id/register_img_fb"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -267,7 +229,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/login_img_google"
+                android:id="@+id/register_img_google"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"

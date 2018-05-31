@@ -47,23 +47,23 @@ public class Fragment_shop_content extends Fragment {
     int nextpage = 2;
     library.Component.MySwipeRefreshLayout mSwipeLayout;
     EndLessOnScrollListener endLessOnScrollListener;
+    String ptno;
+
+    public void setPtno(String ptno) {
+        this.ptno = ptno;
+    }
 
     public void setType(int type) {
         this.type = type;
     }
 
-    int banner = 1;
+    int banner;
     public final static int HIDE_BANNER = 0;
     public final static int SHOW_BANNER = 1;
 
     public Fragment_shop_content() {
     }
 
-    @SuppressLint("ValidFragment")
-    public Fragment_shop_content(JSONObject json1, JSONObject json2) {
-        this.json1 = json1;
-        this.json2 = json2;
-    }
 
     @SuppressLint("ValidFragment")
     public Fragment_shop_content(int banner) {
@@ -96,10 +96,12 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (banner == SHOW_BANNER)
-                        json1 = new GetInformationByPHP().getBanner(type);
-                        json2 = new GetInformationByPHP().getIplist(type, 1);
-
+                        if (banner == SHOW_BANNER) {
+                            json1 = new GetInformationByPHP().getBanner(type);
+                            json2 = new GetInformationByPHP().getIplist(type, 1);
+                        } else if (banner == HIDE_BANNER) {
+                            json2 = new GetInformationByPHP().getPlist(ptno, type, 1);
+                        }
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -131,13 +133,9 @@ public class Fragment_shop_content extends Fragment {
         int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
-
-        if (banner == HIDE_BANNER) {
-            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
-        } else {
-            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), type);
+        myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
+        if(banner==SHOW_BANNER)
             setHeaderView(myRecyclerAdapter);
-        }
         recyclerView.setAdapter(myRecyclerAdapter);
         // OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         /*重複一直刷
@@ -191,7 +189,11 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json2 = new GetInformationByPHP().getIplist(type, nextpage);
+                        if (banner == SHOW_BANNER) {
+                            json2 = new GetInformationByPHP().getIplist(type, nextpage);
+                        } else if (banner == HIDE_BANNER) {
+                            json2 = new GetInformationByPHP().getPlist(ptno, type, nextpage);
+                        }
                         nextpage++;
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

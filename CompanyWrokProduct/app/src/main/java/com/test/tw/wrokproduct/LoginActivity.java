@@ -7,19 +7,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
+import library.AnalyzeJSON.AnalyzeMember;
 import library.GetJsonData.MemberJsonData;
+import library.SQLiteDatabaseHandler;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
-    EditText login_account, login_password;
+    EditText login_edit_account, login_edit_password;
     Button login_button;
-    GlobalVariable gv ;
-
+    GlobalVariable gv;
+    ImageView login_img_account, login_img_mobile, login_img_email, login_img_fb, login_img_google;
+int type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initToolbar();
         initEditText();
         initButton();
+        initImage();
     }
 
     private void initButton() {
@@ -35,9 +42,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_button.setOnClickListener(this);
     }
 
+    private void initImage() {
+        login_img_account = findViewById(R.id.login_img_account);
+        login_img_account.setOnClickListener(this);
+        login_img_mobile = findViewById(R.id.login_img_mobile);
+        login_img_mobile.setOnClickListener(this);
+        login_img_email = findViewById(R.id.login_img_email);
+        login_img_email.setOnClickListener(this);
+        login_img_fb = findViewById(R.id.login_img_fb);
+        login_img_fb.setOnClickListener(this);
+        login_img_google = findViewById(R.id.login_img_google);
+        login_img_google.setOnClickListener(this);
+    }
+
     private void initEditText() {
-        login_account = findViewById(R.id.login_account);
-        login_password = findViewById(R.id.login_password);
+        login_edit_account = findViewById(R.id.login_edit_account);
+        login_edit_password = findViewById(R.id.login_edit_password);
     }
 
     private void initToolbar() {
@@ -60,17 +80,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final JSONObject jsonObject= new MemberJsonData().login(0, "886", login_account.getText().toString(), login_password.getText().toString());
+                        final JSONObject jsonObject = new MemberJsonData().login(type, "+886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    boolean success=jsonObject.getBoolean("Success");
-                                    if(success) {
+                                    boolean success = jsonObject.getBoolean("Success");
+                                    if (success) {
                                         gv.setToken(jsonObject.getString("Token"));
+                                        initMemberDB(jsonObject);
                                         finish();
                                     }
-                                    Log.e("wwww",success+"");
+                                    Log.e("success", success + ""+jsonObject.getString("Message"));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -78,9 +99,43 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         });
                     }
                 }).start();
-
-
+                break;
+            case R.id.login_img_account:
+                login_edit_account.setHint("請輸入您的帳號");
+                type=0;
+                break;
+            case R.id.login_img_mobile:
+                login_edit_account.setHint("請輸入您的電話");
+                type=1;
+                break;
+            case R.id.login_img_email:
+                login_edit_account.setHint("請輸入您的信箱");
+                type=2;
+                break;
+            case R.id.login_img_fb:
+                type=3;
+                break;
+            case R.id.login_img_google:
+                type=4;
                 break;
         }
+
+    }
+
+    private void initMemberDB(final JSONObject json) {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                Map<String, String> datas = AnalyzeMember.getLogin(json);
+                if (datas != null) {
+                    db.resetLoginTables();
+                    db.addMember(datas.get("Token"), datas.get("Name"), datas.get("Picture"));
+                    db.close();
+                }
+            }
+        }).start();
+
     }
 }

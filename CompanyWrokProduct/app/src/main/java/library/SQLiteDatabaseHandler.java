@@ -24,15 +24,36 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "android_common";
 
-    // Login table name
+    // Address table name
     private static final String TABLE_ADDRESS = "getAddress";
-
-    // Login Table Columns names
-    private static final String KEY_ID = "id";
+    // Address Table Columns names
+    private static final String KEY_AD_ID = "id";
     private static final String KEY_CITY = "city";
     private static final String KEY_AREA = "area";
     private static final String KEY_ZIPCODE = "zipcode";
     private static final String KEY_MODIFYDATE = "modifydate";
+    private static final String CREATE_ADDRESS_TABLE ="CREATE TABLE IF NOT EXISTS " + TABLE_ADDRESS + "("
+            + KEY_AD_ID + " INTEGER PRIMARY KEY,"
+            + KEY_CITY + " TEXT,"
+            + KEY_AREA + " TEXT,"
+            + KEY_ZIPCODE + " TEXT,"
+            + KEY_MODIFYDATE + " TEXT" + ")";
+
+    // Login table name
+    private static final String TABLE_MEMBER = "getMember";
+    // Login Table Columns names
+    private static final String KEY_LG_ID = "id";
+    private static final String KEY_TOKEN = "token";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_PHOTO= "photo";
+    private static final String KEY_BACKGROUND = "background";
+    private static final String CREATE_LOGIN_TABLE ="CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
+            + KEY_LG_ID + " INTEGER PRIMARY KEY,"
+            + KEY_TOKEN + " TEXT,"
+            + KEY_NAME + " TEXT,"
+            + KEY_PHOTO + " TEXT,"
+            + KEY_BACKGROUND + " TEXT" + ")";
+
 
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,13 +62,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ADDRESS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_CITY + " TEXT,"
-                + KEY_AREA + " TEXT,"
-                + KEY_ZIPCODE + " TEXT,"
-                + KEY_MODIFYDATE + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
+        db.execSQL(CREATE_ADDRESS_TABLE);
     }
 
     // Upgrading database
@@ -55,6 +71,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDRESS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEMBER);
         // Create tables again
         onCreate(db);
     }
@@ -276,7 +293,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Getting user login status
      * return true if rows are there in table
      */
-    public int getRowCount() {
+    public int getAddressRowCount() {
         String countQuery = "SELECT  * FROM " + TABLE_ADDRESS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
@@ -305,11 +322,81 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Re crate database
      * Delete all tables and create them again
      */
-    public void resetTables() {
+    public void resetAddressTables() {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_ADDRESS, null, null);
         db.close();
     }
+    /**
+     * Storing user details in database
+     */
+    public void addMember(String token, String name, String photo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TOKEN, token); // token
+        values.put(KEY_NAME, name); // name
+        values.put(KEY_PHOTO, photo); // photo
+        // Inserting Row
+        db.insert(TABLE_MEMBER, null, values);
+        db.close(); // Closing database connection
+    }
+    /**
+     * Storing user details in database
+     */
+    public void updateBackground(String background) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_BACKGROUND, background); // background
+        // Inserting Row
+        db.update(TABLE_MEMBER,values,KEY_LG_ID+ "=" +1,null);
+        db.close(); // Closing database connection
+    }
+    /**
+     * Getting user data from database
+     */
+    public Map<String, String> getMemberDetail() {
+        Map<String, String> data;
+        String selectQuery = "SELECT  * FROM " + TABLE_MEMBER;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        data = new HashMap<>();
+        if (cursor.getCount() > 0) {
+            data.put("token", cursor.getString(1));
+            data.put("name", cursor.getString(2));
+            data.put("photo", cursor.getString(3));
+            data.put("background", cursor.getString(3));
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return data;
+    }
+    /**
+     * Getting user login status
+     * return true if rows are there in table
+     */
+    public int getLoginRowCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_MEMBER;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int rowCount = cursor.getCount();
+        db.close();
+        cursor.close();
+        // return row count
+        return rowCount;
+    }
 
+    /**
+     * Re crate database
+     * Delete all tables and create them again
+     */
+    public void resetLoginTables() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete All Rows
+        db.delete(TABLE_MEMBER, null, null);
+        db.close();
+    }
 }

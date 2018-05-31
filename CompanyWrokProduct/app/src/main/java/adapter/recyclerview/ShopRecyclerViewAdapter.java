@@ -40,7 +40,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View mHeaderView;
     private View mFooterView;
     private Context ctx;
-    private int layout_width, layout_heigh, had_header = 1;
+    private int layout_width, layout_heigh, had_header = 0;
     private JSONObject json;
     private View view;
     private ArrayList<Map<String, String>> list;

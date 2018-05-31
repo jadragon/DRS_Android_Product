@@ -21,7 +21,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShopCartActivity;
@@ -36,9 +38,9 @@ import java.util.List;
 import java.util.Map;
 
 import adapter.recyclerview.MyRecyclerAdapter;
-import library.GetJsonData.GetInformationByPHP;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.MySwipeRefreshLayout;
+import library.GetJsonData.GetInformationByPHP;
 import library.LoadingView;
 
 /**
@@ -87,7 +89,12 @@ public class Fragment_home extends Fragment {
         home_shopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
+
+                if(gv.getToken()!=null)
                 startActivity(new Intent(getActivity(), ShopCartActivity.class));
+                else
+                    Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
             }
         });
         initSwipeLayout();

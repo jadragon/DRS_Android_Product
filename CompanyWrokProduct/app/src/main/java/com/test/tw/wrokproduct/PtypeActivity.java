@@ -52,14 +52,18 @@ public class PtypeActivity extends AppCompatActivity {
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = findViewById(R.id.ptype_viewpager);
         fragment_shop_content1 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content1.setType(0);
         fragment_shop_content2 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content2.setType(1);
         fragment_shop_content3 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content3.setType(2);
         fragment_shop_content4 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content4.setType(3);
         shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), new Fragment_shop_content[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4});
         viewPager.setAdapter(shopViewPagerAdapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-       // tabLayout.setupWithViewPager(viewPager, true);
+        // tabLayout.setupWithViewPager(viewPager, true);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -116,7 +120,7 @@ public class PtypeActivity extends AppCompatActivity {
         });
     }
 
-    public void setFilter(int position) {
+    public void setFilter(final int position) {
         json1 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 0, 1);
         json2 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 1, 1);
         json3 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 2, 1);
@@ -125,6 +129,10 @@ public class PtypeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    fragment_shop_content1.setPtno(list.get(position).get("ptno"));
+                    fragment_shop_content2.setPtno(list.get(position).get("ptno"));
+                    fragment_shop_content3.setPtno(list.get(position).get("ptno"));
+                    fragment_shop_content4.setPtno(list.get(position).get("ptno"));
                     fragment_shop_content1.setFilter(json1);
                     fragment_shop_content2.setFilter(json2);
                     fragment_shop_content3.setFilter(json3);
@@ -151,9 +159,13 @@ public class PtypeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         fragment_shop_content1.resetRecyclerView(json1);
+                        fragment_shop_content1.setPtno(list.get(index).get("ptno"));
                         fragment_shop_content2.resetRecyclerView(json2);
+                        fragment_shop_content2.setPtno(list.get(index).get("ptno"));
                         fragment_shop_content3.resetRecyclerView(json3);
+                        fragment_shop_content3.setPtno(list.get(index).get("ptno"));
                         fragment_shop_content4.resetRecyclerView(json4);
+                        fragment_shop_content4.setPtno(list.get(index).get("ptno"));
                     }
                 });
             }

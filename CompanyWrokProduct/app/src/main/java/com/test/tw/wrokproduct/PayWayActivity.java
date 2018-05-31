@@ -47,7 +47,6 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payway);
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        gv.setToken("I0JN9@_fTxybt/YuH1j1Ceg==");
         token = gv.getToken();
         initID();
         initToolbar();

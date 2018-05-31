@@ -55,13 +55,18 @@ public class MemberJsonData {
     /**
      * 2.1.3	會員登入
      */
+    public JSONObject login(int type, String account, String pawd) {
+        params.add(new BasicNameValuePair("type", type+""));
+        params.add(new BasicNameValuePair("account", account.trim()));
+        params.add(new BasicNameValuePair("pawd", pawd.trim()));
+        return jsonParser.getJSONFromUrl(login_url, params);
+    }
     public JSONObject login(int type,String mpcode, String account, String pawd) {
         Log.e("gggggg",type+"\n"+mpcode+"\n"+account+"\n"+pawd);
         params.add(new BasicNameValuePair("type", type+""));
-        params.add(new BasicNameValuePair("mpcode", mpcode));
-        params.add(new BasicNameValuePair("account", account));
-        params.add(new BasicNameValuePair("pawd", pawd));
-
+        params.add(new BasicNameValuePair("mpcode", mpcode.trim()));
+        params.add(new BasicNameValuePair("account", account.trim()));
+        params.add(new BasicNameValuePair("pawd", pawd.trim()));
         return jsonParser.getJSONFromUrl(login_url, params);
     }
 }

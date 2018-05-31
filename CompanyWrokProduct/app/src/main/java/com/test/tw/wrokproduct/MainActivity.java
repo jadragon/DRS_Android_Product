@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_community fragment_community;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
-    private View loading;
     BottomNavigationView navigation;
 
     @Override
@@ -48,14 +47,12 @@ public class MainActivity extends AppCompatActivity {
         AppManager.getAppManager().addActivity(this);
         LoadingView.setContext(getApplicationContext());
         LoadingView.getInstance();
-        initAddressDB();
+        initDB();
         initFragments();
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
-        /*
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        gv.setToken("I0JN9@_fTxybt/YuH1j1Ceg==");
-        */
+
+
     }
 
     protected void initBtnNav() {//BottomLayout
@@ -199,7 +196,8 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void initAddressDB() {
+    private void initDB() {
+
         new Thread(new Runnable() {
 
             @Override
@@ -210,12 +208,15 @@ public class MainActivity extends AppCompatActivity {
                 String lastestmodifydate = GetAddress.checkModifydate(json);
                 int sqlmodifydate = db.getModifydate(lastestmodifydate);
                 if (datas.size() > 0 && sqlmodifydate == 0) {
-                    db.resetTables();
+                    db.resetAddressTables();
                     db.addAddressAll(datas, lastestmodifydate);
-                    db.close();
                 }
+                GlobalVariable gv = (GlobalVariable) getApplicationContext();
+                if (db.getLoginRowCount() > 0) {
+                    gv.setToken(db.getMemberDetail().get("token"));
+                }
+                db.close();
             }
         }).start();
-
     }
 }
