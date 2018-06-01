@@ -15,6 +15,7 @@ public class MemberJsonData {
     private static final String register_url = "http://api.gok1945.com/main/member/register.php";
     private static final String gvcode_url = "http://api.gok1945.com/main/member/gvcode.php";
     private static final String login_url = "http://api.gok1945.com/main/member/login.php";
+    private static final String forget_url = "http://api.gok1945.com/main/member/forget.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -55,18 +56,22 @@ public class MemberJsonData {
     /**
      * 2.1.3	會員登入
      */
-    public JSONObject login(int type, String account, String pawd) {
-        params.add(new BasicNameValuePair("type", type+""));
+    public JSONObject login(int type, String mpcode, String account, String pawd) {
+        Log.e("gggggg", type + "\n" + mpcode + "\n" + account + "\n" + pawd);
+        params.add(new BasicNameValuePair("type", type + ""));
+        params.add(new BasicNameValuePair("mpcode", mpcode.trim()));
         params.add(new BasicNameValuePair("account", account.trim()));
         params.add(new BasicNameValuePair("pawd", pawd.trim()));
         return jsonParser.getJSONFromUrl(login_url, params);
     }
-    public JSONObject login(int type,String mpcode, String account, String pawd) {
-        Log.e("gggggg",type+"\n"+mpcode+"\n"+account+"\n"+pawd);
-        params.add(new BasicNameValuePair("type", type+""));
+
+    /**
+     * 2.1.4	忘記密碼
+     */
+    public JSONObject forget(int type, String mpcode, String account) {
+        params.add(new BasicNameValuePair("type", type + ""));
         params.add(new BasicNameValuePair("mpcode", mpcode.trim()));
         params.add(new BasicNameValuePair("account", account.trim()));
-        params.add(new BasicNameValuePair("pawd", pawd.trim()));
         return jsonParser.getJSONFromUrl(login_url, params);
     }
 }

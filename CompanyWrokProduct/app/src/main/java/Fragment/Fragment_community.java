@@ -31,6 +31,7 @@ import java.util.Map;
 
 import adapter.listview.CommunityListViewAdapter;
 import adapter.viewpager.CommunityPagerAdapter;
+import de.hdodenhof.circleimageview.CircleImageView;
 import library.GetJsonData.GetWebView;
 import library.SQLiteDatabaseHandler;
 
@@ -40,11 +41,13 @@ public class Fragment_community extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     Toolbar toolbar;
-    Button fragment_community_btn_login,fragment_community_btn_logout,fragment_community_btn_register;
+    Button fragment_community_btn_login, fragment_community_btn_logout, fragment_community_btn_register;
     GlobalVariable gv;
     View login_success;
-ImageView login_photo;
-TextView login_name;
+    CircleImageView login_photo;
+    TextView login_name;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_community, container, false);
@@ -87,7 +90,7 @@ TextView login_name;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final String json = new GetWebView(getActivity()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==",position);
+                        final String json = new GetWebView(getActivity()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==", position);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -104,25 +107,25 @@ TextView login_name;
         list.add(listView);
         viewPager.setAdapter(new CommunityPagerAdapter(list));
 
-        fragment_community_btn_register=v.findViewById(R.id.fragment_community_btn_register);
+        fragment_community_btn_register = v.findViewById(R.id.fragment_community_btn_register);
         fragment_community_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), RegisterActivity.class));
             }
         });
-        fragment_community_btn_login=v.findViewById(R.id.fragment_community_btn_login);
+        fragment_community_btn_login = v.findViewById(R.id.fragment_community_btn_login);
         fragment_community_btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
-        fragment_community_btn_logout=v.findViewById(R.id.fragment_community_btn_logout);
+        fragment_community_btn_logout = v.findViewById(R.id.fragment_community_btn_logout);
         fragment_community_btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SQLiteDatabaseHandler db=new SQLiteDatabaseHandler(getContext());
+                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
                 db.resetLoginTables();
                 db.close();
                 GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
@@ -135,9 +138,11 @@ TextView login_name;
         return v;
     }
 
+
+
     private void initMember() {
-        login_photo=v.findViewById(R.id.login_photo);
-        login_name=v.findViewById(R.id.login_name);
+        login_photo = v.findViewById(R.id.login_photo);
+        login_name = v.findViewById(R.id.login_name);
     }
 
 
@@ -164,16 +169,16 @@ TextView login_name;
     public void onResume() {
         super.onResume();
 
-        if(gv.getToken()!=null){
+        if (gv.getToken() != null) {
             login_success.setVisibility(View.VISIBLE);
             SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
-           Map<String,String> member= db.getMemberDetail();
-            ImageLoader.getInstance().displayImage(member.get("photo"),login_photo);
+            Map<String, String> member = db.getMemberDetail();
+            ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
             login_name.setText(member.get("name"));
             db.close();
-            Log.e("member",""+member);
+            Log.e("member", "" + member);
 
-        }else {
+        } else {
             login_success.setVisibility(View.INVISIBLE);
         }
     }

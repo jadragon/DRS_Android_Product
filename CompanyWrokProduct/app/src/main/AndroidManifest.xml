@@ -15,30 +15,59 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoadingPage" />
-        <activity android:name=".PtypeActivity" />
-        <activity android:name=".PcContentActivity" />
+        <activity
+            android:name=".LoadingPage"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".PtypeActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".PcContentActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".TestActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".ShopCartActivity" />
-        <activity android:name=".CommunityActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ShopCartActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".CommunityActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".CountActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ShipWayActivity" />
-        <activity android:name=".StoreWebViewActivity" />
-        <activity android:name=".AddStoreShipWayActivity" />
-        <activity android:name=".AddDeliveryShipWayActivity" />
-        <activity android:name=".ListVIewActivity" />
-        <activity android:name=".PayWayActivity" />
-        <activity android:name=".GoldFlowActivity" />
+        <activity
+            android:name=".ShipWayActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".StoreWebViewActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".AddStoreShipWayActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".AddDeliveryShipWayActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ListVIewActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".PayWayActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".GoldFlowActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".FacebookActivity" />
         <!-- Facebook Start -->
         <!-- FB Login -->
@@ -69,8 +98,16 @@
         </activity>
         <!-- Facebook End -->
         <activity android:name=".GoogleSignInActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".RegisterDetailActivity"></activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".RegisterDetailActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ForgetPassActivity"
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

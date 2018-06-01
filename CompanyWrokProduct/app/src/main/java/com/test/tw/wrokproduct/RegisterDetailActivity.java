@@ -17,20 +17,41 @@ import library.GetJsonData.MemberJsonData;
 
 public class RegisterDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
-    EditText registerdetail_edit_account, registerdetail_edit_password;
+    EditText registerdetail_edit_account, registerdetail_edit_password, registerdetail_edit_repassword;
     Button registerdetail_button;
     GlobalVariable gv;
     int type = 1;
     String vcode, account;
+    String id, email, name, photo;
+    int gender;
+    JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_detail);
-        vcode = getIntent().getStringExtra("vcode");
-        account = getIntent().getStringExtra("account");
-        type=getIntent().getIntExtra("type",0);
-        Log.e("type", type+"");
+        type = getIntent().getIntExtra("type", 0);
+        if (type == 1 || type == 2) {
+            vcode = getIntent().getStringExtra("vcode");
+            account = getIntent().getStringExtra("account");
+        } else if (type == 3) {
+            id = getIntent().getStringExtra("id");
+            email = getIntent().getStringExtra("email");
+            name = getIntent().getStringExtra("name");
+            gender = getIntent().getIntExtra("gender", 0);
+            photo = getIntent().getStringExtra("photo");
+            account = email.substring(0, email.indexOf("@"));
+            Log.e("QUICK", "\nID" + id + "\nemail" + email + "\nname" + name + "\ngender" + gender + "\nphoto" + photo + "\naccount" + account);
+        } else if (type == 4) {
+            id = getIntent().getStringExtra("id");
+            email = getIntent().getStringExtra("email");
+            name = getIntent().getStringExtra("name");
+            gender = getIntent().getIntExtra("gender", 0);
+            photo = getIntent().getStringExtra("photo");
+            account = email.substring(0, email.indexOf("@"));
+            Log.e("QUICK", "\nID" + id + "\nemail" + email + "\nname" + name + "\ngender" + gender + "\nphoto" + photo + "\naccount" + account);
+        }
+        Log.e("type", type + "");
         initButton();
         initEditText();
         initToolbar();
@@ -41,27 +62,44 @@ public class RegisterDetailActivity extends AppCompatActivity {
         registerdetail_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final JSONObject jsonObject = new MemberJsonData().register(type, account,registerdetail_edit_password.getText().toString(),"+886",account,vcode,"",0,"");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    boolean success = jsonObject.getBoolean("Success");
-                                    if(success) {
-                                        Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                    Log.e("success", success + "" + jsonObject.getString("Message"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                if (!registerdetail_edit_account.getText().toString().equals("") && !registerdetail_edit_password.getText().toString().equals("") && !registerdetail_edit_repassword.getText().toString().equals("")) {
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            switch (type) {
+                                case 1:
+                                    jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
+                                    break;
+                                case 2:
+                                    jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
+                                    break;
+                                case 3:
+                                    jsonObject = new MemberJsonData().register(type,registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
+                                    break;
+                                case 4:
+                                    jsonObject = new MemberJsonData().register(type,registerdetail_edit_account.getText().toString(),registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
+                                    break;
                             }
-                        });
-                    }
-                }).start();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        boolean success = jsonObject.getBoolean("Success");
+                                        if (success) {
+                                            Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                        Log.e("success", success + "" + jsonObject.getString("Message"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                        }
+                    }).start();
+                }
             }
         });
 
@@ -70,8 +108,9 @@ public class RegisterDetailActivity extends AppCompatActivity {
     private void initEditText() {
         registerdetail_edit_account = findViewById(R.id.registerdetail_edit_account);
         registerdetail_edit_account.setText(account);
-        registerdetail_edit_account.setFocusable(false);
         registerdetail_edit_password = findViewById(R.id.registerdetail_edit_password);
+        registerdetail_edit_password.requestFocus();
+        registerdetail_edit_repassword = findViewById(R.id.registerdetail_edit_repassword);
     }
 
     private void initToolbar() {
