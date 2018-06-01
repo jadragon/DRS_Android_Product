@@ -44,7 +44,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:background="@null"
-                    android:hint="請輸入帳號" />
+                    android:hint="請輸入帳號"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
             </LinearLayout>
 
             <View
@@ -72,7 +75,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:background="@null"
-                    android:hint="請輸入密碼" />
+                    android:hint="請輸入密碼"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
             </LinearLayout>
 
             <View

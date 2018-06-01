@@ -3,12 +3,14 @@ package com.test.tw.wrokproduct;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     GlobalVariable gv;
     ImageView login_img_account, login_img_mobile, login_img_email, login_img_fb, login_img_google;
 int type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,39 +80,46 @@ int type;
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final JSONObject jsonObject = new MemberJsonData().login(type, "+886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    boolean success = jsonObject.getBoolean("Success");
-                                    if (success) {
-                                        gv.setToken(jsonObject.getString("Token"));
-                                        initMemberDB(jsonObject);
-                                        finish();
+                if(!login_edit_account.getText().toString().equals("")&&!login_edit_password.getText().toString().equals("") ){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final JSONObject jsonObject = new MemberJsonData().login(type, "+886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        boolean success = jsonObject.getBoolean("Success");
+                                        if (success) {
+                                            gv.setToken(jsonObject.getString("Token"));
+                                            initMemberDB(jsonObject);
+                                            finish();
+                                        }
+                                        Log.e("success", success + "" + jsonObject.getString("Message"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                    Log.e("success", success + ""+jsonObject.getString("Message"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        });
-                    }
-                }).start();
+                            });
+                        }
+                    }).start();
+                }else {
+                    Toast.makeText(getApplicationContext(), "請先輸入帳號密碼", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.login_img_account:
                 login_edit_account.setHint("請輸入您的帳號");
+                login_edit_account.setInputType(InputType.TYPE_CLASS_TEXT);
                 type=0;
                 break;
             case R.id.login_img_mobile:
                 login_edit_account.setHint("請輸入您的電話");
+                login_edit_account.setInputType(InputType.TYPE_CLASS_PHONE);
                 type=1;
                 break;
             case R.id.login_img_email:
                 login_edit_account.setHint("請輸入您的信箱");
+                login_edit_account.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 type=2;
                 break;
             case R.id.login_img_fb:
@@ -138,4 +148,6 @@ int type;
         }).start();
 
     }
+
+
 }

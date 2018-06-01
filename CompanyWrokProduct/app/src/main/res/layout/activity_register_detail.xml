@@ -45,6 +45,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:background="@null"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:hint="請輸入帳號" />
             </LinearLayout>
 
@@ -73,6 +76,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:hint="6-15為英文數字混合"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:background="@null" />
 
             </LinearLayout>
@@ -101,6 +107,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:hint="請再次輸入密碼"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:background="@null" />
 
             </LinearLayout>

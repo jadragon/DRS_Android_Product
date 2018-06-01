@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.CommunityActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
@@ -25,6 +27,7 @@ import com.test.tw.wrokproduct.RegisterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import adapter.listview.CommunityListViewAdapter;
 import adapter.viewpager.CommunityPagerAdapter;
@@ -38,12 +41,16 @@ public class Fragment_community extends Fragment {
     ViewPager viewPager;
     Toolbar toolbar;
     Button fragment_community_btn_login,fragment_community_btn_logout,fragment_community_btn_register;
+    GlobalVariable gv;
+    View login_success;
+ImageView login_photo;
+TextView login_name;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_community, container, false);
         initToolbar(v);
-
-
+        gv = (GlobalVariable) getActivity().getApplicationContext();
+        login_success = v.findViewById(R.id.login_success);
         tabLayout = v.findViewById(R.id.fragment_community_tablayout);
         TabLayout.Tab tab = tabLayout.newTab();//获得每一个tab
         tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
@@ -121,9 +128,16 @@ public class Fragment_community extends Fragment {
                 GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
                 gv.setToken(null);
                 Toast.makeText(getContext(), "登出", Toast.LENGTH_SHORT).show();
+                login_success.setVisibility(View.INVISIBLE);
             }
         });
+        initMember();
         return v;
+    }
+
+    private void initMember() {
+        login_photo=v.findViewById(R.id.login_photo);
+        login_name=v.findViewById(R.id.login_name);
     }
 
 
@@ -143,14 +157,24 @@ public class Fragment_community extends Fragment {
     private void initToolbar(View view) {
         //Toolbar 建立
         toolbar = view.findViewById(R.id.include_toolbar);
-        ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("登入");
-        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("會員中心");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(gv.getToken()!=null){
+            login_success.setVisibility(View.VISIBLE);
+            SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
+           Map<String,String> member= db.getMemberDetail();
+            ImageLoader.getInstance().displayImage(member.get("photo"),login_photo);
+            login_name.setText(member.get("name"));
+            db.close();
+            Log.e("member",""+member);
+
+        }else {
+            login_success.setVisibility(View.INVISIBLE);
+        }
+    }
 }

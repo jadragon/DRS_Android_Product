@@ -367,7 +367,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             data.put("token", cursor.getString(1));
             data.put("name", cursor.getString(2));
             data.put("photo", cursor.getString(3));
-            data.put("background", cursor.getString(3));
+            data.put("background", cursor.getString(4));
         }
         cursor.close();
         db.close();
