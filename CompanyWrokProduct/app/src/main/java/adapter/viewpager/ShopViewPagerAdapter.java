@@ -4,25 +4,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
+import Fragment.*;
+import java.util.ArrayList;
 
 public class ShopViewPagerAdapter  extends FragmentPagerAdapter {
 
     private String[] mTabtitle;
-    private Fragment[] fragments;
-    public ShopViewPagerAdapter(FragmentManager fm, String[] mTabtitle,Fragment[] fragments) {
+    private ArrayList<Fragment_shop_content> fragmentArrayList;
+    public ShopViewPagerAdapter(FragmentManager fm, String[] mTabtitle,ArrayList<Fragment_shop_content> fragmentArrayList) {
         super(fm);
         this.mTabtitle=mTabtitle;
-        this.fragments=fragments;
+        this.fragmentArrayList=fragmentArrayList;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return  fragments[position];
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+        return  fragmentArrayList.get(position);
     }
 
     @Override

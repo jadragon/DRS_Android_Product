@@ -15,6 +15,8 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetJsonData.GetInformationByPHP;
 
@@ -22,8 +24,8 @@ public class Fragment_shop extends Fragment {
     View v;
     TabLayout tabLayout;
     ViewPager viewPager;
-    JSONObject json1, json2, json3, json4;
-    Fragment_shop_content fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4;
+    ArrayList<Fragment_shop_content> fragmentArrayList;
+    Fragment_shop_content fragment_shop_content;
 
     @Nullable
     @Override
@@ -35,24 +37,30 @@ public class Fragment_shop extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                fragment_shop_content1 = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content1.setJson(new GetInformationByPHP().getBanner(0), new GetInformationByPHP().getIplist(0, 1));
-                fragment_shop_content1.setType(0);
-                fragment_shop_content2 = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content2.setJson(new GetInformationByPHP().getBanner(1), new GetInformationByPHP().getIplist(1, 1));
-                fragment_shop_content2.setType(1);
-                fragment_shop_content3 = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content3.setJson(new GetInformationByPHP().getBanner(2), new GetInformationByPHP().getIplist(2, 1));
-                fragment_shop_content3.setType(2);
-                fragment_shop_content4 = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content4.setJson(new GetInformationByPHP().getBanner(3), new GetInformationByPHP().getIplist(3, 1));
-                fragment_shop_content4.setType(3);
+                fragmentArrayList = new ArrayList<>();
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(0), new GetInformationByPHP().getIplist(0, 1));
+                fragment_shop_content.setType(0);
+                fragmentArrayList.add(fragment_shop_content);
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(1), new GetInformationByPHP().getIplist(1, 1));
+                fragment_shop_content.setType(1);
+                fragmentArrayList.add(fragment_shop_content);
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(2), new GetInformationByPHP().getIplist(2, 1));
+                fragment_shop_content.setType(2);
+                fragmentArrayList.add(fragment_shop_content);
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(3), new GetInformationByPHP().getIplist(3, 1));
+                fragment_shop_content.setType(3);
+                fragmentArrayList.add(fragment_shop_content);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getActivity().getResources().getStringArray(R.array.shop_header_title), new Fragment_shop_content[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4}));
+                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getActivity().getResources().getStringArray(R.array.shop_header_title), fragmentArrayList));
                         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
                         tabLayout.setupWithViewPager(viewPager, true);
+
                     }
                 });
             }
@@ -80,28 +88,6 @@ public class Fragment_shop extends Fragment {
         Log.e("onStart", "onStart");
     }
 
-    public void setFilter() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                json1 = new GetInformationByPHP().getIplist(0, 1);
-                json2 = new GetInformationByPHP().getIplist(1, 1);
-                json3 = new GetInformationByPHP().getIplist(2, 1);
-                json4 = new GetInformationByPHP().getIplist(3, 1);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        fragment_shop_content1.setFilter(json1);
-                        fragment_shop_content2.setFilter(json2);
-                        fragment_shop_content3.setFilter(json3);
-                        fragment_shop_content4.setFilter(json4);
-                    }
-                });
-
-            }
-        }).start();
-    }
-
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -109,7 +95,7 @@ public class Fragment_shop extends Fragment {
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
 
-            setFilter();
+            //  setFilter();
             //网络数据刷新
         }
     }

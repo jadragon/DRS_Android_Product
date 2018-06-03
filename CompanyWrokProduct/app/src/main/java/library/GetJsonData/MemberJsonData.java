@@ -59,9 +59,9 @@ public class MemberJsonData {
     public JSONObject login(int type, String mpcode, String account, String pawd) {
         Log.e("gggggg", type + "\n" + mpcode + "\n" + account + "\n" + pawd);
         params.add(new BasicNameValuePair("type", type + ""));
-        params.add(new BasicNameValuePair("mpcode", mpcode.trim()));
-        params.add(new BasicNameValuePair("account", account.trim()));
-        params.add(new BasicNameValuePair("pawd", pawd.trim()));
+        params.add(new BasicNameValuePair("mpcode", mpcode));
+        params.add(new BasicNameValuePair("account", account));
+        params.add(new BasicNameValuePair("pawd", pawd));
         return jsonParser.getJSONFromUrl(login_url, params);
     }
 
@@ -70,8 +70,8 @@ public class MemberJsonData {
      */
     public JSONObject forget(int type, String mpcode, String account) {
         params.add(new BasicNameValuePair("type", type + ""));
-        params.add(new BasicNameValuePair("mpcode", mpcode.trim()));
-        params.add(new BasicNameValuePair("account", account.trim()));
-        return jsonParser.getJSONFromUrl(login_url, params);
+        params.add(new BasicNameValuePair("mpcode", mpcode));
+        params.add(new BasicNameValuePair("account", account));
+        return jsonParser.getJSONFromUrl(forget_url, params);
     }
 }

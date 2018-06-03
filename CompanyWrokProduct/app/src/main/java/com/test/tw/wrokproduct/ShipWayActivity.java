@@ -1,5 +1,6 @@
 package com.test.tw.wrokproduct;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -88,18 +89,24 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     protected void onRestart() {
         super.onRestart();
         Log.e("onRestart","onRestart");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                json = new ShopCartJsonData().getStoreLogistics(token, sno);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showShipWayRecyclerViewAdapter.setFilterAfterAdd(json);
-                    }
-                });
-            }
-        }).start();
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==0&&resultCode==0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showShipWayRecyclerViewAdapter.setFilterAfterAdd(json);
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 }

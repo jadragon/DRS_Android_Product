@@ -109,6 +109,7 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                                 public void run() {
                                     Log.e("SUCCESS",AnalyzeShopCart.checkSuccess(json)+"");
                                     Toast.makeText(getApplicationContext(), "新增完成" , Toast.LENGTH_SHORT).show();
+                                    setResult(1, null);
                                     finish();
                                 }
                             });

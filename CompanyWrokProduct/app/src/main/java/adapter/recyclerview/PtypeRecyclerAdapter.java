@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -25,18 +26,16 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
     View view;
     ArrayList<Map<String, String>> list;
     DisplayMetrics dm;
-    Bitmap[][] bitmaps;
     PtypeRecyclerAdapter.RecycleHolder recycleHolder;
     LinearLayout.LayoutParams layoutParams;
     private PtypeRecyclerAdapter.ClickListener clickListener;
     int lastposition;
 
-    public PtypeRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list,Bitmap[][] bitmaps, int layout_width, int layout_heigh) {
+    public PtypeRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int layout_width, int layout_heigh) {
         this.ctx = ctx;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;
         this.list = list;
-        this.bitmaps=bitmaps;
         dm = ctx.getResources().getDisplayMetrics();
 
     }
@@ -55,39 +54,10 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
         resizeImageView(holder.imageView,(int)(layout_width),(int)(layout_width));
         holder.ptype_title_linear.setLayoutParams(layoutParams);
         if (lastposition == position) {
-            holder.imageView.setImageBitmap(bitmaps[1][position]);
+            ImageLoader.getInstance().displayImage(list.get(position).get("aimg"), holder.imageView);
         } else {
-            holder.imageView.setImageBitmap(bitmaps[0][position]);
+            ImageLoader.getInstance().displayImage(list.get(position).get("image"), holder.imageView);
         }
-        /*
-        if (images_a[position] == null) {
-            ImageLoader.getInstance().loadImage(list.get(position).get("image"), getWholeOptions(), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view,
-                                              Bitmap loadedImage) {
-                    super.onLoadingComplete(imageUri, view, loadedImage);
-                    images_a[position] = loadedImage;
-                    holder.imageView.setImageBitmap(loadedImage);
-                }
-            });
-        } else {
-            if (lastposition == position) {
-                holder.imageView.setImageBitmap(images_b[position]);
-            } else {
-                holder.imageView.setImageBitmap(images_a[position]);
-            }
-        }
-
-        if (images_b[position] == null)
-            ImageLoader.getInstance().loadImage(list.get(position).get("aimg"), getWholeOptions(), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view,
-                                              Bitmap loadedImage) {
-                    super.onLoadingComplete(imageUri, view, loadedImage);
-                    images_b[position] = loadedImage;
-                }
-            });
-            */
         holder.tv.setText(list.get(position).get("title"));
     }
     private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
@@ -124,7 +94,7 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
             int position = getAdapterPosition();
             if (lastposition != position) {
                 notifyItemChanged(lastposition);
-                imageView.setImageBitmap(bitmaps[1][position]);
+                ImageLoader.getInstance().displayImage(list.get(position).get("aimg"),imageView);
                 lastposition = position;
             }
             if (clickListener != null) {

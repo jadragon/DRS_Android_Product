@@ -1,5 +1,6 @@
 package adapter.recyclerview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -59,20 +60,19 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
         if (json != null) {
-          if( AnalyzeShopCart.getStoreLogisticsData(json)!=null) {
-              title_list = AnalyzeShopCart.getStoreLogisticsData(json);
-              items_list = AnalyzeShopCart.getmyLogisticsArray(json);
-          }else {
-              title_list = new ArrayList<>();
-              items_list = new ArrayList<>();
-          }
+            if (AnalyzeShopCart.getStoreLogisticsData(json) != null) {
+                title_list = AnalyzeShopCart.getStoreLogisticsData(json);
+                items_list = AnalyzeShopCart.getmyLogisticsArray(json);
+            } else {
+                title_list = new ArrayList<>();
+                items_list = new ArrayList<>();
+            }
         } else {
             title_list = new ArrayList<>();
             items_list = new ArrayList<>();
         }
         initData();
     }
-
 
     @Override
     public ShowShipWayRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -81,7 +81,6 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         //頁面
         view.setTag(viewType);
         return new ShowShipWayRecyclerViewAdapter.RecycleHolder(parent, view);
-
 
     }
 
@@ -124,7 +123,6 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 case 0:
                     if (getItemViewType(position) == TYPE_HEADER) {
 
-
                     } else if (getItemViewType(position) == TYPE_CONTENT) {
 
                     }
@@ -155,7 +153,6 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
     }
-
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout showArea;
@@ -198,24 +195,20 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
             hideArea.setDividerDrawable(ctx.getResources().getDrawable(R.drawable.decoration_line));
         }
 
-
-
         @Override
         public void onClick(final View view) {
 
-
         }
-
 
     }
 
     public void setFilter(JSONObject newjson) {
         this.json = newjson;
         if (json != null) {
-            if( AnalyzeShopCart.getStoreLogisticsData(json)!=null) {
+            if (AnalyzeShopCart.getStoreLogisticsData(json) != null) {
                 title_list = AnalyzeShopCart.getStoreLogisticsData(json);
                 items_list = AnalyzeShopCart.getmyLogisticsArray(json);
-            }else {
+            } else {
                 title_list = new ArrayList<>();
                 items_list = new ArrayList<>();
             }
@@ -230,10 +223,10 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     public void setFilterAfterAdd(JSONObject newjson) {
         this.json = newjson;
         if (json != null) {
-            if( AnalyzeShopCart.getStoreLogisticsData(json)!=null) {
+            if (AnalyzeShopCart.getStoreLogisticsData(json) != null) {
                 title_list = AnalyzeShopCart.getStoreLogisticsData(json);
                 items_list = AnalyzeShopCart.getmyLogisticsArray(json);
-            }else {
+            } else {
                 title_list = new ArrayList<>();
                 items_list = new ArrayList<>();
             }
@@ -243,25 +236,26 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         }
         initData();
         //新增後做登陸動作
-            for (int i = 0; i < datas.size(); i++) {
-                if (datas.get(i).getIsused() && (datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getIsused())) {
-                    sno = datas.get(i).getSno();
-                    plno = datas.get(i).getPlno();
-                    mino = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getMlno();
-                    sname = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getSname();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
-                            json = new ShopCartJsonData().getStoreLogistics(token, sno);
-                        }
-                    }).start();
-                    break;
-                }
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).getIsused() && (datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getIsused())) {
+                sno = datas.get(i).getSno();
+                plno = datas.get(i).getPlno();
+                mino = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getMlno();
+                sname = datas.get(i).getMyLogisticsArray().get(datas.get(i).getMyLogisticsArray().size() - 1).getSname();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
+                        json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                    }
+                }).start();
+                break;
             }
-        currentItem=-1;
+        }
+        currentItem = -1;
         notifyDataSetChanged();
     }
+
     private void initItemView(final RecycleHolder holder, ViewGroup parent, final int position) {
         holder.hideArea.removeAllViews();
         LinearLayout linearLayout;
@@ -297,7 +291,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                   holder.vitem_shipwaylist_sname.setText(sname);
+                                    holder.vitem_shipwaylist_sname.setText(sname);
                                     setFilter(json);
                                 }
                             });
@@ -347,11 +341,12 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 intent.putExtra("type", title_list.get(position).get("type"));
                 intent.putExtra("land", title_list.get(position).get("land"));
                 intent.putExtra("logistics", title_list.get(position).get("logistics"));
-                ctx.startActivity(intent);
+                ((Activity) ctx).startActivityForResult(intent, 0);
             }
         });
         holder.hideArea.addView(linearLayout);
     }
+
     public void initData() {
         datas = new ArrayList<>();
         HeaderPojo headerPojo;
@@ -496,7 +491,6 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
             this.myLogisticsArray = myLogisticsArray;
         }
     }
-
 
     private class ItemPojo {
         private String mlno;

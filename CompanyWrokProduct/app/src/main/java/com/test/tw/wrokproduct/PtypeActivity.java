@@ -3,6 +3,7 @@ package com.test.tw.wrokproduct;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,16 +30,17 @@ public class PtypeActivity extends AppCompatActivity {
     DisplayMetrics dm;
     TabLayout tabLayout;
     ViewPager viewPager;
-    JSONObject json1, json2, json3, json4;
-    Fragment_shop_content fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4;
+
     RecyclerView recyclerView;
     JSONObject json;
     ArrayList<Map<String, String>> list;
     ShopViewPagerAdapter shopViewPagerAdapter;
-    Bitmap[][] bitmaps;
     int index;
     int POSITION;
     PtypeRecyclerAdapter adapter;
+    ArrayList<Fragment_shop_content> fragmentArrayList;
+    Fragment_shop_content fragment_shop_content;
+    String currentPtno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,47 +53,65 @@ public class PtypeActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.ptype_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = findViewById(R.id.ptype_viewpager);
-        fragment_shop_content1 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-        fragment_shop_content1.setType(0);
-        fragment_shop_content2 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-        fragment_shop_content2.setType(1);
-        fragment_shop_content3 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-        fragment_shop_content3.setType(2);
-        fragment_shop_content4 = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-        fragment_shop_content4.setType(3);
-        shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), new Fragment_shop_content[]{fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4});
-        viewPager.setAdapter(shopViewPagerAdapter);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        // tabLayout.setupWithViewPager(viewPager, true);
+        //分類
         new Thread(new Runnable() {
             @Override
             public void run() {
                 json = new GetInformationByPHP().getPtype();
                 list = ResolveJsonData.getPtypeDetail(json, POSITION);
-                bitmaps = new Bitmap[2][list.size()];
-                try {
-                    for (int i = 0; i < list.size(); i++) {
-                        bitmaps[0][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("image"));
-                        bitmaps[1][i] = ImageLoader.getInstance().loadImageSync(list.get(i).get("aimg"));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initRecyclerView();
                     }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                initRecyclerView();
-                            } catch (NullPointerException e) {
-                                e.getMessage();
-                            }
-                        }
-                    });
-                    setFilter(0);
-                } catch (NullPointerException e) {
-                    e.getMessage();
-                }
-
+                });
+                fragmentArrayList = new ArrayList<>();
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 0, 1));
+                fragment_shop_content.setType(0);
+                fragmentArrayList.add(fragment_shop_content);
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 1, 1));
+                fragment_shop_content.setType(1);
+                fragmentArrayList.add(fragment_shop_content);
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 2, 1));
+                fragment_shop_content.setType(2);
+                fragmentArrayList.add(fragment_shop_content);
+                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 3, 1));
+                fragment_shop_content.setType(3);
+                fragmentArrayList.add(fragment_shop_content);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), fragmentArrayList);
+                        viewPager.setAdapter(shopViewPagerAdapter);
+                        viewPager.setOffscreenPageLimit(fragmentArrayList.size()-1);
+                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                    }
+                });
             }
         }).start();
+
+
+        /*
+        fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content.setType(0);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content.setType(1);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content.setType(2);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
+        fragment_shop_content.setType(3);
+        fragmentArrayList.add(fragment_shop_content);
+*/
+
+
     }
 
     private void initRecyclerView() {
@@ -102,7 +122,7 @@ public class PtypeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) ((dm.widthPixels - 80 * dm.density) / 4 + 40 * dm.density));
         recyclerView.setLayoutParams(params);
-        adapter = new PtypeRecyclerAdapter(getApplicationContext(), list, bitmaps, (int) ((dm.widthPixels - 80 * dm.density) / 4), (int) ((dm.widthPixels - 80 * dm.density) / 4 + 40 * dm.density));
+        adapter = new PtypeRecyclerAdapter(getApplicationContext(), list, (int) ((dm.widthPixels - 80 * dm.density) / 4), (int) ((dm.widthPixels - 80 * dm.density) / 4 + 40 * dm.density));
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(new PtypeRecyclerAdapter.ClickListener() {
             @Override
@@ -120,56 +140,29 @@ public class PtypeActivity extends AppCompatActivity {
         });
     }
 
-    public void setFilter(final int position) {
-        json1 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 0, 1);
-        json2 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 1, 1);
-        json3 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 2, 1);
-        json4 = new GetInformationByPHP().getPlist(list.get(position).get("ptno"), 3, 1);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    fragment_shop_content1.setPtno(list.get(position).get("ptno"));
-                    fragment_shop_content2.setPtno(list.get(position).get("ptno"));
-                    fragment_shop_content3.setPtno(list.get(position).get("ptno"));
-                    fragment_shop_content4.setPtno(list.get(position).get("ptno"));
-                    fragment_shop_content1.setFilter(json1);
-                    fragment_shop_content2.setFilter(json2);
-                    fragment_shop_content3.setFilter(json3);
-                    fragment_shop_content4.setFilter(json4);
-                } catch (NullPointerException e) {
-                    e.getMessage();
-                }
-
-            }
-        });
+    public void setFilter(int position) {
+        currentPtno = list.get(position).get("ptno");
+        fragmentArrayList.get(0).setPtno(currentPtno);
+        fragmentArrayList.get(1).setPtno(currentPtno);
+        fragmentArrayList.get(2).setPtno(currentPtno);
+        fragmentArrayList.get(3).setPtno(currentPtno);
+        fragmentArrayList.get(0).setFilter(new GetInformationByPHP().getPlist(currentPtno, 0, 1));
+        fragmentArrayList.get(1).setFilter(new GetInformationByPHP().getPlist(currentPtno, 1, 1));
+        fragmentArrayList.get(2).setFilter(new GetInformationByPHP().getPlist(currentPtno, 2, 1));
+        fragmentArrayList.get(3).setFilter(new GetInformationByPHP().getPlist(currentPtno, 3, 1));
 
     }
 
     public void resetRecyclerView(int position) {
-        this.index = position;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                json1 = new GetInformationByPHP().getPlist(list.get(index).get("ptno"), 0, 1);
-                json2 = new GetInformationByPHP().getPlist(list.get(index).get("ptno"), 1, 1);
-                json3 = new GetInformationByPHP().getPlist(list.get(index).get("ptno"), 2, 1);
-                json4 = new GetInformationByPHP().getPlist(list.get(index).get("ptno"), 3, 1);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        fragment_shop_content1.resetRecyclerView(json1);
-                        fragment_shop_content1.setPtno(list.get(index).get("ptno"));
-                        fragment_shop_content2.resetRecyclerView(json2);
-                        fragment_shop_content2.setPtno(list.get(index).get("ptno"));
-                        fragment_shop_content3.resetRecyclerView(json3);
-                        fragment_shop_content3.setPtno(list.get(index).get("ptno"));
-                        fragment_shop_content4.resetRecyclerView(json4);
-                        fragment_shop_content4.setPtno(list.get(index).get("ptno"));
-                    }
-                });
-            }
-        }).start();
+        currentPtno = list.get(position).get("ptno");
+        fragmentArrayList.get(0).setPtno(currentPtno);
+        fragmentArrayList.get(1).setPtno(currentPtno);
+        fragmentArrayList.get(2).setPtno(currentPtno);
+        fragmentArrayList.get(3).setPtno(currentPtno);
+        fragmentArrayList.get(0).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 0, 1));
+        fragmentArrayList.get(1).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 1, 1));
+        fragmentArrayList.get(2).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 2, 1));
+        fragmentArrayList.get(3).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 3, 1));
     }
 
     @Override
@@ -203,29 +196,8 @@ public class PtypeActivity extends AppCompatActivity {
         dm = null;
         tabLayout = null;
         viewPager = null;
-        json1 = null;
-        json2 = null;
-        json3 = null;
-        json4 = null;
-        fragment_shop_content1 = null;
-        fragment_shop_content2 = null;
-        fragment_shop_content3 = null;
-        fragment_shop_content4 = null;
+        fragment_shop_content = null;
         recyclerView = null;
-        try {
-            for (int i = 0; i < bitmaps[0].length; i++) {
-                if (bitmaps[0][i] != null && !bitmaps[0][i].isRecycled()) {
-                    bitmaps[0][i].recycle();
-                }
-                if (bitmaps[1][i] != null && !bitmaps[1][i].isRecycled()) {
-                    bitmaps[1][i].recycle();
-                }
-            }
-        } catch (NullPointerException e) {
-            e.getMessage();
-        }
-
-        bitmaps = null;
         json = null;
         System.gc();
         //释放内存
@@ -244,6 +216,5 @@ public class PtypeActivity extends AppCompatActivity {
         }
         */
     }
-
 
 }

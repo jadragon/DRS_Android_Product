@@ -140,7 +140,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
                 holder.imageView.setImageBitmap(null);
                 ImageLoader.getInstance().displayImage(list.get(position - had_header).get("image"), holder.imageView);
-
                 holder.free.setVisibility(View.INVISIBLE);
                 holder.freash.setVisibility(View.INVISIBLE);
                 holder.hot.setVisibility(View.INVISIBLE);

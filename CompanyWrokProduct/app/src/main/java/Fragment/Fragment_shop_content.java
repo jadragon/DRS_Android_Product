@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -64,7 +65,6 @@ public class Fragment_shop_content extends Fragment {
     public Fragment_shop_content() {
     }
 
-
     @SuppressLint("ValidFragment")
     public Fragment_shop_content(int banner) {
         this.banner = banner;
@@ -79,7 +79,6 @@ public class Fragment_shop_content extends Fragment {
         v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
         initViewPagerAndRecyclerView();
         initSwipeLayout();
-
         return v;
     }
 
@@ -96,12 +95,6 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (banner == SHOW_BANNER) {
-                            json1 = new GetInformationByPHP().getBanner(type);
-                            json2 = new GetInformationByPHP().getIplist(type, 1);
-                        } else if (banner == HIDE_BANNER) {
-                            json2 = new GetInformationByPHP().getPlist(ptno, type, 1);
-                        }
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -134,8 +127,11 @@ public class Fragment_shop_content extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
         myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
-        if(banner==SHOW_BANNER)
-            setHeaderView(myRecyclerAdapter);
+        if (banner == SHOW_BANNER) {
+
+                            setHeaderView(myRecyclerAdapter);
+
+        }
         recyclerView.setAdapter(myRecyclerAdapter);
         // OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         /*重複一直刷
@@ -189,16 +185,17 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        final JSONObject json;
                         if (banner == SHOW_BANNER) {
-                            json2 = new GetInformationByPHP().getIplist(type, nextpage);
-                        } else if (banner == HIDE_BANNER) {
-                            json2 = new GetInformationByPHP().getPlist(ptno, type, nextpage);
+                          json = new GetInformationByPHP().getIplist(type, nextpage);
+                        } else {
+                            json = new GetInformationByPHP().getPlist(ptno, type, nextpage);
                         }
                         nextpage++;
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (!myRecyclerAdapter.setFilterMore(json2)) {
+                                if (!myRecyclerAdapter.setFilterMore(json)) {
                                     nextpage--;
                                 }
                                 LoadingView.hide();
@@ -211,34 +208,6 @@ public class Fragment_shop_content extends Fragment {
         recyclerView.addOnScrollListener(endLessOnScrollListener);
 
         setFooterView(myRecyclerAdapter);
-        /*
-        myRecyclerAdapter.setClickListener(new ShopRecyclerViewAdapter.ClickListener() {
-            @Override
-            public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), PcContentActivity.class);
-                if (banner == HIDE_BANNER) {
-                    intent.putExtra("pno", list.get(postion).get("pno"));
-                } else {
-                    intent.putExtra("pno", list.get(postion - 1).get("pno"));
-                }
-                startActivity(intent);
-            }
-        });
-        */
-                                   /*
-                                recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-                                    @Override
-                                    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                                        outRect.left = 50;
-                                        outRect.right = 50;
-                                        outRect.bottom = 50;
-
-                                        // Add top margin only for the first item to avoid double space between items
-                                        if (parent.getChildPosition(view) == 0)
-                                            outRect.top = 50;
-                                    }
-                                });
-                                */
 
     }
 
@@ -268,21 +237,35 @@ public class Fragment_shop_content extends Fragment {
         adapter.setmFooterViewView(footer);
     }
 
-    public void resetRecyclerView(JSONObject json) {
+    public void resetRecyclerView(final JSONObject json) {
+        json2=json;
+        nextpage = 2;
         if (myRecyclerAdapter != null) {
-            int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-            myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
-            recyclerView.setAdapter(myRecyclerAdapter);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+                    recyclerView.setAdapter(myRecyclerAdapter);
+                }
+            });
+
         }
     }
 
-    public void setFilter(JSONObject json) {
-        this.json2 = json;
+    public void setFilter(final JSONObject json) {
+        json2=json;
+        nextpage = 2;
         if (myRecyclerAdapter != null) {
-            myRecyclerAdapter.setFilter(json);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    myRecyclerAdapter.setFilter(json);
+                }
+            });
         }
-    }
 
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
