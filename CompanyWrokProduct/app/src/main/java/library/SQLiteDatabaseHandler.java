@@ -44,12 +44,14 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     // Login Table Columns names
     private static final String KEY_LG_ID = "id";
     private static final String KEY_TOKEN = "token";
+    private static final String KEY_ACCOUNT = "account";
     private static final String KEY_NAME = "name";
     private static final String KEY_PHOTO= "photo";
     private static final String KEY_BACKGROUND = "background";
     private static final String CREATE_LOGIN_TABLE ="CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
             + KEY_LG_ID + " INTEGER PRIMARY KEY,"
             + KEY_TOKEN + " TEXT,"
+            + KEY_ACCOUNT + " TEXT,"
             + KEY_NAME + " TEXT,"
             + KEY_PHOTO + " TEXT,"
             + KEY_BACKGROUND + " TEXT" + ")";
@@ -331,10 +333,11 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      */
-    public void addMember(String token, String name, String photo) {
+    public void addMember(String token,String account, String name, String photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TOKEN, token); // token
+        values.put(KEY_ACCOUNT, account); // account
         values.put(KEY_NAME, name); // name
         values.put(KEY_PHOTO, photo); // photo
         // Inserting Row
@@ -365,9 +368,10 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         data = new HashMap<>();
         if (cursor.getCount() > 0) {
             data.put("token", cursor.getString(1));
-            data.put("name", cursor.getString(2));
-            data.put("photo", cursor.getString(3));
-            data.put("background", cursor.getString(4));
+            data.put("account", cursor.getString(2));
+            data.put("name", cursor.getString(3));
+            data.put("photo", cursor.getString(4));
+            data.put("background", cursor.getString(5));
         }
         cursor.close();
         db.close();

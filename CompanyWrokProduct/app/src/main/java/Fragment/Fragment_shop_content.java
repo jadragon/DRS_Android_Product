@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -19,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -49,6 +49,7 @@ public class Fragment_shop_content extends Fragment {
     library.Component.MySwipeRefreshLayout mSwipeLayout;
     EndLessOnScrollListener endLessOnScrollListener;
     String ptno;
+    String token;
 
     public void setPtno(String ptno) {
         this.ptno = ptno;
@@ -77,6 +78,8 @@ public class Fragment_shop_content extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
+        GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
+        token = gv.getToken();
         initViewPagerAndRecyclerView();
         initSwipeLayout();
         return v;
@@ -95,6 +98,10 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        if (banner == SHOW_BANNER)
+                            json2 = new GetInformationByPHP().getIplist(type, token, 1);
+                        else
+                            json2 = new GetInformationByPHP().getPlist(ptno, type, 1);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -126,10 +133,10 @@ public class Fragment_shop_content extends Fragment {
         int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
+        myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
         if (banner == SHOW_BANNER) {
 
-                            setHeaderView(myRecyclerAdapter);
+            setHeaderView(myRecyclerAdapter);
 
         }
         recyclerView.setAdapter(myRecyclerAdapter);
@@ -187,7 +194,7 @@ public class Fragment_shop_content extends Fragment {
                     public void run() {
                         final JSONObject json;
                         if (banner == SHOW_BANNER) {
-                          json = new GetInformationByPHP().getIplist(type, nextpage);
+                            json = new GetInformationByPHP().getIplist(type, token, nextpage);
                         } else {
                             json = new GetInformationByPHP().getPlist(ptno, type, nextpage);
                         }
@@ -238,7 +245,7 @@ public class Fragment_shop_content extends Fragment {
     }
 
     public void resetRecyclerView(final JSONObject json) {
-        json2=json;
+        json2 = json;
         nextpage = 2;
         if (myRecyclerAdapter != null) {
             getActivity().runOnUiThread(new Runnable() {
@@ -254,7 +261,7 @@ public class Fragment_shop_content extends Fragment {
     }
 
     public void setFilter(final JSONObject json) {
-        json2=json;
+        json2 = json;
         nextpage = 2;
         if (myRecyclerAdapter != null) {
             getActivity().runOnUiThread(new Runnable() {
@@ -266,6 +273,7 @@ public class Fragment_shop_content extends Fragment {
         }
 
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

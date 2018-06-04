@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.CommunityActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
+import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
 
@@ -54,35 +55,18 @@ public class Fragment_community extends Fragment {
         initToolbar(v);
         gv = (GlobalVariable) getActivity().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
-        tabLayout = v.findViewById(R.id.fragment_community_tablayout);
-        TabLayout.Tab tab = tabLayout.newTab();//获得每一个tab
-        tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
-        ImageView imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
-        imageView.setImageResource(R.drawable.community);
-        imageView.setSelected(true);
-        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("社群");
-        tabLayout.addTab(tab);
-        /*
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                tab.getCustomView().findViewById(R.id.viewitem_tabItem_img).setSelected(true);
 
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getCustomView().findViewById(R.id.viewitem_tabItem_img).setSelected(false);
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
-
-*/
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
+        //List
         List<View> list = new ArrayList<>();
+        View inflate=LayoutInflater.from(getContext()).inflate(R.layout.table_layout,null);
+        initTableItem(inflate);
+        list.add(inflate);
         ListView listView = new ListView(getActivity());
+        listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.store_manage_image), getResources().getStringArray(R.array.store_manage_title)));
+        list.add(listView);
+        listView = new ListView(getActivity());
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.community_image), getResources().getStringArray(R.array.community_title)));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,7 +89,50 @@ public class Fragment_community extends Fragment {
             }
         });
         list.add(listView);
+        //List
+
         viewPager.setAdapter(new CommunityPagerAdapter(list));
+        //TabLayout
+        tabLayout = v.findViewById(R.id.fragment_community_tablayout);
+        TabLayout.Tab tab = tabLayout.newTab();//获得每一个tab
+        tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
+        ImageView imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
+        imageView.setImageResource(R.drawable.my_account);
+        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("我的帳戶");
+        tabLayout.addTab(tab);
+        tab = tabLayout.newTab();//获得每一个tab
+        tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
+        imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
+        imageView.setImageResource(R.drawable.store_manage);
+        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("商家管理");
+        tabLayout.addTab(tab);
+        tab = tabLayout.newTab();//获得每一个tab
+        tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
+        imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
+        imageView.setImageResource(R.drawable.community);
+        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("社群");
+        tabLayout.addTab(tab);
+        //TabLayout
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
 
         fragment_community_btn_register = v.findViewById(R.id.fragment_community_btn_register);
         fragment_community_btn_register.setOnClickListener(new View.OnClickListener() {
@@ -125,19 +152,13 @@ public class Fragment_community extends Fragment {
         fragment_community_btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
-                db.resetLoginTables();
-                db.close();
-                GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
-                gv.setToken(null);
-                Toast.makeText(getContext(), "登出", Toast.LENGTH_SHORT).show();
-                login_success.setVisibility(View.INVISIBLE);
+                startActivity(new Intent(getActivity(), LogoutActivity.class));
+
             }
         });
         initMember();
         return v;
     }
-
 
 
     private void initMember() {
@@ -164,7 +185,139 @@ public class Fragment_community extends Fragment {
         toolbar = view.findViewById(R.id.include_toolbar);
         ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("會員中心");
     }
+    public void initTableItem(final View v) {
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.a1:
+                        if (v.findViewById(R.id.a1_0).getVisibility() == View.VISIBLE) {
+                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                        } else {
+                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
 
+                            v.findViewById(R.id.a1_0).setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    case R.id.a1_1:
+                        Toast.makeText(getActivity(), "a1_1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.a1_2:
+                        Toast.makeText(getActivity(), "a1_2", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.a1_3:
+                        Toast.makeText(getActivity(), "a1_3", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1:
+                        if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {
+                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                        } else {
+                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+
+                            v.findViewById(R.id.b1_0).setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    case R.id.b1_1:
+                        Toast.makeText(getActivity(), "b1_1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_2:
+                        Toast.makeText(getActivity(), "b1_2", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_3:
+                        Toast.makeText(getActivity(), "b1_3", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_4:
+                        Toast.makeText(getActivity(), "b1_4", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_5:
+                        Toast.makeText(getActivity(), "b1_5", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_6:
+                        Toast.makeText(getActivity(), "b1_6", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_7:
+                        Toast.makeText(getActivity(), "b1_7", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_8:
+                        Toast.makeText(getActivity(), "b1_8", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.b1_9:
+                        Toast.makeText(getActivity(), "b1_9", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.c1:
+                        if (v.findViewById(R.id.c1_0).getVisibility() == View.VISIBLE) {
+                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                        } else {
+                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+
+                            v.findViewById(R.id.c1_0).setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    case R.id.c1_1:
+                        Toast.makeText(getActivity(), "c1_1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.c1_2:
+                        Toast.makeText(getActivity(), "c1_2", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.c1_3:
+                        Toast.makeText(getActivity(), "c1_3", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.d1:
+                        if (v.findViewById(R.id.d1_0).getVisibility() == View.VISIBLE) {
+                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+                        } else {
+                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+
+                            v.findViewById(R.id.d1_0).setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    case R.id.d1_1:
+                        Toast.makeText(getActivity(), "d1_1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.d1_2:
+                        Toast.makeText(getActivity(), "d1_2", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.d1_3:
+                        Toast.makeText(getActivity(), "d1_3", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+        v.findViewById(R.id.a1).setOnClickListener(clickListener);
+        v.findViewById(R.id.a1_1).setOnClickListener(clickListener);
+        v.findViewById(R.id.a1_2).setOnClickListener(clickListener);
+        v.findViewById(R.id.a1_3).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_1).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_2).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_3).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_4).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_5).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_6).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_7).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_8).setOnClickListener(clickListener);
+        v.findViewById(R.id.b1_9).setOnClickListener(clickListener);
+        v.findViewById(R.id.c1).setOnClickListener(clickListener);
+        v.findViewById(R.id.c1_1).setOnClickListener(clickListener);
+        v.findViewById(R.id.c1_2).setOnClickListener(clickListener);
+        v.findViewById(R.id.c1_3).setOnClickListener(clickListener);
+        v.findViewById(R.id.d1).setOnClickListener(clickListener);
+        v.findViewById(R.id.d1_1).setOnClickListener(clickListener);
+        v.findViewById(R.id.d1_2).setOnClickListener(clickListener);
+        v.findViewById(R.id.d1_3).setOnClickListener(clickListener);
+    }
     @Override
     public void onResume() {
         super.onResume();

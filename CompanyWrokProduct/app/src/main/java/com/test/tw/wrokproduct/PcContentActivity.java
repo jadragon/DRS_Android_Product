@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +42,7 @@ import library.AppManager;
 import library.Component.MyViewPager;
 import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.ShopCartJsonData;
+import library.component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
 public class PcContentActivity extends AppCompatActivity {
@@ -74,17 +74,20 @@ public class PcContentActivity extends AppCompatActivity {
     int[] stars = {R.drawable.star0_2, R.drawable.star1_2, R.drawable.star2_2, R.drawable.star3_2, R.drawable.star4_2, R.drawable.star5_2};
     String pino;
     String Message;
-String token;
+    String token;
+    ToastMessageDialog toastMessageDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pccontent);
         productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token=gv.getToken();
+        token = gv.getToken();
         pno = productInfoPojo.getPno();
         //pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
+        toastMessageDialog = new ToastMessageDialog(this);
         AppManager.getAppManager().addActivity(this);
         initToolbar();
         setText();
@@ -384,40 +387,41 @@ String token;
     //加入我的最愛
     private void initFavorate() {
         heart = findViewById(R.id.pccontent_heart);
+        if (productInfoPojo.getFavorite()) {
+            heart.setImageResource(R.drawable.heart_on);
+        } else {
+            heart.setImageResource(R.drawable.heart_off);
+        }
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (heart.getDrawable().getCurrent().getConstantState().equals(getResources().getDrawable(R.drawable.heart_off).getConstantState())) {
-                    heart.setImageResource(R.drawable.heart_on);
-                    toastFavorate(0);
-                } else {
+                if (productInfoPojo.getFavorite()) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new GetInformationByPHP().delFavoriteProduct(token, productInfoPojo.getPno());
+                        }
+                    }).start();
                     heart.setImageResource(R.drawable.heart_off);
-                    toastFavorate(1);
+                    toastMessageDialog.setMessageText("已取消我的最愛");
+                    toastMessageDialog.show();
+                    productInfoPojo.setFavorite(false);
+                } else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new GetInformationByPHP().setFavorite(token, productInfoPojo.getPno());
+                        }
+                    }).start();
+                    heart.setImageResource(R.drawable.heart_on);
+                    toastMessageDialog.setMessageText("已加入我的最愛");
+                    toastMessageDialog.show();
+                    productInfoPojo.setFavorite(true);
                 }
 
             }
 
         });
-    }
-
-    //設定
-    private void toastFavorate(int yes_or_not) {
-        dialog = new Dialog(this);
-        inflate = LayoutInflater.from(this).inflate(R.layout.favorate_layout, null);
-        if (yes_or_not == 0)
-            ((TextView) inflate.findViewById(R.id.favor_txt)).setText("已加入我的最愛");
-        else if (yes_or_not == 1)
-            ((TextView) inflate.findViewById(R.id.favor_txt)).setText("已取消我的最愛");
-        dialog.setContentView(inflate);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();//显示对话框
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        }, 1500);
     }
 
 
@@ -472,9 +476,9 @@ String token;
 
 
     private String getDeciamlString(String str) {
-       // DecimalFormat df = new DecimalFormat("###,###");
-       // return df.format(Double.parseDouble(str));
-        return  str;
+        // DecimalFormat df = new DecimalFormat("###,###");
+        // return df.format(Double.parseDouble(str));
+        return str;
     }
 
 }

@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -46,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import library.GetJsonData.MemberJsonData;
+import library.component.ToastMessageDialog;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
@@ -55,11 +55,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     ImageView register_img_mobile, register_img_email, register_img_fb, register_img_google;
     int type = 1;
     String vcode;
-
+ToastMessageDialog toastMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        toastMessage=new ToastMessageDialog(this);
         initButton();
         initImage();
         initEditText();
@@ -115,10 +116,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         intent.putExtra("account", register_edit_account.getText().toString());
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "請確認您輸入的驗證碼是否正確", Toast.LENGTH_SHORT).show();
+                        toastMessage.setMessageText("請確認您輸入的驗證碼是否正確");
+                        toastMessage.confirm();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "請先取得驗證碼後再進行下一步", Toast.LENGTH_SHORT).show();
+                    toastMessage.setMessageText("請先取得驗證碼後再進行下一步");
+                    toastMessage.confirm();
                 }
                 break;
             case R.id.register_btn_gvcode:
@@ -136,7 +139,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                             vcode = jsonObject.getString("Data");
                                             register_edit_account.setFocusable(false);
                                         }
-                                        Toast.makeText(getApplicationContext(), jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                        toastMessage.setMessageText( jsonObject.getString("Message"));
+                                        toastMessage.confirm();
                                         Log.e("success", success + "" + jsonObject.getString("Message"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -146,7 +150,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }).start();
                 } else {
-                    Toast.makeText(getApplicationContext(), "請先輸入手機號碼或信箱", Toast.LENGTH_SHORT).show();
+                    toastMessage.setMessageText("請先輸入手機號碼或信箱");
+                    toastMessage.confirm();
                 }
                 break;
             case R.id.register_img_mobile:

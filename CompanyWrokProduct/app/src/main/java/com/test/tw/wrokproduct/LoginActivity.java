@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -43,6 +42,7 @@ import java.util.Map;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
+import library.component.ToastMessageDialog;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
@@ -54,11 +54,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     String id;
     JSONObject jsonObject;
     TextView login_btn_forget, login_btn_register;
+    ToastMessageDialog toastMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        toastMessage = new ToastMessageDialog(this);
         gv = (GlobalVariable) getApplicationContext();
         initToolbar();
         initEditText();
@@ -80,7 +82,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_btn_forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, ForgetPassActivity.class));
+                Intent intent=new Intent(LoginActivity.this, ForgetPassActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -125,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                if (!login_edit_account.getText().toString().equals("")) {
+                if (!login_edit_account.getText().toString().equals("")&&!login_edit_password.getText().toString().equals("")) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -139,6 +142,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             gv.setToken(jsonObject.getString("Token"));
                                             initMemberDB(jsonObject);
                                             finish();
+                                        } else {
+                                            toastMessage.setMessageText(jsonObject.getString("Message"));
+                                            toastMessage.confirm();
                                         }
                                         Log.e("success", success + "" + jsonObject.getString("Message"));
                                     } catch (JSONException e) {
@@ -149,7 +155,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }).start();
                 } else {
-                    Toast.makeText(getApplicationContext(), "請先輸入帳號密碼", Toast.LENGTH_SHORT).show();
+                    toastMessage.setMessageText("請先輸入帳號密碼");
+                    toastMessage.confirm();
                 }
                 break;
             case R.id.login_img_account:
@@ -184,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Map<String, String> datas = AnalyzeMember.getLogin(json);
         db.resetLoginTables();
         if (datas != null) {
-            db.addMember(datas.get("Token"), datas.get("Name"), datas.get("Picture"));
+            db.addMember(datas.get("Token"),login_edit_account.getText().toString(), datas.get("Name"), datas.get("Picture"));
         }
         db.close();
 

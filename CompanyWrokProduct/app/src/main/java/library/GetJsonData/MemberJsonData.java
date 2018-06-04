@@ -69,6 +69,7 @@ public class MemberJsonData {
      * 2.1.4	忘記密碼
      */
     public JSONObject forget(int type, String mpcode, String account) {
+        Log.e("type",type+"");
         params.add(new BasicNameValuePair("type", type + ""));
         params.add(new BasicNameValuePair("mpcode", mpcode));
         params.add(new BasicNameValuePair("account", account));

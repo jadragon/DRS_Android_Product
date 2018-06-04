@@ -33,7 +33,7 @@
         <activity
             android:name=".PcContentActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".TestActivity"></activity>
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
@@ -101,13 +101,13 @@
         <activity
             android:name=".RegisterActivity"
             android:launchMode="singleTop" />
-
         <activity
             android:name=".RegisterDetailActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ForgetPassActivity"
             android:launchMode="singleTask" />
+        <activity android:name=".LogoutActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package library.GetJsonData;
 
+import android.util.Log;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
@@ -71,6 +73,7 @@ public JSONObject test() {
      * 取消最愛
      */
     public JSONObject delFavoriteProduct(String token, String pno) {
+        Log.e("delFavoriteProduct", token + "\n" + pno);
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(delFavoriteProduct_url, params);
@@ -80,6 +83,7 @@ public JSONObject test() {
      * 設為最愛
      */
     public JSONObject setFavorite(String token, String pno) {
+        Log.e("delFavoriteProduct", token + "\n" + pno);
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(setFavorite_url, params);
@@ -132,8 +136,9 @@ public JSONObject test() {
     /**
      * 取得每日新品欄資料
      */
-    public JSONObject getIplist(int type, int page) {
+    public JSONObject getIplist(int type, String token, int page) {
         params.add(new BasicNameValuePair("type", "" + type));
+        params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(iplist_url, params);
     }

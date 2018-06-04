@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import library.GetJsonData.MemberJsonData;
+import library.component.ToastMessageDialog;
 
 public class RegisterDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -25,11 +25,12 @@ public class RegisterDetailActivity extends AppCompatActivity {
     String id, email, name, photo;
     int gender;
     JSONObject jsonObject;
-
+ToastMessageDialog toastMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_detail);
+        toastMessage=new ToastMessageDialog(this);
         type = getIntent().getIntExtra("type", 0);
         if (type == 1 || type == 2) {
             vcode = getIntent().getStringExtra("vcode");
@@ -63,42 +64,52 @@ public class RegisterDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!registerdetail_edit_account.getText().toString().equals("") && !registerdetail_edit_password.getText().toString().equals("") && !registerdetail_edit_repassword.getText().toString().equals("")) {
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            switch (type) {
-                                case 1:
-                                    jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
-                                    break;
-                                case 2:
-                                    jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
-                                    break;
-                                case 3:
-                                    jsonObject = new MemberJsonData().register(type,registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
-                                    break;
-                                case 4:
-                                    jsonObject = new MemberJsonData().register(type,registerdetail_edit_account.getText().toString(),registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
-                                    break;
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        boolean success = jsonObject.getBoolean("Success");
-                                        if (success) {
-                                            Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        }
-                                        Log.e("success", success + "" + jsonObject.getString("Message"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                    if (registerdetail_edit_password.getText().toString().equals(registerdetail_edit_repassword.getText().toString())) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                switch (type) {
+                                    case 1:
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
+                                        break;
+                                    case 2:
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
+                                        break;
+                                    case 3:
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
+                                        break;
+                                    case 4:
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
+                                        break;
                                 }
-                            });
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            boolean success = jsonObject.getBoolean("Success");
+                                            if (success) {
+                                                toastMessage.setMessageText("註冊成功");
+                                                toastMessage.confirm();
+                                                finish();
+                                            }
+                                            Log.e("success", success + "" + jsonObject.getString("Message"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
 
-                        }
-                    }).start();
+                            }
+                        }).start();
+                    } else {
+                        toastMessage.setMessageText("請確認密碼輸入是否正確");
+                        toastMessage.confirm();
+                    }
+
+
+                } else {
+                    toastMessage.setMessageText("請將欄位填寫完整");
+                    toastMessage.confirm();
                 }
             }
         });
@@ -125,4 +136,5 @@ public class RegisterDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 }

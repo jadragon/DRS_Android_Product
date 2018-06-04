@@ -24,6 +24,24 @@
         <item>@drawable/pointup</item>
         <item>@drawable/recommended_members</item>
     </array>
+    <string-array name="store_manage_title">
+        <item>申請商家</item>
+        <item>商家介紹</item>
+        <item>商家資料</item>
+        <item>商品管理</item>
+        <item>商品訂單</item>
+        <item>物流管理</item>
+        <item>賣家評價</item>
+    </string-array>
+    <array name="store_manage_image">
+        <item>@drawable/apply_business</item>
+        <item>@drawable/store_introduce</item>
+        <item>@drawable/business_info</item>
+        <item>@drawable/product_manage</item>
+        <item>@drawable/product_list</item>
+        <item>@drawable/logistics_manage</item>
+        <item>@drawable/store_evaluate</item>
+    </array>
     <string name="facebook_app_id">172989503377924</string>
     <string name="fb_login_protocol_scheme">fb172989503377924</string>
     //Google

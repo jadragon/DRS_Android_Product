@@ -1,5 +1,6 @@
 package adapter.recyclerview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -14,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -30,6 +30,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.GetInformationByPHP;
+import library.component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> {
@@ -63,7 +64,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.mFooterView = mFooterView;
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int had_header,int type) {
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int had_header, int type) {
         this.ctx = ctx;
         this.had_header = had_header;
         this.type = type;
@@ -77,7 +78,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         initItems();
         dm = ctx.getResources().getDisplayMetrics();
         gv = (GlobalVariable) ctx.getApplicationContext();
-        token=gv.getToken();
+        token = gv.getToken();
     }
 
     private void initItems() {
@@ -90,7 +91,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh,int type) {
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int type) {
         this.ctx = ctx;
         this.json = json;
         this.type = type;
@@ -209,26 +210,34 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 holder.linear_heart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (itemsList.get(position - had_header).getFavorite()) {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new GetInformationByPHP().delFavoriteProduct(token,itemsList.get(position - had_header).getPno());
-                                }
-                            }).start();
-                            itemsList.get(position - had_header).setFavorite(false);
-                            holder.heart.setImageResource(R.drawable.heart_off);
-                        } else {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new GetInformationByPHP().setFavorite(token,itemsList.get(position - had_header).getPno());
-                                }
-                            }).start();
-                            itemsList.get(position - had_header).setFavorite(true);
-                            holder.heart.setImageResource(R.drawable.heart_on);
-                        }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (itemsList.get(position - had_header).getFavorite()) {
+                                    new GetInformationByPHP().delFavoriteProduct(token, itemsList.get(position - had_header).getPno());
+                                    itemsList.get(position - had_header).setFavorite(false);
+                                    ((Activity) ctx).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            holder.heart.setImageResource(R.drawable.heart_off);
+                                        }
+                                    });
 
+                                } else {
+                                    new GetInformationByPHP().setFavorite(token, itemsList.get(position - had_header).getPno());
+                                    itemsList.get(position - had_header).setFavorite(true);
+                                    ((Activity) ctx).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            holder.heart.setImageResource(R.drawable.heart_on);
+                                        }
+                                    });
+
+                                }
+
+                            }
+
+                        }).start();
                     }
                 });
             } else if (getItemViewType(position) == TYPE_HEADER) {
@@ -236,8 +245,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
 
     }
-
-
 
 
     private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
@@ -341,13 +348,14 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             if (had_header != 0) {
                 position--;
             }
-
-            bundle.putSerializable("productInfoPojo", itemsList.get(position));
-            intent.putExtras(bundle);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ctx.startActivity(intent);
-            if (clickListener != null) {
-                clickListener.ItemClicked(view, position, list);
+            if (itemsList.size() > position) {
+                bundle.putSerializable("productInfoPojo", itemsList.get(position));
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(intent);
+                if (clickListener != null) {
+                    clickListener.ItemClicked(view, position, list);
+                }
             }
         }
     }
@@ -379,7 +387,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             notifyDataSetChanged();
             return true;
         } else {
-            Toast.makeText(ctx, "沒有更多了", Toast.LENGTH_SHORT).show();
+            new ToastMessageDialog(ctx, "沒有更多了").show();
             initItems();
             notifyDataSetChanged();
             return false;
