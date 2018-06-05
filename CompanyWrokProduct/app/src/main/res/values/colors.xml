@@ -21,6 +21,7 @@
     <color name="shipway_orange_dark">#f7931e</color>
     <color name="shipway_blue_dark">#2e3192</color>
     <color name="shipway_gray">#808080</color>
+    <color name="default_gray_invisible">#f0f2f2f2</color>
     <!-- 運送方式 -->
     <color name="default_gray">#f2f2f2</color>
     <color name="ivory">#FFFFF0</color><!-- 象牙色 -->

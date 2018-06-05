@@ -8,11 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
+import library.AnalyzeJSON.AnalyzeMember;
+import library.AppManager;
 import library.GetJsonData.MemberJsonData;
+import library.SQLiteDatabaseHandler;
 import library.component.ToastMessageDialog;
 
 public class RegisterDetailActivity extends AppCompatActivity {
@@ -25,12 +31,14 @@ public class RegisterDetailActivity extends AppCompatActivity {
     String id, email, name, photo;
     int gender;
     JSONObject jsonObject;
-ToastMessageDialog toastMessage;
+    ToastMessageDialog toastMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_detail);
-        toastMessage=new ToastMessageDialog(this);
+        AppManager.getAppManager().addActivity(this);
+        toastMessage = new ToastMessageDialog(this);
         type = getIntent().getIntExtra("type", 0);
         if (type == 1 || type == 2) {
             vcode = getIntent().getStringExtra("vcode");
@@ -88,9 +96,12 @@ ToastMessageDialog toastMessage;
                                         try {
                                             boolean success = jsonObject.getBoolean("Success");
                                             if (success) {
-                                                toastMessage.setMessageText("註冊成功");
+                                                Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
+                                                AppManager.getAppManager().finishActivity(RegisterActivity.class);
+                                                AppManager.getAppManager().finishActivity(RegisterDetailActivity.class);
+                                            } else {
+                                                toastMessage.setMessageText(jsonObject.getString("Message"));
                                                 toastMessage.confirm();
-                                                finish();
                                             }
                                             Log.e("success", success + "" + jsonObject.getString("Message"));
                                         } catch (JSONException e) {
@@ -137,4 +148,14 @@ ToastMessageDialog toastMessage;
         });
     }
 
+    private void initMemberDB(final JSONObject json) {
+        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+        Map<String, String> datas = AnalyzeMember.getLogin(json);
+        db.resetLoginTables();
+        if (datas != null) {
+            db.addMember(datas.get("Token"), registerdetail_edit_account.getText().toString(), datas.get("Name"), datas.get("Picture"));
+        }
+        db.close();
+
+    }
 }

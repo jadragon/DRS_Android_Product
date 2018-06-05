@@ -66,9 +66,9 @@
             android:id="@+id/login_success"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/default_gray"
-            android:visibility="invisible"
-            android:clickable="true">
+            android:background="@drawable/member_bg1"
+            android:clickable="true"
+            android:visibility="invisible">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/login_photo"
@@ -80,7 +80,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/quick_login_account" />
+                android:src="@drawable/quick_login_account" />
 
             <TextView
                 android:id="@+id/login_name"
@@ -89,7 +89,7 @@
                 android:layout_marginStart="120dp"
                 android:layout_marginTop="28dp"
                 android:text="無名氏"
-                android:textColor="@color/gray"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -108,11 +108,11 @@
 
             <Button
                 android:id="@+id/fragment_community_btn_logout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginEnd="28dp"
                 android:layout_marginTop="28dp"
-                android:background="@android:drawable/ic_lock_power_off"
+                android:background="@drawable/logout_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
@@ -129,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             app:tabGravity="fill"
-            app:tabIndicatorHeight="3dp"/>
+            app:tabIndicatorHeight="3dp" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/fragment_community_viewpager"

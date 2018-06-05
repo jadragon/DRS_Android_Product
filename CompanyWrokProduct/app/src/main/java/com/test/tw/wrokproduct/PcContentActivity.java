@@ -1,6 +1,5 @@
 package com.test.tw.wrokproduct;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -54,10 +53,8 @@ public class PcContentActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     LinearLayout ship_ways;
-    TextView pccontent_txt_title, pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
+    TextView  pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
     String pno;
-    Dialog dialog;
-    private View inflate;
     RecyclerView recyclerView;
     ImageView heart, pccontent_btn_home, pccontent_img_star;
     View enable_background;
@@ -85,7 +82,6 @@ public class PcContentActivity extends AppCompatActivity {
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
         token = gv.getToken();
         pno = productInfoPojo.getPno();
-        //pno = "URwlZEnZscDdnIJN4vjczw==";
         dm = getResources().getDisplayMetrics();
         toastMessageDialog = new ToastMessageDialog(this);
         AppManager.getAppManager().addActivity(this);
@@ -115,9 +111,6 @@ public class PcContentActivity extends AppCompatActivity {
 
     //設定價錢
     public void setText() {
-        //商品名
-        pccontent_txt_title = findViewById(R.id.pccontent_txt_title);
-        pccontent_txt_title.setText(productInfoPojo.getTitle());
         //描述
         pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
         pccontent_txt_descs.setText(productInfoPojo.getDescs());
@@ -133,23 +126,6 @@ public class PcContentActivity extends AppCompatActivity {
         //星星
         pccontent_img_star = findViewById(R.id.pccontent_img_star);
         pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
-        /*
-        Map<String, String> information = ResolveJsonData.getPcContentInformation(json);
-        Log.e("information", information + "");
-        pccontent_txt_title = findViewById(R.id.pccontent_txt_title);
-        pccontent_txt_title.setText(information.get("pname"));
-        pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
-        pccontent_txt_descs.setText(information.get("descs"));
-        pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
-        pccontent_txt_rsprice.setText("$" + getDeciamlString(information.get("rsprice")));
-        if (information.get("rsprice").equals(information.get("rprice")))
-            pccontent_txt_rsprice.setVisibility(View.INVISIBLE);
-        pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
-        pccontent_txt_rprice.setText("$" + getDeciamlString(information.get("rprice")));
-        //星星
-        pccontent_img_star = findViewById(R.id.pccontent_img_star);
-        pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
-        */
 
     }
 
@@ -328,33 +304,6 @@ public class PcContentActivity extends AppCompatActivity {
         popWin.setAnimationStyle(R.style.dialogWindowAnim);
         popWin.showAtLocation(enable_background, Gravity.BOTTOM, 0, 0); // 显示弹出窗口
         enable_background.setVisibility(View.VISIBLE);
-        /*
-        dialog = new Dialog(this, R.style.Theme_Design_Light_BottomSheetDialog);
-        //填充对话框的布局
-        inflate = LayoutInflater.from(this).inflate(R.layout.shipways_layout, null);
-        //init控件
-        recyclerView = inflate.findViewById(R.id.ship_ways_review);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
-        //将布局设置给Dialog
-        dialog.setContentView(inflate);
-        //获取当前Activity所在的窗体
-        Window dialogWindow = dialog.getWindow();
-        //设置Dialog从窗体底部弹出
-        dialogWindow.setGravity(Gravity.BOTTOM);
-        //获得窗体的属性
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-
-        lp.windowAnimations = R.style.dialogWindowAnim;
-        lp.width = dm.widthPixels;
-        lp.height = (int) (dm.heightPixels - 200 * dm.density);
-//       将属性设置给窗体
-        dialogWindow.setAttributes(lp);
-        dialog.show();//显示对话框
-        */
     }
 
     //初始化隱藏背景
@@ -441,22 +390,22 @@ public class PcContentActivity extends AppCompatActivity {
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.pccontent_toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+        toolbar = findViewById(R.id.include_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        toolbar.setContentInsetsRelative(0, 50);
+        ((TextView) findViewById(R.id.include_toolbar_title)).setText(productInfoPojo.getTitle());
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 finish();
             }
         });
-    }
+        toolbar.setContentInsetsRelative(0, 50);
 
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pc_content_menu, menu);

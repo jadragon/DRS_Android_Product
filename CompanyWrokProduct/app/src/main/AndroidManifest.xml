@@ -33,7 +33,7 @@
         <activity
             android:name=".PcContentActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".TestActivity" />
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
@@ -107,7 +107,9 @@
         <activity
             android:name=".ForgetPassActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".LogoutActivity"></activity>
+        <activity android:name=".LogoutActivity" />
+        <activity android:name=".我的帳戶.個人管理.個人資料.PersonalInfoActivity" />
+        <activity android:name=".我的帳戶.個人管理.個人資料.SelectCoverActivity"></activity>
     </application>
 
 </manifest>

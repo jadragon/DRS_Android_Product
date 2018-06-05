@@ -1,9 +1,7 @@
 package com.test.tw.wrokproduct;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,8 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -22,9 +18,9 @@ import java.util.Map;
 import Fragment.Fragment_shop_content;
 import adapter.recyclerview.PtypeRecyclerAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
+import library.AnalyzeJSON.ResolveJsonData;
 import library.AppManager;
 import library.GetJsonData.GetInformationByPHP;
-import library.AnalyzeJSON.ResolveJsonData;
 
 public class PtypeActivity extends AppCompatActivity {
     DisplayMetrics dm;
@@ -41,11 +37,14 @@ public class PtypeActivity extends AppCompatActivity {
     ArrayList<Fragment_shop_content> fragmentArrayList;
     Fragment_shop_content fragment_shop_content;
     String currentPtno;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_ptype_layout);
+        GlobalVariable gv = (GlobalVariable) getApplicationContext();
+        token = gv.getToken();
         AppManager.getAppManager().addActivity(this);
         POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();
@@ -67,19 +66,23 @@ public class PtypeActivity extends AppCompatActivity {
                 });
                 fragmentArrayList = new ArrayList<>();
                 fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 0, 1));
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 0, token, 1));
+                fragment_shop_content.setPtno(list.get(0).get("ptno"));
                 fragment_shop_content.setType(0);
                 fragmentArrayList.add(fragment_shop_content);
                 fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 1, 1));
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 1, token, 1));
+                fragment_shop_content.setPtno(list.get(0).get("ptno"));
                 fragment_shop_content.setType(1);
                 fragmentArrayList.add(fragment_shop_content);
                 fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 2, 1));
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 2, token, 1));
+                fragment_shop_content.setPtno(list.get(0).get("ptno"));
                 fragment_shop_content.setType(2);
                 fragmentArrayList.add(fragment_shop_content);
                 fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.HIDE_BANNER);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 3, 1));
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getPlist(list.get(0).get("ptno"), 3, token, 1));
+                fragment_shop_content.setPtno(list.get(0).get("ptno"));
                 fragment_shop_content.setType(3);
                 fragmentArrayList.add(fragment_shop_content);
                 runOnUiThread(new Runnable() {
@@ -87,7 +90,7 @@ public class PtypeActivity extends AppCompatActivity {
                     public void run() {
                         shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), fragmentArrayList);
                         viewPager.setAdapter(shopViewPagerAdapter);
-                        viewPager.setOffscreenPageLimit(fragmentArrayList.size()-1);
+                        viewPager.setOffscreenPageLimit(fragmentArrayList.size() - 1);
                         tabLayout.setTabMode(TabLayout.MODE_FIXED);
                         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
                     }
@@ -146,10 +149,10 @@ public class PtypeActivity extends AppCompatActivity {
         fragmentArrayList.get(1).setPtno(currentPtno);
         fragmentArrayList.get(2).setPtno(currentPtno);
         fragmentArrayList.get(3).setPtno(currentPtno);
-        fragmentArrayList.get(0).setFilter(new GetInformationByPHP().getPlist(currentPtno, 0, 1));
-        fragmentArrayList.get(1).setFilter(new GetInformationByPHP().getPlist(currentPtno, 1, 1));
-        fragmentArrayList.get(2).setFilter(new GetInformationByPHP().getPlist(currentPtno, 2, 1));
-        fragmentArrayList.get(3).setFilter(new GetInformationByPHP().getPlist(currentPtno, 3, 1));
+        fragmentArrayList.get(0).setFilter(new GetInformationByPHP().getPlist(currentPtno, 0, token, 1));
+        fragmentArrayList.get(1).setFilter(new GetInformationByPHP().getPlist(currentPtno, 1, token, 1));
+        fragmentArrayList.get(2).setFilter(new GetInformationByPHP().getPlist(currentPtno, 2, token, 1));
+        fragmentArrayList.get(3).setFilter(new GetInformationByPHP().getPlist(currentPtno, 3, token, 1));
 
     }
 
@@ -159,10 +162,10 @@ public class PtypeActivity extends AppCompatActivity {
         fragmentArrayList.get(1).setPtno(currentPtno);
         fragmentArrayList.get(2).setPtno(currentPtno);
         fragmentArrayList.get(3).setPtno(currentPtno);
-        fragmentArrayList.get(0).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 0, 1));
-        fragmentArrayList.get(1).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 1, 1));
-        fragmentArrayList.get(2).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 2, 1));
-        fragmentArrayList.get(3).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 3, 1));
+        fragmentArrayList.get(0).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 0, token, 1));
+        fragmentArrayList.get(1).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 1, token, 1));
+        fragmentArrayList.get(2).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 2, token, 1));
+        fragmentArrayList.get(3).resetRecyclerView(new GetInformationByPHP().getPlist(currentPtno, 3, token, 1));
     }
 
     @Override

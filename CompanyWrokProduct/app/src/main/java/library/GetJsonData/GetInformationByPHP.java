@@ -146,9 +146,10 @@ public JSONObject test() {
     /**
      * 取得商品列表欄資料
      */
-    public JSONObject getPlist(String ptno, int type, int page) {
+    public JSONObject getPlist(String ptno, int type,String token, int page) {
         params.add(new BasicNameValuePair("ptno", ptno));
         params.add(new BasicNameValuePair("type", "" + type));
+        params.add(new BasicNameValuePair("token",  token));
         params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(plist_url, params);
     }

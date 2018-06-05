@@ -260,6 +260,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                         gv.setToken(jsonObject.getString("Token"));
                                                         initMemberDB(jsonObject);
                                                         finish();
+                                                    }else {
+                                                        toastMessage.setMessageText(jsonObject.getString("Message"));
+                                                        toastMessage.confirm();
                                                     }
                                                     Log.e("success", success + "" + jsonObject.getString("Message"));
                                                 } catch (JSONException e) {
@@ -370,6 +373,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     gv.setToken(jsonObject.getString("Token"));
                                     initMemberDB(jsonObject);
                                     finish();
+                                }else {
+                                    toastMessage.setMessageText(jsonObject.getString("Message"));
+                                    toastMessage.confirm();
                                 }
                                 Log.e("success", success + "" + jsonObject.getString("Message"));
                             } catch (JSONException e) {

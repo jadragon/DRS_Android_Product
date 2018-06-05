@@ -101,7 +101,7 @@ public class Fragment_shop_content extends Fragment {
                         if (banner == SHOW_BANNER)
                             json2 = new GetInformationByPHP().getIplist(type, token, 1);
                         else
-                            json2 = new GetInformationByPHP().getPlist(ptno, type, 1);
+                            json2 = new GetInformationByPHP().getPlist(ptno, type, token, 1);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -131,7 +131,7 @@ public class Fragment_shop_content extends Fragment {
         //recycleView
         dm = getResources().getDisplayMetrics();
         int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
         myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
         if (banner == SHOW_BANNER) {
@@ -196,7 +196,7 @@ public class Fragment_shop_content extends Fragment {
                         if (banner == SHOW_BANNER) {
                             json = new GetInformationByPHP().getIplist(type, token, nextpage);
                         } else {
-                            json = new GetInformationByPHP().getPlist(ptno, type, nextpage);
+                            json = new GetInformationByPHP().getPlist(ptno,type,token,  nextpage);
                         }
                         nextpage++;
                         getActivity().runOnUiThread(new Runnable() {
@@ -247,12 +247,13 @@ public class Fragment_shop_content extends Fragment {
     public void resetRecyclerView(final JSONObject json) {
         json2 = json;
         nextpage = 2;
+        endLessOnScrollListener.reset();
         if (myRecyclerAdapter != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity().getApplicationContext(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
                     recyclerView.setAdapter(myRecyclerAdapter);
                 }
             });

@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import library.AppManager;
 import library.GetJsonData.MemberJsonData;
 import library.component.ToastMessageDialog;
 
@@ -60,6 +61,7 @@ ToastMessageDialog toastMessage;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        AppManager.getAppManager().addActivity(this);
         toastMessage=new ToastMessageDialog(this);
         initButton();
         initImage();

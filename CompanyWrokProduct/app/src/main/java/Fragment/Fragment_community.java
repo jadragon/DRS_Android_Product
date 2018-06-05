@@ -25,6 +25,7 @@ import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
+import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class Fragment_community extends Fragment {
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
         //List
         List<View> list = new ArrayList<>();
-        View inflate=LayoutInflater.from(getContext()).inflate(R.layout.table_layout,null);
+        View inflate = LayoutInflater.from(getContext()).inflate(R.layout.table_layout, null);
         initTableItem(inflate);
         list.add(inflate);
         ListView listView = new ListView(getActivity());
@@ -185,6 +186,7 @@ public class Fragment_community extends Fragment {
         toolbar = view.findViewById(R.id.include_toolbar);
         ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("會員中心");
     }
+
     public void initTableItem(final View v) {
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
@@ -193,12 +195,10 @@ public class Fragment_community extends Fragment {
                     case R.id.a1:
                         if (v.findViewById(R.id.a1_0).getVisibility() == View.VISIBLE) {
                             v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.a1_arrow).setRotation(90);
                         } else {
-                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
-
+                            closeItem();
+                            v.findViewById(R.id.a1_arrow).setRotation(270);
                             v.findViewById(R.id.a1_0).setVisibility(View.VISIBLE);
                         }
                         break;
@@ -214,12 +214,10 @@ public class Fragment_community extends Fragment {
                     case R.id.b1:
                         if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {
                             v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.b1_arrow).setRotation(90);
                         } else {
-                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
-
+                            closeItem();
+                            v.findViewById(R.id.b1_arrow).setRotation(270);
                             v.findViewById(R.id.b1_0).setVisibility(View.VISIBLE);
                         }
                         break;
@@ -253,17 +251,15 @@ public class Fragment_community extends Fragment {
                     case R.id.c1:
                         if (v.findViewById(R.id.c1_0).getVisibility() == View.VISIBLE) {
                             v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.c1_arrow).setRotation(90);
                         } else {
-                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
-
+                            closeItem();
+                            v.findViewById(R.id.c1_arrow).setRotation(270);
                             v.findViewById(R.id.c1_0).setVisibility(View.VISIBLE);
                         }
                         break;
                     case R.id.c1_1:
-                        Toast.makeText(getActivity(), "c1_1", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getActivity(), PersonalInfoActivity.class));
                         break;
                     case R.id.c1_2:
                         Toast.makeText(getActivity(), "c1_2", Toast.LENGTH_SHORT).show();
@@ -274,12 +270,10 @@ public class Fragment_community extends Fragment {
                     case R.id.d1:
                         if (v.findViewById(R.id.d1_0).getVisibility() == View.VISIBLE) {
                             v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+                            v.findViewById(R.id.d1_arrow).setRotation(90);
                         } else {
-                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
-
+                            closeItem();
+                            v.findViewById(R.id.d1_arrow).setRotation(270);
                             v.findViewById(R.id.d1_0).setVisibility(View.VISIBLE);
                         }
                         break;
@@ -318,6 +312,19 @@ public class Fragment_community extends Fragment {
         v.findViewById(R.id.d1_2).setOnClickListener(clickListener);
         v.findViewById(R.id.d1_3).setOnClickListener(clickListener);
     }
+
+    private void closeItem() {
+        v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+        v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+        v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+        v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+        v.findViewById(R.id.a1_arrow).setRotation(90);
+        v.findViewById(R.id.b1_arrow).setRotation(90);
+        v.findViewById(R.id.c1_arrow).setRotation(90);
+        v.findViewById(R.id.d1_arrow).setRotation(90);
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();

@@ -66,10 +66,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="C:\Users\jadragon\Desktop\工作用\運送方式\加號&amp;選取_工作區域 1.png" />
-                                      <entry key="outputName" value="notification_badge" />
-                                      <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="e5000d" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="C:\Users\Alex\Desktop\工作用\會員中心\logout_gray.png" />
+                                      <entry key="outputName" value="logout_white" />
+                                      <entry key="theme" value="HOLO_DARK" />
+                                      <entry key="themeColor" value="f8ffff" />
                                     </map>
                                   </option>
                                 </PersistentState>

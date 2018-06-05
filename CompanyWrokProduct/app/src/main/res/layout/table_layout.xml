@@ -13,7 +13,8 @@
         <LinearLayout
             android:id="@+id/a1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:layout_width="50dp"
@@ -32,10 +33,12 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:rotation="180"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
+                android:id="@+id/a1-arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/arraw_gray_right"
+                android:rotation="90"/>
         </LinearLayout>
 
         <LinearLayout
@@ -118,7 +121,8 @@
         <LinearLayout
             android:id="@+id/b1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:layout_width="50dp"
@@ -137,10 +141,12 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:rotation="180"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
+                android:id="@+id/b1-arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/arraw_gray_right"
+                android:rotation="90"/>
         </LinearLayout>
 
         <LinearLayout
@@ -361,7 +367,8 @@
         <LinearLayout
             android:id="@+id/c1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:layout_width="50dp"
@@ -380,10 +387,12 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:rotation="180"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
+                android:id="@+id/c1-arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/arraw_gray_right"
+                android:rotation="90"/>
         </LinearLayout>
 
         <LinearLayout
@@ -467,7 +476,8 @@
         <LinearLayout
             android:id="@+id/d1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:layout_width="50dp"
@@ -486,10 +496,12 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:rotation="180"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
+                android:id="@+id/d1-arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/arraw_gray_right"
+                android:rotation="90"/>
         </LinearLayout>
 
         <LinearLayout
