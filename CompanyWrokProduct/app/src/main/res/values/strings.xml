@@ -42,6 +42,11 @@
         <item>@drawable/logistics_manage</item>
         <item>@drawable/store_evaluate</item>
     </array>
+    <string-array name="gender">
+        <item>無</item>
+        <item>男生</item>
+        <item>女生</item>
+    </string-array>
     <string name="facebook_app_id">172989503377924</string>
     <string name="fb_login_protocol_scheme">fb172989503377924</string>
     //Google

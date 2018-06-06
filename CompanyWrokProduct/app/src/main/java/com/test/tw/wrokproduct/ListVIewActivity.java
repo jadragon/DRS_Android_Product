@@ -17,7 +17,7 @@ public class ListVIewActivity extends ListActivity {
     TextView toolbar_title;
     String[] array;
     SQLiteDatabaseHandler db;
-    String land, city,area,zipcode;
+    String land, city, area, zipcode;
     Intent intent;
 
     @Override
@@ -31,10 +31,13 @@ public class ListVIewActivity extends ListActivity {
         db = new SQLiteDatabaseHandler(this);
         if (land != null) {
             toolbar_title.setText("縣市");
-            if (land.equals("1"))
+            if (land.equals("0")) {
+                array = db.getAllCity().toArray(new String[db.getInSideCity().size()]);
+            } else if (land.equals("1")) {
                 array = db.getInSideCity().toArray(new String[db.getInSideCity().size()]);
-            else
+            } else if (land.equals("2")) {
                 array = db.getOutSideCity().toArray(new String[db.getOutSideCity().size()]);
+            }
         } else {
             toolbar_title.setText("鄉鎮市區");
             array = db.getAreaByCity(city).toArray(new String[db.getAreaByCity(city).size()]);
@@ -48,18 +51,19 @@ public class ListVIewActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if(land!=null) {
+        if (land != null) {
             intent.putExtra("city", array[position]);
             setResult(0, intent);
-        }else{
-            area=array[position];
-            zipcode=db.getZipcodeByCityAndArea(city,area).get("zipcode");
+        } else {
+            area = array[position];
+            zipcode = db.getZipcodeByCityAndArea(city, area).get("zipcode");
             intent.putExtra("area", area);
             intent.putExtra("zipcode", zipcode);
             setResult(1, intent);
         }
         ListVIewActivity.this.finish();
     }
+
     private void initToolbar() {
         //Toolbar 建立
         toolbar = findViewById(R.id.include_toolbar);
@@ -73,6 +77,7 @@ public class ListVIewActivity extends ListActivity {
         });
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

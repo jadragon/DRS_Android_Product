@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     JSONObject jsonObject;
     TextView login_btn_forget, login_btn_register;
     ToastMessageDialog toastMessage;
+    String account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_btn_forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LoginActivity.this, ForgetPassActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ForgetPassActivity.class);
                 startActivity(intent);
             }
         });
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                if (!login_edit_account.getText().toString().equals("")&&!login_edit_password.getText().toString().equals("")) {
+                if (!login_edit_account.getText().toString().equals("") && !login_edit_password.getText().toString().equals("")) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -140,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         boolean success = jsonObject.getBoolean("Success");
                                         if (success) {
                                             gv.setToken(jsonObject.getString("Token"));
+                                            account = login_edit_account.getText().toString();
                                             initMemberDB(jsonObject);
                                             finish();
                                         } else {
@@ -191,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Map<String, String> datas = AnalyzeMember.getLogin(json);
         db.resetLoginTables();
         if (datas != null) {
-            db.addMember(datas.get("Token"),login_edit_account.getText().toString(), datas.get("Name"), datas.get("Picture"));
+            db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
         }
         db.close();
 
@@ -247,6 +250,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                  * 值在這裡取得
                                  */
                                 id = object.getString("id");
+                                String email = object.getString("email");
+                                account = email.substring(0, email.indexOf("@"));
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -260,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                         gv.setToken(jsonObject.getString("Token"));
                                                         initMemberDB(jsonObject);
                                                         finish();
-                                                    }else {
+                                                    } else {
                                                         toastMessage.setMessageText(jsonObject.getString("Message"));
                                                         toastMessage.confirm();
                                                     }
@@ -328,13 +333,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signIn();
     }
 
-    private String handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    private Map<String, String> handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            Map<String, String> map = new HashMap<>();
             Log.e(TAG, "--------------------------------");
             Log.e(TAG, "getId: " + account.getId());
+            map.put("id", account.getId());
+            map.put("email", account.getEmail());
+
             // G+
-            return account.getId();
+            return map;
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -359,7 +369,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            id = handleSignInResult(task);
+            id = handleSignInResult(task).get("id");
+            String email = handleSignInResult(task).get("email");
+            account = email.substring(0, email.indexOf("@"));
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -373,7 +385,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     gv.setToken(jsonObject.getString("Token"));
                                     initMemberDB(jsonObject);
                                     finish();
-                                }else {
+                                } else {
                                     toastMessage.setMessageText(jsonObject.getString("Message"));
                                     toastMessage.confirm();
                                 }

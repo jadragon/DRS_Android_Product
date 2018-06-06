@@ -1,114 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".我的帳戶.個人管理.個人資料.SelectCoverActivity">
-    <LinearLayout
+
+    <include
+        layout="@layout/include_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:paddingBottom="30dp">
-        <include
-            layout="@layout/include_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="bottom"
-            android:textColor="@color/black"
-            android:text="斜魚格調"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <ImageView
-        android:id="@+id/select_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/member_bg2"
-         android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="bottom"
-            android:textColor="@color/black"
-            android:text="冷冽性格"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <ImageView
-            android:id="@+id/select_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/member_bg1"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <TextView
+        android:layout_height="wrap_content" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:gravity="bottom"
-        android:textColor="@color/black"
-        android:text="插圖時間"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"/>
-        <ImageView
-            android:id="@+id/select_3"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/member_bg3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="bottom"
-            android:textColor="@color/black"
-            android:text="紫炫幾何"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <ImageView
-            android:id="@+id/select_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/member_bg4"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="bottom"
-            android:textColor="@color/black"
-            android:text="漫遊星球"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <ImageView
-            android:id="@+id/select_5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/member_bg5"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="bottom"
-            android:textColor="@color/black"
-            android:text="繽紛生活"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-        <ImageView
-            android:id="@+id/select_6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/member_bg6"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
-    </LinearLayout>
- android:scaleType="fitXY"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom"
+                android:text="斜魚格調"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/select_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/member_bg2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom"
+                android:text="冷冽性格"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/select_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/member_bg1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom"
+                android:text="插圖時間"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/select_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/member_bg3" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom"
+                android:text="紫炫幾何"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/select_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/member_bg4" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom"
+                android:text="漫遊星球"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/select_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/member_bg5" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="bottom"
+                android:text="繽紛生活"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/select_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/member_bg6" />
+        </LinearLayout>
+    </ScrollView>
+    android:scaleType="fitXY"
     android:adjustViewBounds="true"
     android:src="@drawable/select_coverbg"
 
-</ScrollView>
+</LinearLayout>

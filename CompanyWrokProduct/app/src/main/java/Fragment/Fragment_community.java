@@ -49,6 +49,7 @@ public class Fragment_community extends Fragment {
     CircleImageView login_photo;
     TextView login_name;
 
+    int coverbg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,8 +58,8 @@ public class Fragment_community extends Fragment {
         gv = (GlobalVariable) getActivity().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
 
-
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
+
         //List
         List<View> list = new ArrayList<>();
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.table_layout, null);
@@ -335,6 +336,12 @@ public class Fragment_community extends Fragment {
             Map<String, String> member = db.getMemberDetail();
             ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
             login_name.setText(member.get("name"));
+            try {
+                coverbg = Integer.parseInt(db.getMemberDetail().get("background"));
+            } catch (Exception e) {
+                coverbg = R.drawable.member_bg2;
+            }
+            login_success.setBackgroundResource(coverbg);
             db.close();
             Log.e("member", "" + member);
 

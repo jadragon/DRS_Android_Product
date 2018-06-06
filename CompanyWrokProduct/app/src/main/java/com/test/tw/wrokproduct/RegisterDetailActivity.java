@@ -130,6 +130,7 @@ public class RegisterDetailActivity extends AppCompatActivity {
     private void initEditText() {
         registerdetail_edit_account = findViewById(R.id.registerdetail_edit_account);
         registerdetail_edit_account.setText(account);
+        registerdetail_edit_account.setFocusable(false);
         registerdetail_edit_password = findViewById(R.id.registerdetail_edit_password);
         registerdetail_edit_password.requestFocus();
         registerdetail_edit_repassword = findViewById(R.id.registerdetail_edit_repassword);
