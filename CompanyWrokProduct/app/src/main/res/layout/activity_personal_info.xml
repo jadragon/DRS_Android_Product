@@ -53,7 +53,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/orange"
+                android:background="@drawable/arcangle_button_orange"
                 android:paddingBottom="2dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
@@ -65,7 +65,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray" />
+                android:background="@color/gainsboro" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -375,16 +375,16 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray" />
+                android:background="@color/gainsboro" />
 
             <Button
                 android:id="@+id/pdata_save"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/arcangle_button_red"
+                android:background="@drawable/arcangle_button_nocolor"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:text="保存"
@@ -402,7 +402,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/orange"
+                android:background="@drawable/arcangle_button_orange"
                 android:paddingBottom="2dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
@@ -414,7 +414,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray" />
+                android:background="@color/gainsboro" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -452,6 +452,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
+                        android:id="@+id/arrow3"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="right|center_vertical"
@@ -494,6 +495,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
+                        android:id="@+id/arrow4"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="right|center_vertical"
@@ -593,13 +595,18 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
             <Button
+                android:id="@+id/adata_save"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/arcangle_button_red"
+                android:background="@drawable/arcangle_button_nocolor"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:text="未綁定"
@@ -616,7 +623,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/orange"
+                android:background="@drawable/arcangle_button_orange"
                 android:paddingBottom="2dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
@@ -628,7 +635,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray" />
+                android:background="@color/gainsboro" />
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -645,10 +652,11 @@
                     android:textSize="16sp" />
 
                 <Button
+                    android:id="@+id/phone_bind"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
                     android:layout_marginRight="15dp"
                     android:textColor="@color/white"
@@ -670,10 +678,11 @@
                     android:textSize="16sp" />
 
                 <Button
+                    android:id="@+id/email_bind"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
                     android:layout_marginRight="15dp"
                     android:textColor="@color/white"
@@ -695,10 +704,11 @@
                     android:textSize="16sp" />
 
                 <Button
+                    android:id="@+id/fb_bind"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
                     android:layout_marginRight="15dp"
                     android:textColor="@color/white"
@@ -720,10 +730,11 @@
                     android:textSize="16sp" />
 
                 <Button
+                    android:id="@+id/google_bind"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
                     android:layout_marginRight="15dp"
                     android:textColor="@color/white"

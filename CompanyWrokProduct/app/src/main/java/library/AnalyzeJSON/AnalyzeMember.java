@@ -1,8 +1,10 @@
 package library.AnalyzeJSON;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +51,7 @@ public class AnalyzeMember {
     }
 
     /**
-     * 解析7.1.2	讀取個人資料:
+     * 解析7.1.2	讀取個人資料Pdata:
      * account	String	帳號
      * name	String	姓名
      * memberid	String	身分證字號
@@ -64,8 +66,8 @@ public class AnalyzeMember {
 
         try {
             if (json.getBoolean("Success")) {
-                JSONObject data=json.getJSONObject("Data");
-                JSONObject pdata=data.getJSONObject("pdata");
+                JSONObject data = json.getJSONObject("Data");
+                JSONObject pdata = data.getJSONObject("pdata");
                 Map<String, String> map = new HashMap<>();
                 map.put("account", pdata.getString("account"));
                 map.put("name", pdata.getString("name"));
@@ -85,4 +87,92 @@ public class AnalyzeMember {
         return null;
     }
 
+    /**
+     * 解析7.1.2	讀取個人資料Adata:
+     * bcode	String	銀行代碼
+     * bname	String	銀行名稱
+     * bbank	String	分行名稱
+     * bcard	String	銀行帳戶
+     * buname	String	帳戶姓名
+     */
+    public static Map<String, String> getPersonDataAdata(JSONObject json) {
+
+        try {
+            if (json.getBoolean("Success")) {
+                JSONObject data = json.getJSONObject("Data");
+                JSONObject pdata = data.getJSONObject("adata");
+                Map<String, String> map = new HashMap<>();
+                map.put("bcode", pdata.getString("bcode"));
+                map.put("bname", pdata.getString("bname"));
+                map.put("bbank", pdata.getString("bbank"));
+                map.put("bcard", pdata.getString("bcard"));
+                map.put("buname", pdata.getString("buname"));
+                return map;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 解析7.1.2	讀取個人資料Bdata:
+     * mactivate	Number	手機 0未綁 1已綁
+     * mpcode	String	手機國碼
+     * mp	String	手機
+     * eactivate	Number	信箱 0未綁 1已綁
+     * email	String	電子信箱
+     * factivate	Number	FB 0未綁 1已綁
+     * gactivate	Number	G+ 0未綁 1已綁
+     */
+    public static Map<String, String> getPersonDataBdata(JSONObject json) {
+
+        try {
+            if (json.getBoolean("Success")) {
+                JSONObject data = json.getJSONObject("Data");
+                JSONObject pdata = data.getJSONObject("bdata");
+                Map<String, String> map = new HashMap<>();
+                map.put("mactivate", pdata.getString("mactivate"));
+                map.put("mpcode", pdata.getString("mpcode"));
+                map.put("mp", pdata.getString("mp"));
+                map.put("eactivate", pdata.getString("eactivate"));
+                map.put("email", pdata.getString("email"));
+                map.put("factivate", pdata.getString("factivate"));
+                map.put("gactivate", pdata.getString("gactivate"));
+                return map;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 解析9.1.2	讀取銀行資料:
+     * bcode	String	銀行代碼
+     * bname	String	銀行名稱
+     */
+    public static ArrayList<Map<String, String>> getBankData(JSONObject json) {
+
+        try {
+            if (json.getBoolean("Success")) {
+                ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+                JSONArray data = json.getJSONArray("Data");
+                Map<String, String> map;
+                for (int i = 0; i < data.length(); i++) {
+                    map = new HashMap<>();
+                    map.put("bcode", data.getJSONObject(i).getString("bcode"));
+                    map.put("bname", data.getJSONObject(i).getString("bname"));
+                    arrayList.add(map);
+                }
+                return arrayList;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

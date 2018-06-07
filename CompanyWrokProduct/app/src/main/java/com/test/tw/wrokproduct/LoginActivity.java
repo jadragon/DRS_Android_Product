@@ -195,6 +195,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         db.resetLoginTables();
         if (datas != null) {
             db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
+            db.updateBackground(R.drawable.member_bg1+"");
         }
         db.close();
 
@@ -369,34 +370,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            id = handleSignInResult(task).get("id");
-            String email = handleSignInResult(task).get("email");
-            account = email.substring(0, email.indexOf("@"));
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    jsonObject = new MemberJsonData().login(type, "+886", id, "");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                boolean success = jsonObject.getBoolean("Success");
-                                if (success) {
-                                    gv.setToken(jsonObject.getString("Token"));
-                                    initMemberDB(jsonObject);
-                                    finish();
-                                } else {
-                                    toastMessage.setMessageText(jsonObject.getString("Message"));
-                                    toastMessage.confirm();
+            Map<String,String> map=handleSignInResult(task);
+            if(map!=null) {
+                id = map.get("id");
+                String email =map.get("email");
+                account = email.substring(0, email.indexOf("@"));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        jsonObject = new MemberJsonData().login(type, "+886", id, "");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    boolean success = jsonObject.getBoolean("Success");
+                                    if (success) {
+                                        gv.setToken(jsonObject.getString("Token"));
+                                        initMemberDB(jsonObject);
+                                        finish();
+                                    } else {
+                                        toastMessage.setMessageText(jsonObject.getString("Message"));
+                                        toastMessage.confirm();
+                                    }
+                                    Log.e("success", success + "" + jsonObject.getString("Message"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                Log.e("success", success + "" + jsonObject.getString("Message"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
-                        }
-                    });
-                }
-            }).start();
+                        });
+                    }
+                }).start();
+            }
         }
 
     }

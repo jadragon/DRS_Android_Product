@@ -92,7 +92,7 @@ public class PcContentActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getPcontent(pno);
+                json = new GetInformationByPHP().getPcontent(token,pno);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -114,15 +114,16 @@ public class PcContentActivity extends AppCompatActivity {
         //描述
         pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
         pccontent_txt_descs.setText(productInfoPojo.getDescs());
+        //售價
+        pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
+        pccontent_txt_rsprice.setText("$" + getDeciamlString(productInfoPojo.getRsprice()));
         //牌價
         pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
         pccontent_txt_rprice.setPaintFlags(pccontent_txt_rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         pccontent_txt_rprice.setText("$" + getDeciamlString(productInfoPojo.getRprice()));
-        //售價
-        pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
-        pccontent_txt_rsprice.setText("$" + getDeciamlString(productInfoPojo.getRsprice()));
+
         if (productInfoPojo.getRsprice().equals(productInfoPojo.getRprice()))
-            pccontent_txt_rsprice.setVisibility(View.INVISIBLE);
+            pccontent_txt_rprice.setVisibility(View.INVISIBLE);
         //星星
         pccontent_img_star = findViewById(R.id.pccontent_img_star);
         pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);

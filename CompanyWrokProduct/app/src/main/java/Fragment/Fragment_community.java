@@ -25,6 +25,7 @@ import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
+import com.test.tw.wrokproduct.我的帳戶.個人管理.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ public class Fragment_community extends Fragment {
     View login_success;
     CircleImageView login_photo;
     TextView login_name;
-
     int coverbg;
 
     @Override
@@ -67,6 +67,7 @@ public class Fragment_community extends Fragment {
         list.add(inflate);
         ListView listView = new ListView(getActivity());
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.store_manage_image), getResources().getStringArray(R.array.store_manage_title)));
+        listView.setDivider(null);
         list.add(listView);
         listView = new ListView(getActivity());
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.community_image), getResources().getStringArray(R.array.community_title)));
@@ -90,6 +91,7 @@ public class Fragment_community extends Fragment {
                 }).start();
             }
         });
+        listView.setDivider(null);
         list.add(listView);
         //List
 
@@ -112,7 +114,7 @@ public class Fragment_community extends Fragment {
         tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
         imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
         imageView.setImageResource(R.drawable.community);
-        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("社群");
+        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("社群網路");
         tabLayout.addTab(tab);
         //TabLayout
 
@@ -192,101 +194,105 @@ public class Fragment_community extends Fragment {
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.a1:
-                        if (v.findViewById(R.id.a1_0).getVisibility() == View.VISIBLE) {
-                            v.findViewById(R.id.a1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.a1_arrow).setRotation(90);
-                        } else {
-                            closeItem();
-                            v.findViewById(R.id.a1_arrow).setRotation(270);
-                            v.findViewById(R.id.a1_0).setVisibility(View.VISIBLE);
-                        }
-                        break;
-                    case R.id.a1_1:
-                        Toast.makeText(getActivity(), "a1_1", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.a1_2:
-                        Toast.makeText(getActivity(), "a1_2", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.a1_3:
-                        Toast.makeText(getActivity(), "a1_3", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1:
-                        if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {
-                            v.findViewById(R.id.b1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.b1_arrow).setRotation(90);
-                        } else {
-                            closeItem();
-                            v.findViewById(R.id.b1_arrow).setRotation(270);
-                            v.findViewById(R.id.b1_0).setVisibility(View.VISIBLE);
-                        }
-                        break;
-                    case R.id.b1_1:
-                        Toast.makeText(getActivity(), "b1_1", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_2:
-                        Toast.makeText(getActivity(), "b1_2", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_3:
-                        Toast.makeText(getActivity(), "b1_3", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_4:
-                        Toast.makeText(getActivity(), "b1_4", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_5:
-                        Toast.makeText(getActivity(), "b1_5", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_6:
-                        Toast.makeText(getActivity(), "b1_6", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_7:
-                        Toast.makeText(getActivity(), "b1_7", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_8:
-                        Toast.makeText(getActivity(), "b1_8", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.b1_9:
-                        Toast.makeText(getActivity(), "b1_9", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.c1:
-                        if (v.findViewById(R.id.c1_0).getVisibility() == View.VISIBLE) {
-                            v.findViewById(R.id.c1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.c1_arrow).setRotation(90);
-                        } else {
-                            closeItem();
-                            v.findViewById(R.id.c1_arrow).setRotation(270);
-                            v.findViewById(R.id.c1_0).setVisibility(View.VISIBLE);
-                        }
-                        break;
-                    case R.id.c1_1:
-                        startActivity(new Intent(getActivity(), PersonalInfoActivity.class));
-                        break;
-                    case R.id.c1_2:
-                        Toast.makeText(getActivity(), "c1_2", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.c1_3:
-                        Toast.makeText(getActivity(), "c1_3", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.d1:
-                        if (v.findViewById(R.id.d1_0).getVisibility() == View.VISIBLE) {
-                            v.findViewById(R.id.d1_0).setVisibility(View.GONE);
-                            v.findViewById(R.id.d1_arrow).setRotation(90);
-                        } else {
-                            closeItem();
-                            v.findViewById(R.id.d1_arrow).setRotation(270);
-                            v.findViewById(R.id.d1_0).setVisibility(View.VISIBLE);
-                        }
-                        break;
-                    case R.id.d1_1:
-                        Toast.makeText(getActivity(), "d1_1", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.d1_2:
-                        Toast.makeText(getActivity(), "d1_2", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.d1_3:
-                        Toast.makeText(getActivity(), "d1_3", Toast.LENGTH_SHORT).show();
-                        break;
+                if (gv.getToken()!=null) {
+                    switch (view.getId()) {
+                        case R.id.a1:
+                            if (v.findViewById(R.id.a1_0).getVisibility() == View.VISIBLE) {
+                                v.findViewById(R.id.a1_0).setVisibility(View.GONE);
+                                v.findViewById(R.id.a1_arrow).setRotation(90);
+                            } else {
+                                closeItem();
+                                v.findViewById(R.id.a1_arrow).setRotation(270);
+                                v.findViewById(R.id.a1_0).setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case R.id.a1_1:
+                            Toast.makeText(getActivity(), "a1_1", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.a1_2:
+                            Toast.makeText(getActivity(), "a1_2", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.a1_3:
+                            Toast.makeText(getActivity(), "a1_3", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1:
+                            if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {
+                                v.findViewById(R.id.b1_0).setVisibility(View.GONE);
+                                v.findViewById(R.id.b1_arrow).setRotation(90);
+                            } else {
+                                closeItem();
+                                v.findViewById(R.id.b1_arrow).setRotation(270);
+                                v.findViewById(R.id.b1_0).setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case R.id.b1_1:
+                            Toast.makeText(getActivity(), "b1_1", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_2:
+                            Toast.makeText(getActivity(), "b1_2", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_3:
+                            Toast.makeText(getActivity(), "b1_3", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_4:
+                            Toast.makeText(getActivity(), "b1_4", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_5:
+                            Toast.makeText(getActivity(), "b1_5", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_6:
+                            Toast.makeText(getActivity(), "b1_6", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_7:
+                            Toast.makeText(getActivity(), "b1_7", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_8:
+                            Toast.makeText(getActivity(), "b1_8", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.b1_9:
+                            Toast.makeText(getActivity(), "b1_9", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.c1:
+                            if (v.findViewById(R.id.c1_0).getVisibility() == View.VISIBLE) {
+                                v.findViewById(R.id.c1_0).setVisibility(View.GONE);
+                                v.findViewById(R.id.c1_arrow).setRotation(90);
+                            } else {
+                                closeItem();
+                                v.findViewById(R.id.c1_arrow).setRotation(270);
+                                v.findViewById(R.id.c1_0).setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case R.id.c1_1:
+                            startActivity(new Intent(getActivity(), PersonalInfoActivity.class));
+                            break;
+                        case R.id.c1_2:
+                            startActivity(new Intent(getActivity(), ModifyPasswordActivity.class));
+                            break;
+                        case R.id.c1_3:
+                            startActivity(new Intent(getActivity(), LogoutActivity.class));
+                            break;
+                        case R.id.d1:
+                            if (v.findViewById(R.id.d1_0).getVisibility() == View.VISIBLE) {
+                                v.findViewById(R.id.d1_0).setVisibility(View.GONE);
+                                v.findViewById(R.id.d1_arrow).setRotation(90);
+                            } else {
+                                closeItem();
+                                v.findViewById(R.id.d1_arrow).setRotation(270);
+                                v.findViewById(R.id.d1_0).setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case R.id.d1_1:
+                            Toast.makeText(getActivity(), "d1_1", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.d1_2:
+                            Toast.makeText(getActivity(), "d1_2", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.d1_3:
+                            Toast.makeText(getActivity(), "d1_3", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }else{
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
             }
         };

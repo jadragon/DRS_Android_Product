@@ -17,105 +17,111 @@
         android:layout_height="0dp"
         android:layout_weight="2">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/quick_login_account" />
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
 
-            <Button
-                android:id="@+id/fragment_community_btn_login"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/arcangle_button_red"
-                android:text="登入"
-                android:textColor="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/quick_login_account" />
+            </FrameLayout>
 
-            <Button
-                android:id="@+id/fragment_community_btn_register"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/arcangle_button_orange"
-                android:text="註冊"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.105"
-                app:layout_constraintStart_toEndOf="@+id/fragment_community_btn_login"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-        <android.support.constraint.ConstraintLayout
+                <Button
+                    android:id="@+id/fragment_community_btn_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:background="@drawable/arcangle_button_red"
+                    android:text="登入"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="20dp"/>
+
+                <Button
+                    android:id="@+id/fragment_community_btn_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:background="@drawable/arcangle_button_orange"
+                    android:text="註冊"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="20dp"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/login_success"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/member_bg1"
             android:clickable="true"
-            android:visibility="invisible">
+            android:orientation="horizontal"
+       >
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/login_photo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/quick_login_account" />
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
 
-            <TextView
-                android:id="@+id/login_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="120dp"
-                android:layout_marginTop="28dp"
-                android:text="無名氏"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/login_photo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/quick_login_account" />
+            </FrameLayout>
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="120dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/arcangle_button_red"
-                android:text="一般會員"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_name" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/login_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="無名氏"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/arcangle_button_red"
+                    android:text="一般會員"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+<FrameLayout
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="2">
             <Button
                 android:id="@+id/fragment_community_btn_logout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginTop="28dp"
-                android:background="@drawable/logout_white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
+                android:layout_gravity="center"
+                android:background="@drawable/logout_white" />
+</FrameLayout>
+        </LinearLayout>
     </FrameLayout>
 
     <LinearLayout

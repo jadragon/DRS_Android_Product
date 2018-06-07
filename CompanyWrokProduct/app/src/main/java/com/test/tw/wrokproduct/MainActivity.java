@@ -25,10 +25,12 @@ import java.util.TimerTask;
 import Fragment.Fragment_community;
 import Fragment.Fragment_home;
 import Fragment.Fragment_shop;
+import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
 import library.AppManager;
 import library.BottomNavigationViewHelper;
 import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.MemberJsonData;
 import library.LoadingView;
 import library.SQLiteDatabaseHandler;
 
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] fragments;
     private int lastShowFragment = 0;
     BottomNavigationView navigation;
-
+    SQLiteDatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,12 +199,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDB() {
-
         new Thread(new Runnable() {
 
             @Override
             public void run() {
-                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                db = new SQLiteDatabaseHandler(getApplicationContext());
                 JSONObject json = new GetInformationByPHP().getAddress("0");
                 ArrayList<Map<String, String>> datas = GetAddress.getAddress(json);
                 String lastestmodifydate = GetAddress.checkModifydate(json);
@@ -214,6 +215,11 @@ public class MainActivity extends AppCompatActivity {
                 GlobalVariable gv = (GlobalVariable) getApplicationContext();
                 if (db.getLoginRowCount() > 0) {
                     gv.setToken(db.getMemberDetail().get("token"));
+                }
+                //
+                if(db.getBankRowCount()<1) {
+                    ArrayList<Map<String, String>> banks = AnalyzeMember.getBankData(new MemberJsonData().getBankData());
+                    db.addBankAll(banks);
                 }
                 db.close();
             }

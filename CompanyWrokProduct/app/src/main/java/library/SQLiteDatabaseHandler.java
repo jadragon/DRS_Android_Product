@@ -32,7 +32,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_AREA = "area";
     private static final String KEY_ZIPCODE = "zipcode";
     private static final String KEY_MODIFYDATE = "modifydate";
-    private static final String CREATE_ADDRESS_TABLE ="CREATE TABLE IF NOT EXISTS " + TABLE_ADDRESS + "("
+    private static final String CREATE_ADDRESS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ADDRESS + "("
             + KEY_AD_ID + " INTEGER PRIMARY KEY,"
             + KEY_CITY + " TEXT,"
             + KEY_AREA + " TEXT,"
@@ -46,16 +46,25 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_ACCOUNT = "account";
     private static final String KEY_NAME = "name";
-    private static final String KEY_PHOTO= "photo";
+    private static final String KEY_PHOTO = "photo";
     private static final String KEY_BACKGROUND = "background";
-    private static final String CREATE_LOGIN_TABLE ="CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
+    private static final String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
             + KEY_LG_ID + " INTEGER PRIMARY KEY,"
             + KEY_TOKEN + " TEXT,"
             + KEY_ACCOUNT + " TEXT,"
             + KEY_NAME + " TEXT,"
             + KEY_PHOTO + " TEXT,"
             + KEY_BACKGROUND + " TEXT" + ")";
-
+    //Bank table name
+    private static final String TABLE_BANK = "getBank";
+    // Bank Table Columns names
+    private static final String KEY_BK_ID = "id";
+    private static final String KEY_BCODE = "bcode";
+    private static final String KEY_BNAME = "bname";
+    private static final String CREATE_BANK_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_BANK + "("
+            + KEY_BK_ID + " INTEGER PRIMARY KEY,"
+            + KEY_BCODE + " TEXT,"
+            + KEY_BNAME + " TEXT" + ")";
 
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -66,6 +75,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_LOGIN_TABLE);
         db.execSQL(CREATE_ADDRESS_TABLE);
+        db.execSQL(CREATE_BANK_TABLE);
     }
 
     // Upgrading database
@@ -74,6 +84,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDRESS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEMBER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BANK);
         // Create tables again
         onCreate(db);
     }
@@ -133,11 +144,12 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return datas;
     }
+
     /**
      * Getting user data from database
      */
     public ArrayList<String> getAllCity() {
-        ArrayList<String> data=new ArrayList<>();
+        ArrayList<String> data = new ArrayList<>();
         String selectQuery = "SELECT distinct city FROM " + TABLE_ADDRESS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -150,13 +162,14 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return data;
     }
+
     /**
      * Getting user data from database
      */
     public ArrayList<Map<String, String>> getInSideCityDetail() {
         ArrayList<Map<String, String>> datas = new ArrayList<>();
         Map<String, String> data;
-        String selectQuery = "SELECT * FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " not like '" + "%金%" + "'"+" and "+ KEY_CITY + " not like '" + "%連%" + "'"+" and "+ KEY_CITY + " not like '" + "%澎%" + "'";
+        String selectQuery = "SELECT * FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " not like '" + "%金%" + "'" + " and " + KEY_CITY + " not like '" + "%連%" + "'" + " and " + KEY_CITY + " not like '" + "%澎%" + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row
@@ -172,12 +185,13 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return datas;
     }
+
     /**
      * Getting user data from database
      */
     public ArrayList<String> getInSideCity() {
-        ArrayList<String> data=new ArrayList<>();
-        String selectQuery = "SELECT distinct city FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " not like '" + "%金%" + "'"+" and "+ KEY_CITY + " not like '" + "%連%" + "'"+" and "+ KEY_CITY + " not like '" + "%澎%" + "'";
+        ArrayList<String> data = new ArrayList<>();
+        String selectQuery = "SELECT distinct city FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " not like '" + "%金%" + "'" + " and " + KEY_CITY + " not like '" + "%連%" + "'" + " and " + KEY_CITY + " not like '" + "%澎%" + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row
@@ -194,8 +208,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Getting user data from database
      */
     public ArrayList<String> getOutSideCity() {
-        ArrayList<String> data=new ArrayList<>();
-        String selectQuery = "SELECT distinct city FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " like '" + "%金%" + "'"+" or "+ KEY_CITY + " like '" + "%連%" + "'"+" or "+ KEY_CITY + " like '" + "%澎%" + "'";
+        ArrayList<String> data = new ArrayList<>();
+        String selectQuery = "SELECT distinct city FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " like '" + "%金%" + "'" + " or " + KEY_CITY + " like '" + "%連%" + "'" + " or " + KEY_CITY + " like '" + "%澎%" + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row
@@ -214,7 +228,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public ArrayList<Map<String, String>> getOutSideCityDetail() {
         ArrayList<Map<String, String>> datas = new ArrayList<>();
         Map<String, String> data;
-        String selectQuery = "SELECT * FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " like '" + "%金%" + "'"+" or "+ KEY_CITY + " like '" + "%連%" + "'"+" or "+ KEY_CITY + " like '" + "%澎%" + "'";
+        String selectQuery = "SELECT * FROM " + TABLE_ADDRESS + " where " + KEY_CITY + " like '" + "%金%" + "'" + " or " + KEY_CITY + " like '" + "%連%" + "'" + " or " + KEY_CITY + " like '" + "%澎%" + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row
@@ -230,12 +244,13 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return datas;
     }
+
     /**
      * Getting user data from database
      */
     public Map<String, String> getZipcodeByCityAndArea(String city, String area) {
         Map<String, String> data;
-        city=city.substring(0,1).equals("台")?city.replace("台","臺"):city;
+        city = city.substring(0, 1).equals("台") ? city.replace("台", "臺") : city;
         String selectQuery = "SELECT  * FROM " + TABLE_ADDRESS + " where " + KEY_CITY + "='" + city + "'" + " and " + KEY_AREA + " like '%" + area + "%'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -252,23 +267,25 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return data;
     }
+
     /**
      * Getting user data from database
      */
     public ArrayList<String> getAreaByCity(String city) {
-        ArrayList<String> data=new ArrayList<>();
-        String selectQuery = "SELECT "+KEY_AREA+"  FROM " + TABLE_ADDRESS + " where " + KEY_CITY + "='" + city + "'";
+        ArrayList<String> data = new ArrayList<>();
+        String selectQuery = "SELECT " + KEY_AREA + "  FROM " + TABLE_ADDRESS + " where " + KEY_CITY + "='" + city + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row
         while (cursor.moveToNext()) {
-            data.add( cursor.getString(0));
+            data.add(cursor.getString(0));
         }
         cursor.close();
         db.close();
         // return user
         return data;
     }
+
     /**
      * Getting user data from database
      */
@@ -305,6 +322,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return row count
         return rowCount;
     }
+
     /**
      * Getting user login status
      * return true if rows are there in table
@@ -313,13 +331,14 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_ADDRESS + " where " + KEY_MODIFYDATE + "='" + modifydate + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        modifydate=null;
+        modifydate = null;
         int rowCount = cursor.getCount();
         db.close();
         cursor.close();
         // return row count
         return rowCount;
     }
+
     /**
      * Re crate database
      * Delete all tables and create them again
@@ -330,10 +349,11 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.delete(TABLE_ADDRESS, null, null);
         db.close();
     }
+
     /**
      * Storing user details in database
      */
-    public void addMember(String token,String account, String name, String photo) {
+    public void addMember(String token, String account, String name, String photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TOKEN, token); // token
@@ -344,6 +364,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.insert(TABLE_MEMBER, null, values);
         db.close(); // Closing database connection
     }
+
     /**
      * Storing user details in database
      */
@@ -352,9 +373,10 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BACKGROUND, background); // background
         // Inserting Row
-        db.update(TABLE_MEMBER,values,KEY_LG_ID+ "=" +1,null);
+        db.update(TABLE_MEMBER, values, KEY_LG_ID + "=" + 1, null);
         db.close(); // Closing database connection
     }
+
     /**
      * Getting user data from database
      */
@@ -378,6 +400,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // return user
         return data;
     }
+
     /**
      * Getting user login status
      * return true if rows are there in table
@@ -401,6 +424,73 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_MEMBER, null, null);
+        db.close();
+    }
+
+
+    /**
+     * Storing user details in database
+     */
+    public void addBankAll(ArrayList<Map<String, String>> datas) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        for (int i = 0; i < datas.size(); i++) {
+            values.put(KEY_BCODE, datas.get(i).get("bcode")); // bcode
+            values.put(KEY_BNAME, datas.get(i).get("bname")); // bname
+            db.insert(TABLE_BANK, null, values);
+        }
+        // Inserting Row
+        db.close(); // Closing database connection
+    }
+
+    /**
+     * Getting user data from database
+     */
+    public ArrayList<Map<String, String>> getBankDetail() {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        String selectQuery = "SELECT  * FROM " + TABLE_BANK;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        // Move to first row
+        while (cursor.moveToNext()) {
+            map = new HashMap<>();
+            map.put("bcode", cursor.getString(1));
+            map.put("bname", cursor.getString(2));
+            datas.add(map);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+
+    /**
+     * Getting user login status
+     * return true if rows are there in table
+     */
+    public int getBankRowCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_BANK;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int rowCount = cursor.getCount();
+        db.close();
+        cursor.close();
+        // return row count
+        return rowCount;
+    }
+
+    /**
+     * Re crate database
+     * Delete all tables and create them again
+     */
+    public void resetBankTables() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete All Rows
+        db.delete(TABLE_BANK, null, null);
         db.close();
     }
 }

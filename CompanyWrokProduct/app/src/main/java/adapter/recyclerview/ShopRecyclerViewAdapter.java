@@ -169,6 +169,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                     holder.discount.setText(itemsList.get(position - had_header).getDiscount());
                 }
                 //原價
+                holder.rprice.setVisibility(View.VISIBLE);
+                holder.rsprice.setVisibility(View.VISIBLE);
                 //特價
                 if (itemsList.get(position - had_header).getRprice().equals(itemsList.get(position - had_header).getRsprice())) {
                     holder.rprice.setVisibility(View.INVISIBLE);

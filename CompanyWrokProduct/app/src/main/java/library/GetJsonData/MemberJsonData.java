@@ -18,6 +18,9 @@ public class MemberJsonData {
     private static final String forget_url = "http://api.gok1945.com/main/member/forget.php";
     private static final String getPersonData_url = "http://api.gok1945.com/main/mcenter/person/getPersonData.php";
     private static final String updateBasicData_url = "http://api.gok1945.com/main/mcenter/person/updateBasicData.php";
+    private static final String getBankData_url = "http://api.gok1945.com/main/other/getBankData.php";
+    private static final String updateBillingData_url = "http://api.gok1945.com/main/mcenter/person/updateBillingData.php";
+    private static final String updatePersonPawd_url = "http://api.gok1945.com/main/mcenter/person/updatePersonPawd.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -113,4 +116,44 @@ public class MemberJsonData {
 
         return jsonParser.getJSONFromUrl(updateBasicData_url, params);
     }
+
+    /**
+     * 7.1.4	修改帳務資料
+     */
+    public JSONObject updateBillingData(
+            String token
+            , String bcode
+            , String bbank
+            , String bcard
+            , String buname
+    ) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("bcode", bcode));
+        params.add(new BasicNameValuePair("bbank", bbank));
+        params.add(new BasicNameValuePair("bcard", bcard));
+        params.add(new BasicNameValuePair("buname", buname));
+        return jsonParser.getJSONFromUrl(updateBillingData_url, params);
+    }
+
+    /**
+     * 7.2.1	修改密碼
+     */
+    public JSONObject updatePersonPawd(
+            String token
+            , String oldpawd
+            , String newpawd
+    ) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("oldpawd", oldpawd));
+        params.add(new BasicNameValuePair("newpawd", newpawd));
+        return jsonParser.getJSONFromUrl(updatePersonPawd_url, params);
+    }
+
+    /**
+     * 9.1.2	讀取銀行資料
+     */
+    public JSONObject getBankData() {
+        return jsonParser.getJSONFromUrl(getBankData_url, params);
+    }
+
 }

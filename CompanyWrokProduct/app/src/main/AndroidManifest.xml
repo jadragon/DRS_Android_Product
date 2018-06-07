@@ -108,8 +108,13 @@
             android:name=".ForgetPassActivity"
             android:launchMode="singleTask" />
         <activity android:name=".LogoutActivity" />
-        <activity android:name=".我的帳戶.個人管理.個人資料.PersonalInfoActivity" />
-        <activity android:name=".我的帳戶.個人管理.個人資料.SelectCoverActivity"></activity>
+        <activity
+            android:name=".我的帳戶.個人管理.個人資料.PersonalInfoActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".我的帳戶.個人管理.個人資料.SelectCoverActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".我的帳戶.個人管理.ModifyPasswordActivity"></activity>
     </application>
 
 </manifest>

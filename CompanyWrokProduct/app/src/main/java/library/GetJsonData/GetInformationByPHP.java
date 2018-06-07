@@ -1,7 +1,5 @@
 package library.GetJsonData;
 
-import android.util.Log;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
@@ -73,7 +71,6 @@ public JSONObject test() {
      * 取消最愛
      */
     public JSONObject delFavoriteProduct(String token, String pno) {
-        Log.e("delFavoriteProduct", token + "\n" + pno);
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(delFavoriteProduct_url, params);
@@ -83,7 +80,6 @@ public JSONObject test() {
      * 設為最愛
      */
     public JSONObject setFavorite(String token, String pno) {
-        Log.e("delFavoriteProduct", token + "\n" + pno);
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(setFavorite_url, params);
@@ -92,7 +88,8 @@ public JSONObject test() {
     /**
      * 設為最愛
      */
-    public JSONObject getPcontent(String pno) {
+    public JSONObject getPcontent(String token, String pno) {
+        params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(pcontent_url, params);
     }
@@ -146,10 +143,10 @@ public JSONObject test() {
     /**
      * 取得商品列表欄資料
      */
-    public JSONObject getPlist(String ptno, int type,String token, int page) {
+    public JSONObject getPlist(String ptno, int type, String token, int page) {
         params.add(new BasicNameValuePair("ptno", ptno));
         params.add(new BasicNameValuePair("type", "" + type));
-        params.add(new BasicNameValuePair("token",  token));
+        params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("page", "" + page));
         return jsonParser.getJSONFromUrl(plist_url, params);
     }

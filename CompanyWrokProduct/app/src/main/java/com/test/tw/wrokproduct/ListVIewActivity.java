@@ -10,6 +10,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import library.SQLiteDatabaseHandler;
 
 public class ListVIewActivity extends ListActivity {
@@ -38,9 +41,16 @@ public class ListVIewActivity extends ListActivity {
             } else if (land.equals("2")) {
                 array = db.getOutSideCity().toArray(new String[db.getOutSideCity().size()]);
             }
-        } else {
-            toolbar_title.setText("鄉鎮市區");
+        } else if (city != null) {
+            toolbar_title.setText("鄉鎮市");
             array = db.getAreaByCity(city).toArray(new String[db.getAreaByCity(city).size()]);
+        } else {
+            toolbar_title.setText("銀行");
+            ArrayList<Map<String,String>> arrayList=db.getBankDetail();
+            array = new String[arrayList.size()];
+            for (int i = 0; i < array.length; i++) {
+                array[i] = arrayList.get(i).get("bcode") + " - " + arrayList.get(i).get("bname");
+            }
         }
         ListAdapter adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
@@ -54,12 +64,17 @@ public class ListVIewActivity extends ListActivity {
         if (land != null) {
             intent.putExtra("city", array[position]);
             setResult(0, intent);
-        } else {
+        } else if (city != null) {
             area = array[position];
             zipcode = db.getZipcodeByCityAndArea(city, area).get("zipcode");
             intent.putExtra("area", area);
             intent.putExtra("zipcode", zipcode);
             setResult(1, intent);
+        } else {
+            array = array[position].split("-");
+            intent.putExtra("bcode", array[0].trim());
+            intent.putExtra("bname", array[1].trim());
+            setResult(2, intent);
         }
         ListVIewActivity.this.finish();
     }
