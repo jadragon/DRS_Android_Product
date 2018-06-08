@@ -15,6 +15,10 @@
         android:icon="@drawable/ic_my_favor_w"
         android:title="喜好紀錄" />
     <item
+        android:id="@+id/navigation_notification"
+        android:icon="@drawable/ic_information_w"
+        android:title="通知" />
+    <item
         android:id="@+id/navigation_member"
         android:icon="@drawable/ic_member_w"
         android:title="會員中心" />

@@ -62,6 +62,8 @@ public class Fragment_shop_content extends Fragment {
     int banner;
     public final static int HIDE_BANNER = 0;
     public final static int SHOW_BANNER = 1;
+    public final static int FAVORATE = -1;
+    public final static int BROWSE = -2;
 
     public Fragment_shop_content() {
     }
@@ -98,10 +100,16 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (banner == SHOW_BANNER)
+                        if (banner == SHOW_BANNER) {
+                            json1 = new GetInformationByPHP().getBanner(type);
                             json2 = new GetInformationByPHP().getIplist(type, token, 1);
-                        else
+                        } else if (banner == HIDE_BANNER) {
                             json2 = new GetInformationByPHP().getPlist(ptno, type, token, 1);
+                        } else if (banner == FAVORATE) {
+                            json2 = new GetInformationByPHP().getFavorite(token);
+                        } else if (banner == BROWSE) {
+                            json2 = new GetInformationByPHP().getBrowse(token);
+                        }
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -114,8 +122,10 @@ public class Fragment_shop_content extends Fragment {
                                 myRecyclerAdapter.setFilter(json2);
                                 mSwipeLayout.setRefreshing(false);
                                 LoadingView.hide();
-                                nextpage = 2;
-                                endLessOnScrollListener.reset();
+                                if (banner > FAVORATE) {
+                                    nextpage = 2;
+                                    endLessOnScrollListener.reset();
+                                }
                             }
                         });
                     }
@@ -135,9 +145,7 @@ public class Fragment_shop_content extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
         if (banner == SHOW_BANNER) {
-
             setHeaderView(myRecyclerAdapter);
-
         }
         recyclerView.setAdapter(myRecyclerAdapter);
         // OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
@@ -185,35 +193,35 @@ public class Fragment_shop_content extends Fragment {
         });
         */
 //只刷一次
-        endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                LoadingView.show(v);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final JSONObject json;
-                        if (banner == SHOW_BANNER) {
-                            json = new GetInformationByPHP().getIplist(type, token, nextpage);
-                        } else {
-                            json = new GetInformationByPHP().getPlist(ptno,type,token,  nextpage);
-                        }
-                        nextpage++;
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!myRecyclerAdapter.setFilterMore(json)) {
-                                    nextpage--;
-                                }
-                                LoadingView.hide();
+        if (banner > FAVORATE) {
+            endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
+                @Override
+                public void onLoadMore(int currentPage) {
+                    LoadingView.show(v);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (banner == SHOW_BANNER) {
+                                json2 = new GetInformationByPHP().getIplist(type, token, nextpage);
+                            } else if (banner == HIDE_BANNER) {
+                                json2 = new GetInformationByPHP().getPlist(ptno, type, token, nextpage);
                             }
-                        });
-                    }
-                }).start();
-            }
-        };
-        recyclerView.addOnScrollListener(endLessOnScrollListener);
-
+                            nextpage++;
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!myRecyclerAdapter.setFilterMore(json2)) {
+                                        nextpage--;
+                                    }
+                                    LoadingView.hide();
+                                }
+                            });
+                        }
+                    }).start();
+                }
+            };
+            recyclerView.addOnScrollListener(endLessOnScrollListener);
+        }
         setFooterView(myRecyclerAdapter);
 
     }

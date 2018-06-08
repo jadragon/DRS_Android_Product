@@ -7,4 +7,10 @@ public class StringUtil {
         DecimalFormat df = new DecimalFormat("###,###");
         return df.format(Double.parseDouble(str));
     }
+    public static String htmlFormat(String noamltext,String specialtext,String specialcolor,int insertPosition) {
+        StringBuilder builder=new StringBuilder(noamltext);
+        String text1 = "<big><font color=\"#"+specialcolor+"\">"+specialtext+"</font></big>";
+        builder.insert(insertPosition,text1);
+        return builder.toString();
+    }
 }

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Fragment.Fragment_shop_content;
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.GetInformationByPHP;
@@ -66,7 +67,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int had_header, int type) {
         this.ctx = ctx;
-        this.had_header = had_header;
+        if (had_header > Fragment_shop_content.FAVORATE)
+            this.had_header = had_header;
         this.type = type;
         this.layout_width = layout_width;
         this.layout_heigh = layout_heigh;

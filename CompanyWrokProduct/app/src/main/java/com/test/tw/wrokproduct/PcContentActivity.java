@@ -404,8 +404,6 @@ public class PcContentActivity extends AppCompatActivity {
                 finish();
             }
         });
-        toolbar.setContentInsetsRelative(0, 50);
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

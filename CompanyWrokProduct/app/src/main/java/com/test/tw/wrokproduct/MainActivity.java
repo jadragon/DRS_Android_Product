@@ -22,9 +22,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Fragment.Fragment_community;
-import Fragment.Fragment_home;
-import Fragment.Fragment_shop;
+import Fragment.*;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
 import library.AppManager;
@@ -38,10 +36,13 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
     private Fragment_shop fragment_shop;
     private Fragment_community fragment_community;
+    private Fragment_favorate fragment_favorate;
+    private Fragment_notification fragment_notification;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
     BottomNavigationView navigation;
     SQLiteDatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +87,13 @@ public class MainActivity extends AppCompatActivity {
                         switchFrament(lastShowFragment, 2);
                         lastShowFragment = 2;
                         return true;
-                    case R.id.navigation_member:
+                    case R.id.navigation_notification:
                         switchFrament(lastShowFragment, 3);
                         lastShowFragment = 3;
+                        return true;
+                    case R.id.navigation_member:
+                        switchFrament(lastShowFragment, 4);
+                        lastShowFragment = 4;
                         return true;
 
                 }
@@ -157,7 +162,9 @@ public class MainActivity extends AppCompatActivity {
         fragment_home = new Fragment_home();
         fragment_shop = new Fragment_shop();
         fragment_community = new Fragment_community();
-        fragments = new Fragment[]{fragment_home, fragment_shop, fragment_shop, fragment_community};
+        fragment_favorate = new Fragment_favorate();
+        fragment_notification = new Fragment_notification();
+        fragments = new Fragment[]{fragment_home, fragment_shop, fragment_favorate, fragment_notification, fragment_community};
         lastShowFragment = 0;
         getSupportFragmentManager()
                 .beginTransaction()
@@ -217,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                     gv.setToken(db.getMemberDetail().get("token"));
                 }
                 //
-                if(db.getBankRowCount()<1) {
+                if (db.getBankRowCount() < 1) {
                     ArrayList<Map<String, String>> banks = AnalyzeMember.getBankData(new MemberJsonData().getBankData());
                     db.addBankAll(banks);
                 }

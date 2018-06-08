@@ -34,9 +34,10 @@
                 android:id="@+id/a1-arrow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:padding="8dp"
-                android:src="@drawable/arraw_gray_right"
-                android:rotation="90"/>
+                android:rotation="90"
+                android:src="@drawable/arraw_gray_right" />
         </LinearLayout>
 
         <LinearLayout
@@ -143,8 +144,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="8dp"
-                android:src="@drawable/arraw_gray_right"
-                android:rotation="90"/>
+                android:rotation="90"
+                android:src="@drawable/arraw_gray_right" />
         </LinearLayout>
 
         <LinearLayout
@@ -388,9 +389,10 @@
                 android:id="@+id/c1-arrow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:padding="8dp"
-                android:src="@drawable/arraw_gray_right"
-                android:rotation="90"/>
+                android:rotation="90"
+                android:src="@drawable/arraw_gray_right" />
         </LinearLayout>
 
         <LinearLayout
@@ -497,9 +499,10 @@
                 android:id="@+id/d1-arrow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:padding="8dp"
-                android:src="@drawable/arraw_gray_right"
-                android:rotation="90"/>
+                android:rotation="90"
+                android:src="@drawable/arraw_gray_right" />
         </LinearLayout>
 
         <LinearLayout

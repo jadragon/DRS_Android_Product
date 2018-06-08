@@ -21,6 +21,8 @@ public class GetInformationByPHP {
     private static final String setFavorite_url = "http://api.gok1945.com/main/record/setFavorite.php";
     private static final String plist_url = "http://api.gok1945.com/main/product/plist.php";
     private static final String pcontent_url = "http://api.gok1945.com/main/product/pcontent.php";
+    private static final String getBrowse_url = "http://api.gok1945.com/main/record/getBrowse.php";
+    private static final String getFavorite_url = "http://api.gok1945.com/main/record/getFavorite.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -162,5 +164,19 @@ public JSONObject test() {
         return jsonParser.getJSONFromUrl(getAddress_url, params);
     }
 
+    /**
+     * 4.1.1	讀取個人瀏覽資訊
+     */
+    public JSONObject getBrowse(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getBrowse_url, params);
+    }
 
+    /**
+     * 4.2.1	讀取我的最愛資訊
+     */
+    public JSONObject getFavorite(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getFavorite_url, params);
+    }
 }

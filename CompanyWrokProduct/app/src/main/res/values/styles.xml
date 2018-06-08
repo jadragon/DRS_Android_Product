@@ -13,9 +13,9 @@
     </style>
 
     <style name="ActionButtonStyle" parent="Widget.AppCompat.Light.ActionButton">
-        <item name="android:minWidth">30dp</item>
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:paddingEnd">0dp</item>
+        <item name="android:minWidth">0dip</item>
+        <item name="android:paddingStart">0dip</item>
+        <item name="android:paddingEnd">0dip</item>
     </style>
 
     //For GifView Declaration

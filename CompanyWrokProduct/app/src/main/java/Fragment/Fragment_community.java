@@ -6,9 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,6 +29,7 @@ import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
+import com.test.tw.wrokproduct.ShopCartActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 
@@ -186,15 +191,39 @@ public class Fragment_community extends Fragment {
 
     private void initToolbar(View view) {
         //Toolbar 建立
-        toolbar = view.findViewById(R.id.include_toolbar);
+        toolbar = v.findViewById(R.id.include_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setHasOptionsMenu(true);
         ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("會員中心");
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.pc_content_menu, menu);
+        menu.getItem(1).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //會員區
+        if (item.getItemId() == R.id.pccontent_menu_shopcart) {
+            if (gv.getToken() != null)
+                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+            else
+                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return false;
     }
 
     public void initTableItem(final View v) {
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (gv.getToken()!=null) {
+                if (gv.getToken() != null) {
                     switch (view.getId()) {
                         case R.id.a1:
                             if (v.findViewById(R.id.a1_0).getVisibility() == View.VISIBLE) {
@@ -291,7 +320,7 @@ public class Fragment_community extends Fragment {
                             Toast.makeText(getActivity(), "d1_3", Toast.LENGTH_SHORT).show();
                             break;
                     }
-                }else{
+                } else {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
             }
