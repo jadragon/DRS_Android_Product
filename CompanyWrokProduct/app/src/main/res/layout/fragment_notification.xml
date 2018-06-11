@@ -31,9 +31,8 @@
                     android:src="@mipmap/notification_activity" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="主題活動"
                     android:textColor="@color/black"
@@ -43,7 +42,7 @@
                     android:id="@+id/notification_txt_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -70,9 +69,8 @@
                     android:src="@mipmap/notification_list" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="喬喬通知"
                     android:textColor="@color/black"
@@ -82,7 +80,7 @@
                     android:id="@+id/notification_txt_chaw"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -109,9 +107,8 @@
                     android:src="@mipmap/notification_store" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="商城通知"
                     android:textColor="@color/black"
@@ -121,7 +118,7 @@
                     android:id="@+id/notification_txt_store"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -149,9 +146,8 @@
                     android:src="@mipmap/notification_list" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="訂單通知"
                     android:textColor="@color/black"
@@ -161,7 +157,7 @@
                     android:id="@+id/notification_txt_list"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:textColor="@color/black"
                     android:textSize="12sp" />

@@ -21,6 +21,7 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShopCartActivity;
 
 import Util.StringUtil;
+import library.Component.AutoHorizontalTextView;
 
 public class Fragment_notification extends Fragment implements View.OnClickListener {
     Toolbar toolbar;
@@ -46,11 +47,11 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
 
     private void initTextView() {
         notification_txt_activity = v.findViewById(R.id.notification_txt_activity);
-        notification_txt_activity.setText(Html.fromHtml(StringUtil.htmlFormat("再天將會有一個大活動",30+"","d40000",2)));
+        notification_txt_activity.setText(Html.fromHtml(StringUtil.htmlFormat("再天將會有一個大活動",30+"","d40000",1)));
         notification_txt_chaw = v.findViewById(R.id.notification_txt_chaw);
         notification_txt_chaw.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動",5+"","d40000",3)));
         notification_txt_store = v.findViewById(R.id.notification_txt_store);
-        notification_txt_store.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動","10000000000000000","d40000",3)));
+        notification_txt_store.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動","1000000000","d40000",3)));
         notification_txt_list = v.findViewById(R.id.notification_txt_list);
         notification_txt_list.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動",12+"","d40000",3)));
     }

@@ -13,4 +13,10 @@ public class StringUtil {
         builder.insert(insertPosition,text1);
         return builder.toString();
     }
+    public static String htmlFormat1(String noamltext,String specialcolor,int insertPosition) {
+        StringBuilder builder=new StringBuilder(noamltext);
+        String text1 = "<big><font color=\""+specialcolor+"\">"+"</font></big>";
+        builder.insert(insertPosition,text1);
+        return builder.toString();
+    }
 }
