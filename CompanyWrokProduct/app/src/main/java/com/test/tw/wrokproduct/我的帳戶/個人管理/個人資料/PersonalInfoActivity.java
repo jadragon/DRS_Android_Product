@@ -2,6 +2,8 @@ package com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -85,6 +87,12 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
         ImageLoader.getInstance().displayImage(db.getMemberDetail().get("photo"), select_photo);
         personal_info_bg.setBackgroundResource(coverbg);
+        select_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(PersonalInfoActivity.this,CameraActivity.class),100);
+            }
+        });
         initToolbar();
 
         modify_coverbg.setOnClickListener(new View.OnClickListener() {
@@ -388,6 +396,11 @@ public class PersonalInfoActivity extends AppCompatActivity {
             } else if (requestCode == 2) {
                 personal_txt_bankcode.setText(data.getStringExtra("bcode"));
                 personal_txt_bankname.setText(data.getStringExtra("bname"));
+            }else if(requestCode==100){
+                byte[] bis = data.getByteArrayExtra("picture");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bis, 0, bis.length);
+                select_photo.setImageBitmap(bitmap);
+                bitmap.recycle();
             }
         }
     }
