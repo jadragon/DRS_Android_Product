@@ -36,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
     SurfaceView surfaceView1;
-    Button albums, button1, change_camera, confirm, cancel;
+    Button back, albums, button1, change_camera, confirm, cancel;
     CircleImageView imageView1;
     Camera camera;
     LinearLayout show_layout;
@@ -58,6 +58,13 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
                 intent.setType("image/*");
                 startActivityForResult(intent, 200);
+            }
+        });
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
         surfaceView1 = findViewById(R.id.surfaceView1);
@@ -131,6 +138,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bitmap.recycle();
                 show_layout.setVisibility(View.INVISIBLE);
             }
         });
@@ -139,15 +147,20 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     Camera.PictureCallback jpeg = new Camera.PictureCallback() {
 
         public void onPictureTaken(byte[] data, Camera camera) {
-
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             Log.e("bitmap", width + "\n" + height);
-            bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
+            if (width > height) {
+                bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
+            } else if (width < height) {
+                bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
+            }
             //byte數组轉換成Bitmap
+            imageView1.setImageBitmap(null);
             imageView1.setImageBitmap(bitmap);
             //拍下圖片顯示在下面的ImageView裡
+
             FileOutputStream fop;
             try {
                 fop = new FileOutputStream("/sdcard/dd.jpg");
@@ -157,7 +170,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 //格式可以為jpg,png,jpg不能存儲透明
                 fop.close();
                 System.out.println("拍照成功");
-                bitmap.recycle();
                 //關閉流
             } catch (FileNotFoundException e) {
 
@@ -171,6 +183,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             }
             camera.startPreview();
             //需要手動重新startPreview，否則停在拍下的瞬間
+
         }
 
     };
@@ -218,8 +231,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private void setPictureSize(Camera.Parameters parameters) {
         List<Camera.Size> list = parameters.getSupportedPictureSizes();
         if (list.size() > 2) {
+            /*
             Camera.Size size = list.get(list.size() / 2);
             parameters.setPictureSize(size.width, size.height);
+            */
+            parameters.setPictureSize(1280, 720);
         } else {
             Camera.Size size = list.get(0);
             parameters.setPictureSize(size.width, size.height);
@@ -270,12 +286,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        camera = null;
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -294,12 +304,13 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 int height = bitmap.getHeight();
                 Log.e("bitmap", width + "\n" + height);
                 if (width > height) {
-                    bitmap = Bitmap.createBitmap(bitmap, 0, (width - height) / 2, height, height);
+                    bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
                 } else if (width < height) {
                     bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
                 }
+                imageView1.setImageBitmap(null);
                 imageView1.setImageBitmap(bitmap);
-                bitmap.recycle();
+
                 /*
                 // 這裏開始的第二部分，獲取圖片的路徑：
                 String[] proj = {MediaStore.Images.Media.DATA};

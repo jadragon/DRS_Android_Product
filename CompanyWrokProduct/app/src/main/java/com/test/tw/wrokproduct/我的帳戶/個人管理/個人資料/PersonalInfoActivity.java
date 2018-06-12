@@ -400,6 +400,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 byte[] bis = data.getByteArrayExtra("picture");
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bis, 0, bis.length);
                 select_photo.setImageBitmap(bitmap);
+                if(bitmap!=null)
                 bitmap.recycle();
             }
         }

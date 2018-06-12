@@ -19,13 +19,27 @@
         android:clickable="true"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/select_photo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+        <FrameLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/quick_login_account" />
+            android:layout_weight="1">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/select_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/quick_login_account" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/edit_circle"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/circle"/>
+        </FrameLayout>
+
 
         <Button
             android:id="@+id/modify_coverbg"
@@ -459,6 +473,7 @@
                         android:src="@drawable/arraw_gray_right" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -502,6 +517,7 @@
                         android:src="@drawable/arraw_gray_right" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -533,6 +549,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -564,6 +581,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -595,10 +613,12 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/gainsboro" />
+
             <Button
                 android:id="@+id/adata_save"
                 android:layout_width="wrap_content"
@@ -612,6 +632,7 @@
                 android:text="未綁定"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -636,6 +657,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/gainsboro" />
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -656,12 +678,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
-                    android:layout_marginRight="15dp"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </FrameLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -682,12 +705,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
-                    android:layout_marginRight="15dp"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </FrameLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -708,12 +732,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
-                    android:layout_marginRight="15dp"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </FrameLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -734,9 +759,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/arcangle_button_nocolor"
                     android:text="綁定"
-                    android:layout_marginRight="15dp"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </FrameLayout>
