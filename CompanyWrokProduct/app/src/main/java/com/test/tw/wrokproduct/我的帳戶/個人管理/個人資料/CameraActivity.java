@@ -2,11 +2,13 @@ package com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -16,13 +18,20 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import library.Http.PostByteArrayformImage;
 
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
@@ -44,11 +54,13 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     int currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     DisplayMetrics dm;
     Camera.Parameters parameters;
+    String token;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        token = ((GlobalVariable) getApplicationContext()).getToken();
         dm = getResources().getDisplayMetrics();
         button1 = findViewById(R.id.button_capture);
         albums = findViewById(R.id.albums);
@@ -106,7 +118,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 try {
                     //設置參數
                     camera.setPreviewDisplay(surfaceHolder);
-                    camera.setDisplayOrientation(90);
+                    int rotation = getOrientation(getApplicationContext());
+                    camera.setDisplayOrientation(rotation);
                     setPictureSize(parameters);
                     //鏡頭的方向和手機相差90度，所以要轉向
                     //攝影頭畫面顯示在Surface上
@@ -125,12 +138,31 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] bitmapByte = baos.toByteArray();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                         final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmap);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Log.e("IMAGE", aa.getString("Message"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }).start();
+
                 intent.putExtra("picture", bitmapByte);
                 setResult(100, intent);
+
                 finish();
             }
         });
@@ -148,6 +180,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
         public void onPictureTaken(byte[] data, Camera camera) {
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            if (currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                bitmap = rotateImage(bitmap, 90);
+            } else {
+                bitmap = rotateImage(bitmap, 270);
+            }
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             Log.e("bitmap", width + "\n" + height);
@@ -208,11 +245,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             //設置參數
             camera.setPreviewDisplay(surfaceHolder);
             //鏡頭的方向和手機相差90度，所以要轉向
-            camera.setDisplayOrientation(90);
+            int rotation = getOrientation(getApplicationContext());
+            camera.setDisplayOrientation(rotation);
             //攝影頭畫面顯示在Surface上
             camera.startPreview();
         } catch (IOException e) {
-
             e.printStackTrace();
         }
 
@@ -235,18 +272,65 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             Camera.Size size = list.get(list.size() / 2);
             parameters.setPictureSize(size.width, size.height);
             */
-            parameters.setPictureSize(1280, 720);
+            int width = 0;
+            int heigh = 0;
+            for (Camera.Size size : list) {
+                if (size.width < 1500 && size.width > 1000) {
+                    width = size.width;
+                    heigh = size.height;
+                    break;
+                }
+            }
+            parameters.setPictureSize(width, heigh);
+            parameters.setPreviewSize(width, heigh);
         } else {
             Camera.Size size = list.get(0);
             parameters.setPictureSize(size.width, size.height);
+            parameters.setPreviewSize(size.width, size.height);
         }
 // 设置相机参数
-        if (currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
-            parameters.set("rotation", 90);
-        } else {
-            parameters.set("rotation", 270);
-        }
+        parameters.setFocusMode(
+                Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
         camera.setParameters(parameters);
+    }
+
+    //取得display rotation
+    public static int getOrientation(Context context) {
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+        int orientation;
+        boolean expectPortrait;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+            default:
+                orientation = 90;
+                expectPortrait = true;
+                break;
+            case Surface.ROTATION_90:
+                orientation = 0;
+                expectPortrait = false;
+                break;
+            case Surface.ROTATION_180:
+                orientation = 270;
+                expectPortrait = true;
+                break;
+            case Surface.ROTATION_270:
+                orientation = 180;
+                expectPortrait = false;
+                break;
+        }
+        boolean isPortrait = display.getHeight() > display.getWidth();
+        if (isPortrait != expectPortrait) {
+            orientation = (orientation + 270) % 360;
+        }
+        return orientation;
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -398,10 +397,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 personal_txt_bankname.setText(data.getStringExtra("bname"));
             }else if(requestCode==100){
                 byte[] bis = data.getByteArrayExtra("picture");
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bis, 0, bis.length);
-                select_photo.setImageBitmap(bitmap);
-                if(bitmap!=null)
-                bitmap.recycle();
+                select_photo.setImageBitmap( BitmapFactory.decodeByteArray(bis, 0, bis.length));
             }
         }
     }
