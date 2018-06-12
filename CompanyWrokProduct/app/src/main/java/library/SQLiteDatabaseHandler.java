@@ -47,6 +47,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ACCOUNT = "account";
     private static final String KEY_NAME = "name";
     private static final String KEY_PHOTO = "photo";
+    private static final String KEY_IMAGE = "image";
     private static final String KEY_BACKGROUND = "background";
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
             + KEY_LG_ID + " INTEGER PRIMARY KEY,"
@@ -54,6 +55,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             + KEY_ACCOUNT + " TEXT,"
             + KEY_NAME + " TEXT,"
             + KEY_PHOTO + " TEXT,"
+            + KEY_IMAGE + " BLOB,"
             + KEY_BACKGROUND + " TEXT" + ")";
     //Bank table name
     private static final String TABLE_BANK = "getBank";
@@ -393,12 +395,39 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             data.put("account", cursor.getString(2));
             data.put("name", cursor.getString(3));
             data.put("photo", cursor.getString(4));
-            data.put("background", cursor.getString(5));
+            data.put("background", cursor.getString(6));
         }
         cursor.close();
         db.close();
         // return user
         return data;
+    }
+
+    /**
+     * Storing user details in database
+     */
+    public void updatePhotoImage(byte[] image) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_IMAGE, image); // background
+        // Inserting Row
+        db.update(TABLE_MEMBER, values, KEY_LG_ID + "=" + 1, null);
+        db.close(); // Closing database connection
+    }
+
+    public byte[] getPhotoImage() {
+        String selectQuery = "SELECT  "+KEY_IMAGE+" FROM " + TABLE_MEMBER;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            return cursor.getBlob(0);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return null;
     }
 
     /**

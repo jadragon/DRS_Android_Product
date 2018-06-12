@@ -3,6 +3,7 @@ package com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -15,6 +16,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -42,6 +46,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import library.Http.PostByteArrayformImage;
+import library.SQLiteDatabaseHandler;
 
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
@@ -55,48 +60,89 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     DisplayMetrics dm;
     Camera.Parameters parameters;
     String token;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
-        dm = getResources().getDisplayMetrics();
-        button1 = findViewById(R.id.button_capture);
-        albums = findViewById(R.id.albums);
-        albums.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                intent.setType("image/*");
-                startActivityForResult(intent, 200);
-            }
-        });
-        back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        surfaceView1 = findViewById(R.id.surfaceView1);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        imageView1 = findViewById(R.id.imageView1);
-        initShow();
-        initChangeCamera();
-        surfaceHolder = surfaceView1.getHolder();
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        surfaceHolder.addCallback(this);
-        button1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //自動對焦
-                // camera.autoFocus(afcb);
-                imageView1.setImageBitmap(null);
-                show_layout.setVisibility(View.VISIBLE);
-                camera.takePicture(null, null, jpeg);
-            }
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasCameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
+            List<String> permissions = new ArrayList<String>();
 
+            if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
+            if (!permissions.isEmpty()) {
+                requestPermissions(permissions.toArray(new String[permissions.size()]), MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(CameraActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(CameraActivity.this,
+                    Manifest.permission.CAMERA)) {
+                new AlertDialog.Builder(CameraActivity.this)
+                        .setMessage("我真的沒有要做壞事, 給我權限吧?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(CameraActivity.this,
+                                        new String[]{Manifest.permission.CAMERA},
+                                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else {
+
+                ActivityCompat.requestPermissions(CameraActivity.this,
+                        new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        } else {
+            token = ((GlobalVariable) getApplicationContext()).getToken();
+            dm = getResources().getDisplayMetrics();
+            button1 = findViewById(R.id.button_capture);
+            albums = findViewById(R.id.albums);
+            albums.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, 200);
+                }
+            });
+            back = findViewById(R.id.back);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            surfaceView1 = findViewById(R.id.surfaceView1);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            imageView1 = findViewById(R.id.imageView1);
+            initShow();
+            initChangeCamera();
+            surfaceHolder = surfaceView1.getHolder();
+            surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+            surfaceHolder.addCallback(this);
+            button1.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //自動對焦
+                    // camera.autoFocus(afcb);
+                    imageView1.setImageBitmap(null);
+                    show_layout.setVisibility(View.VISIBLE);
+                    camera.takePicture(null, null, jpeg);
+                }
+            });
+        }
     }
 
     private void initChangeCamera() {
@@ -143,10 +189,13 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] bitmapByte = baos.toByteArray();
+                SQLiteDatabaseHandler sql = new SQLiteDatabaseHandler(getApplicationContext());
+                sql.updatePhotoImage(bitmapByte);
+                sql.close();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                         final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmap);
+                        final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmap);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -333,32 +382,17 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 matrix, true);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int hasCameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
-            List<String> permissions = new ArrayList<String>();
-
-            if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.CAMERA);
-            }
-            if (!permissions.isEmpty()) {
-                requestPermissions(permissions.toArray(new String[permissions.size()]), 111);
-            }
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         switch (requestCode) {
-            case 111: {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 for (int i = 0; i < permissions.length; i++) {
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
 
                     } else if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-
+                        finish();
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package Fragment;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -22,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.CommunityActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
@@ -62,7 +62,6 @@ public class Fragment_community extends Fragment {
         initToolbar(v);
         gv = (GlobalVariable) getActivity().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
-
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
 
         //List
@@ -369,7 +368,9 @@ public class Fragment_community extends Fragment {
             login_success.setVisibility(View.VISIBLE);
             SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
             Map<String, String> member = db.getMemberDetail();
-            ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
+            byte[] bis = db.getPhotoImage();
+            login_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+           // ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
             login_name.setText(member.get("name"));
             try {
                 coverbg = Integer.parseInt(db.getMemberDetail().get("background"));

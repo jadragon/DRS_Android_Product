@@ -71,6 +71,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
+                                    setResult(1, null);
                                     finish();
                                 }
                             });

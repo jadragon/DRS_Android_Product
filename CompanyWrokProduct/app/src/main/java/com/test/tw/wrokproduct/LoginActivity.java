@@ -1,6 +1,7 @@
 package com.test.tw.wrokproduct;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,10 +31,14 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             gv.setToken(jsonObject.getString("Token"));
                                             account = login_edit_account.getText().toString();
                                             initMemberDB(jsonObject);
-                                            finish();
+
                                         } else {
                                             toastMessage.setMessageText(jsonObject.getString("Message"));
                                             toastMessage.confirm();
@@ -190,14 +195,49 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initMemberDB(final JSONObject json) {
-        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
-        Map<String, String> datas = AnalyzeMember.getLogin(json);
-        db.resetLoginTables();
+
+        final Map<String, String> datas = AnalyzeMember.getLogin(json);
+
         if (datas != null) {
-            db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
-            db.updateBackground(R.drawable.member_bg1+"");
+
+                    final SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                    db.resetLoginTables();
+                    db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
+                    db.updateBackground(R.drawable.member_bg1 + "");
+                    ImageLoader.getInstance().loadImage(datas.get("Picture"), new ImageLoadingListener() {
+
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view,
+                                                    FailReason failReason) {
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] bitmapByte = baos.toByteArray();
+                            db.updatePhotoImage(bitmapByte);
+                            db.close();
+                            finish();
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+
+                        }
+                    });
+
+
+
+
+
         }
-        db.close();
 
     }
 
@@ -265,7 +305,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     if (success) {
                                                         gv.setToken(jsonObject.getString("Token"));
                                                         initMemberDB(jsonObject);
-                                                        finish();
                                                     } else {
                                                         toastMessage.setMessageText(jsonObject.getString("Message"));
                                                         toastMessage.confirm();
@@ -370,10 +409,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            Map<String,String> map=handleSignInResult(task);
-            if(map!=null) {
+            Map<String, String> map = handleSignInResult(task);
+            if (map != null) {
                 id = map.get("id");
-                String email =map.get("email");
+                String email = map.get("email");
                 account = email.substring(0, email.indexOf("@"));
                 new Thread(new Runnable() {
                     @Override
@@ -387,7 +426,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     if (success) {
                                         gv.setToken(jsonObject.getString("Token"));
                                         initMemberDB(jsonObject);
-                                        finish();
                                     } else {
                                         toastMessage.setMessageText(jsonObject.getString("Message"));
                                         toastMessage.confirm();

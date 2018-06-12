@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.ListVIewActivity;
 import com.test.tw.wrokproduct.R;
@@ -83,13 +82,13 @@ public class PersonalInfoActivity extends AppCompatActivity {
         } catch (Exception e) {
             coverbg = 0;
         }
-
-        ImageLoader.getInstance().displayImage(db.getMemberDetail().get("photo"), select_photo);
+        byte[] bis = db.getPhotoImage();
+        select_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
         personal_info_bg.setBackgroundResource(coverbg);
         select_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(PersonalInfoActivity.this,CameraActivity.class),100);
+                startActivityForResult(new Intent(PersonalInfoActivity.this, CameraActivity.class), 100);
             }
         });
         initToolbar();
@@ -395,9 +394,12 @@ public class PersonalInfoActivity extends AppCompatActivity {
             } else if (requestCode == 2) {
                 personal_txt_bankcode.setText(data.getStringExtra("bcode"));
                 personal_txt_bankname.setText(data.getStringExtra("bname"));
-            }else if(requestCode==100){
-                byte[] bis = data.getByteArrayExtra("picture");
-                select_photo.setImageBitmap( BitmapFactory.decodeByteArray(bis, 0, bis.length));
+            } else if (requestCode == 100) {
+                // byte[] bis = data.getByteArrayExtra("picture");
+                //select_photo.setImageBitmap( BitmapFactory.decodeByteArray(bis, 0, bis.length));
+
+                byte[] bis = db.getPhotoImage();
+                select_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
             }
         }
     }
