@@ -1,6 +1,5 @@
 package library.Http;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -16,7 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,7 +34,7 @@ public class PostByteArrayformImage {
     }
 
 
-    public JSONObject getJSONFromUrl(String url, String token, Bitmap bm) {
+    public JSONObject getJSONFromUrl(String url, String token, byte[] image) {
 
         // Making HTTP request
         try {
@@ -44,13 +42,16 @@ public class PostByteArrayformImage {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
             MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            /*
             if (bm != null) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bm.compress(Bitmap.CompressFormat.JPEG, 75, bos);
                 byte[] data = bos.toByteArray();
-                ByteArrayBody bab = new ByteArrayBody(data, 123 + ".jpg");
-                entity.addPart("fimg", bab);
-            }
+                }
+                */
+            ByteArrayBody bab = new ByteArrayBody(image, 123 + ".jpg");
+            entity.addPart("fimg", bab);
+
             try {
                 entity.addPart("token", new StringBody(token));
                 entity.addPart("gok", new StringBody("Dr@_K4y51G2A0w26B8OWkfQ=="));

@@ -8,11 +8,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
         <SurfaceView
             android:id="@+id/surfaceView1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -27,10 +27,8 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
 
     private Context ctx;
     private JSONObject json;
-    private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
-    private FrameLayout.LayoutParams layoutParams;
     private AddCartRecyclerViewAdapter.RecycleHolder recycleHolder;
     private AddCartRecyclerViewAdapter.ItemSelectListener clickListener;
     private boolean[] ischoice;
@@ -41,9 +39,6 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
         this.ctx = ctx;
         this.color_values = color_values;
         dm = ctx.getResources().getDisplayMetrics();
-        int lenth = (int) (dm.widthPixels / 3 - 20 * dm.density);
-        layoutParams = new FrameLayout.LayoutParams(lenth, (int) (heigh - 50 * dm.density) / 4);
-        layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), (int) (10 * dm.density));
         if (json != null) {
             list = ResolveJsonData.getPcContentItemArray(json);
             ischoice = new boolean[list.size()];
@@ -55,22 +50,30 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
     @Override
     public AddCartRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //頁面
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shopcart, parent, false);
-        recycleHolder = new AddCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+        // view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shopcart, parent, false);
+        TextView textView = new TextView(ctx);
+        textView.setGravity(Gravity.CENTER);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,(int)(40*dm.density));
+        layoutParams.setMargins((int)(10*dm.density),(int)(10*dm.density),(int)(10*dm.density),(int)(10*dm.density));
+        textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
+        textView.setBackground(ctx.getResources().getDrawable(R.drawable.shopcart_item_bg));
+        recycleHolder = new AddCartRecyclerViewAdapter.RecycleHolder(ctx, textView, json);
         return recycleHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        drawable = (GradientDrawable) holder.linearLayout.getBackground();
-        if (!ischoice[position])
+        drawable = (GradientDrawable) holder.text.getBackground();
+        // layoutParams.width = (int) ((list.get(position).get("color").trim().length() + list.get(position).get("size").trim().length()) * 15 * dm.density);
+        if (!ischoice[position]) {
             drawable.setStroke((int) (1 * dm.density), Color.BLACK);
-        else
+            holder.text.setTextColor(Color.BLACK);
+        } else {
             drawable.setStroke((int) (3 * dm.density), color_values);
-        holder.linearLayout.setLayoutParams(layoutParams);
-        holder.color.setText(list.get(position).get("color"));
-        holder.size.setText(list.get(position).get("size"));
-
+            holder.text.setTextColor(color_values);
+        }
+        //  holder.linearLayout.setLayoutParams(layoutParams);
+        holder.text.setText("    "+list.get(position).get("color") + "  " + list.get(position).get("size")+"    ");
     }
 
 
@@ -93,7 +96,8 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView color, size;
+        //  TextView color, size;
+        TextView text;
         Context ctx;
         JSONObject json;
         LinearLayout linearLayout;
@@ -103,10 +107,11 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
             super(view);
             this.json = json;
             this.ctx = ctx;
-            color = view.findViewById(R.id.shopcart_txt_color);
-            size = view.findViewById(R.id.shopcart_txt_size);
-            linearLayout = view.findViewById(R.id.shopcart_linearlayout);
-            drawable = (GradientDrawable) linearLayout.getBackground();
+            //color = view.findViewById(R.id.shopcart_txt_color);
+            // size = view.findViewById(R.id.shopcart_txt_size);
+            text = (TextView) view;
+            drawable = (GradientDrawable) text.getBackground();
+            //linearLayout = view.findViewById(R.id.shopcart_linearlayout);
             itemView.setOnClickListener(this);
         }
 
@@ -117,11 +122,11 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
                 for (int i = 0; i < ischoice.length; i++) {
                     ischoice[i] = false;
                 }
-                ischoice[position]=true;
+                ischoice[position] = true;
                 if (clickListener != null)
                     clickListener.ItemSelected(view, position, list);
             } else {
-                ischoice[position]=false;
+                ischoice[position] = false;
                 if (clickListener != null)
                     clickListener.ItemCancelSelect(view, position, list);
             }

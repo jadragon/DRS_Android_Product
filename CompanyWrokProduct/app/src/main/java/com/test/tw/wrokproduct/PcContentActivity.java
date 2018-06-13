@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -175,7 +174,7 @@ public class PcContentActivity extends AppCompatActivity {
         ((TextView) popView.findViewById(R.id.shopcart_txt_title)).setText(product_info.get("pname"));
         ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + product_info.get("rsprice"));
         //設定款式
-        GridLayoutManager layoutManager = new GridLayoutManager(getBaseContext(), 3);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView = popView.findViewById(R.id.shop_cart_review);
         recyclerView.setHasFixedSize(true);

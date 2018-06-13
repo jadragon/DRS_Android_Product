@@ -9,7 +9,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class GlobalVariable extends Application {
     private String token;     //User token
@@ -43,14 +42,14 @@ public class GlobalVariable extends Application {
                 //设置图片加入缓存前，对bitmap进行设置
                 //.preProcessor(BitmapProcessor preProcessor)
                 .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-                .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
+              //  .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
                 .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间，可能会出现闪动
                 .build();//构建完成
         //imageloader
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
                 .Builder(getApplicationContext())
                 .defaultDisplayImageOptions(options)
-                .memoryCache(new UsingFreqLimitedMemoryCache(50)).threadPoolSize(3)
+                .memoryCache(new UsingFreqLimitedMemoryCache(20)).threadPoolSize(3)
                 .memoryCacheExtraOptions(480, 800) //保存每個緩存圖片的最大寬高
                 .threadPriority(Thread.NORM_PRIORITY - 1) //線池中的緩存數
                 .denyCacheImageMultipleSizesInMemory() //禁止緩存多張圖片

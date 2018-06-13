@@ -23,12 +23,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -47,6 +49,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import library.Http.PostByteArrayformImage;
 import library.SQLiteDatabaseHandler;
+import library.component.ToastMessageDialog;
 
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
@@ -184,23 +187,28 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] bitmapByte = baos.toByteArray();
-                SQLiteDatabaseHandler sql = new SQLiteDatabaseHandler(getApplicationContext());
-                sql.updatePhotoImage(bitmapByte);
-                sql.close();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmap);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+                        final byte[] bitmapByte = baos.toByteArray();
+                        final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmapByte);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    Log.e("IMAGE", aa.getString("Message"));
+                                    if(aa.getBoolean("Success")) {
+                                        SQLiteDatabaseHandler sql = new SQLiteDatabaseHandler(getApplicationContext());
+                                        sql.updatePhotoImage(bitmapByte);
+                                        sql.close();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("picture", bitmapByte);
+                                        setResult(100, intent);
+                                        finish();
+                                    }else {
+                                        new ToastMessageDialog(CameraActivity.this,aa.getString("Message")).confirm();
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -209,10 +217,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     }
                 }).start();
 
-                intent.putExtra("picture", bitmapByte);
-                setResult(100, intent);
-
-                finish();
             }
         });
         cancel = findViewById(R.id.cancel);
@@ -332,6 +336,14 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             }
             parameters.setPictureSize(width, heigh);
             parameters.setPreviewSize(width, heigh);
+            FrameLayout.LayoutParams params;
+            if (width > heigh)
+                params = new FrameLayout.LayoutParams(dm.widthPixels, dm.widthPixels * width / heigh);
+
+            else
+                params = new FrameLayout.LayoutParams(dm.widthPixels, dm.widthPixels * heigh / width);
+            params.gravity= Gravity.CENTER;
+            surfaceView1.setLayoutParams(params);
         } else {
             Camera.Size size = list.get(0);
             parameters.setPictureSize(size.width, size.height);

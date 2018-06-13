@@ -170,24 +170,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login_img_account:
                 login_edit_account.setHint("請輸入您的帳號");
                 login_edit_account.setInputType(InputType.TYPE_CLASS_TEXT);
+                login_edit_account.setText(null);
+                login_edit_account.setText(null);
+                login_edit_account.setEnabled(true);
+                login_edit_account.setEnabled(true);
+                login_button.setEnabled(true);
                 type = 0;
                 break;
             case R.id.login_img_mobile:
                 login_edit_account.setHint("請輸入您的電話");
                 login_edit_account.setInputType(InputType.TYPE_CLASS_PHONE);
+                login_edit_account.setText(null);
+                login_edit_account.setText(null);
+                login_edit_account.setEnabled(true);
+                login_edit_account.setEnabled(true);
+                login_button.setEnabled(true);
                 type = 1;
                 break;
             case R.id.login_img_email:
                 login_edit_account.setHint("請輸入您的信箱");
                 login_edit_account.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                login_edit_account.setText(null);
+                login_edit_password.setText(null);
+                login_edit_account.setEnabled(true);
+                login_edit_password.setEnabled(true);
+                login_button.setEnabled(true);
                 type = 2;
                 break;
             case R.id.login_img_fb:
                 type = 3;
+                login_edit_account.setHint("請選擇其他登入方式");
+                login_edit_account.setText(null);
+                login_edit_password.setText(null);
+                login_edit_account.setEnabled(false);
+                login_edit_password.setEnabled(false);
+                login_button.setEnabled(false);
+
                 quickLoginFB();
+
                 break;
             case R.id.login_img_google:
                 type = 4;
+                login_edit_account.setHint("請選擇其他登入方式");
+                login_edit_account.setText(null);
+                login_edit_password.setText(null);
+                login_edit_account.setEnabled(false);
+                login_edit_password.setEnabled(false);
+                login_button.setEnabled(false);
                 quickLoginGoogle();
                 break;
         }

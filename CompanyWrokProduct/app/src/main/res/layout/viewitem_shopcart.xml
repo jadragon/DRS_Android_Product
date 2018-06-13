@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shopcart_linearlayout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="@drawable/shopcart_item_bg"
     android:gravity="center"
@@ -9,25 +9,25 @@
 
     <TextView
         android:id="@+id/shopcart_txt_color"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:gravity="right|center_vertical"
         android:text="無"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/shopcart_txt_size"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:gravity="left|center_vertical"
         android:text="F"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"/>
 </LinearLayout>
 
 

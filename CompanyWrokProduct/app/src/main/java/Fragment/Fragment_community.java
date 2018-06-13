@@ -30,8 +30,9 @@ import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
 import com.test.tw.wrokproduct.ShopCartActivity;
-import com.test.tw.wrokproduct.我的帳戶.個人管理.ModifyPasswordActivity;
+import com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
+import com.test.tw.wrokproduct.我的帳戶.諮詢管理.幫助中心.HelpCenterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -316,7 +317,7 @@ public class Fragment_community extends Fragment {
                             Toast.makeText(getActivity(), "d1_2", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.d1_3:
-                            Toast.makeText(getActivity(), "d1_3", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getActivity(), HelpCenterActivity.class));
                             break;
                     }
                 } else {

@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.我的帳戶.個人管理;
+package com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

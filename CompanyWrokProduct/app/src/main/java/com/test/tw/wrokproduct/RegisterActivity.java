@@ -164,6 +164,10 @@ ToastMessageDialog toastMessage;
                 register_edit_account.requestFocus();
                 register_edit_account.setText(null);
                 register_edit_password.setText(null);
+                register_edit_account.setEnabled(true);
+                register_edit_password.setEnabled(true);
+                register_button.setEnabled(true);
+                register_btn_gvcode.setEnabled(true);
                 vcode = null;
                 type = 1;
                 break;
@@ -175,16 +179,34 @@ ToastMessageDialog toastMessage;
                 register_edit_account.requestFocus();
                 register_edit_account.setText(null);
                 register_edit_password.setText(null);
+                register_edit_account.setEnabled(true);
+                register_edit_password.setEnabled(true);
+                register_button.setEnabled(true);
+                register_btn_gvcode.setEnabled(true);
                 vcode = null;
                 type = 2;
                 break;
             case R.id.register_img_fb:
                 type = 3;
+                register_edit_account.setHint("請選擇其他註冊方式");
+                register_edit_account.setText(null);
+                register_edit_password.setText(null);
+                register_edit_account.setEnabled(false);
+                register_edit_password.setEnabled(false);
+                register_button.setEnabled(false);
+                register_btn_gvcode.setEnabled(false);
                 quickLoginFB();
 
                 break;
             case R.id.register_img_google:
                 type = 4;
+                register_edit_account.setHint("請選擇其他註冊方式");
+                register_edit_account.setText(null);
+                register_edit_password.setText(null);
+                register_edit_account.setEnabled(false);
+                register_edit_password.setEnabled(false);
+                register_button.setEnabled(false);
+                register_btn_gvcode.setEnabled(false);
                 quickLoginGoogle();
 
                 break;
