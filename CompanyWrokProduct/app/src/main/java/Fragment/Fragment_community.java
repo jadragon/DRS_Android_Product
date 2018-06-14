@@ -33,6 +33,7 @@ import com.test.tw.wrokproduct.ShopCartActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.諮詢管理.幫助中心.HelpCenterActivity;
+import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.ContactActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,7 @@ public class Fragment_community extends Fragment {
                             public void run() {
                                 Intent intent = new Intent(getActivity().getApplicationContext(), CommunityActivity.class);
                                 intent.putExtra("html", json);
+                                intent.putExtra("title",  getResources().getStringArray(R.array.community_title)[position]);
                                 startActivity(intent);
 
                             }
@@ -314,7 +316,7 @@ public class Fragment_community extends Fragment {
                             Toast.makeText(getActivity(), "d1_1", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.d1_2:
-                            Toast.makeText(getActivity(), "d1_2", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getActivity(), ContactActivity.class));
                             break;
                         case R.id.d1_3:
                             startActivity(new Intent(getActivity(), HelpCenterActivity.class));

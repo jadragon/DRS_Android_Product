@@ -121,9 +121,10 @@
             android:name=".我的帳戶.個人管理.個人資料.SelectCoverActivity"
             android:launchMode="singleTop" />
         <activity android:name=".我的帳戶.個人管理.修改密碼.ModifyPasswordActivity" />
-        <activity android:name=".我的帳戶.個人管理.個人資料.Camera2Activity"></activity>
-        <activity android:name=".我的帳戶.個人管理.個人資料.CameraActivity"></activity>
-        <activity android:name=".我的帳戶.諮詢管理.幫助中心.HelpCenterActivity"></activity>
+        <activity android:name=".我的帳戶.個人管理.個人資料.Camera2Activity" />
+        <activity android:name=".我的帳戶.個人管理.個人資料.CameraActivity" />
+        <activity android:name=".我的帳戶.諮詢管理.幫助中心.HelpCenterActivity" />
+        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.ContactActivity"></activity>
     </application>
 
 </manifest>

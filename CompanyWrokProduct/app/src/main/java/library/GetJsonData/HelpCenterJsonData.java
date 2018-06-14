@@ -13,6 +13,7 @@ public class HelpCenterJsonData {
     private static final String category_url = "http://api.gok1945.com/main/footer/category.php";
     private static final String searchCategory_url = "http://api.gok1945.com/main/footer/searchCategory.php";
     private static final String searchMbCategory_url = "http://api.gok1945.com/main/footer/searchMbCategory.php";
+    private static final String citem_url = "http://api.gok1945.com/main/footer/citem.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -46,4 +47,11 @@ public class HelpCenterJsonData {
         return jsonParser.getJSONFromUrl(searchMbCategory_url, params);
     }
 
+    /**
+     * 8.3.4	讀取標題內文
+     */
+    public JSONObject getCitem(String icno) {
+        params.add(new BasicNameValuePair("icno", icno));
+        return jsonParser.getJSONFromUrl(citem_url, params);
+    }
 }

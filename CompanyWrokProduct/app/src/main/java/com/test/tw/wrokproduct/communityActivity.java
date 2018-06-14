@@ -3,6 +3,8 @@ package com.test.tw.wrokproduct;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
@@ -16,21 +18,33 @@ import Fragment.Fragment_WebView;
 
 public class CommunityActivity extends AppCompatActivity {
     private WebView luntanListview;
-    String html;
+    String title,html;
     ViewGroup container;
     int webviewHeigh;
     Intent intent;
-    TextView textView;
     Fragment_WebView.OnHeighChangerListener onHeighChangerListener;
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
         intent = getIntent();
         html = intent.getStringExtra("html");
-
+        title = intent.getStringExtra("title");
+        initToolbar();
         showWebView();
+    }
+    private void initToolbar() {
+        //Toolbar 建立
+        toolbar = findViewById(R.id.include_toolbar);
+        ((TextView) findViewById(R.id.include_toolbar_title)).setText(title);
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void showWebView() {
