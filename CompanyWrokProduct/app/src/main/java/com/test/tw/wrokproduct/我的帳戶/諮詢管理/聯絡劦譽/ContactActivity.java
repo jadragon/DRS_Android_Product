@@ -25,9 +25,10 @@ public class ContactActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager contact_viewpager;
     TabLayout tabLayout;
-    List<Fragment> fragmentList;
+    List<Fragment_Contact> fragmentList;
     String[] mTabtitle = {"收件夾", "寄信備份"};
     String token;
+    JSONObject json1, json2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +45,18 @@ public class ContactActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONObject json1 = new ContactJsonData().getContact(token, 0, 1);
-                final JSONObject json2 = new ContactJsonData().getContact(token, 1, 1);
+                json1 = new ContactJsonData().getContact(token, 0, 1);
+                json2 = new ContactJsonData().getContact(token, 1, 1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Fragment_Contact fragment_contact = new Fragment_Contact();
                         fragment_contact.setJson(json1);
+                        fragment_contact.setType(0);
                         fragmentList.add(fragment_contact);
                         fragment_contact = new Fragment_Contact();
                         fragment_contact.setJson(json2);
+                        fragment_contact.setType(1);
                         fragmentList.add(fragment_contact);
                         contact_viewpager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
                             @Override
@@ -93,5 +96,30 @@ public class ContactActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setFilter();
+    }
+
+    public void setFilter() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json1 = new ContactJsonData().getContact(token, 0, 1);
+                json2 = new ContactJsonData().getContact(token, 1, 1);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentList.get(0).setJson(json1);
+                        fragmentList.get(0).setFilter();
+                        fragmentList.get(1).setJson(json2);
+                        fragmentList.get(1).setFilter();
+                    }
+                });
+            }
+        }).start();
     }
 }

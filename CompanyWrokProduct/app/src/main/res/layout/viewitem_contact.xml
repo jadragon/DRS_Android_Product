@@ -35,18 +35,25 @@
             android:id="@+id/viewitem_contact_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:text="劦譽商城" />
 
         <library.Component.AutoVerticalTextView
             android:id="@+id/viewitem_contact_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:text="主題" />
 
         <library.Component.AutoVerticalTextView
             android:id="@+id/viewitem_contact_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="10sp"
             android:text="20180911" />
     </LinearLayout>
 

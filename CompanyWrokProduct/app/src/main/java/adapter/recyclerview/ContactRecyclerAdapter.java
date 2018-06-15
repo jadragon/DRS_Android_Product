@@ -1,15 +1,16 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.ReplyActivity;
 
 import org.json.JSONObject;
 
@@ -61,7 +62,11 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
     }
 
     @Override
-    public void onBindViewHolder(final RecycleHolder holder, int position) {
+    public void onBindViewHolder(RecycleHolder holder, int position) {
+        if (itemPojoList.get(position).isCheck())
+            holder.viewitem_contact_checkbox.setChecked(true);
+        else
+            holder.viewitem_contact_checkbox.setChecked(false);
         holder.viewitem_contact_person.setText(itemPojoList.get(position).getPerson());
         holder.viewitem_contact_title.setText(itemPojoList.get(position).getTitle());
         holder.viewitem_contact_time.setText(itemPojoList.get(position).getTime());
@@ -90,12 +95,22 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
             viewitem_contact_checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (itemPojoList.get(position).isCheck()) {
+                        itemPojoList.get(position).setCheck(false);
+                        ((CheckBox) ((ViewGroup) view.getParent().getParent().getParent()).findViewById(R.id.contact_allcheck)).setChecked(false);
+                    } else {
+                        itemPojoList.get(position).setCheck(true);
+                        checkAll(view);
+                    }
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, itemPojoList.get(getAdapterPosition()).getMsno(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, ReplyActivity.class);
+                    intent.putExtra("msno", itemPojoList.get(getAdapterPosition()).getMsno());
+                    context.startActivity(intent);
                 }
             });
         }
@@ -131,14 +146,47 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
 
     }
 
+    public void checkAll(View view) {
+        for (ItemPojo itemPojo : itemPojoList) {
+            if (!itemPojo.isCheck()) {
+                return;
+            }
+        }
+        ((CheckBox) ((ViewGroup) view.getParent().getParent().getParent()).findViewById(R.id.contact_allcheck)).setChecked(true);
+        notifyDataSetChanged();
+    }
+
+    public String getCheckedList() {
+
+        StringBuilder builder = new StringBuilder();
+
+        for (ItemPojo itemPojo : itemPojoList) {
+            if (itemPojo.isCheck())
+                builder.append("," + itemPojo.getMsno());
+        }
+        return builder.delete(0, 1).toString();
+    }
+
+    public void setAllChecked() {
+        for (ItemPojo itemPojo : itemPojoList)
+            itemPojo.setCheck(true);
+        notifyDataSetChanged();
+    }
+
+    public void setAllNotCheck() {
+        for (ItemPojo itemPojo : itemPojoList)
+            itemPojo.setCheck(false);
+        notifyDataSetChanged();
+    }
+
     private class ItemPojo {
-        String msno;
-        String type;
-        String person;
-        String title;
-        String isread;
-        String content;
-        String time;
+        private String msno;
+        private String type;
+        private String person;
+        private String title;
+        private String isread;
+        private String content;
+        private String time;
         boolean isCheck;
 
         public String getMsno() {

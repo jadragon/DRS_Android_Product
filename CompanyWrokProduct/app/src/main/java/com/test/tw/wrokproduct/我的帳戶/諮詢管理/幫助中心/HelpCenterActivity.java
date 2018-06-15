@@ -9,20 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 import adapter.recyclerview.HelpCenterRecyclerViewAdapter;
 import library.AnalyzeJSON.AnalyzeHelpCenter;
@@ -33,7 +28,6 @@ public class HelpCenterActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SearchView searchView;
     HelpCenterRecyclerViewAdapter adapter;
-    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +62,11 @@ public class HelpCenterActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.searchmenu, menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        MenuItem menuItem = menu.findItem(R.id.menu_send);
+        menuItem.setVisible(false);
+        menuItem = menu.findItem(R.id.menu_search);
         //通过MenuItem得到SearchView
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setQueryHint("輸入常見問題");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -125,25 +121,5 @@ public class HelpCenterActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void initHeader(ArrayList<Map<String, String>> list) {
-        view = LayoutInflater.from(getApplicationContext()).inflate(
-                R.layout.table_view_header, recyclerView, false);
-        //header 背景
-        LinearLayout layout = view.findViewById(R.id.table_view_header_layout);
-        layout.setBackgroundColor(getResources().getColor(R.color.gray));
-        //header title
-        TextView textView = view.findViewById(R.id.table_view_header_text);
-        textView.setText("搜尋項目");
-        //item layout
-        layout = view.findViewById(R.id.table_view_item_layout);
-        View item;
-        for (Map<String, String> map : list) {
-            item = LayoutInflater.from(getApplicationContext()).inflate(
-                    R.layout.table_view_item, recyclerView, false);
-            ((TextView) item.findViewById(R.id.table_view_item_text)).setText(map.get("title"));
-            layout.addView(item);
-        }
     }
 }

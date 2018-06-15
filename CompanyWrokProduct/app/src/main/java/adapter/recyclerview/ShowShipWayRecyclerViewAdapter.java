@@ -34,7 +34,6 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
 
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_CONTENT = 1;
-    public static final int TYPE_FOOTER = 3;
     private Context ctx;
     private JSONObject json;
     private DisplayMetrics dm;
