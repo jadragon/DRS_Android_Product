@@ -1,5 +1,7 @@
 package com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽;
 
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,10 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.CameraActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +25,7 @@ public class WriteMailActivity extends AppCompatActivity {
     Toolbar toolbar;
     String token;
     EditText write_mail_title, write_mail_note;
+    ImageView write_mail_photo1, write_mail_photo2, write_mail_photo3, write_mail_photo4, write_mail_photo5, write_mail_photo6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,52 @@ public class WriteMailActivity extends AppCompatActivity {
         initToolbar();
         write_mail_title = findViewById(R.id.write_mail_title);
         write_mail_note = findViewById(R.id.write_mail_note);
+        initPhotos();
+    }
+
+    private void initPhotos() {
+        View.OnClickListener clickListener = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(WriteMailActivity.this, CameraActivity.class);
+                intent.putExtra("Shape", "square");
+
+                switch (view.getId()) {
+                    case R.id.write_mail_photo1:
+                        startActivityForResult(intent, 100);
+                        break;
+                    case R.id.write_mail_photo2:
+                        startActivityForResult(intent, 200);
+                        break;
+                    case R.id.write_mail_photo3:
+                        startActivityForResult(intent, 300);
+                        break;
+                    case R.id.write_mail_photo4:
+                        startActivityForResult(intent, 400);
+                        break;
+                    case R.id.write_mail_photo5:
+                        startActivityForResult(intent, 500);
+                        break;
+                    case R.id.write_mail_photo6:
+                        startActivityForResult(intent, 600);
+                        break;
+                }
+            }
+        };
+        write_mail_photo1 = findViewById(R.id.write_mail_photo1);
+        write_mail_photo1.setOnClickListener(clickListener);
+        write_mail_photo2 = findViewById(R.id.write_mail_photo2);
+        write_mail_photo2.setOnClickListener(clickListener);
+        write_mail_photo3 = findViewById(R.id.write_mail_photo3);
+        write_mail_photo3.setOnClickListener(clickListener);
+        write_mail_photo4 = findViewById(R.id.write_mail_photo4);
+        write_mail_photo4.setOnClickListener(clickListener);
+        write_mail_photo5 = findViewById(R.id.write_mail_photo5);
+        write_mail_photo5.setOnClickListener(clickListener);
+        write_mail_photo6 = findViewById(R.id.write_mail_photo6);
+        write_mail_photo6.setOnClickListener(clickListener);
     }
 
     private void initToolbar() {
@@ -79,5 +130,49 @@ public class WriteMailActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 100:
+                if (data != null) {
+                    byte[] bis = data.getByteArrayExtra("picture");
+                    write_mail_photo1.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+                }
+                break;
+            case 200:
+                if (data != null) {
+                    byte[] bis = data.getByteArrayExtra("picture");
+                    write_mail_photo2.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+                }
+                break;
+            case 300:
+                if (data != null) {
+                    byte[] bis = data.getByteArrayExtra("picture");
+                    write_mail_photo3.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+                }
+                break;
+            case 400:
+                if (data != null) {
+                    byte[] bis = data.getByteArrayExtra("picture");
+                    write_mail_photo4.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+                }
+                break;
+            case 500:
+                if (data != null) {
+                    byte[] bis = data.getByteArrayExtra("picture");
+                    write_mail_photo5.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+                }
+                break;
+            case 600:
+                if (data != null) {
+                    byte[] bis = data.getByteArrayExtra("picture");
+                    write_mail_photo6.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
+                }
+                break;
+        }
+
     }
 }

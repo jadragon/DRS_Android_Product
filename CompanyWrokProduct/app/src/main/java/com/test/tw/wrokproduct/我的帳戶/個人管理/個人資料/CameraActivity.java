@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -55,7 +56,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     SurfaceHolder surfaceHolder;
     SurfaceView surfaceView1;
     Button back, albums, button1, change_camera, confirm, cancel;
-    CircleImageView imageView1;
+    ImageView imageView1;
     Camera camera;
     LinearLayout show_layout;
     Bitmap bitmap;
@@ -64,11 +65,23 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     Camera.Parameters parameters;
     String token;
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    String shape;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        //
+        imageView1 = findViewById(R.id.imageView1);
+        shape = getIntent().getStringExtra("Shape");
+        if (shape != null && shape.equals("square")) {
+            findViewById(R.id.target_round).setVisibility(View.INVISIBLE);
+            imageView1 = findViewById(R.id.imageView2);
+            imageView1.setVisibility(View.VISIBLE);
+        } else {
+            imageView1 = findViewById(R.id.imageView1);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasCameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
             List<String> permissions = new ArrayList<String>();
@@ -130,7 +143,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             });
             surfaceView1 = findViewById(R.id.surfaceView1);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            imageView1 = findViewById(R.id.imageView1);
             initShow();
             initChangeCamera();
             surfaceHolder = surfaceView1.getHolder();
@@ -187,36 +199,43 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
-                        final byte[] bitmapByte = baos.toByteArray();
-                        final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmapByte);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if(aa.getBoolean("Success")) {
-                                        SQLiteDatabaseHandler sql = new SQLiteDatabaseHandler(getApplicationContext());
-                                        sql.updatePhotoImage(bitmapByte);
-                                        sql.close();
-                                        Intent intent = new Intent();
-                                        intent.putExtra("picture", bitmapByte);
-                                        setResult(100, intent);
-                                        finish();
-                                    }else {
-                                        new ToastMessageDialog(CameraActivity.this,aa.getString("Message")).confirm();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+                final byte[] bitmapByte = baos.toByteArray();
+                if (shape != null && shape.equals("square")) {
+                    Intent intent = new Intent();
+                    intent.putExtra("picture", bitmapByte);
+                    setResult(100, intent);
+                    finish();
+                } else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmapByte);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if (aa.getBoolean("Success")) {
+                                            SQLiteDatabaseHandler sql = new SQLiteDatabaseHandler(getApplicationContext());
+                                            sql.updatePhotoImage(bitmapByte);
+                                            sql.close();
+                                            Intent intent = new Intent();
+                                            intent.putExtra("picture", bitmapByte);
+                                            setResult(100, intent);
+                                            finish();
+                                        } else {
+                                            new ToastMessageDialog(CameraActivity.this, aa.getString("Message")).confirm();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        });
-                    }
-                }).start();
+                            });
+                        }
+                    }).start();
 
+                }
             }
         });
         cancel = findViewById(R.id.cancel);
@@ -342,7 +361,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
             else
                 params = new FrameLayout.LayoutParams(dm.widthPixels, dm.widthPixels * heigh / width);
-            params.gravity= Gravity.CENTER;
+            params.gravity = Gravity.CENTER;
             surfaceView1.setLayoutParams(params);
         } else {
             Camera.Size size = list.get(0);
@@ -393,7 +412,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

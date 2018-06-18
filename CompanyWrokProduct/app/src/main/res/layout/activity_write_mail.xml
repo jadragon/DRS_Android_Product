@@ -128,31 +128,37 @@
                 android:layout_height="match_parent" />
 
             <ImageView
+                android:id="@+id/write_mail_photo1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/add_photo" />
 
             <ImageView
+                android:id="@+id/write_mail_photo2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/add_photo" />
 
             <ImageView
+                android:id="@+id/write_mail_photo3"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/add_photo" />
 
             <ImageView
+                android:id="@+id/write_mail_photo4"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/add_photo" />
 
             <ImageView
+                android:id="@+id/write_mail_photo5"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/add_photo" />
 
             <ImageView
+                android:id="@+id/write_mail_photo6"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/add_photo" />
