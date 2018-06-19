@@ -24,6 +24,7 @@ import com.test.tw.wrokproduct.R;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +32,11 @@ import Fragment.Fragment_shop_content;
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.GetInformationByPHP;
+import library.ItemTouchListencer;
 import library.component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
-public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> {
+public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> implements ItemTouchListencer {
     public static final int TYPE_NORMAL = 0;  //说明是不带有header和footer的
     public static final int TYPE_HEADER = 1;  //说明是带有Header的
     public static final int TYPE_FOOTER = 2;  //说明是带有Footer的
@@ -297,6 +299,20 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 }
             });
         }
+    }
+
+    @Override
+    public void itemMove(int startIndex, int endIndex) {
+        if (startIndex == 0 || endIndex == 0) {
+            return;
+        }
+        Collections.swap(list, startIndex, endIndex);
+        notifyItemMoved(startIndex, endIndex);
+    }
+
+    @Override
+    public void itemSwipe(int direction) {
+
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
