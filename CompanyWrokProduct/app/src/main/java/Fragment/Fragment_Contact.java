@@ -1,6 +1,8 @@
 package Fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import org.json.JSONObject;
 
 import adapter.recyclerview.ContactRecyclerAdapter;
 import library.GetJsonData.ContactJsonData;
+import library.SQLiteDatabaseHandler;
 
 public class Fragment_Contact extends Fragment {
     RecyclerView recyclerView;
@@ -48,7 +51,16 @@ public class Fragment_Contact extends Fragment {
         token = ((GlobalVariable) getActivity().getApplicationContext()).getToken();
         recyclerView = v.findViewById(R.id.contact_recyclerview);
         recyclerView.setHasFixedSize(true);
-        adapter = new ContactRecyclerAdapter(getActivity(), json);
+        //DB
+        if(type==1) {
+            SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
+            byte[] bytes = db.getPhotoImage();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            db.close();
+            adapter = new ContactRecyclerAdapter(getActivity(), json, bitmap);
+        }else {
+            adapter = new ContactRecyclerAdapter(getActivity(), json);
+        }
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

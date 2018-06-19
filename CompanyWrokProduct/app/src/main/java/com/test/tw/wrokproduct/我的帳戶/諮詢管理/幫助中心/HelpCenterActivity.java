@@ -8,10 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +71,6 @@ public class HelpCenterActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String s) {
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -81,9 +80,10 @@ public class HelpCenterActivity extends AppCompatActivity {
                             public void run() {
                                 adapter.setHeader(AnalyzeHelpCenter.getSearchCategory(json));
                                 adapter.notifyDataSetChanged();
-                                Log.e("WWWW", AnalyzeHelpCenter.getSearchCategory(json) + "");
                             }
                         });
+
+                        ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(HelpCenterActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                 }).start();
                 return true;

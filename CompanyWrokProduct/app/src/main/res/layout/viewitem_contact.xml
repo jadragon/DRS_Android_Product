@@ -15,15 +15,16 @@
         android:id="@+id/viewitem_contact_checkbox"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:button="@null"
-        android:background="@drawable/checkbox" />
+        android:background="@drawable/checkbox"
+        android:button="@null" />
 
     <ImageView
+        android:id="@+id/head_portrait"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/xie_yu_circle"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/xie_yu_circle" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -35,26 +36,28 @@
             android:id="@+id/viewitem_contact_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:text="劦譽商城"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="劦譽商城" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <library.Component.AutoVerticalTextView
             android:id="@+id/viewitem_contact_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:text="主題"
             android:textColor="@color/black"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:text="主題" />
+            android:singleLine="true"
+            android:ellipsize="end"/>
 
         <library.Component.AutoVerticalTextView
             android:id="@+id/viewitem_contact_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:text="20180911" />
+            android:text="20180911"
+            android:textSize="10sp" />
     </LinearLayout>
 
     <ImageView

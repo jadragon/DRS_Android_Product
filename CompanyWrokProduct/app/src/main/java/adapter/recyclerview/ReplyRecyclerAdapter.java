@@ -2,10 +2,12 @@ package adapter.recyclerview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.CameraActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +49,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
     private DisplayMetrics dm;
     Bitmap myphoto;
     String myname;
+    Bitmap[] photos;
 
     public void setMsno(String msno) {
         this.msno = msno;
@@ -70,6 +74,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
             list = new ArrayList<>();
         }
         initItems(list);
+        photos = new Bitmap[6];
     }
 
     private void initItems(ArrayList<Map<String, String>> list) {
@@ -105,8 +110,8 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
             textView.setGravity(Gravity.CENTER_VERTICAL);
-            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins((int)(20*dm.density),(int)(10*dm.density),(int)(20*dm.density),(int)(10*dm.density));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins((int) (20 * dm.density), (int) (10 * dm.density), (int) (20 * dm.density), (int) (10 * dm.density));
             textView.setLayoutParams(params);
             textView.setTextColor(Color.BLACK);
             return new ReplyRecyclerAdapter.RecycleHolder(ctx, textView, TYPE_HEADER);
@@ -136,6 +141,15 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
         } else if (getItemViewType(position) == TYPE_FOOTER) {
             holder.viewitem_reply_keyin_image.setImageBitmap(myphoto);
             holder.viewitem_reply_keyin_person.setText(myname);
+            int i = 0;
+            for (Bitmap bitmap : photos) {
+                if (bitmap != null) {
+                    holder.photoImages.get(i).setImageBitmap(photos[i]);
+                }
+                i++;
+            }
+
+
         }
 
     }
@@ -153,6 +167,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
         TextView title;
         EditText viewitem_reply_keyin_content;
         Button viewitem_reply_keyin_confirm;
+        ArrayList<ImageView> photoImages;
 
         public RecycleHolder(Context ctx, View view, int viewType) {
             super(view);
@@ -175,13 +190,13 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                final JSONObject jsonObject = new ContactJsonData().setContactCont(token,msno,viewitem_reply_keyin_content.getText().toString());
+                                final JSONObject jsonObject = new ContactJsonData().setContactCont(token, msno, viewitem_reply_keyin_content.getText().toString());
                                 new android.os.Handler(context.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
-                                            if(jsonObject.getBoolean("Success")){
-                                                ((Activity)context).finish();
+                                            if (jsonObject.getBoolean("Success")) {
+                                                ((Activity) context).finish();
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -192,16 +207,66 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
                         }).start();
                     }
                 });
+                ImageView photoImage;
+                photoImages = new ArrayList<>();
+                photoImage = view.findViewById(R.id.viewitem_reply_keyin_photo1);
+                photoImage.setOnClickListener(this);
+                photoImages.add(photoImage);
+                photoImage = view.findViewById(R.id.viewitem_reply_keyin_photo2);
+                photoImage.setOnClickListener(this);
+                photoImages.add(photoImage);
+                photoImage = view.findViewById(R.id.viewitem_reply_keyin_photo3);
+                photoImage.setOnClickListener(this);
+                photoImages.add(photoImage);
+                photoImage = view.findViewById(R.id.viewitem_reply_keyin_photo4);
+                photoImage.setOnClickListener(this);
+                photoImages.add(photoImage);
+                photoImage = view.findViewById(R.id.viewitem_reply_keyin_photo5);
+                photoImage.setOnClickListener(this);
+                photoImages.add(photoImage);
+                photoImage = view.findViewById(R.id.viewitem_reply_keyin_photo6);
+                photoImage.setOnClickListener(this);
+                photoImages.add(photoImage);
             }
         }
 
         @Override
         public void onClick(View view) {
+            Intent intent = new Intent(context, CameraActivity.class);
+            intent.putExtra("Shape", "square");
+            switch (view.getId()) {
+                case R.id.viewitem_reply_keyin_photo1:
+                    ((AppCompatActivity) context).startActivityForResult(intent, 100);
+                    break;
+                case R.id.viewitem_reply_keyin_photo2:
+                    ((AppCompatActivity) context).startActivityForResult(intent, 200);
+                    break;
+                case R.id.viewitem_reply_keyin_photo3:
+                    ((AppCompatActivity) context).startActivityForResult(intent, 300);
+                    break;
+                case R.id.viewitem_reply_keyin_photo4:
+                    ((AppCompatActivity) context).startActivityForResult(intent, 400);
+                    break;
+                case R.id.viewitem_reply_keyin_photo5:
+                    ((AppCompatActivity) context).startActivityForResult(intent, 500);
+                    break;
+                case R.id.viewitem_reply_keyin_photo6:
+                    ((AppCompatActivity) context).startActivityForResult(intent, 600);
+                    break;
+            }
+
+            /*
             int position = getAdapterPosition();
             if (clickListener != null) {
                 clickListener.ItemClicked(view, position, itemPojoList);
             }
+            */
         }
+    }
+
+    public void setPhotos(Bitmap photo, int position) {
+        photos[position] = photo;
+        notifyItemChanged(getItemCount() - 1);
     }
 
     public void setClickListener(ReplyRecyclerAdapter.ClickListener clickListener) {

@@ -2,11 +2,13 @@ package adapter.recyclerview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.test.tw.wrokproduct.R;
@@ -25,10 +27,24 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
     JSONObject json;
     private ContactRecyclerAdapter.ClickListener clickListener;
     private List<ItemPojo> itemPojoList;
+    Bitmap bitmap;
 
     public ContactRecyclerAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         this.json = json;
+        ArrayList<Map<String, String>> list;
+        if (json != null) {
+            list = AnalyzeContact.getContact(json);
+        } else {
+            list = new ArrayList<>();
+        }
+        initItems(list);
+    }
+
+    public ContactRecyclerAdapter(Context ctx, JSONObject json, Bitmap bitmap) {
+        this.ctx = ctx;
+        this.json = json;
+        this.bitmap = bitmap;
         ArrayList<Map<String, String>> list;
         if (json != null) {
             list = AnalyzeContact.getContact(json);
@@ -58,6 +74,8 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
     @Override
     public ContactRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_contact, parent, false);
+        if (bitmap != null)
+            ((ImageView) view.findViewById(R.id.head_portrait)).setImageBitmap(bitmap);
         return new ContactRecyclerAdapter.RecycleHolder(ctx, view);
     }
 

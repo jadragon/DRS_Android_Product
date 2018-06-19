@@ -79,37 +79,55 @@
                 android:id="@+id/viewitem_reply_keyin_photo1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/add_photo" />
+                android:src="@drawable/add_photo"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"/>
 
             <ImageView
                 android:id="@+id/viewitem_reply_keyin_photo2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/add_photo" />
+                android:src="@drawable/add_photo"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"/>
 
             <ImageView
                 android:id="@+id/viewitem_reply_keyin_photo3"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/add_photo" />
+                android:src="@drawable/add_photo"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"/>
 
             <ImageView
                 android:id="@+id/viewitem_reply_keyin_photo4"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/add_photo" />
+                android:src="@drawable/add_photo"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"/>
 
             <ImageView
                 android:id="@+id/viewitem_reply_keyin_photo5"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/add_photo" />
+                android:src="@drawable/add_photo"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"/>
 
             <ImageView
                 android:id="@+id/viewitem_reply_keyin_photo6"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/add_photo" />
+                android:src="@drawable/add_photo"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"/>
         </LinearLayout>
     </HorizontalScrollView>
 
