@@ -10,6 +10,26 @@
         <item>我的最愛</item>
         <item>瀏覽紀錄</item>
     </string-array>
+    <string-array name="shipway_title">
+        <item>無</item>
+        <item>7-11</item>
+        <item>全家</item>
+        <item>萊爾富</item>
+        <item>黑貓宅配</item>
+        <item>郵局</item>
+        <item>賣家宅配</item>
+        <item>海外配送</item>
+    </string-array>
+    <array name="shipway_color">
+        <item>@color/shipway_yellow</item>
+        <item>@color/shipway_green_dark</item>
+        <item>@color/shipway_blue_light</item>
+        <item>@color/shipway_pink</item>
+        <item>@color/shipway_orange_light</item>
+        <item>@color/shipway_green_light</item>
+        <item>@color/shipway_orange_dark</item>
+        <item>@color/shipway_blue_dark</item>
+    </array>
     <string-array name="community_title">
         <item>安置網路</item>
         <item>安置註冊</item>

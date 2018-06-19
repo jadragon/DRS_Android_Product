@@ -3,6 +3,7 @@ package adapter.recyclerview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -42,7 +43,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     ArrayList<ArrayList<Map<String, String>>> items_list;
     private List<HeaderPojo> datas;
     String[] lanes = {"無", "本島", "離島", "海外"};
-    int[] colors = {R.color.shipway_yellow, R.color.shipway_green_dark, R.color.shipway_blue_light, R.color.shipway_pink, R.color.shipway_orange_light, R.color.shipway_green_light, R.color.shipway_orange_dark, R.color.shipway_blue_dark};
+    TypedArray colors;
     String token;
     String sno, plno, mino, sname;
 
@@ -56,6 +57,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         dm = ctx.getResources().getDisplayMetrics();
         this.ctx = ctx;
         this.json = json;
+        colors = ctx.getResources().obtainTypedArray(R.array.shipway_color);
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
         if (json != null) {
@@ -76,7 +78,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     @Override
     public ShowShipWayRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.vitem_shipwaylist, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shipwaylist, parent, false);
         //頁面
         view.setTag(viewType);
         return new ShowShipWayRecyclerViewAdapter.RecycleHolder(parent, view);
@@ -87,7 +89,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     public void onBindViewHolder(RecycleHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {//payloads为空 即不是调用notifyItemChanged(position,payloads)方法执行的
             holder.vitem_shipwaylist_logisticsVal.setText(datas.get(position).getLogisticsVal());
-            holder.vitem_shipwaylist_logisticsVal.setBackgroundColor(ctx.getResources().getColor(colors[datas.get(position).getLogistics()]));
+            holder.vitem_shipwaylist_logisticsVal.setBackgroundColor(ctx.getResources().getColor(colors.getResourceId(datas.get(position).getLogistics(), 0)));
             holder.vitem_shipwaylist_lpay.setText("$" + datas.get(position).getLpay());
             holder.vitem_shipwaylist_land.setText(lanes[datas.get(position).getLand()]);
             holder.vitem_shipwaylist_sname.setText(datas.get(position).getSname());

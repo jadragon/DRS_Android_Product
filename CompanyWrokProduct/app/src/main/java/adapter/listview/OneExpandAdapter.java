@@ -85,7 +85,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
 
     private View createView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(
-                R.layout.vitem_shipwaylist, parent, false);
+                R.layout.viewitem_shipwaylist, parent, false);
         holder = new ViewHolder();
         //header
         holder.showArea = convertView.findViewById(R.id.layout_showArea);
