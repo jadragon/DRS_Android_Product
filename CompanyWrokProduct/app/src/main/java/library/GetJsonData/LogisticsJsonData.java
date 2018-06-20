@@ -10,11 +10,11 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class LogisticsJsonData {
-    private static final String getLogistics_url = "http://api.gok1945.com/main/mcenter/mlogistics/getLogistics.php";
-    private static final String setLogistics_url = "http://api.gok1945.com/main/mcenter/mlogistics/setLogistics.php";
-    private static final String updateLogistics_url = "http://api.gok1945.com/main/mcenter/mlogistics/updateLogistics.php";
-    private static final String delLogistics_url = "http://api.gok1945.com/main/mcenter/mlogistics/delLogistics.php";
-    private static final String setInitLogistics_url = "http://api.gok1945.com/main/mcenter/mlogistics/setInitLogistics.php";
+    private static final String getLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/getLogistics.php";
+    private static final String setLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/setLogistics.php";
+    private static final String updateLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/updateLogistics.php";
+    private static final String delLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/delLogistics.php";
+    private static final String setInitLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/setInitLogistics.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -113,10 +113,10 @@ public class LogisticsJsonData {
     /**
      * 3.2.5	設定預設收貨地址
      */
-    public JSONObject setInitLogistics(String token, String mlno, String type) {
+    public JSONObject setInitLogistics(String token, String mlno, int type) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("mlno", mlno));
-        params.add(new BasicNameValuePair("type", type));
+        params.add(new BasicNameValuePair("type", ""+type));
         return jsonParser.getJSONFromUrl(setInitLogistics_url, params);
     }
 

@@ -47,8 +47,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import library.Http.PostByteArrayformImage;
+import library.GetJsonData.UploadFileJsonData;
 import library.SQLiteDatabaseHandler;
 import library.component.ToastMessageDialog;
 
@@ -211,7 +210,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final JSONObject aa = new PostByteArrayformImage().getJSONFromUrl("http://api.gok1945.com/main/mcenter/person/updatePortrait.php", token, bitmapByte);
+                            final JSONObject aa = new UploadFileJsonData().updatePortrait(token, bitmapByte);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

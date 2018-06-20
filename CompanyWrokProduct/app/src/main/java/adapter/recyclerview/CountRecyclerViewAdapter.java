@@ -489,7 +489,6 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             switch (view.getTag() + "") {
                 case "goto"://當shipway點擊時
                     Intent intent = new Intent(ctx, ShipWayActivity.class);
-                    intent.putExtra("token", token);
                     intent.putExtra("sno", items.get(position).getSno());
                     ctx.startActivity(intent);
                     break;

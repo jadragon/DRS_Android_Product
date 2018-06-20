@@ -1,9 +1,14 @@
 package adapter.recyclerview;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -17,17 +22,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.tw.wrokproduct.AddDeliveryShipWayActivity;
+import com.test.tw.wrokproduct.AddStoreShipWayActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.AnalyzeJSON.AnalyzeContact;
 import library.AnalyzeJSON.AnalyzeLogistics;
+import library.GetJsonData.LogisticsJsonData;
 
 public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddressRecyclerAdapter.RecycleHolder> {
     private Context ctx;
@@ -35,16 +43,17 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
     String token;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTENT = 1;
-    private ShipAddressRecyclerAdapter.ClickListener clickListener;
     private List<ItemPojo> itemPojoList;
     private DisplayMetrics dm;
     String[] shipways;
     TypedArray colors;
     int lastuse_position;
+    int type;
 
-    public ShipAddressRecyclerAdapter(Context ctx, JSONObject json) {
+    public ShipAddressRecyclerAdapter(Context ctx, JSONObject json, int type) {
         this.ctx = ctx;
         this.json = json;
+        this.type = type;
         dm = ctx.getResources().getDisplayMetrics();
         token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
         shipways = ctx.getResources().getStringArray(R.array.shipway_title);
@@ -104,19 +113,36 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
             LinearLayout linearLayout = new LinearLayout(ctx);
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             TextView textView;
-            for (int i = 1; i < 4; i++) {
-                textView = new TextView(ctx);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                //textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
-                textView.setGravity(Gravity.CENTER);
-                textView.setText("+" + shipways[i] + "地址");
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) ((dm.widthPixels - 20 * dm.density) / 2), dm.heightPixels / 9);
-                params.setMargins((int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density));
-                textView.setLayoutParams(params);
-                textView.setTag(i);
-                textView.setTextColor(Color.WHITE);
-                textView.setBackgroundColor(ctx.getResources().getColor(colors.getResourceId(i, 0)));
-                linearLayout.addView(textView);
+            if (type == 0) {
+                for (int i = 1; i < 4; i++) {
+                    textView = new TextView(ctx);
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    //textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setText("+" + shipways[i] + "地址");
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) ((dm.widthPixels - 20 * dm.density) / 2), dm.heightPixels / 9);
+                    params.setMargins((int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density));
+                    textView.setLayoutParams(params);
+                    textView.setTag(i);
+                    textView.setTextColor(Color.WHITE);
+                    textView.setBackgroundColor(ctx.getResources().getColor(colors.getResourceId(i, 0)));
+                    linearLayout.addView(textView);
+                }
+            } else {
+                for (int i = 4; i < 6; i++) {
+                    textView = new TextView(ctx);
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    //textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setText("+" + shipways[i] + "地址");
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) ((dm.widthPixels - 20 * dm.density) / 2), dm.heightPixels / 9);
+                    params.setMargins((int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density));
+                    textView.setLayoutParams(params);
+                    textView.setTag(i);
+                    textView.setTextColor(Color.WHITE);
+                    textView.setBackgroundColor(ctx.getResources().getColor(colors.getResourceId(i, 0)));
+                    linearLayout.addView(textView);
+                }
             }
             scrollView.addView(linearLayout);
             return new ShipAddressRecyclerAdapter.RecycleHolder(ctx, scrollView, TYPE_HEADER);
@@ -138,11 +164,19 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
                 ((GradientDrawable) holder.按鈕預設.getBackground()).setColor(ctx.getResources().getColor(R.color.red));
             else
                 ((GradientDrawable) holder.按鈕預設.getBackground()).setColor(ctx.getResources().getColor(R.color.gainsboro));
-            holder.文字店號.setText("店號(" + itemPojoList.get(position).getSid() + ")");
-            holder.文字門市.setText(itemPojoList.get(position).getSname());
-            holder.文字姓名.setText(itemPojoList.get(position).getName());
-            holder.文字電話.setText(itemPojoList.get(position).getMpcode() + " " + itemPojoList.get(position).getMp());
-            holder.文字地址.setText(itemPojoList.get(position).getAddress());
+            if (type == 0) {
+                holder.文字店號.setText("店號(" + itemPojoList.get(position).getSid() + ")");
+                holder.文字門市.setText(itemPojoList.get(position).getSname());
+                holder.文字姓名.setText(itemPojoList.get(position).getName());
+                holder.文字電話.setText(itemPojoList.get(position).getMpcode() + " " + itemPojoList.get(position).getMp());
+                holder.文字地址.setText(itemPojoList.get(position).getAddress());
+            } else if (type == 1) {
+                holder.文字店號.setText(itemPojoList.get(position).getZipcode());
+                holder.文字門市.setText(itemPojoList.get(position).getArea());
+                holder.文字姓名.setText(itemPojoList.get(position).getName());
+                holder.文字電話.setText(itemPojoList.get(position).getMpcode() + " " + itemPojoList.get(position).getMp());
+                holder.文字地址.setText(itemPojoList.get(position).getAddress());
+            }
         }
 
     }
@@ -157,8 +191,11 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
         Context context;
         TextView viewitem_shipaddress_logisticsVal, 文字店號, 文字門市, 文字姓名, 文字電話, 文字地址;
         Button 按鈕預設;
-LinearLayout 資訊布局;
-        public RecycleHolder(Context ctx, View view, int viewType) {
+        LinearLayout 資訊布局;
+        AlertDialog.Builder builder;
+        Intent intent;
+
+        public RecycleHolder(final Context ctx, View view, int viewType) {
             super(view);
             this.context = ctx;
             if (viewType == TYPE_HEADER) {
@@ -178,51 +215,172 @@ LinearLayout 資訊布局;
                 按鈕預設.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        itemPojoList.get(lastuse_position).setIsused(false);
-                        notifyItemChanged(lastuse_position + 1);
-                        itemPojoList.get(getAdapterPosition() - 1).setIsused(true);
-                        lastuse_position = getAdapterPosition() - 1;
-                        notifyItemChanged(getAdapterPosition());
-
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new LogisticsJsonData().setInitLogistics(token, itemPojoList.get(getAdapterPosition() - 1).getMlno(), type);
+                                try {
+                                    if (jsonObject.getBoolean("Success")) {
+                                        new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                itemPojoList.get(lastuse_position).setIsused(false);
+                                                notifyItemChanged(lastuse_position + 1);
+                                                itemPojoList.get(getAdapterPosition() - 1).setIsused(true);
+                                                lastuse_position = getAdapterPosition() - 1;
+                                                notifyItemChanged(getAdapterPosition());
+                                            }
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
                     }
                 });
-                資訊布局=view.findViewById(R.id.資訊布局);
+                資訊布局 = view.findViewById(R.id.資訊布局);
                 資訊布局.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "" + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                        Intent intent;
+                        if (type == 0)
+                            intent = new Intent(context, AddStoreShipWayActivity.class);
+                        else
+                            intent = new Intent(context, AddDeliveryShipWayActivity.class);
+                        intent.putExtra("type", type);
+                        intent.putExtra("land", itemPojoList.get(getAdapterPosition() - 1).getLand() + "");
+                        intent.putExtra("logistics", itemPojoList.get(getAdapterPosition() - 1).getLogistics() + "");
+                        intent.putExtra("mlno", itemPojoList.get(getAdapterPosition() - 1).getMlno());
+                        intent.putExtra("name", itemPojoList.get(getAdapterPosition() - 1).getName());
+                        intent.putExtra("mp", itemPojoList.get(getAdapterPosition() - 1).getMp());
+                        intent.putExtra("sname", itemPojoList.get(getAdapterPosition() - 1).getSname());
+                        intent.putExtra("sid", itemPojoList.get(getAdapterPosition() - 1).getSid());
+                        intent.putExtra("city", itemPojoList.get(getAdapterPosition() - 1).getCity());
+                        intent.putExtra("area", itemPojoList.get(getAdapterPosition() - 1).getArea());
+                        intent.putExtra("zipcode", itemPojoList.get(getAdapterPosition() - 1).getZipcode());
+                        intent.putExtra("address", itemPojoList.get(getAdapterPosition() - 1).getAddress());
+                        ((Activity) ctx).startActivityForResult(intent, 0);
+                    }
+                });
+                資訊布局.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        builder = new AlertDialog.Builder(ctx);
+                        builder.setMessage("是否要取消此商品?").setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            final JSONObject jsonObject = new LogisticsJsonData().delLogistics(token, itemPojoList.get(getAdapterPosition() - 1).getMlno());
+                                            json = new LogisticsJsonData().getLogistics(token, type);
+                                            if (jsonObject.getBoolean("Success")) {
+                                                new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        setFilter(json);
+                                                    }
+                                                });
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+
+                            }
+
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(ctx, "取消", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        //点击dialog之外的区域禁止取消dialog
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                        return false;
                     }
                 });
             }
+
+
         }
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(context, "" + view.getTag(), Toast.LENGTH_SHORT).show();
-            /*
-            int position = getAdapterPosition();
-            if (clickListener != null) {
-                clickListener.ItemClicked(view, position, itemPojoList);
+
+            switch ((int) view.getTag()) {
+
+                case 0:
+                    break;
+                case 1:
+                    intent = new Intent(context, AddStoreShipWayActivity.class);
+                    intent.putExtra("type", type);
+                    intent.putExtra("land", "1");
+                    intent.putExtra("logistics", "1");
+                    ((Activity) ctx).startActivityForResult(intent, 0);
+                    break;
+                case 2:
+                    intent = new Intent(context, AddStoreShipWayActivity.class);
+                    intent.putExtra("type", type);
+                    intent.putExtra("land", "1");
+                    intent.putExtra("logistics", "2");
+                    ((Activity) ctx).startActivityForResult(intent, 0);
+                    break;
+                case 3:
+                    intent = new Intent(context, AddStoreShipWayActivity.class);
+                    intent.putExtra("type", type + "");
+                    intent.putExtra("land", "1");
+                    intent.putExtra("logistics", "3");
+                    ((Activity) ctx).startActivityForResult(intent, 0);
+                    break;
+                case 4:
+                    builder = new AlertDialog.Builder(context);
+                    builder.setItems(new String[]{"本島", "離島"}, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            intent = new Intent(context, AddDeliveryShipWayActivity.class);
+                            intent.putExtra("type", type + "");
+                            intent.putExtra("land", "" + (i + 1));
+                            intent.putExtra("logistics", "4");
+                            ((Activity) ctx).startActivityForResult(intent, 0);
+                        }
+                    }).setTitle("請選擇您要運送的區域").show();
+
+
+                    break;
+                case 5:
+                    builder = new AlertDialog.Builder(context);
+                    builder.setItems(new String[]{"本島", "離島"}, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            intent = new Intent(context, AddDeliveryShipWayActivity.class);
+                            intent.putExtra("type", type + "");
+                            intent.putExtra("land", "" + (i + 1));
+                            intent.putExtra("logistics", "5");
+                            ((Activity) ctx).startActivityForResult(intent, 0);
+                        }
+                    }).setTitle("請選擇您要運送的區域").show();
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
             }
-            */
         }
     }
 
-    public void setClickListener(ShipAddressRecyclerAdapter.ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void ItemClicked(View view, int postion, List<ItemPojo> itemPojoList);
-    }
 
     public void setFilter(JSONObject json) {
         this.json = json;
-
         ArrayList<Map<String, String>> list;
         if (json != null) {
-            list = AnalyzeContact.getContact(json);
-
+            list = AnalyzeLogistics.getLogistics(json);
         } else {
             list = new ArrayList<>();
         }

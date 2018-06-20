@@ -12,7 +12,7 @@ import java.util.List;
 import library.Http.GetFileJson;
 
 public class GetFileJsonByPHP {
-    private static final String getAddress_url = "http://api.gok1945.com/main/cart/getAddress.php";
+    private static final String getAddress_url = "http://mall-tapi.gok1945.com/main/cart/getAddress.php";
     private GetFileJson jsonParser;
     List<NameValuePair> params;
 

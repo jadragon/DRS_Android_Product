@@ -28,12 +28,6 @@ public class PostByteArrayformImage {
     static InputStream is = null;
     static String json = "";
 
-    // constructor
-    public PostByteArrayformImage() {
-
-    }
-
-
     public JSONObject getJSONFromUrl(String url, String token, byte[] image) {
 
         // Making HTTP request

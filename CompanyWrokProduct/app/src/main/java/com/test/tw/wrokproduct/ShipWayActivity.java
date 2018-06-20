@@ -18,20 +18,19 @@ import library.GetJsonData.ShopCartJsonData;
 
 public class ShipWayActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
-    String token,sno;
+    String token, sno;
     Toolbar toolbar;
     TextView toolbar_title;
     RecyclerView recyclerView;
     ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
     LinearLayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipway);
-       // token = "I0JN9@_fTxybt/YuH1j1Ceg==";
-       // sno="QKwd9IJZjuUfKZa00V9CjQ==";
-        token=getIntent().getStringExtra("token");
-        sno=getIntent().getStringExtra("sno");
+        token = ((GlobalVariable) getApplicationContext()).getToken();
+        sno = getIntent().getStringExtra("sno");
         initToolbar();
         new Thread(new Runnable() {
             @Override
@@ -50,16 +49,17 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
 
     private void requestData() {
         recyclerView = findViewById(R.id.lv_products);
-       showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json);
+        showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json);
         recyclerView.setHasFixedSize(true);
-      layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        DividerItemDecoration decoration=new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        DividerItemDecoration decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.divider_10dp_invisble));
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(showShipWayRecyclerViewAdapter);
     }
+
     private void initToolbar() {
         //Toolbar 建立
         toolbar = findViewById(R.id.include_toolbar);
@@ -88,13 +88,13 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e("onRestart","onRestart");
+        Log.e("onRestart", "onRestart");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==0&&resultCode==1){
+        if (requestCode == 0 && resultCode == 1) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {

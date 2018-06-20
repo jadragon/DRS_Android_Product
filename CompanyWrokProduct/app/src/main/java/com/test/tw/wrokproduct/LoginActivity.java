@@ -2,6 +2,7 @@ package com.test.tw.wrokproduct;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -229,41 +230,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (datas != null) {
 
-                    final SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
-                    db.resetLoginTables();
-                    db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
-                    db.updateBackground(R.drawable.member_bg1 + "");
-                    ImageLoader.getInstance().loadImage(datas.get("Picture"), new ImageLoadingListener() {
+            final SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+            db.resetLoginTables();
+            db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
+            db.updateBackground(R.drawable.member_bg1 + "");
+            ImageLoader.getInstance().loadImage(datas.get("Picture"), new ImageLoadingListener() {
 
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
 
-                        }
+                }
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view,
-                                                    FailReason failReason) {
+                @Override
+                public void onLoadingFailed(String imageUri, View view,
+                                            FailReason failReason) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.quick_login_account);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bitmapByte = baos.toByteArray();
+                    db.updatePhotoImage(bitmapByte);
+                    db.close();
+                    finish();
+                }
 
-                        }
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bitmapByte = baos.toByteArray();
+                    db.updatePhotoImage(bitmapByte);
+                    db.close();
+                    finish();
+                }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                            byte[] bitmapByte = baos.toByteArray();
-                            db.updatePhotoImage(bitmapByte);
-                            db.close();
-                            finish();
-                        }
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
-
-                        }
-                    });
-
-
-
+                }
+            });
 
 
         }

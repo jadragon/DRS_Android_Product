@@ -4,17 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
+import library.GetJsonData.LogisticsJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
@@ -26,8 +27,10 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
     Button confirm;
     String mpcode = "+886", shit = "TW";
     String token, sno, plno, type, land, logistics;
+    String mlno, name, mp;
     String sid, sname, city, area, zipcode, address;
     Intent intent;
+    JSONObject json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +39,9 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
         token = gv.getToken();
         setContentView(R.layout.activity_add_store_shipway);
         intent = getIntent();
-        sno = intent.getStringExtra("sno");
-        plno = intent.getStringExtra("plno");
-        type = intent.getStringExtra("type");
-        land = intent.getStringExtra("land");
-        logistics = intent.getStringExtra("logistics");
-
+        //shipwayInfo
+        initShipwayInfo();
         initToolbar();
-        Log.e("ADD", "\nsno:" + sno + "\nplno:" + plno + "\ntype:" + type + "\nland:" + land + "\nlogistics:" + logistics);
         addshipway_store = findViewById(R.id.addshipway_store);
         addshipway_store.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,25 +60,69 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
                 if (addshipway_name.getText().toString().equals("") || addshipway_phone.getText().toString().equals("") || addshipway_store.getText().toString().equals("請選擇門市")) {
                     Toast.makeText(AddStoreShipWayActivity.this, "資料填寫不完整", Toast.LENGTH_SHORT).show();
                 } else {
+
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final JSONObject json = new ShopCartJsonData().setMemberLogistics(token, sno, plno, type, land, logistics, addshipway_name.getText().toString(),
-                                    mpcode, addshipway_phone.getText().toString(), sname, sid, shit, city, area, zipcode, address);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
-                                    setResult(1, null);
-                                    finish();
+                            name = addshipway_name.getText().toString();
+                            mp = addshipway_phone.getText().toString();
+                            if (sno != null) {//運送方式
+                                json = new ShopCartJsonData().setMemberLogistics(token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                            } else if (mlno != null) {//修改收貨方式
+                                json = new LogisticsJsonData().updateLogistics(token, mlno, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                            } else {//新增收貨方式
+                                json = new LogisticsJsonData().setLogistics(token, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                            }
+                            try {
+                                if (json.getBoolean("Success")) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
+                                            setResult(1, null);
+                                            finish();
+                                        }
+                                    });
                                 }
-                            });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }).start();
 
                 }
             }
         });
+        if (mlno != null)
+            initTextView();
+    }
+
+    private void initShipwayInfo() {
+        //運送方式
+        sno = intent.getStringExtra("sno");
+        plno = intent.getStringExtra("plno");
+        //修改收貨方式
+        mlno = intent.getStringExtra("mlno");
+        name = intent.getStringExtra("name");
+        mp = intent.getStringExtra("mp");
+        sname = intent.getStringExtra("sname");
+        sid=intent.getStringExtra("sid");
+        city = intent.getStringExtra("city");
+        area = intent.getStringExtra("area");
+        zipcode = intent.getStringExtra("zipcode");
+        address = intent.getStringExtra("address");
+        //必備
+        type = intent.getStringExtra("type");
+        land = intent.getStringExtra("land");
+        logistics = intent.getStringExtra("logistics");
+
+    }
+
+    private void initTextView() {
+        addshipway_name.setText(name);
+        addshipway_phone.setText(mp);
+        addshipway_store.setText(sname);
     }
 
     private void initToolbar() {

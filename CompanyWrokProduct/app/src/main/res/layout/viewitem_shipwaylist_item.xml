@@ -35,7 +35,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="周子瑜"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
     <TextView
         android:id="@+id/shipwaylist_item_address"
         android:layout_width="match_parent"

@@ -33,6 +33,7 @@ import com.test.tw.wrokproduct.ShopCartActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.收貨地址.ShipAddressActivity;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.諮詢管理.幫助中心.HelpCenterActivity;
 import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.ContactActivity;
 
@@ -239,7 +240,7 @@ public class Fragment_community extends Fragment {
                             }
                             break;
                         case R.id.a1_1:
-                            Toast.makeText(getActivity(), "a1_1", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getActivity(), OrderInfoActivity.class));
                             break;
                         case R.id.a1_2:
                             startActivity(new Intent(getActivity(), ShipAddressActivity.class));
@@ -367,7 +368,6 @@ public class Fragment_community extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         if (gv.getToken() != null) {
             login_success.setVisibility(View.VISIBLE);
             SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());

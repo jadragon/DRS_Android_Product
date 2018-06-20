@@ -12,16 +12,16 @@ import java.util.List;
 import library.Http.WebVewJsonParser;
 
 public class GetWebView {
-    private static final String register_url = "http://api.gok1945.com/main/snetwork/register.php";
-    private static final String activation_url = "http://api.gok1945.com/main/snetwork/activation.php";
-    private static final String inactivated_url = "http://api.gok1945.com/main/snetwork/inactivated.php";
-    private static final String directPush_url = "http://api.gok1945.com/main/snetwork/directPush.php";
-    private static final String placement_url = "http://api.gok1945.com/main/snetwork/placement.php";
-    private static final String upgrade_url = "http://api.gok1945.com/main/snetwork/upgrade.php";
-    private static final String recommend_url = "http://api.gok1945.com/main/snetwork/recommend.php";
-    private static final String agency_url = "http://api.gok1945.com/main/snetwork/agency.php";
-    private static final String getMap_url = "http://api.gok1945.com/main/cart/getMap.php";
-    private static final String setGoldFlow_url = "http://api.gok1945.com/main/cart/setGoldFlow.php";
+    private static final String register_url = "http://mall-tapi.gok1945.com/main/snetwork/register.php";
+    private static final String activation_url = "http://mall-tapi.gok1945.com/main/snetwork/activation.php";
+    private static final String inactivated_url = "http://mall-tapi.gok1945.com/main/snetwork/inactivated.php";
+    private static final String directPush_url = "http://mall-tapi.gok1945.com/main/snetwork/directPush.php";
+    private static final String placement_url = "http://mall-tapi.gok1945.com/main/snetwork/placement.php";
+    private static final String upgrade_url = "http://mall-tapi.gok1945.com/main/snetwork/upgrade.php";
+    private static final String recommend_url = "http://mall-tapi.gok1945.com/main/snetwork/recommend.php";
+    private static final String agency_url = "http://mall-tapi.gok1945.com/main/snetwork/agency.php";
+    private static final String getMap_url = "http://mall-tapi.gok1945.com/main/cart/getMap.php";
+    private static final String setGoldFlow_url = "http://mall-tapi.gok1945.com/main/cart/setGoldFlow.php";
     private WebVewJsonParser jsonParser;
     List<NameValuePair> params;
 

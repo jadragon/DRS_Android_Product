@@ -43,7 +43,6 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
        token = gv.getToken();
         initToolbar();
-
         initRecycleView();
     }
 
@@ -55,7 +54,6 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("TestJSONONONONON", ResolveJsonData.getCartItemArray(json) + "");
                         recyclerView = findViewById(R.id.shop_cart_review);
 
                         shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, json, token);

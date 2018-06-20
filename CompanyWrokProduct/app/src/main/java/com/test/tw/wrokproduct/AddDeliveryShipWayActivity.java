@@ -5,18 +5,18 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
-import library.AnalyzeJSON.AnalyzeShopCart;
+import library.GetJsonData.LogisticsJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
@@ -28,8 +28,11 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
     Button confirm;
     String mpcode = "+886", shit = "TW";
     String token, sno, plno, type, land, logistics;
+    String mlno, name, mp;
+    String sid, sname, city, area, prezipcode, address;
+    JSONObject json;
     Intent intent;
-    String prezipcode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +41,10 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_delivery_shipway);
 
         intent = getIntent();
-        sno = intent.getStringExtra("sno");
-        plno = intent.getStringExtra("plno");
-        type = intent.getStringExtra("type");
-        land = intent.getStringExtra("land");
-        logistics = intent.getStringExtra("logistics");
+        //shipwayInfo
+        initShipwayInfo();
 
         initToolbar();
-        Log.e("ADD", "\nsno:" + sno + "\nplno:" + plno + "\ntype:" + type + "\nland:" + land + "\nlogistics:" + logistics);
         add_delivery_edit_name = findViewById(R.id.add_delivery_edit_name);
         add_delivery_edit_phone = findViewById(R.id.add_delivery_edit_phone);
         add_delivery_edit_address = findViewById(R.id.add_delivery_edit_address);
@@ -57,12 +56,14 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                     SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
                     Map<String, String> map = db.getCityAndAreaByZipcode(add_delivery_edit_zipcode.getText().toString());
                     if (!map.isEmpty()) {
-                        add_delivery_txt_area.setText(map.get("area"));
+                        area = map.get("area");
+                        add_delivery_txt_area.setText(area);
                         add_delivery_txt_area.setTextColor(Color.BLACK);
-                        add_delivery_txt_city.setText(map.get("city"));
+                        city = map.get("city");
+                        add_delivery_txt_city.setText(city);
                         add_delivery_txt_city.setTextColor(Color.BLACK);
-                        prezipcode=add_delivery_edit_zipcode.getText().toString();
-                    }else{
+                        prezipcode = add_delivery_edit_zipcode.getText().toString();
+                    } else {
                         add_delivery_edit_zipcode.setText(prezipcode);
                     }
                     db.close();
@@ -94,31 +95,84 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (add_delivery_edit_name.getText().toString().equals("") || add_delivery_edit_phone.getText().toString().equals("")||add_delivery_edit_zipcode.getText().toString().equals("")
-                        ||add_delivery_txt_city.getText().toString().equals("請選擇縣市")||add_delivery_txt_area.getText().toString().equals("請選擇鄉鎮市區")) {
+                if (add_delivery_edit_name.getText().toString().equals("") || add_delivery_edit_phone.getText().toString().equals("") || add_delivery_edit_zipcode.getText().toString().equals("")
+                        || add_delivery_txt_city.getText().toString().equals("請選擇縣市") || add_delivery_txt_area.getText().toString().equals("請選擇鄉鎮市區")) {
                     Toast.makeText(AddDeliveryShipWayActivity.this, "資料填寫不完整", Toast.LENGTH_SHORT).show();
                 } else {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final JSONObject json = new ShopCartJsonData().setMemberLogistics(token, sno, plno, type, land, logistics, add_delivery_edit_name.getText().toString(),
-                                    mpcode, add_delivery_edit_phone.getText().toString(), shit, add_delivery_txt_city.getText().toString(), add_delivery_txt_area.getText().toString(),
-                                    add_delivery_edit_zipcode.getText().toString(), add_delivery_edit_address.getText().toString());
-                            runOnUiThread(new Runnable() {
+                            new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.e("SUCCESS",AnalyzeShopCart.checkSuccess(json)+"");
-                                    Toast.makeText(getApplicationContext(), "新增完成" , Toast.LENGTH_SHORT).show();
-                                    setResult(1, null);
-                                    finish();
+                                    name = add_delivery_edit_name.getText().toString();
+                                    mp = add_delivery_edit_phone.getText().toString();
+                                    address = add_delivery_edit_address.getText().toString();
+                                    if (sno != null) {//運送方式
+                                        json = new ShopCartJsonData().setMemberLogistics(token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                    } else if (mlno != null) {//修改收貨方式
+                                        json = new LogisticsJsonData().updateLogistics(token, mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                    } else {//新增收貨方式
+                                        json = new LogisticsJsonData().setLogistics(token, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                    }
+                                    try {
+                                        if (json.getBoolean("Success")) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
+                                                    setResult(1, null);
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
                                 }
-                            });
+                            }).start();
                         }
                     }).start();
 
                 }
             }
         });
+        if (mlno != null)
+            initTextView();
+    }
+
+    private void initTextView() {
+        add_delivery_edit_name.setText(name);
+        add_delivery_edit_phone.setText(mp);
+        add_delivery_txt_city.setText(city);
+        add_delivery_txt_city.setTextColor(Color.BLACK);
+        add_delivery_txt_area.setText(area);
+        add_delivery_txt_area.setTextColor(Color.BLACK);
+        add_delivery_edit_zipcode.setText(prezipcode);
+        add_delivery_edit_address.setText(address);
+
+    }
+
+    private void initShipwayInfo() {
+        //運送方式
+        sno = intent.getStringExtra("sno");
+        plno = intent.getStringExtra("plno");
+        //修改收貨方式
+        mlno = intent.getStringExtra("mlno");
+        name = intent.getStringExtra("name");
+        mp = intent.getStringExtra("mp");
+        sname = intent.getStringExtra("sname");
+        sid = intent.getStringExtra("sid");
+        city = intent.getStringExtra("city");
+        area = intent.getStringExtra("area");
+        prezipcode = intent.getStringExtra("zipcode");
+        address = intent.getStringExtra("address");
+        //必備
+        type = intent.getStringExtra("type");
+        land = intent.getStringExtra("land");
+        logistics = intent.getStringExtra("logistics");
+
     }
 
     private void initToolbar() {
@@ -146,13 +200,15 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                 add_delivery_txt_area.setText("請選擇鄉鎮市區");
                 add_delivery_txt_area.setTextColor(getResources().getColor(R.color.gainsboro));
                 add_delivery_edit_zipcode.setText(null);
-                add_delivery_txt_city.setText(data.getStringExtra("city"));
+                city = data.getStringExtra("city");
+                add_delivery_txt_city.setText(city);
                 add_delivery_txt_city.setTextColor(Color.BLACK);
             } else if (requestCode == 1) {
                 add_delivery_edit_zipcode.setText(null);
-                add_delivery_txt_area.setText(data.getStringExtra("area"));
+                area = data.getStringExtra("area");
+                add_delivery_txt_area.setText(area);
                 add_delivery_txt_area.setTextColor(Color.BLACK);
-                prezipcode=data.getStringExtra("zipcode");
+                prezipcode = data.getStringExtra("zipcode");
                 add_delivery_edit_zipcode.setText(prezipcode);
 
             }
