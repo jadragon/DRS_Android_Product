@@ -47,7 +47,7 @@ public class ShipAddressActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Fragment_shipAddress fragment_shipAddress = new Fragment_shipAddress();
+                Fragment_shipAddress fragment_shipAddress=new Fragment_shipAddress();
                         fragment_shipAddress.setJson(json1);
                         fragment_shipAddress.setType(0);
                         fragmentList.add(fragment_shipAddress);

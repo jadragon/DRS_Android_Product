@@ -1,102 +1,113 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/default_gray">
-    <LinearLayout
-        android:id="@+id/viewitem_count_shipways_goto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="運送方式"
-                android:textSize="16sp"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:layout_gravity="left"/>
-            <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="right">
-                <TextView
-                    android:id="@+id/viewitem_count_shipways_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:text="7-11"
-                    android:gravity="right|center_vertical"
-                    android:textSize="16sp"/>
-                <TextView
-                    android:id="@+id/viewitem_count_shipways_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="$30"
-                    android:gravity="right|center_vertical"
-                    android:textSize="16sp"/>
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_chevron_left_black_24dp"
-                    android:rotation="180" />
-            </LinearLayout>
-
-        </FrameLayout>
-        <TextView
-            android:id="@+id/viewitem_count_shipways_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="桃園市大溪區人和路案段"
-            android:gravity="right"
-            android:layout_marginRight="30dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginLeft="80dp"/>
-        <TextView
-            android:id="@+id/viewitem_count_shipways_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="李大明+886 09112222333"
-            android:gravity="center"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="30dp"/>
-    </LinearLayout>
-
-    <LinearLayout
+    android:orientation="vertical">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/gainsboro"
+        android:background="@color/white"
+        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
-        android:paddingRight="30dp">
-        <TextView
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="備註:"
-            android:textSize="16sp"
-            android:textColor="@color/black"/>
-        <EditText
-            android:id="@+id/viewitem_count_shipways_note"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="請輸入備註"
-            android:background="@null"
-            android:gravity="right|center_vertical"
-            android:lines="1"
-            android:textSize="16sp"
-            android:inputType="text"
-            android:ellipsize="end"
-            android:maxLines="1" />
-    </LinearLayout>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="付款狀態:"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="已付款"
+                android:textColor="@color/mediumblue"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/default_gray" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="配送狀態:"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="取件完成"
+                android:textColor="@color/mediumblue"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/default_gray" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="交易流程:"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="已完成"
+                android:textColor="@color/mediumblue"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

@@ -14,18 +14,18 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import adapter.recyclerview.ShipAddressRecyclerAdapter;
+import adapter.recyclerview.OrderInfoRecyclerViewAdapter;
 
-public class Fragment_shipAddress extends Fragment {
+public class Fragment_oderInfo extends Fragment {
     View v;
-    ShipAddressRecyclerAdapter adapter;
+    OrderInfoRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     JSONObject json;
     String token;
-    int type;
+    int index;
 
-    public void setType(int type) {
-        this.type = type;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setJson(JSONObject json) {
@@ -48,7 +48,7 @@ public class Fragment_shipAddress extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ShipAddressRecyclerAdapter(getActivity(), json, type);
+        adapter = new OrderInfoRecyclerViewAdapter(getActivity(), json,index);
         recyclerView.setAdapter(adapter);
     }
 
