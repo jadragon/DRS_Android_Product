@@ -1,29 +1,35 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.ContentPojo;
-import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.FooterPojo;
-import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.HeaderPojo;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Item;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderContentPojo;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderFooterPojo;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderHeaderPojo;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 
 public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,9 +39,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     public static final int TYPE_FOOTER = 3;
     private Context ctx;
     private List<Item> items;
-    ArrayList<HeaderPojo> headerPojoArrayList;
-    ArrayList<ArrayList<ContentPojo>> contentPojoArrayList;
-    ArrayList<FooterPojo> footerPojoArrayList;
+    ArrayList<MemberOrderHeaderPojo> memberOrderHeaderPojoArrayList;
+    ArrayList<ArrayList<MemberOrderContentPojo>> contentPojoArrayList;
+    ArrayList<MemberOrderFooterPojo> memberOrderFooterPojoArrayList;
     String token;
     int index;
 
@@ -44,13 +50,13 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         this.index = index;
         token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
         if (json != null) {
-            headerPojoArrayList = AnalyzeOrderInfo.getMemberOrderHeader(json);
+            memberOrderHeaderPojoArrayList = AnalyzeOrderInfo.getMemberOrderHeader(json);
             contentPojoArrayList = AnalyzeOrderInfo.getMemberOrderContent(json);
-            footerPojoArrayList = AnalyzeOrderInfo.getMemberOrderFooter(json);
+            memberOrderFooterPojoArrayList = AnalyzeOrderInfo.getMemberOrderFooter(json);
         } else {
-            headerPojoArrayList = new ArrayList<>();
+            memberOrderHeaderPojoArrayList = new ArrayList<>();
             contentPojoArrayList = new ArrayList<>();
-            footerPojoArrayList = new ArrayList<>();
+            memberOrderFooterPojoArrayList = new ArrayList<>();
         }
 
         //初始化checkbox
@@ -61,8 +67,8 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     public void initItems() {
         items = new ArrayList<>();
         Item item;
-        for (int i = 0; i < headerPojoArrayList.size(); i++) {
-            item = headerPojoArrayList.get(i);
+        for (int i = 0; i < memberOrderHeaderPojoArrayList.size(); i++) {
+            item = memberOrderHeaderPojoArrayList.get(i);
             item.setType(TYPE_HEADER);
             items.add(item);
             //TYPE_CONTENT
@@ -72,7 +78,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 items.add(item);
             }
             //TYPE_INFO
-            item = footerPojoArrayList.get(i);
+            item = memberOrderFooterPojoArrayList.get(i);
             item.setType(TYPE_INFO);
             items.add(item);
 
@@ -108,33 +114,37 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {//payloads为空 即不是调用notifyItemChanged(position,payloads)方法执行的
             if (getItemViewType(position) == TYPE_HEADER) {
-                ((HeaderHolder) holder).odate.setText(((HeaderPojo) items.get(position)).getOdate());
-                ((HeaderHolder) holder).ordernum.setText(((HeaderPojo) items.get(position)).getOrdernum());
-                ((HeaderHolder) holder).sname.setText(((HeaderPojo) items.get(position)).getSname());
+                ((HeaderHolder) holder).odate.setText(((MemberOrderHeaderPojo) items.get(position)).getOdate());
+                ((HeaderHolder) holder).ordernum.setText(((MemberOrderHeaderPojo) items.get(position)).getOrdernum());
+                ((HeaderHolder) holder).sname.setText(((MemberOrderHeaderPojo) items.get(position)).getSname());
             } else if (getItemViewType(position) == TYPE_CONTENT) {
-                ((ContentHolder) holder).pname.setText(((ContentPojo) items.get(position)).getPname());
-                ImageLoader.getInstance().displayImage(((ContentPojo) items.get(position)).getPimg(), ((ContentHolder) holder).pimg);
-                ((ContentHolder) holder).color.setText(((ContentPojo) items.get(position)).getColor());
-                ((ContentHolder) holder).size.setText(((ContentPojo) items.get(position)).getSize());
-                ((ContentHolder) holder).oiname.setText(((ContentPojo) items.get(position)).getOiname());
-                ((ContentHolder) holder).oiname.setTextColor(Color.parseColor(((ContentPojo) items.get(position)).getOicolor()));
-                ((ContentHolder) holder).price.setText("$" + ((ContentPojo) items.get(position)).getPrice());
-                ((ContentHolder) holder).sprice.setText("$" + ((ContentPojo) items.get(position)).getSprice());
-                ((ContentHolder) holder).stotal.setText("X" + ((ContentPojo) items.get(position)).getStotal());
+                ((ContentHolder) holder).pname.setText(((MemberOrderContentPojo) items.get(position)).getPname());
+                ImageLoader.getInstance().displayImage(((MemberOrderContentPojo) items.get(position)).getPimg(), ((ContentHolder) holder).pimg);
+                ((ContentHolder) holder).color.setText(((MemberOrderContentPojo) items.get(position)).getColor());
+                ((ContentHolder) holder).size.setText(((MemberOrderContentPojo) items.get(position)).getSize());
+                ((ContentHolder) holder).oiname.setText(((MemberOrderContentPojo) items.get(position)).getOiname());
+                ((ContentHolder) holder).oiname.setTextColor(Color.parseColor(((MemberOrderContentPojo) items.get(position)).getOicolor()));
+                ((ContentHolder) holder).price.setText("$" + StringUtil.getDeciamlString(((MemberOrderContentPojo) items.get(position)).getPrice()));
+                ((ContentHolder) holder).price.setPaintFlags(((ContentHolder) holder).price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                ((ContentHolder) holder).sprice.setText("$" + StringUtil.getDeciamlString(((MemberOrderContentPojo) items.get(position)).getSprice()));
+                ((ContentHolder) holder).stotal.setText("X" + ((MemberOrderContentPojo) items.get(position)).getStotal());
 
             } else if (getItemViewType(position) == TYPE_INFO) {
-                ((InfoHolder) holder).ttotal.setText(((FooterPojo) items.get(position)).getTtotal() + "");
-                ((InfoHolder) holder).tprice.setText("$" + ((FooterPojo) items.get(position)).getTprice());
-                ((InfoHolder) holder).oname.setText(((FooterPojo) items.get(position)).getOname());
+                ((InfoHolder) holder).ttotal.setText(((MemberOrderFooterPojo) items.get(position)).getTtotal() + "");
+                ((InfoHolder) holder).tprice.setText("$" + StringUtil.getDeciamlString(((MemberOrderFooterPojo) items.get(position)).getTprice()));
+                ((InfoHolder) holder).oname.setText(((MemberOrderFooterPojo) items.get(position)).getOname());
+                ((InfoHolder) holder).pinfo.setText(((MemberOrderFooterPojo) items.get(position)).getPinfo());
+                if (index == 6) {
+                    ((InfoHolder) holder).pname.setText(((MemberOrderFooterPojo) items.get(position)).getPname());
+                    ((InfoHolder) holder).pname.setTextColor(Color.parseColor(((MemberOrderFooterPojo) items.get(position)).getPcolor()));
+                    ((InfoHolder) holder).lpname.setText(((MemberOrderFooterPojo) items.get(position)).getLpname());
+                    ((InfoHolder) holder).lpname.setTextColor(Color.parseColor(((MemberOrderFooterPojo) items.get(position)).getLcolor()));
+                    ((InfoHolder) holder).iname.setText(((MemberOrderFooterPojo) items.get(position)).getIname());
+                    ((InfoHolder) holder).iname.setTextColor(Color.parseColor(((MemberOrderFooterPojo) items.get(position)).getIcolor()));
+                } else {
+                    ((InfoHolder) holder).orderinfo_payinfo_layout.setVisibility(View.GONE);
+                }
 
-                ((InfoHolder) holder).pinfo.setText(((FooterPojo) items.get(position)).getPinfo());
-
-                ((InfoHolder) holder).pname.setText(((FooterPojo) items.get(position)).getPname());
-                ((InfoHolder) holder).pname.setTextColor(Color.parseColor(((FooterPojo) items.get(position)).getPcolor()));
-                ((InfoHolder) holder).lpname.setText(((FooterPojo) items.get(position)).getLpname());
-                ((InfoHolder) holder).lpname.setTextColor(Color.parseColor(((FooterPojo) items.get(position)).getLcolor()));
-                ((InfoHolder) holder).iname.setText(((FooterPojo) items.get(position)).getIname());
-                ((InfoHolder) holder).iname.setTextColor(Color.parseColor(((FooterPojo) items.get(position)).getIcolor()));
             } else if (getItemViewType(position) == TYPE_FOOTER) {
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
@@ -175,10 +185,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     }
 
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
 
     class HeaderHolder extends RecyclerView.ViewHolder {
         Context ctx;
@@ -215,10 +221,12 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    class InfoHolder extends RecyclerView.ViewHolder {
+    class InfoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         TextView ttotal, tprice, oname, pinfo;
         TextView pname, lpname, iname;
+        FrameLayout oname_layout, pinfo_layout;
+        LinearLayout orderinfo_payinfo_layout;
 
         public InfoHolder(final Context ctx, View view) {
             super(view);
@@ -230,6 +238,28 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             pname = view.findViewById(R.id.orderinfo_listinfo_pname);
             lpname = view.findViewById(R.id.orderinfo_listinfo_lpname);
             iname = view.findViewById(R.id.orderinfo_listinfo_iname);
+            oname_layout = view.findViewById(R.id.orderinfo_listinfo_oname_layout);
+            oname_layout.setOnClickListener(this);
+            pinfo_layout = view.findViewById(R.id.orderinfo_listinfo_pinfo_layout);
+            pinfo_layout.setOnClickListener(this);
+            orderinfo_payinfo_layout = view.findViewById(R.id.orderinfo_payinfo_layout);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent;
+            switch (view.getId()) {
+                case R.id.orderinfo_listinfo_oname_layout:
+                    intent = new Intent(ctx, OrderInfoDetailActivity.class);
+                    intent.putExtra("mono", ((MemberOrderFooterPojo) items.get(getAdapterPosition())).getMono());
+                    ctx.startActivity(intent);
+                    break;
+                case R.id.orderinfo_listinfo_pinfo_layout:
+                    intent = new Intent(ctx, OrderPayDetailActivity.class);
+                    intent.putExtra("mono", ((MemberOrderFooterPojo) items.get(getAdapterPosition())).getMono());
+                    ctx.startActivity(intent);
+                    break;
+            }
         }
     }
 

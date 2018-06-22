@@ -11,6 +11,8 @@ import library.Http.JSONParser;
 
 public class OrderInfoJsonData {
     private static final String getMemberOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMemberOrder.php";
+    private static final String getMOrderPay_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderPay.php";
+    private static final String getMOrderItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderItem.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -91,4 +93,21 @@ public class OrderInfoJsonData {
         return getMemberOrder(token, ostatus, pstatus, lstatus, istatus, page);
     }
 
+    /**
+     * 3.1.2	讀取會員訂單付款詳情資訊
+     */
+    public JSONObject getMOrderPay(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        return jsonParser.getJSONFromUrl(getMOrderPay_url, params);
+    }
+
+    /**
+     * 3.1.3	讀取會員訂單詳情資訊
+     */
+    public JSONObject getMOrderItem(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        return jsonParser.getJSONFromUrl(getMOrderItem_url, params);
+    }
 }

@@ -24,7 +24,7 @@ import library.AnalyzeJSON.AnalyzeHelpCenter;
 import library.GetJsonData.HelpCenterJsonData;
 
 public class HelpCenterActivity extends AppCompatActivity {
-    Toolbar toolbar;
+
     RecyclerView recyclerView;
     SearchView searchView;
     HelpCenterRecyclerViewAdapter adapter;
@@ -109,7 +109,7 @@ public class HelpCenterActivity extends AppCompatActivity {
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.include_toolbar);
+        Toolbar toolbar = findViewById(R.id.include_toolbar);
         ((TextView) findViewById(R.id.include_toolbar_title)).setText("幫助中心");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

@@ -1,6 +1,6 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class ContentPojo extends Item {
+public class MemberOrderContentPojo extends Item {
     String pname;
     String pimg;
     String color;
@@ -10,10 +10,10 @@ public class ContentPojo extends Item {
     int price;
     int sprice;
     int stotal;
-    public ContentPojo() {
+    public MemberOrderContentPojo() {
 
     }
-    public ContentPojo(int type) {
+    public MemberOrderContentPojo(int type) {
         super(type);
     }
 

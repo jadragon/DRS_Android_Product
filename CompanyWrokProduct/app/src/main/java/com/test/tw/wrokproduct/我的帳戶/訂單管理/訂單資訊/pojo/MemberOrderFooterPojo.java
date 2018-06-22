@@ -1,6 +1,6 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class FooterPojo extends Item {
+public class MemberOrderFooterPojo extends Item {
     String mono;
     int ttotal;
     int tprice;
@@ -17,9 +17,9 @@ public class FooterPojo extends Item {
     String iname;
     String icolor;
     String pinfo;
-    public FooterPojo() {
+    public MemberOrderFooterPojo() {
     }
-    public FooterPojo(int type) {
+    public MemberOrderFooterPojo(int type) {
         super(type);
     }
 

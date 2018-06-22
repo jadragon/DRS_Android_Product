@@ -128,7 +128,9 @@
         <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.ReplyActivity" />
         <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.WriteMailActivity" />
         <activity android:name=".我的帳戶.訂單管理.收貨地址.ShipAddressActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoActivity"></activity>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoActivity" />
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity" />
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity"></activity>
     </application>
 
 </manifest>

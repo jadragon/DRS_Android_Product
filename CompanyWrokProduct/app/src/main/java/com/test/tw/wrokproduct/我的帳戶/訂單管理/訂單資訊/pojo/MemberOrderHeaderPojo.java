@@ -1,13 +1,13 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class HeaderPojo extends Item {
+public class MemberOrderHeaderPojo extends Item {
     String ordernum;
     String odate;
     String sname;
-    public HeaderPojo() {
+    public MemberOrderHeaderPojo() {
 
     }
-    public HeaderPojo(int type) {
+    public MemberOrderHeaderPojo(int type) {
         super(type);
     }
 
