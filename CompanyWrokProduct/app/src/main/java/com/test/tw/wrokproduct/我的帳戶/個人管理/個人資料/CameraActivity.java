@@ -216,9 +216,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                                 public void run() {
                                     try {
                                         if (aa.getBoolean("Success")) {
-                                            SQLiteDatabaseHandler sql = new SQLiteDatabaseHandler(getApplicationContext());
-                                            sql.updatePhotoImage(bitmapByte);
-                                            sql.close();
+                                            SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                                            db.updatePhotoImage(bitmapByte);
+                                            db.close();
                                             Intent intent = new Intent();
                                             intent.putExtra("picture", bitmapByte);
                                             setResult(100, intent);

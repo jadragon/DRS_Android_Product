@@ -232,7 +232,13 @@ public class AnalyzeShopCart {
                     for (int j = 0; j < jsonArray.length(); j++) {
                         map = new HashMap<>();
                         JSONObject jsonObject = jsonArray.getJSONObject(j);
-                        map.put("mcpno", jsonObject.getString("mcpno"));
+                        try {
+                            map.put("mcpno", jsonObject.getString("mcpno"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            map.put("mcpno", jsonObject.getString("mrpno"));
+                        }
+
                         map.put("stotal", jsonObject.getString("stotal"));
                         map.put("pname", jsonObject.getString("pname"));
                         map.put("img", jsonObject.getString("img"));
@@ -279,7 +285,11 @@ public class AnalyzeShopCart {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     map = new HashMap<>();
                     JSONObject json_obj = jsonArray.getJSONObject(i);
-                    map.put("moprno", json_obj.getString("moprno"));
+                    try {
+                        map.put("moprno", json_obj.getString("moprno"));
+                    } catch (Exception e) {
+
+                    }
                     map.put("mcoupon", json_obj.getString("mcoupon"));
                     map.put("mdiscount", json_obj.getString("mdiscount"));
                     arrayList.add(map);
@@ -447,7 +457,7 @@ public class AnalyzeShopCart {
      * pname	String	付款名稱
      * info	String	說明
      * isused	Number	付款使用狀態 0未使用1使用中
-     *
+     * <p>
      * NoneUse	String	無使用付款方式代碼
      */
     public static ArrayList<Map<String, String>> getMemberPaymentsData(JSONObject json) {

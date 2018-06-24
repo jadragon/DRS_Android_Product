@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.util.Map;
 
 import library.GetJsonData.LogisticsJsonData;
+import library.GetJsonData.ReCountJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
@@ -32,15 +33,15 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
     String sid, sname, city, area, prezipcode, address;
     JSONObject json;
     Intent intent;
+    int count_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getApplicationContext()).getToken();
         setContentView(R.layout.activity_add_delivery_shipway);
-
         intent = getIntent();
+        count_type = intent.getIntExtra("count_type", 0);
         //shipwayInfo
         initShipwayInfo();
 
@@ -109,7 +110,7 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                                     mp = add_delivery_edit_phone.getText().toString();
                                     address = add_delivery_edit_address.getText().toString();
                                     if (sno != null) {//運送方式
-                                        json = new ShopCartJsonData().setMemberLogistics(token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                        json = new ReCountJsonData().setMemberLogistics(count_type, token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                     } else if (mlno != null) {//修改收貨方式
                                         json = new LogisticsJsonData().updateLogistics(token, mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                     } else {//新增收貨方式

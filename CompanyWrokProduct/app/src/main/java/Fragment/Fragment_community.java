@@ -383,8 +383,6 @@ public class Fragment_community extends Fragment {
             }
             login_success.setBackgroundResource(coverbg);
             db.close();
-            Log.e("member", "" + member);
-
         } else {
             login_success.setVisibility(View.INVISIBLE);
         }

@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.util.Map;
 
 import library.GetJsonData.LogisticsJsonData;
+import library.GetJsonData.ReCountJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
@@ -31,6 +32,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
     String sid, sname, city, area, zipcode, address;
     Intent intent;
     JSONObject json;
+    int count_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
         token = gv.getToken();
         setContentView(R.layout.activity_add_store_shipway);
         intent = getIntent();
+        count_type = intent.getIntExtra("count_type", 0);
         //shipwayInfo
         initShipwayInfo();
         initToolbar();
@@ -67,7 +70,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
                             name = addshipway_name.getText().toString();
                             mp = addshipway_phone.getText().toString();
                             if (sno != null) {//運送方式
-                                json = new ShopCartJsonData().setMemberLogistics(token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                                json = new ReCountJsonData().setMemberLogistics(count_type, token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
                             } else if (mlno != null) {//修改收貨方式
                                 json = new LogisticsJsonData().updateLogistics(token, mlno, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
                             } else {//新增收貨方式
@@ -107,7 +110,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
         name = intent.getStringExtra("name");
         mp = intent.getStringExtra("mp");
         sname = intent.getStringExtra("sname");
-        sid=intent.getStringExtra("sid");
+        sid = intent.getStringExtra("sid");
         city = intent.getStringExtra("city");
         area = intent.getStringExtra("area");
         zipcode = intent.getStringExtra("zipcode");

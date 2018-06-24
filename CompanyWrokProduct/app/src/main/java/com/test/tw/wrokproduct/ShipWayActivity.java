@@ -14,7 +14,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import adapter.recyclerview.ShowShipWayRecyclerViewAdapter;
-import library.GetJsonData.ShopCartJsonData;
+import library.GetJsonData.ReCountJsonData;
 
 public class ShipWayActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
@@ -24,6 +24,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     RecyclerView recyclerView;
     ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
     LinearLayoutManager layoutManager;
+    int count_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +32,12 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_shipway);
         token = ((GlobalVariable) getApplicationContext()).getToken();
         sno = getIntent().getStringExtra("sno");
+        count_type = getIntent().getIntExtra("count_type", 0);
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                json = new ReCountJsonData().getStoreLogistics(count_type, token, sno);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -49,7 +51,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
 
     private void requestData() {
         recyclerView = findViewById(R.id.lv_products);
-        showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json);
+        showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json,count_type);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -85,11 +87,6 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e("onRestart", "onRestart");
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -98,7 +95,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                    json = new ReCountJsonData().getStoreLogistics(count_type, token, sno);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

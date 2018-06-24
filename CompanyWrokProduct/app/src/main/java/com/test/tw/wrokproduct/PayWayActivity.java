@@ -14,7 +14,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.Map;
 
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeShopCart;
-import library.GetJsonData.ShopCartJsonData;
+import library.GetJsonData.ReCountJsonData;
 
 public class PayWayActivity extends AppCompatActivity implements TextView.OnEditorActionListener, View.OnFocusChangeListener, View.OnClickListener {
     Toolbar toolbar;
@@ -41,19 +43,20 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     Animation animation;
     String pno;
     Button payway_activity_btn_confirm;
+    int count_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payway);
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getApplicationContext()).getToken();
+        count_type = getIntent().getIntExtra("count_type", 0);
         initID();
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getMemberPayments(token);
+                json = new ReCountJsonData().getMemberPayment(count_type, token);
                 data_list = AnalyzeShopCart.getMemberPaymentsData(json);
                 pay_list = AnalyzeShopCart.getMemberPaymentsPay(json);
                 xtrans = Integer.parseInt(pay_list.get(0).get("xtrans"));
@@ -177,11 +180,19 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ShopCartJsonData().setMemberPayment(token, xkeyin, ykeyin, ekeyin, pno);
+                        json = new ReCountJsonData().setMemberPayment(count_type,token, xkeyin, ykeyin, ekeyin, pno);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                finish();
+                                try {
+                                    if (json.getBoolean("Success")) {
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                     }

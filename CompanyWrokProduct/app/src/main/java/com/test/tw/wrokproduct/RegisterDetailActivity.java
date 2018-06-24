@@ -25,7 +25,6 @@ public class RegisterDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     EditText registerdetail_edit_account, registerdetail_edit_password, registerdetail_edit_repassword;
     Button registerdetail_button;
-    GlobalVariable gv;
     int type = 1;
     String vcode, account;
     String id, email, name, photo;
@@ -147,16 +146,5 @@ public class RegisterDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void initMemberDB(final JSONObject json) {
-        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
-        Map<String, String> datas = AnalyzeMember.getLogin(json);
-        db.resetLoginTables();
-        if (datas != null) {
-            db.addMember(datas.get("Token"), registerdetail_edit_account.getText().toString(), datas.get("Name"), datas.get("Picture"));
-        }
-        db.close();
-
     }
 }

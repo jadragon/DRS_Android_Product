@@ -7,7 +7,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +15,12 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.Map;
 
+import Util.StringUtil;
 import adapter.recyclerview.ShopCartRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
+import library.GetJsonData.ReCountJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -41,7 +41,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopcart);
         GlobalVariable gv = (GlobalVariable) getApplicationContext();
-       token = gv.getToken();
+        token = gv.getToken();
         initToolbar();
         initRecycleView();
     }
@@ -61,7 +61,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void ItemClicked(int count) {
                                 total = count;
-                                shop_cart_needpay.setText("$" + getDeciamlString((total + discount) + ""));
+                                shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + discount)));
                             }
                         });
                         recyclerView.setHasFixedSize(true);
@@ -89,10 +89,10 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     private void initTextView() {
         shop_cart_needpay = findViewById(R.id.shop_cart_needpay);
         total = shopCartRecyclerViewAdapter.showPrice();
-        shop_cart_needpay.setText("$" + getDeciamlString(total + ""));
+        shop_cart_needpay.setText("$" + StringUtil.getDeciamlString(total));
         shopcart_edit_coupon = findViewById(R.id.shopcart_edit_coupon);
         shopcart_txt_discount = findViewById(R.id.shopcart_txt_discount);
-        shopcart_txt_discount.setText("$" + getDeciamlString(discount + ""));
+        shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(discount));
     }
 
     private void initButton() {
@@ -118,6 +118,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         });
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -137,8 +138,8 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                                     if (datas != null) {
                                         moprno = datas.get("moprno");
                                         discount = Integer.parseInt(datas.get("mdiscount"));
-                                        shopcart_txt_discount.setText("$" + getDeciamlString(discount + ""));
-                                        shop_cart_needpay.setText("$" + getDeciamlString((total + discount) + ""));
+                                        shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(discount));
+                                        shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + discount)));
                                         shopcart_btn_coupon.setText("取消");
                                     }
                                 }
@@ -155,8 +156,8 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                                 public void run() {
                                     if (success) {
                                         discount = 0;
-                                        shopcart_txt_discount.setText("$" + getDeciamlString(discount + ""));
-                                        shop_cart_needpay.setText("$" + getDeciamlString((total + discount) + ""));
+                                        shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(discount));
+                                        shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + discount)));
                                         shopcart_btn_coupon.setText("發送");
                                     }
                                 }
@@ -169,14 +170,16 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.shopcart_gotobuy:
-                Log.e("Morno", "" + shopCartRecyclerViewAdapter.showMornoArray() + "\n" + shopCartRecyclerViewAdapter.showMornoString());
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            boolean success = new ShopCartJsonData().goCheckout(token, shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
-                            if (success)
-                                startActivity(new Intent(ShopCartActivity.this, CountActivity.class));
+                            boolean success = new ReCountJsonData().goCheckout(ReCountJsonData.COUNT, token, shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
+                            if (success) {
+                                Intent intent = new Intent(ShopCartActivity.this, CountActivity.class);
+                                intent.putExtra("count_type", ReCountJsonData.COUNT);
+                                startActivity(intent);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -205,8 +208,4 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
 }

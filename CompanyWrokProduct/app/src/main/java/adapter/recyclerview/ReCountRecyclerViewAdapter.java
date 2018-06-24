@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,9 +33,9 @@ import java.util.List;
 import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeShopCart;
-import library.GetJsonData.ShopCartJsonData;
+import library.GetJsonData.ReCountJsonData;
 
-public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecyclerViewAdapter.RecycleHolder> {
+public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecyclerViewAdapter.RecycleHolder> {
     public static final int TYPE_CONTENT = 0;
     public static final int TYPE_HEADER = 1;
     public static final int TYPE_SHIPWAY = 2;
@@ -52,9 +51,10 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     private Item item;
     String token;
     String[] invoiceType;
-
-    public CountRecyclerViewAdapter(Context ctx, JSONObject json) {
+int count_type;
+    public ReCountRecyclerViewAdapter(Context ctx, JSONObject json,int count_type) {
         this.ctx = ctx;
+        this.count_type = count_type;
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
         invoiceType=ctx.getResources().getStringArray(R.array.invoice_type);
@@ -140,7 +140,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     }
 
     @Override
-    public CountRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReCountRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (36 * dm.density));
         params.setMargins((int) (10 * dm.density), 0, (int) (30 * dm.density), 0);
         //頁面
@@ -154,12 +154,12 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             tv.setPadding((int) (dm.density * 10), 0, 0, 0);
             params.height = (int) (60 * dm.density);
             tv.setLayoutParams(params);
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, tv);
+            return new ReCountRecyclerViewAdapter.RecycleHolder(ctx, tv);
         }
         if (viewType == TYPE_SHIPWAY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_shipways, parent, false);
             view.setTag("shipway");
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
+            return new ReCountRecyclerViewAdapter.RecycleHolder(ctx, view);
         }
         if (viewType == TYPE_DISCOUNT) {
             //layout
@@ -187,17 +187,17 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             tv.setTag("discount_total");
             tv.setText("0");
             linearLayout.addView(tv);
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, linearLayout);
+            return new ReCountRecyclerViewAdapter.RecycleHolder(ctx, linearLayout);
         }
         if (viewType == TYPE_COUNT) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_total, parent, false);
             view.setTag("count");
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
+            return new ReCountRecyclerViewAdapter.RecycleHolder(ctx, view);
         }
         if (viewType == TYPE_PAY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_paydetail, parent, false);
             view.setTag("pay");
-            return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
+            return new ReCountRecyclerViewAdapter.RecycleHolder(ctx, view);
         }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_content, parent, false);
         params.height = (int) (dm.heightPixels / 5.5);
@@ -206,7 +206,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         view.setLayoutParams(params);
         view.setTag("content");
         resizeImageView(view.findViewById(R.id.viewitem_count_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));
-        return new CountRecyclerViewAdapter.RecycleHolder(ctx, view);
+        return new ReCountRecyclerViewAdapter.RecycleHolder(ctx, view);
 
     }
 
@@ -360,7 +360,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                                InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                      */
-                                new ShopCartJsonData().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
+                                new ReCountJsonData().setStoreNote(count_type,token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
                             }
                         }).start();
                     }
@@ -389,7 +389,9 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_linear.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ctx.startActivity(new Intent(ctx, PayWayActivity.class));
+                        Intent intent=new Intent(ctx, PayWayActivity.class);
+                        intent.putExtra("count_type", count_type);
+                        ctx.startActivity(intent);
                     }
                 });
                 viewitem_count_frame_xmoney = view.findViewById(R.id.viewitem_count_frame_xmoney);
@@ -482,6 +484,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 case "goto"://當shipway點擊時
                     Intent intent = new Intent(ctx, ShipWayActivity.class);
                     intent.putExtra("sno", items.get(position).getSno());
+                    intent.putExtra("count_type", count_type);
                     ctx.startActivity(intent);
                     break;
 

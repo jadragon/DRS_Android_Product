@@ -10,30 +10,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
-
-import adapter.recyclerview.CountRecyclerViewAdapter;
-import library.GetJsonData.ShopCartJsonData;
+import adapter.recyclerview.ReCountRecyclerViewAdapter;
+import library.GetJsonData.ReCountJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CountActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
     RecyclerView recyclerView;
-    CountRecyclerViewAdapter countRecyclerViewAdapter;
+    ReCountRecyclerViewAdapter countRecyclerViewAdapter;
     Toolbar toolbar;
     TextView toolbar_title;
     String token;
     Button count_gotobuy;
+    int count_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getApplicationContext()).getToken();
+        count_type = getIntent().getIntExtra("count_type", 0);
         initToolbar();
         initRecycleView();
     }
@@ -42,13 +39,13 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getCheckout(token);
+                json = new ReCountJsonData().getCheckout(count_type, token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView = findViewById(R.id.count_review);
                         recyclerView.setHasFixedSize(true);
-                        countRecyclerViewAdapter = new CountRecyclerViewAdapter(CountActivity.this, json);
+                        countRecyclerViewAdapter = new ReCountRecyclerViewAdapter(CountActivity.this, json, count_type);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);
@@ -68,7 +65,6 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
         }).start();
 
     }
-
 
     private void initButton() {
         count_gotobuy = findViewById(R.id.count_gotobuy);
@@ -100,11 +96,13 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ShopCartJsonData().setVat(token,countRecyclerViewAdapter.getInvoice(),countRecyclerViewAdapter.getCtitle(),countRecyclerViewAdapter.getVat());
+                        new ReCountJsonData().setVat(count_type, token, countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(new Intent(CountActivity.this, GoldFlowActivity.class));
+                                Intent intent=new Intent(CountActivity.this, GoldFlowActivity.class);
+                                intent.putExtra("count_type", ReCountJsonData.RECOUNT);
+                                startActivity(intent);
                                 finish();
                             }
                         });
@@ -115,24 +113,13 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     @Override
     protected void onRestart() {
         super.onRestart();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getCheckout(token);
-
+                json = new ReCountJsonData().getCheckout(count_type, token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

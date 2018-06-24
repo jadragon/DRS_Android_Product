@@ -22,7 +22,6 @@ public class LogoutActivity extends AppCompatActivity {
         initToolbar();
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
         String account=db.getMemberDetail().get("account");
-        Log.e("account",account);
         db.close();
         logout_account=findViewById(R.id.logout_account);
         logout_account.setText("會員帳號:"+account);

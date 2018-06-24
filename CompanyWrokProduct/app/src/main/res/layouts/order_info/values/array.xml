@@ -102,4 +102,9 @@
         <item>男生</item>
         <item>女生</item>
     </string-array>
+    <string-array name="invoice_type">
+        <item>紙本發票</item>
+        <item>捐贈發票</item>
+        <item>電子發票</item>
+    </string-array>
 </resources>

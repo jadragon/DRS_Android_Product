@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeShopCart;
-import library.GetJsonData.ShopCartJsonData;
+import library.GetJsonData.ReCountJsonData;
 
 public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShipWayRecyclerViewAdapter.RecycleHolder> {
 
@@ -46,17 +46,13 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     TypedArray colors;
     String token;
     String sno, plno, mino, sname;
+    int count_type;
 
-    public ShowShipWayRecyclerViewAdapter(Context ctx, JSONObject json, String token) {
-        this(ctx, json);
-        this.token = token;
-
-    }
-
-    public ShowShipWayRecyclerViewAdapter(Context ctx, JSONObject json) {
+    public ShowShipWayRecyclerViewAdapter(Context ctx, JSONObject json,int count_type) {
         dm = ctx.getResources().getDisplayMetrics();
         this.ctx = ctx;
         this.json = json;
+        this.count_type = count_type;
         colors = ctx.getResources().obtainTypedArray(R.array.shipway_color);
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
@@ -150,11 +146,6 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
 
     }
 
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
-
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout showArea;
         private TextView vitem_shipwaylist_logisticsVal;
@@ -246,8 +237,8 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
-                        json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                        new ReCountJsonData().setStoreMemberLogistics(count_type,token, sno, plno, mino);
+                        json = new ReCountJsonData().getStoreLogistics(count_type,token, sno);
                     }
                 }).start();
                 break;
@@ -287,8 +278,8 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
-                            json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                            new ReCountJsonData().setStoreMemberLogistics(count_type,token, sno, plno, mino);
+                            json = new ReCountJsonData().getStoreLogistics(count_type,token, sno);
                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -337,6 +328,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 } else {
                     intent = new Intent(ctx, AddDeliveryShipWayActivity.class);
                 }
+                intent.putExtra("count_type", count_type);
                 intent.putExtra("sno", title_list.get(position).get("sno"));
                 intent.putExtra("plno", title_list.get(position).get("plno"));
                 intent.putExtra("type", title_list.get(position).get("type"));

@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import library.GetJsonData.GetWebView;
+import library.GetJsonData.ReCountJsonData;
 
 public class GoldFlowActivity extends AppCompatActivity {
 
@@ -21,17 +22,18 @@ public class GoldFlowActivity extends AppCompatActivity {
     ViewGroup container;
     String success, msg;
     String token;
+    int count_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goldflow);
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        count_type = getIntent().getIntExtra("count_type", 0);
+        token = ((GlobalVariable) getApplicationContext()).getToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                html = new GetWebView().setGoldFlow(token);
+                html = new ReCountJsonData().setGoldFlow(count_type,token);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -42,7 +44,6 @@ public class GoldFlowActivity extends AppCompatActivity {
         }).start();
 
     }
-
 
     private void showWebView() {
         luntanListview = findViewById(R.id.goldflow_activity_webview);

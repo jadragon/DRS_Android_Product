@@ -267,7 +267,7 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
                     @Override
                     public boolean onLongClick(View view) {
                         builder = new AlertDialog.Builder(ctx);
-                        builder.setMessage("是否要取消此商品?").setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                        builder.setMessage("是否刪除此運送方式?").setPositiveButton("確定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 

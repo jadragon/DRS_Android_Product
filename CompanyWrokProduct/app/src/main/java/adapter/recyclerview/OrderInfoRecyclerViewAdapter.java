@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.CountActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.ShopCartActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Item;
@@ -24,6 +28,7 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Membe
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderFooterPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderHeaderPojo;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,6 +36,8 @@ import java.util.List;
 
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
+import library.GetJsonData.ReCountJsonData;
+import library.GetJsonData.ShopCartJsonData;
 
 public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_HEADER = 0;
@@ -62,7 +69,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         //初始化checkbox
         initItems();
     }
-
 
     public void initItems() {
         items = new ArrayList<>();
@@ -184,7 +190,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         return items.size();
 
     }
-
 
     class HeaderHolder extends RecyclerView.ViewHolder {
         Context ctx;
@@ -342,10 +347,81 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         @Override
         public void onClick(View view) {
+
             switch (view.getId()) {
                 case R.id.orderinfo_footer_btn1:
+                    switch (index) {
+                        case 0:
+
+                            break;
+                        case 1:
+
+                            break;
+                        case 2:
+
+                            break;
+                        case 3:
+
+                            break;
+                        case 4:
+
+                            break;
+                        case 5:
+
+                            break;
+                        case 6:
+
+                            break;
+                    }
                     break;
                 case R.id.orderinfo_footer_btn2:
+                    switch (index) {
+                        case 0:
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final JSONObject jsonObject = new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono());
+                                    new Handler(ctx.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                if (jsonObject.getBoolean("Success")) {
+
+                                                    Intent intent;
+                                                    intent = new Intent(ctx, CountActivity.class);
+                                                    intent.putExtra("count_type", ReCountJsonData.RECOUNT);
+                                                    ctx.startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                }
+                            }).start();
+
+                            break;
+                        case 1:
+
+                            break;
+                        case 2:
+
+                            break;
+                        case 3:
+
+                            break;
+                        case 4:
+
+                            break;
+                        case 5:
+
+                            break;
+                        case 6:
+
+                            break;
+                    }
                     break;
             }
 
@@ -356,6 +432,5 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         initItems();
         notifyDataSetChanged();
     }
-
 
 }

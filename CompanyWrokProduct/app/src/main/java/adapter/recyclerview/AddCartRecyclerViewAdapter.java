@@ -77,17 +77,6 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
     }
 
 
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
-
-    private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
-        ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
-        params.width = width;
-        params.height = heigh;
-        view.setLayoutParams(params);
-    }
 
 
     @Override

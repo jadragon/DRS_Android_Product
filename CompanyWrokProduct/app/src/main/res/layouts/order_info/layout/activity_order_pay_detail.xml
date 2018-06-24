@@ -36,6 +36,7 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/order_pay_detail_deadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -44,20 +45,12 @@
 
 
         <TextView
+            android:id="@+id/order_pay_detail_allpay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:text="$60000"
             android:textColor="@color/red"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/orderinfo_detail_header_ordernum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:layout_weight="5"
-            android:textColor="@color/black"
             android:textSize="15sp" />
     </FrameLayout>
 
@@ -83,8 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:showDividers="middle|end"
+            android:divider="@drawable/decoration_line"/>
     </ScrollView>
 
 
