@@ -13,6 +13,12 @@ public class OrderInfoJsonData {
     private static final String getMemberOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMemberOrder.php";
     private static final String getMOrderPay_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderPay.php";
     private static final String getMOrderItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderItem.php";
+    private static final String applyCancel_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyCancel.php";
+    private static final String cancelMOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/cancelMOrder.php";
+    private static final String extendReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/extendReceipt.php";
+    private static final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/confirmReceipt.php";
+    private static final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturn.php";
+    private static final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/complaintStore.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -109,5 +115,63 @@ public class OrderInfoJsonData {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("mono", mono));
         return jsonParser.getJSONFromUrl(getMOrderItem_url, params);
+    }
+
+    /**
+     * 3.1.4	申請取消訂單
+     */
+    public JSONObject applyCancel(String token, String mono, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(applyCancel_url, params);
+    }
+
+    /**
+     * 3.1.5	取消訂單
+     */
+    public JSONObject cancelMOrder(String token, String mono, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(cancelMOrder_url, params);
+    }
+
+    /**
+     * 3.1.6	申請延長收貨
+     */
+    public JSONObject extendReceipt(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        return jsonParser.getJSONFromUrl(extendReceipt_url, params);
+    }
+
+    /**
+     * 3.1.7	確認收貨
+     */
+    public JSONObject confirmReceipt(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        return jsonParser.getJSONFromUrl(confirmReceipt_url, params);
+    }
+
+    /**
+     * 3.1.8	申請退換貨
+     */
+    public JSONObject applyReturn(String token, String mono, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(applyReturn_url, params);
+    }
+
+    /**
+     * 3.1.9	投訴商家
+     */
+    public JSONObject complaintStore(String token, String mono, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(complaintStore_url, params);
     }
 }

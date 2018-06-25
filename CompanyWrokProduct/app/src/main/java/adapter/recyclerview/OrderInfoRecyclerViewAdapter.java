@@ -1,10 +1,12 @@
 package adapter.recyclerview;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.CountActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.ShopCartActivity;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Item;
@@ -36,8 +38,9 @@ import java.util.List;
 
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
+import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.ReCountJsonData;
-import library.GetJsonData.ShopCartJsonData;
+import library.component.ToastMessageDialog;
 
 public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_HEADER = 0;
@@ -271,12 +274,19 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         Button button1, button2;
+        AlertDialog.Builder builder;
+        JSONObject jsonObject;
+        LinearLayout linearLayout;
+        AlertDialog alertDialog;
+        ToastMessageDialog toastMessageDialog;
 
         public FooterHolder(final Context ctx, View view) {
             super(view);
             this.ctx = ctx;
+            toastMessageDialog = new ToastMessageDialog(ctx);
             initFooterButton(view);
         }
+
 
         private void initFooterButton(View view) {
             switch (index) {
@@ -352,16 +362,106 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 case R.id.orderinfo_footer_btn1:
                     switch (index) {
                         case 0:
-
+                            toastMessageDialog.setTitleText("取消訂單");
+                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().cancelMOrder(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(0, 6);
+                                                        }
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            });
+                            toastMessageDialog.choice();
                             break;
                         case 1:
-
+                            toastMessageDialog.setTitleText("申請取消訂單");
+                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().applyCancel(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(1, 6);
+                                                        }
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            });
+                            toastMessageDialog.choice();
                             break;
                         case 2:
-
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jsonObject = new OrderInfoJsonData().extendReceipt(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono());
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                }
+                            }).start();
                             break;
                         case 3:
-
+                            toastMessageDialog.setTitleText("申請退換貨");
+                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().applyReturn(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(3, 4);
+                                                        }
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            });
+                            toastMessageDialog.choice();
                             break;
                         case 4:
 
@@ -386,7 +486,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                         public void run() {
                                             try {
                                                 if (jsonObject.getBoolean("Success")) {
-
                                                     Intent intent;
                                                     intent = new Intent(ctx, CountActivity.class);
                                                     intent.putExtra("count_type", ReCountJsonData.RECOUNT);
@@ -407,7 +506,25 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
                             break;
                         case 2:
-
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jsonObject = new OrderInfoJsonData().confirmReceipt(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono());
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                if (jsonObject.getBoolean("Success")) {
+                                                    ((OrderInfoActivity) ctx).setFilterByIndex(2, 3);
+                                                }
+                                                Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                }
+                            }).start();
                             break;
                         case 3:
 
@@ -416,10 +533,54 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
                             break;
                         case 5:
-
+                            toastMessageDialog.setTitleText("投訴賣家");
+                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            });
+                            toastMessageDialog.choice();
                             break;
                         case 6:
-
+                            toastMessageDialog.setTitleText("投訴賣家");
+                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            });
+                            toastMessageDialog.choice();
                             break;
                     }
                     break;
@@ -429,8 +590,35 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public void setFilter(JSONObject json) {
+        if (json != null) {
+            memberOrderHeaderPojoArrayList = AnalyzeOrderInfo.getMemberOrderHeader(json);
+            contentPojoArrayList = AnalyzeOrderInfo.getMemberOrderContent(json);
+            memberOrderFooterPojoArrayList = AnalyzeOrderInfo.getMemberOrderFooter(json);
+        } else {
+            memberOrderHeaderPojoArrayList = new ArrayList<>();
+            contentPojoArrayList = new ArrayList<>();
+            memberOrderFooterPojoArrayList = new ArrayList<>();
+        }
         initItems();
         notifyDataSetChanged();
+    }
+
+    public boolean setFilterMore(JSONObject json) {
+        int presize = items.size();
+        if (json != null && AnalyzeOrderInfo.getMemberOrderHeader(json).size() > 0) {
+            memberOrderHeaderPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderHeader(json));
+            contentPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderContent(json));
+            memberOrderFooterPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderFooter(json));
+            initItems();
+            notifyItemChanged(presize + 1, items.size()+1);
+            return true;
+        } else {
+            new ToastMessageDialog(ctx, "沒有更多了").show();
+            initItems();
+            notifyDataSetChanged();
+            return false;
+        }
+
     }
 
 }

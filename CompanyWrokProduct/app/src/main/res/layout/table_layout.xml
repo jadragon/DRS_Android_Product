@@ -18,7 +18,7 @@
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:padding="5sp"
-                android:src="@drawable/list_manage" />
+                android:src="@mipmap/list_manage" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/list_info" />
+                    android:src="@mipmap/list_info" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/ship_address" />
+                    android:src="@mipmap/ship_address" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/my_evaluate" />
+                    android:src="@mipmap/my_evaluate" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:padding="5sp"
-                android:src="@drawable/account_manage" />
+                android:src="@mipmap/account_manage" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -165,7 +165,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/account_overview" />
+                    android:src="@mipmap/account_overview" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -188,7 +188,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/poke_point" />
+                    android:src="@mipmap/poke_point" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -211,7 +211,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/colwa_point" />
+                    android:src="@mipmap/colwa_point" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -234,7 +234,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/ds_point" />
+                    android:src="@mipmap/ds_point" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -257,7 +257,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/electronic_wallet" />
+                    android:src="@mipmap/electronic_wallet" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -280,7 +280,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/point_exchange" />
+                    android:src="@mipmap/point_exchange" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -303,7 +303,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/online_recharge" />
+                    android:src="@mipmap/online_recharge" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -326,7 +326,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/wallet_withdrawal" />
+                    android:src="@mipmap/wallet_withdrawal" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -349,7 +349,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/cash_coupon" />
+                    android:src="@mipmap/cash_coupon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -373,7 +373,7 @@
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:padding="5sp"
-                android:src="@drawable/personal_manage" />
+                android:src="@mipmap/personal_manage" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -412,7 +412,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/personal_info" />
+                    android:src="@mipmap/personal_info" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -435,7 +435,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/change_password" />
+                    android:src="@mipmap/change_password" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -458,7 +458,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/logout" />
+                    android:src="@mipmap/logout" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -483,7 +483,7 @@
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:padding="5sp"
-                android:src="@drawable/consult_manage" />
+                android:src="@mipmap/consult_manage" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -522,7 +522,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/chaw_record" />
+                    android:src="@mipmap/chaw_record" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -545,7 +545,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/contact_me" />
+                    android:src="@mipmap/contact_me" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -568,7 +568,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:padding="5sp"
-                    android:src="@drawable/help" />
+                    android:src="@mipmap/help" />
 
                 <TextView
                     android:layout_width="wrap_content"

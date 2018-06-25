@@ -203,7 +203,7 @@ public class Fragment_shop_content extends Fragment {
             endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
                 @Override
                 public void onLoadMore(int currentPage) {
-                    LoadingView.show(v);
+                    //     LoadingView.show(v);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -219,7 +219,7 @@ public class Fragment_shop_content extends Fragment {
                                     if (!myRecyclerAdapter.setFilterMore(json2)) {
                                         nextpage--;
                                     }
-                                    LoadingView.hide();
+                                    //    LoadingView.hide();
                                 }
                             });
                         }

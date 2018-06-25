@@ -193,8 +193,8 @@ public class ReCountJsonData {
      */
     public String setGoldFlow(int count_type, String token) {
         WebVewJsonParser  webVewJsonParser=new WebVewJsonParser();
-        params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("device", "2"));
+        params.add(new BasicNameValuePair("token", token));
         if (count_type == COUNT) {
             return webVewJsonParser.getJSONFromUrl(count_url + setGoldFlow_url, params);
         } else {

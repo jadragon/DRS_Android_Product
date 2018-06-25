@@ -3,13 +3,12 @@ package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 import java.util.ArrayList;
 
 public class MOrderPayPojo extends Item {
-    String pinfo;
-    int allpay;
-    String deadline;
-    String atm_code;
-    String atm_account;
-ArrayList<String> ordernum;
-
+    private String pinfo;
+    private int allpay;
+    private String deadline;
+    private String atm_code;
+    private String atm_account;
+    private ArrayList<String> ordernum;
 
 
     public MOrderPayPojo() {
@@ -58,6 +57,7 @@ ArrayList<String> ordernum;
     public void setAtm_account(String atm_account) {
         this.atm_account = atm_account;
     }
+
     public ArrayList<String> getOrdernum() {
         return ordernum;
     }

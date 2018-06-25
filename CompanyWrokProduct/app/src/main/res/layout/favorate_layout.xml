@@ -1,42 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/toast_message_bg"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="240dp"
-        android:layout_height="70dp"
-        android:orientation="vertical"
-        android:gravity="center">
-<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="注意"
-        android:textSize="14sp"
+        android:layout_height="80dp"
         android:gravity="center"
-    android:textColor="@color/black"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/favor_txt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="已加入最愛"
-        android:gravity="center"
-        android:textColor="@color/dimgray"
-        android:textSize="11sp"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/favor_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="注意"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/favor_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="已加入最愛"
+                android:textColor="@color/dimgray"
+                android:textSize="11sp" />
+
+            <EditText
+                android:id="@+id/favor_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext_background1"
+                android:hint="原因"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </FrameLayout>
+
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/gray"/>
-    <Button
-        android:id="@+id/favor_btn"
+        android:background="@color/gray" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="確認"
-        android:textColor="@color/dodgerblue"
-        android:background="@color/colorInvisible"
-        android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:divider="@drawable/decoration_line"
+        android:showDividers="middle">
+
+        <Button
+            android:id="@+id/favor_cancel"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorInvisible"
+            android:text="取消"
+            android:textColor="@color/dodgerblue" />
+
+        <Button
+            android:id="@+id/favor_confirm"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorInvisible"
+            android:text="確認"
+            android:textColor="@color/dodgerblue" />
+
+    </LinearLayout>
+
 </LinearLayout>

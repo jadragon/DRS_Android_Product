@@ -52,7 +52,7 @@ public class PcContentActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     LinearLayout ship_ways;
-    TextView  pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
+    TextView pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
     String pno;
     RecyclerView recyclerView;
     ImageView heart, pccontent_btn_home, pccontent_img_star;
@@ -91,7 +91,7 @@ public class PcContentActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getPcontent(token,pno);
+                json = new GetInformationByPHP().getPcontent(token, pno);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -115,11 +115,11 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_txt_descs.setText(productInfoPojo.getDescs());
         //售價
         pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
-        pccontent_txt_rsprice.setText("$" + getDeciamlString(productInfoPojo.getRsprice()));
+        pccontent_txt_rsprice.setText(productInfoPojo.getRsprice());
         //牌價
         pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
         pccontent_txt_rprice.setPaintFlags(pccontent_txt_rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        pccontent_txt_rprice.setText("$" + getDeciamlString(productInfoPojo.getRprice()));
+        pccontent_txt_rprice.setText(productInfoPojo.getRprice());
 
         if (productInfoPojo.getRsprice().equals(productInfoPojo.getRprice()))
             pccontent_txt_rprice.setVisibility(View.INVISIBLE);
@@ -158,7 +158,7 @@ public class PcContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 max = 0;
-                count = 1;
+                count = 0;
                 popUpView(getResources().getColor(R.color.red), 1);
             }
         });
@@ -194,10 +194,13 @@ public class PcContentActivity extends AppCompatActivity {
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + list.get(postion).get("sprice"));
                                 try {
                                     max = Integer.parseInt(list.get(postion).get("total"));
+                                    count = 1;
+                                    shopcart_txt_count.setText(count + "");
                                 } catch (Exception e) {
                                     max = 0;
                                 }
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
+
                                 pino = list.get(postion).get("pino");
                             }
 
@@ -207,7 +210,7 @@ public class PcContentActivity extends AppCompatActivity {
                                 max = 0;
                                 count = 0;
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_total)).setText("商品數量:" + max);
-                                shopcart_txt_count.setText(max + "");
+                                shopcart_txt_count.setText(count + "");
                                 pino = null;
                             }
                         });
@@ -404,6 +407,7 @@ public class PcContentActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pc_content_menu, menu);
@@ -421,11 +425,5 @@ public class PcContentActivity extends AppCompatActivity {
         return false;
     }
 
-
-    private String getDeciamlString(String str) {
-        // DecimalFormat df = new DecimalFormat("###,###");
-        // return df.format(Double.parseDouble(str));
-        return str;
-    }
 
 }

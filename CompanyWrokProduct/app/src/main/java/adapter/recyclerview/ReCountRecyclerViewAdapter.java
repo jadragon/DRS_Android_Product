@@ -51,13 +51,14 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
     private Item item;
     String token;
     String[] invoiceType;
-int count_type;
-    public ReCountRecyclerViewAdapter(Context ctx, JSONObject json,int count_type) {
+    int count_type;
+
+    public ReCountRecyclerViewAdapter(Context ctx, JSONObject json, int count_type) {
         this.ctx = ctx;
         this.count_type = count_type;
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
-        invoiceType=ctx.getResources().getStringArray(R.array.invoice_type);
+        invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
             title_list = AnalyzeShopCart.getCheckoutData(json);
@@ -239,7 +240,7 @@ int count_type;
                         holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
                     else
                         holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
-                    holder.viewitem_count_pay_opay.setText("$" + getDeciamlString( footerItem.getOpay()));
+                    holder.viewitem_count_pay_opay.setText("$" + getDeciamlString(footerItem.getOpay()));
                     holder.viewitem_count_pay_pterms.setText(footerItem.getPterms());
                     if (footerItem.getXmoney() != 0) {
                         holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
@@ -360,7 +361,7 @@ int count_type;
                                InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                      */
-                                new ReCountJsonData().setStoreNote(count_type,token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
+                                new ReCountJsonData().setStoreNote(count_type, token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
                             }
                         }).start();
                     }
@@ -389,7 +390,7 @@ int count_type;
                 viewitem_count_linear.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(ctx, PayWayActivity.class);
+                        Intent intent = new Intent(ctx, PayWayActivity.class);
                         intent.putExtra("count_type", count_type);
                         ctx.startActivity(intent);
                     }
@@ -422,6 +423,7 @@ int count_type;
                 viewitem_count_invoice_invoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        viewitem_count_invoice_invoice.setText(invoiceType[numberPicker.getValue()]);
                         alertDialog.show();
                     }
                 });

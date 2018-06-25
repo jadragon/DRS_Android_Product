@@ -10,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import org.json.JSONObject;
+
 import adapter.recyclerview.ReCountRecyclerViewAdapter;
 import library.GetJsonData.ReCountJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
@@ -100,8 +102,8 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent=new Intent(CountActivity.this, GoldFlowActivity.class);
-                                intent.putExtra("count_type", ReCountJsonData.RECOUNT);
+                                Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
+                                intent.putExtra("count_type",count_type);
                                 startActivity(intent);
                                 finish();
                             }
@@ -129,4 +131,5 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
             }
         }).start();
     }
+
 }

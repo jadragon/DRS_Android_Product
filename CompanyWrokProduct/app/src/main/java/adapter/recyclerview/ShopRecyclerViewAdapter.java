@@ -401,10 +401,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     }
 
     public boolean setFilterMore(JSONObject json) {
+        int presize = itemsList.size();
         if (json != null && ResolveJsonData.getJSONData(json).size() > 0) {
             list.addAll(ResolveJsonData.getJSONData(json));
             initItems();
-            notifyDataSetChanged();
+            notifyItemChanged(presize + 1, itemsList.size() + 1);
             return true;
         } else {
             new ToastMessageDialog(ctx, "沒有更多了").show();

@@ -18,7 +18,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/orderinfo_tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             app:tabIndicatorHeight="3dp" />
     </android.support.v4.view.ViewPager>
 </LinearLayout>

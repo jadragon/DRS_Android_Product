@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Fragment.Fragment_oderInfo;
-import library.GetJsonData.OrderInfoJsonData;
 
 public class OrderInfoActivity extends AppCompatActivity {
     String token;
@@ -28,6 +27,7 @@ public class OrderInfoActivity extends AppCompatActivity {
     ViewPager viewPager;
     TabLayout tabLayout;
     JSONObject json1, json2, json3, json4, json5, json6, json7;
+    FragmentPagerAdapter fragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,6 @@ public class OrderInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_info);
         token = ((GlobalVariable) getApplicationContext()).getToken();
         initToolbar();
-
         initRecylcerViewAndTabLayout();
     }
 
@@ -44,68 +43,69 @@ public class OrderInfoActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.orderinfo_tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         fragmentList = new ArrayList<>();
-        new Thread(new Runnable() {
+        Fragment_oderInfo fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json1);
+        fragment_oderInfo.setIndex(0);
+        fragmentList.add(fragment_oderInfo);
+        fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json2);
+        fragment_oderInfo.setIndex(1);
+        fragmentList.add(fragment_oderInfo);
+        fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json3);
+        fragment_oderInfo.setIndex(2);
+        fragmentList.add(fragment_oderInfo);
+        fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json4);
+        fragment_oderInfo.setIndex(3);
+        fragmentList.add(fragment_oderInfo);
+        fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json5);
+        fragment_oderInfo.setIndex(4);
+        fragmentList.add(fragment_oderInfo);
+        fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json6);
+        fragment_oderInfo.setIndex(5);
+        fragmentList.add(fragment_oderInfo);
+        fragment_oderInfo = new Fragment_oderInfo();
+        fragment_oderInfo.setJson(json7);
+        fragment_oderInfo.setIndex(6);
+        fragmentList.add(fragment_oderInfo);
+        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public void run() {
-                json1 = new OrderInfoJsonData().getMemberOrder(token, 0, 1);
-                json2 = new OrderInfoJsonData().getMemberOrder(token, 1, 1);
-                json3 = new OrderInfoJsonData().getMemberOrder(token, 2, 1);
-                json4 = new OrderInfoJsonData().getMemberOrder(token, 3, 1);
-                json5 = new OrderInfoJsonData().getMemberOrder(token, 4, 1);
-                json6 = new OrderInfoJsonData().getMemberOrder(token, 5, 1);
-                json7 = new OrderInfoJsonData().getMemberOrder(token, 6, 1);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Fragment_oderInfo fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json1);
-                        fragment_oderInfo.setIndex(0);
-                        fragmentList.add(fragment_oderInfo);
-                        fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json2);
-                        fragment_oderInfo.setIndex(1);
-                        fragmentList.add(fragment_oderInfo);
-                        fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json3);
-                        fragment_oderInfo.setIndex(2);
-                        fragmentList.add(fragment_oderInfo);
-                        fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json4);
-                        fragment_oderInfo.setIndex(3);
-                        fragmentList.add(fragment_oderInfo);
-                        fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json5);
-                        fragment_oderInfo.setIndex(4);
-                        fragmentList.add(fragment_oderInfo);
-                        fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json6);
-                        fragment_oderInfo.setIndex(5);
-                        fragmentList.add(fragment_oderInfo);
-                        fragment_oderInfo = new Fragment_oderInfo();
-                        fragment_oderInfo.setJson(json7);
-                        fragment_oderInfo.setIndex(6);
-                        fragmentList.add(fragment_oderInfo);
-                        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-                            @Override
-                            public Fragment getItem(int position) {
-                                return fragmentList.get(position);
-                            }
-
-                            @Override
-                            public int getCount() {
-                                return fragmentList.size();
-                            }
-
-                            @Override
-                            public CharSequence getPageTitle(int position) {
-                                return mTabtitle[position];
-                            }
-                        });
-                    }
-                });
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
             }
-        }).start();
 
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mTabtitle[position];
+            }
+        };
+        viewPager.setAdapter(fragmentPagerAdapter);
+
+
+    }
+
+    public void setFilterByIndex(int... indexes) {
+        for (int index : indexes) {
+            fragmentList.get(index).prepareFetchData(true);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        switch (tabLayout.getSelectedTabPosition()) {
+            case 0:
+                setFilterByIndex(0, 1);
+                break;
+        }
     }
 
     private void initToolbar() {

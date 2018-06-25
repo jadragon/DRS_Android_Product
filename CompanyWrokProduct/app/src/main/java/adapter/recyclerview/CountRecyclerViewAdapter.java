@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -57,7 +56,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         this.ctx = ctx;
         GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
         token = gv.getToken();
-        invoiceType=ctx.getResources().getStringArray(R.array.invoice_type);
+        invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
             title_list = AnalyzeShopCart.getCheckoutData(json);
@@ -239,7 +238,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                         holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
                     else
                         holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
-                    holder.viewitem_count_pay_opay.setText("$" + getDeciamlString( footerItem.getOpay()));
+                    holder.viewitem_count_pay_opay.setText("$" + getDeciamlString(footerItem.getOpay()));
                     holder.viewitem_count_pay_pterms.setText(footerItem.getPterms());
                     if (footerItem.getXmoney() != 0) {
                         holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
@@ -405,6 +404,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 numberPicker.setMaxValue(invoiceType.length - 1);
                 numberPicker.setDisplayedValues(invoiceType);
                 numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
                 numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker numberPicker, int oldone, int newone) {
@@ -420,6 +420,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                 viewitem_count_invoice_invoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        viewitem_count_invoice_invoice.setText(invoiceType[numberPicker.getValue()]);
                         alertDialog.show();
                     }
                 });
