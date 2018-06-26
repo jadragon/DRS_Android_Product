@@ -55,8 +55,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         dm = context.getResources().getDisplayMetrics();
         this.context = context;
         this.json = json;
-        GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) context.getApplicationContext()).getToken();
         if (json != null) {
             title_list = AnalyzeShopCart.getStoreLogisticsData(json);
             items_list = AnalyzeShopCart.getmyLogisticsArray(json);

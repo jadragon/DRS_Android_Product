@@ -54,8 +54,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
 
     public CountRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
         invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {

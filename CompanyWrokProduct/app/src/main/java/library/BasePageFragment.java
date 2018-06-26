@@ -23,9 +23,11 @@ public abstract class BasePageFragment extends Fragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
         this.isVisibleToUser = isVisibleToUser;
-        prepareFetchData();
+        if (isVisibleToUser) {
+            prepareFetchData();
+        }
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     public abstract void fetchData();
@@ -42,5 +44,9 @@ public abstract class BasePageFragment extends Fragment {
         }
         return false;
     }
-
+    public void updateData() {
+        if (isDataInitiated) {
+            fetchData();
+        }
+    }
 }

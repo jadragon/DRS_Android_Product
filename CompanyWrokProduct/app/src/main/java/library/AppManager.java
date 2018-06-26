@@ -116,4 +116,16 @@ public class AppManager {
         }
         return null;
     }
+
+    /**
+     * 保留指定类名的Activity
+     */
+    public void remainActivity(Class<?>... cls) {
+        for (int i=activityStack.size()-1;i>0;i--){
+            if (!activityStack.get(i).getClass().equals(cls)) {
+                activityStack.get(i).finish();
+                activityStack.remove(activityStack.get(i));
+            }
+        }
+    }
 }

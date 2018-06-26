@@ -43,8 +43,7 @@ public class PtypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_ptype_layout);
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getApplicationContext()).getToken();
         AppManager.getAppManager().addActivity(this);
         POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();

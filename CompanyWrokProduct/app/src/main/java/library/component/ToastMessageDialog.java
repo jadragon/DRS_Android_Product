@@ -20,6 +20,7 @@ public class ToastMessageDialog {
     Button confirm, cancel;
     TextView title, textView;
     private ClickListener clickListener;
+    private CheckListener checkListener;
 
     public ToastMessageDialog(Context context) {
         if (dialog == null)
@@ -90,7 +91,8 @@ public class ToastMessageDialog {
         dialog.show();//显示对话框
     }
 
-    public void choice() {
+    public void choice(ClickListener onclick) {
+        this.clickListener = onclick;
         confirm.setVisibility(View.VISIBLE);
         editText.setVisibility(View.VISIBLE);
         textView.setVisibility(View.GONE);
@@ -98,10 +100,7 @@ public class ToastMessageDialog {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (clickListener != null) {
-                    clickListener.ItemClicked(view, editText.getText().toString());
-                }
-                dialog.dismiss();
+                clickListener.ItemClicked(dialog, view, editText.getText().toString());
             }
         });
         cancel.setVisibility(View.VISIBLE);
@@ -114,11 +113,37 @@ public class ToastMessageDialog {
         dialog.show();//显示对话框
     }
 
+
+
     public interface ClickListener {
-        void ItemClicked(View view, String note);
+        void ItemClicked(Dialog dialog, View view, String note);
     }
 
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
+    public interface CheckListener {
+        void ItemClicked(Dialog dialog, View view);
+    }
+    public void setCheckListener(CheckListener onCheck){
+        this.checkListener = onCheck;
+        confirm.setVisibility(View.VISIBLE);
+        editText.setVisibility(View.VISIBLE);
+        textView.setVisibility(View.GONE);
+        editText.setVisibility(View.GONE);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkListener!=null)
+                    checkListener.ItemClicked(dialog, view);
+            }
+        });
+        cancel.setVisibility(View.VISIBLE);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+    public void check() {
+        dialog.show();//显示对话框
     }
 }

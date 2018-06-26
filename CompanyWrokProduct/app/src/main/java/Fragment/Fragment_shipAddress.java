@@ -36,8 +36,9 @@ public class Fragment_shipAddress extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
-        GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
+        v.findViewById(R.id.swipe_refresh).setEnabled(false);
+
         initRecyclerView();
         return v;
     }
@@ -45,10 +46,10 @@ public class Fragment_shipAddress extends Fragment {
     private void initRecyclerView() {
         recyclerView = v.findViewById(R.id.fragment_recyclerview);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ShipAddressRecyclerAdapter(getActivity(), json, type);
+        adapter = new ShipAddressRecyclerAdapter(getContext(), json, type);
         recyclerView.setAdapter(adapter);
     }
 

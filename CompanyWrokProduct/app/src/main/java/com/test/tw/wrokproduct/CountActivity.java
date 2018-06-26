@@ -1,5 +1,6 @@
 package com.test.tw.wrokproduct;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,10 @@ import org.json.JSONObject;
 
 import adapter.recyclerview.ReCountRecyclerViewAdapter;
 import library.GetJsonData.ReCountJsonData;
+import library.component.ToastMessageDialog;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class CountActivity extends AppCompatActivity implements View.OnClickListener {
+public class CountActivity extends AppCompatActivity {
     JSONObject json;
     RecyclerView recyclerView;
     ReCountRecyclerViewAdapter countRecyclerViewAdapter;
@@ -26,6 +28,7 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
     String token;
     Button count_gotobuy;
     int count_type;
+    ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,36 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_count);
         token = ((GlobalVariable) getApplicationContext()).getToken();
         count_type = getIntent().getIntExtra("count_type", 0);
+
         initToolbar();
+        initToastMessage();
         initRecycleView();
+
+    }
+
+    private void initToastMessage() {
+        toastMessageDialog = new ToastMessageDialog(this);
+        toastMessageDialog.setTitleText("確定要開始結帳?");
+        toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+            @Override
+            public void ItemClicked(Dialog dialog, View view) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ReCountJsonData().setVat(count_type, token, countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
+                                intent.putExtra("count_type", count_type);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
     }
 
     private void initRecycleView() {
@@ -70,7 +101,12 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
 
     private void initButton() {
         count_gotobuy = findViewById(R.id.count_gotobuy);
-        count_gotobuy.setOnClickListener(this);
+        count_gotobuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toastMessageDialog.check();
+            }
+        });
     }
 
     private void initToolbar() {
@@ -88,32 +124,6 @@ public class CountActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case -1://toolbar
-                finish();
-                break;
-            case R.id.count_gotobuy:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReCountJsonData().setVat(count_type, token, countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
-                                intent.putExtra("count_type",count_type);
-                                startActivity(intent);
-                                finish();
-                            }
-                        });
-                    }
-                }).start();
-                break;
-        }
-
-    }
 
     @Override
     protected void onRestart() {

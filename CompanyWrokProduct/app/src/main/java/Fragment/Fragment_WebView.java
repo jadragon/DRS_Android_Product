@@ -2,6 +2,8 @@ package Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -59,9 +61,9 @@ public class Fragment_WebView extends Fragment {
                 null);
         luntanListview.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
         // 设置可以支持缩放
-         luntanListview.getSettings().setSupportZoom(true);
+        luntanListview.getSettings().setSupportZoom(true);
         // 设置出现缩放工具
-           luntanListview.getSettings().setBuiltInZoomControls(true);
+        luntanListview.getSettings().setBuiltInZoomControls(true);
         //设置可在大视野范围内上下左右拖动，并且可以任意比例缩放
         luntanListview.getSettings().setUseWideViewPort(true);
         //设置默认加载的可视范围是大视野范围
@@ -128,14 +130,14 @@ public class Fragment_WebView extends Fragment {
 
     @JavascriptInterface
     public void resize(final float height) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
                 luntanListview.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
                 webviewHeigh = (int) (height);
-                if(onHeighChangerListener!=null)
-                onHeighChangerListener.valueChanged(webviewHeigh);
+                if (onHeighChangerListener != null)
+                    onHeighChangerListener.valueChanged(webviewHeigh);
             }
         });
     }

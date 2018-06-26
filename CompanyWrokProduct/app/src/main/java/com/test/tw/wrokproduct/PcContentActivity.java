@@ -78,8 +78,7 @@ public class PcContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pccontent);
         productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getApplicationContext()).getToken();
         pno = productInfoPojo.getPno();
         dm = getResources().getDisplayMetrics();
         toastMessageDialog = new ToastMessageDialog(this);
@@ -329,8 +328,7 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppManager.getAppManager().finishActivity(PtypeActivity.class);
-                AppManager.getAppManager().finishActivity(PcContentActivity.class);
+                AppManager.getAppManager().remainActivity(MainActivity.class);
 
             }
         });

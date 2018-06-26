@@ -2,6 +2,8 @@ package Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -34,14 +36,13 @@ public class Fragment_favorate extends Fragment {
     ArrayList<Fragment_shop_content> fragmentArrayList;
     Fragment_shop_content fragment_shop_content;
     String token;
-GlobalVariable gv;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_favorate_layout, container, false);
-    gv = (GlobalVariable) getActivity().getApplicationContext();
         initToolbar();
-        token = gv.getToken();
+        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.favorate_viewpager);
@@ -55,12 +56,11 @@ GlobalVariable gv;
                 fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.BROWSE);
                 fragment_shop_content.setJson(null, new GetInformationByPHP().getBrowse(token));
                 fragmentArrayList.add(fragment_shop_content);
-                getActivity().runOnUiThread(new Runnable() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getActivity().getResources().getStringArray(R.array.favorate_title), fragmentArrayList));
+                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getContext().getResources().getStringArray(R.array.favorate_title), fragmentArrayList));
                         tabLayout.setupWithViewPager(viewPager, true);
-
                     }
                 });
             }
@@ -72,8 +72,8 @@ GlobalVariable gv;
     private void initToolbar() {
         //Toolbar 建立
         toolbar = v.findViewById(R.id.include_toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
         ((TextView) v.findViewById(R.id.include_toolbar_title)).setText("我的喜好紀錄");
 
@@ -90,8 +90,8 @@ GlobalVariable gv;
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            if(gv.getToken()!=null)
-                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+            if (token != null)
+                startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
             return true;

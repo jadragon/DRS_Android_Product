@@ -56,8 +56,7 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
     public ReCountRecyclerViewAdapter(Context ctx, JSONObject json, int count_type) {
         this.ctx = ctx;
         this.count_type = count_type;
-        GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
         invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {

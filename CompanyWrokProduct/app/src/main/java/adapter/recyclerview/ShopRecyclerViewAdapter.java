@@ -51,14 +51,12 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private DisplayMetrics dm;
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
-    GlobalVariable gv;
     String token;
     int type;
     private ShopRecyclerViewAdapter.ClickListener clickListener;
     private List<ProductInfoPojo> itemsList;
 
     public void setmHeaderView(View mHeaderView) {
-
         this.mHeaderView = mHeaderView;
     }
 
@@ -81,8 +79,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             list = new ArrayList<>();
         initItems();
         dm = ctx.getResources().getDisplayMetrics();
-        gv = (GlobalVariable) ctx.getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
     }
 
     private void initItems() {
@@ -108,7 +105,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             list = new ArrayList<>();
         initItems();
         dm = ctx.getResources().getDisplayMetrics();
-        gv = (GlobalVariable) ctx.getApplicationContext();
     }
 
     @Override
@@ -405,12 +401,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         if (json != null && ResolveJsonData.getJSONData(json).size() > 0) {
             list.addAll(ResolveJsonData.getJSONData(json));
             initItems();
-            notifyItemChanged(presize + 1, itemsList.size() + 1);
+            notifyItemInserted(presize+1);
+          //  notifyItemChanged(presize + 1, itemsList.size() + 1);
             return true;
         } else {
             new ToastMessageDialog(ctx, "沒有更多了").show();
-            initItems();
-            notifyDataSetChanged();
             return false;
         }
 
@@ -426,7 +421,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         dm = null;
         recycleHolder = null;
         layoutParams = null;
-        gv = null;
     }
 
 }

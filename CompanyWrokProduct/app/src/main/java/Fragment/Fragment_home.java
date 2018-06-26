@@ -89,10 +89,10 @@ public class Fragment_home extends Fragment {
         home_shopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
+                GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
 
                 if(gv.getToken()!=null)
-                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+                startActivity(new Intent(getContext(), ShopCartActivity.class));
                 else
                     Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
             }
@@ -126,7 +126,7 @@ public class Fragment_home extends Fragment {
 
     private void init() {
         list = new ArrayList<>();
-        dm = getActivity().getResources().getDisplayMetrics();
+        dm = getContext().getResources().getDisplayMetrics();
         real_heigh = (int) ((dm.widthPixels - 20 * dm.density) / (float) 3.5 / 4 * 3);
         recyclerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, real_heigh));
         recyclerView.setHasFixedSize(true);
@@ -186,7 +186,7 @@ public class Fragment_home extends Fragment {
             //高度等比縮放[   圖片高度/(圖片寬度/手機寬度)    ]
             // float real_heigh = bitmaps1.get(0).getImage().getHeight() / (bitmaps1.get(0).getImage().getWidth() / (float) dm.widthPixels);
             header = v.findViewById(R.id.testbanner);
-            // Banner header=new Banner(getActivity());
+            // Banner header=new Banner(getContext());
             header.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
             header.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
             header.setImageLoader(new ImageLoader() {
@@ -203,30 +203,30 @@ public class Fragment_home extends Fragment {
             header.start();
             //取得HotkeyWords圖片
             real_heigh = (int) ((dm.widthPixels - 40 * dm.density) / (float) 3.5);
-            myRecyclerAdapter1 = new MyRecyclerAdapter(getActivity(), ResolveJsonData.getJSONData(json1), real_heigh, real_heigh * 3 / 4, 0);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            myRecyclerAdapter1 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json1), real_heigh, real_heigh * 3 / 4, 0);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(myRecyclerAdapter1);
             //取得Ptype圖片
             real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 3.5);
-            myRecyclerAdapter2 = new MyRecyclerAdapter(getActivity(), ResolveJsonData.getJSONData(json2), real_heigh, dm.widthPixels / 4, 1);
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+            myRecyclerAdapter2 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json2), real_heigh, dm.widthPixels / 4, 1);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView2.setLayoutManager(gridLayoutManager);
             recyclerView2.setAdapter(myRecyclerAdapter2);
             myRecyclerAdapter2.setClickListener(new MyRecyclerAdapter.ClickListener() {
                 @Override
                 public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), PtypeActivity.class);
+                    Intent intent = new Intent(getContext(), PtypeActivity.class);
                     intent.putExtra("position", postion);
                     startActivity(intent);
                 }
             });
             //取得Brands圖片
             real_heigh = (int) ((dm.widthPixels - 25 * dm.density) / (float) 4);
-            myRecyclerAdapter3 = new MyRecyclerAdapter(getActivity(), ResolveJsonData.getJSONData(json3), real_heigh, real_heigh / 4 * 3, 2);
-            gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+            myRecyclerAdapter3 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json3), real_heigh, real_heigh / 4 * 3, 2);
+            gridLayoutManager = new GridLayoutManager(getContext(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView3.setLayoutManager(gridLayoutManager);
             recyclerView3.setAdapter(myRecyclerAdapter3);

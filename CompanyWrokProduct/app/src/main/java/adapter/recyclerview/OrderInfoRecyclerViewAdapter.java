@@ -1,10 +1,11 @@
 package adapter.recyclerview;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
@@ -143,7 +144,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 ((InfoHolder) holder).tprice.setText("$" + StringUtil.getDeciamlString(((MemberOrderFooterPojo) items.get(position)).getTprice()));
                 ((InfoHolder) holder).oname.setText(((MemberOrderFooterPojo) items.get(position)).getOname());
                 ((InfoHolder) holder).pinfo.setText(((MemberOrderFooterPojo) items.get(position)).getPinfo());
-                if (index == 6) {
+                if (index >= 5) {
                     ((InfoHolder) holder).pname.setText(((MemberOrderFooterPojo) items.get(position)).getPname());
                     ((InfoHolder) holder).pname.setTextColor(Color.parseColor(((MemberOrderFooterPojo) items.get(position)).getPcolor()));
                     ((InfoHolder) holder).lpname.setText(((MemberOrderFooterPojo) items.get(position)).getLpname());
@@ -274,10 +275,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         Button button1, button2;
-        AlertDialog.Builder builder;
         JSONObject jsonObject;
-        LinearLayout linearLayout;
-        AlertDialog alertDialog;
         ToastMessageDialog toastMessageDialog;
 
         public FooterHolder(final Context ctx, View view) {
@@ -289,87 +287,85 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
 
         private void initFooterButton(View view) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setCornerRadius(8);
+            button1 = view.findViewById(R.id.orderinfo_footer_btn1);
+            button2 = view.findViewById(R.id.orderinfo_footer_btn2);
+
             switch (index) {
                 case 0:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
                     button1.setOnClickListener(this);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
                     button2.setOnClickListener(this);
                     button1.setText("取消訂單");
                     button2.setText("重新結帳");
-                    button1.setBackgroundColor(ctx.getResources().getColor(R.color.gray));
-                    button2.setBackgroundColor(ctx.getResources().getColor(R.color.red));
+                    reShapeButton(button1,R.color.gray);
+                    reShapeButton(button2,R.color.red);
                     break;
                 case 1:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
                     button1.setOnClickListener(this);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
                     button2.setVisibility(View.INVISIBLE);
                     button1.setText("申請取消");
-                    button1.setBackgroundColor(ctx.getResources().getColor(R.color.red));
+                    reShapeButton(button1,R.color.red);
                     break;
                 case 2:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
                     button1.setOnClickListener(this);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
                     button2.setOnClickListener(this);
                     button1.setText("延長收貨");
                     button2.setText("確認收貨");
-                    button1.setBackgroundColor(ctx.getResources().getColor(R.color.orange));
-                    button2.setBackgroundColor(ctx.getResources().getColor(R.color.shipway_blue_light));
+                    reShapeButton(button1,R.color.orange);
+                    reShapeButton(button2,R.color.shipway_blue_light);
                     break;
                 case 3:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
                     button1.setOnClickListener(this);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
                     button2.setOnClickListener(this);
-                    button1.setText("申請退換貨");
-                    button2.setText("給予評價");
-                    button1.setBackgroundColor(ctx.getResources().getColor(R.color.shipway_green_dark));
-                    button2.setBackgroundColor(ctx.getResources().getColor(R.color.mediumpurple));
+                    button1.setText("給予評價");
+                    button2.setText("申請退換貨");
+                    reShapeButton(button1,R.color.shipway_green_dark);
+                    reShapeButton(button2,R.color.mediumpurple);
                     break;
                 case 4:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
-                    button1.setVisibility(View.INVISIBLE);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
-                    button2.setVisibility(View.INVISIBLE);
+                    button1.setVisibility(View.GONE);
+                    button2.setVisibility(View.GONE);
                     break;
                 case 5:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
                     button1.setOnClickListener(this);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
                     button2.setOnClickListener(this);
                     button1.setText("給予評價");
                     button2.setText("投訴賣家");
-                    button1.setBackgroundColor(ctx.getResources().getColor(R.color.shipway_green_dark));
-                    button2.setBackgroundColor(ctx.getResources().getColor(R.color.gray));
+                    reShapeButton(button1,R.color.shipway_green_dark);
+                    reShapeButton(button2,R.color.gray);
                     break;
                 case 6:
-                    button1 = view.findViewById(R.id.orderinfo_footer_btn1);
                     button1.setVisibility(View.INVISIBLE);
-                    button2 = view.findViewById(R.id.orderinfo_footer_btn2);
                     button2.setOnClickListener(this);
                     button2.setText("投訴賣家");
-                    button2.setBackgroundColor(ctx.getResources().getColor(R.color.gray));
+                    reShapeButton(button2,R.color.gray);
                     break;
             }
         }
 
+        private void reShapeButton(Button button, int color) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setCornerRadius(8);
+            shape.setColor(ctx.getResources().getColor(color));
+            button.setBackground(shape);
+        }
+
         @Override
         public void onClick(View view) {
-
+            final int position = getAdapterPosition() - 1;
             switch (view.getId()) {
                 case R.id.orderinfo_footer_btn1:
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("取消訂單");
-                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(View view, final String note) {
+                                public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().cancelMOrder(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().cancelMOrder(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -385,19 +381,20 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                             });
                                         }
                                     }).start();
+
+                                    dialog.dismiss();
                                 }
                             });
-                            toastMessageDialog.choice();
                             break;
                         case 1:
                             toastMessageDialog.setTitleText("申請取消訂單");
-                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(View view, final String note) {
+                                public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyCancel(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().applyCancel(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -413,15 +410,16 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                             });
                                         }
                                     }).start();
+
+                                    dialog.dismiss();
                                 }
                             });
-                            toastMessageDialog.choice();
                             break;
                         case 2:
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    jsonObject = new OrderInfoJsonData().extendReceipt(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono());
+                                    jsonObject = new OrderInfoJsonData().extendReceipt(token, ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -436,32 +434,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             }).start();
                             break;
                         case 3:
-                            toastMessageDialog.setTitleText("申請退換貨");
-                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(View view, final String note) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyReturn(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(3, 4);
-                                                        }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }).start();
-                                }
-                            });
-                            toastMessageDialog.choice();
+
                             break;
                         case 4:
 
@@ -480,7 +453,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    final JSONObject jsonObject = new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono());
+                                    final JSONObject jsonObject = new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, token, ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                     new Handler(ctx.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -509,7 +482,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    jsonObject = new OrderInfoJsonData().confirmReceipt(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono());
+                                    jsonObject = new OrderInfoJsonData().confirmReceipt(token, ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -527,20 +500,46 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             }).start();
                             break;
                         case 3:
+                            toastMessageDialog.setTitleText("申請退換貨");
+                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(Dialog dialog, View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().applyReturn(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(3, 4);
+                                                        }
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
 
+                                    dialog.dismiss();
+                                }
+                            });
                             break;
                         case 4:
 
                             break;
                         case 5:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(View view, final String note) {
+                                public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -553,19 +552,20 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                             });
                                         }
                                     }).start();
+
+                                    dialog.dismiss();
                                 }
                             });
-                            toastMessageDialog.choice();
                             break;
                         case 6:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.setClickListener(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(View view, final String note) {
+                                public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(getAdapterPosition() - 1))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -579,8 +579,8 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                         }
                                     }).start();
                                 }
+
                             });
-                            toastMessageDialog.choice();
                             break;
                     }
                     break;
@@ -610,12 +610,11 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             contentPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderContent(json));
             memberOrderFooterPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderFooter(json));
             initItems();
-            notifyItemChanged(presize + 1, items.size()+1);
+            notifyItemInserted(presize + 1);
+            //notifyItemChanged(presize + 1, items.size()+1);
             return true;
         } else {
             new ToastMessageDialog(ctx, "沒有更多了").show();
-            initItems();
-            notifyDataSetChanged();
             return false;
         }
 

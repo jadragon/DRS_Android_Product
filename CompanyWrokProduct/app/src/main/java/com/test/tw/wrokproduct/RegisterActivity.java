@@ -52,7 +52,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     Toolbar toolbar;
     EditText register_edit_account, register_edit_password;
     Button register_button, register_btn_gvcode;
-    GlobalVariable gv;
     ImageView register_img_mobile, register_img_email, register_img_fb, register_img_google;
     int type = 1;
     String vcode;

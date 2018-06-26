@@ -3,13 +3,14 @@ package Fragment;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,7 +65,7 @@ public class Fragment_community extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_community, container, false);
         initToolbar(v);
-        gv = (GlobalVariable) getActivity().getApplicationContext();
+        gv = (GlobalVariable) getContext().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
 
@@ -73,11 +74,11 @@ public class Fragment_community extends Fragment {
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.table_layout, null);
         initTableItem(inflate);
         list.add(inflate);
-        ListView listView = new ListView(getActivity());
+        ListView listView = new ListView(getContext());
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.store_manage_image), getResources().getStringArray(R.array.store_manage_title)));
         listView.setDivider(null);
         list.add(listView);
-        listView = new ListView(getActivity());
+        listView = new ListView(getContext());
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.community_image), getResources().getStringArray(R.array.community_title)));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,15 +86,14 @@ public class Fragment_community extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final String json = new GetWebView(getActivity()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==", position);
-                        getActivity().runOnUiThread(new Runnable() {
+                        final String json = new GetWebView(getContext()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==", position);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent = new Intent(getActivity().getApplicationContext(), CommunityActivity.class);
+                                Intent intent = new Intent(getContext(), CommunityActivity.class);
                                 intent.putExtra("html", json);
                                 intent.putExtra("title",  getResources().getStringArray(R.array.community_title)[position]);
                                 startActivity(intent);
-
                             }
                         });
                     }
@@ -151,21 +151,21 @@ public class Fragment_community extends Fragment {
         fragment_community_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), RegisterActivity.class));
+                startActivity(new Intent(getContext(), RegisterActivity.class));
             }
         });
         fragment_community_btn_login = v.findViewById(R.id.fragment_community_btn_login);
         fragment_community_btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                startActivity(new Intent(getContext(), LoginActivity.class));
             }
         });
         fragment_community_btn_logout = v.findViewById(R.id.fragment_community_btn_logout);
         fragment_community_btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), LogoutActivity.class));
+                startActivity(new Intent(getContext(), LogoutActivity.class));
 
             }
         });
@@ -196,8 +196,8 @@ public class Fragment_community extends Fragment {
     private void initToolbar(View view) {
         //Toolbar 建立
         toolbar = v.findViewById(R.id.include_toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
         ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("會員中心");
     }
@@ -214,7 +214,7 @@ public class Fragment_community extends Fragment {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
             if (gv.getToken() != null)
-                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+                startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
             return true;
@@ -240,13 +240,13 @@ public class Fragment_community extends Fragment {
                             }
                             break;
                         case R.id.a1_1:
-                            startActivity(new Intent(getActivity(), OrderInfoActivity.class));
+                            startActivity(new Intent(getContext(), OrderInfoActivity.class));
                             break;
                         case R.id.a1_2:
-                            startActivity(new Intent(getActivity(), ShipAddressActivity.class));
+                            startActivity(new Intent(getContext(), ShipAddressActivity.class));
                             break;
                         case R.id.a1_3:
-                            Toast.makeText(getActivity(), "a1_3", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "a1_3", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1:
                             if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {
@@ -259,31 +259,31 @@ public class Fragment_community extends Fragment {
                             }
                             break;
                         case R.id.b1_1:
-                            Toast.makeText(getActivity(), "b1_1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_1", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_2:
-                            Toast.makeText(getActivity(), "b1_2", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_2", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_3:
-                            Toast.makeText(getActivity(), "b1_3", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_3", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_4:
-                            Toast.makeText(getActivity(), "b1_4", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_4", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_5:
-                            Toast.makeText(getActivity(), "b1_5", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_5", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_6:
-                            Toast.makeText(getActivity(), "b1_6", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_6", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_7:
-                            Toast.makeText(getActivity(), "b1_7", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_7", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_8:
-                            Toast.makeText(getActivity(), "b1_8", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_8", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_9:
-                            Toast.makeText(getActivity(), "b1_9", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "b1_9", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.c1:
                             if (v.findViewById(R.id.c1_0).getVisibility() == View.VISIBLE) {
@@ -296,13 +296,13 @@ public class Fragment_community extends Fragment {
                             }
                             break;
                         case R.id.c1_1:
-                            startActivity(new Intent(getActivity(), PersonalInfoActivity.class));
+                            startActivity(new Intent(getContext(), PersonalInfoActivity.class));
                             break;
                         case R.id.c1_2:
-                            startActivity(new Intent(getActivity(), ModifyPasswordActivity.class));
+                            startActivity(new Intent(getContext(), ModifyPasswordActivity.class));
                             break;
                         case R.id.c1_3:
-                            startActivity(new Intent(getActivity(), LogoutActivity.class));
+                            startActivity(new Intent(getContext(), LogoutActivity.class));
                             break;
                         case R.id.d1:
                             if (v.findViewById(R.id.d1_0).getVisibility() == View.VISIBLE) {
@@ -315,17 +315,17 @@ public class Fragment_community extends Fragment {
                             }
                             break;
                         case R.id.d1_1:
-                            Toast.makeText(getActivity(), "d1_1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "d1_1", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.d1_2:
-                            startActivity(new Intent(getActivity(), ContactActivity.class));
+                            startActivity(new Intent(getContext(), ContactActivity.class));
                             break;
                         case R.id.d1_3:
-                            startActivity(new Intent(getActivity(), HelpCenterActivity.class));
+                            startActivity(new Intent(getContext(), HelpCenterActivity.class));
                             break;
                     }
                 } else {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    startActivity(new Intent(getContext(), LoginActivity.class));
                 }
             }
         };

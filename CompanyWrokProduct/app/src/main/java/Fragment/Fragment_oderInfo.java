@@ -46,8 +46,7 @@ public class Fragment_oderInfo extends BasePageFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
-        GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
-        token = gv.getToken();
+        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
         initRecyclerView();
         initSwipeLayout();
         return v;
@@ -64,7 +63,7 @@ public class Fragment_oderInfo extends BasePageFragment {
             public void onRefresh() {
                 LoadingView.show(v);
                 prepareFetchData(true);
-                nextpage=2;
+                nextpage = 2;
                 endLessOnScrollListener.reset();
             }
 
@@ -74,10 +73,10 @@ public class Fragment_oderInfo extends BasePageFragment {
     private void initRecyclerView() {
         recyclerView = v.findViewById(R.id.fragment_recyclerview);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new OrderInfoRecyclerViewAdapter(getActivity(), json, index);
+        adapter = new OrderInfoRecyclerViewAdapter(getContext(), json, index);
         recyclerView.setAdapter(adapter);
 
         endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {

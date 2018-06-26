@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -82,8 +84,7 @@ public class Fragment_shop_content extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
-        GlobalVariable gv = (GlobalVariable) getActivity().getApplicationContext();
-        token = gv.getToken();
+        token =  ((GlobalVariable) getContext().getApplicationContext()).getToken();
         initViewPagerAndRecyclerView();
         initSwipeLayout();
         return v;
@@ -112,7 +113,7 @@ public class Fragment_shop_content extends Fragment {
                         } else if (banner == BROWSE) {
                             json2 = new GetInformationByPHP().getBrowse(token);
                         }
-                        getActivity().runOnUiThread(new Runnable() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
                                 if (banner == SHOW_BANNER) {
@@ -143,9 +144,9 @@ public class Fragment_shop_content extends Fragment {
         //recycleView
         dm = getResources().getDisplayMetrics();
         int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
+        myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
         if (banner == SHOW_BANNER) {
             setHeaderView(myRecyclerAdapter);
         }
@@ -175,7 +176,7 @@ public class Fragment_shop_content extends Fragment {
                                 public void run() {
                                     json2 = new GetInformationByPHP().getIplist(type, nextpage);
                                     nextpage++;
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    getContext().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!myRecyclerAdapter.setFilterMore(json2)) {
@@ -213,7 +214,7 @@ public class Fragment_shop_content extends Fragment {
                                 json2 = new GetInformationByPHP().getPlist(ptno, type, token, nextpage);
                             }
                             nextpage++;
-                            getActivity().runOnUiThread(new Runnable() {
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (!myRecyclerAdapter.setFilterMore(json2)) {
@@ -233,8 +234,8 @@ public class Fragment_shop_content extends Fragment {
     }
 
     private void setHeaderView(ShopRecyclerViewAdapter adapter) {
-        header = (Banner) LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.testbanner, recyclerView, false);
-        // Banner header=new Banner(getActivity());
+        header = (Banner) LayoutInflater.from(getContext()).inflate(R.layout.testbanner, recyclerView, false);
+        // Banner header=new Banner(getContext());
         header.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
         header.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         header.setImageLoader(new ImageLoader() {
@@ -253,7 +254,7 @@ public class Fragment_shop_content extends Fragment {
     }
 
     private void setFooterView(ShopRecyclerViewAdapter adapter) {
-        View footer = new LinearLayout(getActivity().getApplicationContext());
+        View footer = new LinearLayout(getContext());
         footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50));
         adapter.setmFooterViewView(footer);
     }
@@ -263,15 +264,14 @@ public class Fragment_shop_content extends Fragment {
         nextpage = 2;
         endLessOnScrollListener.reset();
         if (myRecyclerAdapter != null) {
-            getActivity().runOnUiThread(new Runnable() {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getActivity(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
                     recyclerView.setAdapter(myRecyclerAdapter);
                 }
             });
-
         }
     }
 
@@ -279,7 +279,7 @@ public class Fragment_shop_content extends Fragment {
         json2 = json;
         nextpage = 2;
         if (myRecyclerAdapter != null) {
-            getActivity().runOnUiThread(new Runnable() {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     myRecyclerAdapter.setFilter(json);

@@ -21,22 +21,18 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShopCartActivity;
 
 import Util.StringUtil;
-import library.Component.AutoHorizontalTextView;
-
 public class Fragment_notification extends Fragment implements View.OnClickListener {
     Toolbar toolbar;
     View v;
     String token;
-    GlobalVariable gv;
     TextView notification_txt_activity, notification_txt_chaw, notification_txt_store, notification_txt_list;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_notification, container, false);
-        gv = (GlobalVariable) getActivity().getApplicationContext();
         initToolbar();
-        token = gv.getToken();
+        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
         initTextView();
         v.findViewById(R.id.n1).setOnClickListener(this);
         v.findViewById(R.id.n2).setOnClickListener(this);
@@ -47,20 +43,20 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
 
     private void initTextView() {
         notification_txt_activity = v.findViewById(R.id.notification_txt_activity);
-        notification_txt_activity.setText(Html.fromHtml(StringUtil.htmlFormat("再天將會有一個大活動",30+"","d40000",1)));
+        notification_txt_activity.setText(Html.fromHtml(StringUtil.htmlFormat("再天將會有一個大活動", 30 + "", "d40000", 1)));
         notification_txt_chaw = v.findViewById(R.id.notification_txt_chaw);
-        notification_txt_chaw.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動",5+"","d40000",3)));
+        notification_txt_chaw.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動", 5 + "", "d40000", 3)));
         notification_txt_store = v.findViewById(R.id.notification_txt_store);
-        notification_txt_store.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動","1000000000","d40000",3)));
+        notification_txt_store.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動", "1000000000", "d40000", 3)));
         notification_txt_list = v.findViewById(R.id.notification_txt_list);
-        notification_txt_list.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動",12+"","d40000",3)));
+        notification_txt_list.setText(Html.fromHtml(StringUtil.htmlFormat("您尚有則新活動", 12 + "", "d40000", 3)));
     }
 
     private void initToolbar() {
         //Toolbar 建立
         toolbar = v.findViewById(R.id.include_toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
         ((TextView) v.findViewById(R.id.include_toolbar_title)).setText("通知");
 
@@ -77,8 +73,8 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            if (gv.getToken() != null)
-                startActivity(new Intent(getActivity(), ShopCartActivity.class));
+            if (token != null)
+                startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
             return true;

@@ -88,13 +88,13 @@ public class OrderInfoActivity extends AppCompatActivity {
             }
         };
         viewPager.setAdapter(fragmentPagerAdapter);
-
+        viewPager.setOffscreenPageLimit(7);
 
     }
 
     public void setFilterByIndex(int... indexes) {
         for (int index : indexes) {
-            fragmentList.get(index).prepareFetchData(true);
+            fragmentList.get(index).updateData();
         }
     }
 

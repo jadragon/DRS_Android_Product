@@ -37,8 +37,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GlobalVariable gv = (GlobalVariable) getApplicationContext();
-        token = gv.getToken();
+        token =( (GlobalVariable) getApplicationContext()).getToken();
         setContentView(R.layout.activity_add_store_shipway);
         intent = getIntent();
         count_type = intent.getIntExtra("count_type", 0);

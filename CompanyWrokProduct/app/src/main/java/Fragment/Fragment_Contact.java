@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -48,24 +50,24 @@ public class Fragment_Contact extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_contact_layout, container, false);
-        token = ((GlobalVariable) getActivity().getApplicationContext()).getToken();
+        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
         recyclerView = v.findViewById(R.id.contact_recyclerview);
         recyclerView.setHasFixedSize(true);
         //DB
-        if(type==1) {
+        if (type == 1) {
             SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getContext());
             byte[] bytes = db.getPhotoImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             db.close();
-            adapter = new ContactRecyclerAdapter(getActivity(), json, bitmap);
-        }else {
-            adapter = new ContactRecyclerAdapter(getActivity(), json);
+            adapter = new ContactRecyclerAdapter(getContext(), json, bitmap);
+        } else {
+            adapter = new ContactRecyclerAdapter(getContext(), json);
         }
         recyclerView.setAdapter(adapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
         recyclerView.addItemDecoration(decoration);
         contact_allcheck = v.findViewById(R.id.contact_allcheck);
@@ -89,7 +91,7 @@ public class Fragment_Contact extends Fragment {
         contact_write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), WriteMailActivity.class));
+                startActivity(new Intent(getContext(), WriteMailActivity.class));
             }
         });
     }
@@ -103,12 +105,12 @@ public class Fragment_Contact extends Fragment {
                     @Override
                     public void run() {
                         final JSONObject jsonObject = new ContactJsonData().delContact(token, adapter.getCheckedList());
-                        getActivity().runOnUiThread(new Runnable() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
                                 try {
                                     if (jsonObject.getBoolean("Success")) {
-                                        ((ContactActivity) getActivity()).setFilter();
+                                        ((ContactActivity) getContext()).setFilter();
                                         Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {

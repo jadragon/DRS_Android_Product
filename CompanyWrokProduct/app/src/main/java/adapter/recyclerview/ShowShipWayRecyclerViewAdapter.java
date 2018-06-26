@@ -54,8 +54,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         this.json = json;
         this.count_type = count_type;
         colors = ctx.getResources().obtainTypedArray(R.array.shipway_color);
-        GlobalVariable gv = (GlobalVariable) ctx.getApplicationContext();
-        token = gv.getToken();
+        token =( (GlobalVariable) ctx.getApplicationContext()).getToken();
         if (json != null) {
             if (AnalyzeShopCart.getStoreLogisticsData(json) != null) {
                 title_list = AnalyzeShopCart.getStoreLogisticsData(json);
