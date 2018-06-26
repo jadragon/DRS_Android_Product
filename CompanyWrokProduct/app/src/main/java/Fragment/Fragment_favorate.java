@@ -42,7 +42,8 @@ public class Fragment_favorate extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_favorate_layout, container, false);
         initToolbar();
-        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
+        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        token = gv.getToken();
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.favorate_viewpager);

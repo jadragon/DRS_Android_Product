@@ -34,14 +34,14 @@ public class AppManager {
         if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
-        activityStack.add(activity);
+        activityStack.push(activity);
     }
 
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
     public Activity currentActivity() {
-        Activity activity = activityStack.lastElement();
+        Activity activity = activityStack.peek();
         return activity;
     }
 
@@ -49,8 +49,8 @@ public class AppManager {
      * 结束当前Activity（堆栈中最后一个压入的）
      */
     public void finishActivity() {
-        Activity activity = activityStack.lastElement();
-        finishActivity(activity);
+        Activity activity = activityStack.pop();
+        activity.finish();
     }
 
     /**
@@ -58,9 +58,9 @@ public class AppManager {
      */
     public void finishActivity(Activity activity) {
         if (activity != null) {
-            activityStack.remove(activity);
-            activity.finish();
-            activity = null;
+            if (activityStack.remove(activity)) {
+                activity.finish();
+            }
         }
     }
 
@@ -99,11 +99,9 @@ public class AppManager {
             finishAllActivity();
             System.exit(0);
             android.os.Process.killProcess(android.os.Process.myPid());
-
         } catch (Exception e) {
         }
     }
-
 
     /**
      * 得到指定类名的Activity
@@ -120,12 +118,11 @@ public class AppManager {
     /**
      * 保留指定类名的Activity
      */
-    public void remainActivity(Class<?>... cls) {
-        for (int i=activityStack.size()-1;i>0;i--){
-            if (!activityStack.get(i).getClass().equals(cls)) {
-                activityStack.get(i).finish();
-                activityStack.remove(activityStack.get(i));
-            }
+    public void remainActivity(Class<?> cls) {
+        int count = activityStack.search(getActivity(cls));
+        for (int i = 1; i < count; i++) {
+            activityStack.pop().finish();
         }
+
     }
 }

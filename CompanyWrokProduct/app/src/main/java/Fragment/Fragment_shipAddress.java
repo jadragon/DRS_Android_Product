@@ -36,9 +36,9 @@ public class Fragment_shipAddress extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
-        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
+        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        token = gv.getToken();
         v.findViewById(R.id.swipe_refresh).setEnabled(false);
-
         initRecyclerView();
         return v;
     }

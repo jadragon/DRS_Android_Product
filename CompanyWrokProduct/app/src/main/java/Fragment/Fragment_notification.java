@@ -32,7 +32,8 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_notification, container, false);
         initToolbar();
-        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
+        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        token = gv.getToken();
         initTextView();
         v.findViewById(R.id.n1).setOnClickListener(this);
         v.findViewById(R.id.n2).setOnClickListener(this);

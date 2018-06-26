@@ -33,7 +33,8 @@ public class Fragment_shop extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_layout, container, false);
-        token = ((GlobalVariable) getContext().getApplicationContext()).getToken();
+        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        token = gv.getToken();
         tabLayout = v.findViewById(R.id.shop_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.shop_viewpager);

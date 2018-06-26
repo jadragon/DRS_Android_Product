@@ -66,7 +66,7 @@ public class Fragment_home extends Fragment {
     private Handler mThreadHandler;
     //宣告特約工人
     private HandlerThread mThread;
-
+String token;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -269,7 +269,7 @@ public class Fragment_home extends Fragment {
         myRecyclerAdapter1 = null;
         myRecyclerAdapter2 = null;
         myRecyclerAdapter3 = null;
-        handler.getLooper().quit();
+//        handler.getLooper().quit();
     }
 
 }
