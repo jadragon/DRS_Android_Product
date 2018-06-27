@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.test.tw.wrokproduct.R;
 
 public class CommunityListViewAdapter extends BaseAdapter {
-    View view;
     String[] txt_sourse;
     TypedArray image_sourse;
     public CommunityListViewAdapter( TypedArray image_sourse, String[] txt_sourse) {

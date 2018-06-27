@@ -1,6 +1,7 @@
 package com.test.tw.wrokproduct;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -40,6 +41,7 @@ import library.AppManager;
 import library.Component.MyViewPager;
 import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.ShopCartJsonData;
+import library.component.AutoNewLineLayoutManager;
 import library.component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
@@ -51,32 +53,32 @@ public class PcContentActivity extends AppCompatActivity {
     private PcContentPagerAdapter adapter;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    LinearLayout ship_ways;
-    TextView pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
-    String pno;
-    RecyclerView recyclerView;
-    ImageView heart, pccontent_btn_home, pccontent_img_star;
-    View enable_background;
-    LinearLayout shipways_layout;
-    private PopupWindow popWin = null; // 弹出窗口
+    private LinearLayout ship_ways;
+    private TextView pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
+    private String pno;
+    private RecyclerView recyclerView;
+    private ImageView heart, pccontent_btn_home, pccontent_img_star;
+    private View enable_background;
+    private PopupWindow popWin;
     private View popView = null; // 保存弹出窗口布局
-    Button pccontent_btn_addshopcart, pccontent_btn_buynow, shop_cart_confirm;
-    Map<String, String> product_info;
-    int count, max = 0;
-    int default_color;
-    Button shopcart_btn_increase, shopcart_btn_decrease;
-    int myRecylcerViewHeight;
-    ProductInfoPojo productInfoPojo;
-    int[] stars = {R.drawable.star0_2, R.drawable.star1_2, R.drawable.star2_2, R.drawable.star3_2, R.drawable.star4_2, R.drawable.star5_2};
-    String pino;
-    String Message;
-    String token;
-    ToastMessageDialog toastMessageDialog;
+    private Button pccontent_btn_addshopcart, pccontent_btn_buynow, shop_cart_confirm;
+    private Map<String, String> product_info;
+    private int count, max = 0;
+    private int default_color;
+    private Button shopcart_btn_increase, shopcart_btn_decrease;
+    private int myRecylcerViewHeight;
+    private ProductInfoPojo productInfoPojo;
+    private TypedArray stars;
+    private String pino;
+    private String Message;
+    private String token;
+    private ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pccontent);
+        stars = getResources().obtainTypedArray(R.array.stars);
         productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
         token = ((GlobalVariable) getApplicationContext()).getToken();
         pno = productInfoPojo.getPno();
@@ -124,8 +126,8 @@ public class PcContentActivity extends AppCompatActivity {
             pccontent_txt_rprice.setVisibility(View.INVISIBLE);
         //星星
         pccontent_img_star = findViewById(R.id.pccontent_img_star);
-        pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
-
+        //  pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
+        pccontent_img_star.setImageResource(stars.getResourceId(Integer.parseInt(productInfoPojo.getScore()), 0));
     }
 
     //產品圖片
@@ -138,7 +140,6 @@ public class PcContentActivity extends AppCompatActivity {
     //初始化加入購物車
     private void initAddShopCart() {
         pccontent_btn_addshopcart = findViewById(R.id.pccontent_btn_addshopcart);
-
         pccontent_btn_addshopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,8 +174,9 @@ public class PcContentActivity extends AppCompatActivity {
         ((TextView) popView.findViewById(R.id.shopcart_txt_title)).setText(product_info.get("pname"));
         ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + product_info.get("rsprice"));
         //設定款式
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        AutoNewLineLayoutManager layoutManager = new AutoNewLineLayoutManager(getApplicationContext());
+        layoutManager.setDivider(10);
+        //  layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView = popView.findViewById(R.id.shop_cart_review);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -186,7 +188,7 @@ public class PcContentActivity extends AppCompatActivity {
                     @Override
                     public void onGlobalLayout() {
                         myRecylcerViewHeight = recyclerView.getHeight();
-                        AddCartRecyclerViewAdapter recylcerAdapter = new AddCartRecyclerViewAdapter(getBaseContext(), json, myRecylcerViewHeight, default_color);
+                        AddCartRecyclerViewAdapter recylcerAdapter = new AddCartRecyclerViewAdapter(getBaseContext(), json, default_color);
                         recylcerAdapter.setItemSelectListener(new AddCartRecyclerViewAdapter.ItemSelectListener() {
                             @Override
                             public void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list) {
@@ -277,8 +279,7 @@ public class PcContentActivity extends AppCompatActivity {
                 }
             }
         });
-        //設定POP UP
-        showPopUp(popView);
+        showPopWin(popView);
     }
 
     //初始化運送方式
@@ -294,13 +295,13 @@ public class PcContentActivity extends AppCompatActivity {
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(new ShipsWaysRecyclerViewAdapter(getApplicationContext(), json));
-                showPopUp(popView);
+                showPopWin(popView);
             }
         });
     }
 
     //顯示POP UP
-    public void showPopUp(View popView) {
+    public void showPopWin(View popView) {
         popWin = new PopupWindow(popView, LinearLayout.LayoutParams.MATCH_PARENT, (int) (450 * dm.density), false); // 实例化PopupWindow
         // 设置PopupWindow的弹出和消失效果
         popWin.setAnimationStyle(R.style.dialogWindowAnim);
@@ -423,5 +424,13 @@ public class PcContentActivity extends AppCompatActivity {
         return false;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (popWin != null && popWin.isShowing()) {
+            popWin.dismiss();
+            enable_background.setVisibility(View.INVISIBLE);
+        } else {
+            finish();
+        }
+    }
 }

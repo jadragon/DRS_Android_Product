@@ -53,7 +53,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private LinearLayout.LayoutParams layoutParams;
     String token;
     int type;
-    private ShopRecyclerViewAdapter.ClickListener clickListener;
     private List<ProductInfoPojo> itemsList;
 
     public void setmHeaderView(View mHeaderView) {
@@ -74,7 +73,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.layout_heigh = layout_heigh;
         if (json != null)
             list = ResolveJsonData.getJSONData(json);
-
         else
             list = new ArrayList<>();
         initItems();
@@ -369,21 +367,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ctx.startActivity(intent);
-                if (clickListener != null) {
-                    clickListener.ItemClicked(view, position, list);
-                }
             }
         }
     }
-
-    public void setClickListener(ShopRecyclerViewAdapter.ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list);
-    }
-
 
     public void setFilter(JSONObject json) {
         this.json = json;

@@ -12,11 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.test.tw.wrokproduct.R;
-
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -32,10 +29,9 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
     private AddCartRecyclerViewAdapter.RecycleHolder recycleHolder;
     private AddCartRecyclerViewAdapter.ItemSelectListener clickListener;
     private boolean[] ischoice;
-    GradientDrawable drawable;
     int color_values;
 
-    public AddCartRecyclerViewAdapter(Context ctx, JSONObject json, int heigh, int color_values) {
+    public AddCartRecyclerViewAdapter(Context ctx, JSONObject json, int color_values) {
         this.ctx = ctx;
         this.color_values = color_values;
         dm = ctx.getResources().getDisplayMetrics();
@@ -53,30 +49,26 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
         // view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shopcart, parent, false);
         TextView textView = new TextView(ctx);
         textView.setGravity(Gravity.CENTER);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,(int)(40*dm.density));
-        layoutParams.setMargins((int)(10*dm.density),(int)(10*dm.density),(int)(10*dm.density),(int)(10*dm.density));
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, (int) (40 * dm.density));
+        layoutParams.setMargins((int) (10 * dm.density), (int) (10 * dm.density), (int) (10 * dm.density), (int) (10 * dm.density));
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
-        textView.setBackground(ctx.getResources().getDrawable(R.drawable.shopcart_item_bg));
         recycleHolder = new AddCartRecyclerViewAdapter.RecycleHolder(ctx, textView, json);
         return recycleHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        drawable = (GradientDrawable) holder.text.getBackground();
         // layoutParams.width = (int) ((list.get(position).get("color").trim().length() + list.get(position).get("size").trim().length()) * 15 * dm.density);
         if (!ischoice[position]) {
-            drawable.setStroke((int) (1 * dm.density), Color.BLACK);
+            reShapeView(holder.text, 1, Color.BLACK);
             holder.text.setTextColor(Color.BLACK);
         } else {
-            drawable.setStroke((int) (3 * dm.density), color_values);
+            reShapeView(holder.text, 3, color_values);
             holder.text.setTextColor(color_values);
         }
         //  holder.linearLayout.setLayoutParams(layoutParams);
-        holder.text.setText("    "+list.get(position).get("color") + "  " + list.get(position).get("size")+"    ");
+        holder.text.setText("    " + list.get(position).get("color") + "  " + list.get(position).get("size") + "    ");
     }
-
-
 
 
     @Override
@@ -89,8 +81,6 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
         TextView text;
         Context ctx;
         JSONObject json;
-        LinearLayout linearLayout;
-
 
         public RecycleHolder(Context ctx, View view, JSONObject json) {
             super(view);
@@ -99,7 +89,6 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
             //color = view.findViewById(R.id.shopcart_txt_color);
             // size = view.findViewById(R.id.shopcart_txt_size);
             text = (TextView) view;
-            drawable = (GradientDrawable) text.getBackground();
             //linearLayout = view.findViewById(R.id.shopcart_linearlayout);
             itemView.setOnClickListener(this);
         }
@@ -135,6 +124,12 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
         void ItemCancelSelect(View view, int postion, ArrayList<Map<String, String>> list);
     }
 
+    private void reShapeView(View view, int size, int color) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setCornerRadius(10 * dm.density);
+        shape.setStroke((int) (size * dm.density), color);
+        view.setBackground(shape);
+    }
 
     public void setFilter(JSONObject json) {
         this.json = json;

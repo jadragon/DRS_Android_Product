@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         initBtnNav();
         startActivity(new Intent(MainActivity.this, LoadingPage.class));
 
-
     }
 
     protected void initBtnNav() {//BottomLayout
@@ -147,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
      * @param index     需要显示的Fragment的索引
      */
     public void switchFrament(int lastIndex, int index) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(
-                android.R.anim.fade_in, android.R.anim.fade_out);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                //.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         transaction.hide(fragments[lastIndex]);
         if (!fragments[index].isAdded()) {
             transaction.add(R.id.content_layout, fragments[index]);

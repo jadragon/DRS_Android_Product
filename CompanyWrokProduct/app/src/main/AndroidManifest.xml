@@ -24,11 +24,7 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".LoadingPage"
@@ -130,7 +126,14 @@
         <activity android:name=".我的帳戶.訂單管理.收貨地址.ShipAddressActivity" />
         <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoActivity" />
         <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity"></activity>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity" />
+        <activity android:name=".SearchBarActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -13,6 +13,10 @@
     <declare-styleable name="CustomTheme">
         <attr name="gifViewStyle" format="reference" />
     </declare-styleable>
+    <declare-styleable name="AutoNewLineLayout">
+        <attr name="horizontalSpace" format="dimension|reference"/>
 
+        <attr name="vertivalSpace" format="dimension|reference"/>
+    </declare-styleable>
 
 </resources>
