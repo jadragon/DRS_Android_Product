@@ -66,21 +66,19 @@ public class PcContentActivity extends AppCompatActivity {
     private int count, max = 0;
     private int default_color;
     private Button shopcart_btn_increase, shopcart_btn_decrease;
-    private int myRecylcerViewHeight;
     private ProductInfoPojo productInfoPojo;
     private TypedArray stars;
     private String pino;
     private String Message;
-    private String token;
     private ToastMessageDialog toastMessageDialog;
-
+GlobalVariable gv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pccontent);
         stars = getResources().obtainTypedArray(R.array.stars);
         productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         pno = productInfoPojo.getPno();
         dm = getResources().getDisplayMetrics();
         toastMessageDialog = new ToastMessageDialog(this);
@@ -92,7 +90,7 @@ public class PcContentActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getPcontent(token, pno);
+                json = new GetInformationByPHP().getPcontent(gv.getToken(), pno);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -187,7 +185,6 @@ public class PcContentActivity extends AppCompatActivity {
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        myRecylcerViewHeight = recyclerView.getHeight();
                         AddCartRecyclerViewAdapter recylcerAdapter = new AddCartRecyclerViewAdapter(getBaseContext(), json, default_color);
                         recylcerAdapter.setItemSelectListener(new AddCartRecyclerViewAdapter.ItemSelectListener() {
                             @Override
@@ -252,7 +249,7 @@ public class PcContentActivity extends AppCompatActivity {
                         public void run() {
 
                             try {
-                                JSONObject jsonObject = new ShopCartJsonData().setCart(token, pno, pino, count);
+                                JSONObject jsonObject = new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
                                 boolean success = jsonObject.getBoolean("Success");
                                 Message = jsonObject.getString("Message");
                                 if (success) {
@@ -350,7 +347,7 @@ public class PcContentActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new GetInformationByPHP().delFavoriteProduct(token, productInfoPojo.getPno());
+                            new GetInformationByPHP().delFavoriteProduct(gv.getToken(), productInfoPojo.getPno());
                         }
                     }).start();
                     heart.setImageResource(R.drawable.heart_off);
@@ -361,7 +358,7 @@ public class PcContentActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new GetInformationByPHP().setFavorite(token, productInfoPojo.getPno());
+                            new GetInformationByPHP().setFavorite(gv.getToken(), productInfoPojo.getPno());
                         }
                     }).start();
                     heart.setImageResource(R.drawable.heart_on);

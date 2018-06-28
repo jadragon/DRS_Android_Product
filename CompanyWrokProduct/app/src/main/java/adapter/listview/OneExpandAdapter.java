@@ -47,7 +47,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
     String[] lanes = {"無", "本島", "離島", "海外"};
     int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
     View[] holderList;
-    String token;
+    GlobalVariable gv;
     String sno, plno, mino, sname;
 
     public OneExpandAdapter(Context context, JSONObject json) {
@@ -55,7 +55,7 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         dm = context.getResources().getDisplayMetrics();
         this.context = context;
         this.json = json;
-        token = ((GlobalVariable) context.getApplicationContext()).getToken();
+        gv = ((GlobalVariable) context.getApplicationContext());
         if (json != null) {
             title_list = AnalyzeShopCart.getStoreLogisticsData(json);
             items_list = AnalyzeShopCart.getmyLogisticsArray(json);
@@ -252,8 +252,8 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
-                json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                new ShopCartJsonData().setStoreMemberLogistics(gv.getToken(), sno, plno, mino);
+                json = new ShopCartJsonData().getStoreLogistics(gv.getToken(), sno);
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -319,8 +319,8 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ShopCartJsonData().setStoreMemberLogistics(token, sno, plno, mino);
-                        json = new ShopCartJsonData().getStoreLogistics(token, sno);
+                        new ShopCartJsonData().setStoreMemberLogistics(gv.getToken(), sno, plno, mino);
+                        json = new ShopCartJsonData().getStoreLogistics(gv.getToken(), sno);
                     }
                 }).start();
                 break;

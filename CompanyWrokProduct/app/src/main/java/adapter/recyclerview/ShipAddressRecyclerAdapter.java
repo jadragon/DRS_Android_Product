@@ -40,7 +40,6 @@ import library.GetJsonData.LogisticsJsonData;
 public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddressRecyclerAdapter.RecycleHolder> {
     private Context ctx;
     JSONObject json;
-    String token;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTENT = 1;
     private List<ItemPojo> itemPojoList;
@@ -49,13 +48,13 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
     TypedArray colors;
     int lastuse_position;
     int type;
-
+GlobalVariable gv;
     public ShipAddressRecyclerAdapter(Context ctx, JSONObject json, int type) {
         this.ctx = ctx;
         this.json = json;
         this.type = type;
         dm = ctx.getResources().getDisplayMetrics();
-        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         shipways = ctx.getResources().getStringArray(R.array.shipway_title);
         colors = ctx.getResources().obtainTypedArray(R.array.shipway_color);
         //JSON
@@ -218,7 +217,7 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                JSONObject jsonObject = new LogisticsJsonData().setInitLogistics(token, itemPojoList.get(getAdapterPosition() - 1).getMlno(), type);
+                                JSONObject jsonObject = new LogisticsJsonData().setInitLogistics(gv.getToken(), itemPojoList.get(getAdapterPosition() - 1).getMlno(), type);
                                 try {
                                     if (jsonObject.getBoolean("Success")) {
                                         new Handler(ctx.getMainLooper()).post(new Runnable() {
@@ -275,8 +274,8 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
                                     @Override
                                     public void run() {
                                         try {
-                                            final JSONObject jsonObject = new LogisticsJsonData().delLogistics(token, itemPojoList.get(getAdapterPosition() - 1).getMlno());
-                                            json = new LogisticsJsonData().getLogistics(token, type);
+                                            final JSONObject jsonObject = new LogisticsJsonData().delLogistics(gv.getToken(), itemPojoList.get(getAdapterPosition() - 1).getMlno());
+                                            json = new LogisticsJsonData().getLogistics(gv.getToken(), type);
                                             if (jsonObject.getBoolean("Success")) {
                                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                                     @Override

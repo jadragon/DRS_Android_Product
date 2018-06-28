@@ -37,9 +37,8 @@ public class Fragment_Contact extends Fragment {
     View v;
     ContactRecyclerAdapter adapter;
     int type;
-    String token;
     ImageView contact_alldelete, contact_write;
-
+    GlobalVariable gv;
     public void setJson(JSONObject json) {
         this.json = json;
     }
@@ -51,7 +50,6 @@ public class Fragment_Contact extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_contact_layout, container, false);
         GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
-        token = gv.getToken();
         recyclerView = v.findViewById(R.id.contact_recyclerview);
         recyclerView.setHasFixedSize(true);
         //DB
@@ -105,7 +103,7 @@ public class Fragment_Contact extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final JSONObject jsonObject = new ContactJsonData().delContact(token, adapter.getCheckedList());
+                        final JSONObject jsonObject = new ContactJsonData().delContact(gv.getToken(), adapter.getCheckedList());
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {

@@ -21,19 +21,19 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShopCartActivity;
 
 import Util.StringUtil;
+
 public class Fragment_notification extends Fragment implements View.OnClickListener {
     Toolbar toolbar;
     View v;
-    String token;
     TextView notification_txt_activity, notification_txt_chaw, notification_txt_store, notification_txt_list;
+    GlobalVariable gv;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_notification, container, false);
         initToolbar();
-        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
-        token = gv.getToken();
+        gv = (GlobalVariable) getContext().getApplicationContext();
         initTextView();
         v.findViewById(R.id.n1).setOnClickListener(this);
         v.findViewById(R.id.n2).setOnClickListener(this);
@@ -74,7 +74,7 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            if (token != null)
+            if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();

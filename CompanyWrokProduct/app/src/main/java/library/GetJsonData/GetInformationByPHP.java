@@ -10,19 +10,19 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class GetInformationByPHP {
-    private static final String getAddress_url = "http://mall-tapi.gok1945.com/main/cart/getAddress.php";
-    private static final String slider_url = "http://mall-tapi.gok1945.com/main/index/slider.php";
-    private static final String banner_url = "http://mall-tapi.gok1945.com/main/product/banner.php";
-    private static final String hotkeywords_url = "http://mall-tapi.gok1945.com/main/index/hotkeywords.php";
-    private static final String ptype_url = "http://mall-tapi.gok1945.com/main/index/ptype.php";
-    private static final String brands_url = "http://mall-tapi.gok1945.com/main/index/brands.php";
-    private static final String iplist_url = "http://mall-tapi.gok1945.com/main/index/iplist.php";
-    private static final String delFavoriteProduct_url = "http://mall-tapi.gok1945.com/main/record/delFavoriteProduct.php";
-    private static final String setFavorite_url = "http://mall-tapi.gok1945.com/main/record/setFavorite.php";
-    private static final String plist_url = "http://mall-tapi.gok1945.com/main/product/plist.php";
-    private static final String pcontent_url = "http://mall-tapi.gok1945.com/main/product/pcontent.php";
-    private static final String getBrowse_url = "http://mall-tapi.gok1945.com/main/record/getBrowse.php";
-    private static final String getFavorite_url = "http://mall-tapi.gok1945.com/main/record/getFavorite.php";
+    private  final String getAddress_url = "http://mall-tapi.gok1945.com/main/cart/getAddress.php";
+    private  final String slider_url = "http://mall-tapi.gok1945.com/main/index/slider.php";
+    private  final String banner_url = "http://mall-tapi.gok1945.com/main/product/banner.php";
+    private  final String hotkeywords_url = "http://mall-tapi.gok1945.com/main/index/hotkeywords.php";
+    private  final String ptype_url = "http://mall-tapi.gok1945.com/main/index/ptype.php";
+    private  final String brands_url = "http://mall-tapi.gok1945.com/main/index/brands.php";
+    private  final String iplist_url = "http://mall-tapi.gok1945.com/main/index/iplist.php";
+    private  final String delFavoriteProduct_url = "http://mall-tapi.gok1945.com/main/record/delFavoriteProduct.php";
+    private  final String setFavorite_url = "http://mall-tapi.gok1945.com/main/record/setFavorite.php";
+    private  final String plist_url = "http://mall-tapi.gok1945.com/main/product/plist.php";
+    private  final String pcontent_url = "http://mall-tapi.gok1945.com/main/product/pcontent.php";
+    private  final String getBrowse_url = "http://mall-tapi.gok1945.com/main/record/getBrowse.php";
+    private  final String getFavorite_url = "http://mall-tapi.gok1945.com/main/record/getFavorite.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 

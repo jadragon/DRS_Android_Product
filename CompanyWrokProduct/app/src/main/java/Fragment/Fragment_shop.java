@@ -25,6 +25,7 @@ import com.test.tw.wrokproduct.ShopCartActivity;
 
 import java.util.ArrayList;
 
+import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetJsonData.GetInformationByPHP;
 
@@ -34,15 +35,14 @@ public class Fragment_shop extends Fragment {
     ViewPager viewPager;
     ArrayList<Fragment_shop_content> fragmentArrayList;
     Fragment_shop_content fragment_shop_content;
-    String token;
+    GlobalVariable gv;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_layout, container, false);
-        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        gv = (GlobalVariable) getContext().getApplicationContext();
         initSearchToolbar();
-        token = gv.getToken();
         tabLayout = v.findViewById(R.id.shop_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.shop_viewpager);
@@ -50,20 +50,20 @@ public class Fragment_shop extends Fragment {
             @Override
             public void run() {
                 fragmentArrayList = new ArrayList<>();
-                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(0), new GetInformationByPHP().getIplist(0, token, 1));
+                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(0), new GetInformationByPHP().getIplist(0, gv.getToken(), 1));
                 fragment_shop_content.setType(0);
                 fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(1), new GetInformationByPHP().getIplist(1, token, 1));
+                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(1), new GetInformationByPHP().getIplist(1, gv.getToken(), 1));
                 fragment_shop_content.setType(1);
                 fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(2), new GetInformationByPHP().getIplist(2, token, 1));
+                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(2), new GetInformationByPHP().getIplist(2, gv.getToken(), 1));
                 fragment_shop_content.setType(2);
                 fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(3), new GetInformationByPHP().getIplist(3, token, 1));
+                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(3), new GetInformationByPHP().getIplist(3, gv.getToken(), 1));
                 fragment_shop_content.setType(3);
                 fragmentArrayList.add(fragment_shop_content);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -92,7 +92,7 @@ public class Fragment_shop extends Fragment {
                 Intent intent = new Intent(getContext(), SearchBarActivity.class);
                 intent.addFlags(intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-               // getActivity().overridePendingTransition(0, 0);
+                // getActivity().overridePendingTransition(0, 0);
             }
         });
     }
@@ -120,7 +120,7 @@ public class Fragment_shop extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            if (token != null)
+            if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();

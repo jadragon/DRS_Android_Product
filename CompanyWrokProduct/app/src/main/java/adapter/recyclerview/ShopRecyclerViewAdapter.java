@@ -40,7 +40,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     public static final int TYPE_NORMAL = 0;  //说明是不带有header和footer的
     public static final int TYPE_HEADER = 1;  //说明是带有Header的
     public static final int TYPE_FOOTER = 2;  //说明是带有Footer的
-
+    //type
+    public final static int HIDE_BANNER = 0;
+    public final static int SHOW_BANNER = 1;
+    public final static int FAVORATE = -1;
+    public final static int BROWSE = -2;
     private View mHeaderView;
     private View mFooterView;
     private Context ctx;
@@ -51,10 +55,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private DisplayMetrics dm;
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
-    String token;
-    int type;
     private List<ProductInfoPojo> itemsList;
-
+GlobalVariable gv;
     public void setmHeaderView(View mHeaderView) {
         this.mHeaderView = mHeaderView;
     }
@@ -64,20 +66,19 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.mFooterView = mFooterView;
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int had_header, int type) {
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int had_header) {
         this.ctx = ctx;
-        if (had_header > Fragment_shop_content.FAVORATE)
+        dm = ctx.getResources().getDisplayMetrics();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
+        if (had_header > FAVORATE)
             this.had_header = had_header;
-        this.type = type;
-        this.layout_width = layout_width;
-        this.layout_heigh = layout_heigh;
+        this.layout_width = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+        this.layout_heigh = (int) (this.layout_width + (110 * dm.density));
         if (json != null)
             list = ResolveJsonData.getJSONData(json);
         else
             list = new ArrayList<>();
         initItems();
-        dm = ctx.getResources().getDisplayMetrics();
-        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
     }
 
     private void initItems() {
@@ -90,12 +91,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int layout_width, int layout_heigh, int type) {
+    public ShopRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         this.json = json;
-        this.type = type;
-        this.layout_width = layout_width;
-        this.layout_heigh = layout_heigh;
+        this.layout_width = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+        this.layout_heigh = (int) (this.layout_width + (110 * dm.density));
         if (json != null)
             list = ResolveJsonData.getJSONData(json);
 
@@ -214,7 +214,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                             @Override
                             public void run() {
                                 if (itemsList.get(position - had_header).getFavorite()) {
-                                    new GetInformationByPHP().delFavoriteProduct(token, itemsList.get(position - had_header).getPno());
+                                    new GetInformationByPHP().delFavoriteProduct(gv.getToken(), itemsList.get(position - had_header).getPno());
                                     itemsList.get(position - had_header).setFavorite(false);
                                     ((Activity) ctx).runOnUiThread(new Runnable() {
                                         @Override
@@ -224,7 +224,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                                     });
 
                                 } else {
-                                    new GetInformationByPHP().setFavorite(token, itemsList.get(position - had_header).getPno());
+                                    new GetInformationByPHP().setFavorite(gv.getToken(), itemsList.get(position - had_header).getPno());
                                     itemsList.get(position - had_header).setFavorite(true);
                                     ((Activity) ctx).runOnUiThread(new Runnable() {
                                         @Override
@@ -245,7 +245,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
 
     }
-
 
     private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
         ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
@@ -387,8 +386,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         if (json != null && ResolveJsonData.getJSONData(json).size() > 0) {
             list.addAll(ResolveJsonData.getJSONData(json));
             initItems();
-            notifyItemInserted(presize+1);
-          //  notifyItemChanged(presize + 1, itemsList.size() + 1);
+            notifyItemInserted(presize + 1);
+            //  notifyItemChanged(presize + 1, itemsList.size() + 1);
             return true;
         } else {
             new ToastMessageDialog(ctx, "沒有更多了").show();

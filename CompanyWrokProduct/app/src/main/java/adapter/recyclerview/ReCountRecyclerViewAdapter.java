@@ -49,14 +49,14 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
     private List<Item> items;
     private FooterItem footerItem;
     private Item item;
-    String token;
     String[] invoiceType;
     int count_type;
+    GlobalVariable gv;
 
     public ReCountRecyclerViewAdapter(Context ctx, JSONObject json, int count_type) {
         this.ctx = ctx;
         this.count_type = count_type;
-        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
@@ -360,7 +360,7 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
                                InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                      */
-                                new ReCountJsonData().setStoreNote(count_type, token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
+                                new ReCountJsonData().setStoreNote(count_type, gv.getToken(), items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
                             }
                         }).start();
                     }
@@ -830,7 +830,6 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
         }
 
     }
-
 
     private class FooterItem {
         String moprno;

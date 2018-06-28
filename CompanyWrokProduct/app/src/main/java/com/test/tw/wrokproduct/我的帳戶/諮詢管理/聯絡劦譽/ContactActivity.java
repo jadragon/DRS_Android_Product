@@ -27,14 +27,14 @@ public class ContactActivity extends AppCompatActivity {
     TabLayout tabLayout;
     List<Fragment_Contact> fragmentList;
     String[] mTabtitle = {"收件夾", "寄信備份"};
-    String token;
     JSONObject json1, json2;
+    GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         initToolbar();
         initRecylcerViewAndTabLayout();
     }
@@ -45,8 +45,8 @@ public class ContactActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new ContactJsonData().getContact(token, 0, 1);
-                json2 = new ContactJsonData().getContact(token, 1, 1);
+                json1 = new ContactJsonData().getContact(gv.getToken(), 0, 1);
+                json2 = new ContactJsonData().getContact(gv.getToken(), 1, 1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -108,8 +108,8 @@ public class ContactActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new ContactJsonData().getContact(token, 0, 1);
-                json2 = new ContactJsonData().getContact(token, 1, 1);
+                json1 = new ContactJsonData().getContact(gv.getToken(), 0, 1);
+                json2 = new ContactJsonData().getContact(gv.getToken(), 1, 1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

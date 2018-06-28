@@ -90,7 +90,6 @@ public class Fragment_WebView extends Fragment {
                 luntanListview.loadUrl("javascript:App.resize(document.body.getBoundingClientRect().height)");
             }
         });
-        luntanListview.addJavascriptInterface(this, "App");
         //        luntanListview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
         //            @Override
         //            public void onFocusChange(View v, boolean hasFocus) {
@@ -113,6 +112,8 @@ public class Fragment_WebView extends Fragment {
         //                }
         //            }
         //        });
+
+        //  luntanListview.addJavascriptInterface(this, "App");
     }
 
     public void clearWebViewResource(ViewGroup container, WebView webView) {
@@ -128,20 +129,21 @@ public class Fragment_WebView extends Fragment {
         }
     }
 
-    @JavascriptInterface
-    public void resize(final float height) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
-                luntanListview.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
-                webviewHeigh = (int) (height);
-                if (onHeighChangerListener != null)
-                    onHeighChangerListener.valueChanged(webviewHeigh);
-            }
-        });
-    }
-
+    /*
+        @JavascriptInterface
+        public void resize(final float height) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
+                    luntanListview.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+                    webviewHeigh = (int) (height);
+                    if (onHeighChangerListener != null)
+                        onHeighChangerListener.valueChanged(webviewHeigh);
+                }
+            });
+        }
+    */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

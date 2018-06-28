@@ -48,18 +48,18 @@ public class PersonalInfoActivity extends AppCompatActivity {
     Spinner personal_spinner_gender;
     AlertDialog alertDialog;
     DatePicker datePicker;
-    String token;
+    GlobalVariable gv;
     Map<String, String> pdata, adata, bdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JSONObject json = new MemberJsonData().getPersonData(token);
+                JSONObject json = new MemberJsonData().getPersonData(gv.getToken());
                 pdata = AnalyzeMember.getPersonDataPdata(json);
                 adata = AnalyzeMember.getPersonDataAdata(json);
                 bdata = AnalyzeMember.getPersonDataBdata(json);
@@ -130,7 +130,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new MemberJsonData().updateBasicData(token, personal_edit_name.getText().toString(), personal_edit_memberId.getText().toString(), personal_spinner_gender.getSelectedItemPosition(),
+                        new MemberJsonData().updateBasicData(gv.getToken(), personal_edit_name.getText().toString(), personal_edit_memberId.getText().toString(), personal_spinner_gender.getSelectedItemPosition(),
                                 personal_txt_birthday.getText().toString(), personal_txt_city.getText().toString(), personal_txt_area.getText().toString(), personal_edit_zipcode.getText().toString(), personal_edit_address.getText().toString());
                         runOnUiThread(new Runnable() {
                             @Override
@@ -208,12 +208,12 @@ public class PersonalInfoActivity extends AppCompatActivity {
             adata_save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!token.equals("") && !personal_txt_bankcode.getText().toString().equals("") && !personal_edit_subbankname.getText().toString().equals("")
+                    if (!gv.getToken().equals("") && !personal_txt_bankcode.getText().toString().equals("") && !personal_edit_subbankname.getText().toString().equals("")
                             && !personal_edit_bankaccount.getText().toString().equals("") && !personal_edit_bankaccountname.getText().toString().equals("")) {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                JSONObject json = new MemberJsonData().updateBillingData(token, personal_txt_bankcode.getText().toString(),
+                                JSONObject json = new MemberJsonData().updateBillingData(gv.getToken(), personal_txt_bankcode.getText().toString(),
                                         personal_edit_subbankname.getText().toString(), personal_edit_bankaccount.getText().toString(), personal_edit_bankaccountname.getText().toString());
 
                                 if (AnalyzeMember.checkSuccess(json)) {

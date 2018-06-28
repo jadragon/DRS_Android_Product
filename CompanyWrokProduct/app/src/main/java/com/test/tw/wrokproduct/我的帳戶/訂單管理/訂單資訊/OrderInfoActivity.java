@@ -21,19 +21,16 @@ import java.util.List;
 import Fragment.Fragment_oderInfo;
 
 public class OrderInfoActivity extends AppCompatActivity {
-    String token;
     List<Fragment_oderInfo> fragmentList;
     String[] mTabtitle = {"未付款", "未配送", "配送中", "取件完成", "申請退換貨中", "已完成", "取消"};
     ViewPager viewPager;
     TabLayout tabLayout;
     JSONObject json1, json2, json3, json4, json5, json6, json7;
     FragmentPagerAdapter fragmentPagerAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_info);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
         initToolbar();
         initRecylcerViewAndTabLayout();
     }

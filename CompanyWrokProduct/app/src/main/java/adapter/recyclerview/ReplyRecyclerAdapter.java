@@ -39,7 +39,6 @@ import library.SQLiteDatabaseHandler;
 public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdapter.RecycleHolder> {
     private Context ctx;
     JSONObject json;
-    String token;
     String msno;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTENT = 1;
@@ -50,7 +49,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
     Bitmap myphoto;
     String myname;
     Bitmap[] photos;
-
+GlobalVariable gv;
     public void setMsno(String msno) {
         this.msno = msno;
     }
@@ -59,7 +58,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
         this.ctx = ctx;
         this.json = json;
         dm = ctx.getResources().getDisplayMetrics();
-        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         //DB
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
         myname = db.getMemberDetail().get("name");
@@ -190,7 +189,7 @@ public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdap
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                final JSONObject jsonObject = new ContactJsonData().setContactCont(token, msno, viewitem_reply_keyin_content.getText().toString());
+                                final JSONObject jsonObject = new ContactJsonData().setContactCont(gv.getToken(), msno, viewitem_reply_keyin_content.getText().toString());
                                 new android.os.Handler(context.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {

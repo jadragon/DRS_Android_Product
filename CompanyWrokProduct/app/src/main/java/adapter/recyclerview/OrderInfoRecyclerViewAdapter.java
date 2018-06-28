@@ -53,13 +53,13 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     ArrayList<MemberOrderHeaderPojo> memberOrderHeaderPojoArrayList;
     ArrayList<ArrayList<MemberOrderContentPojo>> contentPojoArrayList;
     ArrayList<MemberOrderFooterPojo> memberOrderFooterPojoArrayList;
-    String token;
     int index;
+    GlobalVariable gv;
 
     public OrderInfoRecyclerViewAdapter(Context ctx, JSONObject json, int index) {
         this.ctx = ctx;
         this.index = index;
-        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
             memberOrderHeaderPojoArrayList = AnalyzeOrderInfo.getMemberOrderHeader(json);
             contentPojoArrayList = AnalyzeOrderInfo.getMemberOrderContent(json);
@@ -285,7 +285,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             initFooterButton(view);
         }
 
-
         private void initFooterButton(View view) {
             GradientDrawable shape = new GradientDrawable();
             shape.setCornerRadius(8);
@@ -298,30 +297,30 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     button2.setOnClickListener(this);
                     button1.setText("取消訂單");
                     button2.setText("重新結帳");
-                    reShapeButton(button1,R.color.gray);
-                    reShapeButton(button2,R.color.red);
+                    reShapeButton(button1, R.color.gray);
+                    reShapeButton(button2, R.color.red);
                     break;
                 case 1:
                     button1.setOnClickListener(this);
                     button2.setVisibility(View.INVISIBLE);
                     button1.setText("申請取消");
-                    reShapeButton(button1,R.color.red);
+                    reShapeButton(button1, R.color.red);
                     break;
                 case 2:
                     button1.setOnClickListener(this);
                     button2.setOnClickListener(this);
                     button1.setText("延長收貨");
                     button2.setText("確認收貨");
-                    reShapeButton(button1,R.color.orange);
-                    reShapeButton(button2,R.color.shipway_blue_light);
+                    reShapeButton(button1, R.color.orange);
+                    reShapeButton(button2, R.color.shipway_blue_light);
                     break;
                 case 3:
                     button1.setOnClickListener(this);
                     button2.setOnClickListener(this);
                     button1.setText("給予評價");
                     button2.setText("申請退換貨");
-                    reShapeButton(button1,R.color.shipway_green_dark);
-                    reShapeButton(button2,R.color.mediumpurple);
+                    reShapeButton(button1, R.color.shipway_green_dark);
+                    reShapeButton(button2, R.color.mediumpurple);
                     break;
                 case 4:
                     button1.setVisibility(View.GONE);
@@ -332,14 +331,14 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     button2.setOnClickListener(this);
                     button1.setText("給予評價");
                     button2.setText("投訴賣家");
-                    reShapeButton(button1,R.color.shipway_green_dark);
-                    reShapeButton(button2,R.color.gray);
+                    reShapeButton(button1, R.color.shipway_green_dark);
+                    reShapeButton(button2, R.color.gray);
                     break;
                 case 6:
                     button1.setVisibility(View.INVISIBLE);
                     button2.setOnClickListener(this);
                     button2.setText("投訴賣家");
-                    reShapeButton(button2,R.color.gray);
+                    reShapeButton(button2, R.color.gray);
                     break;
             }
         }
@@ -365,7 +364,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().cancelMOrder(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().cancelMOrder(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -394,7 +393,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyCancel(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -419,7 +418,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    jsonObject = new OrderInfoJsonData().extendReceipt(token, ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                                    jsonObject = new OrderInfoJsonData().extendReceipt(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -453,7 +452,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    final JSONObject jsonObject = new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, token, ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                                    final JSONObject jsonObject = new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                     new Handler(ctx.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -482,7 +481,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    jsonObject = new OrderInfoJsonData().confirmReceipt(token, ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                                    jsonObject = new OrderInfoJsonData().confirmReceipt(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -507,7 +506,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyReturn(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().applyReturn(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -539,7 +538,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().complaintStore(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -565,7 +564,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            jsonObject = new OrderInfoJsonData().complaintStore(token, ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            jsonObject = new OrderInfoJsonData().complaintStore(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {

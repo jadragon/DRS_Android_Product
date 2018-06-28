@@ -24,12 +24,12 @@ public class ModifyPasswordActivity extends AppCompatActivity {
     EditText modify_account, modify_oldpass, modify_newpass, modify_renewpass;
     Button modify_confirm;
     ToastMessageDialog toastMessageDialog;
-String token;
+    GlobalVariable gv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_password);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         initToolbar();
         toastMessageDialog = new ToastMessageDialog(this);
         getViewById();
@@ -47,7 +47,7 @@ String token;
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    final JSONObject json=new MemberJsonData().updatePersonPawd(token,modify_oldpass.getText().toString(),modify_newpass.getText().toString());
+                                    final JSONObject json=new MemberJsonData().updatePersonPawd(gv.getToken(),modify_oldpass.getText().toString(),modify_newpass.getText().toString());
                                     if(AnalyzeMember.checkSuccess(json)){
                                         runOnUiThread(new Runnable() {
                                             @Override

@@ -132,7 +132,7 @@
         <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity" />
         <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity" />
         <activity android:name=".SearchBarActivity"></activity>
-        <activity android:name=".我的帳戶.SearchResultActivity"></activity>
+        <activity android:name=".SearchResultActivity"></activity>
     </application>
 
 </manifest>

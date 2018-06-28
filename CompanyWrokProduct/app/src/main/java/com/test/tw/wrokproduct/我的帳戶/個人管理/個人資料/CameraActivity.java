@@ -62,7 +62,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     int currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     DisplayMetrics dm;
     Camera.Parameters parameters;
-    String token;
+    GlobalVariable gv;
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     String shape;
 
@@ -121,7 +121,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
             }
         } else {
-            token = ((GlobalVariable) getApplicationContext()).getToken();
+            gv = ((GlobalVariable) getApplicationContext());
             dm = getResources().getDisplayMetrics();
             button1 = findViewById(R.id.button_capture);
             albums = findViewById(R.id.albums);
@@ -210,7 +210,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final JSONObject aa = new UploadFileJsonData().updatePortrait(token, bitmapByte);
+                            final JSONObject aa = new UploadFileJsonData().updatePortrait(gv.getToken(), bitmapByte);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

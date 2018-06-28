@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import library.Http.PostByteArrayformImage;
 
 public class UploadFileJsonData {
-    private static final String updatePortrait_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updatePortrait.php";
+    private  final String updatePortrait_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updatePortrait.php";
     private PostByteArrayformImage postByteArrayformImage;
 
     public UploadFileJsonData() {

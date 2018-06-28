@@ -10,15 +10,15 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class OrderInfoJsonData {
-    private static final String getMemberOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMemberOrder.php";
-    private static final String getMOrderPay_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderPay.php";
-    private static final String getMOrderItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderItem.php";
-    private static final String applyCancel_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyCancel.php";
-    private static final String cancelMOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/cancelMOrder.php";
-    private static final String extendReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/extendReceipt.php";
-    private static final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/confirmReceipt.php";
-    private static final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturn.php";
-    private static final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/complaintStore.php";
+    private  final String getMemberOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMemberOrder.php";
+    private  final String getMOrderPay_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderPay.php";
+    private  final String getMOrderItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderItem.php";
+    private  final String applyCancel_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyCancel.php";
+    private  final String cancelMOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/cancelMOrder.php";
+    private  final String extendReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/extendReceipt.php";
+    private  final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/confirmReceipt.php";
+    private  final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturn.php";
+    private  final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/complaintStore.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 

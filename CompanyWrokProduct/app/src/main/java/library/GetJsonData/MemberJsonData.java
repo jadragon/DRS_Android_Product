@@ -12,15 +12,15 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class MemberJsonData {
-    private static final String register_url = "http://mall-tapi.gok1945.com/main/member/register.php";
-    private static final String gvcode_url = "http://mall-tapi.gok1945.com/main/member/gvcode.php";
-    private static final String login_url = "http://mall-tapi.gok1945.com/main/member/login.php";
-    private static final String forget_url = "http://mall-tapi.gok1945.com/main/member/forget.php";
-    private static final String getPersonData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/getPersonData.php";
-    private static final String updateBasicData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updateBasicData.php";
-    private static final String getBankData_url = "http://mall-tapi.gok1945.com/main/other/getBankData.php";
-    private static final String updateBillingData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updateBillingData.php";
-    private static final String updatePersonPawd_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updatePersonPawd.php";
+    private  final String register_url = "http://mall-tapi.gok1945.com/main/member/register.php";
+    private  final String gvcode_url = "http://mall-tapi.gok1945.com/main/member/gvcode.php";
+    private  final String login_url = "http://mall-tapi.gok1945.com/main/member/login.php";
+    private  final String forget_url = "http://mall-tapi.gok1945.com/main/member/forget.php";
+    private  final String getPersonData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/getPersonData.php";
+    private  final String updateBasicData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updateBasicData.php";
+    private  final String getBankData_url = "http://mall-tapi.gok1945.com/main/other/getBankData.php";
+    private  final String updateBillingData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updateBillingData.php";
+    private  final String updatePersonPawd_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updatePersonPawd.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 

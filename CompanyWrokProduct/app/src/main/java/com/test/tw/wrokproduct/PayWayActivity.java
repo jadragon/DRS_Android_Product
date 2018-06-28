@@ -29,7 +29,7 @@ import library.GetJsonData.ReCountJsonData;
 public class PayWayActivity extends AppCompatActivity implements TextView.OnEditorActionListener, View.OnFocusChangeListener, View.OnClickListener {
     Toolbar toolbar;
     TextView toolbar_title;
-    String token;
+    GlobalVariable gv;
     TextView payway_activity_txt_opay, payway_activity_txt_xmoney, payway_activity_txt_ymoney, payway_activity_txt_ewallet,
             payway_activity_txt_pname1, payway_activity_txt_info1, payway_activity_txt_pname2, payway_activity_txt_info2,
             payway_activity_txt_total;
@@ -49,14 +49,14 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payway);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         count_type = getIntent().getIntExtra("count_type", 0);
         initID();
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ReCountJsonData().getMemberPayment(count_type, token);
+                json = new ReCountJsonData().getMemberPayment(count_type, gv.getToken());
                 data_list = AnalyzeShopCart.getMemberPaymentsData(json);
                 pay_list = AnalyzeShopCart.getMemberPaymentsPay(json);
                 xtrans = Integer.parseInt(pay_list.get(0).get("xtrans"));
@@ -180,7 +180,7 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json = new ReCountJsonData().setMemberPayment(count_type,token, xkeyin, ykeyin, ekeyin, pno);
+                        json = new ReCountJsonData().setMemberPayment(count_type,gv.getToken(), xkeyin, ykeyin, ekeyin, pno);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

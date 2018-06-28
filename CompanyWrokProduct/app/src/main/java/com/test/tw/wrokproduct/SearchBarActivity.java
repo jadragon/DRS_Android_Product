@@ -1,5 +1,6 @@
 package com.test.tw.wrokproduct;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -50,7 +51,10 @@ public class SearchBarActivity extends AppCompatActivity {
         search_bar_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                Intent intent=new Intent(SearchBarActivity.this,SearchResultActivity.class);
+                intent.putExtra("keyword",query);
+                startActivity(intent);
+                return true;
             }
 
             @Override
@@ -60,7 +64,6 @@ public class SearchBarActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             json = new SearchJsonData().search(newText);
-                            Log.e("FF", json + "");
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

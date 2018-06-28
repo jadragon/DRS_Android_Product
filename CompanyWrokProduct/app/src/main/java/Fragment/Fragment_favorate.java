@@ -25,6 +25,7 @@ import com.test.tw.wrokproduct.ShopCartActivity;
 
 import java.util.ArrayList;
 
+import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetJsonData.GetInformationByPHP;
 
@@ -35,15 +36,15 @@ public class Fragment_favorate extends Fragment {
     ViewPager viewPager;
     ArrayList<Fragment_shop_content> fragmentArrayList;
     Fragment_shop_content fragment_shop_content;
-    String token;
+    GlobalVariable gv;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_favorate_layout, container, false);
         initToolbar();
-        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
-        token = gv.getToken();
+        gv = (GlobalVariable) getContext().getApplicationContext();
+
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.favorate_viewpager);
@@ -51,11 +52,11 @@ public class Fragment_favorate extends Fragment {
             @Override
             public void run() {
                 fragmentArrayList = new ArrayList<>();
-                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.FAVORATE);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getFavorite(token));
+                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.FAVORATE);
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getFavorite(gv.getToken()));
                 fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(Fragment_shop_content.BROWSE);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getBrowse(token));
+                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.BROWSE);
+                fragment_shop_content.setJson(null, new GetInformationByPHP().getBrowse(gv.getToken()));
                 fragmentArrayList.add(fragment_shop_content);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
@@ -91,7 +92,7 @@ public class Fragment_favorate extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            if (token != null)
+            if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();

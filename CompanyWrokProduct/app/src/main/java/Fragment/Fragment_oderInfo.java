@@ -28,12 +28,11 @@ public class Fragment_oderInfo extends BasePageFragment {
     OrderInfoRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     JSONObject json;
-    String token;
     int index;
     library.Component.MySwipeRefreshLayout mSwipeLayout;
     int nextpage = 2;
     EndLessOnScrollListener endLessOnScrollListener;
-
+    GlobalVariable gv;
     public void setIndex(int index) {
         this.index = index;
     }
@@ -46,8 +45,7 @@ public class Fragment_oderInfo extends BasePageFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
-        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
-        token = gv.getToken();
+      gv = (GlobalVariable) getContext().getApplicationContext();
         initRecyclerView();
         initSwipeLayout();
         return v;
@@ -87,7 +85,7 @@ public class Fragment_oderInfo extends BasePageFragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json = new OrderInfoJsonData().getMemberOrder(token, index, nextpage);
+                        json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, nextpage);
                         nextpage++;
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -115,7 +113,7 @@ public class Fragment_oderInfo extends BasePageFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new OrderInfoJsonData().getMemberOrder(token, index, 1);
+                json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, 1);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {

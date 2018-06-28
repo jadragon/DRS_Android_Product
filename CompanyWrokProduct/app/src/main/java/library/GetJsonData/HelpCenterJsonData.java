@@ -10,10 +10,10 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class HelpCenterJsonData {
-    private static final String category_url = "http://mall-tapi.gok1945.com/main/footer/category.php";
-    private static final String searchCategory_url = "http://mall-tapi.gok1945.com/main/footer/searchCategory.php";
-    private static final String searchMbCategory_url = "http://mall-tapi.gok1945.com/main/footer/searchMbCategory.php";
-    private static final String citem_url = "http://mall-tapi.gok1945.com/main/footer/citem.php";
+    private  final String category_url = "http://mall-tapi.gok1945.com/main/footer/category.php";
+    private  final String searchCategory_url = "http://mall-tapi.gok1945.com/main/footer/searchCategory.php";
+    private  final String searchMbCategory_url = "http://mall-tapi.gok1945.com/main/footer/searchMbCategory.php";
+    private  final String citem_url = "http://mall-tapi.gok1945.com/main/footer/citem.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 

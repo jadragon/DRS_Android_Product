@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONException;
@@ -51,19 +52,14 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private ShopCartRecyclerViewAdapter.ClickListener clickListener;
     private List<Item> items;
     private Item item;
-    String token;
+    GlobalVariable gv;
     int size;
-
-    public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json, String token) {
-        this(ctx, json);
-        this.token = token;
-
-    }
 
     public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         this.json = json;
         dm = ctx.getResources().getDisplayMetrics();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
 
             title_list = ResolveJsonData.getCartInformation(json);
@@ -173,12 +169,12 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_content, parent, false);
-        params.height =(int)(dm.heightPixels / 5.5);
+        params.height = (int) (dm.heightPixels / 5.5);
         params.setMarginStart(0);
         params.setMarginEnd(0);
         view.setLayoutParams(params);
         view.setTag("content");
-        resizeImageView(view.findViewById(R.id.viewitem_cart_content_img), (int)(dm.heightPixels / 5.5), (int)(dm.heightPixels / 5.5));
+        resizeImageView(view.findViewById(R.id.viewitem_cart_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));
         return new ShopCartRecyclerViewAdapter.RecycleHolder(ctx, view, json);
     }
 
@@ -345,8 +341,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 @Override
                                 public void run() {
                                     try {
-                                        final JSONObject jsonObject = new ShopCartJsonData().delCartProduct(token, items.get(position).getMorno());
-                                        json = new ShopCartJsonData().getCart(token);
+                                        final JSONObject jsonObject = new ShopCartJsonData().delCartProduct(gv.getToken(), items.get(position).getMorno());
+                                        json = new ShopCartJsonData().getCart(gv.getToken());
                                         if (jsonObject.getBoolean("Success")) {
                                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                                 @Override
@@ -428,7 +424,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     break;
                 case "content"://當content點擊時
                     if (!items.get(position).isCheck()) {//當content為非選取狀態
-                        for (int i = items.size()-1; i >= 0; i--) {
+                        for (int i = items.size() - 1; i >= 0; i--) {
                             if (items.get(i).getType() == TYPE_HEADER && position > i) {
                                 position = i;
                                 break;
@@ -449,7 +445,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         items.get(getAdapterPosition()).countTotal_price();
                     } else {//當content為選取狀態
                         //header
-                        for (int i = items.size()-1; i >= 0; i--) {
+                        for (int i = items.size() - 1; i >= 0; i--) {
                             if (items.get(i).getType() == TYPE_HEADER && position > i) {
                                 position = i;
                                 break;
@@ -471,9 +467,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                             @Override
                             public void run() {
                                 int total = Integer.parseInt(items.get(position).getStotal()) + 1;
-                                new ShopCartJsonData().addCartProduct(token, items.get(position).getMorno(),
+                                new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
                                         total);
-                                json = new ShopCartJsonData().getCart(token);
+                                json = new ShopCartJsonData().getCart(gv.getToken());
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -497,9 +493,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                             @Override
                             public void run() {
                                 int total = Integer.parseInt(items.get(position).getStotal()) - 1;
-                                new ShopCartJsonData().addCartProduct(token, items.get(position).getMorno(),
+                                new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
                                         total);
-                                json = new ShopCartJsonData().getCart(token);
+                                json = new ShopCartJsonData().getCart(gv.getToken());
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -512,7 +508,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                     }
                                 });
 
-
                             }
                         }).start();
                     }
@@ -520,7 +515,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     break;
             }
         }
-
 
     }
 
@@ -543,16 +537,17 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     public ArrayList<String> showMornoArray() {
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).isCheck()&&items.get(i).getMorno()!=null)
+            if (items.get(i).isCheck() && items.get(i).getMorno() != null)
                 arrayList.add(items.get(i).getMorno());
         }
         return arrayList;
     }
+
     public String showMornoString() {
-       StringBuilder stringBuilder=new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).isCheck()&&items.get(i).getMorno()!=null) {
-                if(stringBuilder.length()!=0)
+            if (items.get(i).isCheck() && items.get(i).getMorno() != null) {
+                if (stringBuilder.length() != 0)
                     stringBuilder.append(",");
                 stringBuilder.append(items.get(i).getMorno());
             }
@@ -629,7 +624,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             this.simg = simg;
         }
 
-
         /**
          * footer
          */
@@ -647,7 +641,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     break;
             }
         }
-
 
         /**
          * content
@@ -822,7 +815,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
             total_price = Integer.parseInt(stotal) * Integer.parseInt(sprice);
             return total_price;
         }
-
 
     }
 

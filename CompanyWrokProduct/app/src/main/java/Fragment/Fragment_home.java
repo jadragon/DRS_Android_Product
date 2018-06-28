@@ -71,7 +71,7 @@ public class Fragment_home extends Fragment {
     private Handler mThreadHandler;
     //宣告特約工人
     private HandlerThread mThread;
-    String token;
+    GlobalVariable gv;
 
     @Nullable
     @Override
@@ -84,8 +84,7 @@ public class Fragment_home extends Fragment {
         init();
         handler = new Handler(Looper.getMainLooper());
         mThread = new HandlerThread("name");
-        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
-        token = gv.getToken();
+        gv = (GlobalVariable) getContext().getApplicationContext();
         //讓Worker待命，等待其工作 (開啟Thread)
 
         mThread.start();
@@ -98,6 +97,7 @@ public class Fragment_home extends Fragment {
 
         return v;
     }
+
     private void initSearchToolbar() {
         //Toolbar 建立
         Toolbar toolbar = v.findViewById(R.id.include_search_toolbar);
@@ -114,6 +114,7 @@ public class Fragment_home extends Fragment {
             }
         });
     }
+
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
@@ -282,6 +283,7 @@ public class Fragment_home extends Fragment {
         myRecyclerAdapter3 = null;
 //        handler.getLooper().quit();
     }
+
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.pc_content_menu, menu);
@@ -293,7 +295,7 @@ public class Fragment_home extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            if (token != null)
+            if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
                 Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();

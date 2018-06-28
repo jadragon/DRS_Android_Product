@@ -23,15 +23,16 @@ import library.GetJsonData.LogisticsJsonData;
 
 public class ShipAddressActivity extends AppCompatActivity {
     JSONObject json1, json2;
-    String token;
     List<Fragment_shipAddress> fragmentList;
     ViewPager viewpager;
     String[] mTabtitle = {"超商地址", "一般地址"};
+    GlobalVariable gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         initToolbar();
         initRecylcerViewAndTabLayout();
     }
@@ -42,12 +43,12 @@ public class ShipAddressActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new LogisticsJsonData().getLogistics(token, 0);
-                json2 = new LogisticsJsonData().getLogistics(token, 1);
+                json1 = new LogisticsJsonData().getLogistics(gv.getToken(), 0);
+                json2 = new LogisticsJsonData().getLogistics(gv.getToken(), 1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                Fragment_shipAddress fragment_shipAddress=new Fragment_shipAddress();
+                        Fragment_shipAddress fragment_shipAddress = new Fragment_shipAddress();
                         fragment_shipAddress.setJson(json1);
                         fragment_shipAddress.setType(0);
                         fragmentList.add(fragment_shipAddress);
@@ -119,7 +120,6 @@ public class ShipAddressActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -128,8 +128,8 @@ public class ShipAddressActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    json1 = new LogisticsJsonData().getLogistics(token, 0);
-                    json2 = new LogisticsJsonData().getLogistics(token, 1);
+                    json1 = new LogisticsJsonData().getLogistics(gv.getToken(), 0);
+                    json2 = new LogisticsJsonData().getLogistics(gv.getToken(), 1);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

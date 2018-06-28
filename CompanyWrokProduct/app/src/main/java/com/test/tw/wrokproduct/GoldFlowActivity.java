@@ -21,7 +21,7 @@ public class GoldFlowActivity extends AppCompatActivity {
     String html;
     ViewGroup container;
     String success, msg;
-    String token;
+    GlobalVariable gv;
     int count_type;
 
     @Override
@@ -29,11 +29,11 @@ public class GoldFlowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goldflow);
         count_type = getIntent().getIntExtra("count_type", 0);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         new Thread(new Runnable() {
             @Override
             public void run() {
-                html = new ReCountJsonData().setGoldFlow(count_type,token);
+                html = new ReCountJsonData().setGoldFlow(count_type,gv.getToken());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

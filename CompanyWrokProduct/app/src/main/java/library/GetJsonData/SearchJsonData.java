@@ -10,7 +10,9 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class SearchJsonData {
-    private static final String search_url = "http://mall-tapi.gok1945.com/main/index/search.php";
+    private final String search_url = "http://mall-tapi.gok1945.com/main/index/search.php";
+    private final String search_click_url = "http://mall-tapi.gok1945.com/main/index/search_click.php";
+    private final String search_list_url = "http://mall-tapi.gok1945.com/main/index/search_list.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -29,4 +31,20 @@ public class SearchJsonData {
         return jsonParser.getJSONFromUrl(search_url, params);
     }
 
+    /**
+     * 1.1.6	搜尋 - Search Bar 前5個關鍵字
+     */
+    public JSONObject search_click(String keyword) {
+        params.add(new BasicNameValuePair("keyword", keyword));
+        return jsonParser.getJSONFromUrl(search_click_url, params);
+    }
+
+    /**
+     * 1.1.8	搜尋關鍵字 – 顯示商品列表
+     */
+    public JSONObject search_list(String keyword, int page) {
+        params.add(new BasicNameValuePair("keyword", keyword));
+        params.add(new BasicNameValuePair("page", page + ""));
+        return jsonParser.getJSONFromUrl(search_list_url, params);
+    }
 }

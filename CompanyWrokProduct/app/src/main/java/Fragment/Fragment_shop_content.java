@@ -53,7 +53,7 @@ public class Fragment_shop_content extends Fragment {
     library.Component.MySwipeRefreshLayout mSwipeLayout;
     EndLessOnScrollListener endLessOnScrollListener;
     String ptno;
-    String token;
+    GlobalVariable gv;
 
     public void setPtno(String ptno) {
         this.ptno = ptno;
@@ -64,10 +64,6 @@ public class Fragment_shop_content extends Fragment {
     }
 
     int banner;
-    public final static int HIDE_BANNER = 0;
-    public final static int SHOW_BANNER = 1;
-    public final static int FAVORATE = -1;
-    public final static int BROWSE = -2;
 
     public Fragment_shop_content() {
     }
@@ -84,7 +80,7 @@ public class Fragment_shop_content extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
-        token =  ((GlobalVariable) getContext().getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getContext().getApplicationContext());
         initViewPagerAndRecyclerView();
         initSwipeLayout();
         return v;
@@ -103,20 +99,20 @@ public class Fragment_shop_content extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (banner == SHOW_BANNER) {
+                        if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
                             json1 = new GetInformationByPHP().getBanner(type);
-                            json2 = new GetInformationByPHP().getIplist(type, token, 1);
-                        } else if (banner == HIDE_BANNER) {
-                            json2 = new GetInformationByPHP().getPlist(ptno, type, token, 1);
-                        } else if (banner == FAVORATE) {
-                            json2 = new GetInformationByPHP().getFavorite(token);
-                        } else if (banner == BROWSE) {
-                            json2 = new GetInformationByPHP().getBrowse(token);
+                            json2 = new GetInformationByPHP().getIplist(type, gv.getToken(), 1);
+                        } else if (banner == ShopRecyclerViewAdapter.HIDE_BANNER) {
+                            json2 = new GetInformationByPHP().getPlist(ptno, type, gv.getToken(), 1);
+                        } else if (banner == ShopRecyclerViewAdapter.FAVORATE) {
+                            json2 = new GetInformationByPHP().getFavorite(gv.getToken());
+                        } else if (banner == ShopRecyclerViewAdapter.BROWSE) {
+                            json2 = new GetInformationByPHP().getBrowse(gv.getToken());
                         }
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                if (banner == SHOW_BANNER) {
+                                if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
                                     List<String> images = new ArrayList<>();
                                     for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
                                         images.add(map.get("image"));
@@ -125,7 +121,7 @@ public class Fragment_shop_content extends Fragment {
                                 myRecyclerAdapter.setFilter(json2);
                                 mSwipeLayout.setRefreshing(false);
                                 LoadingView.hide();
-                                if (banner > FAVORATE) {
+                                if (banner > ShopRecyclerViewAdapter.FAVORATE) {
                                     nextpage = 2;
                                     endLessOnScrollListener.reset();
                                 }
@@ -143,11 +139,11 @@ public class Fragment_shop_content extends Fragment {
         viewPager = v.findViewById(R.id.adView);
         //recycleView
         dm = getResources().getDisplayMetrics();
-        int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
+
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json2, real_heigh, (int) (real_heigh + (110 * dm.density)), banner, type);
-        if (banner == SHOW_BANNER) {
+        myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json2, banner);
+        if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
             setHeaderView(myRecyclerAdapter);
         }
         recyclerView.setAdapter(myRecyclerAdapter);
@@ -200,7 +196,7 @@ public class Fragment_shop_content extends Fragment {
         });
         */
 //只刷一次
-        if (banner > FAVORATE) {
+        if (banner > ShopRecyclerViewAdapter.FAVORATE) {
             endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
                 @Override
                 public void onLoadMore(int currentPage) {
@@ -208,10 +204,10 @@ public class Fragment_shop_content extends Fragment {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (banner == SHOW_BANNER) {
-                                json2 = new GetInformationByPHP().getIplist(type, token, nextpage);
-                            } else if (banner == HIDE_BANNER) {
-                                json2 = new GetInformationByPHP().getPlist(ptno, type, token, nextpage);
+                            if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
+                                json2 = new GetInformationByPHP().getIplist(type, gv.getToken(), nextpage);
+                            } else if (banner == ShopRecyclerViewAdapter.HIDE_BANNER) {
+                                json2 = new GetInformationByPHP().getPlist(ptno, type, gv.getToken(), nextpage);
                             }
                             nextpage++;
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -267,8 +263,7 @@ public class Fragment_shop_content extends Fragment {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    int real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, real_heigh, (int) (real_heigh + (110 * dm.density)), banner);
+                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, banner);
                     recyclerView.setAdapter(myRecyclerAdapter);
                 }
             });

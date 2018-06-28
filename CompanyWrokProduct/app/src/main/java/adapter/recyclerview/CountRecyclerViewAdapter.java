@@ -49,12 +49,12 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     private List<Item> items;
     private FooterItem footerItem;
     private Item item;
-    String token;
+    GlobalVariable gv;
     String[] invoiceType;
 
     public CountRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        token = ((GlobalVariable) ctx.getApplicationContext()).getToken();
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
         if (json != null) {
@@ -358,7 +358,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
                                InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 inputMethodManager.hideSoftInputFromWindow(viewitem_count_shipways_note.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                      */
-                                new ShopCartJsonData().setStoreNote(token, items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
+                                new ShopCartJsonData().setStoreNote(gv.getToken(), items.get(position).getSno(), viewitem_count_shipways_note.getText() != null ? viewitem_count_shipways_note.getText().toString() : "");
                             }
                         }).start();
                     }

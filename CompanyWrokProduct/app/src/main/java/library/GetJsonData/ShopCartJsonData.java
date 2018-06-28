@@ -10,23 +10,23 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class ShopCartJsonData {
-    private static final String setCart_url = "http://mall-tapi.gok1945.com/main/cart/setCart.php";
-    private static final String getCart_url = "http://mall-tapi.gok1945.com/main/cart/getCart.php";
-    private static final String addCartProduct_url = "http://mall-tapi.gok1945.com/main/cart/addCartProduct.php";
-    private static final String delCartProduct_url = "http://mall-tapi.gok1945.com/main/cart/delCartProduct.php";
-    private static final String setCartDiscount_url = "http://mall-tapi.gok1945.com/main/cart/setCartDiscount.php";
-    private static final String delCartDiscount_url = "http://mall-tapi.gok1945.com/main/cart/delCartDiscount.php";
-    private static final String goCheckout_url = "http://mall-tapi.gok1945.com/main/cart/goCheckout.php";
-    private static final String getCheckout_url = "http://mall-tapi.gok1945.com/main/cart/getCheckout.php";
-    private static final String setStoreNote_url = "http://mall-tapi.gok1945.com/main/cart/setStoreNote.php";
-    private static final String getStoreLogistics_url = "http://mall-tapi.gok1945.com/main/cart/getStoreLogistics.php";
-    private static final String setStoreMemberLogistics_url = "http://mall-tapi.gok1945.com/main/cart/setStoreMemberLogistics.php";
-    private static final String setMemberLogistics_url = "http://mall-tapi.gok1945.com/main/cart/setMemberLogistics.php";
+    private  final String setCart_url = "http://mall-tapi.gok1945.com/main/cart/setCart.php";
+    private  final String getCart_url = "http://mall-tapi.gok1945.com/main/cart/getCart.php";
+    private  final String addCartProduct_url = "http://mall-tapi.gok1945.com/main/cart/addCartProduct.php";
+    private  final String delCartProduct_url = "http://mall-tapi.gok1945.com/main/cart/delCartProduct.php";
+    private  final String setCartDiscount_url = "http://mall-tapi.gok1945.com/main/cart/setCartDiscount.php";
+    private  final String delCartDiscount_url = "http://mall-tapi.gok1945.com/main/cart/delCartDiscount.php";
+    private  final String goCheckout_url = "http://mall-tapi.gok1945.com/main/cart/goCheckout.php";
+    private  final String getCheckout_url = "http://mall-tapi.gok1945.com/main/cart/getCheckout.php";
+    private  final String setStoreNote_url = "http://mall-tapi.gok1945.com/main/cart/setStoreNote.php";
+    private  final String getStoreLogistics_url = "http://mall-tapi.gok1945.com/main/cart/getStoreLogistics.php";
+    private  final String setStoreMemberLogistics_url = "http://mall-tapi.gok1945.com/main/cart/setStoreMemberLogistics.php";
+    private  final String setMemberLogistics_url = "http://mall-tapi.gok1945.com/main/cart/setMemberLogistics.php";
 
-    private static final String getMemberPayments_url = "http://mall-tapi.gok1945.com/main/cart/getMemberPayment.php";
-    private static final String setMemberPayment_url = "http://mall-tapi.gok1945.com/main/cart/setMemberPayment.php";
-    private static final String setVat_url = "http://mall-tapi.gok1945.com/main/cart/setVat.php";
-    private static final String setGoldFlow_url = "http://mall-tapi.gok1945.com/main/cart/setGoldFlow.php";
+    private  final String getMemberPayments_url = "http://mall-tapi.gok1945.com/main/cart/getMemberPayment.php";
+    private  final String setMemberPayment_url = "http://mall-tapi.gok1945.com/main/cart/setMemberPayment.php";
+    private  final String setVat_url = "http://mall-tapi.gok1945.com/main/cart/setVat.php";
+    private  final String setGoldFlow_url = "http://mall-tapi.gok1945.com/main/cart/setGoldFlow.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 

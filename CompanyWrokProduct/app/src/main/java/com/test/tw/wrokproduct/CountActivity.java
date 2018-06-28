@@ -25,7 +25,7 @@ public class CountActivity extends AppCompatActivity {
     ReCountRecyclerViewAdapter countRecyclerViewAdapter;
     Toolbar toolbar;
     TextView toolbar_title;
-    String token;
+    GlobalVariable gv;
     Button count_gotobuy;
     int count_type;
     ToastMessageDialog toastMessageDialog;
@@ -34,7 +34,7 @@ public class CountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         count_type = getIntent().getIntExtra("count_type", 0);
 
         initToolbar();
@@ -52,7 +52,7 @@ public class CountActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ReCountJsonData().setVat(count_type, token, countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
+                        new ReCountJsonData().setVat(count_type, gv.getToken(), countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -72,7 +72,7 @@ public class CountActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ReCountJsonData().getCheckout(count_type, token);
+                json = new ReCountJsonData().getCheckout(count_type, gv.getToken());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -124,14 +124,13 @@ public class CountActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onRestart() {
         super.onRestart();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ReCountJsonData().getCheckout(count_type, token);
+                json = new ReCountJsonData().getCheckout(count_type, gv.getToken());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

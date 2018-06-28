@@ -44,7 +44,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     private List<HeaderPojo> datas;
     String[] lanes = {"無", "本島", "離島", "海外"};
     TypedArray colors;
-    String token;
+   GlobalVariable gv;
     String sno, plno, mino, sname;
     int count_type;
 
@@ -54,7 +54,7 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
         this.json = json;
         this.count_type = count_type;
         colors = ctx.getResources().obtainTypedArray(R.array.shipway_color);
-        token =( (GlobalVariable) ctx.getApplicationContext()).getToken();
+        gv =( (GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
             if (AnalyzeShopCart.getStoreLogisticsData(json) != null) {
                 title_list = AnalyzeShopCart.getStoreLogisticsData(json);
@@ -236,8 +236,8 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ReCountJsonData().setStoreMemberLogistics(count_type,token, sno, plno, mino);
-                        json = new ReCountJsonData().getStoreLogistics(count_type,token, sno);
+                        new ReCountJsonData().setStoreMemberLogistics(count_type,gv.getToken(), sno, plno, mino);
+                        json = new ReCountJsonData().getStoreLogistics(count_type,gv.getToken(), sno);
                     }
                 }).start();
                 break;
@@ -277,8 +277,8 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new ReCountJsonData().setStoreMemberLogistics(count_type,token, sno, plno, mino);
-                            json = new ReCountJsonData().getStoreLogistics(count_type,token, sno);
+                            new ReCountJsonData().setStoreMemberLogistics(count_type,gv.getToken(), sno, plno, mino);
+                            json = new ReCountJsonData().getStoreLogistics(count_type,gv.getToken(), sno);
                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {

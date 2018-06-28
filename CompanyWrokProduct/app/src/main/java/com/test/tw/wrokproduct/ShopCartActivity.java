@@ -28,10 +28,10 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     JSONObject json;
     RecyclerView recyclerView;
     ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
-    Toolbar toolbar;
     TextView toolbar_title;
     TextView shop_cart_needpay, shopcart_txt_discount;
-    String token, moprno;
+    String moprno;
+    GlobalVariable gv;
     Button shopcart_btn_coupon, shopcart_btn_continue, shopcart_gotobuy;
     EditText shopcart_edit_coupon;
     int total, discount;
@@ -40,7 +40,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopcart);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         initToolbar();
         initRecycleView();
     }
@@ -49,13 +49,13 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getCart(token);
+                json = new ShopCartJsonData().getCart(gv.getToken());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView = findViewById(R.id.shop_cart_review);
 
-                        shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, json, token);
+                        shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, json);
                         shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
                             @Override
                             public void ItemClicked(int count) {
@@ -105,7 +105,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
 
     private void initToolbar() {
         //Toolbar 建立
-        toolbar = findViewById(R.id.include_toolbar);
+        Toolbar toolbar = findViewById(R.id.include_toolbar);
         toolbar_title = findViewById(R.id.include_toolbar_title);
         toolbar_title.setText("購物車");
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
@@ -130,7 +130,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void run() {
                             //shopcart_edit_coupon.getText().toString()
-                            final Map<String, String> datas = ResolveJsonData.getCartDiscount(new ShopCartJsonData().setCartDiscount(token, shopcart_edit_coupon.getText().toString()));
+                            final Map<String, String> datas = ResolveJsonData.getCartDiscount(new ShopCartJsonData().setCartDiscount(gv.getToken(), shopcart_edit_coupon.getText().toString()));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -149,7 +149,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final boolean success = ResolveJsonData.checkSuccess(new ShopCartJsonData().delCartDiscount(token, moprno));
+                            final boolean success = ResolveJsonData.checkSuccess(new ShopCartJsonData().delCartDiscount(gv.getToken(), moprno));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -173,7 +173,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         try {
-                            boolean success = new ReCountJsonData().goCheckout(ReCountJsonData.COUNT, token, shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
+                            boolean success = new ReCountJsonData().goCheckout(ReCountJsonData.COUNT, gv.getToken(), shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
                             if (success) {
                                 Intent intent = new Intent(ShopCartActivity.this, CountActivity.class);
                                 intent.putExtra("count_type", ReCountJsonData.COUNT);
@@ -195,7 +195,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getCart(token);
+                json = new ShopCartJsonData().getCart(gv.getToken());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

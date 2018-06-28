@@ -23,15 +23,15 @@ import library.GetJsonData.ContactJsonData;
 
 public class WriteMailActivity extends AppCompatActivity {
     Toolbar toolbar;
-    String token;
     EditText write_mail_title, write_mail_note;
     ImageView write_mail_photo1, write_mail_photo2, write_mail_photo3, write_mail_photo4, write_mail_photo5, write_mail_photo6;
+    GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_mail);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         initToolbar();
         write_mail_title = findViewById(R.id.write_mail_title);
         write_mail_note = findViewById(R.id.write_mail_note);
@@ -112,7 +112,7 @@ public class WriteMailActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    final JSONObject jsonObject = new ContactJsonData().setContact(token, write_mail_title.getText().toString(), write_mail_note.getText().toString());
+                    final JSONObject jsonObject = new ContactJsonData().setContact(gv.getToken(), write_mail_title.getText().toString(), write_mail_note.getText().toString());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

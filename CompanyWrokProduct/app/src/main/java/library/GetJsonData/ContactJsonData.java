@@ -10,11 +10,11 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class ContactJsonData {
-    private static final String getContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/getContact.php";
-    private static final String getContactCont_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/getContactCont.php";
-    private static final String setContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/setContact.php";
-    private static final String delContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/delContact.php";
-    private static final String setContactCont_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/setContactCont.php";
+    private  final String getContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/getContact.php";
+    private  final String getContactCont_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/getContactCont.php";
+    private final String setContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/setContact.php";
+    private  final String delContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/delContact.php";
+    private final String setContactCont_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/setContactCont.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
