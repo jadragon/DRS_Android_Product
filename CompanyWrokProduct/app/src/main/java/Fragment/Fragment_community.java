@@ -64,7 +64,7 @@ public class Fragment_community extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_community, container, false);
-        initToolbar(v);
+        initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
@@ -193,13 +193,13 @@ public class Fragment_community extends Fragment {
     }
 
 
-    private void initToolbar(View view) {
+    private void initToolbar() {
         //Toolbar 建立
         toolbar = v.findViewById(R.id.include_toolbar);
         ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
-        ((TextView) view.findViewById(R.id.include_toolbar_title)).setText("會員中心");
+        ((TextView) v.findViewById(R.id.include_toolbar_title)).setText("會員中心");
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

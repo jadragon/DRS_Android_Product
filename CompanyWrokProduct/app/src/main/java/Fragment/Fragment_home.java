@@ -11,11 +11,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,6 +31,7 @@ import android.widget.Toast;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.SearchBarActivity;
 import com.test.tw.wrokproduct.ShopCartActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -60,24 +66,26 @@ public class Fragment_home extends Fragment {
     Handler handler;
     View v;
     Banner header;
-    ImageView home_shopcart;
     int what = 0;
     //宣告特約工人的經紀人
     private Handler mThreadHandler;
     //宣告特約工人
     private HandlerThread mThread;
-String token;
+    String token;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_home_layout, container, false);
+        initSearchToolbar();
         //取得ID
         getID(v);
         //起始方法
         init();
         handler = new Handler(Looper.getMainLooper());
         mThread = new HandlerThread("name");
-
+        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        token = gv.getToken();
         //讓Worker待命，等待其工作 (開啟Thread)
 
         mThread.start();
@@ -85,24 +93,27 @@ String token;
         //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
 
         mThreadHandler = new Handler(mThread.getLooper());
-        home_shopcart = v.findViewById(R.id.home_shopcart);
-        home_shopcart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
-
-                if(gv.getToken()!=null)
-                startActivity(new Intent(getContext(), ShopCartActivity.class));
-                else
-                    Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
-            }
-        });
         initSwipeLayout();
         initViewPagerAndRecyclerView();
 
         return v;
     }
-
+    private void initSearchToolbar() {
+        //Toolbar 建立
+        Toolbar toolbar = v.findViewById(R.id.include_search_toolbar);
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setHasOptionsMenu(true);
+        v.findViewById(R.id.include_search_toolbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SearchBarActivity.class);
+                intent.addFlags(intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                // getActivity().overridePendingTransition(0, 0);
+            }
+        });
+    }
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
@@ -111,7 +122,7 @@ String token;
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-        LoadingView.show(v);
+                LoadingView.show(v);
                 what = 1;
                 mThreadHandler.post(r1);
             }
@@ -246,7 +257,7 @@ String token;
             myRecyclerAdapter2.setFilter(ResolveJsonData.getJSONData(json2));
             myRecyclerAdapter3.setFilter(ResolveJsonData.getJSONData(json3));
             mSwipeLayout.setRefreshing(false);// 結束更新動畫
-         LoadingView.hide();
+            LoadingView.hide();
         }
     };
 
@@ -271,5 +282,24 @@ String token;
         myRecyclerAdapter3 = null;
 //        handler.getLooper().quit();
     }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.pc_content_menu, menu);
+        menu.getItem(1).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //會員區
+        if (item.getItemId() == R.id.pccontent_menu_shopcart) {
+            if (token != null)
+                startActivity(new Intent(getContext(), ShopCartActivity.class));
+            else
+                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return false;
+    }
 }

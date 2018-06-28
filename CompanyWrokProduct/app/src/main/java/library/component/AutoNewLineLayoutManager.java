@@ -19,6 +19,7 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
     private SparseBooleanArray hasAttachedItems = new SparseBooleanArray();
     private DisplayMetrics dm;
     private int divider;
+    private int aloneType[] = {};
 
     public AutoNewLineLayoutManager(Context context) {
         this.context = context;
@@ -50,11 +51,16 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
         int offsetX = getPaddingLeft();
         int offsetY = getPaddingTop();
         totalHeight = getPaddingTop();
+
+        //上一位同學的高
+        int preheigh = 0;
+
+//迴圈TAG
+        aaa:
         for (int i = 0; i < getItemCount(); i++) {
 
             //这里就是从缓存里面取出
             View view = recycler.getViewForPosition(i);
-
             measureChildWithMargins(view, 0, 0);
             int width = getDecoratedMeasuredWidth(view);
             int height = getDecoratedMeasuredHeight(view);
@@ -62,20 +68,39 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
             if (frame == null) {
                 frame = new Rect();
             }
-            if (offsetX + width + getPaddingRight() < dm.widthPixels) {
+            //獨立出設定好的viewType
+
+            for (int viewtype : aloneType) {
+                if (getItemViewType(view) == viewtype) {
+                    offsetX = getPaddingLeft();
+                    if (i != 0) {
+                        offsetY += (preheigh + divider);
+                        totalHeight += (preheigh + divider);
+                    }
+                    frame.set(offsetX, offsetY, offsetX + width, offsetY + height);
+                    offsetY += (height + divider);
+                    totalHeight += (height + divider);
+                    allItemFrames.put(i, frame);
+                    hasAttachedItems.put(i, false);
+                    preheigh = height;
+                    continue aaa;
+                }
+            }
+            if (offsetX + width + getPaddingRight() <= dm.widthPixels) {
                 frame.set(offsetX, offsetY, offsetX + width, offsetY + height);
             } else {
                 offsetX = getPaddingLeft();
-                offsetY += (height + divider);
-                totalHeight += height;
+                offsetY += (preheigh + divider);
+                totalHeight += (preheigh + divider);
                 frame.set(offsetX, offsetY, offsetX + width, offsetY + height);
             }
-            offsetX += (width+divider);
+            offsetX += (width + divider);
             // 将当前的Item的Rect边界数据保存
             allItemFrames.put(i, frame);
             // 由于已经调用了detachAndScrapAttachedViews，因此需要将当前的Item设置为未出现过
             hasAttachedItems.put(i, false);
             //将竖直方向偏移量增大height
+            preheigh = height;
 
 
         }
@@ -85,6 +110,10 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
         totalHeight = Math.max(totalHeight, getVerticalSpace());
         recycleAndFillItems(recycler, state);
 
+    }
+
+    public void setAloneViewType(int... viewType) {
+        this.aloneType = viewType;
     }
 
     /**

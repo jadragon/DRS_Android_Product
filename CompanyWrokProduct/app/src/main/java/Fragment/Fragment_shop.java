@@ -1,6 +1,6 @@
 package Fragment;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,13 +8,20 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.SearchBarActivity;
+import com.test.tw.wrokproduct.ShopCartActivity;
 
 import java.util.ArrayList;
 
@@ -34,6 +41,7 @@ public class Fragment_shop extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_layout, container, false);
         GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        initSearchToolbar();
         token = gv.getToken();
         tabLayout = v.findViewById(R.id.shop_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
@@ -72,23 +80,21 @@ public class Fragment_shop extends Fragment {
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("onResume", "onResume");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        Log.e("onAttach", "onAttach");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e("onStart", "onStart");
+    private void initSearchToolbar() {
+        //Toolbar 建立
+        Toolbar toolbar = v.findViewById(R.id.include_search_toolbar);
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setHasOptionsMenu(true);
+        v.findViewById(R.id.include_search_toolbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SearchBarActivity.class);
+                intent.addFlags(intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+               // getActivity().overridePendingTransition(0, 0);
+            }
+        });
     }
 
     @Override
@@ -101,5 +107,26 @@ public class Fragment_shop extends Fragment {
             //  setFilter();
             //网络数据刷新
         }
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.pc_content_menu, menu);
+        menu.getItem(1).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //會員區
+        if (item.getItemId() == R.id.pccontent_menu_shopcart) {
+            if (token != null)
+                startActivity(new Intent(getContext(), ShopCartActivity.class));
+            else
+                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return false;
     }
 }

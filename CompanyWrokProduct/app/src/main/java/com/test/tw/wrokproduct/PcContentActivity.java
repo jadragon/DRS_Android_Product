@@ -116,11 +116,11 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_txt_descs.setText(productInfoPojo.getDescs());
         //售價
         pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
-        pccontent_txt_rsprice.setText(productInfoPojo.getRsprice());
+        pccontent_txt_rsprice.setText("$"+productInfoPojo.getRsprice());
         //牌價
         pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
         pccontent_txt_rprice.setPaintFlags(pccontent_txt_rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        pccontent_txt_rprice.setText(productInfoPojo.getRprice());
+        pccontent_txt_rprice.setText("$"+productInfoPojo.getRprice());
 
         if (productInfoPojo.getRsprice().equals(productInfoPojo.getRprice()))
             pccontent_txt_rprice.setVisibility(View.INVISIBLE);
