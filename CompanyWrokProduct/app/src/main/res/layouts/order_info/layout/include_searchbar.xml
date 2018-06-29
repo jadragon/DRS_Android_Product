@@ -12,7 +12,7 @@
         android:background="@color/default_gray"
         android:orientation="vertical"
         android:paddingRight="10dp">
-        <library.component.TextImageView
+        <library.Component.TextImageView
             android:id="@+id/include_search_textview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -46,7 +46,7 @@ import java.util.List;
 
 import library.AppManager;
 import library.GetJsonData.MemberJsonData;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;

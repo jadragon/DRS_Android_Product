@@ -13,13 +13,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
-
-import library.AnalyzeJSON.AnalyzeMember;
 import library.AppManager;
 import library.GetJsonData.MemberJsonData;
-import library.SQLiteDatabaseHandler;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class RegisterDetailActivity extends AppCompatActivity {
     Toolbar toolbar;

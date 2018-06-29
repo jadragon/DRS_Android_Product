@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 import adapter.recyclerview.ReCountRecyclerViewAdapter;
 import library.GetJsonData.ReCountJsonData;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CountActivity extends AppCompatActivity {

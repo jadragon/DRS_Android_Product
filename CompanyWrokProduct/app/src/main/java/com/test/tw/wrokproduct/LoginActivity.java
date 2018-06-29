@@ -49,7 +49,7 @@ import java.util.Map;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;

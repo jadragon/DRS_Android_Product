@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,14 @@ import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.R;
 
+import library.Component.CustomerWebView;
+
 public class Fragment_WebView extends Fragment {
-    private WebView luntanListview;
+    private CustomerWebView webView;
     String html;
     private View v;
     ViewGroup container;
-    int webviewHeigh;
+
     Fragment_WebView.OnHeighChangerListener onHeighChangerListener;
 
     public Fragment_WebView() {
@@ -37,9 +38,6 @@ public class Fragment_WebView extends Fragment {
         this.onHeighChangerListener = onHeighChangerListener;
     }
 
-    public int getWebviewHeigh() {
-        return webviewHeigh;
-    }
 
     @SuppressLint("ValidFragment")
     public Fragment_WebView(String html) {
@@ -54,29 +52,44 @@ public class Fragment_WebView extends Fragment {
     }
 
     private void showWebView() {
-        Log.e("html", html);
-        luntanListview = v.findViewById(R.id.pccontent_webview);
+        webView = v.findViewById(R.id.pccontent_webview);
+        webView.setOnScrollChangeListener(new CustomerWebView.OnScrollChangeListener() {
+            @Override
+            public void onPageEnd(int l, int t, int oldl, int oldt) {
+            }
+
+            @Override
+            public void onPageTop(int l, int t, int oldl, int oldt) {
+                webView.getParent().getParent().getParent().getParent().getParent().requestDisallowInterceptTouchEvent(false);
+            //    webView.getParent().getParent().requestDisallowInterceptTouchEvent(false);
+            }
+
+            @Override
+            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+           //     webView.getParent().getParent().requestDisallowInterceptTouchEvent(true);
+            }
+        });
         // 设置WevView要显示的网页
-        luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8",
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8",
                 null);
-        luntanListview.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
+        webView.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
         // 设置可以支持缩放
-        luntanListview.getSettings().setSupportZoom(true);
+        webView.getSettings().setSupportZoom(true);
         // 设置出现缩放工具
-        luntanListview.getSettings().setBuiltInZoomControls(true);
+          webView.getSettings().setBuiltInZoomControls(true);
         //设置可在大视野范围内上下左右拖动，并且可以任意比例缩放
-        luntanListview.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setUseWideViewPort(true);
         //设置默认加载的可视范围是大视野范围
-        luntanListview.getSettings().setLoadWithOverviewMode(true);
+        // webView.getSettings().setLoadWithOverviewMode(true);
         //自适应屏幕
-        luntanListview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        luntanListview.setVerticalScrollBarEnabled(false);
-        luntanListview.setVerticalScrollbarOverlay(false);
-        luntanListview.setHorizontalScrollBarEnabled(false);
-        luntanListview.setHorizontalScrollbarOverlay(false);
-        //                luntanListview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);   //取消滚动条
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setVerticalScrollbarOverlay(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setHorizontalScrollbarOverlay(false);
+        //                webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);   //取消滚动条
         //                点击链接由自己处理，而不是新开Android的系统browser响应该链接。
-        luntanListview.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 //设置点击网页里面的链接还是在当前的webview里跳转
@@ -87,10 +100,10 @@ public class Fragment_WebView extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                luntanListview.loadUrl("javascript:App.resize(document.body.getBoundingClientRect().height)");
+                     webView.loadUrl("javascript:App.resize(document.body.getBoundingClientRect().height)");
             }
         });
-        //        luntanListview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        //        webView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
         //            @Override
         //            public void onFocusChange(View v, boolean hasFocus) {
         //                if (hasFocus) {
@@ -99,7 +112,7 @@ public class Fragment_WebView extends Fragment {
         //                        Field defaultScale = WebView.class
         //                                .getDeclaredField("mDefaultScale");
         //                        defaultScale.setAccessible(true);
-        //                        defaultScale.setFloat(luntanListview, 1.0f);
+        //                        defaultScale.setFloat(webView, 1.0f);
         //                    } catch (SecurityException e) {
         //                        e.printStackTrace();
         //                    } catch (IllegalArgumentException e) {
@@ -113,7 +126,7 @@ public class Fragment_WebView extends Fragment {
         //            }
         //        });
 
-        //  luntanListview.addJavascriptInterface(this, "App");
+          webView.addJavascriptInterface(this, "App");
     }
 
     public void clearWebViewResource(ViewGroup container, WebView webView) {
@@ -129,24 +142,28 @@ public class Fragment_WebView extends Fragment {
         }
     }
 
-    /*
+
         @JavascriptInterface
         public void resize(final float height) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
-                    luntanListview.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
-                    webviewHeigh = (int) (height);
-                    if (onHeighChangerListener != null)
-                        onHeighChangerListener.valueChanged(webviewHeigh);
+                    try {
+                        webView.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+                        int webviewHeigh = (int) (height);
+                        if (onHeighChangerListener != null)
+                            onHeighChangerListener.valueChanged(webviewHeigh);
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
-    */
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        clearWebViewResource(container, luntanListview);
+        clearWebViewResource(container, webView);
     }
 }

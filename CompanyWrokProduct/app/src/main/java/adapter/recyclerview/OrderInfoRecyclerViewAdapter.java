@@ -41,7 +41,7 @@ import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.ReCountJsonData;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_HEADER = 0;

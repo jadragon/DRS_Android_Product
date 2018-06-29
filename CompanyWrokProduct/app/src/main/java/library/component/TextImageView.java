@@ -1,4 +1,4 @@
-package library.component;
+package library.Component;
 
 import android.content.Context;
 import android.content.res.TypedArray;

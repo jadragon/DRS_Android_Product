@@ -2,6 +2,7 @@ package com.test.tw.wrokproduct.我的帳戶.訂單管理.收貨地址;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -39,6 +40,8 @@ public class ShipAddressActivity extends AppCompatActivity {
 
     private void initRecylcerViewAndTabLayout() {
         viewpager = findViewById(R.id.contact_viewpager);
+        TabLayout tabLayout=findViewById(R.id.contact_tablayout);
+        tabLayout.setElevation(20);
         fragmentList = new ArrayList<>();
         new Thread(new Runnable() {
             @Override

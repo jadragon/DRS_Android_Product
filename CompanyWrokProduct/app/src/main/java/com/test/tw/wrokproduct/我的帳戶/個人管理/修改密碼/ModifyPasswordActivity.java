@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class ModifyPasswordActivity extends AppCompatActivity {
     Toolbar toolbar;

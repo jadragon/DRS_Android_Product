@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import library.GetJsonData.MemberJsonData;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class ForgetPassActivity extends AppCompatActivity {
     Toolbar toolbar;

@@ -28,12 +28,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import Fragment.Fragment_shop_content;
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.GetInformationByPHP;
 import library.ItemTouchListencer;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> implements ItemTouchListencer {

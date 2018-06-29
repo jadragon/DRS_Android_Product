@@ -1,4 +1,4 @@
-package library.component;
+package library.Component;
 
 import android.app.Dialog;
 import android.content.Context;

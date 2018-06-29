@@ -49,7 +49,7 @@ import java.util.List;
 
 import library.GetJsonData.UploadFileJsonData;
 import library.SQLiteDatabaseHandler;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;

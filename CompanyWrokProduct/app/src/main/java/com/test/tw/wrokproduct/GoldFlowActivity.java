@@ -8,11 +8,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import library.GetJsonData.GetWebView;
 import library.GetJsonData.ReCountJsonData;
 
 public class GoldFlowActivity extends AppCompatActivity {
@@ -126,6 +126,11 @@ public class GoldFlowActivity extends AppCompatActivity {
             webView.clearHistory();
             webView.destroy();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "請先完成交易後,再執行此動作", Toast.LENGTH_SHORT).show();
     }
 
     @Override

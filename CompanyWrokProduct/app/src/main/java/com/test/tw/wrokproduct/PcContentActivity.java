@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,17 +33,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
+import Util.StringUtil;
 import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.AppManager;
+import library.Component.AutoNewLineLayoutManager;
 import library.Component.MyViewPager;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.ShopCartJsonData;
-import library.component.AutoNewLineLayoutManager;
-import library.component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
 public class PcContentActivity extends AppCompatActivity {
@@ -71,7 +73,9 @@ public class PcContentActivity extends AppCompatActivity {
     private String pino;
     private String Message;
     private ToastMessageDialog toastMessageDialog;
-GlobalVariable gv;
+    GlobalVariable gv;
+    private ScrollView scrollview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +88,7 @@ GlobalVariable gv;
         toastMessageDialog = new ToastMessageDialog(this);
         AppManager.getAppManager().addActivity(this);
         initToolbar();
+        initSrcrollView();
         setText();
         initHome();
         initFavorate();
@@ -107,6 +112,18 @@ GlobalVariable gv;
         }).start();
     }
 
+    private void initSrcrollView() {
+        scrollview = findViewById(R.id.scrollview);
+        scrollview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                if (scrollview.getScrollY() + scrollview.getHeight() - scrollview.getPaddingTop() -
+                        scrollview.getPaddingBottom() == scrollview.getChildAt(0).getHeight()) {
+                }
+            }
+        });
+    }
+
     //設定價錢
     public void setText() {
         //描述
@@ -114,11 +131,11 @@ GlobalVariable gv;
         pccontent_txt_descs.setText(productInfoPojo.getDescs());
         //售價
         pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
-        pccontent_txt_rsprice.setText("$"+productInfoPojo.getRsprice());
+        pccontent_txt_rsprice.setText("$" + productInfoPojo.getRsprice());
         //牌價
         pccontent_txt_rprice = findViewById(R.id.pccontent_txt_rprice);
         pccontent_txt_rprice.setPaintFlags(pccontent_txt_rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        pccontent_txt_rprice.setText("$"+productInfoPojo.getRprice());
+        pccontent_txt_rprice.setText("$" + productInfoPojo.getRprice());
 
         if (productInfoPojo.getRsprice().equals(productInfoPojo.getRprice()))
             pccontent_txt_rprice.setVisibility(View.INVISIBLE);
@@ -189,7 +206,7 @@ GlobalVariable gv;
                         recylcerAdapter.setItemSelectListener(new AddCartRecyclerViewAdapter.ItemSelectListener() {
                             @Override
                             public void ItemSelected(View view, int postion, ArrayList<Map<String, String>> list) {
-                                ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + list.get(postion).get("sprice"));
+                                ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + StringUtil.getDeciamlString(list.get(postion).get("sprice")));
                                 try {
                                     max = Integer.parseInt(list.get(postion).get("total"));
                                     count = 1;

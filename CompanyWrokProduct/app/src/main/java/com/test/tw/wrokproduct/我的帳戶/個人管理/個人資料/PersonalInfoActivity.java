@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
-import library.component.ToastMessageDialog;
+import library.Component.ToastMessageDialog;
 
 public class PersonalInfoActivity extends AppCompatActivity {
     Toolbar toolbar;

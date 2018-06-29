@@ -7,7 +7,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.View;
 
 import org.json.JSONObject;
@@ -15,7 +14,7 @@ import org.json.JSONObject;
 import adapter.recyclerview.ChangeTextRecyclerViewAdapter;
 import adapter.recyclerview.KeyWordRecyclerViewAdapter;
 import library.GetJsonData.SearchJsonData;
-import library.component.AutoNewLineLayoutManager;
+import library.Component.AutoNewLineLayoutManager;
 
 public class SearchBarActivity extends AppCompatActivity {
     RecyclerView search_bar_recyclerview;
