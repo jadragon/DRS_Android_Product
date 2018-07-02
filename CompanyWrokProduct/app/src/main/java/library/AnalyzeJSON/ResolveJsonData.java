@@ -122,11 +122,19 @@ public class ResolveJsonData {
         try {
             if (json.getBoolean("Success")) {
                 JSONObject json_obj = json.getJSONArray("Data").getJSONObject(0);
+                maps.put("pno", json_obj.getString("pno"));
+                maps.put("content", json_obj.getString("content"));
                 maps.put("img", json_obj.getString("img"));
                 maps.put("pname", json_obj.getString("pname"));
                 maps.put("descs", json_obj.getString("descs"));
                 maps.put("rprice", json_obj.getString("rprice"));
                 maps.put("rsprice", json_obj.getString("rsprice"));
+                maps.put("score", json_obj.getString("score"));
+                maps.put("isnew", json_obj.getString("isnew"));
+                maps.put("ishot", json_obj.getString("ishot"));
+                maps.put("istime", json_obj.getString("istime"));
+                maps.put("favorite", json_obj.getString("favorite"));
+                maps.put("rpolicy", json_obj.getString("rpolicy"));
                 return maps;
             }
 

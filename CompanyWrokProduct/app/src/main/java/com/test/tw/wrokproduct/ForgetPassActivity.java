@@ -12,8 +12,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import library.GetJsonData.MemberJsonData;
 import library.Component.ToastMessageDialog;
+import library.GetJsonData.MemberJsonData;
 
 public class ForgetPassActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -43,24 +43,55 @@ public class ForgetPassActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            json = new MemberJsonData().gvcode(0, "+886", forget_edit_account.getText().toString());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        boolean success = json.getBoolean("Success");
-                                        if (success) {
-                                            vcode = json.getString("Data");
-                                            forget_edit_account.setFocusable(false);
+                            if (forget_edit_account.getText().toString().matches("09[0-9]{8}")) {
+                                json = new MemberJsonData().gvcode(1, "886", forget_edit_account.getText().toString());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            boolean success = json.getBoolean("Success");
+                                            if (success) {
+                                                vcode = json.getString("Data");
+                                                forget_edit_account.setFocusable(false);
+                                            }
+                                            toastMessage.setMessageText(json.getString("Message"));
+                                            toastMessage.confirm();
+                                            Log.e("success", success + "" + json.getString("Message"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-                                        toastMessage.setMessageText(json.getString("Message"));
-                                        toastMessage.confirm();
-                                        Log.e("success", success + "" + json.getString("Message"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
-                                }
-                            });
+                                });
+                            } else if (forget_edit_account.getText().toString().matches("[\\w-.]+@[\\w-]+(.[\\w_-]+)+")) {
+                                json = new MemberJsonData().gvcode(2, "886", forget_edit_account.getText().toString());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            boolean success = json.getBoolean("Success");
+                                            if (success) {
+                                                vcode = json.getString("Data");
+                                                forget_edit_account.setFocusable(false);
+                                            }
+                                            toastMessage.setMessageText(json.getString("Message"));
+                                            toastMessage.confirm();
+                                            Log.e("success", success + "" + json.getString("Message"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        toastMessage.setMessageText("請輸入正確的Email或手機");
+                                        toastMessage.confirm();
+                                    }
+                                });
+
+                            }
+
                         }
                     }).start();
                 } else {
@@ -78,7 +109,7 @@ public class ForgetPassActivity extends AppCompatActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                json = new MemberJsonData().forget(1, "+886", forget_edit_account.getText().toString());
+                                json = new MemberJsonData().forget(1, "886", forget_edit_account.getText().toString());
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

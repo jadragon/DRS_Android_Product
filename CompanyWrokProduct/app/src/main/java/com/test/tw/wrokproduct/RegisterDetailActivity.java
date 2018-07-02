@@ -73,16 +73,16 @@ public class RegisterDetailActivity extends AppCompatActivity {
                             public void run() {
                                 switch (type) {
                                     case 1:
-                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
                                         break;
                                     case 2:
-                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", account, vcode, "", 0, "");
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
                                         break;
                                     case 3:
-                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
                                         break;
                                     case 4:
-                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "+886", id, vcode, name, gender, photo);
+                                        jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
                                         break;
                                 }
                                 runOnUiThread(new Runnable() {

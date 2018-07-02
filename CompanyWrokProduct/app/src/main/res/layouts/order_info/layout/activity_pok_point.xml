@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".帳務管理.波克點值and庫瓦點值and雙閃幣.PointActivity"
+    android:orientation="vertical">
+    <include
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/wheat"
+    android:padding="20dp">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:text="剩餘:"
+        android:gravity="center_vertical"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/activity_pok_point"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:textSize="30sp" />
+</LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/point_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/point_tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            app:tabIndicatorHeight="3dp" />
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

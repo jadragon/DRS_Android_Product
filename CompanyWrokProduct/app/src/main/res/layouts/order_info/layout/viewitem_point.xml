@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/viewitem_point_btitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="2"
+            android:background="@color/red"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="待審核"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/viewitem_point_cdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:background="@color/darkcyan"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="2018-10-20"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:id="@+id/viewitem_point_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="庫瓦:波克"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/viewitem_point_rate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_weight="5"
+                android:gravity="right|center_vertical"
+                android:text="1:1"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="1sp"
+            android:layout_marginRight="1sp"
+            android:background="@color/gainsboro" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="收支"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/viewitem_point_iemoney"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_weight="5"
+                android:gravity="right|center_vertical"
+                android:text="1:1"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="1sp"
+            android:layout_marginRight="1sp"
+            android:background="@color/gainsboro" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="變動前"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/viewitem_point_bmoney"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_weight="5"
+                android:gravity="right|center_vertical"
+                android:text="1:1"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="1sp"
+            android:layout_marginRight="1sp"
+            android:background="@color/gainsboro" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="變動後"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/viewitem_point_amoney"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_weight="5"
+                android:gravity="right|center_vertical"
+                android:text="1:1"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

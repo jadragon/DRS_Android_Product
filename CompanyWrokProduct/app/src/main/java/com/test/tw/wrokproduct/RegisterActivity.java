@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,8 +46,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import library.AppManager;
-import library.GetJsonData.MemberJsonData;
 import library.Component.ToastMessageDialog;
+import library.GetJsonData.MemberJsonData;
+import library.LoadingView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
@@ -55,13 +57,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     ImageView register_img_mobile, register_img_email, register_img_fb, register_img_google;
     int type = 1;
     String vcode;
-ToastMessageDialog toastMessage;
+    ToastMessageDialog toastMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        LoadingView.setContext(RegisterActivity.this);
+        LoadingView.setMessage("認證碼寄送中...");
         AppManager.getAppManager().addActivity(this);
-        toastMessage=new ToastMessageDialog(this);
+        toastMessage = new ToastMessageDialog(this);
         initButton();
         initImage();
         initEditText();
@@ -127,20 +132,24 @@ ToastMessageDialog toastMessage;
                 break;
             case R.id.register_btn_gvcode:
                 if (!register_edit_account.getText().toString().equals("")) {
+                    //收鍵盤
+                    ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(RegisterActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    LoadingView.show(view);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final JSONObject jsonObject = new MemberJsonData().gvcode(type, "+886", register_edit_account.getText().toString());
+                            final JSONObject jsonObject = new MemberJsonData().gvcode(type, "886", register_edit_account.getText().toString());
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
+                                        LoadingView.hide();
                                         boolean success = jsonObject.getBoolean("Success");
                                         if (success) {
                                             vcode = jsonObject.getString("Data");
                                             register_edit_account.setFocusable(false);
                                         }
-                                        toastMessage.setMessageText( jsonObject.getString("Message"));
+                                        toastMessage.setMessageText(jsonObject.getString("Message"));
                                         toastMessage.confirm();
                                         Log.e("success", success + "" + jsonObject.getString("Message"));
                                     } catch (JSONException e) {
@@ -424,9 +433,9 @@ ToastMessageDialog toastMessage;
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            Intent intent=handleSignInResult(task);
-            if(intent!=null)
-            startActivity(intent);
+            Intent intent = handleSignInResult(task);
+            if (intent != null)
+                startActivity(intent);
         }
     }
 

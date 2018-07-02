@@ -31,6 +31,7 @@ import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
 import com.test.tw.wrokproduct.ShopCartActivity;
+import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣.PointActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.收貨地址.ShipAddressActivity;
@@ -60,6 +61,7 @@ public class Fragment_community extends Fragment {
     CircleImageView login_photo;
     TextView login_name;
     int coverbg;
+    Intent intent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class Fragment_community extends Fragment {
                             public void run() {
                                 Intent intent = new Intent(getContext(), CommunityActivity.class);
                                 intent.putExtra("html", json);
-                                intent.putExtra("title",  getResources().getStringArray(R.array.community_title)[position]);
+                                intent.putExtra("title", getResources().getStringArray(R.array.community_title)[position]);
                                 startActivity(intent);
                             }
                         });
@@ -224,6 +226,7 @@ public class Fragment_community extends Fragment {
     }
 
     public void initTableItem(final View v) {
+
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -262,16 +265,24 @@ public class Fragment_community extends Fragment {
                             Toast.makeText(getContext(), "b1_1", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_2:
-                            Toast.makeText(getContext(), "b1_2", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), PointActivity.class);
+                            intent.putExtra("point_type", 1);
+                            startActivity(intent);
                             break;
                         case R.id.b1_3:
-                            Toast.makeText(getContext(), "b1_3", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), PointActivity.class);
+                            intent.putExtra("point_type", 2);
+                            startActivity(intent);
                             break;
                         case R.id.b1_4:
-                            Toast.makeText(getContext(), "b1_4", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), PointActivity.class);
+                            intent.putExtra("point_type", 3);
+                            startActivity(intent);
                             break;
                         case R.id.b1_5:
-                            Toast.makeText(getContext(), "b1_5", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), PointActivity.class);
+                            intent.putExtra("point_type", 4);
+                            startActivity(intent);
                             break;
                         case R.id.b1_6:
                             Toast.makeText(getContext(), "b1_6", Toast.LENGTH_SHORT).show();
@@ -374,7 +385,7 @@ public class Fragment_community extends Fragment {
             Map<String, String> member = db.getMemberDetail();
             byte[] bis = db.getPhotoImage();
             login_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
-           // ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
+            // ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
             login_name.setText(member.get("name"));
             try {
                 coverbg = Integer.parseInt(db.getMemberDetail().get("background"));

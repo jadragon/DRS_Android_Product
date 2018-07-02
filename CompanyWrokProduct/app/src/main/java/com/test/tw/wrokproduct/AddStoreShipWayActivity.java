@@ -26,7 +26,7 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
     TextView addshipway_store;
     EditText addshipway_name, addshipway_phone;
     Button confirm;
-    String mpcode = "+886", shit = "TW";
+    String mpcode = "886", shit = "TW";
     String token, sno, plno, type, land, logistics;
     String mlno, name, mp;
     String sid, sname, city, area, zipcode, address;

@@ -45,6 +45,7 @@ import library.Component.MyViewPager;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.ShopCartJsonData;
+import library.JsonDataThread;
 import pojo.ProductInfoPojo;
 
 public class PcContentActivity extends AppCompatActivity {
@@ -57,7 +58,7 @@ public class PcContentActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private LinearLayout ship_ways;
     private TextView pccontent_txt_descs, pccontent_txt_rsprice, pccontent_txt_rprice, shopcart_txt_count;
-    private String pno;
+    private String pno, title;
     private RecyclerView recyclerView;
     private ImageView heart, pccontent_btn_home, pccontent_img_star;
     private View enable_background;
@@ -68,48 +69,67 @@ public class PcContentActivity extends AppCompatActivity {
     private int count, max = 0;
     private int default_color;
     private Button shopcart_btn_increase, shopcart_btn_decrease;
-    private ProductInfoPojo productInfoPojo;
     private TypedArray stars;
     private String pino;
     private String Message;
     private ToastMessageDialog toastMessageDialog;
     GlobalVariable gv;
     private ScrollView scrollview;
+    private ProductInfoPojo productInfoPojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pccontent);
-        stars = getResources().obtainTypedArray(R.array.stars);
-        productInfoPojo = (ProductInfoPojo) getIntent().getSerializableExtra("productInfoPojo");
         gv = ((GlobalVariable) getApplicationContext());
-        pno = productInfoPojo.getPno();
         dm = getResources().getDisplayMetrics();
+        pno = getIntent().getStringExtra("pno");
+        title = getIntent().getStringExtra("title");
+        stars = getResources().obtainTypedArray(R.array.stars);
         toastMessageDialog = new ToastMessageDialog(this);
         AppManager.getAppManager().addActivity(this);
         initToolbar();
         initSrcrollView();
-        setText();
         initHome();
-        initFavorate();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                json = new GetInformationByPHP().getPcontent(gv.getToken(), pno);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initViewPager();
-                        initTabLayout();
-                        initShipWay();
-                        initAddShopCart();
-                        initBuyNow();
-                        initEnableBackground();
-                    }
-                });
 
+        new JsonDataThread() {
+            @Override
+            public JSONObject getJsonData() {
+                return new GetInformationByPHP().getPcontent(gv.getToken(), pno);
             }
-        }).start();
+
+            @Override
+            public void runUiThread(JSONObject jsonObject) {
+                json = jsonObject;
+                initPojo();
+                setText();
+                initFavorate();
+                initViewPager();
+                initTabLayout();
+                initShipWay();
+                initAddShopCart();
+                initBuyNow();
+                initEnableBackground();
+            }
+        }.start();
+
+    }
+
+    private void initPojo() {
+        Map<String, String> map = ResolveJsonData.getPcContentInformation(json);
+        productInfoPojo = new ProductInfoPojo();
+        productInfoPojo.setPno(map.get("pno"));
+        productInfoPojo.setTitle(map.get("pname"));
+        productInfoPojo.setDescs(map.get("descs"));
+        productInfoPojo.setContent(map.get("content"));
+        productInfoPojo.setRprice(map.get("rprice"));
+        productInfoPojo.setRsprice(map.get("rsprice"));
+        productInfoPojo.setIsnew(map.get("isnew"));
+        productInfoPojo.setIshot(map.get("ishot"));
+        productInfoPojo.setIstime(map.get("istime"));
+        productInfoPojo.setFavorite(map.get("favorite").equals("true"));
+        productInfoPojo.setScore(map.get("score"));
+        productInfoPojo.setRpolicy(map.get("rpolicy"));
     }
 
     private void initSrcrollView() {
@@ -128,7 +148,8 @@ public class PcContentActivity extends AppCompatActivity {
     public void setText() {
         //描述
         pccontent_txt_descs = findViewById(R.id.pccontent_txt_descs);
-        pccontent_txt_descs.setText(productInfoPojo.getDescs());
+        // pccontent_txt_descs.setText(productInfoPojo.getDescs());
+        pccontent_txt_descs.setText(productInfoPojo.getTitle());
         //售價
         pccontent_txt_rsprice = findViewById(R.id.pccontent_txt_rsprice);
         pccontent_txt_rsprice.setText("$" + productInfoPojo.getRsprice());
@@ -148,7 +169,7 @@ public class PcContentActivity extends AppCompatActivity {
     //產品圖片
     private void initViewPager() {
         viewPager = findViewById(R.id.adView);
-        adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json, dm.widthPixels, dm.widthPixels);
+        adapter = new PcContentPagerAdapter(getWindow().getDecorView(), json);
         viewPager.setAdapter(adapter);
     }
 
@@ -395,8 +416,7 @@ public class PcContentActivity extends AppCompatActivity {
         webviewpager = findViewById(R.id.pccontent_web_viewpager);
         tabLayout = findViewById(R.id.pccontent_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
-        Map<String, String> map = ResolveJsonData.getWebView(json);
-        PcContentWebViewPagerAdapter adapter = new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知"}, new String[]{map.get("content"), map.get("rpolicy")});
+        PcContentWebViewPagerAdapter adapter = new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知"}, new String[]{productInfoPojo.getContent(), productInfoPojo.getRpolicy()});
         adapter.setViewPager(webviewpager);
         webviewpager.setAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
@@ -411,7 +431,7 @@ public class PcContentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((TextView) findViewById(R.id.include_toolbar_title)).setText(productInfoPojo.getTitle());
+        ((TextView) findViewById(R.id.include_toolbar_title)).setText(title);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

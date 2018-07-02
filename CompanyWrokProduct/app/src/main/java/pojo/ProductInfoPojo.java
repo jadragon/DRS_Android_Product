@@ -1,28 +1,29 @@
 package pojo;
 
-import java.io.Serializable;
-
-
 /**
  * OBJECT实现SERIALIZABLE
  *
  * @author bixiaopeng 2013-2-18 上午11:32:19
  */
-public class ProductInfoPojo implements Serializable {
+public class ProductInfoPojo
+        //implements Serializable
+{
+    private String title;
+    private String image;
+    private String pno;
+    private String descs;
+    private String content;
+    private String rprice;
+    private String rsprice;
+    private String isnew;
+    private String ishot;
+    private String istime;
+    private String discount;
+    private String shipping;
+    private String score;
+    private boolean favorite;
+    private String rpolicy;
 
-    String title;
-    String image;
-    String pno;
-    String descs;
-    String rprice;
-    String rsprice;
-    String isnew;
-    String ishot;
-    String istime;
-    String discount;
-    String shipping;
-    String score;
-    boolean favorite;
 
     public ProductInfoPojo() {
     }
@@ -145,6 +146,26 @@ public class ProductInfoPojo implements Serializable {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public String getRpolicy() {
+        return rpolicy;
+    }
+
+    public void setRpolicy(String rpolicy) {
+        this.rpolicy = rpolicy;
     }
 
 }

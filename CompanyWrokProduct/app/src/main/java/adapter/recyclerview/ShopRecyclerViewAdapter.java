@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -30,9 +29,9 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.GetInformationByPHP;
 import library.ItemTouchListencer;
-import library.Component.ToastMessageDialog;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> implements ItemTouchListencer {
@@ -55,7 +54,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
     private List<ProductInfoPojo> itemsList;
-GlobalVariable gv;
+    GlobalVariable gv;
+
     public void setmHeaderView(View mHeaderView) {
         this.mHeaderView = mHeaderView;
     }
@@ -132,6 +132,7 @@ GlobalVariable gv;
                 resizeImageView(holder.imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
                 resizeImageView(holder.count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
                 resizeImageView(holder.count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
+                resizeImageView(holder.discount,(int) (layout_width / 3 * 1.3 - 5 * dm.density)/2, (int) (layout_width / 3 * 1.3 - 5 * dm.density)/2);
                 resizeImageView(holder.free, (layout_width / 3), (layout_width / 3));
                 resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
                 resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
@@ -320,16 +321,6 @@ GlobalVariable gv;
             ButterKnife.bind(this, view);
             this.json = json;
             this.ctx = ctx;
-            if (view == mHeaderView) {
-                /*
-                viewPager = view.findViewById(R.id.adView);
-                relativeLayout = view.findViewById(R.id.RelateView);
-                relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
-                viewPager.setAdapter(new MyPagerAdapter(view, json1));
-                */
-            }
-            if (view == mFooterView) {
-            }
             frameLayout = view.findViewById(R.id.shop_frame);
             item_linear = view.findViewById(R.id.item_linear);
             imageView = view.findViewById(R.id.product_image);
@@ -355,15 +346,18 @@ GlobalVariable gv;
             if (position != list.size() + 1) {
 
             }
-            Intent intent = new Intent(ctx, PcContentActivity.class);
-            Bundle bundle = new Bundle();
+
             if (had_header != 0) {
                 position--;
             }
             if (itemsList.size() > position) {
-                bundle.putSerializable("productInfoPojo", itemsList.get(position));
-                intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                  Intent intent = new Intent(ctx, PcContentActivity.class);
+                //            Bundle bundle = new Bundle();
+                //  bundle.putSerializable("productInfoPojo", itemsList.get(position));
+                //   intent.putExtras(bundle);
+                //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("pno", itemsList.get(position).getPno());
+                intent.putExtra("title", itemsList.get(position).getTitle());
                 ctx.startActivity(intent);
             }
         }

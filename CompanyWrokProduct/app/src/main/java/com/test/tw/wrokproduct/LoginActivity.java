@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            jsonObject = new MemberJsonData().login(type, "+886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
+                            jsonObject = new MemberJsonData().login(type, "886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -329,7 +329,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        jsonObject = new MemberJsonData().login(type, "+886", id, "");
+                                        jsonObject = new MemberJsonData().login(type, "886", id, "");
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -450,7 +450,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        jsonObject = new MemberJsonData().login(type, "+886", id, "");
+                        jsonObject = new MemberJsonData().login(type, "886", id, "");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

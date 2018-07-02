@@ -47,14 +47,13 @@
                     android:layout_gravity="right"
                     app:srcCompat="@drawable/count1" />
 
-                <TextView
+                <library.Component.AutoHorizontalTextView
                     android:id="@+id/discount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:text="9折"
                     android:paddingRight="5dp"
                     android:paddingTop="5dp"/>
 

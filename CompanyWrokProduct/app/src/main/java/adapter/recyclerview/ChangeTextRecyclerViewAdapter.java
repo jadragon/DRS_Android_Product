@@ -15,17 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.test.tw.wrokproduct.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTextRecyclerViewAdapter.RecycleHolder> {
     private Context ctx;
-    private ArrayList<String> list;
+    private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
 
     public ChangeTextRecyclerViewAdapter(Context ctx, JSONObject json) {
@@ -41,13 +45,16 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
 
     private void initList(JSONObject json) {
         list = new ArrayList<>();
-
+        Map<String, String> map;
         try {
             JSONArray jsonArray = json.getJSONArray("Data");
             JSONObject jsonObject;
             for (int i = 0; i < jsonArray.length(); i++) {
                 jsonObject = jsonArray.getJSONObject(i);
-                list.add(jsonObject.getString("title"));
+                map = new HashMap<>();
+                map.put("img", jsonObject.getString("img"));
+                map.put("title", jsonObject.getString("title"));
+                list.add(map);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,16 +71,42 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
         textView.setPadding((int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density));
         textView.setTextColor(Color.BLACK);
+/*
         Drawable drawable = ctx.getResources().getDrawable(R.drawable.product);
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         drawable = new BitmapDrawable(ctx.getResources(), Bitmap.createScaledBitmap(bitmap, (int) (50 * dm.density), (int) (50 * dm.density), true));
         textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        */
         return new ChangeTextRecyclerViewAdapter.RecycleHolder(ctx, textView);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        holder.text.setText(list.get(position));
+        holder.text.setText(list.get(position).get("title"));
+
+        ImageLoader.getInstance().loadImage(list.get(position).get("img"), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                Drawable drawable = new BitmapDrawable(ctx.getResources(), Bitmap.createScaledBitmap(loadedImage, (int) (50 * dm.density), (int) (50 * dm.density), true));
+                holder.text.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
     }
 
     @Override
@@ -103,7 +136,7 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Toast.makeText(ctx, list.get(position), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, list.get(position).get("title"), Toast.LENGTH_SHORT).show();
             notifyDataSetChanged();
 
         }

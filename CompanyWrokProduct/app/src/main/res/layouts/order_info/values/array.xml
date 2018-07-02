@@ -120,4 +120,31 @@
         <item>捐贈發票</item>
         <item>電子發票</item>
     </string-array>
+    <string-array name="orderInfo_type">
+        <item>未付款</item>
+        <item>未配送</item>
+        <item>配送中</item>
+        <item>取件完成</item>
+        <item>申請退換貨中</item>
+        <item>已完成</item>
+        <item>取消</item>
+    </string-array>
+    <string-array name="polk_title">
+        <item>消費紀錄</item>
+        <item>回饋紀錄</item>
+        <item>庫瓦紀錄</item>
+    </string-array>
+    <string-array name="kuva_title">
+        <item>回饋紀錄</item>
+        <item>波克紀錄</item>
+        <item>雙閃紀錄</item>
+    </string-array>
+    <string-array name="acoin_title">
+    <item>庫瓦紀錄</item>
+</string-array>
+    <string-array name="ewallet_title">
+        <item>消費紀錄</item>
+        <item>儲值紀錄</item>
+        <item>提領紀錄</item>
+    </string-array>
 </resources>

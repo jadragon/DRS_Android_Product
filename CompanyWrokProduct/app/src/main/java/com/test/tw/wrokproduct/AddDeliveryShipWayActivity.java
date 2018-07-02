@@ -27,7 +27,7 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
     TextView add_delivery_txt_city, add_delivery_txt_area;
     EditText add_delivery_edit_name, add_delivery_edit_phone, add_delivery_edit_zipcode, add_delivery_edit_address;
     Button confirm;
-    String mpcode = "+886", shit = "TW";
+    String mpcode = "886", shit = "TW";
     String token, sno, plno, type, land, logistics;
     String mlno, name, mp;
     String sid, sname, city, area, prezipcode, address;

@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
@@ -37,25 +36,14 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
     private TextView textView;
     private int mChildCount = 0;
     private RelativeLayout relativeLayout;
-
-    public PcContentPagerAdapter(View current_view, JSONObject json) {
+    private DisplayMetrics dm;
+    public PcContentPagerAdapter(View current_view,  JSONObject json) {
+        this.dm = current_view.getContext().getResources().getDisplayMetrics();
         this.ctx = current_view.getContext();
         this.linearLayout = current_view.findViewById(R.id.dot_layout);
         this.viewPager = current_view.findViewById(R.id.adView);
-        this.relativeLayout=current_view.findViewById(R.id.RelateView);
-        getImageView(json);
-        initDot();
-        viewPager.addOnPageChangeListener(new PageChangeListener());
-        //兩張圖以上才放dot及定時翻頁
-        if (bitmaps.size() > 1) {
-        }
-    }
-    public PcContentPagerAdapter(View current_view, JSONObject json, int width, int heigh) {
-        this.ctx = current_view.getContext();
-        this.linearLayout = current_view.findViewById(R.id.dot_layout);
-        this.viewPager = current_view.findViewById(R.id.adView);
-        this.relativeLayout=current_view.findViewById(R.id.RelateView);
-        relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(width,heigh));
+        this.relativeLayout = current_view.findViewById(R.id.RelateView);
+        relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels,  dm.widthPixels));
         getImageView(json);
         initDot();
         viewPager.addOnPageChangeListener(new PageChangeListener());
@@ -64,9 +52,8 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
         }
     }
 
-    public void getImageView(JSONObject json) {
-        bitmaps = ResolveJsonData.getPcContentImgArray(json);
-        Log.e("Image",bitmaps+"");
+    public void getImageView( JSONObject json) {
+        bitmaps= ResolveJsonData.getPcContentImgArray(json);
         mListViews = new ArrayList<>();
         for (int i = 0; i < bitmaps.size(); i++) {
             imageView = new ImageView(ctx);
@@ -143,39 +130,23 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
             // timer.cancel();
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.e("ACTION_DOWN", "ACTION_DOWN");
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.e("ACTION_MOVE", "ACTION_MOVE");
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.e("ACTION_UP", "ACTION_UP");
-                    int position = (int) view.getTag();
-
-                    Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
-
-                    //   initTimer();
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    Log.e("ACTION_CANCEL", "ACTION_CANCEL");
-                    //  initTimer();
                     break;
             }
         } else {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.e("ACTION_DOWN", "ACTION_DOWN");
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.e("ACTION_MOVE", "ACTION_MOVE");
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.e("ACTION_UP", "ACTION_UP");
-                    int position = (int) view.getTag();
-                    Toast.makeText(ctx, "" + bitmaps.get(position).get("title"), Toast.LENGTH_SHORT).show();
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    Log.e("ACTION_CANCEL", "ACTION_CANCEL");
                     break;
             }
         }
@@ -220,13 +191,6 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
             return POSITION_NONE;
         }
         return super.getItemPosition(object);
-    }
-
-    public void setFilter(JSONObject json) {
-        //  timer.cancel();
-        getImageView(json);
-        // initDot();
-        notifyDataSetChanged();
     }
 
 }

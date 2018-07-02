@@ -10,10 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +19,14 @@ import Fragment.Fragment_oderInfo;
 
 public class OrderInfoActivity extends AppCompatActivity {
     List<Fragment_oderInfo> fragmentList;
-    String[] mTabtitle = {"未付款", "未配送", "配送中", "取件完成", "申請退換貨中", "已完成", "取消"};
+    String[] mTabtitle;
     ViewPager viewPager;
     TabLayout tabLayout;
-    JSONObject json1, json2, json3, json4, json5, json6, json7;
     FragmentPagerAdapter fragmentPagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTabtitle=getResources().getStringArray(R.array.orderInfo_type);
         setContentView(R.layout.activity_order_info);
         initToolbar();
         initRecylcerViewAndTabLayout();
@@ -41,31 +38,24 @@ public class OrderInfoActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         fragmentList = new ArrayList<>();
         Fragment_oderInfo fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json1);
         fragment_oderInfo.setIndex(0);
         fragmentList.add(fragment_oderInfo);
         fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json2);
         fragment_oderInfo.setIndex(1);
         fragmentList.add(fragment_oderInfo);
         fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json3);
         fragment_oderInfo.setIndex(2);
         fragmentList.add(fragment_oderInfo);
         fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json4);
         fragment_oderInfo.setIndex(3);
         fragmentList.add(fragment_oderInfo);
         fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json5);
         fragment_oderInfo.setIndex(4);
         fragmentList.add(fragment_oderInfo);
         fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json6);
         fragment_oderInfo.setIndex(5);
         fragmentList.add(fragment_oderInfo);
         fragment_oderInfo = new Fragment_oderInfo();
-        fragment_oderInfo.setJson(json7);
         fragment_oderInfo.setIndex(6);
         fragmentList.add(fragment_oderInfo);
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {

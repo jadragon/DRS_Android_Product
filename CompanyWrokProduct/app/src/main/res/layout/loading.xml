@@ -16,6 +16,8 @@
         custom:gif="@raw/yloading" />
 
     <TextView
+
+        android:id="@+id/loading_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
