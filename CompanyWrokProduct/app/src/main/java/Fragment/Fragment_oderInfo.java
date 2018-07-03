@@ -44,7 +44,7 @@ public class Fragment_oderInfo extends BasePageFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
+        v = inflater.inflate(R.layout.include_recylcerview, container, false);
       gv = (GlobalVariable) getContext().getApplicationContext();
         initRecyclerView();
         initSwipeLayout();

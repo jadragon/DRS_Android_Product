@@ -49,7 +49,7 @@ public class Fragment_Contact extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_contact_layout, container, false);
-        GlobalVariable gv = (GlobalVariable) getContext().getApplicationContext();
+        gv = (GlobalVariable) getContext().getApplicationContext();
         recyclerView = v.findViewById(R.id.contact_recyclerview);
         recyclerView.setHasFixedSize(true);
         //DB

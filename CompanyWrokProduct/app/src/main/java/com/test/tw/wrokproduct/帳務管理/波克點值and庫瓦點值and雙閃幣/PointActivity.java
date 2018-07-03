@@ -5,9 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -21,13 +18,12 @@ import java.util.List;
 
 import Fragment.Fragment_Point;
 import Util.StringUtil;
+import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
 
-public class PointActivity extends AppCompatActivity {
+public class PointActivity extends ToolbarActivity {
     List<Fragment_Point> fragmentList;
     String[] mTabtitle;
-    ViewPager viewPager;
-    TabLayout tabLayout;
     int point_type;
     int count = 3;
     JSONObject json1, json2, json3;
@@ -36,7 +32,7 @@ public class PointActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pok_point);
+        setContentView(R.layout.activity_point);
         gv = (GlobalVariable) getApplicationContext();
         point_type = getIntent().getIntExtra("point_type", 1);
         switch (point_type) {
@@ -54,15 +50,6 @@ public class PointActivity extends AppCompatActivity {
                 mTabtitle = getResources().getStringArray(R.array.ewallet_title);
                 break;
         }
-
-
-        initToolbar();
-        initRecylcerViewAndTabLayout();
-    }
-
-    private void initToolbar() {
-        //Toolbar 建立
-        Toolbar toolbar = findViewById(R.id.include_toolbar);
         String title = "";
         switch (point_type) {
             case 1:
@@ -78,22 +65,14 @@ public class PointActivity extends AppCompatActivity {
                 title = "電子錢包";
                 break;
         }
-        ((TextView) findViewById(R.id.include_toolbar_title)).setText(title);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+        initToolbar(true, title);
+        initRecylcerViewAndTabLayout();
     }
 
+
     private void initRecylcerViewAndTabLayout() {
-        viewPager = findViewById(R.id.point_viewpager);
-        tabLayout = findViewById(R.id.point_tabLayout);
+        ViewPager viewPager = findViewById(R.id.include_viewpager);
+        TabLayout tabLayout = findViewById(R.id.include_tabLayout);
         fragmentList = new ArrayList<>();
         Fragment_Point fragment_point;
         for (int i = 1; i <= count; i++) {
@@ -137,7 +116,7 @@ public class PointActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    ((TextView) findViewById(R.id.activity_pok_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
+                                    ((TextView) findViewById(R.id.activity_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -155,7 +134,7 @@ public class PointActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    ((TextView) findViewById(R.id.activity_pok_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
+                                    ((TextView) findViewById(R.id.activity_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -171,7 +150,7 @@ public class PointActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    ((TextView) findViewById(R.id.activity_pok_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
+                                    ((TextView) findViewById(R.id.activity_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -187,7 +166,7 @@ public class PointActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    ((TextView) findViewById(R.id.activity_pok_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
+                                    ((TextView) findViewById(R.id.activity_point)).setText(StringUtil.getDeciamlString(json1.getJSONObject("Data").getString("point")));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

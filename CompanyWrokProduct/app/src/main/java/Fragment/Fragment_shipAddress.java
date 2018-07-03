@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -34,7 +33,7 @@ public class Fragment_shipAddress extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
+        v = inflater.inflate(R.layout.include_recylcerview, container, false);
         v.findViewById(R.id.swipe_refresh).setEnabled(false);
         initRecyclerView();
         return v;

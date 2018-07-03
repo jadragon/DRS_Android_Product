@@ -32,6 +32,7 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
 import com.test.tw.wrokproduct.ShopCartActivity;
 import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣.PointActivity;
+import com.test.tw.wrokproduct.帳務管理.點值轉換.ExchangePointActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.收貨地址.ShipAddressActivity;
@@ -285,7 +286,8 @@ public class Fragment_community extends Fragment {
                             startActivity(intent);
                             break;
                         case R.id.b1_6:
-                            Toast.makeText(getContext(), "b1_6", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), ExchangePointActivity.class);
+                            startActivity(intent);
                             break;
                         case R.id.b1_7:
                             Toast.makeText(getContext(), "b1_7", Toast.LENGTH_SHORT).show();

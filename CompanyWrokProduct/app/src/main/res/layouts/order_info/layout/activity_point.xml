@@ -24,7 +24,7 @@
         android:gravity="center_vertical"
         android:textSize="18sp" />
     <TextView
-        android:id="@+id/activity_pok_point"
+        android:id="@+id/activity_point"
         android:layout_width="0dp"
         android:layout_weight="3"
         android:layout_height="match_parent"
@@ -33,15 +33,8 @@
         android:textStyle="bold"
         android:textSize="30sp" />
 </LinearLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/point_viewpager"
+    <include
+        layout="@layout/include_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/point_tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            app:tabIndicatorHeight="3dp" />
-    </android.support.v4.view.ViewPager>
+        android:layout_height="wrap_content" />
 </LinearLayout>

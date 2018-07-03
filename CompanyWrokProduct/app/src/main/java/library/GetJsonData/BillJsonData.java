@@ -69,4 +69,40 @@ public class BillJsonData {
         params.add(new BasicNameValuePair("type", type + ""));
         return jsonParser.getJSONFromUrl(getEwallet_url, params);
     }
+
+    /**
+     * 6.6.1	讀取波克點值及轉換比值
+     */
+    public JSONObject getPolkRate(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getPolkRate_url, params);
+    }
+
+    /**
+     * 6.6.2	設定波克點值轉換其它
+     */
+    public JSONObject getPolkTrans(String token, int kuva_num) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("kuva_num", kuva_num + ""));
+        return jsonParser.getJSONFromUrl(getPolkTrans_url, params);
+    }
+
+    /**
+     * 6.6.3	讀取庫瓦點值及轉換比值
+     */
+    public JSONObject getKuvaRate(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getKuvaRate_url, params);
+    }
+
+    /**
+     * 6.6.4	設定庫瓦點值轉換其它
+     */
+    public JSONObject getKuvaTrans(String token, int polk_num, int acoin_num) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("polk_num", polk_num + ""));
+        params.add(new BasicNameValuePair("acoin_num", acoin_num + ""));
+        return jsonParser.getJSONFromUrl(getKuvaTrans_url, params);
+    }
+
 }

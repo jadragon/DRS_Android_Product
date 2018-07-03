@@ -25,18 +25,20 @@
             android:layout_weight="6"
             android:gravity="center"
             android:orientation="vertical">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="請輸入您註冊商城的Email或電話號碼"
-    android:textSize="18sp"
-    android:gravity="center"
-    android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="請輸入您註冊商城的Email或電話號碼"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="20dp">
 
 
                 <EditText
@@ -45,11 +47,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:background="@null"
+                    android:hint="Email或電話號碼"
                     android:inputType="text"
                     android:lines="1"
                     android:maxLines="1"
-                    android:singleLine="true"
-                    android:hint="Email或電話號碼" />
+                    android:singleLine="true" />
             </LinearLayout>
 
             <View
@@ -58,39 +60,32 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/black" />
+            <!--
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:orientation="horizontal"
+                           android:padding="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                                           <EditText
+                                               android:id="@+id/forget_edit_password"
+                                               android:layout_width="0dp"
+                                               android:layout_height="wrap_content"
+                                               android:layout_weight="8"
+                                               android:background="@null"
+                                               android:lines="1"
+                                               android:hint="驗證碼"
+                                               android:singleLine="true"
+                                               android:maxLines="1"/>
+                                       </LinearLayout>
 
-                <EditText
-                    android:id="@+id/forget_edit_password"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="8"
-                    android:background="@null"
-                    android:lines="1"
-                    android:hint="驗證碼"
-                    android:singleLine="true"
-                    android:maxLines="1"/>
-                <Button
-                    android:id="@+id/forget_btn_gvcode"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="6"
-                    android:text="取得認證碼"
-                    android:textColor="@color/white"
-                    android:background="@drawable/arcangle_button_red"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/black" />
+                                       <View
+                                           android:layout_width="match_parent"
+                                           android:layout_height="1px"
+                                           android:layout_marginLeft="10dp"
+                                           android:layout_marginRight="10dp"
+                                           android:background="@color/black" />
+                                           -->
         </LinearLayout>
 
         <LinearLayout
@@ -112,9 +107,10 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="80dp"/>
+            android:layout_height="80dp" />
     </LinearLayout>
 
 </LinearLayout>

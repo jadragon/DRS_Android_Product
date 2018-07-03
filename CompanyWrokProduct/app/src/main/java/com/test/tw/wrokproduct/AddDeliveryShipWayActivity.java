@@ -18,7 +18,6 @@ import java.util.Map;
 
 import library.GetJsonData.LogisticsJsonData;
 import library.GetJsonData.ReCountJsonData;
-import library.GetJsonData.ShopCartJsonData;
 import library.SQLiteDatabaseHandler;
 
 public class AddDeliveryShipWayActivity extends AppCompatActivity {
@@ -28,17 +27,18 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
     EditText add_delivery_edit_name, add_delivery_edit_phone, add_delivery_edit_zipcode, add_delivery_edit_address;
     Button confirm;
     String mpcode = "886", shit = "TW";
-    String token, sno, plno, type, land, logistics;
+    String sno, plno, type, land, logistics;
     String mlno, name, mp;
     String sid, sname, city, area, prezipcode, address;
     JSONObject json;
     Intent intent;
     int count_type;
+    GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         setContentView(R.layout.activity_add_delivery_shipway);
         intent = getIntent();
         count_type = intent.getIntExtra("count_type", 0);
@@ -110,11 +110,11 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                                     mp = add_delivery_edit_phone.getText().toString();
                                     address = add_delivery_edit_address.getText().toString();
                                     if (sno != null) {//運送方式
-                                        json = new ReCountJsonData().setMemberLogistics(count_type, token, sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                        json = new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                     } else if (mlno != null) {//修改收貨方式
-                                        json = new LogisticsJsonData().updateLogistics(token, mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                        json = new LogisticsJsonData().updateLogistics(gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                     } else {//新增收貨方式
-                                        json = new LogisticsJsonData().setLogistics(token, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                        json = new LogisticsJsonData().setLogistics(gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                     }
                                     try {
                                         if (json.getBoolean("Success")) {

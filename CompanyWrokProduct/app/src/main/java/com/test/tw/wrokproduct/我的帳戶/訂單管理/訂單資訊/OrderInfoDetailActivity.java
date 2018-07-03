@@ -27,22 +27,23 @@ import library.GetJsonData.OrderInfoJsonData;
 
 public class OrderInfoDetailActivity extends AppCompatActivity {
     LinearLayout orderinfo_detail_prolayout;
-    String token, mono;
+    String mono;
     JSONObject json;
     MOrderItemPojo mOrderItemPojo;
     ArrayList<MOrderItemContentPojo> pojoArrayList;
+    GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_info_detail);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         mono = getIntent().getStringExtra("mono");
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new OrderInfoJsonData().getMOrderItem(token, mono);
+                json = new OrderInfoJsonData().getMOrderItem(gv.getToken(), mono);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

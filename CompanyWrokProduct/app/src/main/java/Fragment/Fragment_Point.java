@@ -35,7 +35,7 @@ public class Fragment_Point extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_recylcerview_layout, container, false);
+        v = inflater.inflate(R.layout.include_recylcerview, container, false);
         gv = (GlobalVariable) getContext().getApplicationContext();
         v.findViewById(R.id.swipe_refresh).setEnabled(false);
         initRecyclerView();

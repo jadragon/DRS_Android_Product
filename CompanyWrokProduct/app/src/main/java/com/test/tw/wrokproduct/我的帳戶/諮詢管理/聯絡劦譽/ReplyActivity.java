@@ -22,14 +22,15 @@ public class ReplyActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerView;
     ReplyRecyclerAdapter adapter;
-    String token, msno;
+    String msno;
     JSONObject json;
+    GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        gv = ((GlobalVariable) getApplicationContext());
         msno = getIntent().getStringExtra("msno");
         initToolbar();
         initRecycleView();
@@ -44,7 +45,7 @@ public class ReplyActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ContactJsonData().getContactCont(token, msno);
+                json = new ContactJsonData().getContactCont(gv.getToken(), msno);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

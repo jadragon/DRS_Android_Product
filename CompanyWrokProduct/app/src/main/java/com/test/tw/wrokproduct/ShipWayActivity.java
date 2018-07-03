@@ -17,26 +17,26 @@ import library.GetJsonData.ReCountJsonData;
 
 public class ShipWayActivity extends AppCompatActivity implements View.OnClickListener {
     JSONObject json;
-    String token, sno;
+    String  sno;
     Toolbar toolbar;
     TextView toolbar_title;
     RecyclerView recyclerView;
     ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
     LinearLayoutManager layoutManager;
     int count_type;
-
+    GlobalVariable gv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipway);
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+       gv = (GlobalVariable) getApplicationContext();
         sno = getIntent().getStringExtra("sno");
         count_type = getIntent().getIntExtra("count_type", 0);
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ReCountJsonData().getStoreLogistics(count_type, token, sno);
+                json = new ReCountJsonData().getStoreLogistics(count_type, gv.getToken(), sno);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -94,7 +94,7 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    json = new ReCountJsonData().getStoreLogistics(count_type, token, sno);
+                    json = new ReCountJsonData().getStoreLogistics(count_type,  gv.getToken(), sno);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

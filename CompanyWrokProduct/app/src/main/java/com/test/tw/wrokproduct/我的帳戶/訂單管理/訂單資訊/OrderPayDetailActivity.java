@@ -1,12 +1,10 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,31 +16,31 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrde
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 import library.GetJsonData.OrderInfoJsonData;
 
 public class OrderPayDetailActivity extends AppCompatActivity {
     JSONObject json;
-    String token, mono;
+    String mono;
     MOrderPayPojo mOrderPayPojo;
     LinearLayout order_pay_detail_layout;
     TextView textView;
-DisplayMetrics dm;
+    DisplayMetrics dm;
+    GlobalVariable gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay_detail);
-        dm=getResources().getDisplayMetrics();
-        token = ((GlobalVariable) getApplicationContext()).getToken();
+        dm = getResources().getDisplayMetrics();
+        gv = ((GlobalVariable) getApplicationContext());
         mono = getIntent().getStringExtra("mono");
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new OrderInfoJsonData().getMOrderPay(token, mono);
+                json = new OrderInfoJsonData().getMOrderPay(gv.getToken(), mono);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -70,9 +68,9 @@ DisplayMetrics dm;
         for (String ordernum : mOrderPayPojo.getOrdernum()) {
             textView = new TextView(this);
             textView.setText(ordernum);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             textView.setTextColor(Color.BLACK);
-            textView.setPadding((int)(10*dm.density),(int)(5*dm.density),(int)(10*dm.density),(int)(5*dm.density));
+            textView.setPadding((int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density));
             order_pay_detail_layout.addView(textView);
         }
     }
