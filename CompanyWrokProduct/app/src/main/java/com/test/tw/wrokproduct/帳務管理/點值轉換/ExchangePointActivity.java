@@ -69,7 +69,7 @@ public class ExchangePointActivity extends ToolbarActivity {
         refreshText();
     }
 
-    private void refreshText() {
+    public void refreshText() {
         new Thread(new Runnable() {
             @Override
             public void run() {

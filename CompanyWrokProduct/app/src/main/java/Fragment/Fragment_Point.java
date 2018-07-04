@@ -35,15 +35,15 @@ public class Fragment_Point extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.include_recylcerview, container, false);
+        v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
         gv = (GlobalVariable) getContext().getApplicationContext();
-        v.findViewById(R.id.swipe_refresh).setEnabled(false);
         initRecyclerView();
         return v;
     }
 
     private void initRecyclerView() {
-        recyclerView = v.findViewById(R.id.fragment_recyclerview);
+        v.findViewById(R.id.include_swipe_refresh).setEnabled(false);
+        recyclerView = v.findViewById(R.id.include_recyclerview);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

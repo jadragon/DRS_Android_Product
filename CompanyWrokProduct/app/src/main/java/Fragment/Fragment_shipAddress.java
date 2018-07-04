@@ -33,14 +33,14 @@ public class Fragment_shipAddress extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.include_recylcerview, container, false);
-        v.findViewById(R.id.swipe_refresh).setEnabled(false);
+        v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
+        v.findViewById(R.id.include_swipe_refresh).setEnabled(false);
         initRecyclerView();
         return v;
     }
 
     private void initRecyclerView() {
-        recyclerView = v.findViewById(R.id.fragment_recyclerview);
+        recyclerView = v.findViewById(R.id.include_recyclerview);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -79,7 +79,7 @@ public class Fragment_shop_content extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_shop_content_layout, container, false);
+        v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
         gv = ((GlobalVariable) getContext().getApplicationContext());
         initViewPagerAndRecyclerView();
         initSwipeLayout();
@@ -87,7 +87,7 @@ public class Fragment_shop_content extends Fragment {
     }
 
     private void initSwipeLayout() {
-        mSwipeLayout = v.findViewById(R.id.swipe_refresh);
+        mSwipeLayout = v.findViewById(R.id.include_swipe_refresh);
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
         mSwipeLayout.setTouchSlop(400);
@@ -135,7 +135,7 @@ public class Fragment_shop_content extends Fragment {
     }
 
     private void initViewPagerAndRecyclerView() {
-        recyclerView = v.findViewById(R.id.shop_conttent_re);
+        recyclerView = v.findViewById(R.id.include_recyclerview);
         viewPager = v.findViewById(R.id.adView);
         //recycleView
         dm = getResources().getDisplayMetrics();

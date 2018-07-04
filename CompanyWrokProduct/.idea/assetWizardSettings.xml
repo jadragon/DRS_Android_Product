@@ -69,8 +69,6 @@
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="C:\Users\Alex\Desktop\工作用\會員中心\logout_gray.png" />
                                       <entry key="outputName" value="logout_white" />
-                                      <entry key="theme" value="HOLO_DARK" />
-                                      <entry key="themeColor" value="f8ffff" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -83,8 +81,8 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Alex\Desktop\工作用\icon\search_red.png" />
-                                      <entry key="outputName" value="search_red" />
+                                      <entry key="imageAsset" value="C:\Users\Alex\Desktop\工作用\註冊\quick_login_message.png" />
+                                      <entry key="outputName" value="quick_login_message" />
                                     </map>
                                   </option>
                                 </PersistentState>

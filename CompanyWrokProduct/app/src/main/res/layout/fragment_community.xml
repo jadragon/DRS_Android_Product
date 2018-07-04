@@ -32,7 +32,7 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/quick_login_account" />
+                    app:srcCompat="@mipmap/quick_login_account" />
             </FrameLayout>
 
             <LinearLayout
@@ -83,7 +83,7 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/quick_login_account" />
+                    android:src="@mipmap/quick_login_account" />
             </FrameLayout>
 
             <LinearLayout

@@ -7,25 +7,16 @@ import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.test.tw.wrokproduct.R;
-
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import adapter.recyclerview.ShopRecyclerViewAdapter;
-import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.MySwipeRefreshLayout;
 import library.EndLessOnScrollListener;
-import library.GetJsonData.GetInformationByPHP;
 import library.GetJsonData.SearchJsonData;
 import library.LoadingView;
 
@@ -49,7 +40,7 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     private void initSwipeLayout() {
-        mSwipeLayout = findViewById(R.id.swipe_refresh);
+        mSwipeLayout = findViewById(R.id.include_swipe_refresh);
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
         mSwipeLayout.setTouchSlop(400);
@@ -80,8 +71,7 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-
-        recyclerView = findViewById(R.id.fragment_recyclerview);
+        recyclerView = findViewById(R.id.include_recyclerview);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);

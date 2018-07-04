@@ -31,7 +31,10 @@ import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
 import com.test.tw.wrokproduct.ShopCartActivity;
-import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣.PointActivity;
+import com.test.tw.wrokproduct.帳務管理.帳戶總覽.OverviewBillActivity;
+import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity;
+import com.test.tw.wrokproduct.帳務管理.現金折價券.CouponActivity;
+import com.test.tw.wrokproduct.帳務管理.錢包提領.EwalletActivity;
 import com.test.tw.wrokproduct.帳務管理.點值轉換.ExchangePointActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.修改密碼.ModifyPasswordActivity;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.PersonalInfoActivity;
@@ -263,7 +266,8 @@ public class Fragment_community extends Fragment {
                             }
                             break;
                         case R.id.b1_1:
-                            Toast.makeText(getContext(), "b1_1", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), OverviewBillActivity.class);
+                            startActivity(intent);
                             break;
                         case R.id.b1_2:
                             intent = new Intent(getContext(), PointActivity.class);
@@ -293,10 +297,12 @@ public class Fragment_community extends Fragment {
                             Toast.makeText(getContext(), "b1_7", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.b1_8:
-                            Toast.makeText(getContext(), "b1_8", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), EwalletActivity.class);
+                            startActivity(intent);
                             break;
                         case R.id.b1_9:
-                            Toast.makeText(getContext(), "b1_9", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(getContext(), CouponActivity.class);
+                            startActivity(intent);
                             break;
                         case R.id.c1:
                             if (v.findViewById(R.id.c1_0).getVisibility() == View.VISIBLE) {

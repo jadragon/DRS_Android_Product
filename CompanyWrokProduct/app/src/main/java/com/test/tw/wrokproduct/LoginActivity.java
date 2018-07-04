@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 public void onLoadingFailed(String imageUri, View view,
                                             FailReason failReason) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.quick_login_account);
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.quick_login_account);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] bitmapByte = baos.toByteArray();
                     db.updatePhotoImage(bitmapByte);

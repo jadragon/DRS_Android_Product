@@ -44,7 +44,7 @@ public class Fragment_oderInfo extends BasePageFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.include_recylcerview, container, false);
+        v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
       gv = (GlobalVariable) getContext().getApplicationContext();
         initRecyclerView();
         initSwipeLayout();
@@ -52,7 +52,7 @@ public class Fragment_oderInfo extends BasePageFragment {
     }
 
     private void initSwipeLayout() {
-        mSwipeLayout = v.findViewById(R.id.swipe_refresh);
+        mSwipeLayout = v.findViewById(R.id.include_swipe_refresh);
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
         mSwipeLayout.setTouchSlop(400);
@@ -70,7 +70,7 @@ public class Fragment_oderInfo extends BasePageFragment {
     }
 
     private void initRecyclerView() {
-        recyclerView = v.findViewById(R.id.fragment_recyclerview);
+        recyclerView = v.findViewById(R.id.include_recyclerview);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -17,16 +17,14 @@
             android:id="@+id/exchange_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:src="@drawable/poke_point" />
+            android:layout_weight="3" />
 
         <TextView
             android:id="@+id/exchange_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="波克點值" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/exchange_point"
@@ -34,7 +32,6 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="123456"
             android:textColor="@color/red"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -60,7 +57,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:gravity="center"
                 android:text="名稱"
                 android:textColor="@color/black" />
@@ -68,7 +65,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:text="比值"
                 android:textColor="@color/black" />
@@ -87,6 +84,7 @@
             android:layout_height="1px"
             android:background="@color/gainsboro" />
         <LinearLayout
+            android:id="@+id/exchange_group1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -96,18 +94,16 @@
                 android:id="@+id/exchange_name1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:gravity="center"
-                android:text="波克:庫瓦"
                 android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/exchange_rate1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
-                android:text="1.1"
                 android:textColor="@color/black" />
 
             <EditText
@@ -124,6 +120,7 @@
                 android:textColor="@color/black" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/exchange_group2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -133,18 +130,16 @@
                 android:id="@+id/exchange_name2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:gravity="center"
-                android:text="波克:庫瓦"
                 android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/exchange_rate2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
-                android:text="1.1"
                 android:textColor="@color/black" />
 
             <EditText
@@ -161,4 +156,12 @@
                 android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>
+    <Button
+        android:id="@+id/exchange_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="轉換"
+        android:background="@drawable/arcangle_button_red"
+        android:textColor="@color/white"
+        android:layout_margin="20dp"/>
 </LinearLayout>

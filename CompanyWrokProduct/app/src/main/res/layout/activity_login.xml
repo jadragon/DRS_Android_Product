@@ -186,7 +186,7 @@
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/quick_login_account" />
+                android:src="@mipmap/quick_login_account" />
 
             <library.Component.AutoVerticalTextView
                 android:layout_width="match_parent"
@@ -210,7 +210,7 @@
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/quick_login_mobil" />
+                android:src="@mipmap/quick_login_mobil" />
 
             <library.Component.AutoVerticalTextView
                 android:layout_width="match_parent"
@@ -235,7 +235,7 @@
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/quick_login_mail" />
+                android:src="@mipmap/quick_login_mail" />
 
             <library.Component.AutoVerticalTextView
                 android:layout_width="match_parent"
@@ -260,7 +260,7 @@
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/quick_login_fb" />
+                android:src="@mipmap/quick_login_fb" />
 
             <library.Component.AutoVerticalTextView
                 android:layout_width="match_parent"
@@ -284,7 +284,7 @@
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/quick_login_google" />
+                android:src="@mipmap/quick_login_google" />
 
             <library.Component.AutoVerticalTextView
                 android:layout_width="match_parent"

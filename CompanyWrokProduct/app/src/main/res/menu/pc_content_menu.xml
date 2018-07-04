@@ -5,7 +5,7 @@
     <item
        android:id="@+id/pccontent_menu_shopcart"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/shop"
+        android:icon="@mipmap/cart_red"
         android:title="購物車" />
     <item
         android:id="@+id/pccontent_menu_share"

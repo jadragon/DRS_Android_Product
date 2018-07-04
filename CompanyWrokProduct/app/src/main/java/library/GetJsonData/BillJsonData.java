@@ -32,7 +32,13 @@ public class BillJsonData {
         params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
         params.add(new BasicNameValuePair("lang", "0"));
     }
-
+    /**
+     * 6.2.1	讀取波克點值
+     */
+    public JSONObject getBilling(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getBilling_url, params);
+    }
     /**
      * 6.2.1	讀取波克點值
      */
@@ -81,7 +87,7 @@ public class BillJsonData {
     /**
      * 6.6.2	設定波克點值轉換其它
      */
-    public JSONObject getPolkTrans(String token, int kuva_num) {
+    public JSONObject getPolkTrans(String token, String kuva_num) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("kuva_num", kuva_num + ""));
         return jsonParser.getJSONFromUrl(getPolkTrans_url, params);
@@ -98,11 +104,44 @@ public class BillJsonData {
     /**
      * 6.6.4	設定庫瓦點值轉換其它
      */
-    public JSONObject getKuvaTrans(String token, int polk_num, int acoin_num) {
+    public JSONObject getKuvaTrans(String token, String polk_num, String acoin_num) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("polk_num", polk_num + ""));
         params.add(new BasicNameValuePair("acoin_num", acoin_num + ""));
         return jsonParser.getJSONFromUrl(getKuvaTrans_url, params);
     }
 
+    /**
+     * 6.7.1	讀取電子錢包及轉換比值
+     */
+    public JSONObject getEwalletRate(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getEwalletRate_url, params);
+    }
+
+    /**
+     * 6.7.2	設定電子錢包轉換其它
+     */
+    public JSONObject getEwalletTrans(String token, String cash_num) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("cash_num", cash_num));
+        return jsonParser.getJSONFromUrl(getEwalletTrans_url, params);
+    }
+
+    /**
+     * 6.7.2	設定電子錢包轉換其它
+     */
+    public JSONObject getCoupon(String token) {
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getCoupon_url, params);
+    }
+
+    /**
+     * 6.8.2	刪除現金折價券
+     */
+    public JSONObject delCoupon(String token, String mcno) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mcno", mcno));
+        return jsonParser.getJSONFromUrl(delCoupon_url, params);
+    }
 }
