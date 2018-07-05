@@ -9,9 +9,9 @@ import java.util.List;
 
 public class CommunityPagerAdapter extends PagerAdapter {
     private List<View> mListViews;
-
     public CommunityPagerAdapter(List<View> mListViews) {
         this.mListViews = mListViews;
+
     }
 
     @Override
@@ -52,6 +52,10 @@ public class CommunityPagerAdapter extends PagerAdapter {
     @Override
     public void startUpdate(ViewGroup container) {
     }
-
-
+    /*
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return this.mTabtitle[position];
+    }
+*/
 }

@@ -217,8 +217,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     @Override
     public int getItemCount() {
         if (mHeaderView == null) {
-            return list.size();
-        } else if (mHeaderView == null) {
             return list.size() + 1;
         } else {
             return list.size() + 2;
@@ -327,11 +325,12 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        if (json != null)
+        if (json != null) {
             list = ResolveJsonData.getJSONData(json);
 
-        else
+        } else {
             list = new ArrayList<>();
+        }
         initItems();
         notifyDataSetChanged();
     }

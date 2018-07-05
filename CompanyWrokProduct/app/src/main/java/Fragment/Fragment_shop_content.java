@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,19 +39,18 @@ import library.LoadingView;
 import library.MyRecyclerViewTouchCallBack;
 
 public class Fragment_shop_content extends Fragment {
-    RecyclerView recyclerView;
-    ShopRecyclerViewAdapter myRecyclerAdapter;
-    ViewPager viewPager;
-    JSONObject json1, json2;
-    View v;
-    DisplayMetrics dm;
-    Banner header;
-    int type;
-    int nextpage = 2;
-    library.Component.MySwipeRefreshLayout mSwipeLayout;
-    EndLessOnScrollListener endLessOnScrollListener;
-    String ptno;
-    GlobalVariable gv;
+    private RecyclerView recyclerView;
+    private ShopRecyclerViewAdapter myRecyclerAdapter;
+    private JSONObject json1, json2;
+    private View v;
+    private  DisplayMetrics dm;
+    private  Banner header;
+    private  int type;
+    private  int nextpage = 2;
+    private  library.Component.MySwipeRefreshLayout mSwipeLayout;
+    private    EndLessOnScrollListener endLessOnScrollListener;
+    private  String ptno;
+    private  GlobalVariable gv;
 
     public void setPtno(String ptno) {
         this.ptno = ptno;
@@ -94,7 +92,7 @@ public class Fragment_shop_content extends Fragment {
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                LoadingView.show(v);
+                LoadingView.show(getView());
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -112,7 +110,7 @@ public class Fragment_shop_content extends Fragment {
                             @Override
                             public void run() {
                                 if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
-                                  setHeaderFilter(json1);
+                                    setHeaderFilter(json1);
                                 }
                                 myRecyclerAdapter.setFilter(json2);
                                 mSwipeLayout.setRefreshing(false);
@@ -132,7 +130,6 @@ public class Fragment_shop_content extends Fragment {
 
     private void initViewPagerAndRecyclerView() {
         recyclerView = v.findViewById(R.id.include_recyclerview);
-        viewPager = v.findViewById(R.id.adView);
         //recycleView
         dm = getResources().getDisplayMetrics();
 
@@ -236,7 +233,7 @@ public class Fragment_shop_content extends Fragment {
             }
         });
         List<String> images = new ArrayList<>();
-        if(json1!=null) {
+        if (json1 != null) {
             for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
                 images.add(map.get("image"));
             header.setImages(images);
@@ -252,20 +249,20 @@ public class Fragment_shop_content extends Fragment {
         nextpage = 2;
         endLessOnScrollListener.reset();
         if (myRecyclerAdapter != null) {
-                    myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, banner);
-                    recyclerView.setAdapter(myRecyclerAdapter);
+            myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, banner);
+            recyclerView.setAdapter(myRecyclerAdapter);
         }
     }
 
-    public void setFilter( JSONObject json) {
+    public void setFilter(JSONObject json) {
         json2 = json;
         nextpage = 2;
         if (myRecyclerAdapter != null) {
-                    myRecyclerAdapter.setFilter(json);
+            myRecyclerAdapter.setFilter(json);
         }
     }
-    public void setHeaderFilter( JSONObject json) {
-        json1 = json;
+
+    public void setHeaderFilter(JSONObject json) {
         if (header != null) {
             List<String> images = new ArrayList<>();
             for (Map<String, String> map : ResolveJsonData.getJSONData(json))
@@ -273,15 +270,15 @@ public class Fragment_shop_content extends Fragment {
             header.update(images);
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(header!=null)
-        header.releaseBanner();
+        if (header != null)
+            header.releaseBanner();
         recyclerView = null;
         recycleBitamps();
         myRecyclerAdapter = null;
-        viewPager = null;
         json1 = null;
         json2 = null;
         v = null;
@@ -295,7 +292,6 @@ public class Fragment_shop_content extends Fragment {
             myRecyclerAdapter.recycleBitmaps();
         recyclerView = null;
         myRecyclerAdapter = null;
-        viewPager = null;
         json1 = null;
         json2 = null;
         v = null;

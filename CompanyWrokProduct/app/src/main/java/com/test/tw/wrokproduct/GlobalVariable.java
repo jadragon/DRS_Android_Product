@@ -12,15 +12,25 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class GlobalVariable extends Application {
     private String token;     //User token
+    private String mvip;//User mvip
 
-    public String getToken() {
-        return token;
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         initImageLoader();
+    }
+
+    public String getMvip() {
+        return mvip;
+    }
+
+    public void setMvip(String mvip) {
+        this.mvip = mvip;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public void setToken(String token) {
@@ -42,7 +52,7 @@ public class GlobalVariable extends Application {
                 //设置图片加入缓存前，对bitmap进行设置
                 //.preProcessor(BitmapProcessor preProcessor)
                 .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-              //  .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
+                //  .displayer(new RoundedBitmapDisplayer(20))//不推荐用！！！！是否设置为圆角，弧度为多少
                 .displayer(new FadeInBitmapDisplayer(100))//是否图片加载好后渐入的动画时间，可能会出现闪动
                 .build();//构建完成
         //imageloader

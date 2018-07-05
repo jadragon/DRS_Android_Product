@@ -147,7 +147,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     try {
                                         boolean success = jsonObject.getBoolean("Success");
                                         if (success) {
-                                            gv.setToken(jsonObject.getString("Token"));
                                             account = login_edit_account.getText().toString();
                                             initMemberDB(jsonObject);
 
@@ -224,15 +223,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void initMemberDB(final JSONObject json) {
-
+    private void initMemberDB(final JSONObject json) throws JSONException {
+        gv.setToken(jsonObject.getString("Token"));
+        gv.setMvip(jsonObject.getString("Mvip"));
         final Map<String, String> datas = AnalyzeMember.getLogin(json);
-
         if (datas != null) {
 
             final SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
             db.resetLoginTables();
-            db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"));
+            db.addMember(datas.get("Token"), account, datas.get("Name"), datas.get("Picture"), datas.get("Mvip"), datas.get("Svip"));
             db.updateBackground(R.drawable.member_bg1 + "");
             ImageLoader.getInstance().loadImage(datas.get("Picture"), new ImageLoadingListener() {
 
@@ -336,7 +335,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 try {
                                                     boolean success = jsonObject.getBoolean("Success");
                                                     if (success) {
-                                                        gv.setToken(jsonObject.getString("Token"));
                                                         initMemberDB(jsonObject);
                                                     } else {
                                                         toastMessage.setMessageText(jsonObject.getString("Message"));
@@ -457,7 +455,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 try {
                                     boolean success = jsonObject.getBoolean("Success");
                                     if (success) {
-                                        gv.setToken(jsonObject.getString("Token"));
                                         initMemberDB(jsonObject);
                                     } else {
                                         toastMessage.setMessageText(jsonObject.getString("Message"));

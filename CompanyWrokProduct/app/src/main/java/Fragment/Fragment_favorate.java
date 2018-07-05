@@ -23,11 +23,15 @@ import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.ShopCartActivity;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetJsonData.GetInformationByPHP;
+import library.LoadingView;
 
 public class Fragment_favorate extends Fragment {
     Toolbar toolbar;
@@ -37,6 +41,9 @@ public class Fragment_favorate extends Fragment {
     ArrayList<Fragment_shop_content> fragmentArrayList;
     Fragment_shop_content fragment_shop_content;
     GlobalVariable gv;
+    JSONObject json1, json2;
+    String mvip;
+    ArrayList<String> tabtitle;
 
     @Nullable
     @Override
@@ -44,7 +51,8 @@ public class Fragment_favorate extends Fragment {
         v = inflater.inflate(R.layout.fragment_favorate_layout, container, false);
         initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
-
+        tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
+        mvip = gv.getMvip();
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.favorate_viewpager);
@@ -61,7 +69,7 @@ public class Fragment_favorate extends Fragment {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getContext().getResources().getStringArray(R.array.favorate_title), fragmentArrayList));
+                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList));
                         tabLayout.setupWithViewPager(viewPager, true);
                     }
                 });
@@ -79,6 +87,24 @@ public class Fragment_favorate extends Fragment {
         setHasOptionsMenu(true);
         ((TextView) v.findViewById(R.id.include_toolbar_title)).setText("我的喜好紀錄");
 
+    }
+
+    public void setFilter() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json1 = new GetInformationByPHP().getFavorite(gv.getToken());
+                json2 = new GetInformationByPHP().getBrowse(gv.getToken());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentArrayList.get(0).setFilter(json1);
+                        fragmentArrayList.get(1).setFilter(json2);
+                        LoadingView.hide();
+                    }
+                });
+            }
+        }).start();
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -108,9 +134,13 @@ public class Fragment_favorate extends Fragment {
         if (hidden) {   // 不在最前端显示 相当于调用了onPause();
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
+            if (!gv.getMvip().equals(mvip)) {
+                LoadingView.show(v);
+                mvip = gv.getMvip();
+                //网络数据刷新
+                setFilter();
+            }
 
-            //  setFilter();
-            //网络数据刷新
         }
     }
 }

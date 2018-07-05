@@ -40,6 +40,8 @@ public class AnalyzeMember {
                 map.put("Account", json.getString("Account"));
                 map.put("Name", json.getString("Name"));
                 map.put("Picture", json.getString("Picture"));
+                map.put("Mvip", json.getString("Mvip"));
+                map.put("Svip", json.getString("Svip"));
                 map.put("Message", json.getString("Message"));
                 return map;
             }

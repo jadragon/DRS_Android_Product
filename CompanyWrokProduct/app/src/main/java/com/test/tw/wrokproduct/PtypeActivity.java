@@ -13,11 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import Fragment.Fragment_shop_content;
@@ -27,6 +27,7 @@ import adapter.viewpager.ShopViewPagerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.AppManager;
 import library.GetJsonData.GetInformationByPHP;
+import library.LoadingView;
 
 public class PtypeActivity extends AppCompatActivity {
     DisplayMetrics dm;
@@ -45,13 +46,17 @@ public class PtypeActivity extends AppCompatActivity {
     String currentPtno;
     GlobalVariable gv;
     JSONObject json1, json2, json3, json4;
+    String mvip;
+    ArrayList<String> tabtitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_ptype_layout);
+        tabtitle = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.shop_header_title)));
         initSearchToolbar();
         gv = ((GlobalVariable) getApplicationContext());
+        mvip = gv.getMvip();
         AppManager.getAppManager().addActivity(this);
         POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();
@@ -73,7 +78,7 @@ public class PtypeActivity extends AppCompatActivity {
         fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
         fragment_shop_content.setType(3);
         fragmentArrayList.add(fragment_shop_content);
-        shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.shop_header_title), fragmentArrayList);
+        shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), tabtitle, fragmentArrayList);
         viewPager.setAdapter(shopViewPagerAdapter);
         viewPager.setOffscreenPageLimit(fragmentArrayList.size() - 1);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
@@ -88,7 +93,8 @@ public class PtypeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         initRecyclerView();
-                        setFilter(0);
+                        currentPtno = list.get(0).get("ptno");
+                        setFilter();
                     }
                 });
             }
@@ -138,8 +144,7 @@ public class PtypeActivity extends AppCompatActivity {
         });
     }
 
-    public void setFilter(int position) {
-        currentPtno = list.get(position).get("ptno");
+    public void setFilter() {
         fragmentArrayList.get(0).setPtno(currentPtno);
         fragmentArrayList.get(1).setPtno(currentPtno);
         fragmentArrayList.get(2).setPtno(currentPtno);
@@ -158,10 +163,12 @@ public class PtypeActivity extends AppCompatActivity {
                         fragmentArrayList.get(1).setFilter(json2);
                         fragmentArrayList.get(2).setFilter(json3);
                         fragmentArrayList.get(3).setFilter(json4);
+                        LoadingView.hide();
                     }
                 });
             }
         }).start();
+
     }
 
     public void resetRecyclerView(int position) {
@@ -191,30 +198,18 @@ public class PtypeActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        if (!gv.getMvip().equals(mvip)) {
+            LoadingView.show(getCurrentFocus());
+            mvip = gv.getMvip();
+            //网络数据刷新
+            setFilter();
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     protected void onDestroy() {
@@ -258,7 +253,7 @@ public class PtypeActivity extends AppCompatActivity {
             if (gv.getToken() != null)
                 startActivity(new Intent(PtypeActivity.this, ShopCartActivity.class));
             else
-                Toast.makeText(this, "請先做登入動作", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(PtypeActivity.this, LoginActivity.class));
             return true;
         }
 

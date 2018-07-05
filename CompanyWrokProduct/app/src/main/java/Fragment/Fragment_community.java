@@ -63,7 +63,7 @@ public class Fragment_community extends Fragment {
     GlobalVariable gv;
     View login_success;
     CircleImageView login_photo;
-    TextView login_name;
+    TextView login_name, login_mvip;
     int coverbg;
     Intent intent;
 
@@ -73,8 +73,13 @@ public class Fragment_community extends Fragment {
         initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
+        initRegistAndLogin();
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
+        tabLayout = v.findViewById(R.id.fragment_community_tablayout);
+        return v;
+    }
 
+    private void initViewPager(String mvip) {
         //List
         List<View> list = new ArrayList<>();
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.table_layout, null);
@@ -84,35 +89,11 @@ public class Fragment_community extends Fragment {
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.store_manage_image), getResources().getStringArray(R.array.store_manage_title)));
         listView.setDivider(null);
         list.add(listView);
-        listView = new ListView(getContext());
-        listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.community_image), getResources().getStringArray(R.array.community_title)));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final String json = new GetWebView(getContext()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==", position);
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(getContext(), CommunityActivity.class);
-                                intent.putExtra("html", json);
-                                intent.putExtra("title", getResources().getStringArray(R.array.community_title)[position]);
-                                startActivity(intent);
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
-        listView.setDivider(null);
-        list.add(listView);
+
         //List
 
-        viewPager.setAdapter(new CommunityPagerAdapter(list));
-        //TabLayout
-        tabLayout = v.findViewById(R.id.fragment_community_tablayout);
+
+        tabLayout.removeAllTabs();
         TabLayout.Tab tab = tabLayout.newTab();//获得每一个tab
         tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
         ImageView imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
@@ -125,14 +106,44 @@ public class Fragment_community extends Fragment {
         imageView.setImageResource(R.drawable.store_manage);
         ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("商家管理");
         tabLayout.addTab(tab);
-        tab = tabLayout.newTab();//获得每一个tab
-        tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
-        imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
-        imageView.setImageResource(R.drawable.community);
-        ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("社群網路");
-        tabLayout.addTab(tab);
-        //TabLayout
 
+//==========================================
+        if (mvip.equals("2")) {
+            listView = new ListView(getContext());
+            listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.community_image), getResources().getStringArray(R.array.community_title)));
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String json = new GetWebView(getContext()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==", position);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(getContext(), CommunityActivity.class);
+                                    intent.putExtra("html", json);
+                                    intent.putExtra("title", getResources().getStringArray(R.array.community_title)[position]);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    }).start();
+                }
+            });
+            listView.setDivider(null);
+            list.add(listView);
+            tab = tabLayout.newTab();//获得每一个tab
+            tab.setCustomView(R.layout.tabitem);//给每一个tab设置view
+            imageView = tab.getCustomView().findViewById(R.id.viewitem_tabItem_img);
+            imageView.setImageResource(R.drawable.community);
+            ((TextView) tab.getCustomView().findViewById(R.id.viewitem_tabItem_txt)).setText("社群網路");
+            tabLayout.addTab(tab);
+        }
+//==========================================
+
+        viewPager.setAdapter(new CommunityPagerAdapter(list));
+        //TabLayout
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -152,7 +163,9 @@ public class Fragment_community extends Fragment {
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+    }
 
+    private void initRegistAndLogin() {
         fragment_community_btn_register = v.findViewById(R.id.fragment_community_btn_register);
         fragment_community_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,14 +188,9 @@ public class Fragment_community extends Fragment {
 
             }
         });
-        initMember();
-        return v;
-    }
-
-
-    private void initMember() {
         login_photo = v.findViewById(R.id.login_photo);
         login_name = v.findViewById(R.id.login_name);
+        login_mvip = v.findViewById(R.id.login_mvip);
     }
 
 
@@ -393,17 +401,27 @@ public class Fragment_community extends Fragment {
             Map<String, String> member = db.getMemberDetail();
             byte[] bis = db.getPhotoImage();
             login_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
-            // ImageLoader.getInstance().displayImage(member.get("photo"), login_photo);
+
             login_name.setText(member.get("name"));
+            if (member.get("mvip").equals("2")) {
+                login_mvip.setText("特約會員");
+            } else {
+                login_mvip.setText("一般會員");
+            }
+
             try {
                 coverbg = Integer.parseInt(db.getMemberDetail().get("background"));
             } catch (Exception e) {
                 coverbg = R.drawable.member_bg2;
             }
             login_success.setBackgroundResource(coverbg);
+            initViewPager(member.get("mvip"));
             db.close();
         } else {
             login_success.setVisibility(View.INVISIBLE);
+            initViewPager("0");
         }
+
     }
+
 }

@@ -26,25 +26,29 @@ import com.test.tw.wrokproduct.ShopCartActivity;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.GetJsonData.GetInformationByPHP;
+import library.LoadingView;
 
 public class Fragment_shop extends Fragment {
-    View v;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ArrayList<Fragment_shop_content> fragmentArrayList;
-    GlobalVariable gv;
-    JSONObject json1, json2, json3, json4;
-    JSONObject jsonheader1, jsonheader2, jsonheader3, jsonheader4;
-
+    private View v;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ArrayList<Fragment_shop_content> fragmentArrayList;
+    private GlobalVariable gv;
+    private String mvip;
+    ArrayList<String> tabtitle;
+    ShopViewPagerAdapter viewPagerAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_layout, container, false);
         gv = (GlobalVariable) getContext().getApplicationContext();
+        tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
+
         initSearchToolbar();
         tabLayout = v.findViewById(R.id.shop_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
@@ -62,12 +66,28 @@ public class Fragment_shop extends Fragment {
         fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
         fragment_shop_content.setType(3);
         fragmentArrayList.add(fragment_shop_content);
-        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getContext().getResources().getStringArray(R.array.shop_header_title), fragmentArrayList));
-        viewPager.setOffscreenPageLimit(5);
+        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content.setType(4);
+        fragmentArrayList.add(fragment_shop_content);
+        viewPagerAdapter=new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList);
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setOffscreenPageLimit(6);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager(viewPager, true);
         setFilter();
+        mvip = gv.getMvip();
         return v;
+    }
+
+    public void resetViewPager(String mvip) {
+        if (mvip.equals("2")) {
+            tabtitle.remove(4);
+            viewPagerAdapter=new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList);
+            viewPager.setAdapter(viewPagerAdapter);
+        } else {
+            tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
+            viewPagerAdapter=new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList);
+            viewPager.setAdapter(viewPagerAdapter);
+        }
     }
 
     private void initSearchToolbar() {
@@ -89,15 +109,17 @@ public class Fragment_shop extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        /*
         if (hidden) {   // 不在最前端显示 相当于调用了onPause();
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
-
-            //  setFilter();
-            //网络数据刷新
+            if (!gv.getMvip().equals(mvip)) {
+                LoadingView.show(getView());
+                mvip = gv.getMvip();
+                resetViewPager(mvip);
+                //网络数据刷新
+                setFilter();
+            }
         }
-        */
     }
 
 
@@ -105,14 +127,17 @@ public class Fragment_shop extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new GetInformationByPHP().getIplist(0, gv.getToken(), 1);
-                json2 = new GetInformationByPHP().getIplist(1, gv.getToken(), 1);
-                json3 = new GetInformationByPHP().getIplist(2, gv.getToken(), 1);
-                json4 = new GetInformationByPHP().getIplist(3, gv.getToken(), 1);
-                jsonheader1 = new GetInformationByPHP().getBanner(0);
-                jsonheader2 = new GetInformationByPHP().getBanner(1);
-                jsonheader3 = new GetInformationByPHP().getBanner(2);
-                jsonheader4 = new GetInformationByPHP().getBanner(3);
+                final JSONObject json1 = new GetInformationByPHP().getIplist(0, gv.getToken(), 1);
+                final JSONObject json2 = new GetInformationByPHP().getIplist(1, gv.getToken(), 1);
+                final JSONObject json3 = new GetInformationByPHP().getIplist(2, gv.getToken(), 1);
+                final JSONObject json4 = new GetInformationByPHP().getIplist(3, gv.getToken(), 1);
+                final JSONObject jsonheader1 = new GetInformationByPHP().getBanner(0);
+                final JSONObject jsonheader2 = new GetInformationByPHP().getBanner(1);
+                final JSONObject jsonheader3 = new GetInformationByPHP().getBanner(2);
+                final JSONObject jsonheader4 = new GetInformationByPHP().getBanner(3);
+                //========================
+                final JSONObject json5 = new GetInformationByPHP().getIplist(4, gv.getToken(), 1);
+                final JSONObject jsonheader5 = new GetInformationByPHP().getBanner(4);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -120,10 +145,16 @@ public class Fragment_shop extends Fragment {
                         fragmentArrayList.get(1).setHeaderFilter(jsonheader2);
                         fragmentArrayList.get(2).setHeaderFilter(jsonheader3);
                         fragmentArrayList.get(3).setHeaderFilter(jsonheader4);
+
                         fragmentArrayList.get(0).setFilter(json1);
                         fragmentArrayList.get(1).setFilter(json2);
                         fragmentArrayList.get(2).setFilter(json3);
                         fragmentArrayList.get(3).setFilter(json4);
+                        //========================
+                        fragmentArrayList.get(4).setHeaderFilter(jsonheader5);
+                        fragmentArrayList.get(4).setFilter(json5);
+
+                        LoadingView.hide();
                     }
                 });
             }

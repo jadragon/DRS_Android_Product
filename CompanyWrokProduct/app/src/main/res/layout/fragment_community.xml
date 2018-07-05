@@ -97,15 +97,15 @@
                     android:id="@+id/login_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="無名氏"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
-                <Button
+                <TextView
+                    android:id="@+id/login_mvip"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
+                    android:gravity="center"
                     android:background="@drawable/arcangle_button_red"
-                    android:text="一般會員"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
             </LinearLayout>

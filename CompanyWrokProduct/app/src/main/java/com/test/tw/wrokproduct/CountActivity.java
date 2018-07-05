@@ -64,6 +64,7 @@ public class CountActivity extends AppCompatActivity {
                         });
                     }
                 }).start();
+                dialog.dismiss();
             }
         });
     }

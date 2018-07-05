@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,7 +18,7 @@ import library.GetJsonData.ReCountJsonData;
 
 public class GoldFlowActivity extends AppCompatActivity {
 
-    private WebView luntanListview;
+    private WebView webview;
     String html;
     ViewGroup container;
     String success, msg;
@@ -33,7 +34,7 @@ public class GoldFlowActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                html = new ReCountJsonData().setGoldFlow(count_type,gv.getToken());
+                html = new ReCountJsonData().setGoldFlow(count_type, gv.getToken());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -46,9 +47,9 @@ public class GoldFlowActivity extends AppCompatActivity {
     }
 
     private void showWebView() {
-        luntanListview = findViewById(R.id.goldflow_activity_webview);
+        webview = findViewById(R.id.goldflow_activity_webview);
         // 设置WevView要显示的网页
-        WebSettings webSettings = luntanListview.getSettings();
+        WebSettings webSettings = webview.getSettings();
         //声明WebSettings子
 
         //如果访问的页面中要与Javascript交互，则webview必须设置支持Javascript
@@ -75,17 +76,17 @@ public class GoldFlowActivity extends AppCompatActivity {
 
         //自适应屏幕
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
-        luntanListview.setVerticalScrollBarEnabled(false);
-        luntanListview.setVerticalScrollbarOverlay(false);
-        luntanListview.setHorizontalScrollBarEnabled(false);
-        luntanListview.setHorizontalScrollbarOverlay(false);
-        //                luntanListview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);   //取消滚动条
+        webview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        webview.setVerticalScrollBarEnabled(false);
+        webview.setVerticalScrollbarOverlay(false);
+        webview.setHorizontalScrollBarEnabled(false);
+        webview.setHorizontalScrollbarOverlay(false);
+        //                webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);   //取消滚动条
         //                点击链接由自己处理，而不是新开Android的系统browser响应该链接。
         //webSettings.setAllowUniversalAccessFromFileURLs(true);
-        luntanListview.clearCache(true);//清除暫存
-        luntanListview.setWebChromeClient(new WebChromeClient());
-        luntanListview.setWebViewClient(new WebViewClient() {
+        webview.clearCache(true);//清除暫存
+        webview.setWebChromeClient(new WebChromeClient());
+        webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.e("URL", url);
@@ -108,9 +109,9 @@ public class GoldFlowActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                Log.e("URL", url);
             }
         });
+        webview.addJavascriptInterface(this, "JSInterface");
     }
 
     public void clearWebViewResource(ViewGroup container, WebView webView) {
@@ -128,6 +129,11 @@ public class GoldFlowActivity extends AppCompatActivity {
         }
     }
 
+    @JavascriptInterface
+    public void setDeliver(String success, String msg) {
+        Toast.makeText(this, ""+success+msg, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onBackPressed() {
         Toast.makeText(this, "請先完成交易後,再執行此動作", Toast.LENGTH_SHORT).show();
@@ -136,6 +142,6 @@ public class GoldFlowActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        clearWebViewResource(container, luntanListview);
+        clearWebViewResource(container, webview);
     }
 }

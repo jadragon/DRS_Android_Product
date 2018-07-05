@@ -47,6 +47,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ACCOUNT = "account";
     private static final String KEY_NAME = "name";
     private static final String KEY_PHOTO = "photo";
+    private static final String KEY_MVIP = "mvip";
+    private static final String KEY_SVIP = "svip";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_BACKGROUND = "background";
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
@@ -55,6 +57,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             + KEY_ACCOUNT + " TEXT,"
             + KEY_NAME + " TEXT,"
             + KEY_PHOTO + " TEXT,"
+            + KEY_MVIP + " TEXT,"
+            + KEY_SVIP + " TEXT,"
             + KEY_IMAGE + " BLOB,"
             + KEY_BACKGROUND + " TEXT" + ")";
     //Bank table name
@@ -355,13 +359,15 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      */
-    public void addMember(String token, String account, String name, String photo) {
+    public void addMember(String token, String account, String name, String photo, String mvip, String svip) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TOKEN, token); // token
         values.put(KEY_ACCOUNT, account); // account
         values.put(KEY_NAME, name); // name
         values.put(KEY_PHOTO, photo); // photo
+        values.put(KEY_MVIP, mvip); // mvip
+        values.put(KEY_SVIP, svip); // svip
         // Inserting Row
         db.insert(TABLE_MEMBER, null, values);
         db.close(); // Closing database connection
@@ -395,7 +401,9 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             data.put("account", cursor.getString(2));
             data.put("name", cursor.getString(3));
             data.put("photo", cursor.getString(4));
-            data.put("background", cursor.getString(6));
+            data.put("mvip", cursor.getString(5));
+            data.put("svip", cursor.getString(6));
+            data.put("background", cursor.getString(8));
         }
         cursor.close();
         db.close();
@@ -416,7 +424,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     }
 
     public byte[] getPhotoImage() {
-        String selectQuery = "SELECT  "+KEY_IMAGE+" FROM " + TABLE_MEMBER;
+        String selectQuery = "SELECT  " + KEY_IMAGE + " FROM " + TABLE_MEMBER;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // Move to first row

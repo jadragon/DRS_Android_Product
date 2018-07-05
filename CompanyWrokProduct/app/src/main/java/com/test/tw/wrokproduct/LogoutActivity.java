@@ -3,7 +3,6 @@ package com.test.tw.wrokproduct;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -34,6 +33,7 @@ public class LogoutActivity extends AppCompatActivity {
                 db.close();
                 GlobalVariable gv = (GlobalVariable) getApplicationContext();
                 gv.setToken(null);
+                gv.setMvip("0");
                 Toast.makeText(getApplicationContext(), "登出", Toast.LENGTH_SHORT).show();
                 finish();
             }

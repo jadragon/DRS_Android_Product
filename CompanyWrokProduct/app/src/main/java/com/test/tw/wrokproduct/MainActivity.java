@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_notification fragment_notification;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
-    BottomNavigationView navigation;
-    SQLiteDatabaseHandler db;
+    private  BottomNavigationView navigation;
+    private  SQLiteDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,40 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 
     /**
      * 切换Fragment
@@ -147,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void switchFrament(int lastIndex, int index) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                //.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        //.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         transaction.hide(fragments[lastIndex]);
         if (!fragments[index].isAdded()) {
             transaction.add(R.id.content_layout, fragments[index]);
@@ -221,6 +187,9 @@ public class MainActivity extends AppCompatActivity {
                 GlobalVariable gv = (GlobalVariable) getApplicationContext();
                 if (db.getLoginRowCount() > 0) {
                     gv.setToken(db.getMemberDetail().get("token"));
+                    gv.setMvip(db.getMemberDetail().get("mvip"));
+                } else {
+                    gv.setMvip("0");
                 }
                 //
                 if (db.getBankRowCount() < 1) {
