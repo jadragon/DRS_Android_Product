@@ -35,23 +35,21 @@ import library.ItemTouchListencer;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> implements ItemTouchListencer {
-    public static final int TYPE_NORMAL = 0;  //说明是不带有header和footer的
-    public static final int TYPE_HEADER = 1;  //说明是带有Header的
-    public static final int TYPE_FOOTER = 2;  //说明是带有Footer的
+    public final int TYPE_NORMAL = 0;  //说明是不带有header和footer的
+    public final int TYPE_HEADER = 1;  //说明是带有Header的
+    public final int TYPE_FOOTER = 2;  //说明是带有Footer的
     //type
     public final static int HIDE_BANNER = 0;
     public final static int SHOW_BANNER = 1;
     public final static int FAVORATE = -1;
     public final static int BROWSE = -2;
     private View mHeaderView;
-    private View mFooterView;
     private Context ctx;
     private int layout_width, layout_heigh, had_header = 0;
     private JSONObject json;
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
-    private ShopRecyclerViewAdapter.RecycleHolder recycleHolder;
     private LinearLayout.LayoutParams layoutParams;
     private List<ProductInfoPojo> itemsList;
     GlobalVariable gv;
@@ -60,10 +58,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         this.mHeaderView = mHeaderView;
     }
 
-    public void setmFooterViewView(View mFooterView) {
 
-        this.mFooterView = mFooterView;
-    }
 
     public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int had_header) {
         this.ctx = ctx;
@@ -90,34 +85,20 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         }
     }
 
-    public ShopRecyclerViewAdapter(Context ctx, JSONObject json) {
-        this.ctx = ctx;
-        this.json = json;
-        this.layout_width = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
-        this.layout_heigh = (int) (this.layout_width + (110 * dm.density));
-        if (json != null)
-            list = ResolveJsonData.getJSONData(json);
-
-        else
-            list = new ArrayList<>();
-        initItems();
-        dm = ctx.getResources().getDisplayMetrics();
-    }
-
     @Override
     public ShopRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //頁面
         if (mHeaderView != null && viewType == TYPE_HEADER) {
             return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mHeaderView, json);
         }
-
-        if (mFooterView != null && viewType == TYPE_FOOTER) {
-            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mFooterView, json);
+        if (viewType == TYPE_FOOTER) {
+            View footer = new View(ctx);
+            footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50));
+            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, footer, json);
         }
 
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shop, parent, false);
-        recycleHolder = new ShopRecyclerViewAdapter.RecycleHolder(ctx, view, json);
-        return recycleHolder;
+        return new ShopRecyclerViewAdapter.RecycleHolder(ctx, view, json);
     }
 
     @Override
@@ -132,7 +113,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 resizeImageView(holder.imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
                 resizeImageView(holder.count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
                 resizeImageView(holder.count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
-                resizeImageView(holder.discount,(int) (layout_width / 3 * 1.3 - 5 * dm.density)/2, (int) (layout_width / 3 * 1.3 - 5 * dm.density)/2);
+                resizeImageView(holder.discount, (int) (layout_width / 3 * 1.3 - 5 * dm.density) / 2, (int) (layout_width / 3 * 1.3 - 5 * dm.density) / 2);
                 resizeImageView(holder.free, (layout_width / 3), (layout_width / 3));
                 resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
                 resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
@@ -258,7 +239,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         if (position == 0 && mHeaderView != null) {
             return TYPE_HEADER;
         }
-        if (position == getItemCount() - 1 && mFooterView != null) {
+        if (position == getItemCount() - 1) {
             return TYPE_FOOTER;
         }
         return TYPE_NORMAL;
@@ -266,11 +247,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     @Override
     public int getItemCount() {
-        if (mHeaderView == null && mFooterView == null) {
+        if (mHeaderView == null ) {
             return list.size();
-        } else if (mHeaderView == null && mFooterView != null) {
-            return list.size() + 1;
-        } else if (mHeaderView != null && mFooterView == null) {
+        } else if (mHeaderView == null ) {
             return list.size() + 1;
         } else {
             return list.size() + 2;
@@ -351,7 +330,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 position--;
             }
             if (itemsList.size() > position) {
-                  Intent intent = new Intent(ctx, PcContentActivity.class);
+                Intent intent = new Intent(ctx, PcContentActivity.class);
                 //            Bundle bundle = new Bundle();
                 //  bundle.putSerializable("productInfoPojo", itemsList.get(position));
                 //   intent.putExtras(bundle);
@@ -391,13 +370,11 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     public void recycleBitmaps() {
         mHeaderView = null;
-        mFooterView = null;
         ctx = null;
         json = null;
         view = null;
         list = null;
         dm = null;
-        recycleHolder = null;
         layoutParams = null;
     }
 

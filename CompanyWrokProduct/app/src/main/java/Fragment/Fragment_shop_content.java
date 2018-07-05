@@ -17,7 +17,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -225,7 +224,6 @@ public class Fragment_shop_content extends Fragment {
             };
             recyclerView.addOnScrollListener(endLessOnScrollListener);
         }
-        setFooterView(myRecyclerAdapter);
 
     }
 
@@ -249,11 +247,6 @@ public class Fragment_shop_content extends Fragment {
         adapter.setmHeaderView(header);
     }
 
-    private void setFooterView(ShopRecyclerViewAdapter adapter) {
-        View footer = new LinearLayout(getContext());
-        footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50));
-        adapter.setmFooterViewView(footer);
-    }
 
     public void resetRecyclerView(final JSONObject json) {
         json2 = json;
@@ -281,13 +274,22 @@ public class Fragment_shop_content extends Fragment {
                 }
             });
         }
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        header.releaseBanner();
+        recyclerView = null;
         recycleBitamps();
+        myRecyclerAdapter = null;
+        viewPager = null;
+        json1 = null;
+        json2 = null;
+        v = null;
+        dm = null;
+        mSwipeLayout = null;
+        endLessOnScrollListener = null;
     }
 
     public void recycleBitamps() {

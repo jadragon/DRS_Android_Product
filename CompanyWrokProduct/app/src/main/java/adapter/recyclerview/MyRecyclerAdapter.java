@@ -6,7 +6,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,19 +21,16 @@ import java.util.Map;
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.RecycleHolder> {
     private Context ctx;
     int type;
-    int layout_width, layout_heigh;
     JSONObject json;
     View view;
     ArrayList<Map<String, String>> list;
     DisplayMetrics dm;
     MyRecyclerAdapter.RecycleHolder recycleHolder;
-    LinearLayout.LayoutParams layoutParams;
+
     private MyRecyclerAdapter.ClickListener clickListener;
 
-    public MyRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int layout_width, int layout_heigh, int type) {
+    public MyRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int type) {
         this.ctx = ctx;
-        this.layout_width = layout_width;
-        this.layout_heigh = layout_heigh;
         this.type = type;
         this.list = list;
         dm = ctx.getResources().getDisplayMetrics();
@@ -50,20 +46,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
-        if (type == 0) {
-            layoutParams.setMargins(0, 0, (int) (10 * dm.density), 0);
-        } else if (type == 1) {
-            layoutParams.setMargins(0, 0, 0, 0);
-            holder.tv1.setTextColor(ctx.getResources().getColor(R.color.black));
-            holder.tv1.setBackgroundColor(ctx.getResources().getColor(R.color.colorInvisible));
-        } else if (type == 2) {
-            layoutParams.setMargins(0, 0, (int) (5 * dm.density), 0);
-            holder.tv1.setVisibility(View.INVISIBLE);
-        }
-        holder.frameLayout.setLayoutParams(layoutParams);
         holder.imageView.setImageBitmap(null);
-        ImageLoader.getInstance().displayImage( list.get(position).get("image"),holder.imageView);
+        ImageLoader.getInstance().displayImage(list.get(position).get("image"), holder.imageView);
         holder.tv1.setText(list.get(position).get("title"));
     }
 
@@ -73,9 +57,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         return list.size();
     }
 
-   class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
-        FrameLayout frameLayout;
         TextView tv1;
         Context ctx;
         JSONObject json;
@@ -84,9 +67,30 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
             super(view);
             this.json = json;
             this.ctx = ctx;
-            frameLayout = view.findViewById(R.id.frame_layout);
             imageView = view.findViewById(R.id.imView);
             tv1 = view.findViewById(R.id.tV1);
+            LinearLayout.LayoutParams layoutParams;
+            int real_heigh;
+            if (type == 0) {
+                real_heigh = (int) ((dm.widthPixels - 40 * dm.density) / (float) 3.5);
+                layoutParams = new LinearLayout.LayoutParams(real_heigh, real_heigh * 3 / 4);
+                layoutParams.setMargins(0, 0, (int) (10 * dm.density), 0);
+                view.setLayoutParams(layoutParams);
+            } else if (type == 1) {
+                real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 3.5);
+                layoutParams = new LinearLayout.LayoutParams(real_heigh, dm.widthPixels / 4);
+                layoutParams.setMargins(0, 0, 0, 0);
+                view.setLayoutParams(layoutParams);
+                tv1.setTextColor(ctx.getResources().getColor(R.color.black));
+                tv1.setBackgroundColor(ctx.getResources().getColor(R.color.colorInvisible));
+            } else if (type == 2) {
+                real_heigh = (int) ((dm.widthPixels - 25 * dm.density) / (float) 4);
+                layoutParams = new LinearLayout.LayoutParams(real_heigh, real_heigh / 4 * 3);
+                layoutParams.setMargins(0, 0, (int) (5 * dm.density), 0);
+                view.setLayoutParams(layoutParams);
+                tv1.setVisibility(View.INVISIBLE);
+            }
+
             imageView.setOnClickListener(this);
         }
 

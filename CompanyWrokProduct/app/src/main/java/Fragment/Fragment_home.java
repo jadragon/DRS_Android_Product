@@ -9,7 +9,6 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -57,8 +56,6 @@ public class Fragment_home extends Fragment {
     DisplayMetrics dm;
     List<ImageView> list;
     RelativeLayout relativeLayout;
-    ViewPager viewPager;
-    int real_heigh;
     MySwipeRefreshLayout mSwipeLayout;
     RecyclerView recyclerView, recyclerView2, recyclerView3;
     JSONObject json, json1, json2, json3;
@@ -80,11 +77,13 @@ public class Fragment_home extends Fragment {
         initSearchToolbar();
         //取得ID
         getID(v);
-        //起始方法
-        init();
+        gv = (GlobalVariable) getContext().getApplicationContext();
+        list = new ArrayList<>();
+        dm = getContext().getResources().getDisplayMetrics();
+        //
         handler = new Handler(Looper.getMainLooper());
         mThread = new HandlerThread("name");
-        gv = (GlobalVariable) getContext().getApplicationContext();
+
         //讓Worker待命，等待其工作 (開啟Thread)
 
         mThread.start();
@@ -136,27 +135,14 @@ public class Fragment_home extends Fragment {
         mThreadHandler.post(r1);
     }
 
-    private void init() {
-        list = new ArrayList<>();
-        dm = getContext().getResources().getDisplayMetrics();
-        real_heigh = (int) ((dm.widthPixels - 20 * dm.density) / (float) 3.5 / 4 * 3);
-        recyclerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, real_heigh));
-        recyclerView.setHasFixedSize(true);
-        real_heigh = (dm.widthPixels) / 2;
-        recyclerView2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, real_heigh));
-        recyclerView2.setHasFixedSize(true);
-        real_heigh = (int) ((dm.widthPixels - 40 * dm.density) / (float) 4 / 4 * 3 + 10 * dm.density) * 2;
-        recyclerView3.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, real_heigh));
-        recyclerView3.setHasFixedSize(true);
-
-    }
-
     private void getID(View v) {
         mSwipeLayout = v.findViewById(R.id.swipe_container);
         recyclerView = v.findViewById(R.id.reView);
+        recyclerView.setHasFixedSize(true);
         recyclerView2 = v.findViewById(R.id.reView2);
+        recyclerView2.setHasFixedSize(true);
         recyclerView3 = v.findViewById(R.id.reView3);
-        viewPager = v.findViewById(R.id.adView);
+        recyclerView3.setHasFixedSize(true);
         relativeLayout = v.findViewById(R.id.RelateView);
     }
 
@@ -195,8 +181,6 @@ public class Fragment_home extends Fragment {
     private Runnable r2 = new Runnable() {
         public void run() {
             //取得Slider圖片
-            //高度等比縮放[   圖片高度/(圖片寬度/手機寬度)    ]
-            // float real_heigh = bitmaps1.get(0).getImage().getHeight() / (bitmaps1.get(0).getImage().getWidth() / (float) dm.widthPixels);
             header = v.findViewById(R.id.testbanner);
             // Banner header=new Banner(getContext());
             header.setLayoutParams(new LinearLayout.LayoutParams(dm.widthPixels, dm.widthPixels * 19 / 54));
@@ -214,15 +198,13 @@ public class Fragment_home extends Fragment {
             //banner设置方法全部调用完毕时最后调用
             header.start();
             //取得HotkeyWords圖片
-            real_heigh = (int) ((dm.widthPixels - 40 * dm.density) / (float) 3.5);
-            myRecyclerAdapter1 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json1), real_heigh, real_heigh * 3 / 4, 0);
+            myRecyclerAdapter1 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json1),  0);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(myRecyclerAdapter1);
             //取得Ptype圖片
-            real_heigh = (int) ((dm.widthPixels - 10 * dm.density) / (float) 3.5);
-            myRecyclerAdapter2 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json2), real_heigh, dm.widthPixels / 4, 1);
+            myRecyclerAdapter2 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json2),  1);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView2.setLayoutManager(gridLayoutManager);
@@ -236,8 +218,7 @@ public class Fragment_home extends Fragment {
                 }
             });
             //取得Brands圖片
-            real_heigh = (int) ((dm.widthPixels - 25 * dm.density) / (float) 4);
-            myRecyclerAdapter3 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json3), real_heigh, real_heigh / 4 * 3, 2);
+            myRecyclerAdapter3 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json3), 2);
             gridLayoutManager = new GridLayoutManager(getContext(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView3.setLayoutManager(gridLayoutManager);
@@ -269,7 +250,6 @@ public class Fragment_home extends Fragment {
         if (mThreadHandler != null) {
             mThreadHandler.removeCallbacks(r1);
         }
-
         //解聘工人 (關閉Thread)
         if (mThread != null) {
             mThread.quit();

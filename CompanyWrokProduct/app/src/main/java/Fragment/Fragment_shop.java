@@ -92,7 +92,6 @@ public class Fragment_shop extends Fragment {
                 Intent intent = new Intent(getContext(), SearchBarActivity.class);
                 intent.addFlags(intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-                // getActivity().overridePendingTransition(0, 0);
             }
         });
     }
@@ -100,6 +99,7 @@ public class Fragment_shop extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        /*
         if (hidden) {   // 不在最前端显示 相当于调用了onPause();
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
@@ -107,6 +107,7 @@ public class Fragment_shop extends Fragment {
             //  setFilter();
             //网络数据刷新
         }
+        */
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
