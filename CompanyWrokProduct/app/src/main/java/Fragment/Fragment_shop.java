@@ -23,6 +23,8 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.SearchBarActivity;
 import com.test.tw.wrokproduct.ShopCartActivity;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
@@ -34,8 +36,9 @@ public class Fragment_shop extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     ArrayList<Fragment_shop_content> fragmentArrayList;
-    Fragment_shop_content fragment_shop_content;
     GlobalVariable gv;
+    JSONObject json1, json2, json3, json4;
+    JSONObject jsonheader1, jsonheader2, jsonheader3, jsonheader4;
 
     @Nullable
     @Override
@@ -46,37 +49,24 @@ public class Fragment_shop extends Fragment {
         tabLayout = v.findViewById(R.id.shop_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.shop_viewpager);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                fragmentArrayList = new ArrayList<>();
-                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(0), new GetInformationByPHP().getIplist(0, gv.getToken(), 1));
-                fragment_shop_content.setType(0);
-                fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(1), new GetInformationByPHP().getIplist(1, gv.getToken(), 1));
-                fragment_shop_content.setType(1);
-                fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(2), new GetInformationByPHP().getIplist(2, gv.getToken(), 1));
-                fragment_shop_content.setType(2);
-                fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-                fragment_shop_content.setJson(new GetInformationByPHP().getBanner(3), new GetInformationByPHP().getIplist(3, gv.getToken(), 1));
-                fragment_shop_content.setType(3);
-                fragmentArrayList.add(fragment_shop_content);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getContext().getResources().getStringArray(R.array.shop_header_title), fragmentArrayList));
-                        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-                        tabLayout.setupWithViewPager(viewPager, true);
-                    }
-                });
-            }
-        }).start();
-
+        fragmentArrayList = new ArrayList<>();
+        Fragment_shop_content fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content.setType(0);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content.setType(1);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content.setType(2);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content.setType(3);
+        fragmentArrayList.add(fragment_shop_content);
+        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), getContext().getResources().getStringArray(R.array.shop_header_title), fragmentArrayList));
+        viewPager.setOffscreenPageLimit(5);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setupWithViewPager(viewPager, true);
+        setFilter();
         return v;
     }
 
@@ -108,6 +98,36 @@ public class Fragment_shop extends Fragment {
             //网络数据刷新
         }
         */
+    }
+
+
+    public void setFilter() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json1 = new GetInformationByPHP().getIplist(0, gv.getToken(), 1);
+                json2 = new GetInformationByPHP().getIplist(1, gv.getToken(), 1);
+                json3 = new GetInformationByPHP().getIplist(2, gv.getToken(), 1);
+                json4 = new GetInformationByPHP().getIplist(3, gv.getToken(), 1);
+                jsonheader1 = new GetInformationByPHP().getBanner(0);
+                jsonheader2 = new GetInformationByPHP().getBanner(1);
+                jsonheader3 = new GetInformationByPHP().getBanner(2);
+                jsonheader4 = new GetInformationByPHP().getBanner(3);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentArrayList.get(0).setHeaderFilter(jsonheader1);
+                        fragmentArrayList.get(1).setHeaderFilter(jsonheader2);
+                        fragmentArrayList.get(2).setHeaderFilter(jsonheader3);
+                        fragmentArrayList.get(3).setHeaderFilter(jsonheader4);
+                        fragmentArrayList.get(0).setFilter(json1);
+                        fragmentArrayList.get(1).setFilter(json2);
+                        fragmentArrayList.get(2).setFilter(json3);
+                        fragmentArrayList.get(3).setFilter(json4);
+                    }
+                });
+            }
+        }).start();
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -20,7 +20,7 @@ public class ProductInfoPojo
     private String istime;
     private String discount;
     private String shipping;
-    private String score;
+    private int score;
     private boolean favorite;
     private String rpolicy;
 
@@ -28,7 +28,7 @@ public class ProductInfoPojo
     public ProductInfoPojo() {
     }
 
-    public ProductInfoPojo(String title, String image, String pno, String descs, String rprice, String rsprice, String isnew, String ishot, String istime, String discount, String shipping, boolean favorite, String score) {
+    public ProductInfoPojo(String title, String image, String pno, String descs, String rprice, String rsprice, String isnew, String ishot, String istime, String discount, String shipping, boolean favorite, int score) {
         this.title = title;
         this.image = image;
         this.pno = pno;
@@ -140,11 +140,11 @@ public class ProductInfoPojo
         this.favorite = favorite;
     }
 
-    public String getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(String score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

@@ -128,7 +128,7 @@ public class PcContentActivity extends AppCompatActivity {
         productInfoPojo.setIshot(map.get("ishot"));
         productInfoPojo.setIstime(map.get("istime"));
         productInfoPojo.setFavorite(map.get("favorite").equals("true"));
-        productInfoPojo.setScore(map.get("score"));
+        productInfoPojo.setScore(Integer.parseInt(map.get("score")));
         productInfoPojo.setRpolicy(map.get("rpolicy"));
     }
 
@@ -163,7 +163,7 @@ public class PcContentActivity extends AppCompatActivity {
         //星星
         pccontent_img_star = findViewById(R.id.pccontent_img_star);
         //  pccontent_img_star.setImageResource(stars[Integer.parseInt(productInfoPojo.getScore())]);
-        pccontent_img_star.setImageResource(stars.getResourceId(Integer.parseInt(productInfoPojo.getScore()), 0));
+        pccontent_img_star.setImageResource(stars.getResourceId(productInfoPojo.getScore(), 0));
     }
 
     //產品圖片

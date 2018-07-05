@@ -78,7 +78,7 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
             textView = new TextView(ctx);
             textView.setText(".");
             textView.setTextSize(50);
-            textView.setTextColor(Color.WHITE);
+            textView.setTextColor(Color.GRAY);
             linearLayout.addView(textView);
             dots.add(textView);
         }
@@ -163,7 +163,7 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
         public void onPageSelected(int position) {
             position = position % mListViews.size();
             for (int i = 0; i < mListViews.size(); i++) {
-                dots.get(i).setTextColor(Color.WHITE);
+                dots.get(i).setTextColor(Color.GRAY);
             }
             dots.get(position).setTextColor(Color.BLACK);
         }

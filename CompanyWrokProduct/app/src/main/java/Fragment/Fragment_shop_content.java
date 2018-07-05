@@ -112,10 +112,7 @@ public class Fragment_shop_content extends Fragment {
                             @Override
                             public void run() {
                                 if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
-                                    List<String> images = new ArrayList<>();
-                                    for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
-                                        images.add(map.get("image"));
-                                    header.update(images);
+                                  setHeaderFilter(json1);
                                 }
                                 myRecyclerAdapter.setFilter(json2);
                                 mSwipeLayout.setRefreshing(false);
@@ -239,11 +236,13 @@ public class Fragment_shop_content extends Fragment {
             }
         });
         List<String> images = new ArrayList<>();
-        for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
-            images.add(map.get("image"));
-        header.setImages(images);
+        if(json1!=null) {
+            for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
+                images.add(map.get("image"));
+            header.setImages(images);
+        }
         //banner设置方法全部调用完毕时最后调用
-        header.start();
+        //header.start();
         adapter.setmHeaderView(header);
     }
 
@@ -253,32 +252,31 @@ public class Fragment_shop_content extends Fragment {
         nextpage = 2;
         endLessOnScrollListener.reset();
         if (myRecyclerAdapter != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
                     myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, banner);
                     recyclerView.setAdapter(myRecyclerAdapter);
-                }
-            });
         }
     }
 
-    public void setFilter(final JSONObject json) {
+    public void setFilter( JSONObject json) {
         json2 = json;
         nextpage = 2;
         if (myRecyclerAdapter != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
                     myRecyclerAdapter.setFilter(json);
-                }
-            });
         }
     }
-
+    public void setHeaderFilter( JSONObject json) {
+        json1 = json;
+        if (header != null) {
+            List<String> images = new ArrayList<>();
+            for (Map<String, String> map : ResolveJsonData.getJSONData(json))
+                images.add(map.get("image"));
+            header.update(images);
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if(header!=null)
         header.releaseBanner();
         recyclerView = null;
         recycleBitamps();

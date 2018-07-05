@@ -3,6 +3,7 @@ package adapter.recyclerview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,20 +51,20 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View view;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
-    private LinearLayout.LayoutParams layoutParams;
     private List<ProductInfoPojo> itemsList;
     GlobalVariable gv;
+    private TypedArray stars;
 
     public void setmHeaderView(View mHeaderView) {
         this.mHeaderView = mHeaderView;
     }
 
 
-
     public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int had_header) {
         this.ctx = ctx;
         dm = ctx.getResources().getDisplayMetrics();
         gv = ((GlobalVariable) ctx.getApplicationContext());
+        stars = ctx.getResources().obtainTypedArray(R.array.small_stars);
         if (had_header > FAVORATE)
             this.had_header = had_header;
         this.layout_width = (int) ((dm.widthPixels - 10 * dm.density) / (float) 2);
@@ -80,7 +81,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         itemsList = new ArrayList<>();
         for (Map<String, String> map : list) {
             items = new ProductInfoPojo(map.get("title"), map.get("image"), map.get("pno"), map.get("descs"), map.get("rprice"), map.get("rsprice"),
-                    map.get("isnew"), map.get("ishot"), map.get("istime"), map.get("discount"), map.get("shipping"), map.get("favorite").equals("true"), map.get("score"));
+                    map.get("isnew"), map.get("ishot"), map.get("istime"), map.get("discount"), map.get("shipping"), map.get("favorite").equals("true"), Integer.parseInt(map.get("score")));
             itemsList.add(items);
         }
     }
@@ -89,35 +90,22 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     public ShopRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //頁面
         if (mHeaderView != null && viewType == TYPE_HEADER) {
-            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mHeaderView, json);
+            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, mHeaderView, json, viewType);
         }
         if (viewType == TYPE_FOOTER) {
             View footer = new View(ctx);
             footer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50));
-            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, footer, json);
+            return new ShopRecyclerViewAdapter.RecycleHolder(ctx, footer, json, viewType);
         }
 
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_shop, parent, false);
-        return new ShopRecyclerViewAdapter.RecycleHolder(ctx, view, json);
+        return new ShopRecyclerViewAdapter.RecycleHolder(ctx, view, json, viewType);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         if (list.size() > 0) {
             if (getItemViewType(position) == TYPE_NORMAL) {
-                layoutParams = new LinearLayout.LayoutParams(layout_width, layout_heigh);
-                //layout
-                holder.frameLayout.setLayoutParams(layoutParams);
-                holder.item_linear.setLayoutParams(new FrameLayout.LayoutParams((int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density + 110 * dm.density)));
-                //圖片
-                resizeImageView(holder.imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
-                resizeImageView(holder.count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
-                resizeImageView(holder.count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
-                resizeImageView(holder.discount, (int) (layout_width / 3 * 1.3 - 5 * dm.density) / 2, (int) (layout_width / 3 * 1.3 - 5 * dm.density) / 2);
-                resizeImageView(holder.free, (layout_width / 3), (layout_width / 3));
-                resizeImageView(holder.freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-                resizeImageView(holder.hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
-                resizeImageView(holder.limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
                 holder.imageView.setImageBitmap(null);
                 ImageLoader.getInstance().displayImage(list.get(position - had_header).get("image"), holder.imageView);
                 holder.free.setVisibility(View.INVISIBLE);
@@ -144,7 +132,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                     holder.count0.setVisibility(View.VISIBLE);
                     holder.count1.setVisibility(View.VISIBLE);
                     holder.discount.setVisibility(View.VISIBLE);
-                    // holder.discount.setTextSize(dm.heightPixels/dm.widthPixels*18);
                     holder.discount.setText(itemsList.get(position - had_header).getDiscount());
                 }
                 //原價
@@ -163,26 +150,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 holder.tv1.setText(itemsList.get(position - had_header).getTitle());
 
                 //score
-                switch (itemsList.get(position - had_header).getScore()) {
-                    case "1":
-                        holder.score.setImageResource(R.drawable.star1);
-                        break;
-                    case "2":
-                        holder.score.setImageResource(R.drawable.star2);
-                        break;
-                    case "3":
-                        holder.score.setImageResource(R.drawable.star3);
-                        break;
-                    case "4":
-                        holder.score.setImageResource(R.drawable.star4);
-                        break;
-                    case "5":
-                        holder.score.setImageResource(R.drawable.star5);
-                        break;
-                    default:
-                        holder.score.setImageResource(R.drawable.star0);
-                        break;
-                }
+
+                holder.score.setImageResource(stars.getResourceId(itemsList.get(position - had_header).getScore(), 0));
+
                 //判斷是否點過最愛
                 if (itemsList.get(position - had_header).getFavorite())
                     holder.heart.setImageResource(R.drawable.heart_on);
@@ -221,7 +191,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                         }).start();
                     }
                 });
-            } else if (getItemViewType(position) == TYPE_HEADER) {
             }
         }
 
@@ -247,9 +216,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     @Override
     public int getItemCount() {
-        if (mHeaderView == null ) {
+        if (mHeaderView == null) {
             return list.size();
-        } else if (mHeaderView == null ) {
+        } else if (mHeaderView == null) {
             return list.size() + 1;
         } else {
             return list.size() + 2;
@@ -289,34 +258,48 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView, count0, count1, free, freash, hot, limit, heart, score;
-        LinearLayout frameLayout, linear_heart;
+        LinearLayout linear_heart;
         TextView tv1, rprice, rsprice, discount;
         Context ctx;
         JSONObject json;
         LinearLayout item_linear;
 
-        public RecycleHolder(Context ctx, View view, JSONObject json) {
+        public RecycleHolder(Context ctx, View view, JSONObject json, int viewType) {
             super(view);
             ButterKnife.bind(this, view);
             this.json = json;
             this.ctx = ctx;
-            frameLayout = view.findViewById(R.id.shop_frame);
-            item_linear = view.findViewById(R.id.item_linear);
-            imageView = view.findViewById(R.id.product_image);
-            tv1 = view.findViewById(R.id.product_title);
-            count0 = view.findViewById(R.id.count0);
-            count1 = view.findViewById(R.id.count1);
-            freash = view.findViewById(R.id.freash);
-            hot = view.findViewById(R.id.hot);
-            limit = view.findViewById(R.id.limit);
-            free = view.findViewById(R.id.free);
-            rprice = view.findViewById(R.id.rprice);
-            rsprice = view.findViewById(R.id.rsprice);
-            discount = view.findViewById(R.id.discount);
-            linear_heart = view.findViewById(R.id.linear_heart);
-            heart = view.findViewById(R.id.heart);
-            score = view.findViewById(R.id.score);
-            itemView.setOnClickListener(this);
+            if (viewType == TYPE_NORMAL) {
+                item_linear = view.findViewById(R.id.item_linear);
+                imageView = view.findViewById(R.id.product_image);
+                tv1 = view.findViewById(R.id.product_title);
+                count0 = view.findViewById(R.id.count0);
+                count1 = view.findViewById(R.id.count1);
+                freash = view.findViewById(R.id.freash);
+                hot = view.findViewById(R.id.hot);
+                limit = view.findViewById(R.id.limit);
+                free = view.findViewById(R.id.free);
+                rprice = view.findViewById(R.id.rprice);
+                rsprice = view.findViewById(R.id.rsprice);
+                discount = view.findViewById(R.id.discount);
+                linear_heart = view.findViewById(R.id.linear_heart);
+                heart = view.findViewById(R.id.heart);
+                score = view.findViewById(R.id.score);
+                itemView.setOnClickListener(this);
+                //
+                //layout
+                view.setLayoutParams(new LinearLayout.LayoutParams(layout_width, layout_heigh));
+                item_linear.setLayoutParams(new FrameLayout.LayoutParams((int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density + 110 * dm.density)));
+                //圖片
+                resizeImageView(imageView, (int) (layout_width - 15 * dm.density), (int) (layout_width - 15 * dm.density));
+                resizeImageView(count0, (int) (layout_width / 3 * 1.3), (int) (layout_width / 3 * 1.3));
+                resizeImageView(count1, (int) (layout_width / 3 * 1.3 - 5 * dm.density), (int) (layout_width / 3 * 1.3 - 5 * dm.density));
+                resizeImageView(discount, (int) (layout_width / 3 * 1.3 - 5 * dm.density) / 2, (int) (layout_width / 3 * 1.3 - 5 * dm.density) / 2);
+                resizeImageView(free, (layout_width / 3), (layout_width / 3));
+                resizeImageView(freash, (layout_width / 3), (int) (layout_width / 3 * 0.3));
+                resizeImageView(hot, (layout_width / 3), (int) (layout_width / 3 * 0.3));
+                resizeImageView(limit, (layout_width / 3), (int) (layout_width / 3 * 0.3));
+            }
         }
 
         @Override
@@ -355,17 +338,19 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     public boolean setFilterMore(JSONObject json) {
         int presize = itemsList.size();
-        if (json != null && ResolveJsonData.getJSONData(json).size() > 0) {
-            list.addAll(ResolveJsonData.getJSONData(json));
-            initItems();
-            notifyItemInserted(presize + 1);
-            //  notifyItemChanged(presize + 1, itemsList.size() + 1);
-            return true;
-        } else {
-            new ToastMessageDialog(ctx, "沒有更多了").show();
-            return false;
+        if (presize > 0) {
+            if (json != null && ResolveJsonData.getJSONData(json).size() > 0) {
+                list.addAll(ResolveJsonData.getJSONData(json));
+                initItems();
+                notifyItemInserted(presize + 1);
+                //  notifyItemChanged(presize + 1, itemsList.size() + 1);
+                return true;
+            } else {
+                new ToastMessageDialog(ctx, "沒有更多了").show();
+                return false;
+            }
         }
-
+        return false;
     }
 
     public void recycleBitmaps() {
@@ -375,7 +360,6 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         view = null;
         list = null;
         dm = null;
-        layoutParams = null;
     }
 
 }
