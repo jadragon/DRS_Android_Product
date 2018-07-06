@@ -2,6 +2,8 @@ package com.test.tw.wrokproduct;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -45,9 +47,9 @@ public class PtypeActivity extends AppCompatActivity {
     Fragment_shop_content fragment_shop_content;
     String currentPtno;
     GlobalVariable gv;
-    JSONObject json1, json2, json3, json4;
     String mvip;
     ArrayList<String> tabtitle;
+    private Fragment_shop_content fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4, fragment_shop_content5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,24 +67,20 @@ public class PtypeActivity extends AppCompatActivity {
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = findViewById(R.id.ptype_viewpager);
         //
-        fragmentArrayList = new ArrayList<>();
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
-        fragment_shop_content.setType(0);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
-        fragment_shop_content.setType(1);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
-        fragment_shop_content.setType(2);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
-        fragment_shop_content.setType(3);
-        fragmentArrayList.add(fragment_shop_content);
-        shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), tabtitle, fragmentArrayList);
-        viewPager.setAdapter(shopViewPagerAdapter);
-        viewPager.setOffscreenPageLimit(fragmentArrayList.size() - 1);
+        fragment_shop_content1 = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
+        fragment_shop_content1.setType(0);
+        fragment_shop_content2 = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
+        fragment_shop_content2.setType(1);
+        fragment_shop_content3 = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
+        fragment_shop_content3.setType(2);
+        fragment_shop_content4 = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
+        fragment_shop_content4.setType(3);
+        fragment_shop_content5 = new Fragment_shop_content(ShopRecyclerViewAdapter.HIDE_BANNER);
+        fragment_shop_content5.setType(4);
+        viewPager.setOffscreenPageLimit(5);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        resetViewPager(mvip);
         //分類
         new Thread(new Runnable() {
             @Override
@@ -99,6 +97,30 @@ public class PtypeActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    public void resetViewPager(String mvip) {
+        if (mvip.equals("2")) {
+            fragmentArrayList = new ArrayList<>();
+            tabtitle = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.shop_header_title)));
+            fragmentArrayList.add(fragment_shop_content1);
+            fragmentArrayList.add(fragment_shop_content2);
+            fragmentArrayList.add(fragment_shop_content3);
+            fragmentArrayList.add(fragment_shop_content4);
+            fragmentArrayList.add(fragment_shop_content5);
+            shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), tabtitle, fragmentArrayList);
+            viewPager.setAdapter(shopViewPagerAdapter);
+        } else {
+            fragmentArrayList = new ArrayList<>();
+            fragmentArrayList.add(fragment_shop_content1);
+            fragmentArrayList.add(fragment_shop_content2);
+            fragmentArrayList.add(fragment_shop_content3);
+            fragmentArrayList.add(fragment_shop_content4);
+            if (tabtitle.size() == 5)
+                tabtitle.remove(4);
+            shopViewPagerAdapter = new ShopViewPagerAdapter(getSupportFragmentManager(), tabtitle, fragmentArrayList);
+            viewPager.setAdapter(shopViewPagerAdapter);
+        }
     }
 
     private void initSearchToolbar() {
@@ -145,24 +167,39 @@ public class PtypeActivity extends AppCompatActivity {
     }
 
     public void setFilter() {
-        fragmentArrayList.get(0).setPtno(currentPtno);
-        fragmentArrayList.get(1).setPtno(currentPtno);
-        fragmentArrayList.get(2).setPtno(currentPtno);
-        fragmentArrayList.get(3).setPtno(currentPtno);
+        fragment_shop_content1.setPtno(currentPtno);
+        fragment_shop_content2.setPtno(currentPtno);
+        fragment_shop_content3.setPtno(currentPtno);
+        fragment_shop_content4.setPtno(currentPtno);
+        fragment_shop_content5.setPtno(currentPtno);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new GetInformationByPHP().getPlist(currentPtno, 0, gv.getToken(), 1);
-                json2 = new GetInformationByPHP().getPlist(currentPtno, 1, gv.getToken(), 1);
-                json3 = new GetInformationByPHP().getPlist(currentPtno, 2, gv.getToken(), 1);
-                json4 = new GetInformationByPHP().getPlist(currentPtno, 3, gv.getToken(), 1);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoadingView.setMessage("更新資料");
+                        LoadingView.show(getCurrentFocus());
+                    }
+                });
+                final JSONObject json1 = new GetInformationByPHP().getPlist(currentPtno, 0, gv.getToken(), 1);
+                final JSONObject json2 = new GetInformationByPHP().getPlist(currentPtno, 1, gv.getToken(), 1);
+                final JSONObject json3 = new GetInformationByPHP().getPlist(currentPtno, 2, gv.getToken(), 1);
+                final JSONObject json4 = new GetInformationByPHP().getPlist(currentPtno, 3, gv.getToken(), 1);
+                final JSONObject json5;
+                if (mvip.equals("2")) {
+                    json5 = new GetInformationByPHP().getPlist(currentPtno, 4, gv.getToken(), 1);
+                } else {
+                    json5 = null;
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fragmentArrayList.get(0).setFilter(json1);
-                        fragmentArrayList.get(1).setFilter(json2);
-                        fragmentArrayList.get(2).setFilter(json3);
-                        fragmentArrayList.get(3).setFilter(json4);
+                        fragment_shop_content1.setFilter(json1);
+                        fragment_shop_content2.setFilter(json2);
+                        fragment_shop_content3.setFilter(json3);
+                        fragment_shop_content4.setFilter(json4);
+                        fragment_shop_content5.setFilter(json5);
                         LoadingView.hide();
                     }
                 });
@@ -173,24 +210,32 @@ public class PtypeActivity extends AppCompatActivity {
 
     public void resetRecyclerView(int position) {
         currentPtno = list.get(position).get("ptno");
-        fragmentArrayList.get(0).setPtno(currentPtno);
-        fragmentArrayList.get(1).setPtno(currentPtno);
-        fragmentArrayList.get(2).setPtno(currentPtno);
-        fragmentArrayList.get(3).setPtno(currentPtno);
+        fragment_shop_content1.setPtno(currentPtno);
+        fragment_shop_content2.setPtno(currentPtno);
+        fragment_shop_content3.setPtno(currentPtno);
+        fragment_shop_content4.setPtno(currentPtno);
+        fragment_shop_content5.setPtno(currentPtno);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new GetInformationByPHP().getPlist(currentPtno, 0, gv.getToken(), 1);
-                json2 = new GetInformationByPHP().getPlist(currentPtno, 1, gv.getToken(), 1);
-                json3 = new GetInformationByPHP().getPlist(currentPtno, 2, gv.getToken(), 1);
-                json4 = new GetInformationByPHP().getPlist(currentPtno, 3, gv.getToken(), 1);
+                final JSONObject json1 = new GetInformationByPHP().getPlist(currentPtno, 0, gv.getToken(), 1);
+                final JSONObject json2 = new GetInformationByPHP().getPlist(currentPtno, 1, gv.getToken(), 1);
+                final JSONObject json3 = new GetInformationByPHP().getPlist(currentPtno, 2, gv.getToken(), 1);
+                final JSONObject json4 = new GetInformationByPHP().getPlist(currentPtno, 3, gv.getToken(), 1);
+                final JSONObject json5;
+                if (mvip.equals("2")) {
+                    json5 = new GetInformationByPHP().getPlist(currentPtno, 4, gv.getToken(), 1);
+                } else {
+                    json5 = null;
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fragmentArrayList.get(0).resetRecyclerView(json1);
-                        fragmentArrayList.get(1).resetRecyclerView(json2);
-                        fragmentArrayList.get(2).resetRecyclerView(json3);
-                        fragmentArrayList.get(3).resetRecyclerView(json4);
+                        fragment_shop_content1.resetRecyclerView(json1);
+                        fragment_shop_content2.resetRecyclerView(json2);
+                        fragment_shop_content3.resetRecyclerView(json3);
+                        fragment_shop_content4.resetRecyclerView(json4);
+                        fragment_shop_content5.resetRecyclerView(json5);
                     }
                 });
             }
@@ -205,6 +250,7 @@ public class PtypeActivity extends AppCompatActivity {
         if (!gv.getMvip().equals(mvip)) {
             LoadingView.show(getCurrentFocus());
             mvip = gv.getMvip();
+            resetViewPager(mvip);
             //网络数据刷新
             setFilter();
         }
@@ -221,21 +267,6 @@ public class PtypeActivity extends AppCompatActivity {
         recyclerView = null;
         json = null;
         System.gc();
-        //释放内存
-        /*
-        ImageLoader.getInstance().clearDiskCache();
-        ImageLoader.getInstance().clearMemoryCache();
-        */
-        //释放被持有的bitmap
-        /*
-        if (mBitmaps != null) {
-            for (Bitmap bitmap : mBitmaps) {
-                if (bitmap != null && !bitmap.isRecycled()) {
-                    bitmap.recycle();
-                }
-            }
-        }
-        */
     }
 
 

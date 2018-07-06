@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity">
+
+    <include
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+  <include
+      layout="@layout/include_refresh_recycler"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="10dp">
+        <Button
+            android:id="@+id/appreciate_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="確定"
+            android:textColor="@color/white"
+            android:background="@drawable/arcangle_button_red"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+    </LinearLayout>
+</LinearLayout>

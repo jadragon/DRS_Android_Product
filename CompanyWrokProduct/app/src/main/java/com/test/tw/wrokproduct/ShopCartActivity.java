@@ -2,6 +2,7 @@ package com.test.tw.wrokproduct;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,19 +23,21 @@ import adapter.recyclerview.ShopCartRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.GetJsonData.ReCountJsonData;
 import library.GetJsonData.ShopCartJsonData;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import library.JsonDataThread;
 
 public class ShopCartActivity extends AppCompatActivity implements View.OnClickListener {
-    JSONObject json;
-    RecyclerView recyclerView;
-    ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
-    TextView toolbar_title;
-    TextView shop_cart_needpay, shopcart_txt_discount;
-    String moprno;
-    GlobalVariable gv;
-    Button shopcart_btn_coupon, shopcart_btn_continue, shopcart_gotobuy;
-    EditText shopcart_edit_coupon;
-    int total, discount;
+    private JSONObject json;
+    private RecyclerView recyclerView;
+    private ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
+    private TextView toolbar_title;
+    private TextView shop_cart_needpay, shopcart_txt_discount;
+    private String moprno;
+    private GlobalVariable gv;
+    private Button shopcart_btn_coupon, shopcart_gotobuy;
+    private EditText shopcart_edit_coupon;
+    private int total, discount;
+    private TabLayout shop_cart_tablayout;
+    private String mvip = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +45,53 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_shopcart);
         gv = ((GlobalVariable) getApplicationContext());
         initToolbar();
+        initTabLayout();
         initRecycleView();
+    }
+
+    private void initTabLayout() {
+        shop_cart_tablayout = findViewById(R.id.shop_cart_tablayout);
+        shop_cart_tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mvip = (tab.getPosition() + 1) + "";
+                setFilter();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    private void setFilter() {
+        new JsonDataThread() {
+            @Override
+            public JSONObject getJsonData() {
+                return new ShopCartJsonData().getCart(gv.getToken(), mvip);
+            }
+
+            @Override
+            public void runUiThread(JSONObject json) {
+                shopCartRecyclerViewAdapter.setMvip(mvip);
+                shopCartRecyclerViewAdapter.setFilter(json);
+                total = shopCartRecyclerViewAdapter.showPrice();
+                shop_cart_needpay.setText("$" + StringUtil.getDeciamlString(total));
+            }
+        }.start();
     }
 
     private void initRecycleView() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new ShopCartJsonData().getCart(gv.getToken());
+                json = new ShopCartJsonData().getCart(gv.getToken(), "1");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -72,7 +114,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                         decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
                         recyclerView.addItemDecoration(decoration);
                         //IOS like
-                        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+                        //  OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
                         //第三方 彈跳效果
                         //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
                         initTextView();
@@ -97,8 +139,6 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     private void initButton() {
         shopcart_btn_coupon = findViewById(R.id.shopcart_btn_coupon);
         shopcart_btn_coupon.setOnClickListener(this);
-        shopcart_btn_continue = findViewById(R.id.shopcart_btn_continue);
-        shopcart_btn_continue.setOnClickListener(this);
         shopcart_gotobuy = findViewById(R.id.shopcart_gotobuy);
         shopcart_gotobuy.setOnClickListener(this);
     }
@@ -165,9 +205,6 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     }).start();
                 }
                 break;
-            case R.id.shopcart_btn_continue:
-                finish();
-                break;
             case R.id.shopcart_gotobuy:
                 new Thread(new Runnable() {
                     @Override
@@ -192,18 +229,7 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onRestart() {
         super.onRestart();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                json = new ShopCartJsonData().getCart(gv.getToken());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        shopCartRecyclerViewAdapter.setFilter(json);
-                    }
-                });
-            }
-        }).start();
+        setFilter();
 
     }
 

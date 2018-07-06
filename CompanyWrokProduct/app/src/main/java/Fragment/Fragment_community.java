@@ -55,17 +55,18 @@ import library.SQLiteDatabaseHandler;
 
 
 public class Fragment_community extends Fragment {
-    View v;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    Toolbar toolbar;
-    Button fragment_community_btn_login, fragment_community_btn_logout, fragment_community_btn_register;
-    GlobalVariable gv;
-    View login_success;
-    CircleImageView login_photo;
-    TextView login_name, login_mvip;
-    int coverbg;
-    Intent intent;
+    private View v;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private Toolbar toolbar;
+    private Button fragment_community_btn_login, fragment_community_btn_logout, fragment_community_btn_register;
+    private GlobalVariable gv;
+    private View login_success;
+    private CircleImageView login_photo;
+    private TextView login_name, login_mvip;
+    private int coverbg;
+    private Intent intent;
+    private String mvip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,9 +74,11 @@ public class Fragment_community extends Fragment {
         initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
+        mvip = gv.getMvip();
         initRegistAndLogin();
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
         tabLayout = v.findViewById(R.id.fragment_community_tablayout);
+        initViewPager(mvip);
         return v;
     }
 
@@ -162,7 +165,6 @@ public class Fragment_community extends Fragment {
             }
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
     }
 
     private void initRegistAndLogin() {
@@ -191,19 +193,6 @@ public class Fragment_community extends Fragment {
         login_photo = v.findViewById(R.id.login_photo);
         login_name = v.findViewById(R.id.login_name);
         login_mvip = v.findViewById(R.id.login_mvip);
-    }
-
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
-            return;
-        } else {  // 在最前端显示 相当于调用了onResume();
-
-            //  setFilter();
-            //网络数据刷新
-        }
     }
 
 
@@ -401,27 +390,40 @@ public class Fragment_community extends Fragment {
             Map<String, String> member = db.getMemberDetail();
             byte[] bis = db.getPhotoImage();
             login_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
-
             login_name.setText(member.get("name"));
-            if (member.get("mvip").equals("2")) {
+            if (gv.getMvip().equals("2")) {
                 login_mvip.setText("特約會員");
             } else {
                 login_mvip.setText("一般會員");
             }
-
             try {
                 coverbg = Integer.parseInt(db.getMemberDetail().get("background"));
             } catch (Exception e) {
                 coverbg = R.drawable.member_bg2;
             }
             login_success.setBackgroundResource(coverbg);
-            initViewPager(member.get("mvip"));
+
             db.close();
         } else {
             login_success.setVisibility(View.INVISIBLE);
-            initViewPager("0");
         }
+        if (!gv.getMvip().equals(mvip)) {
+            mvip = gv.getMvip();
+            initViewPager(mvip);
+        }
+    }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+            if (!gv.getMvip().equals(mvip)) {
+                mvip = gv.getMvip();
+                initViewPager(mvip);
+            }
+        } else {  // 在最前端显示 相当于调用了onResume();
+
+        }
     }
 
 }

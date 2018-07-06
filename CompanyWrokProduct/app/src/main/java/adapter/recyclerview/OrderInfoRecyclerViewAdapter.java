@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.CountActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.AppreciateActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity;
@@ -433,13 +434,13 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             }).start();
                             break;
                         case 3:
-
+                            ctx.startActivity(new Intent(ctx, AppreciateActivity.class));
                             break;
                         case 4:
 
                             break;
                         case 5:
-
+                            ctx.startActivity(new Intent(ctx, AppreciateActivity.class));
                             break;
                         case 6:
 

@@ -51,8 +51,9 @@ public class ShopCartJsonData {
     /**
      * 1.3.2	購買清單 - 讀取購買資訊
      */
-    public JSONObject getCart(String token) {
+    public JSONObject getCart(String token,String type) {
         params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("type", type));
         return jsonParser.getJSONFromUrl(getCart_url, params);
     }
 

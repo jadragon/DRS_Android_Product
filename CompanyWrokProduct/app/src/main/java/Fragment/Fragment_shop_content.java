@@ -43,14 +43,14 @@ public class Fragment_shop_content extends Fragment {
     private ShopRecyclerViewAdapter myRecyclerAdapter;
     private JSONObject json1, json2;
     private View v;
-    private  DisplayMetrics dm;
-    private  Banner header;
-    private  int type;
-    private  int nextpage = 2;
-    private  library.Component.MySwipeRefreshLayout mSwipeLayout;
-    private    EndLessOnScrollListener endLessOnScrollListener;
-    private  String ptno;
-    private  GlobalVariable gv;
+    private DisplayMetrics dm;
+    private Banner header;
+    private int type;
+    private int nextpage = 2;
+    private library.Component.MySwipeRefreshLayout mSwipeLayout;
+    private EndLessOnScrollListener endLessOnScrollListener;
+    private String ptno;
+    private GlobalVariable gv;
 
     public void setPtno(String ptno) {
         this.ptno = ptno;
@@ -92,6 +92,7 @@ public class Fragment_shop_content extends Fragment {
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                LoadingView.setMessage("更新資料");
                 LoadingView.show(getView());
                 new Thread(new Runnable() {
                     @Override
@@ -206,7 +207,7 @@ public class Fragment_shop_content extends Fragment {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!myRecyclerAdapter.setFilterMore(json2)) {
+                                    if (myRecyclerAdapter != null && !myRecyclerAdapter.setFilterMore(json2)) {
                                         nextpage--;
                                     }
                                     //    LoadingView.hide();
@@ -247,7 +248,8 @@ public class Fragment_shop_content extends Fragment {
     public void resetRecyclerView(final JSONObject json) {
         json2 = json;
         nextpage = 2;
-        endLessOnScrollListener.reset();
+        if (endLessOnScrollListener != null)
+            endLessOnScrollListener.reset();
         if (myRecyclerAdapter != null) {
             myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, banner);
             recyclerView.setAdapter(myRecyclerAdapter);

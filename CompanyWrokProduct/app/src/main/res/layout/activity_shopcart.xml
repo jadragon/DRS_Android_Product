@@ -12,6 +12,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/shop_cart_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        app:tabIndicatorHeight="3dp">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="一般會員" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="特約會員" />
+    </android.support.design.widget.TabLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_review"
         android:layout_width="match_parent"
@@ -20,7 +37,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="15dp"
         android:orientation="vertical"
@@ -32,56 +49,75 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/discount_coupon" />
-
-            <EditText
-                android:id="@+id/shopcart_edit_coupon"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="9"
-                android:background="@color/default_gray"
-                android:hint="請輸入折扣碼"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/discount_coupon" />
+
+                <EditText
+                    android:id="@+id/shopcart_edit_coupon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/default_gray"
+                    android:hint="請輸入折扣碼" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/shopcart_btn_coupon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:background="@drawable/arcangle_button_red"
+                android:background="@drawable/arcangle_button_orange"
                 android:text="發送"
                 android:textColor="@color/white" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="折扣金額:"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/shopcart_txt_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right"
+                    android:text="$0"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center_vertical"
-                android:paddingStart="50dp"
-                android:text="折扣金額:"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/shopcart_txt_discount"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical|right"
-                android:text="$0"
-                android:textSize="15sp" />
-
+                android:layout_weight="3" />
         </LinearLayout>
 
         <View
@@ -89,103 +125,84 @@
             android:layout_height="1px"
             android:background="@color/gainsboro" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="bottom"
-                android:paddingStart="50dp"
-                android:text="應付小計:"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/shop_cart_needpay"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="bottom|right"
-                android:text="$0"
-                android:textColor="@color/red"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingStart="50dp"
-                android:text="可賺取的"
-                android:textSize="15dp"
-                android:textColor="@color/orange"/>
-<ImageView
-    android:layout_width="15dp"
-    android:layout_height="15dp"
-    android:layout_gravity="center" />
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="有:"
-            android:textSize="15dp"
-                android:textColor="@color/orange"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="100000"
-                android:textSize="15dp"
-                android:textColor="@color/orange"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gainsboro" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/white"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="10dp">
+            android:paddingTop="5dp">
 
-            <Button
-                android:id="@+id/shopcart_btn_continue"
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:background="@drawable/arcangle_button_orange"
-                android:text="繼續購物"
-                android:textColor="@color/white"
-                android:layout_marginRight="10dp" />
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="bottom"
+                        android:text="應付小計:"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/shop_cart_needpay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="bottom|right"
+                        android:text="$0"
+                        android:textColor="@color/red"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="可賺取的商城點值有:"
+                        android:textColor="@color/orange"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="100000"
+                        android:textColor="@color/orange"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/shopcart_gotobuy"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="3"
                 android:background="@drawable/arcangle_button_red"
                 android:text="去結帳"
-                android:textColor="@color/white"
-                android:layout_marginLeft="10dp"/>
-
+                android:textColor="@color/white" />
         </LinearLayout>
+
+
     </LinearLayout>
 </LinearLayout>

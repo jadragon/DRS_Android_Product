@@ -51,7 +51,7 @@ public class Fragment_favorate extends Fragment {
         v = inflater.inflate(R.layout.fragment_favorate_layout, container, false);
         initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
-        tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
+        tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.favorate_title)));
         mvip = gv.getMvip();
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
@@ -69,7 +69,7 @@ public class Fragment_favorate extends Fragment {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList));
+                        viewPager.setAdapter(new ShopViewPagerAdapter(getChildFragmentManager(), tabtitle, fragmentArrayList));
                         tabLayout.setupWithViewPager(viewPager, true);
                     }
                 });

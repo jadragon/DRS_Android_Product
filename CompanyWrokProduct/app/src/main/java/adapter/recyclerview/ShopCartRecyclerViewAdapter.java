@@ -54,6 +54,11 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private Item item;
     GlobalVariable gv;
     int size;
+    String mvip="0";
+
+    public void setMvip(String mvip) {
+        this.mvip = mvip;
+    }
 
     public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
@@ -342,7 +347,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 public void run() {
                                     try {
                                         final JSONObject jsonObject = new ShopCartJsonData().delCartProduct(gv.getToken(), items.get(position).getMorno());
-                                        json = new ShopCartJsonData().getCart(gv.getToken());
+                                        json = new ShopCartJsonData().getCart(gv.getToken(),mvip);
                                         if (jsonObject.getBoolean("Success")) {
                                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                                 @Override
@@ -469,7 +474,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 int total = Integer.parseInt(items.get(position).getStotal()) + 1;
                                 new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
                                         total);
-                                json = new ShopCartJsonData().getCart(gv.getToken());
+                                json = new ShopCartJsonData().getCart(gv.getToken(),mvip);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -495,7 +500,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 int total = Integer.parseInt(items.get(position).getStotal()) - 1;
                                 new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
                                         total);
-                                json = new ShopCartJsonData().getCart(gv.getToken());
+                                json = new ShopCartJsonData().getCart(gv.getToken(),mvip);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {

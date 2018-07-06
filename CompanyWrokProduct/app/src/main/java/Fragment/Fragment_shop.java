@@ -40,52 +40,59 @@ public class Fragment_shop extends Fragment {
     private ArrayList<Fragment_shop_content> fragmentArrayList;
     private GlobalVariable gv;
     private String mvip;
-    ArrayList<String> tabtitle;
-    ShopViewPagerAdapter viewPagerAdapter;
+    private ArrayList<String> tabtitle;
+    private ShopViewPagerAdapter viewPagerAdapter;
+    private Fragment_shop_content fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4, fragment_shop_content5;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_shop_layout, container, false);
         gv = (GlobalVariable) getContext().getApplicationContext();
         tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
-
-        initSearchToolbar();
-        tabLayout = v.findViewById(R.id.shop_header_tablayout);
-        tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.shop_viewpager);
-        fragmentArrayList = new ArrayList<>();
-        Fragment_shop_content fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-        fragment_shop_content.setType(0);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-        fragment_shop_content.setType(1);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-        fragment_shop_content.setType(2);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-        fragment_shop_content.setType(3);
-        fragmentArrayList.add(fragment_shop_content);
-        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
-        fragment_shop_content.setType(4);
-        fragmentArrayList.add(fragment_shop_content);
-        viewPagerAdapter=new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList);
-        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout = v.findViewById(R.id.shop_header_tablayout);
+        mvip = gv.getMvip();
+        initSearchToolbar();
+        tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager.setOffscreenPageLimit(6);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        fragment_shop_content1 = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content1.setType(0);
+        fragment_shop_content2 = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content2.setType(1);
+        fragment_shop_content3 = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content3.setType(2);
+        fragment_shop_content4 = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content4.setType(3);
+        fragment_shop_content5 = new Fragment_shop_content(ShopRecyclerViewAdapter.SHOW_BANNER);
+        fragment_shop_content5.setType(4);
+        resetViewPager(mvip);
         setFilter();
-        mvip = gv.getMvip();
         return v;
     }
 
     public void resetViewPager(String mvip) {
+
         if (mvip.equals("2")) {
-            tabtitle.remove(4);
-            viewPagerAdapter=new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList);
+            fragmentArrayList = new ArrayList<>();
+            tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
+            fragmentArrayList.add(fragment_shop_content1);
+            fragmentArrayList.add(fragment_shop_content2);
+            fragmentArrayList.add(fragment_shop_content3);
+            fragmentArrayList.add(fragment_shop_content4);
+            fragmentArrayList.add(fragment_shop_content5);
+            viewPagerAdapter = new ShopViewPagerAdapter(getChildFragmentManager(), tabtitle, fragmentArrayList);
             viewPager.setAdapter(viewPagerAdapter);
         } else {
-            tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
-            viewPagerAdapter=new ShopViewPagerAdapter(getFragmentManager(), tabtitle, fragmentArrayList);
+            fragmentArrayList = new ArrayList<>();
+            fragmentArrayList.add(fragment_shop_content1);
+            fragmentArrayList.add(fragment_shop_content2);
+            fragmentArrayList.add(fragment_shop_content3);
+            fragmentArrayList.add(fragment_shop_content4);
+            if (tabtitle.size() == 5)
+                tabtitle.remove(4);
+            viewPagerAdapter = new ShopViewPagerAdapter(getChildFragmentManager(), tabtitle, fragmentArrayList);
             viewPager.setAdapter(viewPagerAdapter);
         }
     }
@@ -113,7 +120,6 @@ public class Fragment_shop extends Fragment {
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
             if (!gv.getMvip().equals(mvip)) {
-                LoadingView.show(getView());
                 mvip = gv.getMvip();
                 resetViewPager(mvip);
                 //网络数据刷新
@@ -127,6 +133,13 @@ public class Fragment_shop extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoadingView.setMessage("更新資料");
+                        LoadingView.show(getView());
+                    }
+                });
                 final JSONObject json1 = new GetInformationByPHP().getIplist(0, gv.getToken(), 1);
                 final JSONObject json2 = new GetInformationByPHP().getIplist(1, gv.getToken(), 1);
                 final JSONObject json3 = new GetInformationByPHP().getIplist(2, gv.getToken(), 1);
@@ -136,29 +149,36 @@ public class Fragment_shop extends Fragment {
                 final JSONObject jsonheader3 = new GetInformationByPHP().getBanner(2);
                 final JSONObject jsonheader4 = new GetInformationByPHP().getBanner(3);
                 //========================
-                final JSONObject json5 = new GetInformationByPHP().getIplist(4, gv.getToken(), 1);
-                final JSONObject jsonheader5 = new GetInformationByPHP().getBanner(4);
+                final JSONObject json5;
+                final JSONObject jsonheader5;
+                if (mvip.equals("2")) {
+                    json5 = new GetInformationByPHP().getIplist(4, gv.getToken(), 1);
+                    jsonheader5 = new GetInformationByPHP().getBanner(4);
+                } else {
+                    json5 = null;
+                    jsonheader5 = null;
+                }
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        fragmentArrayList.get(0).setHeaderFilter(jsonheader1);
-                        fragmentArrayList.get(1).setHeaderFilter(jsonheader2);
-                        fragmentArrayList.get(2).setHeaderFilter(jsonheader3);
-                        fragmentArrayList.get(3).setHeaderFilter(jsonheader4);
-
-                        fragmentArrayList.get(0).setFilter(json1);
-                        fragmentArrayList.get(1).setFilter(json2);
-                        fragmentArrayList.get(2).setFilter(json3);
-                        fragmentArrayList.get(3).setFilter(json4);
+                        fragment_shop_content1.setHeaderFilter(jsonheader1);
+                        fragment_shop_content2.setHeaderFilter(jsonheader2);
+                        fragment_shop_content3.setHeaderFilter(jsonheader3);
+                        fragment_shop_content4.setHeaderFilter(jsonheader4);
+                        fragment_shop_content1.setFilter(json1);
+                        fragment_shop_content2.setFilter(json2);
+                        fragment_shop_content3.setFilter(json3);
+                        fragment_shop_content4.setFilter(json4);
+                        fragment_shop_content5.setFilter(json5);
+                        fragment_shop_content5.setHeaderFilter(jsonheader5);
                         //========================
-                        fragmentArrayList.get(4).setHeaderFilter(jsonheader5);
-                        fragmentArrayList.get(4).setFilter(json5);
 
                         LoadingView.hide();
                     }
                 });
             }
         }).start();
+
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
