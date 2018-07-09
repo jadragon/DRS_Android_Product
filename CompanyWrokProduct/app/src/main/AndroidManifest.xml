@@ -138,7 +138,11 @@
         <activity android:name=".帳務管理.錢包提領.EwalletActivity" />
         <activity android:name=".帳務管理.現金折價券.CouponActivity" />
         <activity android:name=".帳務管理.帳戶總覽.OverviewBillActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity"></activity>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".GoldFlowCompeleteActivity">
+
+        </activity>
     </application>
 
 </manifest>

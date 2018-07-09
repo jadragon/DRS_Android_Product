@@ -79,9 +79,10 @@ public class ShopCartJsonData {
     /**
      * 1.3.5	購買清單 - 輸入折扣代碼
      */
-    public JSONObject setCartDiscount(String token, String coupon) {
+    public JSONObject setCartDiscount(String token, String coupon,int pay) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("coupon", coupon));
+        params.add(new BasicNameValuePair("pay", pay+""));
         return jsonParser.getJSONFromUrl(setCartDiscount_url, params);
     }
 

@@ -434,13 +434,17 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             }).start();
                             break;
                         case 3:
-                            ctx.startActivity(new Intent(ctx, AppreciateActivity.class));
+                            Intent intent = new Intent(ctx, AppreciateActivity.class);
+                            intent.putExtra("mono", ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                            ctx.startActivity(intent);
                             break;
                         case 4:
 
                             break;
                         case 5:
-                            ctx.startActivity(new Intent(ctx, AppreciateActivity.class));
+                            intent = new Intent(ctx, AppreciateActivity.class);
+                            intent.putExtra("mono", ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                            ctx.startActivity(intent);
                             break;
                         case 6:
 

@@ -21,6 +21,7 @@ import java.util.Map;
 import Util.StringUtil;
 import adapter.recyclerview.ShopCartRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.ReCountJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import library.JsonDataThread;
@@ -38,12 +39,14 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
     private int total, discount;
     private TabLayout shop_cart_tablayout;
     private String mvip = "1";
+    ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopcart);
         gv = ((GlobalVariable) getApplicationContext());
+        toastMessageDialog = new ToastMessageDialog(this);
         initToolbar();
         initTabLayout();
         initRecycleView();
@@ -170,16 +173,23 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void run() {
                             //shopcart_edit_coupon.getText().toString()
-                            final Map<String, String> datas = ResolveJsonData.getCartDiscount(new ShopCartJsonData().setCartDiscount(gv.getToken(), shopcart_edit_coupon.getText().toString()));
+                            json = new ShopCartJsonData().setCartDiscount(gv.getToken(), shopcart_edit_coupon.getText().toString(), total);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Map<String, String> datas = ResolveJsonData.getCartDiscount(json);
                                     if (datas != null) {
                                         moprno = datas.get("moprno");
                                         discount = Integer.parseInt(datas.get("mdiscount"));
                                         shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(discount));
                                         shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + discount)));
                                         shopcart_btn_coupon.setText("取消");
+                                    }
+                                    try {
+                                        toastMessageDialog.setMessageText(json.getString("Message"));
+                                        toastMessageDialog.show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             });
@@ -189,15 +199,21 @@ public class ShopCartActivity extends AppCompatActivity implements View.OnClickL
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final boolean success = ResolveJsonData.checkSuccess(new ShopCartJsonData().delCartDiscount(gv.getToken(), moprno));
+                            json = new ShopCartJsonData().delCartDiscount(gv.getToken(), moprno);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (success) {
-                                        discount = 0;
-                                        shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(discount));
-                                        shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + discount)));
-                                        shopcart_btn_coupon.setText("發送");
+                                    try {
+                                        if (json.getBoolean("Success")) {
+                                            discount = 0;
+                                            shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(discount));
+                                            shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + discount)));
+                                            shopcart_btn_coupon.setText("發送");
+                                        }
+                                        toastMessageDialog.setMessageText(json.getString("Message"));
+                                        toastMessageDialog.show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             });

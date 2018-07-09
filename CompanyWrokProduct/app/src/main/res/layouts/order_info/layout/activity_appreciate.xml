@@ -28,8 +28,6 @@
             android:layout_height="wrap_content"
             android:text="確定"
             android:textColor="@color/white"
-            android:background="@drawable/arcangle_button_red"
-            android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            android:background="@drawable/arcangle_button_red" />
     </LinearLayout>
 </LinearLayout>

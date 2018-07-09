@@ -1,5 +1,6 @@
 package library.AnalyzeJSON;
 
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.AppreciatePojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrderItemContentPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrderItemPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrderPayPojo;
@@ -287,5 +288,41 @@ public class AnalyzeOrderInfo {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 3.1.2	讀取會員訂單付款詳情資訊:
+     * pinfo	String	付款方式
+     * allpay	Number	合併結帳–繳費金額
+     * deadline	String	繳費期限
+     * atm_code	String	ATM資訊 – 銀行代號
+     * atm_account	String	ATM資訊 – 銀行帳號
+     */
+    public static ArrayList<AppreciatePojo> getOrderComment(JSONObject json) {
+        ArrayList<AppreciatePojo> arrayList = new ArrayList<>();
+        try {
+            if (json.getBoolean("Success")) {
+                AppreciatePojo appreciatePojo;
+                JSONArray jsonArray = json.getJSONArray("Data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                    appreciatePojo = new AppreciatePojo();
+                    appreciatePojo.setMoino(json_obj.getString("moino"));
+                    appreciatePojo.setPname(json_obj.getString("pname"));
+                    appreciatePojo.setImg(json_obj.getString("img"));
+                    appreciatePojo.setColor(json_obj.getString("color"));
+                    appreciatePojo.setSize(json_obj.getString("size"));
+                    appreciatePojo.setComment(json_obj.getString("comment"));
+                    appreciatePojo.setComscore(json_obj.getDouble("comscore"));
+                    appreciatePojo.setComtimes(json_obj.getInt("comtimes"));
+                    appreciatePojo.setComdate(json_obj.getString("comdate"));
+                    arrayList.add(appreciatePojo);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return arrayList;
     }
 }

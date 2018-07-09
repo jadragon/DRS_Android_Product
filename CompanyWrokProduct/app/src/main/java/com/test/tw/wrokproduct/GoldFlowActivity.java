@@ -1,7 +1,7 @@
 package com.test.tw.wrokproduct;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -9,14 +9,15 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import library.Component.ToastMessageDialog;
+import library.Component.ToolbarActivity;
 import library.GetJsonData.ReCountJsonData;
 
-public class GoldFlowActivity extends AppCompatActivity {
+public class GoldFlowActivity extends ToolbarActivity {
 
     private WebView webview;
     String html;
@@ -31,6 +32,7 @@ public class GoldFlowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goldflow);
         count_type = getIntent().getIntExtra("count_type", 0);
         gv = ((GlobalVariable) getApplicationContext());
+        initToolbar(false, "付款");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -131,12 +133,13 @@ public class GoldFlowActivity extends AppCompatActivity {
 
     @JavascriptInterface
     public void setDeliver(String success, String msg) {
-        Toast.makeText(this, ""+success+msg, Toast.LENGTH_SHORT).show();
+        finish();
+        startActivity(new Intent(GoldFlowActivity.this, GoldFlowCompeleteActivity.class));
     }
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "請先完成交易後,再執行此動作", Toast.LENGTH_SHORT).show();
+        new ToastMessageDialog(this, "請先完成交易後，再執行指動作").show();
     }
 
     @Override

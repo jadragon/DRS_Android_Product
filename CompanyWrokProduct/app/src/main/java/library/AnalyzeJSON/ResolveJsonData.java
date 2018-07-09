@@ -9,17 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResolveJsonData {
-    /**
-     * 判斷是否成功
-     */
-    public static Boolean checkSuccess(JSONObject json) {
-        try {
-            return json.getBoolean("Success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     /**
      * 解析首頁:
@@ -356,6 +345,7 @@ public class ResolveJsonData {
                     map.put("moprno", json_obj.getString("moprno"));
                     map.put("mcoupon", json_obj.getString("mcoupon"));
                     map.put("mdiscount", json_obj.getString("mdiscount"));
+                    map.put("mcost", json_obj.getString("mcost"));
                     arrayList.add(map);
                 }
                 return arrayList;

@@ -2,6 +2,7 @@ package library.GetJsonData;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class OrderInfoJsonData {
     private  final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/confirmReceipt.php";
     private  final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturn.php";
     private  final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/complaintStore.php";
+    private  final String getOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/getOrderComment.php";
+    private  final String setOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/setOrderComment.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -173,5 +176,21 @@ public class OrderInfoJsonData {
         params.add(new BasicNameValuePair("mono", mono));
         params.add(new BasicNameValuePair("note", note));
         return jsonParser.getJSONFromUrl(complaintStore_url, params);
+    }
+    /**
+     *3.1.20	讀取訂單評價資訊
+     */
+    public JSONObject getOrderComment(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        return jsonParser.getJSONFromUrl(getOrderComment_url, params);
+    }
+    /**
+     *3.1.20	讀取訂單評價資訊
+     */
+    public JSONObject setOrderComment(String token,JSONArray data) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("data", data+""));
+        return jsonParser.getJSONFromUrl(setOrderComment_url, params);
     }
 }
