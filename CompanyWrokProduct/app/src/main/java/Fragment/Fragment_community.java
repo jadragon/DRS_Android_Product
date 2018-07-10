@@ -30,7 +30,7 @@ import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
-import com.test.tw.wrokproduct.ShopCartActivity;
+import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 import com.test.tw.wrokproduct.帳務管理.帳戶總覽.OverviewBillActivity;
 import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity;
 import com.test.tw.wrokproduct.帳務管理.現金折價券.CouponActivity;

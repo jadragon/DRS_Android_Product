@@ -31,7 +31,7 @@ import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.SearchBarActivity;
-import com.test.tw.wrokproduct.ShopCartActivity;
+import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoader;

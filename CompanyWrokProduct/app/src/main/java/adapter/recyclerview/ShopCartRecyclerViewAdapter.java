@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.AnalyzeJSON.ResolveJsonData;
+import library.AnalyzeJSON.AnalyzeShopCart;
 import library.Component.AutoHorizontalTextView;
 import library.GetJsonData.ShopCartJsonData;
 
@@ -67,8 +66,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         gv = ((GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
 
-            title_list = ResolveJsonData.getCartInformation(json);
-            content_list = ResolveJsonData.getCartItemArray(json);
+            title_list = AnalyzeShopCart.getCartInformation(json);
+            content_list = AnalyzeShopCart.getCartItemArray(json);
         } else {
             title_list = new ArrayList<>();
             content_list = new ArrayList<>();
@@ -122,8 +121,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                 items.add(item);
                 size++;
             }
-
-            Log.e("VS", getItemCount() + ":" + size + ":" + items.size());
         }
 
     }
@@ -539,15 +536,6 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         return count;
     }
 
-    public ArrayList<String> showMornoArray() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).isCheck() && items.get(i).getMorno() != null)
-                arrayList.add(items.get(i).getMorno());
-        }
-        return arrayList;
-    }
-
     public String showMornoString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < items.size(); i++) {
@@ -570,9 +558,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
 
     public void setFilter(JSONObject json) {
         this.json = json;
-        if (ResolveJsonData.getCartInformation(json) != null) {
-            title_list = ResolveJsonData.getCartInformation(json);
-            content_list = ResolveJsonData.getCartItemArray(json);
+        if (AnalyzeShopCart.getCartInformation(json) != null) {
+            title_list = AnalyzeShopCart.getCartInformation(json);
+            content_list = AnalyzeShopCart.getCartItemArray(json);
         }
         initItems();
         notifyDataSetChanged();

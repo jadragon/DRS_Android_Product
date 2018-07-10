@@ -1,5 +1,7 @@
 package library.AnalyzeJSON;
 
+import com.test.tw.wrokproduct.購物車.pojo.ShopcartCouponPojo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,17 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnalyzeShopCart {
-    /**
-     * 判斷是否成功
-     */
-    public static Boolean checkSuccess(JSONObject json) {
-        try {
-            return json.getBoolean("Success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     /**
      * 解析購物車:
@@ -110,23 +101,32 @@ public class AnalyzeShopCart {
      * 現金折扣條碼
      * 現金折扣金
      */
-    public static ArrayList<Map<String, String>> getCartCoupon(JSONObject json) {
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
-        Map<String, String> map;
+    public static ShopcartCouponPojo getCartCoupon(JSONObject json) {
         try {
             if (json.getBoolean("Success")) {
-                JSONArray jsonArray = json.getJSONArray("Coupon");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    map = new HashMap<>();
-                    JSONObject json_obj = jsonArray.getJSONObject(i);
-                    map.put("moprno", json_obj.getString("moprno"));
-                    map.put("mcoupon", json_obj.getString("mcoupon"));
-                    map.put("mdiscount", json_obj.getString("mdiscount"));
-                    arrayList.add(map);
+                ShopcartCouponPojo shopcartCouponPojo;
+                JSONArray jsonArray;
+                try {
+                    jsonArray = json.getJSONArray("Coupon");
+                    shopcartCouponPojo = new ShopcartCouponPojo();
+                    JSONObject json_obj = jsonArray.getJSONObject(0);
+                    shopcartCouponPojo.setMoprno(json_obj.getString("moprno"));
+                    shopcartCouponPojo.setMcoupon(json_obj.getString("mcoupon"));
+                    shopcartCouponPojo.setMdiscount(json_obj.getInt("mdiscount"));
+                    shopcartCouponPojo.setMcost(json_obj.getInt("mcost"));
+                } catch (JSONException e) {
+                    jsonArray = json.getJSONArray("Data");
+                    shopcartCouponPojo = new ShopcartCouponPojo();
+                    JSONObject json_obj = jsonArray.getJSONObject(0);
+                    shopcartCouponPojo.setMoprno(json_obj.getString("moprno"));
+                    shopcartCouponPojo.setMcoupon(json_obj.getString("mcoupon"));
+                    shopcartCouponPojo.setMdiscount(json_obj.getInt("mdiscount"));
+                    shopcartCouponPojo.setMcost(json_obj.getInt("mcost"));
                 }
-                return arrayList;
+
+                return shopcartCouponPojo;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

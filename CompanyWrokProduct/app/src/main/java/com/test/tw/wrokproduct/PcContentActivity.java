@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

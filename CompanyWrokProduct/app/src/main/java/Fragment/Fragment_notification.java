@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.ShopCartActivity;
+import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
 import Util.StringUtil;
 
