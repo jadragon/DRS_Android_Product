@@ -1,10 +1,13 @@
-package com.test.tw.wrokproduct;
+package com.test.tw.wrokproduct.商品;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.MainActivity;
+import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
 import org.json.JSONException;
@@ -34,17 +40,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
+import Fragment.Fragment_ProductAppraise;
+import Fragment.Fragment_WebView;
 import Util.StringUtil;
 import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
-import adapter.viewpager.PcContentWebViewPagerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.AppManager;
 import library.Component.AutoNewLineLayoutManager;
-import library.Component.MyViewPager;
 import library.Component.ToastMessageDialog;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.GetJsonData.ShopCartJsonData;
 import library.JsonDataThread;
 import pojo.ProductInfoPojo;
@@ -52,7 +58,7 @@ import pojo.ProductInfoPojo;
 public class PcContentActivity extends AppCompatActivity {
     DisplayMetrics dm;
     private ViewPager viewPager;
-    private MyViewPager webviewpager;
+    private ViewPager webviewpager;
     private JSONObject json;
     private PcContentPagerAdapter adapter;
     private Toolbar toolbar;
@@ -96,7 +102,7 @@ public class PcContentActivity extends AppCompatActivity {
         new JsonDataThread() {
             @Override
             public JSONObject getJsonData() {
-                return new GetInformationByPHP().getPcontent(gv.getToken(), pno);
+                return new ProductJsonData().getPcontent(gv.getToken(), pno);
             }
 
             @Override
@@ -386,7 +392,7 @@ public class PcContentActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new GetInformationByPHP().delFavoriteProduct(gv.getToken(), productInfoPojo.getPno());
+                            new ProductJsonData().delFavoriteProduct(gv.getToken(), productInfoPojo.getPno());
                         }
                     }).start();
                     heart.setImageResource(R.drawable.heart_off);
@@ -397,7 +403,7 @@ public class PcContentActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new GetInformationByPHP().setFavorite(gv.getToken(), productInfoPojo.getPno());
+                            new ProductJsonData().setFavorite(gv.getToken(), productInfoPojo.getPno());
                         }
                     }).start();
                     heart.setImageResource(R.drawable.heart_on);
@@ -416,10 +422,31 @@ public class PcContentActivity extends AppCompatActivity {
     private void initTabLayout() {
         webviewpager = findViewById(R.id.pccontent_web_viewpager);
         tabLayout = findViewById(R.id.pccontent_tablayout);
-        tabLayout.setSelectedTabIndicatorHeight(6);
-        PcContentWebViewPagerAdapter adapter = new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知"}, new String[]{productInfoPojo.getContent(), productInfoPojo.getRpolicy()});
-        adapter.setViewPager(webviewpager);
-        webviewpager.setAdapter(adapter);
+
+        final String[] title = new String[]{"詳細說明", "退/換貨須知", "商品評價"};
+        //  PcContentWebViewPagerAdapter adapter = new PcContentWebViewPagerAdapter(getSupportFragmentManager(), new String[]{"詳細說明", "退/換貨須知","商品評價"}, new String[]{productInfoPojo.getContent(), productInfoPojo.getRpolicy()});
+        //    adapter.setViewPager(webviewpager);
+        final ArrayList<Fragment> arrayList = new ArrayList<>();
+        arrayList.add(new Fragment_WebView(productInfoPojo.getContent()));
+        arrayList.add(new Fragment_WebView(productInfoPojo.getRpolicy()));
+        arrayList.add(new Fragment_ProductAppraise(productInfoPojo.getPno()));
+        webviewpager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return arrayList.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return arrayList.size();
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return title[position];
+            }
+        });
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(webviewpager, true);
         //   webviewpager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,6500));

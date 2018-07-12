@@ -30,7 +30,7 @@ import java.util.Arrays;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
 public class Fragment_shop extends Fragment {
@@ -140,20 +140,20 @@ public class Fragment_shop extends Fragment {
                         LoadingView.show(getView());
                     }
                 });
-                final JSONObject json1 = new GetInformationByPHP().getIplist(0, gv.getToken(), 1);
-                final JSONObject json2 = new GetInformationByPHP().getIplist(1, gv.getToken(), 1);
-                final JSONObject json3 = new GetInformationByPHP().getIplist(2, gv.getToken(), 1);
-                final JSONObject json4 = new GetInformationByPHP().getIplist(3, gv.getToken(), 1);
-                final JSONObject jsonheader1 = new GetInformationByPHP().getBanner(0);
-                final JSONObject jsonheader2 = new GetInformationByPHP().getBanner(1);
-                final JSONObject jsonheader3 = new GetInformationByPHP().getBanner(2);
-                final JSONObject jsonheader4 = new GetInformationByPHP().getBanner(3);
+                final JSONObject json1 = new ProductJsonData().getIplist(0, gv.getToken(), 1);
+                final JSONObject json2 = new ProductJsonData().getIplist(1, gv.getToken(), 1);
+                final JSONObject json3 = new ProductJsonData().getIplist(2, gv.getToken(), 1);
+                final JSONObject json4 = new ProductJsonData().getIplist(3, gv.getToken(), 1);
+                final JSONObject jsonheader1 = new ProductJsonData().getBanner(0);
+                final JSONObject jsonheader2 = new ProductJsonData().getBanner(1);
+                final JSONObject jsonheader3 = new ProductJsonData().getBanner(2);
+                final JSONObject jsonheader4 = new ProductJsonData().getBanner(3);
                 //========================
                 final JSONObject json5;
                 final JSONObject jsonheader5;
                 if (mvip.equals("2")) {
-                    json5 = new GetInformationByPHP().getIplist(4, gv.getToken(), 1);
-                    jsonheader5 = new GetInformationByPHP().getBanner(4);
+                    json5 = new ProductJsonData().getIplist(4, gv.getToken(), 1);
+                    jsonheader5 = new ProductJsonData().getBanner(4);
                 } else {
                     json5 = null;
                     jsonheader5 = null;

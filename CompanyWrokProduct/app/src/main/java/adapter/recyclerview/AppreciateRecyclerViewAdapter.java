@@ -1,5 +1,6 @@
 package adapter.recyclerview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Util.ComponentUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 
 public class AppreciateRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -74,10 +77,15 @@ public class AppreciateRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {//payloads为空 即不是调用notifyItemChanged(position,payloads)方法执行的
             if (getItemViewType(position) == TYPE_HEADER) {
-                if(arrayList.get(position).getComtimes()<2)
-                ((HeaderHolder) holder).textView.setText("溫馨提醒,您可再" + (2-arrayList.get(position).getComtimes()) + "次修改評價");
-                else{
+                if (arrayList.get(position).getComtimes() < 2) {
+                    ((HeaderHolder) holder).textView.setText("溫馨提醒,您可再" + (2 - arrayList.get(position).getComtimes()) + "次修改評價");
+
+                } else {
                     ((HeaderHolder) holder).textView.setText("目前無法修改評價，如有任何問題請聯絡客服");
+                    Button confirm = ((Activity) ctx).findViewById(R.id.appreciate_confirm);
+                    confirm.setText("已無法修改");
+                    confirm.setEnabled(false);
+                    new ComponentUtil(ctx).reShapeButton(confirm, R.color.gray);
                 }
             } else if (getItemViewType(position) == TYPE_CONTENT) {
                 ImageLoader.getInstance().displayImage(arrayList.get(position - 1).getImg(), ((ContentHolder) holder).appreciate_srars_img);

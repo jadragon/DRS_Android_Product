@@ -27,7 +27,7 @@ import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
 import library.AppManager;
 import library.BottomNavigationViewHelper;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.GetJsonData.MemberJsonData;
 import library.LoadingView;
 import library.SQLiteDatabaseHandler;
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 db = new SQLiteDatabaseHandler(getApplicationContext());
-                JSONObject json = new GetInformationByPHP().getAddress("0");
+                JSONObject json = new ProductJsonData().getAddress("0");
                 ArrayList<Map<String, String>> datas = GetAddress.getAddress(json);
                 String lastestmodifydate = GetAddress.checkModifydate(json);
                 int sqlmodifydate = db.getModifydate(lastestmodifydate);

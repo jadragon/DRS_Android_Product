@@ -30,7 +30,7 @@ import java.util.Arrays;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
 public class Fragment_favorate extends Fragment {
@@ -61,10 +61,10 @@ public class Fragment_favorate extends Fragment {
             public void run() {
                 fragmentArrayList = new ArrayList<>();
                 fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.FAVORATE);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getFavorite(gv.getToken()));
+                fragment_shop_content.setJson(null, new ProductJsonData().getFavorite(gv.getToken()));
                 fragmentArrayList.add(fragment_shop_content);
                 fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.BROWSE);
-                fragment_shop_content.setJson(null, new GetInformationByPHP().getBrowse(gv.getToken()));
+                fragment_shop_content.setJson(null, new ProductJsonData().getBrowse(gv.getToken()));
                 fragmentArrayList.add(fragment_shop_content);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
@@ -93,8 +93,8 @@ public class Fragment_favorate extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json1 = new GetInformationByPHP().getFavorite(gv.getToken());
-                json2 = new GetInformationByPHP().getBrowse(gv.getToken());
+                json1 = new ProductJsonData().getFavorite(gv.getToken());
+                json2 = new ProductJsonData().getBrowse(gv.getToken());
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {

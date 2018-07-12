@@ -45,7 +45,7 @@ import java.util.Map;
 import adapter.recyclerview.MyRecyclerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.MySwipeRefreshLayout;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
 /**
@@ -152,21 +152,21 @@ public class Fragment_home extends Fragment {
             /**
              * 取得Slider圖片
              * */
-            json = new GetInformationByPHP().getSlider();
+            json = new ProductJsonData().getSlider();
             /**
              * 取得HotkeyWords圖片
              * */
-            json1 = new GetInformationByPHP().getHotkeywords();
+            json1 = new ProductJsonData().getHotkeywords();
 
             /**
              * 取得Ptype圖片
              * */
-            json2 = new GetInformationByPHP().getPtype();
+            json2 = new ProductJsonData().getPtype();
 
             /**
              * 取得Brands圖片
              * */
-            json3 = new GetInformationByPHP().getBrands();
+            json3 = new ProductJsonData().getBrands();
             if (what == 0)
                 //初始化面
                 handler.post(r2);

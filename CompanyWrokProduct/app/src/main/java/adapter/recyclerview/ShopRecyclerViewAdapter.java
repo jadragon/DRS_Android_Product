@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
-import com.test.tw.wrokproduct.PcContentActivity;
+import com.test.tw.wrokproduct.商品.PcContentActivity;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
@@ -31,7 +31,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.ToastMessageDialog;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.ItemTouchListencer;
 import pojo.ProductInfoPojo;
 
@@ -165,7 +165,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                             @Override
                             public void run() {
                                 if (itemsList.get(position - had_header).getFavorite()) {
-                                    new GetInformationByPHP().delFavoriteProduct(gv.getToken(), itemsList.get(position - had_header).getPno());
+                                    new ProductJsonData().delFavoriteProduct(gv.getToken(), itemsList.get(position - had_header).getPno());
                                     itemsList.get(position - had_header).setFavorite(false);
                                     ((Activity) ctx).runOnUiThread(new Runnable() {
                                         @Override
@@ -175,7 +175,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                                     });
 
                                 } else {
-                                    new GetInformationByPHP().setFavorite(gv.getToken(), itemsList.get(position - had_header).getPno());
+                                    new ProductJsonData().setFavorite(gv.getToken(), itemsList.get(position - had_header).getPno());
                                     itemsList.get(position - had_header).setFavorite(true);
                                     ((Activity) ctx).runOnUiThread(new Runnable() {
                                         @Override

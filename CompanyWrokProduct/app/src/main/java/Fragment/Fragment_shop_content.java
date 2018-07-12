@@ -34,7 +34,7 @@ import java.util.Map;
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.EndLessOnScrollListener;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 import library.MyRecyclerViewTouchCallBack;
 
@@ -98,14 +98,14 @@ public class Fragment_shop_content extends Fragment {
                     @Override
                     public void run() {
                         if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
-                            json1 = new GetInformationByPHP().getBanner(type);
-                            json2 = new GetInformationByPHP().getIplist(type, gv.getToken(), 1);
+                            json1 = new ProductJsonData().getBanner(type);
+                            json2 = new ProductJsonData().getIplist(type, gv.getToken(), 1);
                         } else if (banner == ShopRecyclerViewAdapter.HIDE_BANNER) {
-                            json2 = new GetInformationByPHP().getPlist(ptno, type, gv.getToken(), 1);
+                            json2 = new ProductJsonData().getPlist(ptno, type, gv.getToken(), 1);
                         } else if (banner == ShopRecyclerViewAdapter.FAVORATE) {
-                            json2 = new GetInformationByPHP().getFavorite(gv.getToken());
+                            json2 = new ProductJsonData().getFavorite(gv.getToken());
                         } else if (banner == ShopRecyclerViewAdapter.BROWSE) {
-                            json2 = new GetInformationByPHP().getBrowse(gv.getToken());
+                            json2 = new ProductJsonData().getBrowse(gv.getToken());
                         }
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -164,7 +164,7 @@ public class Fragment_shop_content extends Fragment {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    json2 = new GetInformationByPHP().getIplist(type, nextpage);
+                                    json2 = new ProductJsonData().getIplist(type, nextpage);
                                     nextpage++;
                                     getContext().runOnUiThread(new Runnable() {
                                         @Override
@@ -199,9 +199,9 @@ public class Fragment_shop_content extends Fragment {
                         @Override
                         public void run() {
                             if (banner == ShopRecyclerViewAdapter.SHOW_BANNER) {
-                                json2 = new GetInformationByPHP().getIplist(type, gv.getToken(), nextpage);
+                                json2 = new ProductJsonData().getIplist(type, gv.getToken(), nextpage);
                             } else if (banner == ShopRecyclerViewAdapter.HIDE_BANNER) {
-                                json2 = new GetInformationByPHP().getPlist(ptno, type, gv.getToken(), nextpage);
+                                json2 = new ProductJsonData().getPlist(ptno, type, gv.getToken(), nextpage);
                             }
                             nextpage++;
                             new Handler(Looper.getMainLooper()).post(new Runnable() {

@@ -2,18 +2,14 @@ package Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.R;
 
@@ -61,12 +57,12 @@ public class Fragment_WebView extends Fragment {
             @Override
             public void onPageTop(int l, int t, int oldl, int oldt) {
                 webView.getParent().getParent().getParent().getParent().getParent().requestDisallowInterceptTouchEvent(false);
-            //    webView.getParent().getParent().requestDisallowInterceptTouchEvent(false);
+                //    webView.getParent().getParent().requestDisallowInterceptTouchEvent(false);
             }
 
             @Override
             public void onScrollChanged(int l, int t, int oldl, int oldt) {
-           //     webView.getParent().getParent().requestDisallowInterceptTouchEvent(true);
+                //     webView.getParent().getParent().requestDisallowInterceptTouchEvent(true);
             }
         });
         // 设置WevView要显示的网页
@@ -74,13 +70,13 @@ public class Fragment_WebView extends Fragment {
                 null);
         webView.getSettings().setJavaScriptEnabled(true); //设置支持Javascript
         // 设置可以支持缩放
-        webView.getSettings().setSupportZoom(true);
+        //    webView.getSettings().setSupportZoom(true);
         // 设置出现缩放工具
-          webView.getSettings().setBuiltInZoomControls(true);
+        //     webView.getSettings().setBuiltInZoomControls(true);
         //设置可在大视野范围内上下左右拖动，并且可以任意比例缩放
         webView.getSettings().setUseWideViewPort(true);
         //设置默认加载的可视范围是大视野范围
-        // webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
         //自适应屏幕
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         webView.setVerticalScrollBarEnabled(false);
@@ -100,7 +96,7 @@ public class Fragment_WebView extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                     webView.loadUrl("javascript:App.resize(document.body.getBoundingClientRect().height)");
+                //    webView.loadUrl("javascript:App.resize(document.body.getBoundingClientRect().height)");
             }
         });
         //        webView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -126,7 +122,7 @@ public class Fragment_WebView extends Fragment {
         //            }
         //        });
 
-          webView.addJavascriptInterface(this, "App");
+        //    webView.addJavascriptInterface(this, "App");
     }
 
     public void clearWebViewResource(ViewGroup container, WebView webView) {
@@ -142,25 +138,27 @@ public class Fragment_WebView extends Fragment {
         }
     }
 
+    /*
 
-        @JavascriptInterface
-        public void resize(final float height) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
-                    try {
-                        webView.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
-                        int webviewHeigh = (int) (height);
-                        if (onHeighChangerListener != null)
-                            onHeighChangerListener.valueChanged(webviewHeigh);
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
+            @JavascriptInterface
+            public void resize(final float height) {
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        //此处的 layoutParmas 需要根据父控件类型进行区分，这里为了简单就不这么做了
+                        try {
+                            webView.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+                            int webviewHeigh = (int) (height);
+                            if (onHeighChangerListener != null)
+                                onHeighChangerListener.valueChanged(webviewHeigh);
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
-        }
-
+                });
+            }
+    */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

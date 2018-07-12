@@ -37,9 +37,11 @@
             android:name=".PtypeActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".PcContentActivity"
+            android:name=".商品.PcContentActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".TestActivity" >
+
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />

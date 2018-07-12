@@ -30,7 +30,7 @@ import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.AppManager;
-import library.GetJsonData.GetInformationByPHP;
+import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
 public class PtypeActivity extends AppCompatActivity {
@@ -87,7 +87,7 @@ public class PtypeActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new GetInformationByPHP().getPtype();
+                json = new ProductJsonData().getPtype();
                 list = ResolveJsonData.getPtypeDetail(json, POSITION);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -184,13 +184,13 @@ public class PtypeActivity extends AppCompatActivity {
                         LoadingView.show(getCurrentFocus());
                     }
                 });
-                final JSONObject json1 = new GetInformationByPHP().getPlist(currentPtno, 0, gv.getToken(), 1);
-                final JSONObject json2 = new GetInformationByPHP().getPlist(currentPtno, 1, gv.getToken(), 1);
-                final JSONObject json3 = new GetInformationByPHP().getPlist(currentPtno, 2, gv.getToken(), 1);
-                final JSONObject json4 = new GetInformationByPHP().getPlist(currentPtno, 3, gv.getToken(), 1);
+                final JSONObject json1 = new ProductJsonData().getPlist(currentPtno, 0, gv.getToken(), 1);
+                final JSONObject json2 = new ProductJsonData().getPlist(currentPtno, 1, gv.getToken(), 1);
+                final JSONObject json3 = new ProductJsonData().getPlist(currentPtno, 2, gv.getToken(), 1);
+                final JSONObject json4 = new ProductJsonData().getPlist(currentPtno, 3, gv.getToken(), 1);
                 final JSONObject json5;
                 if (mvip.equals("2")) {
-                    json5 = new GetInformationByPHP().getPlist(currentPtno, 4, gv.getToken(), 1);
+                    json5 = new ProductJsonData().getPlist(currentPtno, 4, gv.getToken(), 1);
                 } else {
                     json5 = null;
                 }
@@ -220,13 +220,13 @@ public class PtypeActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONObject json1 = new GetInformationByPHP().getPlist(currentPtno, 0, gv.getToken(), 1);
-                final JSONObject json2 = new GetInformationByPHP().getPlist(currentPtno, 1, gv.getToken(), 1);
-                final JSONObject json3 = new GetInformationByPHP().getPlist(currentPtno, 2, gv.getToken(), 1);
-                final JSONObject json4 = new GetInformationByPHP().getPlist(currentPtno, 3, gv.getToken(), 1);
+                final JSONObject json1 = new ProductJsonData().getPlist(currentPtno, 0, gv.getToken(), 1);
+                final JSONObject json2 = new ProductJsonData().getPlist(currentPtno, 1, gv.getToken(), 1);
+                final JSONObject json3 = new ProductJsonData().getPlist(currentPtno, 2, gv.getToken(), 1);
+                final JSONObject json4 = new ProductJsonData().getPlist(currentPtno, 3, gv.getToken(), 1);
                 final JSONObject json5;
                 if (mvip.equals("2")) {
-                    json5 = new GetInformationByPHP().getPlist(currentPtno, 4, gv.getToken(), 1);
+                    json5 = new ProductJsonData().getPlist(currentPtno, 4, gv.getToken(), 1);
                 } else {
                     json5 = null;
                 }
