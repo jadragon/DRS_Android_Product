@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/white"
-    android:orientation="horizontal"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:orientation="horizontal">
 
     <Button
         android:id="@+id/orderinfo_footer_btn1"
@@ -15,10 +13,8 @@
         android:layout_weight="1"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="8dp"
         android:background="@color/gray"
-        android:layout_marginBottom="8dp"/>
+        android:layout_margin="8dp"/>
 
     <Button
         android:id="@+id/orderinfo_footer_btn2"
@@ -28,8 +24,16 @@
         android:layout_weight="1"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="8dp"
         android:background="@color/red"
-        android:layout_marginBottom="8dp"/>
+        android:layout_margin="8dp"/>
+    <Button
+        android:id="@+id/orderinfo_footer_btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="給予評價"
+        android:layout_weight="1"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:background="@color/gray"
+        android:layout_margin="8dp"/>
 </LinearLayout>

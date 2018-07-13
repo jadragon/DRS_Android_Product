@@ -1,15 +1,17 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class MemberOrderHeaderPojo extends Item {
+public class ReturnAndRefundHeaderPojo extends Item {
+    //order
     private String ordernum;
     private String odate;
+    //store
     private String sname;
+    private String simg;
 
-    public MemberOrderHeaderPojo() {
-
+    public ReturnAndRefundHeaderPojo() {
     }
 
-    public MemberOrderHeaderPojo(int type) {
+    public ReturnAndRefundHeaderPojo(int type) {
         super(type);
     }
 
@@ -36,4 +38,13 @@ public class MemberOrderHeaderPojo extends Item {
     public void setSname(String sname) {
         this.sname = sname;
     }
+
+    public String getSimg() {
+        return simg;
+    }
+
+    public void setSimg(String simg) {
+        this.simg = simg;
+    }
+
 }

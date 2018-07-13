@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.MainActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
@@ -288,38 +289,43 @@ public class PcContentActivity extends AppCompatActivity {
         shop_cart_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count > 0 && max != 0) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
+                if (gv.getToken() != null) {
+                    if (count > 0 && max != 0) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                            try {
-                                JSONObject jsonObject = new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
-                                boolean success = jsonObject.getBoolean("Success");
-                                Message = jsonObject.getString("Message");
-                                if (success) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getApplicationContext(), "" + Message, Toast.LENGTH_SHORT).show();
-                                            popWin.dismiss();
-                                            enable_background.setVisibility(View.INVISIBLE);
-                                            if (type == 1) {
-                                                startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+                                try {
+                                    JSONObject jsonObject = new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
+                                    boolean success = jsonObject.getBoolean("Success");
+                                    Message = jsonObject.getString("Message");
+                                    if (success) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "" + Message, Toast.LENGTH_SHORT).show();
+                                                popWin.dismiss();
+                                                enable_background.setVisibility(View.INVISIBLE);
+                                                if (type == 1) {
+                                                    startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+                                                }
+
                                             }
-
-                                        }
-                                    });
+                                        });
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
                             }
+                        }).start();
 
-                        }
-                    }).start();
-
+                    }
+                } else {
+                    startActivity(new Intent(PcContentActivity.this, LoginActivity.class));
                 }
             }
+
         });
         showPopWin(popView);
     }
@@ -479,7 +485,11 @@ public class PcContentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
-            startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+            if (gv.getToken() != null) {
+                startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+            } else {
+                startActivity(new Intent(PcContentActivity.this, LoginActivity.class));
+            }
             return true;
         }
 

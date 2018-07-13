@@ -7,6 +7,8 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrde
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderContentPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderFooterPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderHeaderPojo;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.ReturnAndRefundContentPojo;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.ReturnAndRefundHeaderPojo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -324,5 +326,96 @@ public class AnalyzeOrderInfo {
             e.printStackTrace();
         }
         return arrayList;
+    }
+
+    /**
+     * 3.1.22	退換貨進度 – 讀取訂單商品列表
+     * order	Object	訂單資料
+     * ordernum	String	訂單編號
+     * odate	String	訂單日期
+     * store	Object	商家資料
+     * sname	String	商家名稱
+     * simg	String	商家圖
+     * content	Array	商品內容
+     * moino	String	訂單細項碼
+     * pname	String	商品名稱
+     * pimg	String	商品圖
+     * color	String	顏色
+     * size	String	尺寸
+     * oiname	String	訂單細項狀態名
+     * oicolor	String	訂單細項狀態顏色色碼
+     * price	Number	牌價
+     * sprice	Number	售價
+     * stotal	Number	訂購數量
+     */
+    public static ReturnAndRefundHeaderPojo getMOrderReturnHeader(JSONObject json) {
+        try {
+            if (json.getBoolean("Success")) {
+                ReturnAndRefundHeaderPojo returnAndRefundHeaderPojo = new ReturnAndRefundHeaderPojo();
+                JSONObject jsonObject = json.getJSONObject("Data");
+                JSONObject json_obj = jsonObject.getJSONObject("order");
+                returnAndRefundHeaderPojo.setOrdernum(json_obj.getString("ordernum"));
+                returnAndRefundHeaderPojo.setOdate(json_obj.getString("odate"));
+                json_obj = jsonObject.getJSONObject("store");
+                returnAndRefundHeaderPojo.setSname(json_obj.getString("sname"));
+                returnAndRefundHeaderPojo.setSimg(json_obj.getString("simg"));
+                return returnAndRefundHeaderPojo;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 3.1.22	退換貨進度 – 讀取訂單商品列表
+     * order	Object	訂單資料
+     * ordernum	String	訂單編號
+     * odate	String	訂單日期
+     * store	Object	商家資料
+     * sname	String	商家名稱
+     * simg	String	商家圖
+     * content	Array	商品內容
+     * moino	String	訂單細項碼
+     * pname	String	商品名稱
+     * pimg	String	商品圖
+     * color	String	顏色
+     * size	String	尺寸
+     * oiname	String	訂單細項狀態名
+     * oicolor	String	訂單細項狀態顏色色碼
+     * price	Number	牌價
+     * sprice	Number	售價
+     * stotal	Number	訂購數量
+     */
+    public static ArrayList<ReturnAndRefundContentPojo> getMOrderReturnContent(JSONObject json) {
+        ArrayList<ReturnAndRefundContentPojo> arrayList = new ArrayList<>();
+        try {
+            if (json.getBoolean("Success")) {
+                JSONObject jsonObject = json.getJSONObject("Data");
+                //content
+                ReturnAndRefundContentPojo returnAndRefundContentPojo;
+                JSONArray jsonArray = jsonObject.getJSONArray("content");
+                JSONObject json_obj;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    returnAndRefundContentPojo = new ReturnAndRefundContentPojo();
+                    json_obj = jsonArray.getJSONObject(i);
+                    returnAndRefundContentPojo.setMoino(json_obj.getString("moino"));
+                    returnAndRefundContentPojo.setPname(json_obj.getString("pname"));
+                    returnAndRefundContentPojo.setPimg(json_obj.getString("pimg"));
+                    returnAndRefundContentPojo.setColor(json_obj.getString("color"));
+                    returnAndRefundContentPojo.setSize(json_obj.getString("size"));
+                    returnAndRefundContentPojo.setOiname(json_obj.getString("oiname"));
+                    returnAndRefundContentPojo.setOicolor(json_obj.getString("oicolor"));
+                    returnAndRefundContentPojo.setPrice(json_obj.getInt("price"));
+                    returnAndRefundContentPojo.setSprice(json_obj.getInt("sprice"));
+                    returnAndRefundContentPojo.setStotal(json_obj.getInt("stotal"));
+                    arrayList.add(returnAndRefundContentPojo);
+                }
+                return arrayList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

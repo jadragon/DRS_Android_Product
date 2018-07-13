@@ -39,9 +39,7 @@
         <activity
             android:name=".商品.PcContentActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".TestActivity" >
-
-        </activity>
+        <activity android:name=".TestActivity"></activity>
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
@@ -140,11 +138,11 @@
         <activity android:name=".帳務管理.錢包提領.EwalletActivity" />
         <activity android:name=".帳務管理.現金折價券.CouponActivity" />
         <activity android:name=".帳務管理.帳戶總覽.OverviewBillActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity"
+        <activity
+            android:name=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".GoldFlowCompeleteActivity">
-
-        </activity>
+        <activity android:name=".GoldFlowCompeleteActivity"></activity>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.ReturnAndRefundActivity"></activity>
     </application>
 
 </manifest>

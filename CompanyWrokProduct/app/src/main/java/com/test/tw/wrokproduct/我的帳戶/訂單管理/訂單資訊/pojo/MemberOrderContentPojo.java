@@ -1,18 +1,20 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
 public class MemberOrderContentPojo extends Item {
-    String pname;
-    String pimg;
-    String color;
-    String size;
-    String oiname;
-    String oicolor;
-    int price;
-    int sprice;
-    int stotal;
+    private String pname;
+    private String pimg;
+    private String color;
+    private String size;
+    private String oiname;
+    private String oicolor;
+    private int price;
+    private int sprice;
+    private int stotal;
+
     public MemberOrderContentPojo() {
 
     }
+
     public MemberOrderContentPojo(int type) {
         super(type);
     }

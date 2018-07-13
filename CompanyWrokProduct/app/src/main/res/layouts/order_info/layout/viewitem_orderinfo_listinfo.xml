@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white"
         android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="5dp">
 
         <LinearLayout
@@ -71,8 +71,8 @@
         android:layout_height="50dp"
         android:background="@color/white"
         android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="5dp">
 
         <LinearLayout
@@ -132,8 +132,8 @@
         android:layout_height="50dp"
         android:background="@color/white"
         android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="5dp">
 
         <LinearLayout
@@ -198,8 +198,8 @@
             android:layout_height="50dp"
             android:background="@color/white"
             android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:paddingTop="5dp">
 
             <LinearLayout
@@ -235,8 +235,8 @@
             android:layout_height="50dp"
             android:background="@color/white"
             android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:paddingTop="5dp">
 
             <LinearLayout
@@ -263,6 +263,14 @@
 
         </FrameLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/orderinfo_tradeprocess_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -273,8 +281,8 @@
             android:layout_height="50dp"
             android:background="@color/white"
             android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:paddingTop="5dp">
 
             <LinearLayout
@@ -298,11 +306,10 @@
                     android:textSize="15sp" />
             </LinearLayout>
         </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/default_gray" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/default_gray" />
 </LinearLayout>

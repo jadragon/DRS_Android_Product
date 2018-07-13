@@ -2,44 +2,44 @@ package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
 public class MOrderItemPojo extends Item {
     //header
-    String header_odate;
-    String header_ordernum;
-    String header_logisticsnum;
-    int header_step1;
-    String header_sdate1;
-    int header_step2;
-    String header_sdate2;
-    int header_step3;
-    String header_sdate3;
-    int header_step4;
-    String header_sdate4;
-    int header_step5;
-    String header_sdate5;
-    int header_step6;
-    String header_sdate6;
+    private String header_odate;
+    private String header_ordernum;
+    private String header_logisticsnum;
+    private int header_step1;
+    private String header_sdate1;
+    private int header_step2;
+    private String header_sdate2;
+    private int header_step3;
+    private String header_sdate3;
+    private int header_step4;
+    private String header_sdate4;
+    private int header_step5;
+    private String header_sdate5;
+    private int header_step6;
+    private String header_sdate6;
     //buyer
-    String buyer_logisticsVal;
-    String buyer_name;
-    String buyer_mp;
-    String buyer_address;
+    private String buyer_logisticsVal;
+    private String buyer_name;
+    private String buyer_mp;
+    private String buyer_address;
     //store
-    String store_sname;
-    String store_name;
-    String store_mp;
-    String store_address;
+    private String store_sname;
+    private String store_name;
+    private String store_mp;
+    private String store_address;
     //invoice
-    String invoice_intypeVal;
-    String invoice_inumber;
-    String invoice_ctitle;
-    String invoice_vat;
+    private String invoice_intypeVal;
+    private String invoice_inumber;
+    private String invoice_ctitle;
+    private String invoice_vat;
     //footer
-    String footer_note;
-    int footer_mdiscount;
-    int footer_lpay;
-    int footer_xmoney;
-    int footer_ymoney;
-    int footer_ewallet;
-    int footer_allpay;
+    private String footer_note;
+    private int footer_mdiscount;
+    private int footer_lpay;
+    private int footer_xmoney;
+    private int footer_ymoney;
+    private int footer_ewallet;
+    private int footer_allpay;
 
     public MOrderItemPojo() {
 

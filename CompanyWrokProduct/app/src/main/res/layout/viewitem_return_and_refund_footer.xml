@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:text="申請項目:" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="我要換貨" />
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="我要退貨退款" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/default_gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="退換貨原因說明:"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/return_and_refund_edit"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edittext_background1"
+        android:gravity="top"
+        android:hint="請輸入原因、30個字以內"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"
+        android:text="上傳圖片"
+        android:textColor="@color/colorPrimary" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/return_and_refund_photo1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/add_photo" />
+
+            <ImageView
+                android:id="@+id/return_and_refund_photo2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/add_photo" />
+
+            <ImageView
+                android:id="@+id/return_and_refund_photo3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/add_photo" />
+
+            <ImageView
+                android:id="@+id/return_and_refund_photo4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/add_photo" />
+
+            <ImageView
+                android:id="@+id/return_and_refund_photo5"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/add_photo" />
+
+            <ImageView
+                android:id="@+id/return_and_refund_photo6"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/add_photo" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/orderinfo_tradeprocess_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/default_gray" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:singleLine="false"
+                android:text="注意事項:\n1.損壞商品可換同商品同款不同色\n2.買家購買到損壞商品，賣家去認後可更換新商品\n3.請買家提供損壞商品照片以便商家確認"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/default_gray" />
+</LinearLayout>

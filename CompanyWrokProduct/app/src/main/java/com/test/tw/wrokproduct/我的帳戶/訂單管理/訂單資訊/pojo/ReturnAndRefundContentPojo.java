@@ -1,6 +1,7 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class MOrderItemContentPojo extends Item {
+public class ReturnAndRefundContentPojo extends Item {
+    private String moino;
     private String pname;
     private String pimg;
     private String color;
@@ -11,11 +12,22 @@ public class MOrderItemContentPojo extends Item {
     private int sprice;
     private int stotal;
 
-    public MOrderItemContentPojo() {
+
+    private boolean check;
+
+    public ReturnAndRefundContentPojo() {
     }
 
-    public MOrderItemContentPojo(int type) {
+    public ReturnAndRefundContentPojo(int type) {
         super(type);
+    }
+
+    public String getMoino() {
+        return moino;
+    }
+
+    public void setMoino(String moino) {
+        this.moino = moino;
     }
 
     public String getPname() {
@@ -88,5 +100,13 @@ public class MOrderItemContentPojo extends Item {
 
     public void setStotal(int stotal) {
         this.stotal = stotal;
+    }
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 }

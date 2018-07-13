@@ -1,24 +1,26 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
 public class MemberOrderFooterPojo extends Item {
-    String mono;
-    int ttotal;
-    int tprice;
-    int ostatus;
-    String oname;
-    String ocolor;
-    int pstatus;
-    String pname;
-    String pcolor;
-    int lstatus;
-    String lpname;
-    String lcolor;
-    int istatus;
-    String iname;
-    String icolor;
-    String pinfo;
+    private String mono;
+    private int ttotal;
+    private int tprice;
+    private int ostatus;
+    private String oname;
+    private String ocolor;
+    private int pstatus;
+    private String pname;
+    private String pcolor;
+    private int lstatus;
+    private String lpname;
+    private String lcolor;
+    private int istatus;
+    private String iname;
+    private String icolor;
+    private String pinfo;
+
     public MemberOrderFooterPojo() {
     }
+
     public MemberOrderFooterPojo(int type) {
         super(type);
     }

@@ -13,13 +13,20 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
+        <CheckBox
+            android:id="@+id/return_and_refund_checkbox"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@drawable/checkbox"
+            android:button="@null" />
+
         <ImageView
-            android:id="@+id/orderinfo_content_pimg"
+            android:id="@+id/return_and_refund_pimg"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:scaleType="fitStart"
             android:src="@drawable/ship_post_office" />
 
         <LinearLayout
@@ -30,7 +37,7 @@
             android:paddingTop="10dp">
 
             <TextView
-                android:id="@+id/orderinfo_content_pname"
+                android:id="@+id/return_and_refund_pname"
                 android:layout_width="match_parent"
                 android:layout_height="40sp"
                 android:layout_weight="1"
@@ -41,52 +48,57 @@
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:orientation="horizontal">
-
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="規格:"
-                        android:textColor="@color/black"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/orderinfo_content_color"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:text="顏色"
-                        android:textColor="@color/black"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/orderinfo_content_size"
+                        android:id="@+id/return_and_refund_format"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="尺寸"
+                        android:ellipsize="end"
+                        android:maxLines="2"
                         android:textColor="@color/black"
-                        android:textSize="13sp" />
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/orderinfo_content_stotal"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
-                    android:text="X1"
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
-            </FrameLayout>
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:text="-" />
+
+                    <TextView
+                        android:id="@+id/return_and_refund_stotal"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="123"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:text="+" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -94,14 +106,15 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/orderinfo_content_oiname"
+                    android:id="@+id/return_and_refund_oiname"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="bottom"
                     android:text="成立"
                     android:textColor="@color/shipway_blue_light"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="invisible"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -110,16 +123,17 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/orderinfo_content_price"
+                        android:id="@+id/return_and_refund_price"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
                         android:text="$25000"
                         android:textColor="@color/shipway_gray"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"
+                        android:layout_marginRight="30dp"/>
 
                     <TextView
-                        android:id="@+id/orderinfo_content_sprice"
+                        android:id="@+id/return_and_refund_sprice"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
