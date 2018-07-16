@@ -1,4 +1,4 @@
-package Fragment;
+package com.test.tw.wrokproduct.Fragment;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -30,6 +30,7 @@ import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
+import com.test.tw.wrokproduct.商家管理.商品訂單.ProductOrderActivity;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 import com.test.tw.wrokproduct.帳務管理.帳戶總覽.OverviewBillActivity;
 import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity;
@@ -92,7 +93,29 @@ public class Fragment_community extends Fragment {
         listView.setAdapter(new CommunityListViewAdapter(getResources().obtainTypedArray(R.array.store_manage_image), getResources().getStringArray(R.array.store_manage_title)));
         listView.setDivider(null);
         list.add(listView);
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        intent = new Intent(getContext(), ProductOrderActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                }
+            }
+        });
         //List
 
 

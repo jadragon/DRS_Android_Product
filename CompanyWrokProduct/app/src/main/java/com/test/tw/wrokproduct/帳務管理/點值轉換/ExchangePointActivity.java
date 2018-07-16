@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import Fragment.Fragment_ExchangePoint;
+import com.test.tw.wrokproduct.Fragment.Fragment_ExchangePoint;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
 

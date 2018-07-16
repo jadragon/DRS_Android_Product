@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
-import Fragment.Fragment_shop_content;
+import com.test.tw.wrokproduct.Fragment.Fragment_shop_content;
 
 public class ShopViewPagerAdapter extends FragmentPagerAdapter {
 

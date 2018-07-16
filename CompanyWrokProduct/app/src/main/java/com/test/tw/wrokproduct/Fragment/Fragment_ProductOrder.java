@@ -1,4 +1,4 @@
-package Fragment;
+package com.test.tw.wrokproduct.Fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import library.EndLessOnScrollListener;
 import library.GetJsonData.OrderInfoJsonData;
 import library.LoadingView;
 
-public class Fragment_oderInfo extends BasePageFragment {
+public class Fragment_ProductOrder extends BasePageFragment {
     View v;
     OrderInfoRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -36,7 +36,9 @@ public class Fragment_oderInfo extends BasePageFragment {
     public void setIndex(int index) {
         this.index = index;
     }
-
+    public void setType(int index) {
+        this.index = index;
+    }
     public void setJson(JSONObject json) {
         this.json = json;
     }

@@ -41,8 +41,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-import Fragment.Fragment_ProductAppraise;
-import Fragment.Fragment_WebView;
+import com.test.tw.wrokproduct.Fragment.Fragment_ProductAppraise;
+import com.test.tw.wrokproduct.Fragment.Fragment_WebView;
 import Util.StringUtil;
 import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;

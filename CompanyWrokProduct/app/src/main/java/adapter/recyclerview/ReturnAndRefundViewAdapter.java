@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.CameraActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Item;
@@ -24,7 +27,9 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Retur
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 
@@ -34,15 +39,15 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public final int TYPE_FOOTER = 2;
     private Context ctx;
     private List<Item> items;
-    ReturnAndRefundHeaderPojo returnAndRefundHeaderPojo;
-    ArrayList<ReturnAndRefundContentPojo> contentPojos;
-    GlobalVariable gv;
-    Bitmap[] photos;
+    private ReturnAndRefundHeaderPojo returnAndRefundHeaderPojo;
+    private ArrayList<ReturnAndRefundContentPojo> contentPojos;
+    private Bitmap[] photos;
+    private int type;
+    private String note;
 
     public ReturnAndRefundViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         photos = new Bitmap[6];
-        gv = ((GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
             returnAndRefundHeaderPojo = AnalyzeOrderInfo.getMOrderReturnHeader(json);
             contentPojos = AnalyzeOrderInfo.getMOrderReturnContent(json);
@@ -101,7 +106,7 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 //   ((ContentHolder) holder).oiname.setText(((ReturnAndRefundContentPojo) items.get(position)).getOiname());
                 ((ContentHolder) holder).price.setText("$" + ((ReturnAndRefundContentPojo) items.get(position)).getPrice());
                 ((ContentHolder) holder).sprice.setText("$" + ((ReturnAndRefundContentPojo) items.get(position)).getSprice());
-                ((ContentHolder) holder).stotal.setText("" + ((ReturnAndRefundContentPojo) items.get(position)).getStotal());
+                ((ContentHolder) holder).stotal.setText("" + ((ReturnAndRefundContentPojo) items.get(position)).getScount());
                 ((ContentHolder) holder).checkbox.setChecked(((ReturnAndRefundContentPojo) items.get(position)).isCheck());
             } else if (getItemViewType(position) == TYPE_FOOTER) {
                 if (photos[0] != null)
@@ -126,6 +131,7 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     if (getItemViewType(position) == TYPE_HEADER) {
 
                     } else if (getItemViewType(position) == TYPE_CONTENT) {
+                        ((ContentHolder) holder).stotal.setText("" + ((ReturnAndRefundContentPojo) items.get(position)).getScount());
 
                     }
                     break;
@@ -172,11 +178,12 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     }
 
-    class ContentHolder extends RecyclerView.ViewHolder {
+    class ContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         ImageView pimg;
         TextView pname, format, oiname, price, sprice, stotal;
         CheckBox checkbox;
+        Button decrease, increase;
 
         public ContentHolder(final Context ctx, View view) {
             super(view);
@@ -189,17 +196,33 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
             sprice = view.findViewById(R.id.return_and_refund_sprice);
             stotal = view.findViewById(R.id.return_and_refund_stotal);
             checkbox = view.findViewById(R.id.return_and_refund_checkbox);
-            checkbox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((ReturnAndRefundContentPojo) items.get(getAdapterPosition())).setCheck(!((ReturnAndRefundContentPojo) items.get(getAdapterPosition())).isCheck());
-                    for (Item item : items) {
-                        if (item instanceof ReturnAndRefundContentPojo) {
-                            Log.e("checkbox", getAdapterPosition() + "");
-                        }
-                    }
-                }
-            });
+            decrease = view.findViewById(R.id.return_and_refund_decrease);
+            increase = view.findViewById(R.id.return_and_refund_increase);
+
+            checkbox.setOnClickListener(this);
+            decrease.setOnClickListener(this);
+            increase.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            ReturnAndRefundContentPojo returnAndRefundContentPojo = ((ReturnAndRefundContentPojo) items.get(getAdapterPosition()));
+            switch (view.getId()) {
+                case R.id.return_and_refund_checkbox:
+                    returnAndRefundContentPojo.setCheck(!returnAndRefundContentPojo.isCheck());
+                    break;
+                case R.id.return_and_refund_decrease:
+                    if (returnAndRefundContentPojo.getScount() > 0)
+                        returnAndRefundContentPojo.setScount(returnAndRefundContentPojo.getScount() - 1);
+                    notifyItemChanged(getAdapterPosition(), 0);
+                    break;
+                case R.id.return_and_refund_increase:
+                    if (returnAndRefundContentPojo.getScount() < returnAndRefundContentPojo.getStotal())
+                        returnAndRefundContentPojo.setScount(returnAndRefundContentPojo.getScount() + 1);
+                    notifyItemChanged(getAdapterPosition(), 0);
+                    break;
+            }
         }
     }
 
@@ -207,10 +230,33 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
     class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         ImageView photo1, photo2, photo3, photo4, photo5, photo6;
+        RadioButton radio_button_return, radio_button_refund;
+        EditText return_and_refund_edit;
 
         public FooterHolder(final Context ctx, View view) {
             super(view);
             this.ctx = ctx;
+            return_and_refund_edit = view.findViewById(R.id.return_and_refund_edit);
+            return_and_refund_edit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    note = editable.toString();
+                }
+            });
+            radio_button_return = view.findViewById(R.id.radio_button_return);
+            radio_button_refund = view.findViewById(R.id.radio_button_refund);
+            radio_button_return.setOnClickListener(this);
+            radio_button_refund.setOnClickListener(this);
             photo1 = view.findViewById(R.id.return_and_refund_photo1);
             photo2 = view.findViewById(R.id.return_and_refund_photo2);
             photo3 = view.findViewById(R.id.return_and_refund_photo3);
@@ -249,6 +295,12 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 case R.id.return_and_refund_photo6:
                     ((AppCompatActivity) ctx).startActivityForResult(intent, 600);
                     break;
+                case R.id.radio_button_return:
+                    type = 1;
+                    break;
+                case R.id.radio_button_refund:
+                    type = 2;
+                    break;
             }
 
         }
@@ -267,5 +319,39 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public void setPhotos(Bitmap bitmap, int index) {
         photos[index] = bitmap;
+    }
+
+
+    public Map<String, String> getApplyReturn() {
+        Map<String, String> map = new HashMap<>();
+        ArrayList<String> arrayList = getMoinoArrayAndNumArray();
+        map.put("type", type + "");
+        map.put("moinoArray", arrayList.get(0));
+        map.put("numArray", arrayList.get(1));
+        map.put("note", note);
+        return map;
+    }
+
+
+    private ArrayList<String> getMoinoArrayAndNumArray() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        StringBuilder moinoArray = new StringBuilder();
+        StringBuilder numArray = new StringBuilder();
+        for (Item item : items) {
+            if (item instanceof ReturnAndRefundContentPojo) {
+                if (((ReturnAndRefundContentPojo) item).isCheck()) {
+                    if (moinoArray.length() != 0) {
+                        moinoArray.append(",");
+                        numArray.append(",");
+                    }
+                    moinoArray.append(((ReturnAndRefundContentPojo) item).getMoino());
+                    numArray.append(((ReturnAndRefundContentPojo) item).getScount());
+
+                }
+            }
+        }
+        arrayList.add(moinoArray.toString());
+        arrayList.add(numArray.toString());
+        return arrayList;
     }
 }

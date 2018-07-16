@@ -15,6 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.test.tw.wrokproduct.Fragment.Fragment_community;
+import com.test.tw.wrokproduct.Fragment.Fragment_favorate;
+import com.test.tw.wrokproduct.Fragment.Fragment_home;
+import com.test.tw.wrokproduct.Fragment.Fragment_notification;
+import com.test.tw.wrokproduct.Fragment.Fragment_shop;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -22,7 +28,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Fragment.*;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
 import library.AppManager;

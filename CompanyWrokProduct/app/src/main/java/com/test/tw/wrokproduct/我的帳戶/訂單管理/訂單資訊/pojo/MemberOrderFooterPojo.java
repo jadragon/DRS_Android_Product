@@ -7,16 +7,24 @@ public class MemberOrderFooterPojo extends Item {
     private int ostatus;
     private String oname;
     private String ocolor;
+    private String alnum;
+    private int alchk;
+    private String aldate;
     private int pstatus;
     private String pname;
     private String pcolor;
     private int lstatus;
     private String lpname;
     private String lcolor;
+    private String logisticsVal;
+    private int lchk;
     private int istatus;
     private String iname;
     private String icolor;
+    private int cpchk;
+    private String cpdate;
     private String pinfo;
+
 
     public MemberOrderFooterPojo() {
     }
@@ -151,5 +159,61 @@ public class MemberOrderFooterPojo extends Item {
 
     public void setPinfo(String pinfo) {
         this.pinfo = pinfo;
+    }
+
+    public String getAlnum() {
+        return alnum;
+    }
+
+    public void setAlnum(String alnum) {
+        this.alnum = alnum;
+    }
+
+    public int getAlchk() {
+        return alchk;
+    }
+
+    public void setAlchk(int alchk) {
+        this.alchk = alchk;
+    }
+
+    public String getAldate() {
+        return aldate;
+    }
+
+    public void setAldate(String aldate) {
+        this.aldate = aldate;
+    }
+
+    public int getLchk() {
+        return lchk;
+    }
+
+    public void setLchk(int lchk) {
+        this.lchk = lchk;
+    }
+
+    public int getCpchk() {
+        return cpchk;
+    }
+
+    public void setCpchk(int cpchk) {
+        this.cpchk = cpchk;
+    }
+
+    public String getCpdate() {
+        return cpdate;
+    }
+
+    public void setCpdate(String cpdate) {
+        this.cpdate = cpdate;
+    }
+
+    public String getLogisticsVal() {
+        return logisticsVal;
+    }
+
+    public void setLogisticsVal(String logisticsVal) {
+        this.logisticsVal = logisticsVal;
     }
 }

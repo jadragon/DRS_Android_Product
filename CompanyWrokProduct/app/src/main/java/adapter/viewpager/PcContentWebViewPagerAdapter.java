@@ -4,11 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import Fragment.Fragment_WebView;
+import com.test.tw.wrokproduct.Fragment.Fragment_WebView;
 
 public class PcContentWebViewPagerAdapter extends FragmentPagerAdapter {
 

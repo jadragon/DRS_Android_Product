@@ -36,12 +36,12 @@ import library.AnalyzeJSON.AnalyzeShopCart;
 import library.GetJsonData.ReCountJsonData;
 
 public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecyclerViewAdapter.RecycleHolder> {
-    public static final int TYPE_CONTENT = 0;
-    public static final int TYPE_HEADER = 1;
-    public static final int TYPE_SHIPWAY = 2;
-    public static final int TYPE_DISCOUNT = 3;
-    public static final int TYPE_COUNT = 4;
-    public static final int TYPE_PAY = 5;
+    private final int TYPE_CONTENT = 0;
+    private final int TYPE_HEADER = 1;
+    private final int TYPE_SHIPWAY = 2;
+    private final int TYPE_DISCOUNT = 3;
+    private final int TYPE_COUNT = 4;
+    private final int TYPE_PAY = 5;
     private Context ctx;
     private DisplayMetrics dm;
     private ArrayList<Map<String, String>> title_list, footer_coupon_list, footer_pay_list, footer_invoice_list;
@@ -49,9 +49,9 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
     private List<Item> items;
     private FooterItem footerItem;
     private Item item;
-    String[] invoiceType;
-    int count_type;
-    GlobalVariable gv;
+    private String[] invoiceType;
+    private int count_type;
+    private GlobalVariable gv;
 
     public ReCountRecyclerViewAdapter(Context ctx, JSONObject json, int count_type) {
         this.ctx = ctx;

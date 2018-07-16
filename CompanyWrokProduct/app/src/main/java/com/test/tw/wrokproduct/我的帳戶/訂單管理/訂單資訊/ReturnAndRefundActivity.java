@@ -5,13 +5,20 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import adapter.recyclerview.ReturnAndRefundViewAdapter;
+import library.Component.ToastMessageDialog;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.OrderInfoJsonData;
 import library.JsonDataThread;
@@ -21,6 +28,7 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
     ReturnAndRefundViewAdapter adapter;
     GlobalVariable gv;
     String mono;
+    Button comfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,33 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
         mono = getIntent().getStringExtra("mono");
         initToolbar(true, "申請退換貨");
         initRecyclerView();
+        comfirm = findViewById(R.id.appreciate_confirm);
+        comfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Map<String, String> map = adapter.getApplyReturn();
+                Log.e("return", "" + map);
+                new JsonDataThread() {
+                    @Override
+                    public JSONObject getJsonData() {
+                        return new OrderInfoJsonData().applyReturn(gv.getToken(), map.get("type"), mono, map.get("moinoArray"), map.get("numArray"), null, null, null, null);
+                    }
+
+                    @Override
+                    public void runUiThread(JSONObject json) {
+                        try {
+                            if (json.getBoolean("Success")) {
+                                finish();
+                            } else {
+                                new ToastMessageDialog(ReturnAndRefundActivity.this, json.getString("Message")).confirm();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+            }
+        });
     }
 
     private void initRecyclerView() {

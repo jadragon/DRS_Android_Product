@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-import Fragment.Fragment_shop_content;
+import com.test.tw.wrokproduct.Fragment.Fragment_shop_content;
 import adapter.recyclerview.PtypeRecyclerAdapter;
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;

@@ -36,12 +36,16 @@ public class AnalyzeOrderInfo {
                     memberOrderHeaderPojo = new MemberOrderHeaderPojo();
                     memberOrderHeaderPojo.setOrdernum(json_obj.getString("ordernum"));
                     memberOrderHeaderPojo.setOdate(json_obj.getString("odate"));
-                    memberOrderHeaderPojo.setSname(json_obj.getString("sname"));
+                    try {
+                        memberOrderHeaderPojo.setSname(json_obj.getString("sname"));
+                    } catch (JSONException e) {
+                        memberOrderHeaderPojo.setSname(json_obj.getString("uname"));
+                    }
                     arrayList.add(memberOrderHeaderPojo);
                 }
                 return arrayList;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return arrayList;
@@ -123,15 +127,25 @@ public class AnalyzeOrderInfo {
                     memberOrderFooterPojo.setOstatus(json_obj.getInt("ostatus"));
                     memberOrderFooterPojo.setOname(json_obj.getString("oname"));
                     memberOrderFooterPojo.setOcolor(json_obj.getString("ocolor"));
+                    memberOrderFooterPojo.setAlnum(json_obj.getString("alnum"));
+                    memberOrderFooterPojo.setAlchk(json_obj.getInt("alchk"));
+                    memberOrderFooterPojo.setAldate(json_obj.getString("aldate"));
                     memberOrderFooterPojo.setPstatus(json_obj.getInt("pstatus"));
                     memberOrderFooterPojo.setPname(json_obj.getString("pname"));
                     memberOrderFooterPojo.setPcolor(json_obj.getString("pcolor"));
                     memberOrderFooterPojo.setLstatus(json_obj.getInt("lstatus"));
                     memberOrderFooterPojo.setLpname(json_obj.getString("lname"));
                     memberOrderFooterPojo.setLcolor(json_obj.getString("lcolor"));
+                    try {
+                        memberOrderFooterPojo.setLchk(json_obj.getInt("lchk"));
+                    } catch (JSONException e) {
+                        memberOrderFooterPojo.setLogisticsVal(json_obj.getString("logisticsVal"));
+                    }
                     memberOrderFooterPojo.setIstatus(json_obj.getInt("istatus"));
                     memberOrderFooterPojo.setIname(json_obj.getString("iname"));
                     memberOrderFooterPojo.setIcolor(json_obj.getString("icolor"));
+                    memberOrderFooterPojo.setCpchk(json_obj.getInt("cpchk"));
+                    memberOrderFooterPojo.setCpdate(json_obj.getString("cpdate"));
                     memberOrderFooterPojo.setPinfo(json_obj.getString("pinfo"));
                     arrayList.add(memberOrderFooterPojo);
                 }
@@ -409,6 +423,7 @@ public class AnalyzeOrderInfo {
                     returnAndRefundContentPojo.setPrice(json_obj.getInt("price"));
                     returnAndRefundContentPojo.setSprice(json_obj.getInt("sprice"));
                     returnAndRefundContentPojo.setStotal(json_obj.getInt("stotal"));
+                    returnAndRefundContentPojo.setScount(0);
                     arrayList.add(returnAndRefundContentPojo);
                 }
                 return arrayList;

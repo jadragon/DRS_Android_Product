@@ -11,7 +11,7 @@ public class ReturnAndRefundContentPojo extends Item {
     private int price;
     private int sprice;
     private int stotal;
-
+    private int scount;
 
     private boolean check;
 
@@ -108,5 +108,14 @@ public class ReturnAndRefundContentPojo extends Item {
 
     public void setCheck(boolean check) {
         this.check = check;
+    }
+
+    public int getScount() {
+
+        return scount;
+    }
+
+    public void setScount(int scount) {
+        this.scount = scount;
     }
 }

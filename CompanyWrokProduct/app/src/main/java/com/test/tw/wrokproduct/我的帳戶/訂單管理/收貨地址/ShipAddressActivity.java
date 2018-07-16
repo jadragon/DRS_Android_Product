@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import Fragment.Fragment_shipAddress;
+import com.test.tw.wrokproduct.Fragment.Fragment_shipAddress;
 import library.GetJsonData.LogisticsJsonData;
 
 public class ShipAddressActivity extends AppCompatActivity {

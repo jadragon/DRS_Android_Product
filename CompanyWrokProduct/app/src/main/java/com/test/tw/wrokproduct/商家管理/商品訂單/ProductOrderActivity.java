@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊;
+package com.test.tw.wrokproduct.商家管理.商品訂單;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import com.test.tw.wrokproduct.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderInfoActivity extends AppCompatActivity {
+public class ProductOrderActivity extends AppCompatActivity {
     List<Fragment_OrderInfo> fragmentList;
     String[] mTabtitle;
     ViewPager viewPager;
@@ -27,7 +27,7 @@ public class OrderInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTabtitle = getResources().getStringArray(R.array.orderInfo_type);
+        mTabtitle = getResources().getStringArray(R.array.productorder_type);
         setContentView(R.layout.activity_order_info);
         initToolbar();
         initRecylcerViewAndTabLayout();
@@ -38,33 +38,37 @@ public class OrderInfoActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.orderinfo_tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         fragmentList = new ArrayList<>();
-        Fragment_OrderInfo fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+      Fragment_OrderInfo fragment_orderInfo = new Fragment_OrderInfo();
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(0);
         fragmentList.add(fragment_orderInfo);
         fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(1);
         fragmentList.add(fragment_orderInfo);
         fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(2);
         fragmentList.add(fragment_orderInfo);
         fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(3);
         fragmentList.add(fragment_orderInfo);
         fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(4);
         fragmentList.add(fragment_orderInfo);
         fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(5);
         fragmentList.add(fragment_orderInfo);
         fragment_orderInfo = new Fragment_OrderInfo();
-        fragment_orderInfo.setType(0);
+        fragment_orderInfo.setType(1);
         fragment_orderInfo.setIndex(6);
+        fragmentList.add(fragment_orderInfo);
+        fragment_orderInfo = new Fragment_OrderInfo();
+        fragment_orderInfo.setType(1);
+        fragment_orderInfo.setIndex(7);
         fragmentList.add(fragment_orderInfo);
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -83,7 +87,7 @@ public class OrderInfoActivity extends AppCompatActivity {
             }
         };
         viewPager.setAdapter(fragmentPagerAdapter);
-        viewPager.setOffscreenPageLimit(7);
+        viewPager.setOffscreenPageLimit(8);
 
     }
 

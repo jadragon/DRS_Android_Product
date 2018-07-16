@@ -53,7 +53,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private Item item;
     GlobalVariable gv;
     int size;
-    String mvip="0";
+    String mvip="1";
 
     public void setMvip(String mvip) {
         this.mvip = mvip;

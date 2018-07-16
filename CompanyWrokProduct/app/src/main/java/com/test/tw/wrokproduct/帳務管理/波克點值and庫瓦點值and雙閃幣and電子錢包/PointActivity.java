@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import Fragment.Fragment_Point;
+import com.test.tw.wrokproduct.Fragment.Fragment_Point;
 import Util.StringUtil;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;

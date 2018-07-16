@@ -14,7 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import Fragment.Fragment_WebView;
+import com.test.tw.wrokproduct.Fragment.Fragment_WebView;
 
 public class CommunityActivity extends AppCompatActivity {
     private WebView luntanListview;

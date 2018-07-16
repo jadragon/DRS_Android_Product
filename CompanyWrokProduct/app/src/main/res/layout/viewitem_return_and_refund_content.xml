@@ -79,6 +79,7 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/return_and_refund_decrease"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:text="-" />
@@ -93,6 +94,7 @@
                         android:textSize="20sp" />
 
                     <Button
+                        android:id="@+id/return_and_refund_increase"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:text="+" />

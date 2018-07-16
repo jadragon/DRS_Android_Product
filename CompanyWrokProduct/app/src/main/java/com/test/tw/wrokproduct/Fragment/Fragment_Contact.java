@@ -1,4 +1,4 @@
-package Fragment;
+package com.test.tw.wrokproduct.Fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
