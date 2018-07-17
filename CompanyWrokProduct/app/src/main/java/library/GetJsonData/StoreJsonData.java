@@ -2,6 +2,7 @@ package library.GetJsonData;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -11,6 +12,13 @@ import library.Http.JSONParser;
 
 public class StoreJsonData {
     private final String getStoreOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/getStoreOrder.php";
+    private final String applyCancel_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/applyCancel.php";
+    private final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/applyReturn.php";
+    private final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/confirmReceipt.php";
+    private final String stockingCompleted_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/stockingCompleted.php";
+    private final String complaintMember_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/complaintMember.php";
+    private final String getOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/getOrderComment.php";
+    private final String setOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/setOrderComment.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -97,4 +105,72 @@ public class StoreJsonData {
         return getStoreOrder(token, ostatus, pstatus, lstatus, istatus, page);
     }
 
+    /**
+     * 5.5.4	申請取消 - 同意、不同意
+     */
+    public JSONObject applyCancel(String token, String mono, int astatus, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", "" + mono));
+        params.add(new BasicNameValuePair("astatus", "" + astatus));
+        params.add(new BasicNameValuePair("note", "" + note));
+        return jsonParser.getJSONFromUrl(applyCancel_url, params);
+    }
+
+
+    /**
+     * 5.5.5	退換貨進度 – 同意換貨、不同意換貨
+     */
+    public JSONObject applyReturn(String token, String mono, int astatus, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", "" + mono));
+        params.add(new BasicNameValuePair("astatus", "" + astatus));
+        params.add(new BasicNameValuePair("note", "" + note));
+        return jsonParser.getJSONFromUrl(applyReturn_url, params);
+    }
+
+    /**
+     * 5.5.5	退換貨進度 – 同意換貨、不同意換貨
+     */
+    public JSONObject confirmReceipt(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", "" + mono));
+        return jsonParser.getJSONFromUrl(confirmReceipt_url, params);
+    }
+
+    /**
+     * 5.5.8	備貨中 – 備貨完成
+     */
+    public JSONObject stockingCompleted(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", "" + mono));
+        return jsonParser.getJSONFromUrl(stockingCompleted_url, params);
+    }
+
+    /**
+     * 5.5.9	已取件、已完成 - 讀取訂單評價資訊
+     */
+    public JSONObject getOrderComment(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", "" + mono));
+        return jsonParser.getJSONFromUrl(getOrderComment_url, params);
+    }
+
+    /**
+     * 5.5.10	已取件、已完成 - 設定訂單評價資訊
+     */
+    public JSONObject setOrderComment(String token, JSONArray data) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("data", "" + data));
+        return jsonParser.getJSONFromUrl(setOrderComment_url, params);
+    }
+
+    /**
+     * 5.5.11	已取件、已完成 – 投訴買家
+     */
+    public JSONObject complaintMember(String token, String mono, String note) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        params.add(new BasicNameValuePair("note", note));
+        return jsonParser.getJSONFromUrl(complaintMember_url, params);
+    }
 }

@@ -193,11 +193,11 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         break;
                     case 1:
                         if (((MemberOrderFooterPojo) items.get(position - 1)).getOstatus() == 0) {
-                            ((FooterHolder) holder).button1.setEnabled(true);
-                            reShapeButton(((FooterHolder) holder).button1, R.color.red);
+                            ((FooterHolder) holder).button2.setEnabled(true);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.red);
                         } else {
-                            ((FooterHolder) holder).button1.setEnabled(false);
-                            reShapeButton(((FooterHolder) holder).button1, R.color.gray);
+                            ((FooterHolder) holder).button2.setEnabled(false);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
                         }
                         break;
                     case 2:
@@ -206,7 +206,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             reShapeButton(((FooterHolder) holder).button2, R.color.shipway_blue_light);
                         } else {
                             ((FooterHolder) holder).button2.setEnabled(false);
-                            reShapeButton(((FooterHolder) holder).button2, R.color.gray);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
                         }
                         if (((MemberOrderFooterPojo) items.get(position - 1)).getPstatus() == 1) {
                             ((FooterHolder) holder).button3.setVisibility(View.VISIBLE);
@@ -217,7 +217,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             reShapeButton(((FooterHolder) holder).button1, R.color.orange);
                             ((FooterHolder) holder).button1.setEnabled(true);
                         } else {
-                            reShapeButton(((FooterHolder) holder).button1, R.color.gray);
+                            reShapeButton(((FooterHolder) holder).button1, R.color.gainsboro);
                             ((FooterHolder) holder).button1.setEnabled(false);
                         }
                         break;
@@ -228,7 +228,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     case 4:
                         if (((MemberOrderFooterPojo) items.get(position - 1)).getAlchk() == 0) {
                             ((FooterHolder) holder).button2.setVisibility(View.VISIBLE);
-                            reShapeButton(((FooterHolder) holder).button2, R.color.gray);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
                             ((FooterHolder) holder).button2.setText("等待賣家處理中");
                             ((FooterHolder) holder).button2.setEnabled(false);
                             ((FooterHolder) holder).button3.setVisibility(View.GONE);
@@ -248,7 +248,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             reShapeButton(((FooterHolder) holder).button2, R.color.gray);
                             ((FooterHolder) holder).button2.setEnabled(true);
                         } else {
-                            reShapeButton(((FooterHolder) holder).button2, R.color.gray);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
                             ((FooterHolder) holder).button2.setEnabled(false);
                         }
                         break;
@@ -257,7 +257,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             reShapeButton(((FooterHolder) holder).button2, R.color.gray);
                             ((FooterHolder) holder).button2.setEnabled(true);
                         } else {
-                            reShapeButton(((FooterHolder) holder).button2, R.color.gray);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
                             ((FooterHolder) holder).button2.setEnabled(false);
                         }
                         break;
@@ -375,16 +375,13 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         }
 
-        void initMember(View view) {
-
-        }
-
         @Override
         public void onClick(View view) {
             Intent intent;
             switch (view.getId()) {
                 case R.id.orderinfo_listinfo_oname_layout:
                     intent = new Intent(ctx, OrderInfoDetailActivity.class);
+                    intent.putExtra("token", gv.getToken());
                     intent.putExtra("mono", ((MemberOrderFooterPojo) items.get(getAdapterPosition())).getMono());
                     ctx.startActivity(intent);
                     break;
@@ -397,7 +394,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context ctx;
         Button button1, button2, button3;
         JSONObject jsonObject;
@@ -427,10 +424,10 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     reShapeButton(button2, R.color.red);
                     break;
                 case 1:
-                    button1.setOnClickListener(this);
-                    button2.setVisibility(View.GONE);
-                    button3.setVisibility(View.GONE);
-                    button1.setText("申請取消");
+                    button1.setVisibility(View.INVISIBLE);
+                    button2.setOnClickListener(this);
+                    button3.setVisibility(View.INVISIBLE);
+                    button2.setText("申請取消");
                     break;
                 case 2:
                     button1.setOnClickListener(this);
@@ -470,9 +467,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     reShapeButton(button2, R.color.gray);
                     break;
                 case 6:
-                    button1.setVisibility(View.GONE);
+                    button1.setVisibility(View.INVISIBLE);
                     button2.setOnClickListener(this);
-                    button3.setVisibility(View.GONE);
+                    button3.setVisibility(View.INVISIBLE);
                     button2.setText("投訴賣家");
                     reShapeButton(button2, R.color.gray);
                     break;
@@ -517,33 +514,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             });
                             break;
                         case 1:
-                            toastMessageDialog.setTitleText("申請取消訂單");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(1);
-                                                        }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }).start();
 
-                                    dialog.dismiss();
-                                }
-                            });
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("延長收貨");
@@ -578,6 +549,8 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 3:
                             intent = new Intent(ctx, AppreciateActivity.class);
+                            intent.putExtra("token", gv.getToken());
+                            intent.putExtra("type", "0");
                             intent.putExtra("mono", ((MemberOrderFooterPojo) (items.get(position))).getMono());
                             ctx.startActivity(intent);
                             break;
@@ -586,6 +559,8 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 5:
                             intent = new Intent(ctx, AppreciateActivity.class);
+                            intent.putExtra("token", gv.getToken());
+                            intent.putExtra("type", "0");
                             intent.putExtra("mono", ((MemberOrderFooterPojo) (items.get(position))).getMono());
                             ctx.startActivity(intent);
                             break;
@@ -623,6 +598,33 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
                             break;
                         case 1:
+                            toastMessageDialog.setTitleText("申請取消訂單");
+                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                                @Override
+                                public void ItemClicked(Dialog dialog, View view, final String note) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonObject = new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(1);
+                                                        }
+                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).start();
+
+                                    dialog.dismiss();
+                                }
+                            });
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("確認收貨");
@@ -700,6 +702,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                 @Override
                                                 public void run() {
                                                     try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(5);
+                                                        }
                                                         Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
@@ -726,6 +731,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                 @Override
                                                 public void run() {
                                                     try {
+                                                        if (jsonObject.getBoolean("Success")) {
+                                                            ((OrderInfoActivity) ctx).setFilterByIndex(6);
+                                                        }
                                                         Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();

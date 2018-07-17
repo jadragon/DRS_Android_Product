@@ -6,10 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.TextView;
 
 import com.test.tw.wrokproduct.Fragment.Fragment_OrderInfo;
 import com.test.tw.wrokproduct.R;
@@ -17,7 +13,9 @@ import com.test.tw.wrokproduct.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderInfoActivity extends AppCompatActivity {
+import library.Component.ToolbarActivity;
+
+public class OrderInfoActivity extends ToolbarActivity {
     List<Fragment_OrderInfo> fragmentList;
     String[] mTabtitle;
     ViewPager viewPager;
@@ -29,7 +27,7 @@ public class OrderInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mTabtitle = getResources().getStringArray(R.array.orderInfo_type);
         setContentView(R.layout.activity_order_info);
-        initToolbar();
+        initToolbar(true,"訂單資訊");
         initRecylcerViewAndTabLayout();
     }
 
@@ -91,22 +89,6 @@ public class OrderInfoActivity extends AppCompatActivity {
         for (int index : indexes) {
             fragmentList.get(index).updateData();
         }
-    }
-
-
-    private void initToolbar() {
-        //Toolbar 建立
-        Toolbar toolbar = findViewById(R.id.include_toolbar);
-        ((TextView) findViewById(R.id.include_toolbar_title)).setText("訂單資訊");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     @Override

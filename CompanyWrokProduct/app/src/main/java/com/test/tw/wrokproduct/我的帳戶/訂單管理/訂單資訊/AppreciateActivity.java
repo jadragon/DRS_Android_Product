@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
 import org.json.JSONException;
@@ -16,27 +15,40 @@ import org.json.JSONObject;
 import adapter.recyclerview.AppreciateRecyclerViewAdapter;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.OrderInfoJsonData;
+import library.GetJsonData.StoreJsonData;
 import library.JsonDataThread;
 
 public class AppreciateActivity extends ToolbarActivity {
     RecyclerView recyclerView;
     AppreciateRecyclerViewAdapter adapter;
     Button appreciate_confirm;
-    GlobalVariable gv;
-    String mono;
+
+    String mono, token, type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appreciate);
-        gv = ((GlobalVariable) getApplicationContext());
+        token = getIntent().getStringExtra("token");
         mono = getIntent().getStringExtra("mono");
-        initToolbar(true, "給予評價");
+        type = getIntent().getStringExtra("type");
+        if (type.equals("0")) {
+            initToolbar(true, "給賣家評價");
+        } else if (type.equals("1")) {
+            initToolbar(true, "給買家評價");
+        }
         initRecyclerView();
         new JsonDataThread() {
             @Override
             public JSONObject getJsonData() {
-                return new OrderInfoJsonData().getOrderComment(gv.getToken(), mono);
+                if (type.equals("0")) {
+                    return new OrderInfoJsonData().getOrderComment(token, mono);
+                } else if (type.equals("1")) {
+                    return new StoreJsonData().getOrderComment(token, mono);
+                } else {
+                    return null;
+                }
+
             }
 
             @Override
@@ -51,7 +63,14 @@ public class AppreciateActivity extends ToolbarActivity {
                 new JsonDataThread() {
                     @Override
                     public JSONObject getJsonData() {
-                        return new OrderInfoJsonData().setOrderComment(gv.getToken(), adapter.getJSONArray());
+                        if (type.equals("0")) {
+                            return new OrderInfoJsonData().setOrderComment(token, adapter.getJSONArray());
+                        } else if (type.equals("1")) {
+                            return new StoreJsonData().setOrderComment(token, adapter.getJSONArray());
+                        } else {
+                            return null;
+                        }
+
                     }
 
                     @Override

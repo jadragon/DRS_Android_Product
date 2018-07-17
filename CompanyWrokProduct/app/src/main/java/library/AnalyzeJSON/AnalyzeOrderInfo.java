@@ -325,7 +325,11 @@ public class AnalyzeOrderInfo {
                     appreciatePojo = new AppreciatePojo();
                     appreciatePojo.setMoino(json_obj.getString("moino"));
                     appreciatePojo.setPname(json_obj.getString("pname"));
-                    appreciatePojo.setImg(json_obj.getString("img"));
+                    try {
+                        appreciatePojo.setImg(json_obj.getString("img"));
+                    } catch (JSONException e) {
+                        appreciatePojo.setImg(json_obj.getString("pimg"));
+                    }
                     appreciatePojo.setColor(json_obj.getString("color"));
                     appreciatePojo.setSize(json_obj.getString("size"));
                     appreciatePojo.setComment(json_obj.getString("comment"));

@@ -163,8 +163,9 @@ public class OrderInfoJsonData {
     /**
      * 3.1.8	申請退換貨
      */
-    public JSONObject applyReturn(String token, String mono, String moinoArray, String numArray, String note, String img1, String img2, String img3, String img4) {
+    public JSONObject applyReturn(String token,String type, String mono, String moinoArray, String numArray, String note, String img1, String img2, String img3, String img4) {
         params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("type", type));
         params.add(new BasicNameValuePair("mono", mono));
         params.add(new BasicNameValuePair("moinoArray", moinoArray));
         params.add(new BasicNameValuePair("numArray", numArray));

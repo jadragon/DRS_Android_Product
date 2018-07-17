@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.Fragment.Fragment_ProductAppraise;
+import com.test.tw.wrokproduct.Fragment.Fragment_WebView;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.MainActivity;
@@ -41,8 +43,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_ProductAppraise;
-import com.test.tw.wrokproduct.Fragment.Fragment_WebView;
 import Util.StringUtil;
 import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
@@ -238,6 +238,7 @@ public class PcContentActivity extends AppCompatActivity {
                                 ((TextView) popView.findViewById(R.id.shopcart_txt_sprice)).setText("$" + StringUtil.getDeciamlString(list.get(postion).get("sprice")));
                                 try {
                                     max = Integer.parseInt(list.get(postion).get("total"));
+                                    if (max > 0)
                                     count = 1;
                                     shopcart_txt_count.setText(count + "");
                                 } catch (Exception e) {

@@ -35,6 +35,7 @@ public class Fragment_OrderInfo extends BasePageFragment {
     private int nextpage = 2;
     private EndLessOnScrollListener endLessOnScrollListener;
     private GlobalVariable gv;
+    String token = "LpESIVhpKXZ5ZxJQyl19Ug==";
 
     public void setType(int type) {
         this.type = type;
@@ -87,6 +88,7 @@ public class Fragment_OrderInfo extends BasePageFragment {
             adapter = new OrderInfoRecyclerViewAdapter(getContext(), json, index);
         } else if (type == 1) {
             adapter = new ProductOrderRecyclerViewAdapter(getContext(), json, index);
+            ((ProductOrderRecyclerViewAdapter) adapter).setToken(token);
         }
 
         recyclerView.setAdapter(adapter);
@@ -101,7 +103,7 @@ public class Fragment_OrderInfo extends BasePageFragment {
                         if (type == 0) {
                             json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, nextpage);
                         } else if (type == 1) {
-                            json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, nextpage);
+                            json = new StoreJsonData().getStoreOrder(token, index, nextpage);
                         }
                         nextpage++;
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -133,7 +135,7 @@ public class Fragment_OrderInfo extends BasePageFragment {
                 if (type == 0) {
                     json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, 1);
                 } else if (type == 1) {
-                    json = new StoreJsonData().getStoreOrder("LpESIVhpKXZ5ZxJQyl19Ug==", index, 1);
+                    json = new StoreJsonData().getStoreOrder(token, index, 1);
                 }
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {

@@ -14,14 +14,18 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.商家管理.商品訂單.ProductOrderActivity;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.AppreciateActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderContentPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderFooterPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderHeaderPojo;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -30,11 +34,18 @@ import java.util.List;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 import library.Component.ToastMessageDialog;
+import library.GetJsonData.StoreJsonData;
+import library.JsonDataThread;
 
 public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapter {
+    String token;
 
     public ProductOrderRecyclerViewAdapter(Context ctx, JSONObject json, int index) {
         super(ctx, json, index);
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
@@ -82,37 +93,80 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                 ((InfoHolder) holder).tprice.setText("$" + StringUtil.getDeciamlString(((MemberOrderFooterPojo) items.get(position)).getTprice()));
                 ((InfoHolder) holder).oname.setText(((MemberOrderFooterPojo) items.get(position)).getOname());
                 ((InfoHolder) holder).pinfo.setText(((MemberOrderFooterPojo) items.get(position)).getPinfo());
+                showPnameAndLpnameAndIname((InfoHolder) holder, position);
+            } else if (getItemViewType(position) == TYPE_FOOTER) {
 
                 switch (index) {
 
                     case 0:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.GONE);
+
                         break;
                     case 1:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.GONE);
+                        if (((MemberOrderFooterPojo) items.get(position - 1)).getAlchk() == 0) {
+                            ((FooterHolder) holder).button1.setText("不同意退換貨");
+                            ((FooterHolder) holder).button2.setText("同意退換貨");
+                            ((FooterHolder) holder).button1.setVisibility(View.VISIBLE);
+                            ((FooterHolder) holder).button1.setEnabled(true);
+                            ((FooterHolder) holder).button2.setEnabled(true);
+                            reShapeButton(((FooterHolder) holder).button1, R.color.gray);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.red);
+                        } else if (((MemberOrderFooterPojo) items.get(position - 1)).getAlchk() == 1) {
+                            ((FooterHolder) holder).button1.setText("確認收件");
+                            ((FooterHolder) holder).button2.setText("查看物流編號");
+                            ((FooterHolder) holder).button1.setVisibility(View.VISIBLE);
+                            ((FooterHolder) holder).button1.setEnabled(false);
+                            ((FooterHolder) holder).button2.setEnabled(false);
+                            reShapeButton(((FooterHolder) holder).button1, R.color.gainsboro);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
+                        } else if (((MemberOrderFooterPojo) items.get(position - 1)).getAlchk() == 2) {
+                            ((FooterHolder) holder).button1.setText("確認收件");
+                            ((FooterHolder) holder).button2.setText("查看物流編號");
+                            ((FooterHolder) holder).button1.setVisibility(View.VISIBLE);
+                            ((FooterHolder) holder).button1.setEnabled(true);
+                            ((FooterHolder) holder).button2.setEnabled(true);
+                            reShapeButton(((FooterHolder) holder).button1, R.color.shipway_blue_light);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.mediumpurple);
+                        } else if (((MemberOrderFooterPojo) items.get(position - 1)).getAlchk() == 3) {
+                            ((FooterHolder) holder).button2.setText("查看物流編號");
+                            ((FooterHolder) holder).button1.setVisibility(View.GONE);
+                            ((FooterHolder) holder).button2.setEnabled(true);
+                            reShapeButton(((FooterHolder) holder).button2, R.color.mediumpurple);
+                        }
                         break;
                     case 2:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.GONE);
+
                         break;
                     case 3:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.GONE);
 
                         break;
                     case 4:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.GONE);
+
 
                         break;
                     case 5:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.VISIBLE);
 
                         break;
                     case 6:
-                        ((InfoHolder) holder).orderinfo_tradeprocess_layout.setVisibility(View.VISIBLE);
+                        if (((MemberOrderFooterPojo) items.get(position - 1)).getCpchk() == 0) {
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gray);
+                            ((FooterHolder) holder).button2.setEnabled(true);
+                        } else {
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
+                            ((FooterHolder) holder).button2.setEnabled(false);
+                        }
+                        break;
+
+                    case 7:
+                        if (((MemberOrderFooterPojo) items.get(position - 1)).getCpchk() == 0) {
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gray);
+                            ((FooterHolder) holder).button2.setEnabled(true);
+                        } else {
+                            reShapeButton(((FooterHolder) holder).button2, R.color.gainsboro);
+                            ((FooterHolder) holder).button2.setEnabled(false);
+                        }
                         break;
                 }
-                ((InfoHolder) holder).orderinfo_payinfo_layout.setVisibility(View.GONE);
-                showPnameAndLpnameAndIname((InfoHolder) holder, position);
-            } else if (getItemViewType(position) == TYPE_FOOTER) {
+
             }
         } else {//payloads不为空 即调用notifyItemChanged(position,payloads)方法后执行的
             //在这里可以获取payloads中的数据  进行局部刷新
@@ -163,6 +217,12 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
             View orderinfo_listinfo_pinfo_arrow = view.findViewById(R.id.orderinfo_listinfo_pinfo_arrow);
             orderinfo_listinfo_pinfo_arrow.setVisibility(View.INVISIBLE);
             pinfo_layout = view.findViewById(R.id.orderinfo_listinfo_pinfo_layout);
+            if (index > 4) {
+                orderinfo_tradeprocess_layout.setVisibility(View.VISIBLE);
+            } else {
+                orderinfo_tradeprocess_layout.setVisibility(View.GONE);
+            }
+            orderinfo_payinfo_layout.setVisibility(View.GONE);
         }
 
         @Override
@@ -172,13 +232,14 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                 case R.id.orderinfo_listinfo_oname_layout:
                     intent = new Intent(ctx, OrderInfoDetailActivity.class);
                     intent.putExtra("mono", ((MemberOrderFooterPojo) items.get(getAdapterPosition())).getMono());
+                    intent.putExtra("token", token);
                     ctx.startActivity(intent);
                     break;
             }
         }
     }
 
-    class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Button button1, button2, button3;
         ToastMessageDialog toastMessageDialog;
 
@@ -208,7 +269,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                     button1.setOnClickListener(this);
                     button2.setOnClickListener(this);
                     button3.setOnClickListener(this);
-                    button1.setText("確認收貨");
+                    button1.setText("確認收件");
                     button2.setText("查看物流編號");
                     button3.setText("退貨單");
                     reShapeButton(button1, R.color.gray);
@@ -245,9 +306,8 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                     button3.setVisibility(View.GONE);
                     button1.setText("給買家評價");
                     button2.setText("投訴賣家");
-                    reShapeButton(button1, R.color.gray);
-                    reShapeButton(button2, R.color.mediumpurple);
-                    reShapeButton(button3, R.color.colorPrimaryDark);
+                    reShapeButton(button1, R.color.shipway_green_dark);
+                    reShapeButton(button2, R.color.gray);
                     break;
                 case 7:
                     button1.setVisibility(View.INVISIBLE);
@@ -272,18 +332,88 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
+                                    new JsonDataThread() {
+                                        @Override
+                                        public JSONObject getJsonData() {
+                                            return new StoreJsonData().applyCancel(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 1, note);
+                                        }
+
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            try {
+                                                if (json.getBoolean("Success")) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(0, 2, 3);
+                                                } else {
+                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
                                     dialog.dismiss();
                                 }
                             });
                             break;
                         case 1:
-                            toastMessageDialog.setTitleText("確認收貨");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    dialog.dismiss();
-                                }
-                            });
+                            if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 0) {
+                                toastMessageDialog.setTitleText("不同意退換貨");
+                                toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                                    @Override
+                                    public void ItemClicked(Dialog dialog, View view, final String note) {
+                                        new JsonDataThread() {
+                                            @Override
+                                            public JSONObject getJsonData() {
+                                                return new StoreJsonData().applyReturn(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 1, note);
+                                            }
+
+                                            @Override
+                                            public void runUiThread(JSONObject json) {
+                                                try {
+                                                    if (json.getBoolean("Success")) {
+                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1, 6);
+                                                    } else {
+                                                        Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }.start();
+                                        dialog.dismiss();
+                                    }
+                                });
+                            } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 2) {
+                                toastMessageDialog.setTitleText("確認收件");
+                                toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+                                    @Override
+                                    public void ItemClicked(Dialog dialog, View view) {
+                                        new JsonDataThread() {
+                                            @Override
+                                            public JSONObject getJsonData() {
+                                                return new StoreJsonData().confirmReceipt(token, ((MemberOrderFooterPojo) items.get(position)).getMono());
+                                            }
+
+                                            @Override
+                                            public void runUiThread(JSONObject json) {
+                                                try {
+                                                    if (json.getBoolean("Success")) {
+                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1);
+                                                    } else {
+                                                        Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }.start();
+                                        dialog.dismiss();
+                                    }
+                                });
+                                toastMessageDialog.check();
+                            } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 3) {
+
+                            }
                             break;
                         case 2:
                             break;
@@ -294,13 +424,11 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                         case 5:
                             break;
                         case 6:
-                            toastMessageDialog.setTitleText("給買家評價");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    dialog.dismiss();
-                                }
-                            });
+                            intent = new Intent(ctx, AppreciateActivity.class);
+                            intent.putExtra("token", token);
+                            intent.putExtra("type", "1");
+                            intent.putExtra("mono", ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                            ctx.startActivity(intent);
                             break;
                         case 7:
                             break;
@@ -313,46 +441,131 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
+                                    new JsonDataThread() {
+                                        @Override
+                                        public JSONObject getJsonData() {
+                                            return new StoreJsonData().applyCancel(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 0, note);
+                                        }
+
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            try {
+                                                if (json.getBoolean("Success")) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(0, 7);
+                                                } else {
+                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
                                     dialog.dismiss();
                                 }
                             });
                             break;
                         case 1:
-                            toastMessageDialog.setTitleText("查看物流編號");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    dialog.dismiss();
-                                }
-                            });
+                            if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 0) {
+                                toastMessageDialog.setTitleText("同意退換貨");
+                                toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                                    @Override
+                                    public void ItemClicked(Dialog dialog, View view, final String note) {
+                                        new JsonDataThread() {
+                                            @Override
+                                            public JSONObject getJsonData() {
+                                                return new StoreJsonData().applyReturn(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 0, note);
+                                            }
+
+                                            @Override
+                                            public void runUiThread(JSONObject json) {
+                                                try {
+                                                    if (json.getBoolean("Success")) {
+                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1);
+                                                    } else {
+                                                        Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }.start();
+                                        dialog.dismiss();
+                                    }
+                                });
+                            } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 2) {
+                                toastMessageDialog.setTitleText("查看物流編號");
+                                toastMessageDialog.setMessageText(((MemberOrderFooterPojo) items.get(position)).getAlnum());
+                                toastMessageDialog.confirm();
+                            } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 3) {
+                                toastMessageDialog.setTitleText("查看物流編號");
+                                toastMessageDialog.setMessageText(((MemberOrderFooterPojo) items.get(position)).getAlnum());
+                                toastMessageDialog.confirm();
+                            }
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("備貨完成");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
+                                public void ItemClicked(Dialog dialog, View view) {
+                                    new JsonDataThread() {
+                                        @Override
+                                        public JSONObject getJsonData() {
+                                            return new StoreJsonData().stockingCompleted(token, ((MemberOrderFooterPojo) items.get(position)).getMono());
+                                        }
+
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            try {
+                                                if (json.getBoolean("Success")) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(2, 3);
+                                                } else {
+                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
                                     dialog.dismiss();
                                 }
                             });
+                            toastMessageDialog.check();
                             break;
                         case 3:
                             break;
                         case 4:
                             break;
                         case 5:
-                            toastMessageDialog.setTitleText("給買家評價");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    dialog.dismiss();
-                                }
-                            });
+                            intent = new Intent(ctx, AppreciateActivity.class);
+                            intent.putExtra("token", token);
+                            intent.putExtra("type", "1");
+                            intent.putExtra("mono", ((MemberOrderFooterPojo) (items.get(position))).getMono());
+                            ctx.startActivity(intent);
                             break;
                         case 6:
                             toastMessageDialog.setTitleText("投訴賣家");
                             toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
+                                    new JsonDataThread() {
+                                        @Override
+                                        public JSONObject getJsonData() {
+                                            return new StoreJsonData().complaintMember(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), note);
+                                        }
+
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            try {
+                                                if (json.getBoolean("Success")) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(6);
+                                                } else {
+                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
                                     dialog.dismiss();
                                 }
                             });
@@ -362,6 +575,25 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
+                                    new JsonDataThread() {
+                                        @Override
+                                        public JSONObject getJsonData() {
+                                            return new StoreJsonData().complaintMember(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), note);
+                                        }
+
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            try {
+                                                if (json.getBoolean("Success")) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(7);
+                                                } else {
+                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
                                     dialog.dismiss();
                                 }
                             });
@@ -374,12 +606,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 1:
                             toastMessageDialog.setTitleText("退貨單");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
-                                @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    dialog.dismiss();
-                                }
-                            });
+                            toastMessageDialog.confirm();
                             break;
                         case 2:
                             break;

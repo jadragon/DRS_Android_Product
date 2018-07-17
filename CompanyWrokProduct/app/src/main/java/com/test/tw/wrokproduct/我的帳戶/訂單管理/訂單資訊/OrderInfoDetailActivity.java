@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrderItemContentPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MOrderItemPojo;
@@ -27,23 +26,21 @@ import library.GetJsonData.OrderInfoJsonData;
 
 public class OrderInfoDetailActivity extends AppCompatActivity {
     LinearLayout orderinfo_detail_prolayout;
-    String mono;
+    String mono,token;
     JSONObject json;
     MOrderItemPojo mOrderItemPojo;
     ArrayList<MOrderItemContentPojo> pojoArrayList;
-    GlobalVariable gv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_info_detail);
-        gv = ((GlobalVariable) getApplicationContext());
         mono = getIntent().getStringExtra("mono");
+        token = getIntent().getStringExtra("token");
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new OrderInfoJsonData().getMOrderItem(gv.getToken(), mono);
+                json = new OrderInfoJsonData().getMOrderItem(token, mono);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

@@ -47,7 +47,7 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
                 new JsonDataThread() {
                     @Override
                     public JSONObject getJsonData() {
-                        return new OrderInfoJsonData().applyReturn(gv.getToken(), map.get("type"), mono, map.get("moinoArray"), map.get("numArray"), null, null, null, null);
+                        return new OrderInfoJsonData().applyReturn(gv.getToken(), map.get("type"), mono, map.get("moinoArray"), map.get("numArray"), map.get("note"), null, null, null, null);
                     }
 
                     @Override
