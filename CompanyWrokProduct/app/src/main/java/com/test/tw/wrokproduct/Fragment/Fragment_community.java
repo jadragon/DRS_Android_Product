@@ -31,6 +31,7 @@ import com.test.tw.wrokproduct.LogoutActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.RegisterActivity;
 import com.test.tw.wrokproduct.商家管理.商品訂單.ProductOrderActivity;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.MyApprecoateActivity;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 import com.test.tw.wrokproduct.帳務管理.帳戶總覽.OverviewBillActivity;
 import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity;
@@ -96,7 +97,7 @@ public class Fragment_community extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
+                switch (i) {
                     case 0:
                         break;
                     case 1:
@@ -273,7 +274,7 @@ public class Fragment_community extends Fragment {
                             startActivity(new Intent(getContext(), ShipAddressActivity.class));
                             break;
                         case R.id.a1_3:
-                            Toast.makeText(getContext(), "a1_3", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getContext(), MyApprecoateActivity.class));
                             break;
                         case R.id.b1:
                             if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {

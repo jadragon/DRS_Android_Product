@@ -39,7 +39,7 @@
         <activity
             android:name=".商品.PcContentActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".TestActivity" />
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
@@ -141,9 +141,10 @@
         <activity
             android:name=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".GoldFlowCompeleteActivity"></activity>
+        <activity android:name=".GoldFlowCompeleteActivity" />
         <activity android:name=".我的帳戶.訂單管理.訂單資訊.ReturnAndRefundActivity" />
         <activity android:name=".商家管理.商品訂單.ProductOrderActivity" />
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.MyApprecoateActivity"></activity>
     </application>
 
 </manifest>

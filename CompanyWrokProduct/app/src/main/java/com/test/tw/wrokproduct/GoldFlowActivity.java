@@ -134,7 +134,10 @@ public class GoldFlowActivity extends ToolbarActivity {
     @JavascriptInterface
     public void setDeliver(String success, String msg) {
         finish();
-        startActivity(new Intent(GoldFlowActivity.this, GoldFlowCompeleteActivity.class));
+        Intent intent=new Intent(GoldFlowActivity.this, GoldFlowCompeleteActivity.class);
+        intent.putExtra("success",success);
+        intent.putExtra("msg",msg);
+        startActivity(intent);
     }
 
     @Override

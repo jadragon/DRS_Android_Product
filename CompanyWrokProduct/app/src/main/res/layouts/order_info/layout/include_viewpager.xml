@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:background="@color/white"
-            app:tabIndicatorHeight="3dp" />
+            app:tabIndicatorHeight="35dp"
+            app:tabIndicatorColor="@color/colorInvisibleGray"/>
     </android.support.v4.view.ViewPager>
 </LinearLayout>
 

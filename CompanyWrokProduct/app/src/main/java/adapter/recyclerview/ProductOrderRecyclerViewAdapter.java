@@ -329,7 +329,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("不同意取消");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -358,7 +358,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                         case 1:
                             if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 0) {
                                 toastMessageDialog.setTitleText("不同意退換貨");
-                                toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                                toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, final String note) {
                                         new JsonDataThread() {
@@ -371,7 +371,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                             public void runUiThread(JSONObject json) {
                                                 try {
                                                     if (json.getBoolean("Success")) {
-                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1, 6);
+                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1, 5);
                                                     } else {
                                                         Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
                                                     }
@@ -385,9 +385,9 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                 });
                             } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 2) {
                                 toastMessageDialog.setTitleText("確認收件");
-                                toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+                                toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
                                     @Override
-                                    public void ItemClicked(Dialog dialog, View view) {
+                                    public void ItemClicked(Dialog dialog, View view,String note) {
                                         new JsonDataThread() {
                                             @Override
                                             public JSONObject getJsonData() {
@@ -410,7 +410,6 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                         dialog.dismiss();
                                     }
                                 });
-                                toastMessageDialog.check();
                             } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 3) {
 
                             }
@@ -438,7 +437,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("同意取消");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -467,7 +466,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                         case 1:
                             if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 0) {
                                 toastMessageDialog.setTitleText("同意退換貨");
-                                toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                                toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, final String note) {
                                         new JsonDataThread() {
@@ -504,9 +503,9 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("備貨完成");
-                            toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+                            toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view) {
+                                public void ItemClicked(Dialog dialog, View view,String note) {
                                     new JsonDataThread() {
                                         @Override
                                         public JSONObject getJsonData() {
@@ -529,7 +528,6 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                     dialog.dismiss();
                                 }
                             });
-                            toastMessageDialog.check();
                             break;
                         case 3:
                             break;
@@ -544,7 +542,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 6:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -572,7 +570,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 7:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {

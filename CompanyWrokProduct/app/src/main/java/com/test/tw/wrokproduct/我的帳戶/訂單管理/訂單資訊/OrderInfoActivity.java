@@ -27,7 +27,7 @@ public class OrderInfoActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         mTabtitle = getResources().getStringArray(R.array.orderInfo_type);
         setContentView(R.layout.activity_order_info);
-        initToolbar(true,"訂單資訊");
+        initToolbar(true, "訂單資訊");
         initRecylcerViewAndTabLayout();
     }
 
@@ -87,7 +87,7 @@ public class OrderInfoActivity extends ToolbarActivity {
 
     public void setFilterByIndex(int... indexes) {
         for (int index : indexes) {
-            fragmentList.get(index).updateData();
+                fragmentList.get(index).updateData();
         }
     }
 

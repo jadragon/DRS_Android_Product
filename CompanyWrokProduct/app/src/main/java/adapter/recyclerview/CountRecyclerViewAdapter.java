@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import library.AnalyzeJSON.AnalyzeShopCart;
 import library.GetJsonData.ShopCartJsonData;
 
 public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecyclerViewAdapter.RecycleHolder> {
@@ -57,6 +56,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         gv = ((GlobalVariable) ctx.getApplicationContext());
         invoiceType = ctx.getResources().getStringArray(R.array.invoice_type);
         dm = ctx.getResources().getDisplayMetrics();
+        /*
         if (json != null) {
             title_list = AnalyzeShopCart.getCheckoutData(json);
             content_list = AnalyzeShopCart.getCheckoutItemArray(json);
@@ -70,7 +70,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             footer_pay_list = new ArrayList<>();
             footer_invoice_list = new ArrayList<>();
         }
-
+*/
         //初始化checkbox
         initItems();
         initFooterItem();
@@ -503,6 +503,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     }
 
     public void setFilter(JSONObject json) {
+        /*
         if (json != null) {
             title_list = AnalyzeShopCart.getCheckoutData(json);
             content_list = AnalyzeShopCart.getCheckoutItemArray(json);
@@ -516,6 +517,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
             footer_pay_list = new ArrayList<>();
             footer_invoice_list = new ArrayList<>();
         }
+        */
         initItems();
         initFooterItem();
         notifyDataSetChanged();

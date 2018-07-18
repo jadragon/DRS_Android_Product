@@ -16,7 +16,7 @@ public class StoreJsonData {
     private final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/applyReturn.php";
     private final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/confirmReceipt.php";
     private final String stockingCompleted_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/stockingCompleted.php";
-    private final String complaintMember_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/complaintMember.php";
+    private final String complaintMember_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/complaintMember.php";
     private final String getOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/getOrderComment.php";
     private final String setOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/setOrderComment.php";
     private JSONParser jsonParser;

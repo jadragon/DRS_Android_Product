@@ -276,15 +276,12 @@ public class AnalyzeShopCart {
      * shippingPay	Number	郵資
      * note	String	備註
      */
-    public static ArrayList<Map<String, String>> getCheckoutCoupon(JSONObject json) {
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
-        Map<String, String> map;
+    public static Map<String, String> getCheckoutCoupon(JSONObject json) {
         try {
             if (json.getBoolean("Success")) {
                 JSONArray jsonArray = json.getJSONArray("Coupon");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    map = new HashMap<>();
-                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                Map<String, String>  map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(0);
                     try {
                         map.put("moprno", json_obj.getString("moprno"));
                     } catch (Exception e) {
@@ -292,9 +289,8 @@ public class AnalyzeShopCart {
                     }
                     map.put("mcoupon", json_obj.getString("mcoupon"));
                     map.put("mdiscount", json_obj.getString("mdiscount"));
-                    arrayList.add(map);
-                }
-                return arrayList;
+
+                return map;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -311,24 +307,19 @@ public class AnalyzeShopCart {
      * ewallet	Number	電子錢包折抵
      * rpay	Number	總付款金額
      */
-    public static ArrayList<Map<String, String>> getCheckoutPay(JSONObject json) {
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
-        Map<String, String> map;
+    public static Map<String, String> getCheckoutPay(JSONObject json) {
         try {
             if (json.getBoolean("Success")) {
                 JSONArray jsonArray = json.getJSONArray("Pay");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    map = new HashMap<>();
-                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                Map<String, String>   map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(0);
                     map.put("opay", json_obj.getString("opay"));
                     map.put("pterms", json_obj.getString("pterms"));
                     map.put("xmoney", json_obj.getString("xmoney"));
                     map.put("ymoney", json_obj.getString("ymoney"));
                     map.put("ewallet", json_obj.getString("ewallet"));
                     map.put("rpay", json_obj.getString("rpay"));
-                    arrayList.add(map);
-                }
-                return arrayList;
+                return map;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -342,21 +333,18 @@ public class AnalyzeShopCart {
      * ctitle	String	公司抬頭
      * vat	String	公司統編
      */
-    public static ArrayList<Map<String, String>> getCheckoutInvoice(JSONObject json) {
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
-        Map<String, String> map;
+    public static  Map<String, String> getCheckoutInvoice(JSONObject json) {
+
         try {
             if (json.getBoolean("Success")) {
                 JSONArray jsonArray = json.getJSONArray("Invoice");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    map = new HashMap<>();
-                    JSONObject json_obj = jsonArray.getJSONObject(i);
+                Map<String, String>   map = new HashMap<>();
+                    JSONObject json_obj = jsonArray.getJSONObject(0);
                     map.put("invoice", json_obj.getString("invoice"));
                     map.put("ctitle", json_obj.getString("ctitle"));
                     map.put("vat", json_obj.getString("vat"));
-                    arrayList.add(map);
-                }
-                return arrayList;
+
+                return map;
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -44,6 +44,7 @@ public abstract class BasePageFragment extends Fragment {
         }
         return false;
     }
+
     public void updateData() {
         if (isDataInitiated) {
             fetchData();

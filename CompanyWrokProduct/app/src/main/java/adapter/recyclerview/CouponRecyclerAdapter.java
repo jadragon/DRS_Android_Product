@@ -95,9 +95,9 @@ public class CouponRecyclerAdapter extends RecyclerView.Adapter<CouponRecyclerAd
                 copyToClipboard(itemPojoList.get(position).getCoupon());
             } else if (itemPojoList.get(position).getIsuse() == 1) {
                 toastMessageDialog.setTitleText("是否要刪除此折價券?");
-                toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+                toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
                     @Override
-                    public void ItemClicked(Dialog dialog, View view) {
+                    public void ItemClicked(Dialog dialog, View view, String note) {
                         new JsonDataThread() {
                             @Override
                             public JSONObject getJsonData() {
@@ -122,7 +122,6 @@ public class CouponRecyclerAdapter extends RecyclerView.Adapter<CouponRecyclerAd
                     }
 
                 });
-                toastMessageDialog.check();
             }
         }
     }

@@ -19,7 +19,7 @@ public class OrderInfoJsonData {
     private final String extendReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/extendReceipt.php";
     private final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/confirmReceipt.php";
     private final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturn.php";
-    private final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/complaintStore.php";
+    private final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/complaintStore.php";
     private final String getOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/getOrderComment.php";
     private final String setOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/setOrderComment.php";
     private final String getMOrderReturnItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderReturnItem.php";

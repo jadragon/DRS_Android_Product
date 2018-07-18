@@ -239,7 +239,7 @@ public class PcContentActivity extends AppCompatActivity {
                                 try {
                                     max = Integer.parseInt(list.get(postion).get("total"));
                                     if (max > 0)
-                                    count = 1;
+                                        count = 1;
                                     shopcart_txt_count.setText(count + "");
                                 } catch (Exception e) {
                                     max = 0;
@@ -291,7 +291,7 @@ public class PcContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (gv.getToken() != null) {
-                    if (count > 0 && max != 0) {
+                    if (count > 0 && max > 0 && count <= max) {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -321,6 +321,9 @@ public class PcContentActivity extends AppCompatActivity {
                             }
                         }).start();
 
+                    } else {
+                        toastMessageDialog.setMessageText("商品數量異常");
+                        toastMessageDialog.confirm();
                     }
                 } else {
                     startActivity(new Intent(PcContentActivity.this, LoginActivity.class));

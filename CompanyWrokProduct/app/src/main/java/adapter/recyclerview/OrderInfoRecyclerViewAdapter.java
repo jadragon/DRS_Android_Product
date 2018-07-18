@@ -201,7 +201,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         }
                         break;
                     case 2:
-                        if (((MemberOrderFooterPojo) items.get(position - 1)).getLstatus() == 3) {
+                        if (((MemberOrderFooterPojo) items.get(position - 1)).getLstatus() == 2) {
                             ((FooterHolder) holder).button2.setEnabled(true);
                             reShapeButton(((FooterHolder) holder).button2, R.color.shipway_blue_light);
                         } else {
@@ -486,7 +486,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("取消訂單");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -519,9 +519,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         case 2:
                             toastMessageDialog.setTitleText("延長收貨");
                             toastMessageDialog.setMessageText("");
-                            toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+                            toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view) {
+                                public void ItemClicked(Dialog dialog, View view,String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -544,8 +544,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     dialog.dismiss();
                                 }
                             });
-                            toastMessageDialog.check();
-
                             break;
                         case 3:
                             intent = new Intent(ctx, AppreciateActivity.class);
@@ -599,7 +597,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 1:
                             toastMessageDialog.setTitleText("申請取消訂單");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -628,9 +626,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("確認收貨");
-                            toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+                            toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view) {
+                                public void ItemClicked(Dialog dialog, View view,String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -653,7 +651,6 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                     dialog.dismiss();
                                 }
                             });
-                            toastMessageDialog.check();
                             break;
                         case 3:
                             intent = new Intent(ctx, ReturnAndRefundActivity.class);
@@ -662,7 +659,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 4:
                             toastMessageDialog.setTitleText("輸入物流編號");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -691,7 +688,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 5:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -713,14 +710,13 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                             });
                                         }
                                     }).start();
-
                                     dialog.dismiss();
                                 }
                             });
                             break;
                         case 6:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -742,6 +738,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                             });
                                         }
                                     }).start();
+                                    dialog.dismiss();
                                 }
 
                             });
@@ -757,7 +754,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("申請取消訂單");
-                            toastMessageDialog.choice(new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {

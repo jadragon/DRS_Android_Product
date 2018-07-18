@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -46,25 +47,29 @@ public class CountActivity extends AppCompatActivity {
     private void initToastMessage() {
         toastMessageDialog = new ToastMessageDialog(this);
         toastMessageDialog.setTitleText("確定要開始結帳?");
-        toastMessageDialog.setCheckListener(new ToastMessageDialog.CheckListener() {
+        toastMessageDialog.setCheckListener(false, new ToastMessageDialog.ClickListener() {
             @Override
-            public void ItemClicked(Dialog dialog, View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReCountJsonData().setVat(count_type, gv.getToken(), countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
-                                intent.putExtra("count_type", count_type);
-                                startActivity(intent);
-                                finish();
-                            }
-                        });
-                    }
-                }).start();
-                dialog.dismiss();
+            public void ItemClicked(Dialog dialog, View view, String note) {
+                if (countRecyclerViewAdapter.checkShipwayAndPayWay()) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ReCountJsonData().setVat(count_type, gv.getToken(), countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
+                                    intent.putExtra("count_type", count_type);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                    }).start();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(CountActivity.this, "請填寫運送方式及付款方式", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -105,7 +110,7 @@ public class CountActivity extends AppCompatActivity {
         count_gotobuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toastMessageDialog.check();
+                toastMessageDialog.showCheck();
             }
         });
     }

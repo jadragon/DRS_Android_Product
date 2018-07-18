@@ -44,8 +44,9 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
     private final int TYPE_PAY = 5;
     private Context ctx;
     private DisplayMetrics dm;
-    private ArrayList<Map<String, String>> title_list, footer_coupon_list, footer_pay_list, footer_invoice_list;
+    private ArrayList<Map<String, String>> title_list;
     private ArrayList<ArrayList<Map<String, String>>> content_list;
+    private Map<String, String> footer_coupon_list, footer_pay_list, footer_invoice_list;
     private List<Item> items;
     private FooterItem footerItem;
     private Item item;
@@ -68,9 +69,6 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
         } else {
             title_list = new ArrayList<>();
             content_list = new ArrayList<>();
-            footer_coupon_list = new ArrayList<>();
-            footer_pay_list = new ArrayList<>();
-            footer_invoice_list = new ArrayList<>();
         }
 
         //初始化checkbox
@@ -79,13 +77,13 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
     }
 
     private void initFooterItem() {
-        for (int i = 0; i < footer_pay_list.size(); i++) {
-            footerItem = new FooterItem(footer_coupon_list.get(i).get("moprno"), footer_coupon_list.get(i).get("mcoupon"), Float.parseFloat(footer_coupon_list.get(i).get("mdiscount")),
-                    footer_pay_list.get(i).get("opay"), footer_pay_list.get(i).get("pterms"), Float.parseFloat(footer_pay_list.get(i).get("xmoney")), Float.parseFloat(footer_pay_list.get(i).get("ymoney")),
-                    Float.parseFloat(footer_pay_list.get(i).get("ewallet")), footer_pay_list.get(i).get("rpay"),
-                    Integer.parseInt(footer_invoice_list.get(i).get("invoice")), footer_invoice_list.get(i).get("ctitle"), footer_invoice_list.get(i).get("vat")
-            );
-        }
+
+        footerItem = new FooterItem(footer_coupon_list.get("moprno"), footer_coupon_list.get("mcoupon"), Float.parseFloat(footer_coupon_list.get("mdiscount")),
+                footer_pay_list.get("opay"), footer_pay_list.get("pterms"), Float.parseFloat(footer_pay_list.get("xmoney")), Float.parseFloat(footer_pay_list.get("ymoney")),
+                Float.parseFloat(footer_pay_list.get("ewallet")), footer_pay_list.get("rpay"),
+                Integer.parseInt(footer_invoice_list.get("invoice")), footer_invoice_list.get("ctitle"), footer_invoice_list.get("vat")
+        );
+
     }
 
     public void initItems() {
@@ -115,6 +113,7 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
             //收費方式
             item = new Item(TYPE_SHIPWAY,
                     title_list.get(i).get("shippingInfo"),
+                    //*
                     title_list.get(i).get("shippingStyle"),
                     title_list.get(i).get("shippingName"),
                     title_list.get(i).get("shippingSname"),
@@ -516,9 +515,6 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
         } else {
             title_list = new ArrayList<>();
             content_list = new ArrayList<>();
-            footer_coupon_list = new ArrayList<>();
-            footer_pay_list = new ArrayList<>();
-            footer_invoice_list = new ArrayList<>();
         }
         initItems();
         initFooterItem();
@@ -960,4 +956,14 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
         }
     }
 
+    public boolean checkShipwayAndPayWay() {
+        for (Map<String, String> shipway : title_list) {
+            if (shipway.get("shippingStyle").equals(""))
+                return false;
+        }
+        if (footer_pay_list.get("pterms").equals(""))
+            return false;
+        return true;
+
+    }
 }

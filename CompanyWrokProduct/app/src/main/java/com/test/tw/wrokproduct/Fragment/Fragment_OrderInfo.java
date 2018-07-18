@@ -23,6 +23,7 @@ import library.BasePageFragment;
 import library.EndLessOnScrollListener;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
+import library.JsonDataThread;
 import library.LoadingView;
 
 public class Fragment_OrderInfo extends BasePageFragment {
@@ -129,24 +130,24 @@ public class Fragment_OrderInfo extends BasePageFragment {
 
     @Override
     public void fetchData() {
-        new Thread(new Runnable() {
+        new JsonDataThread() {
             @Override
-            public void run() {
+            public JSONObject getJsonData() {
                 if (type == 0) {
-                    json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, 1);
+                    return new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, 1);
                 } else if (type == 1) {
-                    json = new StoreJsonData().getStoreOrder(token, index, 1);
+                    return new StoreJsonData().getStoreOrder(token, index, 1);
+                } else {
+                    return null;
                 }
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.setFilter(json);
-                        mSwipeLayout.setRefreshing(false);
-                        LoadingView.hide();
-                    }
-                });
             }
-        }).start();
+
+            @Override
+            public void runUiThread(JSONObject json) {
+                adapter.setFilter(json);
+                mSwipeLayout.setRefreshing(false);
+                LoadingView.hide();
+            }
+        }.start();
     }
 }
