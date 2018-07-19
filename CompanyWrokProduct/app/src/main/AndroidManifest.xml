@@ -144,7 +144,7 @@
         <activity android:name=".GoldFlowCompeleteActivity" />
         <activity android:name=".我的帳戶.訂單管理.訂單資訊.ReturnAndRefundActivity" />
         <activity android:name=".商家管理.商品訂單.ProductOrderActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.MyApprecoateActivity"></activity>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.MyAppreciateActivity"></activity>
     </application>
 
 </manifest>

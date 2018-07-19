@@ -1,6 +1,7 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,11 +14,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.SearchResultActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,13 +73,22 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
         textView.setPadding((int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density));
         textView.setTextColor(Color.BLACK);
+        textView.setTag("textview");
+            LinearLayout linearLayout=new LinearLayout(ctx);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(textView);
+        View view=new View(ctx);
+        view.setBackgroundResource(R.color.gainsboro);
+        layoutParams.height=1;
+        view.setLayoutParams(layoutParams);
+        linearLayout.addView(view);
 /*
         Drawable drawable = ctx.getResources().getDrawable(R.drawable.product);
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         drawable = new BitmapDrawable(ctx.getResources(), Bitmap.createScaledBitmap(bitmap, (int) (50 * dm.density), (int) (50 * dm.density), true));
         textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         */
-        return new ChangeTextRecyclerViewAdapter.RecycleHolder(ctx, textView);
+        return new ChangeTextRecyclerViewAdapter.RecycleHolder(ctx, linearLayout);
     }
 
     @Override
@@ -128,17 +139,16 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
         public RecycleHolder(Context ctx, View view) {
             super(view);
             this.ctx = ctx;
-
-            text = (TextView) view;
+            text =  view.findViewWithTag("textview");
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Toast.makeText(ctx, list.get(position).get("title"), Toast.LENGTH_SHORT).show();
-            notifyDataSetChanged();
-
+                Intent intent = new Intent(ctx, SearchResultActivity.class);
+                intent.putExtra("keyword", list.get(position).get("title"));
+                ctx.startActivity(intent);
         }
     }
 

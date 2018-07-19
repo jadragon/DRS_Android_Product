@@ -72,7 +72,8 @@ public class ProductJsonData {
     /**
      * 1.1.2	熱門關鍵字
      */
-    public JSONObject getHotkeywords() {
+    public JSONObject getHotkeywords(String token) {
+        params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(hotkeywords_url, params);
     }
 

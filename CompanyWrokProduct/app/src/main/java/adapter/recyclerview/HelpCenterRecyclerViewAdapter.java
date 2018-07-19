@@ -74,7 +74,7 @@ public class HelpCenterRecyclerViewAdapter extends RecyclerView.Adapter<HelpCent
                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(ctx.getApplicationContext(), CommunityActivity.class);
+                        Intent intent = new Intent(ctx, CommunityActivity.class);
 
                         try {
                             intent.putExtra("title", json.getJSONObject("Data").getString("title"));

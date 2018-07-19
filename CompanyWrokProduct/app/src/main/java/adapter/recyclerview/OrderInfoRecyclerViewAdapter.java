@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.CommunityActivity;
 import com.test.tw.wrokproduct.CountActivity;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
@@ -43,8 +44,10 @@ import java.util.List;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 import library.Component.ToastMessageDialog;
+import library.GetJsonData.HelpCenterJsonData;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.ReCountJsonData;
+import library.JsonDataThread;
 
 public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public final int TYPE_HEADER = 0;
@@ -486,7 +489,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("取消訂單");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -519,9 +522,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         case 2:
                             toastMessageDialog.setTitleText("延長收貨");
                             toastMessageDialog.setMessageText("");
-                            toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view,String note) {
+                                public void ItemClicked(Dialog dialog, View view, String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -597,7 +600,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 1:
                             toastMessageDialog.setTitleText("申請取消訂單");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -626,9 +629,9 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("確認收貨");
-                            toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view,String note) {
+                                public void ItemClicked(Dialog dialog, View view, String note) {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -659,36 +662,60 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 4:
                             toastMessageDialog.setTitleText("輸入物流編號");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.setOtherButtonText("了解更多");
+                            toastMessageDialog.showOhter(true, new ToastMessageDialog.OtherClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
+                                public void confirmClicked(Dialog dialog, View view, final String note) {
+                                    new JsonDataThread() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyReturnLnum(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(4);
-                                                        }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject getJsonData() {
+                                            return new OrderInfoJsonData().applyReturnLnum(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
-                                    }).start();
 
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            try {
+                                                if (json.getBoolean("Success")) {
+                                                    ((OrderInfoActivity) ctx).setFilterByIndex(4);
+                                                }
+                                                Toast.makeText(ctx, json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
                                     dialog.dismiss();
                                 }
+
+                                @Override
+                                public void otherClicked(Dialog dialog, View view) {
+                                    new JsonDataThread() {
+                                        @Override
+                                        public JSONObject getJsonData() {
+                                            return new HelpCenterJsonData().getCitem("ynvNAzmDHyZXuL3rIqktCw==");
+                                        }
+
+                                        @Override
+                                        public void runUiThread(JSONObject json) {
+                                            Intent intent = new Intent(ctx, CommunityActivity.class);
+
+                                            try {
+                                                intent.putExtra("title", json.getJSONObject("Data").getString("title"));
+                                                intent.putExtra("html", json.getJSONObject("Data").getString("content"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            ctx.startActivity(intent);
+                                        }
+                                    }.start();
+                                }
                             });
+
+
                             break;
                         case 5:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -716,7 +743,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 6:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {
@@ -754,7 +781,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("申請取消訂單");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new Thread(new Runnable() {

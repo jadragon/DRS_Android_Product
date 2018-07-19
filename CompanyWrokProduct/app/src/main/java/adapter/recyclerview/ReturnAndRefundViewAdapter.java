@@ -43,7 +43,7 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private ArrayList<ReturnAndRefundContentPojo> contentPojos;
     private Bitmap[] photos;
     private int type;
-    private String note;
+    private String note = "";
 
     public ReturnAndRefundViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
@@ -328,12 +328,14 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
         map.put("type", type + "");
         map.put("moinoArray", arrayList.get(0));
         map.put("numArray", arrayList.get(1));
+        map.put("hasZero", arrayList.get(2));
         map.put("note", note);
         return map;
     }
 
 
     private ArrayList<String> getMoinoArrayAndNumArray() {
+        String hasZero = "0";
         ArrayList<String> arrayList = new ArrayList<>();
         StringBuilder moinoArray = new StringBuilder();
         StringBuilder numArray = new StringBuilder();
@@ -345,6 +347,8 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         numArray.append(",");
                     }
                     moinoArray.append(((ReturnAndRefundContentPojo) item).getMoino());
+                    if (((ReturnAndRefundContentPojo) item).getScount() == 0)
+                        hasZero = "1";
                     numArray.append(((ReturnAndRefundContentPojo) item).getScount());
 
                 }
@@ -352,6 +356,7 @@ public class ReturnAndRefundViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         arrayList.add(moinoArray.toString());
         arrayList.add(numArray.toString());
+        arrayList.add(hasZero);
         return arrayList;
     }
 }

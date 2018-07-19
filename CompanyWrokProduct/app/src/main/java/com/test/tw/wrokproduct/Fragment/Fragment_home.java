@@ -156,7 +156,7 @@ public class Fragment_home extends Fragment {
             /**
              * 取得HotkeyWords圖片
              * */
-            json1 = new ProductJsonData().getHotkeywords();
+            json1 = new ProductJsonData().getHotkeywords(gv.getToken());
 
             /**
              * 取得Ptype圖片

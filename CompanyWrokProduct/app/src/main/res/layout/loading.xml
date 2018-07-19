@@ -13,7 +13,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        custom:gif="@raw/yloading" />
+        custom:gif="@raw/logo500" />
 
     <TextView
 

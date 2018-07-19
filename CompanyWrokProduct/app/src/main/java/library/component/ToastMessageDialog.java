@@ -19,7 +19,8 @@ public class ToastMessageDialog {
     private EditText editText;
     private Button confirm, cancel, other;
     private TextView title, textView;
-    private ClickListener clickListener;
+    private ClickListener onClick;
+    private OtherClickListener otherClick;
 
     public ToastMessageDialog(Context context) {
         if (dialog == null)
@@ -58,7 +59,9 @@ public class ToastMessageDialog {
     public void setTitleText(String message) {
         title.setText(message);
     }
-
+    public void setOtherButtonText(String message) {
+        other.setText(message);
+    }
     public void setMessageText(String message) {
         textView.setText(message);
     }
@@ -94,8 +97,8 @@ public class ToastMessageDialog {
         dialog.show();//显示对话框
     }
 
-    public void showCheck(boolean showEditText, ClickListener onclick) {
-        this.clickListener = onclick;
+    public void showCheck(boolean showEditText, ClickListener onClickListener) {
+        this.onClick = onClickListener;
         confirm.setVisibility(View.VISIBLE);
         other.setVisibility(View.GONE);
         cancel.setVisibility(View.VISIBLE);
@@ -108,7 +111,7 @@ public class ToastMessageDialog {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickListener.ItemClicked(dialog, view, editText.getText().toString());
+                onClick.ItemClicked(dialog, view, editText.getText().toString());
             }
         });
 
@@ -127,28 +130,34 @@ public class ToastMessageDialog {
     }
 
     public interface OtherClickListener {
-        void confirmClicked(Dialog dialog, View view);
+        void confirmClicked(Dialog dialog, View view, String note);
 
         void otherClicked(Dialog dialog, View view);
     }
 
-    public void showOhter(final OtherClickListener otherClickListener) {
+    public void showOhter(boolean showEditText, final OtherClickListener otherClickListener) {
+        this.otherClick = otherClickListener;
         confirm.setVisibility(View.VISIBLE);
         other.setVisibility(View.VISIBLE);
         cancel.setVisibility(View.VISIBLE);
-        editText.setVisibility(View.GONE);
+        if (showEditText) {
+            editText.setVisibility(View.VISIBLE);
+        } else {
+            editText.setVisibility(View.GONE);
+        }
+
         textView.setVisibility(View.GONE);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                otherClickListener.confirmClicked(dialog, view);
+                otherClick.confirmClicked(dialog, view, editText.getText().toString());
             }
         });
 
         other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                otherClickListener.otherClicked(dialog, view);
+                otherClick.otherClicked(dialog, view);
             }
         });
 
@@ -161,8 +170,8 @@ public class ToastMessageDialog {
         dialog.show();//显示对话框
     }
 
-    public void setCheckListener(boolean showEditText, ClickListener onCheck) {
-        this.clickListener = onCheck;
+    public void setCheckListener(boolean showEditText, ClickListener onClickListener) {
+        this.onClick = onClickListener;
         confirm.setVisibility(View.VISIBLE);
         other.setVisibility(View.GONE);
         cancel.setVisibility(View.VISIBLE);
@@ -175,7 +184,7 @@ public class ToastMessageDialog {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickListener.ItemClicked(dialog, view, editText.getText().toString());
+                onClick.ItemClicked(dialog, view, editText.getText().toString());
             }
         });
 

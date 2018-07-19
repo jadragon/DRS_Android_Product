@@ -24,11 +24,12 @@ public class SearchBarActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     ChangeTextRecyclerViewAdapter changeTextRecyclerViewAdapter;
     DividerItemDecoration decoration;
-
+GlobalVariable gv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_bar);
+        gv=((GlobalVariable)getApplicationContext());
         search_bar_recyclerview = findViewById(R.id.search_bar_recyclerview);
         decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
@@ -47,6 +48,19 @@ public class SearchBarActivity extends AppCompatActivity {
 
     private void initSearchbar() {
         SearchView search_bar_searchview = findViewById(R.id.search_bar_searchview);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                json = new SearchJsonData().search(gv.getToken(),"");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        keyWordRecyclerViewAdapter.setFilter(json);
+                    }
+                });
+
+            }
+        }).start();
         search_bar_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -62,14 +76,13 @@ public class SearchBarActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            json = new SearchJsonData().search(newText);
+                            json = new SearchJsonData().search(gv.getToken(),newText);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     search_bar_recyclerview.setAdapter(changeTextRecyclerViewAdapter);
                                     changeTextRecyclerViewAdapter.setFilter(json);
                                     search_bar_recyclerview.setLayoutManager(linearLayoutManager);
-                                    search_bar_recyclerview.addItemDecoration(decoration);
                                 }
                             });
 
@@ -79,7 +92,6 @@ public class SearchBarActivity extends AppCompatActivity {
                 } else {
                     search_bar_recyclerview.setAdapter(keyWordRecyclerViewAdapter);
                     search_bar_recyclerview.setLayoutManager(autoNewLineLayoutManager);
-                    search_bar_recyclerview.removeItemDecoration(decoration);
                 }
                 return true;
             }

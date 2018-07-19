@@ -1,11 +1,11 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -29,12 +29,14 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
     GlobalVariable gv;
     String mono;
     Button comfirm;
+    ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_and_refund);
         gv = (GlobalVariable) getApplicationContext();
+        toastMessageDialog = new ToastMessageDialog(this);
         mono = getIntent().getStringExtra("mono");
         initToolbar(true, "申請退換貨");
         initRecyclerView();
@@ -43,26 +45,48 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
             @Override
             public void onClick(View view) {
                 final Map<String, String> map = adapter.getApplyReturn();
-                Log.e("return", "" + map);
-                new JsonDataThread() {
-                    @Override
-                    public JSONObject getJsonData() {
-                        return new OrderInfoJsonData().applyReturn(gv.getToken(), map.get("type"), mono, map.get("moinoArray"), map.get("numArray"), map.get("note"), null, null, null, null);
-                    }
+                if (map.get("type").equals("0")) {
+                    toastMessageDialog.setMessageText("請選擇申請");
+                    toastMessageDialog.confirm();
+                } else if (map.get("numArray").equals("")) {
+                    toastMessageDialog.setMessageText("請勾選待退商品");
+                    toastMessageDialog.confirm();
+                } else if (map.get("hasZero").equals("1")) {
+                    toastMessageDialog.setMessageText("勾選商品數量不能為0");
+                    toastMessageDialog.confirm();
+                } else if (map.get("note").equals("")) {
+                    toastMessageDialog.setMessageText("請填寫退換貨原因");
+                    toastMessageDialog.confirm();
+                } else {
+                    toastMessageDialog.setTitleText("申請退換貨");
+                    toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
+                        @Override
+                        public void ItemClicked(Dialog dialog, View view, String note) {
+                            new JsonDataThread() {
+                                @Override
+                                public JSONObject getJsonData() {
+                                    return new OrderInfoJsonData().applyReturn(gv.getToken(), map.get("type"), mono, map.get("moinoArray"), map.get("numArray"), map.get("note"), null, null, null, null);
+                                }
 
-                    @Override
-                    public void runUiThread(JSONObject json) {
-                        try {
-                            if (json.getBoolean("Success")) {
-                                finish();
-                            } else {
-                                new ToastMessageDialog(ReturnAndRefundActivity.this, json.getString("Message")).confirm();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                                @Override
+                                public void runUiThread(JSONObject json) {
+                                    try {
+                                        if (json.getBoolean("Success")) {
+                                            finish();
+                                        } else {
+                                            new ToastMessageDialog(ReturnAndRefundActivity.this, json.getString("Message")).confirm();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }.start();
+                            dialog.dismiss();
                         }
-                    }
-                }.start();
+
+                    });
+
+                }
             }
         });
     }

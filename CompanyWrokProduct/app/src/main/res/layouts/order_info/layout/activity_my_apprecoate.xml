@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".我的帳戶.訂單管理.訂單資訊.MyApprecoateActivity">
+    tools:context=".我的帳戶.訂單管理.訂單資訊.MyAppreciateActivity">
 
     <include
         layout="@layout/include_toolbar"

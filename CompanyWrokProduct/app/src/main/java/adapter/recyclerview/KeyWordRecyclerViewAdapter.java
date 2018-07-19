@@ -1,6 +1,7 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +13,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.test.tw.wrokproduct.SearchResultActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
     public KeyWordRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         dm = ctx.getResources().getDisplayMetrics();
+        /*
         list = new ArrayList<>();
         list.add("熱門關鍵字");
         list.add("黑人問號?");
@@ -53,6 +58,26 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         list.add("滿滿的大！平！台！");
         list.add("你在大聲什麼啦 ");
         list.add("嚇死寶寶了");
+        */
+        if (json != null)
+            initList(json);
+        else
+            list = new ArrayList<>();
+    }
+
+    private void initList(JSONObject json) {
+        list = new ArrayList<>();
+        list.add("熱門關鍵字");
+        try {
+            JSONArray jsonArray = json.getJSONArray("Data");
+            JSONObject jsonObject;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                jsonObject = jsonArray.getJSONObject(i);
+                list.add(jsonObject.getString("title"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -114,14 +139,20 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Toast.makeText(ctx, list.get(position), Toast.LENGTH_SHORT).show();
-            notifyDataSetChanged();
-
+            if(position>0) {
+                Intent intent = new Intent(ctx, SearchResultActivity.class);
+                intent.putExtra("keyword", list.get(position));
+                ctx.startActivity(intent);
+            }
         }
     }
 
     public void setFilter(JSONObject json) {
-        this.json = json;
+        if (json != null) {
+            initList(json);
+        } else {
+            list = new ArrayList<>();
+        }
         notifyDataSetChanged();
     }
 

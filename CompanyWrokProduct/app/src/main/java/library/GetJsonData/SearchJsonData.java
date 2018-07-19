@@ -26,13 +26,14 @@ public class SearchJsonData {
     /**
      * 1.1.6	搜尋 - Search Bar 前5個關鍵字
      */
-    public JSONObject search(String keyword) {
+    public JSONObject search(String token,String keyword) {
+        params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("keyword", keyword));
         return jsonParser.getJSONFromUrl(search_url, params);
     }
 
     /**
-     * 1.1.6	搜尋 - Search Bar 前5個關鍵字
+     1.1.7	搜尋 - Search Bar 熱門搜尋點擊
      */
     public JSONObject search_click(String keyword) {
         params.add(new BasicNameValuePair("keyword", keyword));

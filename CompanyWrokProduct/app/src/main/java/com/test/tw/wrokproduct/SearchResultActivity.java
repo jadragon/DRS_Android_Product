@@ -26,7 +26,7 @@ public class SearchResultActivity extends AppCompatActivity {
     String keyword;
     JSONObject json;
     MySwipeRefreshLayout mSwipeLayout;
-    int nextpage;
+    int nextpage=2;
     EndLessOnScrollListener endLessOnScrollListener;
 
     @Override

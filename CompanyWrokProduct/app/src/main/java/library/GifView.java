@@ -70,7 +70,7 @@ public class GifView extends View {
     */
     private void init(Context context){
         setFocusable(true);
-        inputStream=context.getResources().openRawResource(R.raw.yloading);
+        inputStream=context.getResources().openRawResource(R.raw.logo500);
         movie= Movie.decodeStream(inputStream);
         movieWidth=movie.width();
         movieHeigh=movie.height();
