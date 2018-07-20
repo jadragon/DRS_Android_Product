@@ -48,7 +48,6 @@ import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
-import library.AppManager;
 import library.Component.AutoNewLineLayoutManager;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ProductJsonData;
@@ -95,7 +94,6 @@ public class PcContentActivity extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         stars = getResources().obtainTypedArray(R.array.stars);
         toastMessageDialog = new ToastMessageDialog(this);
-        AppManager.getAppManager().addActivity(this);
         initToolbar();
         initSrcrollView();
         initHome();
@@ -381,8 +379,11 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppManager.getAppManager().remainActivity(MainActivity.class);
-
+               Intent intent = new Intent(PcContentActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
         });
     }

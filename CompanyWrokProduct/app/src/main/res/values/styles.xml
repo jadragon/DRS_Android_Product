@@ -36,5 +36,7 @@
         <item name="colorButtonNormal">@color/blue_grey_500</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@drawable/tab_color_selector</item>
+    </style>
 </resources>

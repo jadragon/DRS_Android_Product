@@ -14,46 +14,48 @@ public class AnalyzeComment {
     /**
      * 3.3.1	讀取我的評價資訊top
      */
-    public ArrayList<MyCommenttopPojo> getMyCommenttopPojo(JSONObject json) {
-        ArrayList<MyCommenttopPojo> arrayList = new ArrayList<>();
+    public MyCommenttopPojo getMyCommenttopPojo(JSONObject json) {
         try {
             MyCommenttopPojo myCommenttopPojo = new MyCommenttopPojo();
             if (json.getBoolean("Success")) {
                 JSONObject jsonObject = json.getJSONObject("Data");
-                JSONArray jsonArray = jsonObject.getJSONArray("top");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    myCommenttopPojo.setTscore(((float) object.getDouble("tscore")));
-                    myCommenttopPojo.setTnum(object.getInt("tnum"));
-                    myCommenttopPojo.setNum1(object.getInt("num1"));
-                    myCommenttopPojo.setNum2(object.getInt("num2"));
-                    myCommenttopPojo.setNum3(object.getInt("num3"));
-                    myCommenttopPojo.setNum4(object.getInt("num4"));
-                    myCommenttopPojo.setNum5(object.getInt("num5"));
-                    arrayList.add(myCommenttopPojo);
-                }
-                return arrayList;
+                JSONObject object = jsonObject.getJSONObject("top");
+                myCommenttopPojo.setTscore((object.getDouble("tscore")));
+                myCommenttopPojo.setTnum(object.getInt("tnum"));
+                myCommenttopPojo.setNum1(object.getInt("num1"));
+                myCommenttopPojo.setNum2(object.getInt("num2"));
+                myCommenttopPojo.setNum3(object.getInt("num3"));
+                myCommenttopPojo.setNum4(object.getInt("num4"));
+                myCommenttopPojo.setNum5(object.getInt("num5"));
+                return myCommenttopPojo;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return arrayList;
+        return null;
     }
+
     /**
      * 3.3.1	讀取我的評價資訊item
      */
     public ArrayList<MyCommentitemPojo> getMyCommentitemPojo(JSONObject json) {
         ArrayList<MyCommentitemPojo> arrayList = new ArrayList<>();
         try {
-            MyCommentitemPojo myCommentPojo = new MyCommentitemPojo();
+            MyCommentitemPojo myCommentPojo;
             if (json.getBoolean("Success")) {
                 JSONObject jsonObject = json.getJSONObject("Data");
                 JSONArray jsonArray = jsonObject.getJSONArray("item");
                 for (int i = 0; i < jsonArray.length(); i++) {
+                    myCommentPojo = new MyCommentitemPojo();
                     JSONObject object = jsonArray.getJSONObject(i);
                     myCommentPojo.setMoino(object.getString("moino"));
-                    myCommentPojo.setSname(object.getString("sname"));
-                    myCommentPojo.setSimg(object.getString("simg"));
+                    try {
+                        myCommentPojo.setSname(object.getString("sname"));
+                        myCommentPojo.setSimg(object.getString("simg"));
+                    } catch (JSONException e) {
+                        myCommentPojo.setSname(object.getString("mname"));
+                        myCommentPojo.setSimg(object.getString("mimg"));
+                    }
                     myCommentPojo.setPname(object.getString("pname"));
                     myCommentPojo.setImg(object.getString("img"));
                     myCommentPojo.setColor(object.getString("color"));

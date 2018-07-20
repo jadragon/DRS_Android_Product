@@ -9,7 +9,6 @@ import org.json.JSONObject;
 public abstract class JsonDataThread extends Thread {
     private static final String TAG = "JsonDataThread";
     private Handler handler;
-    private JSONObject json;
 
     public JsonDataThread() {
         this.handler = new Handler(Looper.getMainLooper());
@@ -17,14 +16,18 @@ public abstract class JsonDataThread extends Thread {
 
     @Override
     public void run() {
-        this.json = getJsonData();
-        Log.e(TAG, json + "");
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                runUiThread(json);
-            }
-        });
+        synchronized (this) {
+            final JSONObject json = getJsonData();
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG, json + "");
+                    runUiThread(json);
+                }
+            });
+        }
+
     }
 
     public abstract JSONObject getJsonData();

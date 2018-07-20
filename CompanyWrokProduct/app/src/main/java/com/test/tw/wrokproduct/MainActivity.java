@@ -30,10 +30,9 @@ import java.util.TimerTask;
 
 import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
-import library.AppManager;
 import library.BottomNavigationViewHelper;
-import library.GetJsonData.ProductJsonData;
 import library.GetJsonData.MemberJsonData;
+import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 import library.SQLiteDatabaseHandler;
 
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        AppManager.getAppManager().addActivity(this);
         LoadingView.setContext(getApplicationContext());
         LoadingView.getInstance();
         initDB();

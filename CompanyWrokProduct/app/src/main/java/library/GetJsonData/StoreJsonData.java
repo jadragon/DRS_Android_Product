@@ -19,6 +19,8 @@ public class StoreJsonData {
     private final String complaintMember_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/complaintMember.php";
     private final String getOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/getOrderComment.php";
     private final String setOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/scomment/setOrderComment.php";
+    private final String getStoreComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/getStoreComment.php";
+    private final String setStoreComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/setStoreComment.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -172,5 +174,24 @@ public class StoreJsonData {
         params.add(new BasicNameValuePair("mono", mono));
         params.add(new BasicNameValuePair("note", note));
         return jsonParser.getJSONFromUrl(complaintMember_url, params);
+    }
+
+    /**
+     * 5.7.1	讀取商家評價資訊
+     */
+    public JSONObject getStoreComment(String token, int rule) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("rule", rule + ""));
+        return jsonParser.getJSONFromUrl(getStoreComment_url, params);
+    }
+
+    /**
+     * 5.7.3	回覆商家評價資訊
+     */
+    public JSONObject setStoreComment(String token, String moino, String comment) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("moino", moino));
+        params.add(new BasicNameValuePair("comment", comment));
+        return jsonParser.getJSONFromUrl(setStoreComment_url, params);
     }
 }

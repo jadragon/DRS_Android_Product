@@ -15,8 +15,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,17 +31,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/myappraise_txt_tscore"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="4"
-                    android:text="0"
+                    android:gravity="center"
+                    android:text="3.0"
                     android:textColor="@color/red"
                     android:textSize="60sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/myappraise_txt_good"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -55,13 +58,15 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/myappraise_img_tscore"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="4"
-                    android:src="@drawable/star0_2"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:src="@drawable/star0_2" />
 
                 <TextView
+                    android:id="@+id/myappraise_txt_tnum"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -75,8 +80,22 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include
-        layout="@layout/include_viewpager"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="1px"
+        android:background="@color/gainsboro" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/myappraise_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/myappraise_tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:tabIndicatorColor="@color/red"
+            style="@style/MyCustomTabLayout"/>
+    </android.support.v4.view.ViewPager>
 </LinearLayout>

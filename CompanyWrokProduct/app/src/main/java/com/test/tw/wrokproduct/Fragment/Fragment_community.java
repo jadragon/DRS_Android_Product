@@ -113,6 +113,9 @@ public class Fragment_community extends Fragment {
                     case 5:
                         break;
                     case 6:
+                        intent = new Intent(getContext(), MyAppreciateActivity.class);
+                        intent.putExtra("type",1);
+                        startActivity(intent);
                         break;
                 }
             }
@@ -274,7 +277,9 @@ public class Fragment_community extends Fragment {
                             startActivity(new Intent(getContext(), ShipAddressActivity.class));
                             break;
                         case R.id.a1_3:
-                            startActivity(new Intent(getContext(), MyAppreciateActivity.class));
+                            intent=new Intent(getContext(), MyAppreciateActivity.class);
+                            intent.putExtra("type",0);
+                            startActivity(intent);
                             break;
                         case R.id.b1:
                             if (v.findViewById(R.id.b1_0).getVisibility() == View.VISIBLE) {

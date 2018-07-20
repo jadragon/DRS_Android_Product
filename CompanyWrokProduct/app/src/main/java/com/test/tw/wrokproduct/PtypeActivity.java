@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.test.tw.wrokproduct.Fragment.Fragment_shop_content;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
 import org.json.JSONObject;
@@ -24,12 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_shop_content;
 import adapter.recyclerview.PtypeRecyclerAdapter;
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
-import library.AppManager;
 import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
@@ -61,7 +60,6 @@ public class PtypeActivity extends AppCompatActivity {
         initSearchToolbar();
         gv = ((GlobalVariable) getApplicationContext());
         mvip = gv.getMvip();
-        AppManager.getAppManager().addActivity(this);
         POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();
         //setupTabIcons();

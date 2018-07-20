@@ -42,7 +42,7 @@
         <activity android:name=".TestActivity" />
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".購物車.ShopCartActivity"
             android:launchMode="singleTask" />
@@ -106,7 +106,7 @@
         <activity android:name=".GoogleSignInActivity" />
         <activity
             android:name=".RegisterActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".RegisterDetailActivity"
             android:launchMode="singleTask" />
@@ -116,35 +116,60 @@
         <activity android:name=".LogoutActivity" />
         <activity
             android:name=".我的帳戶.個人管理.個人資料.PersonalInfoActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".我的帳戶.個人管理.個人資料.SelectCoverActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".我的帳戶.個人管理.修改密碼.ModifyPasswordActivity" />
-        <activity android:name=".我的帳戶.個人管理.個人資料.Camera2Activity" />
-        <activity android:name=".我的帳戶.個人管理.個人資料.CameraActivity" />
-        <activity android:name=".我的帳戶.諮詢管理.幫助中心.HelpCenterActivity" />
-        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.ContactActivity" />
-        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.ReplyActivity" />
-        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.WriteMailActivity" />
-        <activity android:name=".我的帳戶.訂單管理.收貨地址.ShipAddressActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity" />
-        <activity android:name=".SearchBarActivity" />
-        <activity android:name=".SearchResultActivity" />
-        <activity android:name=".帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity" />
-        <activity android:name=".帳務管理.點值轉換.ExchangePointActivity" />
-        <activity android:name=".帳務管理.錢包提領.EwalletActivity" />
-        <activity android:name=".帳務管理.現金折價券.CouponActivity" />
-        <activity android:name=".帳務管理.帳戶總覽.OverviewBillActivity" />
+            android:launchMode="singleTask" />
+        <activity android:name=".我的帳戶.個人管理.修改密碼.ModifyPasswordActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.個人管理.個人資料.Camera2Activity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.個人管理.個人資料.CameraActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.諮詢管理.幫助中心.HelpCenterActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.ContactActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.ReplyActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.諮詢管理.聯絡劦譽.WriteMailActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.收貨地址.ShipAddressActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderInfoDetailActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.OrderPayDetailActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".SearchBarActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".SearchResultActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".帳務管理.點值轉換.ExchangePointActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".帳務管理.錢包提領.EwalletActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".帳務管理.現金折價券.CouponActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".帳務管理.帳戶總覽.OverviewBillActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".我的帳戶.訂單管理.訂單資訊.AppreciateActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".GoldFlowCompeleteActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.ReturnAndRefundActivity" />
-        <activity android:name=".商家管理.商品訂單.ProductOrderActivity" />
-        <activity android:name=".我的帳戶.訂單管理.訂單資訊.MyAppreciateActivity"></activity>
+        <activity android:name=".GoldFlowCompeleteActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.ReturnAndRefundActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".商家管理.商品訂單.ProductOrderActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.MyAppreciateActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".我的帳戶.訂單管理.訂單資訊.ReplyAppreciateActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

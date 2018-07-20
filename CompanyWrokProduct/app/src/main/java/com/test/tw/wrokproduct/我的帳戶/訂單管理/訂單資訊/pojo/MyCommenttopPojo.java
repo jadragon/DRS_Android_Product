@@ -1,7 +1,7 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class MyCommenttopPojo {
-    float tscore;
+public class MyCommenttopPojo  {
+    double tscore;
     int tnum;
     int num1;
     int num2;
@@ -9,11 +9,11 @@ public class MyCommenttopPojo {
     int num4;
     int num5;
 
-    public float getTscore() {
+    public double getTscore() {
         return tscore;
     }
 
-    public void setTscore(float tscore) {
+    public void setTscore(double tscore) {
         this.tscore = tscore;
     }
 

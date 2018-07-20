@@ -1,19 +1,21 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
-public class MyCommentitemPojo {
-    String moino;
-    String sname;
-    String simg;
-    String pname;
-    String img;
-    String color;
-    String size;
-    String comment;
-    int comscore;
-    int comtimes;
-    String comdate;
-    String recomment;
-    String recomdate;
+import java.io.Serializable;
+
+public class MyCommentitemPojo implements Serializable {
+    private String moino;
+    private String sname;
+    private String simg;
+    private String pname;
+    private String img;
+    private String color;
+    private String size;
+    private String comment;
+    private int comscore;
+    private int comtimes;
+    private String comdate;
+    private String recomment;
+    private String recomdate;
 
     public String getMoino() {
         return moino;

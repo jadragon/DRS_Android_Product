@@ -34,7 +34,6 @@ public class ProductAppraiseRecyclerViewAdapter extends RecyclerView.Adapter<Pro
         } else {
             arrayList = new ArrayList<>();
         }
-
     }
 
     @Override

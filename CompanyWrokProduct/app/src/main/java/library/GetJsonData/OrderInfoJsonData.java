@@ -25,6 +25,7 @@ public class OrderInfoJsonData {
     private final String getMOrderReturnItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderReturnItem.php";
     private final String applyReturnLnum_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturnLnum.php";
     private final String getMyComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/getMyComment.php";
+    private final String setMyComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/setMyComment.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
@@ -230,5 +231,16 @@ public class OrderInfoJsonData {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("rule", rule + ""));
         return jsonParser.getJSONFromUrl(getMyComment_url, params);
+    }
+
+
+    /**
+     * 3.3.2	回覆我的評價資訊
+     */
+    public JSONObject setMyComment(String token, String moino, String comment) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("moino", moino));
+        params.add(new BasicNameValuePair("comment", comment));
+        return jsonParser.getJSONFromUrl(setMyComment_url, params);
     }
 }
