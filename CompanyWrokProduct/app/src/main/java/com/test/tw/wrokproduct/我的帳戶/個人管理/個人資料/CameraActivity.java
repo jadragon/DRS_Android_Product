@@ -35,7 +35,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.GoldFlowCompeleteActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +72,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        //
+        gv = ((GlobalVariable) getApplicationContext());
+        dm = getResources().getDisplayMetrics();
         imageView1 = findViewById(R.id.imageView1);
         shape = getIntent().getStringExtra("Shape");
         if (shape != null && shape.equals("square")) {
@@ -80,26 +83,31 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         } else {
             imageView1 = findViewById(R.id.imageView1);
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int hasCameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
-            List<String> permissions = new ArrayList<String>();
-
-            if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.CAMERA);
+        button1 = findViewById(R.id.button_capture);
+        albums = findViewById(R.id.albums);
+        albums.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+                intent.setType("image/*");
+                startActivityForResult(intent, 200);
             }
-            if (!permissions.isEmpty()) {
-                requestPermissions(permissions.toArray(new String[permissions.size()]), MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+        });
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
-        }
+        });
         if (ContextCompat.checkSelfPermission(CameraActivity.this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(CameraActivity.this,
                     Manifest.permission.CAMERA)) {
-                new AlertDialog.Builder(CameraActivity.this)
-                        .setMessage("我真的沒有要做壞事, 給我權限吧?")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CameraActivity.this)
+                        .setMessage("此功能需要權限，請同意權限後再進行下一步")
+                        .setPositiveButton("同意", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(CameraActivity.this,
@@ -107,39 +115,24 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("不同意", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 finish();
                             }
-                        })
-                        .show();
-            } else {
+                        });
 
+                AlertDialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.setCancelable(false);
+                alertDialog.show();
+            } else {
                 ActivityCompat.requestPermissions(CameraActivity.this,
                         new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
             }
         } else {
-            gv = ((GlobalVariable) getApplicationContext());
-            dm = getResources().getDisplayMetrics();
-            button1 = findViewById(R.id.button_capture);
-            albums = findViewById(R.id.albums);
-            albums.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, 200);
-                }
-            });
-            back = findViewById(R.id.back);
-            back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+
             surfaceView1 = findViewById(R.id.surfaceView1);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             initShow();
@@ -156,6 +149,27 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     camera.takePicture(null, null, jpeg);
                 }
             });
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                for (int i = 0; i < permissions.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    } else if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        finish();
+                    }
+                }
+            }
+            break;
+            default: {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
         }
     }
 
@@ -410,26 +424,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-
-                    } else if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        finish();
-                    }
-                }
-            }
-            break;
-            default: {
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            }
-        }
     }
 
     @Override
