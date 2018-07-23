@@ -16,9 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.SearchBarActivity;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
@@ -52,7 +52,7 @@ public class Fragment_shop extends Fragment {
         tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.shop_header_title)));
         viewPager = v.findViewById(R.id.shop_viewpager);
         tabLayout = v.findViewById(R.id.shop_header_tablayout);
-        mvip = gv.getMvip();
+        mvip = gv.getMvip() != null ? gv.getMvip() : "0";
         initSearchToolbar();
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager.setOffscreenPageLimit(6);
@@ -120,7 +120,7 @@ public class Fragment_shop extends Fragment {
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
             if (!gv.getMvip().equals(mvip)) {
-                mvip = gv.getMvip();
+                mvip = gv.getMvip() != null ? gv.getMvip() : "0";
                 resetViewPager(mvip);
                 //网络数据刷新
                 setFilter();
@@ -189,13 +189,25 @@ public class Fragment_shop extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (!gv.getMvip().equals(mvip)) {
+            LoadingView.show(v);
+            mvip = gv.getMvip() != null ? gv.getMvip() : "0";
+            //网络数据刷新
+            setFilter();
+        }
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //會員區
         if (item.getItemId() == R.id.pccontent_menu_shopcart) {
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), LoginActivity.class));
             return true;
         }
 

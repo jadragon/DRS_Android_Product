@@ -17,9 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
@@ -52,7 +52,7 @@ public class Fragment_favorate extends Fragment {
         initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
         tabtitle = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.favorate_title)));
-        mvip = gv.getMvip();
+        mvip = gv.getMvip() != null ? gv.getMvip() : "0";
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.favorate_viewpager);
@@ -121,11 +121,23 @@ public class Fragment_favorate extends Fragment {
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), LoginActivity.class));
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!gv.getMvip().equals(mvip)) {
+            LoadingView.show(v);
+            mvip = gv.getMvip() != null ? gv.getMvip() : "0";
+            //网络数据刷新
+            setFilter();
+        }
+
     }
 
     @Override
@@ -136,7 +148,7 @@ public class Fragment_favorate extends Fragment {
         } else {  // 在最前端显示 相当于调用了onResume();
             if (!gv.getMvip().equals(mvip)) {
                 LoadingView.show(v);
-                mvip = gv.getMvip();
+                mvip = gv.getMvip() != null ? gv.getMvip() : "0";
                 //网络数据刷新
                 setFilter();
             }

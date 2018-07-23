@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import Util.StringUtil;
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import library.Component.MySwipeRefreshLayout;
 import library.EndLessOnScrollListener;
@@ -23,16 +24,17 @@ import library.LoadingView;
 public class SearchResultActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ShopRecyclerViewAdapter adapter;
-    String keyword;
+    String keyword,unicode;
     JSONObject json;
     MySwipeRefreshLayout mSwipeLayout;
-    int nextpage=2;
+    int nextpage = 2;
     EndLessOnScrollListener endLessOnScrollListener;
-
+GlobalVariable gv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+        gv=(GlobalVariable)getApplicationContext();
         keyword = getIntent().getStringExtra("keyword");
         initSwipeLayout();
         initToolbar();
@@ -52,7 +54,8 @@ public class SearchResultActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json = new SearchJsonData().search_list(keyword, 1);
+                        unicode=StringUtil.convertStringToUTF8(keyword);
+                        json = new SearchJsonData().search_list(gv.getToken(),unicode, 1);
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
@@ -80,7 +83,9 @@ public class SearchResultActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new SearchJsonData().search_list(keyword, 1);
+                new SearchJsonData().search_click(unicode);
+                unicode=StringUtil.convertStringToUTF8(keyword);
+                json = new SearchJsonData().search_list(gv.getToken(),unicode, 1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -97,7 +102,8 @@ public class SearchResultActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json = new SearchJsonData().search_list(keyword, nextpage);
+                        unicode=StringUtil.convertStringToUTF8(keyword);
+                        json = new SearchJsonData().search_list(gv.getToken(),unicode, nextpage);
                         nextpage++;
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override

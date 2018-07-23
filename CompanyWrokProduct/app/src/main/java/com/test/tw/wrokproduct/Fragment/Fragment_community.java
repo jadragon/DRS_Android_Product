@@ -56,7 +56,7 @@ import library.GetJsonData.GetWebView;
 import library.SQLiteDatabaseHandler;
 
 
-public class Fragment_community extends Fragment {
+public class Fragment_Community extends Fragment {
     private View v;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -76,7 +76,7 @@ public class Fragment_community extends Fragment {
         initToolbar();
         gv = (GlobalVariable) getContext().getApplicationContext();
         login_success = v.findViewById(R.id.login_success);
-        mvip = gv.getMvip();
+        mvip = gv.getMvip() != null ? gv.getMvip() : "0";
         initRegistAndLogin();
         viewPager = v.findViewById(R.id.fragment_community_viewpager);
         tabLayout = v.findViewById(R.id.fragment_community_tablayout);
@@ -114,7 +114,7 @@ public class Fragment_community extends Fragment {
                         break;
                     case 6:
                         intent = new Intent(getContext(), MyAppreciateActivity.class);
-                        intent.putExtra("type",1);
+                        intent.putExtra("type", 1);
                         startActivity(intent);
                         break;
                 }
@@ -246,7 +246,7 @@ public class Fragment_community extends Fragment {
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), LoginActivity.class));
             return true;
         }
 
@@ -277,8 +277,8 @@ public class Fragment_community extends Fragment {
                             startActivity(new Intent(getContext(), ShipAddressActivity.class));
                             break;
                         case R.id.a1_3:
-                            intent=new Intent(getContext(), MyAppreciateActivity.class);
-                            intent.putExtra("type",0);
+                            intent = new Intent(getContext(), MyAppreciateActivity.class);
+                            intent.putExtra("type", 0);
                             startActivity(intent);
                             break;
                         case R.id.b1:
@@ -437,7 +437,7 @@ public class Fragment_community extends Fragment {
             login_success.setVisibility(View.INVISIBLE);
         }
         if (!gv.getMvip().equals(mvip)) {
-            mvip = gv.getMvip();
+            mvip = gv.getMvip() != null ? gv.getMvip() : "0";
             initViewPager(mvip);
         }
     }
@@ -447,7 +447,7 @@ public class Fragment_community extends Fragment {
         super.onHiddenChanged(hidden);
         if (hidden) {   // 不在最前端显示 相当于调用了onPause();
             if (!gv.getMvip().equals(mvip)) {
-                mvip = gv.getMvip();
+                mvip = gv.getMvip() != null ? gv.getMvip() : "0";
                 initViewPager(mvip);
             }
         } else {  // 在最前端显示 相当于调用了onResume();

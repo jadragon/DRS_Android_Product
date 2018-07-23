@@ -55,6 +55,7 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
                 jsonObject = jsonArray.getJSONObject(i);
                 map = new HashMap<>();
                 map.put("img", jsonObject.getString("img"));
+                map.put("pname", jsonObject.getString("pname"));
                 map.put("title", jsonObject.getString("title"));
                 list.add(map);
             }
@@ -93,7 +94,7 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        holder.text.setText(list.get(position).get("title"));
+        holder.text.setText(list.get(position).get("pname"));
 
         ImageLoader.getInstance().loadImage(list.get(position).get("img"), new ImageLoadingListener() {
             @Override
@@ -147,7 +148,7 @@ public class ChangeTextRecyclerViewAdapter extends RecyclerView.Adapter<ChangeTe
         public void onClick(View view) {
             int position = getAdapterPosition();
                 Intent intent = new Intent(ctx, SearchResultActivity.class);
-                intent.putExtra("keyword", list.get(position).get("title"));
+                intent.putExtra("keyword", list.get(position).get("pname"));
                 ctx.startActivity(intent);
         }
     }

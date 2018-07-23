@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_community;
+import com.test.tw.wrokproduct.Fragment.Fragment_Community;
 import com.test.tw.wrokproduct.Fragment.Fragment_favorate;
 import com.test.tw.wrokproduct.Fragment.Fragment_home;
 import com.test.tw.wrokproduct.Fragment.Fragment_notification;
@@ -39,7 +39,7 @@ import library.SQLiteDatabaseHandler;
 public class MainActivity extends AppCompatActivity {
     private Fragment_home fragment_home;
     private Fragment_shop fragment_shop;
-    private Fragment_community fragment_community;
+    private Fragment_Community fragment_community;
     private Fragment_favorate fragment_favorate;
     private Fragment_notification fragment_notification;
     private Fragment[] fragments;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFragments() {
         fragment_home = new Fragment_home();
         fragment_shop = new Fragment_shop();
-        fragment_community = new Fragment_community();
+        fragment_community = new Fragment_Community();
         fragment_favorate = new Fragment_favorate();
         fragment_notification = new Fragment_notification();
         fragments = new Fragment[]{fragment_home, fragment_shop, fragment_favorate, fragment_notification, fragment_community};

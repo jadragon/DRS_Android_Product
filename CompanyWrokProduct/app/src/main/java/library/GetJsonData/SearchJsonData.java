@@ -43,7 +43,8 @@ public class SearchJsonData {
     /**
      * 1.1.8	搜尋關鍵字 – 顯示商品列表
      */
-    public JSONObject search_list(String keyword, int page) {
+    public JSONObject search_list(String token,String keyword, int page) {
+        params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("keyword", keyword));
         params.add(new BasicNameValuePair("page", page + ""));
         return jsonParser.getJSONFromUrl(search_list_url, params);

@@ -26,4 +26,15 @@ public class StringUtil {
         builder.insert(insertPosition, text1);
         return builder.toString();
     }
+
+    public static String convertStringToUTF8(String s) {
+        String out = null;
+        try {
+            out = new String(s.getBytes("UTF-8"));
+        } catch (java.io.UnsupportedEncodingException e) {
+            return null;
+        }
+        return out;
+    }
+
 }

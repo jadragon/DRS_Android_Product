@@ -59,7 +59,7 @@ public class PtypeActivity extends AppCompatActivity {
         tabtitle = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.shop_header_title)));
         initSearchToolbar();
         gv = ((GlobalVariable) getApplicationContext());
-        mvip = gv.getMvip();
+        mvip = gv.getMvip() != null ? gv.getMvip() : "0";
         POSITION = getIntent().getIntExtra("position", 0);
         dm = getResources().getDisplayMetrics();
         //setupTabIcons();
@@ -209,6 +209,7 @@ public class PtypeActivity extends AppCompatActivity {
     }
 
     public void resetRecyclerView(int position) {
+        LoadingView.show(getCurrentFocus());
         currentPtno = list.get(position).get("ptno");
         fragment_shop_content1.setPtno(currentPtno);
         fragment_shop_content2.setPtno(currentPtno);
@@ -236,6 +237,7 @@ public class PtypeActivity extends AppCompatActivity {
                         fragment_shop_content3.resetRecyclerView(json3);
                         fragment_shop_content4.resetRecyclerView(json4);
                         fragment_shop_content5.resetRecyclerView(json5);
+                        LoadingView.hide();
                     }
                 });
             }
@@ -249,7 +251,7 @@ public class PtypeActivity extends AppCompatActivity {
         super.onRestart();
         if (!gv.getMvip().equals(mvip)) {
             LoadingView.show(getCurrentFocus());
-            mvip = gv.getMvip();
+            mvip = gv.getMvip() != null ? gv.getMvip() : "0";
             resetViewPager(mvip);
             //网络数据刷新
             setFilter();

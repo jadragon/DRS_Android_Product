@@ -90,12 +90,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/myappraise_tabLayout"
+    <android.support.design.widget.TabLayout
+            android:id="@+id/myappraise_tabLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            app:tabBackground="@drawable/tab_color_buyer_selector"
             app:tabIndicatorColor="@color/red"
-            style="@style/MyCustomTabLayout"/>
+        android:visibility="gone"/>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/myappraise_tabLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:tabBackground="@drawable/tab_color_seller_selector"
+            app:tabIndicatorColor="@color/teal"
+            android:visibility="gone"/>
+
     </android.support.v4.view.ViewPager>
 </LinearLayout>

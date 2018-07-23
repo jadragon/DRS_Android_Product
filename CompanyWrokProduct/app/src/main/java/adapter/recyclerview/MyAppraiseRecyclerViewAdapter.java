@@ -127,6 +127,11 @@ public class MyAppraiseRecyclerViewAdapter extends RecyclerView.Adapter<MyApprai
             format = view.findViewById(R.id.myappraise_format);
             comment = view.findViewById(R.id.myappraise_comment);
             comscore = view.findViewById(R.id.myappraise_comscore);
+            if (type == 0) {
+                comscore.setTextColor(ctx.getResources().getColor(R.color.red));
+            } else {
+                comscore.setTextColor(ctx.getResources().getColor(R.color.teal));
+            }
             comdate = view.findViewById(R.id.myappraise_comdate);
             recomment = view.findViewById(R.id.myappraise_recomment);
             recomdate = view.findViewById(R.id.myappraise_recomdate);
@@ -139,13 +144,12 @@ public class MyAppraiseRecyclerViewAdapter extends RecyclerView.Adapter<MyApprai
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("myCommentitemPojo", myCommentitemPojo);
                     intent.putExtras(bundle);
-                    intent.putExtra("type",type);
+                    intent.putExtra("type", type);
                     ((AppCompatActivity) ctx).startActivityForResult(intent, myCommentitemPojo.getComscore());
                 }
             });
         }
     }
-
 
 
     public void setFilter(JSONObject json) {

@@ -21,13 +21,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecyclerViewAdapter.RecycleHolder> {
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_ITEM = 1;
     private Context ctx;
-    private JSONObject json;
-    private ArrayList<String> list;
+    private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
 
     public KeyWordRecyclerViewAdapter(Context ctx, JSONObject json) {
@@ -67,13 +68,18 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
 
     private void initList(JSONObject json) {
         list = new ArrayList<>();
-        list.add("熱門關鍵字");
+        Map<String, String> map = new HashMap<>();
+        map.put("title", "熱門關鍵字");
+        list.add(map);
         try {
             JSONArray jsonArray = json.getJSONArray("Data");
             JSONObject jsonObject;
             for (int i = 0; i < jsonArray.length(); i++) {
                 jsonObject = jsonArray.getJSONObject(i);
-                list.add(jsonObject.getString("title"));
+                map = new HashMap<>();
+                map.put("pname", jsonObject.getString("pname"));
+                map.put("title", jsonObject.getString("title"));
+                list.add(map);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -87,7 +93,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             TextView textView = new TextView(ctx);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             textView.setTextColor(Color.BLACK);
-            return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView, json);
+            return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView);
         }
         TextView textView = new TextView(ctx);
         textView.setGravity(Gravity.CENTER);
@@ -100,12 +106,12 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         shape.setStroke((int) (1 * dm.density), Color.RED);
         textView.setTextColor(Color.RED);
         textView.setBackground(shape);
-        return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView, json);
+        return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        holder.text.setText(list.get(position));
+        holder.text.setText(list.get(position).get("title"));
     }
 
     @Override
@@ -125,11 +131,10 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         //  TextView color, size;
         TextView text;
         Context ctx;
-        JSONObject json;
 
-        public RecycleHolder(Context ctx, View view, JSONObject json) {
+        public RecycleHolder(Context ctx, View view) {
             super(view);
-            this.json = json;
+
             this.ctx = ctx;
 
             text = (TextView) view;
@@ -139,9 +144,9 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if(position>0) {
+            if (position > 0) {
                 Intent intent = new Intent(ctx, SearchResultActivity.class);
-                intent.putExtra("keyword", list.get(position));
+                intent.putExtra("keyword", list.get(position).get("title"));
                 ctx.startActivity(intent);
             }
         }

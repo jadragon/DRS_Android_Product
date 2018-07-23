@@ -6,6 +6,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.test.tw.wrokproduct.Fragment.Fragment_Myappreciate;
@@ -20,10 +22,13 @@ public class MyAppreciateActivity extends ToolbarActivity {
     String[] mTabtitle;
     FragmentPagerAdapter fragmentPagerAdapter;
     int type;
+    TabLayout tabLayout;
 
     public void setmTabtitle(String[] mTabtitle) {
         this.mTabtitle = mTabtitle;
     }
+
+    ViewGroup tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +41,22 @@ public class MyAppreciateActivity extends ToolbarActivity {
 
     private void initRecylcerViewAndTabLayout() {
         ViewPager viewPager = findViewById(R.id.myappraise_viewpager);
-        TabLayout tabLayout = findViewById(R.id.myappraise_tabLayout);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        if(type==0) {
-            ((TextView)findViewById(R.id.myappraise_txt_tscore)).setTextColor(getResources().getColor(R.color.red));
-        }else {
-            ((TextView)findViewById(R.id.myappraise_txt_tscore)).setTextColor(getResources().getColor(R.color.teal));
+        if (type == 0) {
+            ((TextView) findViewById(R.id.myappraise_txt_tscore)).setTextColor(getResources().getColor(R.color.red));
+            tabLayout = findViewById(R.id.myappraise_tabLayout1);
+            tabLayout.setVisibility(View.VISIBLE);
+        } else {
+            ((TextView) findViewById(R.id.myappraise_txt_tscore)).setTextColor(getResources().getColor(R.color.teal));
+            tabLayout = findViewById(R.id.myappraise_tabLayout2);
+            tabLayout.setVisibility(View.VISIBLE);
         }
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        /*
+        StateListDrawable stateListDrawable= new StateListDrawable();
+        stateListDrawable.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(getResources().getColor(R.color.teal)));
+        stateListDrawable.addState(new int[]{-android.R.attr.state_selected}, new ColorDrawable(getResources().getColor(R.color.white)));
+        tabLayout.setBackgroundDrawable(stateListDrawable);
+        */
         tabLayout.setTabTextColors(getResources().getColor(R.color.black), getResources().getColor(R.color.white));
         tabLayout.setElevation(20);
         mTabtitle = new String[]{"  全部(0)  ", "  五顆星(0)  ", "  四顆星(0)  ", "  三顆星(0)  ", "  二顆星(0)  ", "  一顆星(0)  "};

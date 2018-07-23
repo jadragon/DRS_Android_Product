@@ -25,9 +25,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.SearchBarActivity;
@@ -69,15 +69,17 @@ public class Fragment_home extends Fragment {
     //宣告特約工人
     private HandlerThread mThread;
     GlobalVariable gv;
-
+    String mvip;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_home_layout, container, false);
         initSearchToolbar();
+
         //取得ID
         getID(v);
         gv = (GlobalVariable) getContext().getApplicationContext();
+        mvip = gv.getMvip() != null ? gv.getMvip() : "0";
         list = new ArrayList<>();
         dm = getContext().getResources().getDisplayMetrics();
         //
@@ -278,10 +280,39 @@ public class Fragment_home extends Fragment {
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), LoginActivity.class));
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (gv.getMvip()!=null&&!gv.getMvip().equals(mvip)) {
+            LoadingView.show(v);
+            mvip = gv.getMvip() != null ? gv.getMvip() : "0";
+            //网络数据刷新
+            what = 1;
+            mThreadHandler.post(r1);
+        }
+
+    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+            return;
+        } else {  // 在最前端显示 相当于调用了onResume();
+            if (!gv.getMvip().equals(mvip)) {
+                LoadingView.show(v);
+                mvip = gv.getMvip() != null ? gv.getMvip() : "0";
+                //网络数据刷新
+                what = 1;
+                mThreadHandler.post(r1);
+            }
+
+        }
     }
 }
