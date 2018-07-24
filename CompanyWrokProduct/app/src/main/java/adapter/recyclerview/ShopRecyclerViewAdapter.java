@@ -1,6 +1,5 @@
 package adapter.recyclerview;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -15,24 +14,26 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
-import com.test.tw.wrokproduct.商品.PcContentActivity;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.商品.PcContentActivity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ProductJsonData;
 import library.ItemTouchListencer;
+import library.JsonDataThread;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> implements ItemTouchListencer {
@@ -49,9 +50,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private int layout_width, layout_heigh, had_header = 0;
     private JSONObject json;
     private View view;
-    private ArrayList<Map<String, String>> list;
+    private ArrayList<ProductInfoPojo> list;
     private DisplayMetrics dm;
-    private List<ProductInfoPojo> itemsList;
     GlobalVariable gv;
     private TypedArray stars;
 
@@ -73,18 +73,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             list = ResolveJsonData.getJSONData(json);
         else
             list = new ArrayList<>();
-        initItems();
     }
 
-    private void initItems() {
-        ProductInfoPojo items;
-        itemsList = new ArrayList<>();
-        for (Map<String, String> map : list) {
-            items = new ProductInfoPojo(map.get("title"), map.get("image"), map.get("pno"), map.get("descs"), map.get("rprice"), map.get("rsprice"),
-                    map.get("isnew"), map.get("ishot"), map.get("istime"), map.get("discount"), map.get("shipping"), map.get("favorite").equals("true"), Integer.parseInt(map.get("score")));
-            itemsList.add(items);
-        }
-    }
 
     @Override
     public ShopRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -107,7 +97,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         if (list.size() > 0) {
             if (getItemViewType(position) == TYPE_NORMAL) {
                 holder.imageView.setImageBitmap(null);
-                ImageLoader.getInstance().displayImage(list.get(position - had_header).get("image"), holder.imageView);
+                ImageLoader.getInstance().displayImage(list.get(position - had_header).getImage(), holder.imageView);
                 holder.free.setVisibility(View.INVISIBLE);
                 holder.freash.setVisibility(View.INVISIBLE);
                 holder.hot.setVisibility(View.INVISIBLE);
@@ -116,81 +106,48 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 holder.count1.setVisibility(View.INVISIBLE);
                 holder.discount.setVisibility(View.INVISIBLE);
                 //免運
-                if (itemsList.get(position - had_header).getShipping().equals("true"))
+                if (list.get(position - had_header).getShipping().equals("true"))
                     holder.free.setVisibility(View.VISIBLE);
                 //新品
-                if (itemsList.get(position - had_header).getIsnew().equals("true"))
+                if (list.get(position - had_header).getIsnew().equals("true"))
                     holder.freash.setVisibility(View.VISIBLE);
                 //熱門
-                if (itemsList.get(position - had_header).getIshot().equals("true"))
+                if (list.get(position - had_header).getIshot().equals("true"))
                     holder.hot.setVisibility(View.VISIBLE);
                 //限時
-                if (itemsList.get(position - had_header).getIstime().equals("true"))
+                if (list.get(position - had_header).getIstime().equals("true"))
                     holder.limit.setVisibility(View.VISIBLE);
                 //count0+count1
-                if (!itemsList.get(position - had_header).getDiscount().equals("")) {
+                if (!list.get(position - had_header).getDiscount().equals("")) {
                     holder.count0.setVisibility(View.VISIBLE);
                     holder.count1.setVisibility(View.VISIBLE);
                     holder.discount.setVisibility(View.VISIBLE);
-                    holder.discount.setText(itemsList.get(position - had_header).getDiscount());
+                    holder.discount.setText(list.get(position - had_header).getDiscount());
                 }
                 //原價
                 holder.rprice.setVisibility(View.VISIBLE);
                 holder.rsprice.setVisibility(View.VISIBLE);
                 //特價
-                if (itemsList.get(position - had_header).getRprice().equals(itemsList.get(position - had_header).getRsprice())) {
+                if (list.get(position - had_header).getRprice().equals(list.get(position - had_header).getRsprice())) {
                     holder.rprice.setVisibility(View.INVISIBLE);
-                    holder.rsprice.setText("$" + itemsList.get(position - had_header).getRsprice());
+                    holder.rsprice.setText("$" + list.get(position - had_header).getRsprice());
                 } else {
                     holder.rprice.setPaintFlags(holder.rprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.rprice.setText("$" + itemsList.get(position - had_header).getRprice());
-                    holder.rsprice.setText("$" + itemsList.get(position - had_header).getRsprice());
+                    holder.rprice.setText("$" + list.get(position - had_header).getRprice());
+                    holder.rsprice.setText("$" + list.get(position - had_header).getRsprice());
                 }
                 //title
-                holder.tv1.setText(itemsList.get(position - had_header).getTitle());
+                holder.tv1.setText(list.get(position - had_header).getTitle());
 
                 //score
 
-                holder.score.setImageResource(stars.getResourceId(itemsList.get(position - had_header).getScore(), 0));
+                holder.score.setImageResource(stars.getResourceId(list.get(position - had_header).getScore(), 0));
 
                 //判斷是否點過最愛
-                if (itemsList.get(position - had_header).getFavorite())
+                if (list.get(position - had_header).getFavorite())
                     holder.heart.setImageResource(R.drawable.heart_on);
                 else
                     holder.heart.setImageResource(R.drawable.heart_off);
-                holder.linear_heart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (itemsList.get(position - had_header).getFavorite()) {
-                                    new ProductJsonData().delFavoriteProduct(gv.getToken(), itemsList.get(position - had_header).getPno());
-                                    itemsList.get(position - had_header).setFavorite(false);
-                                    ((Activity) ctx).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            holder.heart.setImageResource(R.drawable.heart_off);
-                                        }
-                                    });
-
-                                } else {
-                                    new ProductJsonData().setFavorite(gv.getToken(), itemsList.get(position - had_header).getPno());
-                                    itemsList.get(position - had_header).setFavorite(true);
-                                    ((Activity) ctx).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            holder.heart.setImageResource(R.drawable.heart_on);
-                                        }
-                                    });
-
-                                }
-
-                            }
-
-                        }).start();
-                    }
-                });
             }
         }
 
@@ -281,6 +238,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                 rsprice = view.findViewById(R.id.rsprice);
                 discount = view.findViewById(R.id.discount);
                 linear_heart = view.findViewById(R.id.linear_heart);
+                linear_heart.setOnClickListener(this);
                 heart = view.findViewById(R.id.heart);
                 score = view.findViewById(R.id.score);
                 itemView.setOnClickListener(this);
@@ -302,24 +260,54 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
-            if (position != list.size() + 1) {
+            final int position = getAdapterPosition() - had_header;
+            switch (view.getId()) {
+                case R.id.linear_heart:
+                    if (gv.getToken() != null) {
+                        new JsonDataThread() {
+                            @Override
+                            public JSONObject getJsonData() {
+                                if (list.get(position).getFavorite()) {
+                                    return new ProductJsonData().delFavoriteProduct(gv.getToken(), list.get(position).getPno());
+                                } else {
+                                    return new ProductJsonData().setFavorite(gv.getToken(), list.get(position).getPno());
+                                }
+                            }
 
+                            @Override
+                            public void runUiThread(JSONObject json) {
+                                try {
+                                    if (json.getBoolean("Success")) {
+                                        if (list.get(position).getFavorite()) {
+                                            list.get(position).setFavorite(false);
+                                            heart.setImageResource(R.drawable.heart_off);
+
+
+                                        } else {
+                                            list.get(position).setFavorite(true);
+                                            heart.setImageResource(R.drawable.heart_on);
+                                        }
+                                    } else {
+                                        Toast.makeText(ctx, json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }.start();
+                    } else {
+                        ctx.startActivity(new Intent(ctx, LoginActivity.class));
+                    }
+                    break;
+                default:
+                    if (list.size() > position) {
+                        Intent intent = new Intent(ctx, PcContentActivity.class);
+                        intent.putExtra("pno", list.get(position).getPno());
+                        intent.putExtra("title", list.get(position).getTitle());
+                        ctx.startActivity(intent);
+                    }
             }
 
-            if (had_header != 0) {
-                position--;
-            }
-            if (itemsList.size() > position) {
-                Intent intent = new Intent(ctx, PcContentActivity.class);
-                //            Bundle bundle = new Bundle();
-                //  bundle.putSerializable("productInfoPojo", itemsList.get(position));
-                //   intent.putExtras(bundle);
-                //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("pno", itemsList.get(position).getPno());
-                intent.putExtra("title", itemsList.get(position).getTitle());
-                ctx.startActivity(intent);
-            }
         }
     }
 
@@ -331,16 +319,14 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
         } else {
             list = new ArrayList<>();
         }
-        initItems();
         notifyDataSetChanged();
     }
 
     public boolean setFilterMore(JSONObject json) {
-        int presize = itemsList.size();
+        int presize = list.size();
         if (presize > 0) {
             if (json != null && ResolveJsonData.getJSONData(json).size() > 0) {
                 list.addAll(ResolveJsonData.getJSONData(json));
-                initItems();
                 notifyItemInserted(presize + 1);
                 //  notifyItemChanged(presize + 1, itemsList.size() + 1);
                 return true;

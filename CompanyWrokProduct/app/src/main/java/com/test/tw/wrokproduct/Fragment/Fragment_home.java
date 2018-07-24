@@ -40,13 +40,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import adapter.recyclerview.MyRecyclerAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.MySwipeRefreshLayout;
 import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
+import pojo.ProductInfoPojo;
 
 /**
  * Created by user on 2017/5/30.
@@ -70,6 +70,7 @@ public class Fragment_home extends Fragment {
     private HandlerThread mThread;
     GlobalVariable gv;
     String mvip;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -194,26 +195,26 @@ public class Fragment_home extends Fragment {
                 }
             });
             List<String> images = new ArrayList<>();
-            for (Map<String, String> map : ResolveJsonData.getJSONData(json))
-                images.add(map.get("image"));
+            for (ProductInfoPojo productInfoPojo : ResolveJsonData.getJSONData(json))
+                images.add(productInfoPojo.getImage());
             header.setImages(images);
             //banner设置方法全部调用完毕时最后调用
             header.start();
             //取得HotkeyWords圖片
-            myRecyclerAdapter1 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json1),  0);
+            myRecyclerAdapter1 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json1), 0);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(myRecyclerAdapter1);
             //取得Ptype圖片
-            myRecyclerAdapter2 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json2),  1);
+            myRecyclerAdapter2 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json2), 1);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView2.setLayoutManager(gridLayoutManager);
             recyclerView2.setAdapter(myRecyclerAdapter2);
             myRecyclerAdapter2.setClickListener(new MyRecyclerAdapter.ClickListener() {
                 @Override
-                public void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list) {
+                public void ItemClicked(View view, int postion, ArrayList<ProductInfoPojo> list) {
                     Intent intent = new Intent(getContext(), PtypeActivity.class);
                     intent.putExtra("position", postion);
                     startActivity(intent);
@@ -234,8 +235,8 @@ public class Fragment_home extends Fragment {
         public void run() {
             //myPagerAdapter.setFilter(json);
             List<String> images = new ArrayList<>();
-            for (Map<String, String> map : ResolveJsonData.getJSONData(json))
-                images.add(map.get("image"));
+            for (ProductInfoPojo productInfoPojo : ResolveJsonData.getJSONData(json))
+                images.add(productInfoPojo.getImage());
             header.update(images);
             myRecyclerAdapter1.setFilter(ResolveJsonData.getJSONData(json1));
             myRecyclerAdapter2.setFilter(ResolveJsonData.getJSONData(json2));
@@ -280,7 +281,7 @@ public class Fragment_home extends Fragment {
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                startActivity(new Intent(getContext(), LoginActivity.class));
+                startActivityForResult(new Intent(getContext(), LoginActivity.class), 120);
             return true;
         }
 
@@ -288,31 +289,30 @@ public class Fragment_home extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (gv.getMvip()!=null&&!gv.getMvip().equals(mvip)) {
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+            return;
+        } else {  // 在最前端显示 相当于调用了onResume();
+            checkMvp();
+        }
+    }
+
+    private void checkMvp() {
+        if (!gv.getMvip().equals(mvip)) {
             LoadingView.show(v);
             mvip = gv.getMvip() != null ? gv.getMvip() : "0";
             //网络数据刷新
             what = 1;
             mThreadHandler.post(r1);
         }
-
     }
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
-            return;
-        } else {  // 在最前端显示 相当于调用了onResume();
-            if (!gv.getMvip().equals(mvip)) {
-                LoadingView.show(v);
-                mvip = gv.getMvip() != null ? gv.getMvip() : "0";
-                //网络数据刷新
-                what = 1;
-                mThreadHandler.post(r1);
-            }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 120) {
+            checkMvp();
         }
     }
 }

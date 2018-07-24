@@ -16,20 +16,20 @@ import com.test.tw.wrokproduct.R;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
+
+import pojo.ProductInfoPojo;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.RecycleHolder> {
     private Context ctx;
     int type;
     JSONObject json;
     View view;
-    ArrayList<Map<String, String>> list;
+    ArrayList<ProductInfoPojo> list;
     DisplayMetrics dm;
-    MyRecyclerAdapter.RecycleHolder recycleHolder;
 
     private MyRecyclerAdapter.ClickListener clickListener;
 
-    public MyRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int type) {
+    public MyRecyclerAdapter(Context ctx, ArrayList<ProductInfoPojo> list, int type) {
         this.ctx = ctx;
         this.type = type;
         this.list = list;
@@ -40,15 +40,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
     @Override
     public MyRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_home, parent, false);
-        recycleHolder = new MyRecyclerAdapter.RecycleHolder(ctx, view, json);
-        return recycleHolder;
+        return new MyRecyclerAdapter.RecycleHolder(ctx, view, json);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         holder.imageView.setImageBitmap(null);
-        ImageLoader.getInstance().displayImage(list.get(position).get("image"), holder.imageView);
-        holder.tv1.setText(list.get(position).get("title"));
+        ImageLoader.getInstance().displayImage(list.get(position).getImage(), holder.imageView);
+        holder.tv1.setText(list.get(position).getTitle());
     }
 
 
@@ -108,10 +107,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
     }
 
     public interface ClickListener {
-        void ItemClicked(View view, int postion, ArrayList<Map<String, String>> list);
+        void ItemClicked(View view, int postion, ArrayList<ProductInfoPojo> list);
     }
 
-    public void setFilter(ArrayList<Map<String, String>> list) {
+    public void setFilter(ArrayList<ProductInfoPojo> list) {
         this.list = list;
         notifyDataSetChanged();
 

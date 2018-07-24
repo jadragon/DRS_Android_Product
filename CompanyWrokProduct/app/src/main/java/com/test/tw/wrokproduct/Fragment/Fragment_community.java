@@ -421,7 +421,7 @@ public class Fragment_Community extends Fragment {
             login_photo.setImageBitmap(BitmapFactory.decodeByteArray(bis, 0, bis.length));
             login_name.setText(member.get("name"));
             if (gv.getMvip().equals("2")) {
-                login_mvip.setText("特約會員");
+                login_mvip.setText("VIP會員");
             } else {
                 login_mvip.setText("一般會員");
             }

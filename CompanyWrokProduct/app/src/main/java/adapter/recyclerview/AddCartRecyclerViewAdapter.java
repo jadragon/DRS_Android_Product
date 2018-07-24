@@ -131,10 +131,5 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
         view.setBackground(shape);
     }
 
-    public void setFilter(JSONObject json) {
-        this.json = json;
-        list = ResolveJsonData.getJSONData(json);
-        notifyDataSetChanged();
-    }
 
 }

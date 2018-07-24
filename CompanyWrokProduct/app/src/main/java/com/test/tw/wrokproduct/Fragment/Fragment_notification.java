@@ -14,9 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.GlobalVariable;
+import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
@@ -77,7 +77,7 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                Toast.makeText(getContext(), "請先做登入動作", Toast.LENGTH_SHORT).show();
+                startActivityForResult(new Intent(getContext(), LoginActivity.class), 120);
             return true;
         }
 

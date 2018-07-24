@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import pojo.ProductInfoPojo;
+
 public class ResolveJsonData {
 
     /**
@@ -16,9 +18,9 @@ public class ResolveJsonData {
      * 解析購物:
      * 每日新品、熱門商品、價格由低至高、價格由高至低
      */
-    public static ArrayList<Map<String, String>> getJSONData(JSONObject json) {
-        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
-        Map<String, String> map;
+    public static   ArrayList<ProductInfoPojo> getJSONData(JSONObject json) {
+        ArrayList<ProductInfoPojo> arrayList = new ArrayList<>();
+        ProductInfoPojo productInfoPojo;
         JSONObject json_obj;
         JSONArray json_data;
         try {
@@ -27,35 +29,35 @@ public class ResolveJsonData {
                 json_data = json.getJSONArray("Data");
 
                 for (int i = 0; i < json_data.length(); i++) {
-                    map = new HashMap<>();
+                    productInfoPojo=new ProductInfoPojo();
                     json_obj = json_data.getJSONObject(i);
                     try {
-                        map.put("title", json_obj.getString("title"));
+                        productInfoPojo.setTitle(json_obj.getString("title"));
                     } catch (Exception e) {
-                        map.put("title", json_obj.getString("pname"));
+                        productInfoPojo.setTitle(json_obj.getString("pname"));
                     }
 
                     try {
-                        map.put("image", json_obj.getString("img"));
+                        productInfoPojo.setImage(json_obj.getString("img"));
                     } catch (Exception e) {
-                        map.put("image", json_obj.getString("bimg"));
+                        productInfoPojo.setImage(json_obj.getString("bimg"));
                     }
 
                     try {
-                        map.put("pno", json_obj.getString("pno"));
-                        map.put("descs", json_obj.getString("descs"));
-                        map.put("rprice", json_obj.getString("rprice"));
-                        map.put("rsprice", json_obj.getString("rsprice"));
-                        map.put("isnew", json_obj.getString("isnew"));
-                        map.put("ishot", json_obj.getString("ishot"));
-                        map.put("istime", json_obj.getString("istime"));
-                        map.put("discount", json_obj.getString("discount"));
-                        map.put("shipping", json_obj.getString("shipping"));
-                        map.put("favorite", json_obj.getString("favorite"));
-                        map.put("score", json_obj.getString("score"));
+                        productInfoPojo.setPno(json_obj.getString("pno"));
+                        productInfoPojo.setDescs(json_obj.getString("descs"));
+                        productInfoPojo.setRprice( json_obj.getString("rprice"));
+                        productInfoPojo.setRsprice( json_obj.getString("rsprice"));
+                        productInfoPojo.setIsnew( json_obj.getString("isnew"));
+                        productInfoPojo.setIshot( json_obj.getString("ishot"));
+                        productInfoPojo.setIstime(json_obj.getString("istime"));
+                        productInfoPojo.setDiscount( json_obj.getString("discount"));
+                        productInfoPojo.setShipping(json_obj.getString("shipping"));
+                        productInfoPojo.setFavorite(json_obj.getString("favorite").equals("true"));
+                        productInfoPojo.setScore( Integer.parseInt(json_obj.getString("score")));
                     } catch (Exception e) {
                     }
-                    arrayList.add(map);
+                    arrayList.add(productInfoPojo);
                 }
                 return arrayList;
 

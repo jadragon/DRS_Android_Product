@@ -119,15 +119,18 @@ public class Fragment_shop extends Fragment {
         if (hidden) {   // 不在最前端显示 相当于调用了onPause();
             return;
         } else {  // 在最前端显示 相当于调用了onResume();
-            if (!gv.getMvip().equals(mvip)) {
-                mvip = gv.getMvip() != null ? gv.getMvip() : "0";
-                resetViewPager(mvip);
-                //网络数据刷新
-                setFilter();
-            }
+            checkMvp();
         }
     }
 
+    private void checkMvp() {
+        if (!gv.getMvip().equals(mvip)) {
+            mvip = gv.getMvip();
+            resetViewPager(mvip);
+            //网络数据刷新
+            setFilter();
+        }
+    }
 
     public void setFilter() {
         new Thread(new Runnable() {
@@ -188,17 +191,6 @@ public class Fragment_shop extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!gv.getMvip().equals(mvip)) {
-            LoadingView.show(v);
-            mvip = gv.getMvip() != null ? gv.getMvip() : "0";
-            //网络数据刷新
-            setFilter();
-        }
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -207,10 +199,19 @@ public class Fragment_shop extends Fragment {
             if (gv.getToken() != null)
                 startActivity(new Intent(getContext(), ShopCartActivity.class));
             else
-                startActivity(new Intent(getContext(), LoginActivity.class));
+                startActivityForResult(new Intent(getContext(), LoginActivity.class), 120);
             return true;
         }
 
         return false;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 120) {
+            checkMvp();
+        }
     }
 }

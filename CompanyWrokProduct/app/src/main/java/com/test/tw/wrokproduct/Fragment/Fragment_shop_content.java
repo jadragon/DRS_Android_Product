@@ -29,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import library.AnalyzeJSON.ResolveJsonData;
@@ -37,6 +36,7 @@ import library.EndLessOnScrollListener;
 import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 import library.MyRecyclerViewTouchCallBack;
+import pojo.ProductInfoPojo;
 
 public class Fragment_shop_content extends Fragment {
     private RecyclerView recyclerView;
@@ -235,8 +235,8 @@ public class Fragment_shop_content extends Fragment {
         });
         List<String> images = new ArrayList<>();
         if (json1 != null) {
-            for (Map<String, String> map : ResolveJsonData.getJSONData(json1))
-                images.add(map.get("image"));
+            for (ProductInfoPojo productInfoPojo : ResolveJsonData.getJSONData(json1))
+                images.add(productInfoPojo.getImage());
             header.setImages(images);
         }
         //banner设置方法全部调用完毕时最后调用
@@ -265,10 +265,11 @@ public class Fragment_shop_content extends Fragment {
     }
 
     public void setHeaderFilter(JSONObject json) {
+        this.json1=json;
         if (header != null) {
             List<String> images = new ArrayList<>();
-            for (Map<String, String> map : ResolveJsonData.getJSONData(json))
-                images.add(map.get("image"));
+            for (ProductInfoPojo productInfoPojo : ResolveJsonData.getJSONData(json1))
+                images.add(productInfoPojo.getImage());
             header.update(images);
         }
     }
