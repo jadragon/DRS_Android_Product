@@ -88,7 +88,6 @@ public class SelectCoverActivity extends AppCompatActivity implements View.OnCli
         }
         imgList.get(position).setImageResource(R.drawable.select_coverbg);
         db.updateBackground(ag[position] + "");
-        Log.e("bg", db.getMemberDetail().get("background") + "");
     }
 
 

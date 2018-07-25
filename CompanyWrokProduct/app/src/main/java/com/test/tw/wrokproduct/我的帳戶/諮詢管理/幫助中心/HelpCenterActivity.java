@@ -100,7 +100,6 @@ public class HelpCenterActivity extends AppCompatActivity {
             public boolean onClose() {
                 adapter.removeHeader();
                 adapter.notifyDataSetChanged();
-                Toast.makeText(HelpCenterActivity.this, "close", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });

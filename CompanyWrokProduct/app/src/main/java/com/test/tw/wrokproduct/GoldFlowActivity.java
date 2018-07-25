@@ -91,14 +91,12 @@ public class GoldFlowActivity extends ToolbarActivity {
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.e("URL", url);
                 if (url.contains("js-call")) {
                     url = url.replace("js-call://setDeliver?", "");
                     String[] uuu = url.split("&");
                     try {
                         success = URLDecoder.decode(uuu[0], "UTF-8");
                         msg = URLDecoder.decode(uuu[1], "UTF-8");
-                        Log.e("JS", "\n" + success + "\n" + msg);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -134,10 +132,11 @@ public class GoldFlowActivity extends ToolbarActivity {
     @JavascriptInterface
     public void setDeliver(String success, String msg) {
         finish();
-        Intent intent=new Intent(GoldFlowActivity.this, GoldFlowCompeleteActivity.class);
-        intent.putExtra("success",success);
-        intent.putExtra("msg",msg);
+        Intent intent = new Intent(GoldFlowActivity.this, GoldFlowCompeleteActivity.class);
+        intent.putExtra("success", success);
+        intent.putExtra("msg", msg);
         startActivity(intent);
+        Log.e("Gold", "Success" + success + ":Msg" + msg);
     }
 
     @Override

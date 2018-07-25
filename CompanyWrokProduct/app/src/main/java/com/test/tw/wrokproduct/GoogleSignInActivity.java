@@ -102,6 +102,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements
             try {
                 // G+
                 Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+                /*
                 Log.e(TAG, "--------------------------------");
                 Log.e(TAG, "Display Name: " + person.getDisplayName());
                 Log.e(TAG, "Gender: " + person.getGender());
@@ -109,6 +110,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements
                 Log.e(TAG, "Birthday: " + person.getBirthday());
                 Log.e(TAG, "Current Location: " + person.getCurrentLocation());
                 Log.e(TAG, "Language: " + person.getLanguage());
+                */
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }

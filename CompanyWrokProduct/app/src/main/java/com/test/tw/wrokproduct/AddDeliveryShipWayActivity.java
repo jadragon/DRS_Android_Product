@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.LogisticsJsonData;
 import library.GetJsonData.ReCountJsonData;
 import library.SQLiteDatabaseHandler;
@@ -34,6 +35,7 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
     Intent intent;
     int count_type;
     GlobalVariable gv;
+    ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
         gv = ((GlobalVariable) getApplicationContext());
         setContentView(R.layout.activity_add_delivery_shipway);
         intent = getIntent();
+        toastMessageDialog = new ToastMessageDialog(this);
         count_type = intent.getIntExtra("count_type", 0);
         //shipwayInfo
         initShipwayInfo();
@@ -96,46 +99,55 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (add_delivery_edit_name.getText().toString().equals("") || add_delivery_edit_phone.getText().toString().equals("") || add_delivery_edit_zipcode.getText().toString().equals("")
-                        || add_delivery_txt_city.getText().toString().equals("請選擇縣市") || add_delivery_txt_area.getText().toString().equals("請選擇鄉鎮市區")) {
-                    Toast.makeText(AddDeliveryShipWayActivity.this, "資料填寫不完整", Toast.LENGTH_SHORT).show();
+                if (add_delivery_edit_zipcode.getText().toString().equals("") || add_delivery_txt_city.getText().toString().equals("請選擇縣市") || add_delivery_txt_area.getText().toString().equals("請選擇鄉鎮市區")) {
+                    toastMessageDialog.setMessageText("請選擇城市及鄉鎮市區");
+                    toastMessageDialog.confirm();
                 } else {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    name = add_delivery_edit_name.getText().toString();
-                                    mp = add_delivery_edit_phone.getText().toString();
-                                    address = add_delivery_edit_address.getText().toString();
-                                    if (sno != null) {//運送方式
-                                        json = new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
-                                    } else if (mlno != null) {//修改收貨方式
-                                        json = new LogisticsJsonData().updateLogistics(gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
-                                    } else {//新增收貨方式
-                                        json = new LogisticsJsonData().setLogistics(gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
-                                    }
-                                    try {
-                                        if (json.getBoolean("Success")) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
-                                                    setResult(1, null);
-                                                    finish();
-                                                }
-                                            });
+                    name = add_delivery_edit_name.getText().toString();
+                    mp = add_delivery_edit_phone.getText().toString();
+                    address = add_delivery_edit_address.getText().toString();
+                    if (mp.matches("09[0-9]{8}")) {
+                        if (  name.length() > 0 && name.length() < 40) {
+                            if (!address.equals("")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (sno != null) {//運送方式
+                                            json = new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                        } else if (mlno != null) {//修改收貨方式
+                                            json = new LogisticsJsonData().updateLogistics(gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                        } else {//新增收貨方式
+                                            json = new LogisticsJsonData().setLogistics(gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        try {
+                                            if (json.getBoolean("Success")) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
+                                                        setResult(1, null);
+                                                        finish();
+                                                    }
+                                                });
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
-
-                                }
-                            }).start();
+                                }).start();
+                            } else {
+                                toastMessageDialog.setMessageText("地址不能為空");
+                                toastMessageDialog.confirm();
+                            }
+                        } else {
+                            toastMessageDialog.setMessageText("請填寫正確的姓名");
+                            toastMessageDialog.confirm();
                         }
-                    }).start();
-
+                    } else {
+                        toastMessageDialog.setMessageText("請確認電話格式是否正確");
+                        toastMessageDialog.confirm();
+                    }
                 }
             }
         });

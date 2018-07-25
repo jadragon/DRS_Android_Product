@@ -10,21 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black">
+
         <SurfaceView
             android:id="@+id/surfaceView1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
+
         <ImageView
             android:id="@+id/target_round"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/circle"/>
+            android:src="@drawable/circle" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:layout_gravity="top">
+            android:layout_gravity="top"
+            android:background="@color/black">
 
             <Button
                 android:id="@+id/back"
@@ -46,8 +49,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
             android:layout_gravity="bottom"
+            android:background="@color/black"
             android:orientation="horizontal">
 
             <Button
@@ -88,7 +91,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-      >
+        android:visibility="invisible">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -102,20 +105,24 @@
                 android:text="我的大頭貼"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
-        </FrameLayout><FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <ImageView
-            android:id="@+id/imageView2"
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"/>
-    </FrameLayout>
+            android:layout_weight="1">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

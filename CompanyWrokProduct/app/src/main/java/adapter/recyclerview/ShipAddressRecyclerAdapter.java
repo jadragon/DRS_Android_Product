@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.AddDeliveryShipWayActivity;
 import com.test.tw.wrokproduct.AddStoreShipWayActivity;
@@ -48,7 +47,8 @@ public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddress
     TypedArray colors;
     int lastuse_position;
     int type;
-GlobalVariable gv;
+    GlobalVariable gv;
+
     public ShipAddressRecyclerAdapter(Context ctx, JSONObject json, int type) {
         this.ctx = ctx;
         this.json = json;
@@ -294,8 +294,8 @@ GlobalVariable gv;
 
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(ctx, "取消", Toast.LENGTH_SHORT).show();
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
                             }
                         });
                         AlertDialog dialog = builder.create();

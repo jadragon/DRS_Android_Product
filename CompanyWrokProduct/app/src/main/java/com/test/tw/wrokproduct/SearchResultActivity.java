@@ -45,7 +45,7 @@ GlobalVariable gv;
         mSwipeLayout = findViewById(R.id.include_swipe_refresh);
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
-        mSwipeLayout.setTouchSlop(400);
+        //mSwipeLayout.setTouchSlop(400);
         //設定刷新動作
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

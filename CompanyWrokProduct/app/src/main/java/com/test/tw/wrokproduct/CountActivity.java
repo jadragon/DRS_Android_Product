@@ -11,13 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import adapter.recyclerview.ReCountRecyclerViewAdapter;
-import library.GetJsonData.ReCountJsonData;
 import library.Component.ToastMessageDialog;
+import library.GetJsonData.ReCountJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CountActivity extends AppCompatActivity {
@@ -66,10 +65,10 @@ public class CountActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-                    dialog.dismiss();
                 } else {
-                    Toast.makeText(CountActivity.this, "請填寫運送方式及付款方式", Toast.LENGTH_SHORT).show();
+                    new ToastMessageDialog(CountActivity.this,"請填寫運送方式及付款方式").confirm();
                 }
+                dialog.dismiss();
             }
         });
     }

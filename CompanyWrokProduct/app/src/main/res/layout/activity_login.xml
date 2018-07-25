@@ -5,294 +5,311 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/white">
 
     <include
         layout="@layout/include_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/login_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="6"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/login_txt_account"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="帳號"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/login_edit_account"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:background="@null"
+                            android:hint="請輸入帳號"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="密碼"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/login_edit_password"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:background="@null"
+                            android:hint="請輸入密碼"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/login_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/arcangle_button_red"
+                        android:gravity="center"
+                        android:text="登入"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/login_btn_register"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="left"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:gravity="center"
+                            android:text="立即註冊"
+                            android:textColor="@color/red" />
+
+                        <TextView
+                            android:id="@+id/login_btn_forget"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:gravity="center"
+                            android:text="忘記密碼"
+                            android:textColor="@color/red" />
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="帳號"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/login_edit_account"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="8"
-                    android:background="@null"
-                    android:hint="請輸入帳號"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="密碼"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/login_edit_password"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="8"
-                    android:background="@null"
-                    android:hint="請輸入密碼"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/arcangle_button_red"
-                android:gravity="center"
-                android:text="登入"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/login_btn_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:text="立即註冊"
-                    android:textColor="@color/red" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/black" />
 
                 <TextView
-                    android:id="@+id/login_btn_forget"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="忘記密碼"
-                    android:textColor="@color/red" />
-            </FrameLayout>
+                    android:text="使用其他方式登入"
+                    android:textSize="15sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/login_img_account"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_account" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="帳號"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/login_img_mobile"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_mobil" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="手機"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/login_img_email"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_mail" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="信箱"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/login_img_fb"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_fb" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="FB"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/login_img_google"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_google" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="Google"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
         <View
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/black" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="使用其他方式登入"
-            android:textSize="15sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/login_img_account"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_account" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="帳號"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/login_img_mobile"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_mobil" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="手機"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/login_img_email"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_mail" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="信箱"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/login_img_fb"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_fb" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="FB"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/login_img_google"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_google" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|center_horizontal"
-                android:text="Google"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-        </LinearLayout>
-    </LinearLayout>
+            android:id="@+id/login_cover_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorInvisibleGrayDark"
+            android:visibility="invisible"/>
+    </FrameLayout>
 </LinearLayout>

@@ -386,6 +386,18 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     }
 
     /**
+     * Storing user details in database
+     */
+    public void updateName(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, name); // background
+        // Inserting Row
+        db.update(TABLE_MEMBER, values, KEY_LG_ID + "=" + 1, null);
+        db.close(); // Closing database connection
+    }
+
+    /**
      * Getting user data from database
      */
     public Map<String, String> getMemberDetail() {

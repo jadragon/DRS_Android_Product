@@ -56,26 +56,13 @@ public class Fragment_favorate extends Fragment {
         tabLayout = v.findViewById(R.id.favorate_header_tablayout);
         tabLayout.setSelectedTabIndicatorHeight(6);
         viewPager = v.findViewById(R.id.favorate_viewpager);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                fragmentArrayList = new ArrayList<>();
-                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.FAVORATE);
-                fragment_shop_content.setJson(null, new ProductJsonData().getFavorite(gv.getToken()));
-                fragmentArrayList.add(fragment_shop_content);
-                fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.BROWSE);
-                fragment_shop_content.setJson(null, new ProductJsonData().getBrowse(gv.getToken()));
-                fragmentArrayList.add(fragment_shop_content);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewPager.setAdapter(new ShopViewPagerAdapter(getChildFragmentManager(), tabtitle, fragmentArrayList));
-                        tabLayout.setupWithViewPager(viewPager, true);
-                    }
-                });
-            }
-        }).start();
-
+        fragmentArrayList = new ArrayList<>();
+        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.FAVORATE);
+        fragmentArrayList.add(fragment_shop_content);
+        fragment_shop_content = new Fragment_shop_content(ShopRecyclerViewAdapter.BROWSE);
+        fragmentArrayList.add(fragment_shop_content);
+        viewPager.setAdapter(new ShopViewPagerAdapter(getChildFragmentManager(), tabtitle, fragmentArrayList));
+        setFilter();
         return v;
     }
 
@@ -154,6 +141,5 @@ public class Fragment_favorate extends Fragment {
             checkMvp();
         }
     }
-
 
 }

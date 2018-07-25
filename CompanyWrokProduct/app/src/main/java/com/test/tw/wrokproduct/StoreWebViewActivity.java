@@ -97,7 +97,6 @@ public class StoreWebViewActivity extends AppCompatActivity {
                         deliver = uuu[0].replace("js-call://setDeliver?", "");
                         name = URLDecoder.decode(uuu[1], "UTF-8");
                         address = URLDecoder.decode(uuu[2], "UTF-8");
-                        Log.e("JS", deliver + "\n" + name + "\n" + address);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }

@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
@@ -13,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import adapter.recyclerview.AppreciateRecyclerViewAdapter;
+import library.Component.ToastMessageDialog;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
@@ -24,11 +24,12 @@ public class AppreciateActivity extends ToolbarActivity {
     Button appreciate_confirm;
 
     String mono, token, type;
-
+ToastMessageDialog toastMessageDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appreciate);
+        toastMessageDialog=new ToastMessageDialog(this);
         token = getIntent().getStringExtra("token");
         mono = getIntent().getStringExtra("mono");
         type = getIntent().getStringExtra("type");
@@ -76,7 +77,8 @@ public class AppreciateActivity extends ToolbarActivity {
                     @Override
                     public void runUiThread(JSONObject json) {
                         try {
-                            Toast.makeText(AppreciateActivity.this, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                            toastMessageDialog.setMessageText(json.getString("Message"));
+                            toastMessageDialog.confirm();
                             if (json.getBoolean("Success")) {
                                 finish();
                             }

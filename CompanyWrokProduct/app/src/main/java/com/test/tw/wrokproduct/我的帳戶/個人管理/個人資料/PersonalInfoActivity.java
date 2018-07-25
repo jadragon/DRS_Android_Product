@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,15 +22,17 @@ import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.ListVIewActivity;
 import com.test.tw.wrokproduct.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import library.AnalyzeJSON.AnalyzeMember;
-import library.GetJsonData.MemberJsonData;
-import library.SQLiteDatabaseHandler;
 import library.Component.ToastMessageDialog;
+import library.GetJsonData.MemberJsonData;
+import library.JsonDataThread;
+import library.SQLiteDatabaseHandler;
 
 public class PersonalInfoActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -130,14 +131,26 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new MemberJsonData().updateBasicData(gv.getToken(), personal_edit_name.getText().toString(), personal_edit_memberId.getText().toString(), personal_spinner_gender.getSelectedItemPosition(),
-                                personal_txt_birthday.getText().toString(), personal_txt_city.getText().toString(), personal_txt_area.getText().toString(), personal_edit_zipcode.getText().toString(), personal_edit_address.getText().toString());
-                        runOnUiThread(new Runnable() {
+                        new JsonDataThread() {
                             @Override
-                            public void run() {
-                                new ToastMessageDialog(PersonalInfoActivity.this, "修改完成").show();
+                            public JSONObject getJsonData() {
+                                return new MemberJsonData().updateBasicData(gv.getToken(), personal_edit_name.getText().toString(), personal_edit_memberId.getText().toString(), personal_spinner_gender.getSelectedItemPosition(),
+                                        personal_txt_birthday.getText().toString(), personal_txt_city.getText().toString(), personal_txt_area.getText().toString(), personal_edit_zipcode.getText().toString(), personal_edit_address.getText().toString());
                             }
-                        });
+
+                            @Override
+                            public void runUiThread(JSONObject json) {
+                                try {
+                                    if (json.getBoolean("Success")) {
+                                        db.updateName(personal_edit_name.getText().toString());
+                                    }
+                                    new ToastMessageDialog(PersonalInfoActivity.this, json.getString("Message")).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }.start();
+
 
                     }
                 }).start();
@@ -358,7 +371,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
             coverbg = 0;
         }
         personal_info_bg.setBackgroundResource(coverbg);
-        Log.e("onRestart", "onRestart");
     }
 
     @Override

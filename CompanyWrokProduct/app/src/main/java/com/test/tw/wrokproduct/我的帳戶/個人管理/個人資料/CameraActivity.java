@@ -13,7 +13,6 @@ import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v13.app.ActivityCompat;
@@ -21,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Surface;
@@ -35,9 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.test.tw.wrokproduct.GlobalVariable;
-import com.test.tw.wrokproduct.GoldFlowCompeleteActivity;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,12 +42,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.UploadFileJsonData;
 import library.SQLiteDatabaseHandler;
-import library.Component.ToastMessageDialog;
 
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
@@ -272,7 +267,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             }
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
-            Log.e("bitmap", width + "\n" + height);
             if (width > height) {
                 bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
             } else if (width < height) {
@@ -311,14 +305,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     };
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.e("tag", " surfaceChanged");
         parameters = camera.getParameters();
         parameters.setPictureFormat(PixelFormat.JPEG);
-        Log.e("tag",
-                "parameters.getPictureSize()"
-                        + parameters.getPictureSize().width);
         setPictureSize(parameters);
-        Log.i("tag", "holder width:" + width + "  height:" + height);
         // parameters.setPreviewSize(width, height);//需要判断支持的预览
         camera.setParameters(parameters);
         camera.startPreview();
@@ -443,7 +432,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 show_layout.setVisibility(View.VISIBLE);
                 int width = bitmap.getWidth();
                 int height = bitmap.getHeight();
-                Log.e("bitmap", width + "\n" + height);
                 if (width > height) {
                     bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
                 } else if (width < height) {

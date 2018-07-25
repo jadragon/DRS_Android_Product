@@ -46,7 +46,6 @@ public class OrderInfoDetailActivity extends AppCompatActivity {
                     public void run() {
                         mOrderItemPojo = AnalyzeOrderInfo.getMOrderItem(json);
                         pojoArrayList = AnalyzeOrderInfo.getMOrderItemContent(json);
-                        Log.e("Detail", pojoArrayList + "");
                         initHeader();
                         initBuyer();
                         initStore();

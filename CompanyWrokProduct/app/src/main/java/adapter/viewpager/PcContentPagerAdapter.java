@@ -120,11 +120,6 @@ public class PcContentPagerAdapter extends PagerAdapter implements View.OnTouchL
     }
 
     @Override
-    public void startUpdate(ViewGroup container) {
-        //Log.e("startUpdate", "startUpdate");
-    }
-
-    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (bitmaps.size() > 1) {
             // timer.cancel();

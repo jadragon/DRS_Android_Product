@@ -8,23 +8,26 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import Util.ComponentUtil;
 import library.SQLiteDatabaseHandler;
 
 public class LogoutActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView logout_account;
     Button logout_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logout);
         initToolbar();
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
-        String account=db.getMemberDetail().get("account");
+        String account = db.getMemberDetail().get("account");
         db.close();
-        logout_account=findViewById(R.id.logout_account);
-        logout_account.setText("會員帳號:"+account);
-        logout_button=findViewById(R.id.logout_button);
+        logout_account = findViewById(R.id.logout_account);
+        logout_account.setText("會員帳號:" + account);
+        logout_button = findViewById(R.id.logout_button);
+        new ComponentUtil(this).reShapeButton(logout_button, R.color.shipway_green_dark);
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,6 +43,7 @@ public class LogoutActivity extends AppCompatActivity {
         });
 
     }
+
     private void initToolbar() {
         //Toolbar 建立
         toolbar = findViewById(R.id.include_toolbar);

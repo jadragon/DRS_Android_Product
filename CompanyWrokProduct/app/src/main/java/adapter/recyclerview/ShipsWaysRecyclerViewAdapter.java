@@ -12,7 +12,6 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -57,18 +56,6 @@ public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWays
 
     }
 
-
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
-
-    private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
-        ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
-        params.width = width;
-        params.height = heigh;
-        view.setLayoutParams(params);
-    }
 
 
     @Override

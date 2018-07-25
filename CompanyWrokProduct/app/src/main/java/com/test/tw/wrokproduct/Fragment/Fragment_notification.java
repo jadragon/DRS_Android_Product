@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoActivity;
+import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.ContactActivity;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
 import Util.StringUtil;
@@ -98,16 +100,29 @@ public class Fragment_notification extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.n1:
-                break;
-            case R.id.n2:
-                break;
-            case R.id.n3:
-                break;
-            case R.id.n4:
-                break;
+        if(gv.getToken()!=null) {
+            switch (view.getId()) {
+                case R.id.n1:
+                    break;
+                case R.id.n2:
+                    break;
+                case R.id.n3:
+                    startActivity(new Intent(getContext(), ContactActivity.class));
+                    break;
+                case R.id.n4:
+                    startActivity(new Intent(getContext(), OrderInfoActivity.class));
+                    break;
+            }
+        }else {
+            startActivityForResult(new Intent(getContext(), LoginActivity.class), 120);
         }
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 120) {
+
+        }
     }
 }

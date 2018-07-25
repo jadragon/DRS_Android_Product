@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.LogisticsJsonData;
 import library.GetJsonData.ReCountJsonData;
 import library.SQLiteDatabaseHandler;
@@ -26,18 +27,21 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
     EditText addshipway_name, addshipway_phone;
     Button confirm;
     String mpcode = "886", shit = "TW";
-    String  sno, plno, type, land, logistics;
+    String sno, plno, type, land, logistics;
     String mlno, name, mp;
     String sid, sname, city, area, zipcode, address;
     Intent intent;
     JSONObject json;
     int count_type;
     GlobalVariable gv;
+    ToastMessageDialog toastMessageDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gv = (GlobalVariable) getApplicationContext();
         setContentView(R.layout.activity_add_store_shipway);
+        toastMessageDialog = new ToastMessageDialog(this);
         intent = getIntent();
         count_type = intent.getIntExtra("count_type", 0);
         //shipwayInfo
@@ -58,40 +62,49 @@ public class AddStoreShipWayActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (addshipway_name.getText().toString().equals("") || addshipway_phone.getText().toString().equals("") || addshipway_store.getText().toString().equals("請選擇門市")) {
-                    Toast.makeText(AddStoreShipWayActivity.this, "資料填寫不完整", Toast.LENGTH_SHORT).show();
+                if (addshipway_store.getText().toString().equals("請選擇門市")) {
+                    toastMessageDialog.setMessageText("請選擇門市");
+                    toastMessageDialog.confirm();
                 } else {
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            name = addshipway_name.getText().toString();
-                            mp = addshipway_phone.getText().toString();
-                            if (sno != null) {//運送方式
-                                json = new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
-                            } else if (mlno != null) {//修改收貨方式
-                                json = new LogisticsJsonData().updateLogistics( gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
-                            } else {//新增收貨方式
-                                json = new LogisticsJsonData().setLogistics( gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
-                            }
-                            try {
-                                if (json.getBoolean("Success")) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
-                                            setResult(1, null);
-                                            finish();
+                    name = addshipway_name.getText().toString();
+                    mp = addshipway_phone.getText().toString();
+                    if (mp.matches("09[0-9]{8}")) {
+                        if (name.length() > 0 && name.length() < 40) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (sno != null) {//運送方式
+                                        json = new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                                    } else if (mlno != null) {//修改收貨方式
+                                        json = new LogisticsJsonData().updateLogistics(gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                                    } else {//新增收貨方式
+                                        json = new LogisticsJsonData().setLogistics(gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, zipcode, address);
+                                    }
+                                    try {
+                                        if (json.getBoolean("Success")) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
+                                                    setResult(1, null);
+                                                    finish();
+                                                }
+                                            });
                                         }
-                                    });
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
+                            }).start();
+                        } else {
+                            toastMessageDialog.setMessageText("請填寫正確的姓名");
+                            toastMessageDialog.confirm();
                         }
-                    }).start();
-
+                    } else {
+                        toastMessageDialog.setMessageText("請確認電話格式是否正確");
+                        toastMessageDialog.confirm();
+                    }
                 }
             }
         });

@@ -52,7 +52,7 @@ public abstract class EndLessOnScrollListener extends RecyclerView.OnScrollListe
 
         }
         //这里需要好好理解
-        if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem) {
+        if (dy>0&&!loading && totalItemCount - visibleItemCount <= firstVisibleItem) {
             currentPage++;
             onLoadMore(currentPage);
             loading = true;

@@ -45,6 +45,7 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
             @Override
             public void onClick(View view) {
                 final Map<String, String> map = adapter.getApplyReturn();
+                toastMessageDialog.setTitleText("注意");
                 if (map.get("type").equals("0")) {
                     toastMessageDialog.setMessageText("請選擇申請");
                     toastMessageDialog.confirm();

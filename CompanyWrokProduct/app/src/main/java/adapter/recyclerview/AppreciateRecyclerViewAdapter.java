@@ -231,7 +231,6 @@ public class AppreciateRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                         arrayList.get(getAdapterPosition() - 1).setComscore(finalScore);
                         view.getParent().requestDisallowInterceptTouchEvent(false);
-                        Log.e("Star", arrayList.get(getAdapterPosition() - 1).getComscore() + ":" + (getAdapterPosition() - 1));
                     }
                     return false;
                 }

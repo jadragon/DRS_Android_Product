@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.Fragment.Fragment_ProductAppraise;
@@ -302,7 +301,6 @@ public class PcContentActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Toast.makeText(getApplicationContext(), "" + Message, Toast.LENGTH_SHORT).show();
                                                 popWin.dismiss();
                                                 enable_background.setVisibility(View.INVISIBLE);
                                                 if (type == 1) {
@@ -311,6 +309,9 @@ public class PcContentActivity extends AppCompatActivity {
 
                                             }
                                         });
+                                    } else {
+                                        toastMessageDialog.setMessageText(Message);
+                                        toastMessageDialog.confirm();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -379,7 +380,7 @@ public class PcContentActivity extends AppCompatActivity {
         pccontent_btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(PcContentActivity.this, MainActivity.class);
+                Intent intent = new Intent(PcContentActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

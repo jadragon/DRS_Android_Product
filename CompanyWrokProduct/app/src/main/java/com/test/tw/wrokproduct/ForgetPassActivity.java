@@ -13,12 +13,14 @@ import org.json.JSONObject;
 
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
+import library.JsonDataThread;
+import library.LoadingView;
 
 public class ForgetPassActivity extends AppCompatActivity {
     Toolbar toolbar;
     int type;
     EditText forget_edit_account;
-    Button  forget_button;
+    Button forget_button;
     ToastMessageDialog toastMessage;
     JSONObject json;
 
@@ -53,23 +55,25 @@ public class ForgetPassActivity extends AppCompatActivity {
     }
 
     private void sendAPI(final int type) {
-        new Thread(new Runnable() {
+        LoadingView.show(getCurrentFocus());
+        new JsonDataThread() {
             @Override
-            public void run() {
-                json = new MemberJsonData().forget(type, "886", forget_edit_account.getText().toString());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            toastMessage.setMessageText(json.getString("Message"));
-                            toastMessage.confirm();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+            public JSONObject getJsonData() {
+                return new MemberJsonData().forget(type, "886", forget_edit_account.getText().toString());
             }
-        }).start();
+
+            @Override
+            public void runUiThread(JSONObject json) {
+                try {
+                    toastMessage.setMessageText(json.getString("Message"));
+                    toastMessage.confirm();
+                    LoadingView.hide();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
     }
 
     private void initEditText() {

@@ -2,8 +2,6 @@ package com.test.tw.wrokproduct.Fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +34,8 @@ public class Fragment_OrderInfo extends BasePageFragment {
     private int nextpage = 2;
     private EndLessOnScrollListener endLessOnScrollListener;
     private GlobalVariable gv;
-    String token = "LpESIVhpKXZ5ZxJQyl19Ug==";
+    private String token = "LpESIVhpKXZ5ZxJQyl19Ug==";
+    private View no_data;
 
     public void setType(int type) {
         this.type = type;
@@ -64,7 +63,7 @@ public class Fragment_OrderInfo extends BasePageFragment {
         mSwipeLayout = v.findViewById(R.id.include_swipe_refresh);
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
-        mSwipeLayout.setTouchSlop(400);
+        //mSwipeLayout.setTouchSlop(400);
         //設定刷新動作
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -79,6 +78,7 @@ public class Fragment_OrderInfo extends BasePageFragment {
     }
 
     private void initRecyclerView() {
+        no_data = v.findViewById(R.id.include_no_data);
         recyclerView = v.findViewById(R.id.include_recyclerview);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -97,26 +97,24 @@ public class Fragment_OrderInfo extends BasePageFragment {
         endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-
-                new Thread(new Runnable() {
+                new JsonDataThread() {
                     @Override
-                    public void run() {
+                    public JSONObject getJsonData() {
                         if (type == 0) {
-                            json = new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, nextpage);
+                            return new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, nextpage);
                         } else if (type == 1) {
-                            json = new StoreJsonData().getStoreOrder(token, index, nextpage);
+                            return new StoreJsonData().getStoreOrder(token, index, nextpage);
                         }
-                        nextpage++;
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!adapter.setFilterMore(json)) {
-                                    nextpage--;
-                                }
-                            }
-                        });
+                        return null;
                     }
-                }).start();
+
+                    @Override
+                    public void runUiThread(JSONObject json) {
+                        if (adapter.setFilterMore(json)) {
+                            nextpage++;
+                        }
+                    }
+                }.start();
             }
         };
         recyclerView.addOnScrollListener(endLessOnScrollListener);
@@ -145,6 +143,12 @@ public class Fragment_OrderInfo extends BasePageFragment {
             @Override
             public void runUiThread(JSONObject json) {
                 adapter.setFilter(json);
+                if (adapter.getItemCount() > 0) {
+                    no_data.setVisibility(View.INVISIBLE);
+                } else {
+                    no_data.setVisibility(View.VISIBLE);
+                }
+
                 mSwipeLayout.setRefreshing(false);
                 LoadingView.hide();
             }

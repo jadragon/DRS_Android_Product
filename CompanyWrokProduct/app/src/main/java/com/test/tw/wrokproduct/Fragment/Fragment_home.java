@@ -120,7 +120,7 @@ public class Fragment_home extends Fragment {
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
-        mSwipeLayout.setTouchSlop(400);
+       // mSwipeLayout.setTouchSlop(400);
         //設定刷新動作
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

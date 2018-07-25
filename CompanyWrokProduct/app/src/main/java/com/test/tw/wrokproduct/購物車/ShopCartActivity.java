@@ -29,7 +29,6 @@ import library.GetJsonData.ShopCartJsonData;
 import library.JsonDataThread;
 
 public class ShopCartActivity extends ToolbarActivity implements View.OnClickListener {
-    private JSONObject json;
     private RecyclerView recyclerView;
     private ShopCartRecyclerViewAdapter shopCartRecyclerViewAdapter;
     private TextView shop_cart_needpay, shopcart_txt_discount;
@@ -41,6 +40,7 @@ public class ShopCartActivity extends ToolbarActivity implements View.OnClickLis
     private String mvip = "1";
     ToastMessageDialog toastMessageDialog;
     ShopcartCouponPojo shopcartCouponPojo;
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,8 @@ public class ShopCartActivity extends ToolbarActivity implements View.OnClickLis
         initToolbar(true, "購物車");
         initTabLayout();
         initRecycleView();
+        initCouponButton();
+        initTextView();
     }
 
     private void initTabLayout() {
@@ -92,46 +94,51 @@ public class ShopCartActivity extends ToolbarActivity implements View.OnClickLis
     }
 
     private void initRecycleView() {
-        new Thread(new Runnable() {
+        no_data = findViewById(R.id.include_no_data);
+        recyclerView = findViewById(R.id.include_recyclerview);
+        findViewById(R.id.include_swipe_refresh).setEnabled(false);
+        recyclerView.setHasFixedSize(true);
+        shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, null);
+        shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
             @Override
-            public void run() {
+            public void ItemClicked(int count) {
+                total = count;
+                if (count < shopcartCouponPojo.getMcost()) {
+                    cancelCoupon();
+                } else {
+                    shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + shopcartCouponPojo.getMdiscount())));
+                }
+            }
+        });
+        shopCartRecyclerViewAdapter.setDataChangeListener(new ShopCartRecyclerViewAdapter.DataChangeListener() {
+            @Override
+            public void ItemClicked() {
+                if (shopCartRecyclerViewAdapter.getItemCount() > 0) {
+                    no_data.setVisibility(View.INVISIBLE);
+                } else {
+                    no_data.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(shopCartRecyclerViewAdapter);
+        DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
+        recyclerView.addItemDecoration(decoration);
+        setFilter();
+        //IOS like
+        //  OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        //第三方 彈跳效果
+        //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
+
+
+                /*
                 json = new ShopCartJsonData().getCart(gv.getToken(), "1");
                 shopcartCouponPojo = AnalyzeShopCart.getCartCoupon(json) != null ? AnalyzeShopCart.getCartCoupon(json) : new ShopcartCouponPojo();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView = findViewById(R.id.shop_cart_review);
-                        shopCartRecyclerViewAdapter = new ShopCartRecyclerViewAdapter(ShopCartActivity.this, json);
-                        shopCartRecyclerViewAdapter.setClickListener(new ShopCartRecyclerViewAdapter.ClickListener() {
-                            @Override
-                            public void ItemClicked(int count) {
-                                total = count;
-                                if (count < shopcartCouponPojo.getMcost()) {
-                                    cancelCoupon();
-                                } else {
-                                    shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + shopcartCouponPojo.getMdiscount())));
-                                }
-                            }
-                        });
-                        recyclerView.setHasFixedSize(true);
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(shopCartRecyclerViewAdapter);
-                        DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL);
-                        decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
-                        recyclerView.addItemDecoration(decoration);
-                        //IOS like
-                        //  OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
-                        //第三方 彈跳效果
-                        //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
+                */
 
-                        initCouponButton();
-                        initTextView();
-                    }
-                });
-            }
-        }).start();
 
     }
 
@@ -139,7 +146,6 @@ public class ShopCartActivity extends ToolbarActivity implements View.OnClickLis
         shop_cart_needpay = findViewById(R.id.shop_cart_needpay);
         shopcart_edit_coupon = findViewById(R.id.shopcart_edit_coupon);
         shopcart_txt_discount = findViewById(R.id.shopcart_txt_discount);
-        setPrice();
     }
 
     private void setPrice() {
@@ -170,56 +176,76 @@ public class ShopCartActivity extends ToolbarActivity implements View.OnClickLis
                 break;
             case R.id.shopcart_btn_coupon:
                 if (shopcart_btn_coupon.getText().equals("發送")) {
-                    sendCoupon();
+                    if (total > 0) {
+                        sendCoupon();
+                    } else {
+                        toastMessageDialog.setMessageText("請選擇要購買的商品");
+                        toastMessageDialog.confirm();
+                    }
                 } else if (shopcart_btn_coupon.getText().equals("取消")) {
                     cancelCoupon();
                 }
                 break;
             case R.id.shopcart_gotobuy:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            boolean success = new ReCountJsonData().goCheckout(ReCountJsonData.COUNT, gv.getToken(), shopCartRecyclerViewAdapter.showMornoString()).getBoolean("Success");
-                            if (success) {
-                                Intent intent = new Intent(ShopCartActivity.this, CountActivity.class);
-                                intent.putExtra("count_type", ReCountJsonData.COUNT);
-                                startActivity(intent);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                if (total > 0) {
+                    new JsonDataThread() {
+                        @Override
+                        public JSONObject getJsonData() {
+                            return new ReCountJsonData().goCheckout(ReCountJsonData.COUNT, gv.getToken(), shopCartRecyclerViewAdapter.showMornoString());
                         }
-                    }
-                }).start();
+
+                        @Override
+                        public void runUiThread(JSONObject json) {
+                            try {
+                                if (json.getBoolean("Success")) {
+                                    Intent intent = new Intent(ShopCartActivity.this, CountActivity.class);
+                                    intent.putExtra("count_type", ReCountJsonData.COUNT);
+                                    startActivity(intent);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }.start();
+                } else {
+                    toastMessageDialog.setMessageText("請選擇要購買的商品");
+                    toastMessageDialog.confirm();
+                }
                 break;
         }
+
 
     }
 
     private void sendCoupon() {
-        new JsonDataThread() {
-            @Override
-            public JSONObject getJsonData() {
-                return new ShopCartJsonData().setCartDiscount(gv.getToken(), shopcart_edit_coupon.getText().toString(), total);
-            }
-
-            @Override
-            public void runUiThread(JSONObject json) {
-                try {
-                    if (json.getBoolean("Success")) {
-                        shopcartCouponPojo = AnalyzeShopCart.getCartCoupon(json) != null ? AnalyzeShopCart.getCartCoupon(json) : new ShopcartCouponPojo();
-                        shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(shopcartCouponPojo.getMdiscount()));
-                        shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + shopcartCouponPojo.getMdiscount())));
-                        shopcart_btn_coupon.setText("取消");
-                    } else {
-                        toastMessageDialog.setMessageText(json.getString("Message"));
-                        toastMessageDialog.show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        if (!shopcart_edit_coupon.getText().toString().equals("")) {
+            new JsonDataThread() {
+                @Override
+                public JSONObject getJsonData() {
+                    return new ShopCartJsonData().setCartDiscount(gv.getToken(), shopcart_edit_coupon.getText().toString(), total);
                 }
-            }
-        }.start();
+
+                @Override
+                public void runUiThread(JSONObject json) {
+                    try {
+                        if (json.getBoolean("Success")) {
+                            shopcartCouponPojo = AnalyzeShopCart.getCartCoupon(json) != null ? AnalyzeShopCart.getCartCoupon(json) : new ShopcartCouponPojo();
+                            shopcart_txt_discount.setText("$" + StringUtil.getDeciamlString(shopcartCouponPojo.getMdiscount()));
+                            shop_cart_needpay.setText("$" + StringUtil.getDeciamlString((total + shopcartCouponPojo.getMdiscount())));
+                            shopcart_btn_coupon.setText("取消");
+                        } else {
+                            toastMessageDialog.setMessageText(json.getString("Message"));
+                            toastMessageDialog.show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        } else {
+            toastMessageDialog.setMessageText("請輸入折扣碼");
+            toastMessageDialog.confirm();
+        }
     }
 
     private void cancelCoupon() {
@@ -250,7 +276,6 @@ public class ShopCartActivity extends ToolbarActivity implements View.OnClickLis
     protected void onRestart() {
         super.onRestart();
         setFilter();
-
     }
 
 }

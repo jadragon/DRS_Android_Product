@@ -75,7 +75,6 @@ public class GetFileJson {
                 outputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("File", "大失敗" + e.toString());
             }
 
         } catch (Exception e) {

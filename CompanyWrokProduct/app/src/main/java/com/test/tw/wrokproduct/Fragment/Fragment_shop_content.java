@@ -51,6 +51,7 @@ public class Fragment_shop_content extends Fragment {
     private EndLessOnScrollListener endLessOnScrollListener;
     private String ptno;
     private GlobalVariable gv;
+    private View no_data;
 
     public void setPtno(String ptno) {
         this.ptno = ptno;
@@ -78,6 +79,7 @@ public class Fragment_shop_content extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
         gv = ((GlobalVariable) getContext().getApplicationContext());
+        dm = getResources().getDisplayMetrics();
         initViewPagerAndRecyclerView();
         initSwipeLayout();
         return v;
@@ -87,7 +89,7 @@ public class Fragment_shop_content extends Fragment {
         mSwipeLayout = v.findViewById(R.id.include_swipe_refresh);
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
-        mSwipeLayout.setTouchSlop(400);
+        //mSwipeLayout.setTouchSlop(400);
         //設定刷新動作
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -114,6 +116,11 @@ public class Fragment_shop_content extends Fragment {
                                     setHeaderFilter(json1);
                                 }
                                 myRecyclerAdapter.setFilter(json2);
+                                if (myRecyclerAdapter.getItemCount() > 1) {
+                                    no_data.setVisibility(View.INVISIBLE);
+                                } else {
+                                    no_data.setVisibility(View.VISIBLE);
+                                }
                                 mSwipeLayout.setRefreshing(false);
                                 LoadingView.hide();
                                 if (banner > ShopRecyclerViewAdapter.FAVORATE) {
@@ -130,10 +137,8 @@ public class Fragment_shop_content extends Fragment {
     }
 
     private void initViewPagerAndRecyclerView() {
+        no_data = v.findViewById(R.id.include_no_data);
         recyclerView = v.findViewById(R.id.include_recyclerview);
-        //recycleView
-        dm = getResources().getDisplayMetrics();
-
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
         myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json2, banner);
@@ -203,12 +208,12 @@ public class Fragment_shop_content extends Fragment {
                             } else if (banner == ShopRecyclerViewAdapter.HIDE_BANNER) {
                                 json2 = new ProductJsonData().getPlist(ptno, type, gv.getToken(), nextpage);
                             }
-                            nextpage++;
+
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (myRecyclerAdapter != null && !myRecyclerAdapter.setFilterMore(json2)) {
-                                        nextpage--;
+                                    if (myRecyclerAdapter != null && myRecyclerAdapter.setFilterMore(json2)) {
+                                        nextpage++;
                                     }
                                     //    LoadingView.hide();
                                 }
@@ -253,7 +258,13 @@ public class Fragment_shop_content extends Fragment {
         if (myRecyclerAdapter != null) {
             myRecyclerAdapter = new ShopRecyclerViewAdapter(getContext(), json, banner);
             recyclerView.setAdapter(myRecyclerAdapter);
+            if (myRecyclerAdapter.getItemCount() > 1) {
+                no_data.setVisibility(View.INVISIBLE);
+            } else {
+                no_data.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
     public void setFilter(JSONObject json) {
@@ -261,11 +272,16 @@ public class Fragment_shop_content extends Fragment {
         nextpage = 2;
         if (myRecyclerAdapter != null) {
             myRecyclerAdapter.setFilter(json);
+            if (myRecyclerAdapter.getItemCount() > 1) {
+                no_data.setVisibility(View.INVISIBLE);
+            } else {
+                no_data.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     public void setHeaderFilter(JSONObject json) {
-        this.json1=json;
+        this.json1 = json;
         if (header != null) {
             List<String> images = new ArrayList<>();
             for (ProductInfoPojo productInfoPojo : ResolveJsonData.getJSONData(json1))

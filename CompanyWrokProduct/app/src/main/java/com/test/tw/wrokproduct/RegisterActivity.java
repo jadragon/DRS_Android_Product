@@ -45,19 +45,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import library.AppManager;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
+import library.JsonDataThread;
 import library.LoadingView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
+    TextView register_txt_account;
     EditText register_edit_account, register_edit_password;
     Button register_button, register_btn_gvcode;
     ImageView register_img_mobile, register_img_email, register_img_fb, register_img_google;
     int type = 1;
     String vcode;
     ToastMessageDialog toastMessage;
+    private View register_cover_bg;
+    View register_info_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +68,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
         LoadingView.setContext(RegisterActivity.this);
         LoadingView.setMessage("認證碼寄送中...");
-        AppManager.getAppManager().addActivity(this);
+        register_cover_bg = findViewById(R.id.register_cover_bg);
+        register_info_layout = findViewById(R.id.register_info_layout);
         toastMessage = new ToastMessageDialog(this);
+        initTextView();
         initButton();
         initImage();
         initEditText();
         initToolbar();
+    }
+
+    private void initTextView() {
+        register_txt_account = findViewById(R.id.register_txt_account);
     }
 
     private void initToolbar() {
@@ -131,40 +140,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.register_btn_gvcode:
-                if (!register_edit_account.getText().toString().equals("")) {
-                    //收鍵盤
-                    ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(RegisterActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    LoadingView.show(view);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final JSONObject jsonObject = new MemberJsonData().gvcode(type, "886", register_edit_account.getText().toString());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        LoadingView.hide();
-                                        boolean success = jsonObject.getBoolean("Success");
-                                        if (success) {
-                                            vcode = jsonObject.getString("Data");
-                                            register_edit_account.setFocusable(false);
-                                        }
-                                        toastMessage.setMessageText(jsonObject.getString("Message"));
-                                        toastMessage.confirm();
-                                        Log.e("success", success + "" + jsonObject.getString("Message"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
+                switch (type) {
+                    case 1:
+                        if (register_edit_account.getText().toString().matches("09[0-9]{8}")) {
+                            sendApi();
+                        } else {
+                            toastMessage.setMessageText("手機號碼格式有誤");
+                            toastMessage.confirm();
                         }
-                    }).start();
-                } else {
-                    toastMessage.setMessageText("請先輸入手機號碼或信箱");
-                    toastMessage.confirm();
+
+                        break;
+                    case 2:
+                        if (register_edit_account.getText().toString().matches("[\\w-.]+@[\\w-]+(.[\\w_-]+)+")) {
+                            sendApi();
+                        } else {
+                            toastMessage.setMessageText("信箱格式有誤");
+                            toastMessage.confirm();
+                        }
+                        break;
                 }
+
                 break;
             case R.id.register_img_mobile:
+                type = 1;
+                register_info_layout.setVisibility(View.VISIBLE);
+                register_txt_account.setText("手機號碼");
                 register_edit_account.setHint("請輸入手機號碼");
                 register_edit_account.setInputType(InputType.TYPE_CLASS_PHONE);
                 register_edit_account.setFocusableInTouchMode(true);
@@ -177,9 +177,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 register_button.setEnabled(true);
                 register_btn_gvcode.setEnabled(true);
                 vcode = null;
-                type = 1;
+
                 break;
             case R.id.register_img_email:
+                type = 2;
+                register_info_layout.setVisibility(View.VISIBLE);
+                register_txt_account.setText("電子信箱");
                 register_edit_account.setHint("請輸入信箱帳號");
                 register_edit_account.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 register_edit_account.setFocusableInTouchMode(true);
@@ -192,33 +195,49 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 register_button.setEnabled(true);
                 register_btn_gvcode.setEnabled(true);
                 vcode = null;
-                type = 2;
                 break;
             case R.id.register_img_fb:
                 type = 3;
-                register_edit_account.setHint("請選擇其他註冊方式");
-                register_edit_account.setText(null);
-                register_edit_password.setText(null);
-                register_edit_account.setEnabled(false);
-                register_edit_password.setEnabled(false);
-                register_button.setEnabled(false);
-                register_btn_gvcode.setEnabled(false);
+                register_info_layout.setVisibility(View.INVISIBLE);
+                register_cover_bg.setVisibility(View.VISIBLE);
                 quickLoginFB();
-
                 break;
             case R.id.register_img_google:
                 type = 4;
-                register_edit_account.setHint("請選擇其他註冊方式");
-                register_edit_account.setText(null);
-                register_edit_password.setText(null);
-                register_edit_account.setEnabled(false);
-                register_edit_password.setEnabled(false);
-                register_button.setEnabled(false);
-                register_btn_gvcode.setEnabled(false);
+                register_info_layout.setVisibility(View.INVISIBLE);
+                register_cover_bg.setVisibility(View.VISIBLE);
                 quickLoginGoogle();
 
                 break;
         }
+    }
+
+    private void sendApi() {
+        //收鍵盤
+        ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(RegisterActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        LoadingView.show(getCurrentFocus());
+        new JsonDataThread() {
+            @Override
+            public JSONObject getJsonData() {
+                return new MemberJsonData().gvcode(type, "886", register_edit_account.getText().toString());
+            }
+
+            @Override
+            public void runUiThread(JSONObject json) {
+                try {
+                    LoadingView.hide();
+                    boolean success = json.getBoolean("Success");
+                    if (success) {
+                        vcode = json.getString("Data");
+                        register_edit_account.setFocusable(false);
+                    }
+                    toastMessage.setMessageText(json.getString("Message"));
+                    toastMessage.confirm();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     // FB
@@ -232,6 +251,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // init LoginManager & CallbackManager
         loginManager = LoginManager.getInstance();
         callbackManager = CallbackManager.Factory.create();
+        //loginManager.logOut();
         loginFB();
     }
 
@@ -265,6 +285,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
+                        register_cover_bg.setVisibility(View.INVISIBLE);
                         try {
                             if (response.getConnection().getResponseCode() == 200) {
                                 /**
@@ -276,12 +297,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 String gender = object.getString("gender");
                                 String birthday = object.getString("birthday");
                                 String photo = "https://graph.facebook.com/" + id + "/picture?width=" + 400 + "&height=" + 400;
+                                /*
                                 Log.e(TAG, "Facebook id:" + object);
                                 Log.e(TAG, "Facebook id:" + id);
                                 Log.e(TAG, "Facebook name:" + name);
                                 Log.e(TAG, "Facebook email:" + email);
                                 Log.e(TAG, "Facebook gender:" + gender);
                                 Log.e(TAG, "Facebook birthday:" + birthday);
+                                */
                                 Intent intent = new Intent(RegisterActivity.this, RegisterDetailActivity.class);
                                 intent.putExtra("type", type);
                                 intent.putExtra("id", id);
@@ -324,6 +347,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onCancel() {
                 // 用戶取消
+                register_cover_bg.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "Facebook onCancel");
             }
 
@@ -375,6 +399,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Intent handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            /*
             Log.e(TAG, "--------------------------------");
             Log.e(TAG, "getId: " + account.getId());
             Log.e(TAG, "getDisplayName: " + account.getDisplayName());
@@ -382,11 +407,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "getIdToken: " + account.getIdToken());
             // Log.e(TAG, "getAccount: " + account.getAccount());
             Log.e(TAG, "getPhotoUrl: " + account.getPhotoUrl());
+            */
             // G+
             Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            /*
             Log.e(TAG, "--------------------------------");
             //    Log.e(TAG, "Display Name: " + person.getDisplayName());
             Log.e(TAG, "Gender: " + person.getGender());
+            */
             // Log.e(TAG, "AboutMe: " + person.getAboutMe());
             //  Log.e(TAG, "Birthday: " + person.getBirthday());
             //   Log.e(TAG, "Current Location: " + person.getCurrentLocation());
@@ -432,6 +460,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         } else if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
+            register_cover_bg.setVisibility(View.INVISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             Intent intent = handleSignInResult(task);
             if (intent != null)

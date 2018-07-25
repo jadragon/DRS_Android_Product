@@ -62,7 +62,6 @@ public class MemberJsonData {
      * 2.1.3	會員登入
      */
     public JSONObject login(int type, String mpcode, String account, String pawd) {
-        Log.e("gggggg", type + "\n" + mpcode + "\n" + account + "\n" + pawd);
         params.add(new BasicNameValuePair("type", type + ""));
         params.add(new BasicNameValuePair("mpcode", mpcode));
         params.add(new BasicNameValuePair("account", account));
@@ -74,7 +73,6 @@ public class MemberJsonData {
      * 2.1.4	忘記密碼
      */
     public JSONObject forget(int type, String mpcode, String account) {
-        Log.e("type", type + "");
         params.add(new BasicNameValuePair("type", type + ""));
         params.add(new BasicNameValuePair("mpcode", mpcode));
         params.add(new BasicNameValuePair("account", account));

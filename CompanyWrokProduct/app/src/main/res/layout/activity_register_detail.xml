@@ -47,8 +47,10 @@
                     android:background="@null"
                     android:lines="1"
                     android:maxLines="1"
+                    android:inputType=""
                     android:singleLine="true"
-                    android:hint="請輸入帳號" />
+                    android:hint="請輸入帳號"
+                    android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
             </LinearLayout>
 
             <View
@@ -75,7 +77,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
-                    android:hint="6-15為英文數字混合"
+                    android:hint="密碼長度為6-15字"
                     android:lines="1"
                     android:maxLines="1"
                     android:singleLine="true"

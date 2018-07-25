@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
@@ -329,7 +328,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("不同意取消");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -344,7 +343,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                 if (json.getBoolean("Success")) {
                                                     ((ProductOrderActivity) ctx).setFilterByIndex(0, 2, 3);
                                                 } else {
-                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -358,7 +357,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                         case 1:
                             if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 0) {
                                 toastMessageDialog.setTitleText("不同意退換貨");
-                                toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                                toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, final String note) {
                                         new JsonDataThread() {
@@ -373,7 +372,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                     if (json.getBoolean("Success")) {
                                                         ((ProductOrderActivity) ctx).setFilterByIndex(1, 5);
                                                     } else {
-                                                        Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -385,9 +384,9 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                 });
                             } else if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 2) {
                                 toastMessageDialog.setTitleText("確認收件");
-                                toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
+                                toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                     @Override
-                                    public void ItemClicked(Dialog dialog, View view,String note) {
+                                    public void ItemClicked(Dialog dialog, View view, String note) {
                                         new JsonDataThread() {
                                             @Override
                                             public JSONObject getJsonData() {
@@ -400,7 +399,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                     if (json.getBoolean("Success")) {
                                                         ((ProductOrderActivity) ctx).setFilterByIndex(1);
                                                     } else {
-                                                        Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -437,7 +436,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                     switch (index) {
                         case 0:
                             toastMessageDialog.setTitleText("同意取消");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -452,7 +451,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                 if (json.getBoolean("Success")) {
                                                     ((ProductOrderActivity) ctx).setFilterByIndex(0, 7);
                                                 } else {
-                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -466,7 +465,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                         case 1:
                             if (((MemberOrderFooterPojo) items.get(position)).getAlchk() == 0) {
                                 toastMessageDialog.setTitleText("同意退換貨");
-                                toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                                toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, final String note) {
                                         new JsonDataThread() {
@@ -481,7 +480,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                     if (json.getBoolean("Success")) {
                                                         ((ProductOrderActivity) ctx).setFilterByIndex(1);
                                                     } else {
-                                                        Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -503,9 +502,9 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 2:
                             toastMessageDialog.setTitleText("備貨完成");
-                            toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                 @Override
-                                public void ItemClicked(Dialog dialog, View view,String note) {
+                                public void ItemClicked(Dialog dialog, View view, String note) {
                                     new JsonDataThread() {
                                         @Override
                                         public JSONObject getJsonData() {
@@ -518,7 +517,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                 if (json.getBoolean("Success")) {
                                                     ((ProductOrderActivity) ctx).setFilterByIndex(2, 3);
                                                 } else {
-                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    new ToastMessageDialog(ctx,json.getString("Message")).confirm();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -542,7 +541,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 6:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -557,7 +556,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                 if (json.getBoolean("Success")) {
                                                     ((ProductOrderActivity) ctx).setFilterByIndex(6);
                                                 } else {
-                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    new ToastMessageDialog(ctx,json.getString("Message")).confirm();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -570,7 +569,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             break;
                         case 7:
                             toastMessageDialog.setTitleText("投訴賣家");
-                            toastMessageDialog.showCheck(true,new ToastMessageDialog.ClickListener() {
+                            toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
                                     new JsonDataThread() {
@@ -585,7 +584,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                                 if (json.getBoolean("Success")) {
                                                     ((ProductOrderActivity) ctx).setFilterByIndex(7);
                                                 } else {
-                                                    Toast.makeText(ctx, "" + json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    new ToastMessageDialog(ctx,json.getString("Message")).confirm();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();

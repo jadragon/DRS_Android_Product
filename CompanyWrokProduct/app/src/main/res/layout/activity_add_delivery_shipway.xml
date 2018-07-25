@@ -42,7 +42,7 @@
 
     <EditText
         android:id="@+id/add_delivery_edit_phone"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40sp"
         android:background="@null"
         android:gravity="center_vertical"

@@ -6,15 +6,45 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <library.Component.MySwipeRefreshLayout
         android:id="@+id/include_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/include_recyclerview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/include_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/include_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:src="@drawable/no_data" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="目前沒有資料"
+                    android:textColor="@color/gray"
+                    android:textSize="25dp" />
+            </LinearLayout>
+        </FrameLayout>
     </library.Component.MySwipeRefreshLayout>
+
 
 </LinearLayout>

@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -54,6 +53,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private DisplayMetrics dm;
     GlobalVariable gv;
     private TypedArray stars;
+    ToastMessageDialog toastMessageDialog;
 
     public void setmHeaderView(View mHeaderView) {
         this.mHeaderView = mHeaderView;
@@ -62,6 +62,7 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
 
     public ShopRecyclerViewAdapter(Context ctx, JSONObject json, int had_header) {
         this.ctx = ctx;
+        toastMessageDialog = new ToastMessageDialog(ctx);
         dm = ctx.getResources().getDisplayMetrics();
         gv = ((GlobalVariable) ctx.getApplicationContext());
         stars = ctx.getResources().obtainTypedArray(R.array.small_stars);
@@ -288,7 +289,8 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                                             heart.setImageResource(R.drawable.heart_on);
                                         }
                                     } else {
-                                        Toast.makeText(ctx, json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                        toastMessageDialog.setMessageText(json.getString("Message"));
+                                        toastMessageDialog.confirm();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

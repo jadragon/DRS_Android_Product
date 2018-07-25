@@ -1,256 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/white">
 
     <include
         layout="@layout/include_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/register_info_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/register_txt_account"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="手機號碼"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/register_edit_account"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="8"
-                    android:background="@null"
-                    android:hint="請輸入手機號碼"
-                    android:inputType="phone"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="認證碼"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/register_edit_password"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="8"
-                    android:background="@null"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-                <Button
-                    android:id="@+id/register_btn_gvcode"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="6"
-                    android:background="@drawable/arcangle_button_red"
-                    android:text="取得認證碼"
-                    android:textColor="@color/white" />
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/register_txt_account"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="手機號碼"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/register_edit_account"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:background="@null"
+                            android:hint="請輸入手機號碼"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="認證碼"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/register_edit_password"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:background="@null"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <Button
+                            android:id="@+id/register_btn_gvcode"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="6"
+                            android:background="@drawable/arcangle_button_red"
+                            android:text="取得認證碼"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/register_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/arcangle_button_red"
+                        android:gravity="center"
+                        android:text="下一步"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/black" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <LinearLayout
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="使用其他方式註冊"
+                    android:textSize="15sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/register_img_mobile"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_mobil" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="手機"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/register_img_email"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_mail" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="信箱"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/register_img_fb"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_fb" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="FB"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/register_img_google"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/quick_login_google" />
+
+                    <library.Component.AutoVerticalTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="Google"
+                        android:textSize="20dp"
+                        android:translationY="-5dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:id="@+id/register_cover_bg"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:background="@color/white"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@color/colorInvisibleGrayDark"
+            android:clickable="true"
+            android:visibility="invisible"/>
+    </FrameLayout>
 
-            <Button
-                android:id="@+id/register_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/arcangle_button_red"
-                android:gravity="center"
-                android:text="下一步"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/black" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="使用其他方式註冊"
-            android:textSize="15sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/register_img_mobile"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_mobil" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="手機"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/register_img_email"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_mail" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="信箱"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/register_img_fb"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_fb" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:text="FB"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/register_img_google"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:src="@mipmap/quick_login_google" />
-
-            <library.Component.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|center_horizontal"
-                android:text="Google"
-                android:textSize="20dp"
-                android:translationY="-5dp" />
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

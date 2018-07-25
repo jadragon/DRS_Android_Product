@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
@@ -34,6 +33,7 @@ import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeShopCart;
 import library.Component.AutoHorizontalTextView;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.ShopCartJsonData;
 
 public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRecyclerViewAdapter.RecycleHolder> {
@@ -49,11 +49,13 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private ArrayList<Map<String, String>> title_list;
     private ArrayList<ArrayList<Map<String, String>>> content_list;
     private ShopCartRecyclerViewAdapter.ClickListener clickListener;
+    private ShopCartRecyclerViewAdapter.DataChangeListener dataChangeListener;
     private List<Item> items;
     private Item item;
     GlobalVariable gv;
     int size;
-    String mvip="1";
+    String mvip = "1";
+    ToastMessageDialog toastMessageDialog;
 
     public void setMvip(String mvip) {
         this.mvip = mvip;
@@ -62,6 +64,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     public ShopCartRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         this.json = json;
+        toastMessageDialog = new ToastMessageDialog(ctx);
         dm = ctx.getResources().getDisplayMetrics();
         gv = ((GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
@@ -344,14 +347,15 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 public void run() {
                                     try {
                                         final JSONObject jsonObject = new ShopCartJsonData().delCartProduct(gv.getToken(), items.get(position).getMorno());
-                                        json = new ShopCartJsonData().getCart(gv.getToken(),mvip);
+                                        json = new ShopCartJsonData().getCart(gv.getToken(), mvip);
                                         if (jsonObject.getBoolean("Success")) {
                                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     setFilter(json);
                                                     try {
-                                                        Toast.makeText(ctx, "" + jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        toastMessageDialog.setMessageText(jsonObject.getString("Message"));
+                                                        toastMessageDialog.confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -367,8 +371,8 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(ctx, "取消", Toast.LENGTH_SHORT).show();
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
                         }
                     });
                     //填充对话框的布局
@@ -471,7 +475,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 int total = Integer.parseInt(items.get(position).getStotal()) + 1;
                                 new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
                                         total);
-                                json = new ShopCartJsonData().getCart(gv.getToken(),mvip);
+                                json = new ShopCartJsonData().getCart(gv.getToken(), mvip);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -497,7 +501,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 int total = Integer.parseInt(items.get(position).getStotal()) - 1;
                                 new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
                                         total);
-                                json = new ShopCartJsonData().getCart(gv.getToken(),mvip);
+                                json = new ShopCartJsonData().getCart(gv.getToken(), mvip);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -552,8 +556,16 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         this.clickListener = clickListener;
     }
 
+    public void setDataChangeListener(ShopCartRecyclerViewAdapter.DataChangeListener dataChangeListener) {
+        this.dataChangeListener = dataChangeListener;
+    }
+
     public interface ClickListener {
         void ItemClicked(int count);
+    }
+
+    public interface DataChangeListener {
+        void ItemClicked();
     }
 
     public void setFilter(JSONObject json) {
@@ -564,6 +576,9 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         }
         initItems();
         notifyDataSetChanged();
+        if (dataChangeListener != null) {
+            dataChangeListener.ItemClicked();
+        }
     }
 
     private class Item {

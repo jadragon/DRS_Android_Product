@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +23,7 @@ import java.util.Map;
 
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeShopCart;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.ReCountJsonData;
 
 public class PayWayActivity extends AppCompatActivity implements TextView.OnEditorActionListener, View.OnFocusChangeListener, View.OnClickListener {
@@ -44,12 +44,14 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     String pno;
     Button payway_activity_btn_confirm;
     int count_type;
+    ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payway);
         gv = ((GlobalVariable) getApplicationContext());
+        toastMessageDialog = new ToastMessageDialog(this);
         count_type = getIntent().getIntExtra("count_type", 0);
         initID();
         initToolbar();
@@ -180,7 +182,7 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json = new ReCountJsonData().setMemberPayment(count_type,gv.getToken(), xkeyin, ykeyin, ekeyin, pno);
+                        json = new ReCountJsonData().setMemberPayment(count_type, gv.getToken(), xkeyin, ykeyin, ekeyin, pno);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -188,7 +190,9 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                                     if (json.getBoolean("Success")) {
                                         finish();
                                     } else {
-                                        Toast.makeText(getApplicationContext(), json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                        toastMessageDialog.setTitleText("注意");
+                                        toastMessageDialog.setMessageText(json.getString("Message"));
+                                        toastMessageDialog.confirm();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

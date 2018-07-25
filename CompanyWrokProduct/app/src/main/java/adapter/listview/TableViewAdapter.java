@@ -160,7 +160,6 @@ public class TableViewAdapter extends BaseAdapter implements View.OnClickListene
         int header_position = (int) v.getTag();
         holder = (TableViewAdapter.ViewHolder) holderList[header_position].getTag();
         int position = holder.item_layouts.indexOf(v);
-        Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
         /*
         //取得header
         ViewParent viewGroup = v.getParent();

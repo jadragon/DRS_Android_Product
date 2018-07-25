@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.CommunityActivity;
@@ -503,7 +502,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(0, 6);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -536,7 +535,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(2);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -587,7 +586,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                     intent.putExtra("count_type", ReCountJsonData.RECOUNT);
                                                     ((AppCompatActivity) ctx).startActivityForResult(intent, 110);
                                                 } else {
-                                                    Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                    new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -614,7 +613,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(1);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -643,7 +642,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(2, 3);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -678,7 +677,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                 if (json.getBoolean("Success")) {
                                                     ((OrderInfoActivity) ctx).setFilterByIndex(4);
                                                 }
-                                                Toast.makeText(ctx, json.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -729,7 +728,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(5);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -757,7 +756,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(6);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -795,7 +794,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                                                         if (jsonObject.getBoolean("Success")) {
                                                             ((OrderInfoActivity) ctx).setFilterByIndex(2);
                                                         }
-                                                        Toast.makeText(ctx, jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+                                                         new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -843,19 +842,22 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     public boolean setFilterMore(JSONObject json) {
         int presize = items.size();
-        if (json != null && AnalyzeOrderInfo.getMemberOrderHeader(json).size() > 0) {
-            memberOrderHeaderPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderHeader(json));
-            contentPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderContent(json));
-            memberOrderFooterPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderFooter(json));
-            initItems();
-            notifyItemInserted(presize + 1);
-            //notifyItemChanged(presize + 1, items.size()+1);
-            return true;
+        if (presize > 0) {
+            if (json != null && AnalyzeOrderInfo.getMemberOrderHeader(json).size() > 0) {
+                memberOrderHeaderPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderHeader(json));
+                contentPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderContent(json));
+                memberOrderFooterPojoArrayList.addAll(AnalyzeOrderInfo.getMemberOrderFooter(json));
+                initItems();
+                notifyItemInserted(presize + 1);
+                //notifyItemChanged(presize + 1, items.size()+1);
+                return true;
+            } else {
+                new ToastMessageDialog(ctx, "沒有更多資料了").show();
+                return false;
+            }
         } else {
-            new ToastMessageDialog(ctx, "沒有更多了").show();
             return false;
         }
-
     }
 
     private void reShapeButton(Button button, int color) {

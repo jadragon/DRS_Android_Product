@@ -60,21 +60,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     int type;
     String id;
     JSONObject jsonObject;
-    TextView login_btn_forget, login_btn_register;
+    TextView login_txt_account,login_btn_forget, login_btn_register;
     ToastMessageDialog toastMessage;
     String account;
+    private View login_cover_bg, login_info_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        login_cover_bg = findViewById(R.id.login_cover_bg);
+        login_info_layout = findViewById(R.id.login_info_layout);
         toastMessage = new ToastMessageDialog(this);
         gv = (GlobalVariable) getApplicationContext();
         initToolbar();
+        initTextView();
         initEditText();
         initButton();
         initTextButton();
         initImage();
+    }
+    private void initTextView() {
+        login_txt_account = findViewById(R.id.login_txt_account);
     }
 
     private void initTextButton() {
@@ -140,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            jsonObject = new MemberJsonData().login(type, "886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
+                            jsonObject = new MemberJsonData().login(type, "+886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -154,7 +161,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             toastMessage.setMessageText(jsonObject.getString("Message"));
                                             toastMessage.confirm();
                                         }
-                                        Log.e("success", success + "" + jsonObject.getString("Message"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -168,6 +174,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.login_img_account:
+                type = 0;
+                login_info_layout.setVisibility(View.VISIBLE);
+                login_txt_account.setText("帳號");
                 login_edit_account.setHint("請輸入您的帳號");
                 login_edit_account.setInputType(InputType.TYPE_CLASS_TEXT);
                 login_edit_account.setText(null);
@@ -175,48 +184,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 login_edit_account.setEnabled(true);
                 login_edit_account.setEnabled(true);
                 login_button.setEnabled(true);
-                type = 0;
                 break;
             case R.id.login_img_mobile:
-                login_edit_account.setHint("請輸入您的電話");
+                type = 1;
+                login_info_layout.setVisibility(View.VISIBLE);
+                login_txt_account.setText("手機號碼");
+                login_edit_account.setHint("請輸入您的手機號碼");
                 login_edit_account.setInputType(InputType.TYPE_CLASS_PHONE);
                 login_edit_account.setText(null);
                 login_edit_account.setText(null);
                 login_edit_account.setEnabled(true);
                 login_edit_account.setEnabled(true);
                 login_button.setEnabled(true);
-                type = 1;
                 break;
             case R.id.login_img_email:
-                login_edit_account.setHint("請輸入您的信箱");
+                type = 2;
+                login_info_layout.setVisibility(View.VISIBLE);
+                login_txt_account.setText("電子信箱");
+                login_edit_account.setHint("請輸入您的電子信箱");
                 login_edit_account.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 login_edit_account.setText(null);
                 login_edit_password.setText(null);
                 login_edit_account.setEnabled(true);
                 login_edit_password.setEnabled(true);
                 login_button.setEnabled(true);
-                type = 2;
                 break;
             case R.id.login_img_fb:
                 type = 3;
-                login_edit_account.setHint("請選擇其他登入方式");
-                login_edit_account.setText(null);
-                login_edit_password.setText(null);
-                login_edit_account.setEnabled(false);
-                login_edit_password.setEnabled(false);
-                login_button.setEnabled(false);
-
+                login_info_layout.setVisibility(View.INVISIBLE);
+                login_cover_bg.setVisibility(View.VISIBLE);
                 quickLoginFB();
 
                 break;
             case R.id.login_img_google:
                 type = 4;
-                login_edit_account.setHint("請選擇其他登入方式");
-                login_edit_account.setText(null);
-                login_edit_password.setText(null);
-                login_edit_account.setEnabled(false);
-                login_edit_password.setEnabled(false);
-                login_button.setEnabled(false);
+                login_info_layout.setVisibility(View.INVISIBLE);
+                login_cover_bg.setVisibility(View.VISIBLE);
                 quickLoginGoogle();
                 break;
         }
@@ -340,7 +343,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                         toastMessage.setMessageText(jsonObject.getString("Message"));
                                                         toastMessage.confirm();
                                                     }
-                                                    Log.e("success", success + "" + jsonObject.getString("Message"));
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -369,6 +371,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onCancel() {
                 // 用戶取消
                 Log.d(TAG, "Facebook onCancel");
+                login_cover_bg.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -409,8 +412,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             Map<String, String> map = new HashMap<>();
+            /*
             Log.e(TAG, "--------------------------------");
             Log.e(TAG, "getId: " + account.getId());
+            */
             map.put("id", account.getId());
             map.put("email", account.getEmail());
 
@@ -437,6 +442,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (requestCode == CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode()) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         } else if (requestCode == RC_SIGN_IN) {
+            login_cover_bg.setVisibility(View.INVISIBLE);
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -460,7 +466,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         toastMessage.setMessageText(jsonObject.getString("Message"));
                                         toastMessage.confirm();
                                     }
-                                    Log.e("success", success + "" + jsonObject.getString("Message"));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
