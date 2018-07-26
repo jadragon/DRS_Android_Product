@@ -5,7 +5,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,24 +22,30 @@ import java.util.ArrayList;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
 import library.GetJsonData.OrderInfoJsonData;
+import library.GetJsonData.StoreJsonData;
 
 public class OrderInfoDetailActivity extends AppCompatActivity {
     LinearLayout orderinfo_detail_prolayout;
-    String mono,token;
+    String type, mono, token;
     JSONObject json;
     MOrderItemPojo mOrderItemPojo;
     ArrayList<MOrderItemContentPojo> pojoArrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_info_detail);
+        type = getIntent().getStringExtra("type");
         mono = getIntent().getStringExtra("mono");
         token = getIntent().getStringExtra("token");
         initToolbar();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                json = new OrderInfoJsonData().getMOrderItem(token, mono);
+                if (type.equals("0"))
+                    json = new OrderInfoJsonData().getMOrderItem(token, mono);
+                else if (type.equals("1"))
+                    json = new StoreJsonData().getSOrderItem(token, mono);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

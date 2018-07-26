@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     int type;
     String id;
     JSONObject jsonObject;
-    TextView login_txt_account,login_btn_forget, login_btn_register;
+    TextView login_txt_account, login_btn_forget, login_btn_register;
     ToastMessageDialog toastMessage;
     String account;
     private View login_cover_bg, login_info_layout;
@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initTextButton();
         initImage();
     }
+
     private void initTextView() {
         login_txt_account = findViewById(R.id.login_txt_account);
     }
@@ -144,30 +145,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.login_button:
                 if (!login_edit_account.getText().toString().equals("") && !login_edit_password.getText().toString().equals("")) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            jsonObject = new MemberJsonData().login(type, "+886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        boolean success = jsonObject.getBoolean("Success");
-                                        if (success) {
-                                            account = login_edit_account.getText().toString();
-                                            initMemberDB(jsonObject);
+                    switch (type) {
+                        case 0:
+                            sendApi();
+                            break;
+                        case 1:
+                            if (login_edit_account.getText().toString().matches("09[0-9]{8}")) {
+                                sendApi();
+                            } else {
+                                toastMessage.setMessageText("手機格式有誤");
+                                toastMessage.confirm();
+                            }
+                            break;
+                        case 2:
+                            if (login_edit_account.getText().toString().matches("[\\w-.]+@[\\w-]+(.[\\w_-]+)+")) {
+                                sendApi();
+                            } else {
+                                toastMessage.setMessageText("信箱格式有誤");
+                                toastMessage.confirm();
+                            }
+                            break;
+                    }
 
-                                        } else {
-                                            toastMessage.setMessageText(jsonObject.getString("Message"));
-                                            toastMessage.confirm();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    }).start();
                 } else {
                     toastMessage.setMessageText("請先輸入帳號密碼");
                     toastMessage.confirm();
@@ -180,9 +179,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 login_edit_account.setHint("請輸入您的帳號");
                 login_edit_account.setInputType(InputType.TYPE_CLASS_TEXT);
                 login_edit_account.setText(null);
-                login_edit_account.setText(null);
+                login_edit_password.setText(null);
                 login_edit_account.setEnabled(true);
-                login_edit_account.setEnabled(true);
+                login_edit_password.setEnabled(true);
                 login_button.setEnabled(true);
                 break;
             case R.id.login_img_mobile:
@@ -192,9 +191,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 login_edit_account.setHint("請輸入您的手機號碼");
                 login_edit_account.setInputType(InputType.TYPE_CLASS_PHONE);
                 login_edit_account.setText(null);
-                login_edit_account.setText(null);
+                login_edit_password.setText(null);
                 login_edit_account.setEnabled(true);
-                login_edit_account.setEnabled(true);
+                login_edit_password.setEnabled(true);
                 login_button.setEnabled(true);
                 break;
             case R.id.login_img_email:
@@ -224,6 +223,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
 
+    }
+
+    private void sendApi() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                jsonObject = new MemberJsonData().login(type, "886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            boolean success = jsonObject.getBoolean("Success");
+                            if (success) {
+                                account = login_edit_account.getText().toString();
+                                initMemberDB(jsonObject);
+
+                            } else {
+                                toastMessage.setMessageText(jsonObject.getString("Message"));
+                                toastMessage.confirm();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     private void initMemberDB(final JSONObject json) throws JSONException {

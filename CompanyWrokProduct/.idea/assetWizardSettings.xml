@@ -81,8 +81,8 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Alex\Desktop\工作用\訂單管理\star_off.png" />
-                                      <entry key="outputName" value="star_off" />
+                                      <entry key="imageAsset" value="C:\Users\Alex\Desktop\工作用\icon\富裕商城513-Android.png" />
+                                      <entry key="outputName" value="ic_launcher_round" />
                                     </map>
                                   </option>
                                 </PersistentState>

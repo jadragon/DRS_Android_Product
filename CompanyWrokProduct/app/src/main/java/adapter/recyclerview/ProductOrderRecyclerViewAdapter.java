@@ -230,6 +230,7 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
             switch (view.getId()) {
                 case R.id.orderinfo_listinfo_oname_layout:
                     intent = new Intent(ctx, OrderInfoDetailActivity.class);
+                    intent.putExtra("type", "1");
                     intent.putExtra("mono", ((MemberOrderFooterPojo) items.get(getAdapterPosition())).getMono());
                     intent.putExtra("token", token);
                     ctx.startActivity(intent);

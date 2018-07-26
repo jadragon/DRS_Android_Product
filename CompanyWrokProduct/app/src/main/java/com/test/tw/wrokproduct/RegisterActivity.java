@@ -200,12 +200,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 type = 3;
                 register_info_layout.setVisibility(View.INVISIBLE);
                 register_cover_bg.setVisibility(View.VISIBLE);
+                vcode = null;
                 quickLoginFB();
                 break;
             case R.id.register_img_google:
                 type = 4;
                 register_info_layout.setVisibility(View.INVISIBLE);
                 register_cover_bg.setVisibility(View.VISIBLE);
+                vcode = null;
                 quickLoginGoogle();
 
                 break;

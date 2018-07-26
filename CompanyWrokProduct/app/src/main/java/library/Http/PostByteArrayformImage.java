@@ -79,7 +79,6 @@ public class PostByteArrayformImage {
             }
             is.close();
             json = sb.toString();
-            Log.e("JSON", json);
 
 
         } catch (Exception e) {

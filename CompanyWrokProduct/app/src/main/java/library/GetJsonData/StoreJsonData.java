@@ -11,6 +11,7 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class StoreJsonData {
+    private final String getSOrderItem_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/getSOrderItem.php";
     private final String getStoreOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/getStoreOrder.php";
     private final String applyCancel_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/applyCancel.php";
     private final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/sorder/applyReturn.php";
@@ -105,6 +106,15 @@ public class StoreJsonData {
                 break;
         }
         return getStoreOrder(token, ostatus, pstatus, lstatus, istatus, page);
+    }
+
+    /**
+     * 5.5.3	讀取商家訂單詳情資訊
+     */
+    public JSONObject getSOrderItem(String token, String mono) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mono", mono));
+        return jsonParser.getJSONFromUrl(getSOrderItem_url, params);
     }
 
     /**

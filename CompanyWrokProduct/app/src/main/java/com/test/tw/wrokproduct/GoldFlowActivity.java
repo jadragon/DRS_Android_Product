@@ -136,7 +136,6 @@ public class GoldFlowActivity extends ToolbarActivity {
         intent.putExtra("success", success);
         intent.putExtra("msg", msg);
         startActivity(intent);
-        Log.e("Gold", "Success" + success + ":Msg" + msg);
     }
 
     @Override

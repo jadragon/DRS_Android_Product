@@ -22,7 +22,7 @@ public abstract class JsonDataThread extends Thread {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e(TAG, json + "");
+                  //  Log.e(TAG, json + "");
                     runUiThread(json);
                 }
             });
