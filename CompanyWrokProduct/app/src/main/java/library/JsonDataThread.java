@@ -1,19 +1,11 @@
 package library;
 
 import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 import org.json.JSONObject;
 
 public abstract class JsonDataThread extends Thread {
-    private static final String TAG = "JsonDataThread";
-    private Handler handler;
-
-    public JsonDataThread() {
-        this.handler = new Handler(Looper.getMainLooper());
-    }
-
+    public final static Handler handler= new Handler();
     @Override
     public void run() {
         synchronized (this) {
@@ -22,7 +14,6 @@ public abstract class JsonDataThread extends Thread {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                  //  Log.e(TAG, json + "");
                     runUiThread(json);
                 }
             });

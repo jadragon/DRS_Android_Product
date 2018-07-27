@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".帳務管理.帳戶總覽.OverviewBillActivity">
+    tools:context=".我的帳戶.帳務管理.帳戶總覽.OverviewBillActivity">
 
     <include
         layout="@layout/include_toolbar"

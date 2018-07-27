@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.現金折價券;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".帳務管理.現金折價券.CouponActivity">
+    tools:context=".我的帳戶.帳務管理.現金折價券.CouponActivity">
 
     <include
         layout="@layout/include_toolbar"

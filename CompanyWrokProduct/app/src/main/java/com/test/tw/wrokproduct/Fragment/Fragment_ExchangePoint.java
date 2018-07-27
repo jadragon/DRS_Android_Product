@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.帳務管理.點值轉換.ExchangePointActivity;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.點值轉換.ExchangePointActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

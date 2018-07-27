@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.帳務管理.現金折價券.CouponActivity;
-import com.test.tw.wrokproduct.帳務管理.現金折價券.pojo.CouponPojo;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.CouponActivity;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.pojo.CouponPojo;
 
 import org.json.JSONException;
 import org.json.JSONObject;

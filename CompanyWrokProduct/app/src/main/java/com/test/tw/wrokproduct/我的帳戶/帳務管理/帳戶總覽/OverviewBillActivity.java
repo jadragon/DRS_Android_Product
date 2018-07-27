@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.帳戶總覽;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.帳戶總覽;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,9 @@ import android.widget.TextView;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.帳務管理.帳戶總覽.pojo.GetBillingPojo;
-import com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity;
-import com.test.tw.wrokproduct.帳務管理.現金折價券.CouponActivity;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.帳戶總覽.pojo.GetBillingPojo;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.CouponActivity;
 
 import org.json.JSONObject;
 

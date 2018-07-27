@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.點值轉換;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.點值轉換;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;

@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.錢包提領;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.錢包提領;
 
 import android.os.Bundle;
 import android.view.View;

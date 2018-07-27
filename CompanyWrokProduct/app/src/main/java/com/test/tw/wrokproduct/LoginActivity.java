@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -144,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                if (!login_edit_account.getText().toString().equals("") && !login_edit_password.getText().toString().equals("")) {
+                if (!TextUtils.isEmpty(login_edit_account.getText().toString()) || !TextUtils.isEmpty(login_edit_password.getText().toString())) {
                     switch (type) {
                         case 0:
                             sendApi();
@@ -153,23 +154,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if (login_edit_account.getText().toString().matches("09[0-9]{8}")) {
                                 sendApi();
                             } else {
-                                toastMessage.setMessageText("手機格式有誤");
-                                toastMessage.confirm();
+                                login_edit_account.setError("手機格式有誤");
+                                //  toastMessage.setMessageText("手機格式有誤");
+                                //  toastMessage.confirm();
                             }
                             break;
                         case 2:
                             if (login_edit_account.getText().toString().matches("[\\w-.]+@[\\w-]+(.[\\w_-]+)+")) {
                                 sendApi();
                             } else {
-                                toastMessage.setMessageText("信箱格式有誤");
-                                toastMessage.confirm();
+                                login_edit_account.setError("信箱格式有誤");
+                                //  toastMessage.setMessageText("信箱格式有誤");
+                                //  toastMessage.confirm();
                             }
                             break;
                     }
 
                 } else {
-                    toastMessage.setMessageText("請先輸入帳號密碼");
-                    toastMessage.confirm();
+                    login_edit_account.setError("帳號及密碼不能為空");
+                    login_edit_password.setError("帳號及密碼不能為空");
+                    // toastMessage.setMessageText("帳號及密碼不能為空");
+                    // toastMessage.confirm();
                 }
                 break;
             case R.id.login_img_account:

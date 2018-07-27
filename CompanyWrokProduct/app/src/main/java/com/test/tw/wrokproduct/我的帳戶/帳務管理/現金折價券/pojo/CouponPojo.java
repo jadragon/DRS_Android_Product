@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.現金折價券.pojo;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.pojo;
 
 public class CouponPojo {
     String mcno;

@@ -184,19 +184,19 @@
         <activity android:name=".SearchResultActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity"
+        <activity android:name=".我的帳戶.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".帳務管理.點值轉換.ExchangePointActivity"
+        <activity android:name=".我的帳戶.帳務管理.點值轉換.ExchangePointActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".帳務管理.錢包提領.EwalletActivity"
+        <activity android:name=".我的帳戶.帳務管理.錢包提領.EwalletActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".帳務管理.現金折價券.CouponActivity"
+        <activity android:name=".我的帳戶.帳務管理.現金折價券.CouponActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".帳務管理.帳戶總覽.OverviewBillActivity"
+        <activity android:name=".我的帳戶.帳務管理.帳戶總覽.OverviewBillActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity

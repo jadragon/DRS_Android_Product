@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.test.tw.wrokproduct.R;
-import com.test.tw.wrokproduct.帳務管理.pojo.BillPojo;
+import com.test.tw.wrokproduct.我的帳戶.帳務管理.pojo.BillPojo;
 
 import org.json.JSONObject;
 

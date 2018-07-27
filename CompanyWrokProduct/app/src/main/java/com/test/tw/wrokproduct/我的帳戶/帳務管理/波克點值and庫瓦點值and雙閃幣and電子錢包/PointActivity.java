@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;

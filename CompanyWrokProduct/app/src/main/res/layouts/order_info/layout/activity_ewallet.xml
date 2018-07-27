@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".帳務管理.錢包提領.EwalletActivity"
+    tools:context=".我的帳戶.帳務管理.錢包提領.EwalletActivity"
     android:orientation="vertical">
     <include
         layout="@layout/include_toolbar"

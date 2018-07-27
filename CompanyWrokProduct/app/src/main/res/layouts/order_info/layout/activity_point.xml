@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity"
+    tools:context=".我的帳戶.帳務管理.波克點值and庫瓦點值and雙閃幣and電子錢包.PointActivity"
     android:orientation="vertical">
     <include
         layout="@layout/include_toolbar"

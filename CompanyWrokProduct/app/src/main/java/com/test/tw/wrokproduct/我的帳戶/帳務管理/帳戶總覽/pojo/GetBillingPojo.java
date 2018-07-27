@@ -1,4 +1,4 @@
-package com.test.tw.wrokproduct.帳務管理.帳戶總覽.pojo;
+package com.test.tw.wrokproduct.我的帳戶.帳務管理.帳戶總覽.pojo;
 
 public class GetBillingPojo {
     String buname;

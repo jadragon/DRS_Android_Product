@@ -1,6 +1,5 @@
 package com.test.tw.wrokproduct.Fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,8 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MyCom
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.MyAppraiseRecyclerViewAdapter;
 import library.AnalyzeJSON.AnalyzeComment;
 import library.Component.ToastMessageDialog;
@@ -69,27 +70,31 @@ public class Fragment_Myappreciate extends Fragment {
     }
 
     public void setFilter() {
-        new DownloadImageTask().execute();
-    }
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public void onTaskBefore() {
 
-    private class DownloadImageTask extends AsyncTask<Void, Void, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(Void... voids) {
-            if (type == 0)
-                return new OrderInfoJsonData().getMyComment(gv.getToken(), rule);
-            else
-                return new StoreJsonData().getStoreComment(token, rule);
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            adapter.setFilter(jsonObject);
-            if (rule == 1) {
-                initTopInfo(jsonObject);
             }
-        }
+
+            @Override
+            public JSONObject onTasking(Void... params) {
+                if (type == 0)
+                    return new OrderInfoJsonData().getMyComment(gv.getToken(), rule);
+                else
+                    return new StoreJsonData().getStoreComment(token, rule);
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject json) {
+                adapter.setFilter(json);
+                if (rule == 1) {
+                    initTopInfo(json);
+                }
+            }
+        });
+
     }
+
 
     public void initTopInfo(JSONObject json) {
         MyCommenttopPojo myCommenttopPojo = new AnalyzeComment().getMyCommenttopPojo(json);
