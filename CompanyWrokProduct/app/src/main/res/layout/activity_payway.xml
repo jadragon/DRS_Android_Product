@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PayWayActivity">
+    tools:context=".PayWayActivity"
+    android:background="@color/white">
 
     <include
         layout="@layout/include_toolbar"
@@ -15,11 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/gainsboro"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:paddingRight="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,6 +29,7 @@
             android:text="應付金額:"
             android:textColor="@color/black"
             android:textSize="16sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -35,6 +37,7 @@
             android:text="$"
             android:textColor="@color/red"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/payway_activity_txt_opay"
             android:layout_width="wrap_content"
@@ -48,7 +51,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:showDividers="middle|end"
+        android:divider="@drawable/decoration_line">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,16 +73,16 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_weight="3"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="波克"
+                    android:text="商城點值"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -94,31 +99,36 @@
                 android:id="@+id/payway_activity_edit_xkeyin"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="5"
                 android:background="@drawable/edittext_background1"
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:lines="1"
-                android:maxLines="1"
                 android:maxLength="11"
-                android:textColor="@color/red"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingRight="2dp" />
+                android:maxLines="1"
+                android:paddingRight="2dp"
+                android:textColor="@color/red" />
+
+            <TextView
+                android:id="@+id/payway_activity_edit_xtrans"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/default_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
-
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="40dp"
@@ -157,23 +167,18 @@
                 android:id="@+id/payway_activity_edit_ykeyin"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="4"
                 android:background="@drawable/edittext_background1"
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:lines="1"
-                android:maxLines="1"
                 android:maxLength="11"
-                android:textColor="@color/red"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingRight="2dp" />
+                android:maxLines="1"
+                android:paddingRight="2dp"
+                android:textColor="@color/red" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/default_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -194,7 +199,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_weight="3"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -203,7 +208,7 @@
                     android:layout_height="wrap_content"
                     android:text="電子錢包"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -220,17 +225,23 @@
                 android:id="@+id/payway_activity_edit_ekeyin"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="5"
                 android:background="@drawable/edittext_background1"
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:lines="1"
-                android:maxLines="1"
                 android:maxLength="11"
-                android:textColor="@color/red"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingRight="2dp" />
+                android:maxLines="1"
+                android:paddingRight="2dp"
+                android:textColor="@color/red" />
+            <TextView
+                android:id="@+id/payway_activity_txt_etrans"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -249,6 +260,7 @@
             android:text="應付金額:"
             android:textColor="@color/black"
             android:textSize="16sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -256,6 +268,7 @@
             android:text="$"
             android:textColor="@color/red"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/payway_activity_txt_total"
             android:layout_width="wrap_content"
@@ -271,7 +284,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:showDividers="middle|end"
+        android:divider="@drawable/decoration_line">
 
         <LinearLayout
             android:id="@+id/choice1"
@@ -325,10 +340,7 @@
                 android:src="@drawable/select_nike_red" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/default_gray" />
+
 
         <LinearLayout
             android:id="@+id/choice2"
@@ -383,11 +395,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/default_gray" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -404,7 +411,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginTop="10dp"
-            android:background="@color/red"
+            android:background="@drawable/arcangle_button_red"
             android:text="確認"
             android:textColor="@color/white"
             android:textSize="20sp" />

@@ -3,40 +3,36 @@ package library.GetJsonData;
 
 import android.content.Context;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import library.Http.WebVewJsonParser;
 
-public class GetWebView {
-    private  final String register_url = "http://mall-tapi.gok1945.com/main/snetwork/register.php";
-    private  final String activation_url = "http://mall-tapi.gok1945.com/main/snetwork/activation.php";
-    private  final String inactivated_url = "http://mall-tapi.gok1945.com/main/snetwork/inactivated.php";
-    private  final String directPush_url = "http://mall-tapi.gok1945.com/main/snetwork/directPush.php";
-    private  final String placement_url = "http://mall-tapi.gok1945.com/main/snetwork/placement.php";
-    private  final String upgrade_url = "http://mall-tapi.gok1945.com/main/snetwork/upgrade.php";
-    private  final String recommend_url = "http://mall-tapi.gok1945.com/main/snetwork/recommend.php";
-    private  final String agency_url = "http://mall-tapi.gok1945.com/main/snetwork/agency.php";
-    private  final String getMap_url = "http://mall-tapi.gok1945.com/main/cart/getMap.php";
-    private  final String setGoldFlow_url = "http://mall-tapi.gok1945.com/main/cart/setGoldFlow.php";
+public class GetWebView extends APIInfomation {
+    private  final String register_url = DOMAIN+"main/snetwork/register.php";
+    private  final String activation_url = DOMAIN+"main/snetwork/activation.php";
+    private  final String inactivated_url = DOMAIN+"main/snetwork/inactivated.php";
+    private  final String directPush_url = DOMAIN+"main/snetwork/directPush.php";
+    private  final String placement_url = DOMAIN+"main/snetwork/placement.php";
+    private  final String upgrade_url = DOMAIN+"main/snetwork/upgrade.php";
+    private  final String recommend_url = DOMAIN+"main/snetwork/recommend.php";
+    private  final String agency_url = DOMAIN+"main/snetwork/agency.php";
+    private  final String getMap_url = DOMAIN+"main/cart/getMap.php";
+    private  final String setGoldFlow_url = DOMAIN+"main/cart/setGoldFlow.php";
     private WebVewJsonParser jsonParser;
-    List<NameValuePair> params;
-
     public GetWebView() {
         jsonParser = new WebVewJsonParser();
         params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+        params.add(new BasicNameValuePair("gok", GOK));
+        params.add(new BasicNameValuePair("lang", LANG));
         params.add(new BasicNameValuePair("device", "2"));
     }
 
     public GetWebView(Context context) {
         jsonParser = new WebVewJsonParser(context);
         params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
+        params.add(new BasicNameValuePair("gok",  GOK));
         params.add(new BasicNameValuePair("device", "3"));
     }
 

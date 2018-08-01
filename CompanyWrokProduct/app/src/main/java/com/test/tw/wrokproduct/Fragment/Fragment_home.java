@@ -28,7 +28,6 @@ import android.widget.RelativeLayout;
 
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.LoginActivity;
-import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.SearchBarActivity;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
@@ -212,14 +211,6 @@ public class Fragment_home extends Fragment {
             gridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
             recyclerView2.setLayoutManager(gridLayoutManager);
             recyclerView2.setAdapter(myRecyclerAdapter2);
-            myRecyclerAdapter2.setClickListener(new MyRecyclerAdapter.ClickListener() {
-                @Override
-                public void ItemClicked(View view, int postion, ArrayList<ProductInfoPojo> list) {
-                    Intent intent = new Intent(getContext(), PtypeActivity.class);
-                    intent.putExtra("position", postion);
-                    startActivity(intent);
-                }
-            });
             //取得Brands圖片
             myRecyclerAdapter3 = new MyRecyclerAdapter(getContext(), ResolveJsonData.getJSONData(json3), 2);
             gridLayoutManager = new GridLayoutManager(getContext(), 2);

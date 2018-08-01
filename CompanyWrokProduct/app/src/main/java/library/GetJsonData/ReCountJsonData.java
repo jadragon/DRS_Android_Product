@@ -1,20 +1,15 @@
 package library.GetJsonData;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import library.Http.JSONParser;
 import library.Http.WebVewJsonParser;
 
-public class ReCountJsonData {
+public class ReCountJsonData extends APIInfomation {
     public static final int COUNT = 0;
     public static final int RECOUNT = 1;
-    private final String count_url = "http://mall-tapi.gok1945.com/main/cart/";
-    private final String recount_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/";
+    private final String count_url = DOMAIN + "main/cart/";
+    private final String recount_url = DOMAIN + "main/mcenter/morder/";
 
     private final String goCheckout_url = "goCheckout.php";
     private final String getCheckout_url = "getCheckout.php";
@@ -26,14 +21,9 @@ public class ReCountJsonData {
     private final String setStoreNote_url = "setStoreNote.php";
     private final String setGoldFlow_url = "setGoldFlow.php";
     private final String setVat_url = "setVat.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
 
     public ReCountJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+        super();
     }
 
     /**
@@ -192,7 +182,7 @@ public class ReCountJsonData {
      * 3.1.18	重新結帳 - 處理金流流程
      */
     public String setGoldFlow(int count_type, String token) {
-        WebVewJsonParser  webVewJsonParser=new WebVewJsonParser();
+        WebVewJsonParser webVewJsonParser = new WebVewJsonParser();
         params.add(new BasicNameValuePair("device", "1"));
         params.add(new BasicNameValuePair("token", token));
         if (count_type == COUNT) {

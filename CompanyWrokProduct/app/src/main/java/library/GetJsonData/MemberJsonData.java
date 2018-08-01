@@ -1,34 +1,21 @@
 package library.GetJsonData;
 
-import android.util.Log;
-
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import library.Http.JSONParser;
-
-public class MemberJsonData {
-    private  final String register_url = "http://mall-tapi.gok1945.com/main/member/register.php";
-    private  final String gvcode_url = "http://mall-tapi.gok1945.com/main/member/gvcode.php";
-    private  final String login_url = "http://mall-tapi.gok1945.com/main/member/login.php";
-    private  final String forget_url = "http://mall-tapi.gok1945.com/main/member/forget.php";
-    private  final String getPersonData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/getPersonData.php";
-    private  final String updateBasicData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updateBasicData.php";
-    private  final String getBankData_url = "http://mall-tapi.gok1945.com/main/other/getBankData.php";
-    private  final String updateBillingData_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updateBillingData.php";
-    private  final String updatePersonPawd_url = "http://mall-tapi.gok1945.com/main/mcenter/person/updatePersonPawd.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
+public class MemberJsonData extends APIInfomation {
+    private final String register_url = DOMAIN + "main/member/register.php";
+    private final String gvcode_url = DOMAIN + "main/member/gvcode.php";
+    private final String login_url = DOMAIN + "main/member/login.php";
+    private final String forget_url = DOMAIN + "main/member/forget.php";
+    private final String getPersonData_url = DOMAIN + "main/mcenter/person/getPersonData.php";
+    private final String updateBasicData_url = DOMAIN + "main/mcenter/person/updateBasicData.php";
+    private final String getBankData_url = DOMAIN + "main/other/getBankData.php";
+    private final String updateBillingData_url = DOMAIN + "main/mcenter/person/updateBillingData.php";
+    private final String updatePersonPawd_url = DOMAIN + "main/mcenter/person/updatePersonPawd.php";
 
     public MemberJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+        super();
     }
 
 

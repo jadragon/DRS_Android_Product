@@ -4,25 +4,21 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import library.Http.JSONParser;
 
-public class ContactJsonData {
-    private  final String getContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/getContact.php";
-    private  final String getContactCont_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/getContactCont.php";
-    private final String setContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/setContact.php";
-    private  final String delContact_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/delContact.php";
-    private final String setContactCont_url = "http://mall-tapi.gok1945.com/main/mcenter/contact/setContactCont.php";
+public class ContactJsonData extends APIInfomation {
+    private final String getContact_url = DOMAIN + "main/mcenter/contact/getContact.php";
+    private final String getContactCont_url = DOMAIN + "main/mcenter/contact/getContactCont.php";
+    private final String setContact_url = DOMAIN + "main/mcenter/contact/setContact.php";
+    private final String delContact_url = DOMAIN + "main/mcenter/contact/delContact.php";
+    private final String setContactCont_url = DOMAIN + "main/mcenter/contact/setContactCont.php";
     private JSONParser jsonParser;
     List<NameValuePair> params;
 
     public ContactJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+        super();
     }
 
     /**

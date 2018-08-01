@@ -64,9 +64,10 @@ public class RegisterDetailActivity extends AppCompatActivity {
                 if (!registerdetail_edit_account.getText().toString().equals("")) {
                     if ((registerdetail_edit_password.getText().length() > 5 && registerdetail_edit_password.getText().length() < 16)) {
                         if (registerdetail_edit_password.getText().toString().equals(registerdetail_edit_repassword.getText().toString())) {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
                                     switch (type) {
                                         case 1:
                                             jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
@@ -81,29 +82,33 @@ public class RegisterDetailActivity extends AppCompatActivity {
                                             jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
                                             break;
                                     }
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                boolean success = jsonObject.getBoolean("Success");
-                                                if (success) {
-                                                    Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(RegisterDetailActivity.this, LoginActivity.class);
-                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                    startActivity(intent);
-                                                } else {
-                                                    toastMessage.setMessageText(jsonObject.getString("Message"));
-                                                    toastMessage.confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
 
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (jsonObject.getBoolean("Success")) {
+                                        Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(RegisterDetailActivity.this, MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        intent = new Intent(RegisterDetailActivity.this, LoginActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    } else {
+                                        toastMessage.setMessageText(jsonObject.getString("Message"));
+                                        toastMessage.confirm();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            }).start();
+                            }
+                        });
+
+                    }
+                }).start();
                         } else {
                             toastMessage.setMessageText("請確認密碼輸入是否正確");
                             toastMessage.confirm();

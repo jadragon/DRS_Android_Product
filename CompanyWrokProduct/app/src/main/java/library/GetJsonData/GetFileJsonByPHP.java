@@ -6,20 +6,17 @@ import android.content.Context;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import library.Http.GetFileJson;
 
-public class GetFileJsonByPHP {
-    private  final String getAddress_url = "http://mall-tapi.gok1945.com/main/cart/getAddress.php";
+public class GetFileJsonByPHP extends APIInfomation {
+    private  final String getAddress_url = DOMAIN+"main/cart/getAddress.php";
     private GetFileJson jsonParser;
     List<NameValuePair> params;
 
     public GetFileJsonByPHP(Context context) {
-        jsonParser = new GetFileJson(context);
-        params = new ArrayList<>();
-
+        super();
     }
 
 

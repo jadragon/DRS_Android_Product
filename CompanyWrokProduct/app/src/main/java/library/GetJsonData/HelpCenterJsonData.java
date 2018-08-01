@@ -1,27 +1,15 @@
 package library.GetJsonData;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import library.Http.JSONParser;
-
-public class HelpCenterJsonData {
-    private  final String category_url = "http://mall-tapi.gok1945.com/main/footer/category.php";
-    private  final String searchCategory_url = "http://mall-tapi.gok1945.com/main/footer/searchCategory.php";
-    private  final String searchMbCategory_url = "http://mall-tapi.gok1945.com/main/footer/searchMbCategory.php";
-    private  final String citem_url = "http://mall-tapi.gok1945.com/main/footer/citem.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
-
+public class HelpCenterJsonData extends APIInfomation{
+    private  final String category_url = DOMAIN+"main/footer/category.php";
+    private  final String searchCategory_url = DOMAIN+"main/footer/searchCategory.php";
+    private  final String searchMbCategory_url = DOMAIN+"main/footer/searchMbCategory.php";
+    private  final String citem_url = DOMAIN+"main/footer/citem.php";
     public HelpCenterJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+       super();
     }
 
     /**

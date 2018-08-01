@@ -1,6 +1,7 @@
 package adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.test.tw.wrokproduct.PtypeActivity;
 import com.test.tw.wrokproduct.R;
+import com.test.tw.wrokproduct.SearchResultActivity;
 
 import org.json.JSONObject;
 
@@ -26,8 +29,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
     View view;
     ArrayList<ProductInfoPojo> list;
     DisplayMetrics dm;
-
-    private MyRecyclerAdapter.ClickListener clickListener;
 
     public MyRecyclerAdapter(Context ctx, ArrayList<ProductInfoPojo> list, int type) {
         this.ctx = ctx;
@@ -96,19 +97,24 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if (clickListener != null) {
-                clickListener.ItemClicked(view, position, list);
+            switch (type) {
+                case 0:
+                    Intent intent = new Intent(ctx, SearchResultActivity.class);
+                    intent.putExtra("keyword", list.get(position).getTitle());
+                    ctx.startActivity(intent);
+                    break;
+                case 1:
+                    intent = new Intent(ctx, PtypeActivity.class);
+                    intent.putExtra("position", position);
+                    ctx.startActivity(intent);
+                    break;
+                case 2:
+                    break;
             }
+
         }
     }
 
-    public void setClickListener(MyRecyclerAdapter.ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void ItemClicked(View view, int postion, ArrayList<ProductInfoPojo> list);
-    }
 
     public void setFilter(ArrayList<ProductInfoPojo> list) {
         this.list = list;

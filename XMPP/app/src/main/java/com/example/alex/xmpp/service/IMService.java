@@ -7,10 +7,10 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.alex.xmpp.XmppConnection;
 import com.example.alex.xmpp.dbhelper.ContactOpenHelper;
 import com.example.alex.xmpp.provider.ContactProvider;
 
+import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.RosterListener;
@@ -19,10 +19,14 @@ import org.jivesoftware.smack.packet.Presence;
 
 import java.util.Collection;
 
+
 public class IMService extends Service {
-    public XMPPConnection connection;
     Roster roster;
     MyRosterListener myRosterListener;
+    public static XMPPConnection connection = null;
+    public final static int SERVER_PORT = 5222;//服务端口 可以在openfire上设置
+    public final static String SERVER_HOST = "220.134.248.18";//你openfire服务器所在的ip
+    public final static String SERVER_NAME = "220.134.248.18";
 
     @Nullable
     @Override
@@ -30,10 +34,37 @@ public class IMService extends Service {
         return null;
     }
 
+    private static void openConnection() {
+        //配置连接
+        ConnectionConfiguration conConfig = new ConnectionConfiguration(
+                SERVER_HOST, SERVER_PORT);
+        conConfig.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);// 传明文
+        conConfig.setDebuggerEnabled(true);
+        //设置断网重连 默认为true
+        conConfig.setReconnectionAllowed(true);
+        //设置登录状态 true-为在线
+        conConfig.setSendPresence(true);
+        //设置不需要SAS验证
+        conConfig.setSASLAuthenticationEnabled(true);
+        //开启连接
+        connection = new XMPPConnection(conConfig);
+            //配置各种Provider，如果不配置，则会无法解析数据
+            //   configureConnection(ProviderManager.getInstance());
+    }
+
+    /**
+     * 创建连接
+     */
+    public static XMPPConnection getConnection() {
+        if (connection == null) {
+            openConnection();
+        }
+        return connection;
+    }
+
     @Override
     public void onCreate() {
         Log.e("IMService", "------onCreate------");
-        connection = XmppConnection.getConnection();
         //同步聯繫人
         new Thread(new Runnable() {
             @Override
@@ -64,7 +95,6 @@ public class IMService extends Service {
         if (roster != null && myRosterListener != null) {
             roster.removeRosterListener(myRosterListener);
         }
-        XmppConnection.closeConnection();
         super.onDestroy();
     }
 

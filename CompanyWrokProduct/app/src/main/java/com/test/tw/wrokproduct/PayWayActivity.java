@@ -27,24 +27,32 @@ import library.Component.ToastMessageDialog;
 import library.GetJsonData.ReCountJsonData;
 
 public class PayWayActivity extends AppCompatActivity implements TextView.OnEditorActionListener, View.OnFocusChangeListener, View.OnClickListener {
-    Toolbar toolbar;
-    TextView toolbar_title;
-    GlobalVariable gv;
-    TextView payway_activity_txt_opay, payway_activity_txt_xmoney, payway_activity_txt_ymoney, payway_activity_txt_ewallet,
+    private Toolbar toolbar;
+    private TextView toolbar_title;
+    private GlobalVariable gv;
+    private TextView payway_activity_txt_opay, payway_activity_txt_xmoney,
+    // payway_activity_txt_ymoney,
+    payway_activity_edit_xtrans,
+            payway_activity_txt_ewallet,
+            payway_activity_txt_etrans,
             payway_activity_txt_pname1, payway_activity_txt_info1, payway_activity_txt_pname2, payway_activity_txt_info2,
             payway_activity_txt_total;
-    EditText payway_activity_edit_ekeyin, payway_activity_edit_xkeyin, payway_activity_edit_ykeyin;
-    JSONObject json;
-    ArrayList<Map<String, String>> data_list, pay_list;
-    int xtrans, ytrans;
-    long opay, xmoney, xkeyin, ymoney, ykeyin, ewallet, ekeyin, total;
-    LinearLayout choice1, choice2;
-    ImageView payway_activity_txt_isused1, payway_activity_txt_isused2;
-    Animation animation;
-    String pno;
-    Button payway_activity_btn_confirm;
-    int count_type;
-    ToastMessageDialog toastMessageDialog;
+    private EditText payway_activity_edit_ekeyin, payway_activity_edit_xkeyin, payway_activity_edit_ykeyin;
+    private JSONObject json;
+    private ArrayList<Map<String, String>> data_list, pay_list;
+    private int xtrans
+            //,ytrans
+            ;
+    private long opay, xmoney, xkeyin,
+    //ymoney, ykeyin,
+    ewallet, ekeyin, total;
+    private LinearLayout choice1, choice2;
+    private ImageView payway_activity_txt_isused1, payway_activity_txt_isused2;
+    private Animation animation;
+    private String pno;
+    private Button payway_activity_btn_confirm;
+    private int count_type;
+    private ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +70,18 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 data_list = AnalyzeShopCart.getMemberPaymentsData(json);
                 pay_list = AnalyzeShopCart.getMemberPaymentsPay(json);
                 xtrans = Integer.parseInt(pay_list.get(0).get("xtrans"));
-                ytrans = Integer.parseInt(pay_list.get(0).get("ytrans"));
+                //  ytrans = Integer.parseInt(pay_list.get(0).get("ytrans"));
                 opay = Long.parseLong(pay_list.get(0).get("opay"));
                 xmoney = Long.parseLong(pay_list.get(0).get("xmoney"));
-                ymoney = Long.parseLong(pay_list.get(0).get("ymoney"));
+                // ymoney = Long.parseLong(pay_list.get(0).get("ymoney"));
                 ewallet = Long.parseLong(pay_list.get(0).get("ewallet"));
                 ekeyin = Long.parseLong(pay_list.get(0).get("ekeyin"));
                 xkeyin = Long.parseLong(pay_list.get(0).get("xkeyin"));
-                ykeyin = Long.parseLong(pay_list.get(0).get("ykeyin"));
+                //  ykeyin = Long.parseLong(pay_list.get(0).get("ykeyin"));
 
-                total = (opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin);
+                total = (opay - (xkeyin / xtrans) -
+                        //  (ykeyin / ytrans)
+                        -ekeyin);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -108,10 +118,12 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
         //opay
         payway_activity_txt_opay = findViewById(R.id.payway_activity_txt_opay);
         //xmoney
+        payway_activity_edit_xtrans = findViewById(R.id.payway_activity_edit_xtrans);
         payway_activity_txt_xmoney = findViewById(R.id.payway_activity_txt_xmoney);
         //ymoney
-        payway_activity_txt_ymoney = findViewById(R.id.payway_activity_txt_ymoney);
+        //  payway_activity_txt_ymoney = findViewById(R.id.payway_activity_txt_ymoney);
         //ewallet
+        payway_activity_txt_etrans = findViewById(R.id.payway_activity_txt_etrans);
         payway_activity_txt_ewallet = findViewById(R.id.payway_activity_txt_ewallet);
         //pname1
         payway_activity_txt_pname1 = findViewById(R.id.payway_activity_txt_pname1);
@@ -182,7 +194,7 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        json = new ReCountJsonData().setMemberPayment(count_type, gv.getToken(), xkeyin, ykeyin, ekeyin, pno);
+                        json = new ReCountJsonData().setMemberPayment(count_type, gv.getToken(), xkeyin, 0, ekeyin, pno);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -208,7 +220,9 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
     private void initText() {
         payway_activity_txt_opay.setText(StringUtil.getDeciamlString("" + opay));
         payway_activity_txt_xmoney.setText("(餘額:" + xmoney + "點)");
-        payway_activity_txt_ymoney.setText("(餘額:" + ymoney + "點)");
+        payway_activity_edit_xtrans.setText("  /  " + xtrans);
+        payway_activity_txt_etrans.setText("  /  " + xtrans);
+        // payway_activity_txt_ymoney.setText("(餘額:" + ymoney + "點)");
         payway_activity_txt_ewallet.setText("(餘額:" + ewallet + "點)");
         payway_activity_txt_pname1.setText(data_list.get(0).get("pname") + "");
         payway_activity_txt_info1.setText(data_list.get(0).get("info") + "");
@@ -216,7 +230,7 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
         payway_activity_txt_info2.setText(data_list.get(1).get("info") + "");
         payway_activity_edit_ekeyin.setText(ekeyin + "");
         payway_activity_edit_xkeyin.setText(xkeyin + "");
-        payway_activity_edit_ykeyin.setText(ykeyin + "");
+        // payway_activity_edit_ykeyin.setText(ykeyin + "");
         payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
     }
 
@@ -300,15 +314,20 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
         long number = textView.getText().toString().equals("") ? 0 : Long.parseLong(textView.getText().toString());
         switch (textView.getId()) {
             case R.id.payway_activity_edit_xkeyin:
-                if (number <= xmoney && (opay - ((number - number % xtrans) / xtrans) - (ykeyin / ytrans) - ekeyin) >= 0) {
+                if (number <= xmoney && (opay - ((number - number % xtrans) / xtrans) -
+                        //   (ykeyin / ytrans)
+                        -ekeyin) >= 0) {
                     xkeyin = number - number % xtrans;
                     textView.setText(xkeyin + "");
-                    total = opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin;
+                    total = opay - (xkeyin / xtrans) -
+                            // (ykeyin / ytrans)
+                            -ekeyin;
                     payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
                 } else {
                     textView.setText(xkeyin + "");
                 }
                 break;
+                /*
             case R.id.payway_activity_edit_ykeyin:
                 if (number <= ymoney && (opay - (xkeyin / xtrans) - ((number - number % ytrans) / ytrans) - ekeyin) >= 0) {
                     ykeyin = number - number % ytrans;
@@ -319,11 +338,16 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                     textView.setText(ykeyin + "");
                 }
                 break;
+                */
             case R.id.payway_activity_edit_ekeyin:
-                if (number <= ewallet && (opay - (xkeyin / xtrans) - (ykeyin / ytrans) - number) >= 0) {
+                if (number <= ewallet && (opay - (xkeyin / xtrans)
+                        // -(ykeyin / ytrans)
+                        - number) >= 0) {
                     ekeyin = number;
                     textView.setText(ekeyin + "");
-                    total = opay - (xkeyin / xtrans) - (ykeyin / ytrans) - ekeyin;
+                    total = opay - (xkeyin / xtrans)
+                            //-(ykeyin / ytrans)
+                            - ekeyin;
                     payway_activity_txt_total.setText((StringUtil.getDeciamlString("" + total)));
                 } else {
                     textView.setText(ekeyin + "");

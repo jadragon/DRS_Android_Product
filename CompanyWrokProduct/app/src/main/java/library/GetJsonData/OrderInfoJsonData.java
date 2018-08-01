@@ -1,39 +1,28 @@
 package library.GetJsonData;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import library.Http.JSONParser;
-
-public class OrderInfoJsonData {
-    private final String getMemberOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMemberOrder.php";
-    private final String getMOrderPay_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderPay.php";
-    private final String getMOrderItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderItem.php";
-    private final String applyCancel_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyCancel.php";
-    private final String cancelMOrder_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/cancelMOrder.php";
-    private final String extendReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/extendReceipt.php";
-    private final String confirmReceipt_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/confirmReceipt.php";
-    private final String applyReturn_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturn.php";
-    private final String complaintStore_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/complaintStore.php";
-    private final String getOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/getOrderComment.php";
-    private final String setOrderComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/setOrderComment.php";
-    private final String getMOrderReturnItem_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/getMOrderReturnItem.php";
-    private final String applyReturnLnum_url = "http://mall-tapi.gok1945.com/main/mcenter/morder/applyReturnLnum.php";
-    private final String getMyComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/getMyComment.php";
-    private final String setMyComment_url = "http://mall-tapi.gok1945.com/main/mcenter/comment/setMyComment.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
+public class OrderInfoJsonData extends APIInfomation {
+    private final String getMemberOrder_url = DOMAIN + "main/mcenter/morder/getMemberOrder.php";
+    private final String getMOrderPay_url = DOMAIN + "main/mcenter/morder/getMOrderPay.php";
+    private final String getMOrderItem_url = DOMAIN + "main/mcenter/morder/getMOrderItem.php";
+    private final String applyCancel_url = DOMAIN + "main/mcenter/morder/applyCancel.php";
+    private final String cancelMOrder_url = DOMAIN + "main/mcenter/morder/cancelMOrder.php";
+    private final String extendReceipt_url = DOMAIN + "main/mcenter/morder/extendReceipt.php";
+    private final String confirmReceipt_url = DOMAIN + "main/mcenter/morder/confirmReceipt.php";
+    private final String applyReturn_url = DOMAIN + "main/mcenter/morder/applyReturn.php";
+    private final String complaintStore_url = DOMAIN + "main/mcenter/comment/complaintStore.php";
+    private final String getOrderComment_url = DOMAIN + "main/mcenter/comment/getOrderComment.php";
+    private final String setOrderComment_url = DOMAIN + "main/mcenter/comment/setOrderComment.php";
+    private final String getMOrderReturnItem_url = DOMAIN + "main/mcenter/morder/getMOrderReturnItem.php";
+    private final String applyReturnLnum_url = DOMAIN + "main/mcenter/morder/applyReturnLnum.php";
+    private final String getMyComment_url = DOMAIN + "main/mcenter/comment/getMyComment.php";
+    private final String setMyComment_url = DOMAIN + "main/mcenter/comment/setMyComment.php";
 
     public OrderInfoJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+        super();
     }
 
     /**

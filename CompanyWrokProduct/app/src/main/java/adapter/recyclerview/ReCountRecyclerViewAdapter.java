@@ -27,11 +27,11 @@ import com.test.tw.wrokproduct.ShipWayActivity;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeShopCart;
 import library.GetJsonData.ReCountJsonData;
 
@@ -217,28 +217,28 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
                 holder.viewitem_count_content_title.setText(items.get(position).getPname());
                 holder.viewitem_count_content_color.setText(items.get(position).getColor());
                 holder.viewitem_count_content_size.setText(items.get(position).getSize());
-                holder.viewitem_count_content_total.setText("x" + getDeciamlString(items.get(position).getStotal()));
-                holder.viewitem_count_content_price.setText("$" + getDeciamlString(items.get(position).getSprice()));
+                holder.viewitem_count_content_total.setText("x" + StringUtil.getDeciamlString(items.get(position).getStotal()));
+                holder.viewitem_count_content_price.setText("$" + StringUtil.getDeciamlString(items.get(position).getSprice()));
             } else if (getItemViewType(position) == TYPE_HEADER) {
                 holder.viewitem_count_title_txt.setText(items.get(position).getSname());
             } else if (getItemViewType(position) == TYPE_SHIPWAY) {
                 holder.viewitem_count_shipways_style.setText(items.get(position).getShippingStyle());
-                holder.viewitem_count_shipways_pay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
+                holder.viewitem_count_shipways_pay.setText("$" + StringUtil.getDeciamlString(items.get(position).getShippingPay()));
                 holder.viewitem_count_shipways_address.setText(items.get(position).getShippingAddress());
                 holder.viewitem_count_shipways_name.setText(items.get(position).getShippingName());
             } else if (getItemViewType(position) == TYPE_DISCOUNT) {
                 holder.discount_title.setText("店家優惠:" + items.get(position).getDiscountInfo());
-                holder.discount_total.setText("$" + getDeciamlString(items.get(position).getDiscount()));
+                holder.discount_total.setText("$" + StringUtil.getDeciamlString(items.get(position).getDiscount()));
             } else if (getItemViewType(position) == TYPE_COUNT) {
-                holder.viewitem_count_total_shippay.setText("$" + getDeciamlString(items.get(position).getShippingPay()));
-                holder.viewitem_count_total_subtotal.setText("$" + getDeciamlString(items.get(position).getSubtotal()));
+                holder.viewitem_count_total_shippay.setText("$" + StringUtil.getDeciamlString(items.get(position).getShippingPay()));
+                holder.viewitem_count_total_subtotal.setText("$" + StringUtil.getDeciamlString(items.get(position).getSubtotal()));
             } else if (getItemViewType(position) == TYPE_PAY) {
                 if (footerItem != null) {
                     if (footerItem.getMdiscount() != 0)
                         holder.viewitem_count_coupon_mdiscount.setText((int) footerItem.getMdiscount() + "");
                     else
                         holder.viewitem_count_frame_mdiscount.setVisibility(View.GONE);
-                    holder.viewitem_count_pay_opay.setText("$" + getDeciamlString(footerItem.getOpay()));
+                    holder.viewitem_count_pay_opay.setText("$" + StringUtil.getDeciamlString(footerItem.getOpay()));
                     holder.viewitem_count_pay_pterms.setText(footerItem.getPterms());
                     if (footerItem.getXmoney() != 0) {
                         holder.viewitem_count_pay_xmoney.setText((int) footerItem.getXmoney() + "");
@@ -255,7 +255,7 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
                         holder.viewitem_count_frame_ewallet.setVisibility(View.VISIBLE);
                     } else
                         holder.viewitem_count_frame_ewallet.setVisibility(View.GONE);
-                    holder.viewitem_count_pay_rpay.setText("$" + getDeciamlString(footerItem.getRpay()) + "");
+                    holder.viewitem_count_pay_rpay.setText("$" + StringUtil.getDeciamlString(footerItem.getRpay()) + "");
                     holder.viewitem_count_invoice_invoice.setText(invoiceType[footerItem.getInvoice()]);
                     holder.viewitem_count_invoice_ctitle.setText(footerItem.getCtitle() + "");
                     holder.viewitem_count_invoice_vat.setText(footerItem.getVat());
@@ -304,10 +304,6 @@ public class ReCountRecyclerViewAdapter extends RecyclerView.Adapter<ReCountRecy
 
     }
 
-    private String getDeciamlString(String str) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        return df.format(Double.parseDouble(str));
-    }
 
     private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
         ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;

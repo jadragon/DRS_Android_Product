@@ -228,8 +228,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             public void runUiThread(JSONObject json) {
                 try {
                     LoadingView.hide();
-                    boolean success = json.getBoolean("Success");
-                    if (success) {
+                    if (json.getBoolean("Success")) {
                         vcode = json.getString("Data");
                         register_edit_account.setFocusable(false);
                     }

@@ -1,40 +1,29 @@
 package library.GetJsonData;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ShopCartJsonData extends APIInfomation {
+    private final String setCart_url = DOMAIN + "main/cart/setCart.php";
+    private final String getCart_url = DOMAIN + "main/cart/getCart.php";
+    private final String addCartProduct_url = DOMAIN + "main/cart/addCartProduct.php";
+    private final String delCartProduct_url = DOMAIN + "main/cart/delCartProduct.php";
+    private final String setCartDiscount_url = DOMAIN + "main/cart/setCartDiscount.php";
+    private final String delCartDiscount_url = DOMAIN + "main/cart/delCartDiscount.php";
+    private final String goCheckout_url = DOMAIN + "main/cart/goCheckout.php";
+    private final String getCheckout_url = DOMAIN + "main/cart/getCheckout.php";
+    private final String setStoreNote_url = DOMAIN + "main/cart/setStoreNote.php";
+    private final String getStoreLogistics_url = DOMAIN + "main/cart/getStoreLogistics.php";
+    private final String setStoreMemberLogistics_url = DOMAIN + "main/cart/setStoreMemberLogistics.php";
+    private final String setMemberLogistics_url = DOMAIN + "main/cart/setMemberLogistics.php";
 
-import library.Http.JSONParser;
-
-public class ShopCartJsonData {
-    private  final String setCart_url = "http://mall-tapi.gok1945.com/main/cart/setCart.php";
-    private  final String getCart_url = "http://mall-tapi.gok1945.com/main/cart/getCart.php";
-    private  final String addCartProduct_url = "http://mall-tapi.gok1945.com/main/cart/addCartProduct.php";
-    private  final String delCartProduct_url = "http://mall-tapi.gok1945.com/main/cart/delCartProduct.php";
-    private  final String setCartDiscount_url = "http://mall-tapi.gok1945.com/main/cart/setCartDiscount.php";
-    private  final String delCartDiscount_url = "http://mall-tapi.gok1945.com/main/cart/delCartDiscount.php";
-    private  final String goCheckout_url = "http://mall-tapi.gok1945.com/main/cart/goCheckout.php";
-    private  final String getCheckout_url = "http://mall-tapi.gok1945.com/main/cart/getCheckout.php";
-    private  final String setStoreNote_url = "http://mall-tapi.gok1945.com/main/cart/setStoreNote.php";
-    private  final String getStoreLogistics_url = "http://mall-tapi.gok1945.com/main/cart/getStoreLogistics.php";
-    private  final String setStoreMemberLogistics_url = "http://mall-tapi.gok1945.com/main/cart/setStoreMemberLogistics.php";
-    private  final String setMemberLogistics_url = "http://mall-tapi.gok1945.com/main/cart/setMemberLogistics.php";
-
-    private  final String getMemberPayments_url = "http://mall-tapi.gok1945.com/main/cart/getMemberPayment.php";
-    private  final String setMemberPayment_url = "http://mall-tapi.gok1945.com/main/cart/setMemberPayment.php";
-    private  final String setVat_url = "http://mall-tapi.gok1945.com/main/cart/setVat.php";
-    private  final String setGoldFlow_url = "http://mall-tapi.gok1945.com/main/cart/setGoldFlow.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
+    private final String getMemberPayments_url = DOMAIN + "main/cart/getMemberPayment.php";
+    private final String setMemberPayment_url = DOMAIN + "main/cart/setMemberPayment.php";
+    private final String setVat_url = DOMAIN + "main/cart/setVat.php";
+    private final String setGoldFlow_url = DOMAIN + "main/cart/setGoldFlow.php";
 
     public ShopCartJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+        super();
     }
 
     /**
@@ -51,7 +40,7 @@ public class ShopCartJsonData {
     /**
      * 1.3.2	購買清單 - 讀取購買資訊
      */
-    public JSONObject getCart(String token,String type) {
+    public JSONObject getCart(String token, String type) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("type", type));
         return jsonParser.getJSONFromUrl(getCart_url, params);
@@ -79,10 +68,10 @@ public class ShopCartJsonData {
     /**
      * 1.3.5	購買清單 - 輸入折扣代碼
      */
-    public JSONObject setCartDiscount(String token, String coupon,int pay) {
+    public JSONObject setCartDiscount(String token, String coupon, int pay) {
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("coupon", coupon));
-        params.add(new BasicNameValuePair("pay", pay+""));
+        params.add(new BasicNameValuePair("pay", pay + ""));
         return jsonParser.getJSONFromUrl(setCartDiscount_url, params);
     }
 

@@ -1,28 +1,17 @@
 package library.GetJsonData;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import library.Http.JSONParser;
-
-public class LogisticsJsonData {
-    private  final String getLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/getLogistics.php";
-    private  final String setLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/setLogistics.php";
-    private  final String updateLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/updateLogistics.php";
-    private  final String delLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/delLogistics.php";
-    private  final String setInitLogistics_url = "http://mall-tapi.gok1945.com/main/mcenter/mlogistics/setInitLogistics.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
+public class LogisticsJsonData extends APIInfomation{
+    private  final String getLogistics_url = DOMAIN+"main/mcenter/mlogistics/getLogistics.php";
+    private  final String setLogistics_url = DOMAIN+"main/mcenter/mlogistics/setLogistics.php";
+    private  final String updateLogistics_url = DOMAIN+"main/mcenter/mlogistics/updateLogistics.php";
+    private  final String delLogistics_url = DOMAIN+"main/mcenter/mlogistics/delLogistics.php";
+    private  final String setInitLogistics_url = DOMAIN+"main/mcenter/mlogistics/setInitLogistics.php";
 
     public LogisticsJsonData() {
-        jsonParser = new JSONParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
-        params.add(new BasicNameValuePair("lang", "0"));
+     super();
     }
 
     /**
