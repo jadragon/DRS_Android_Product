@@ -25,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:text="1238"
+                    android:text="user1"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
@@ -42,7 +42,7 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:text="aa1234"
+                    android:text="123456"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>

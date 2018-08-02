@@ -11,34 +11,35 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.alex.xmpp.dbhelper.ContactOpenHelper;
+import com.example.alex.xmpp.dbhelper.SMSOpenHelper;
 
-public class ContactProvider extends ContentProvider {
+public class SMSProvider extends ContentProvider {
     //主機地址常量--?當前類的完整路徑
-    private static final String AUTHORITIES = ContactProvider.class.getCanonicalName();//得到一個類的完整路徑
+    private static final String AUTHORITIES = SMSProvider.class.getCanonicalName();//得到一個類的完整路徑4
+    public static final int SMS = 1;
     //地址匹配對象
     static UriMatcher mUriMatcher;
-    //動應聯繫人表的一個uri常量
-    public static Uri URI_CONTACT = Uri.parse("content://" + AUTHORITIES + "/contact");
-
-    public static final int CONTACT = 1;
 
     static {
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         //添加一個匹配規則
-        mUriMatcher.addURI(AUTHORITIES, "/contact", CONTACT);
+        mUriMatcher.addURI(AUTHORITIES, "/sms", SMS);
     }
 
-    private ContactOpenHelper mHelper;
+    //動應聯繫人表的一個uri常量
+    public static Uri URI_SMS = Uri.parse("content://" + AUTHORITIES + "/sms");
+
+    private SMSOpenHelper mHelper;
 
     @Override
     public boolean onCreate() {
-        mHelper = new ContactOpenHelper(getContext());
+        mHelper = new SMSOpenHelper(getContext());
         if (mHelper != null) {
             return true;
         }
         return false;
     }
+
 
     @Nullable
     @Override
@@ -46,23 +47,21 @@ public class ContactProvider extends ContentProvider {
         return null;
     }
 
-
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         int code = mUriMatcher.match(uri);
         switch (code) {
-            case CONTACT:
+            case SMS:
                 SQLiteDatabase db = mHelper.getWritableDatabase();
                 //新插入的ID
-                long id = db.insert(ContactOpenHelper.TABLE_CONTACT, "", values);
+                long id = db.insert(SMSOpenHelper.TABLE_SMS, "", values);
                 if (id != -1) {
                     Log.e("Insert", "------------------------InsertSuccess----------------------------");
                     //拼接最新的uri
                     uri = ContentUris.withAppendedId(uri, id);
                     //通知ContentObserver數據改變了
-                    getContext().getContentResolver().notifyChange(URI_CONTACT, null);//為空所有都可收到
-
+                    getContext().getContentResolver().notifyChange(URI_SMS, null);//為空所有都可收到
                 }
                 break;
         }
@@ -74,13 +73,13 @@ public class ContactProvider extends ContentProvider {
         int code = mUriMatcher.match(uri);
         int deleteCount = 0;
         switch (code) {
-            case CONTACT:
+            case SMS:
                 SQLiteDatabase db = mHelper.getWritableDatabase();
-                deleteCount = db.delete(ContactOpenHelper.TABLE_CONTACT, selection, selectionArgs);
+                deleteCount = db.delete(SMSOpenHelper.TABLE_SMS, selection, selectionArgs);
                 if (deleteCount > 0) {
                     Log.e("Delete", "------------------------DeleteSuccess----------------------------");
                     //通知ContentObserver數據改變了
-                    getContext().getContentResolver().notifyChange(URI_CONTACT, null);//為空所有都可收到
+                    getContext().getContentResolver().notifyChange(URI_SMS, null);//為空所有都可收到
                 }
                 break;
         }
@@ -92,13 +91,13 @@ public class ContactProvider extends ContentProvider {
         int code = mUriMatcher.match(uri);
         int updateCount = 0;
         switch (code) {
-            case CONTACT:
+            case SMS:
                 SQLiteDatabase db = mHelper.getWritableDatabase();
-                updateCount = db.update(ContactOpenHelper.TABLE_CONTACT, values, selection, selectionArgs);
+                updateCount = db.update(SMSOpenHelper.TABLE_SMS, values, selection, selectionArgs);
                 if (updateCount > 0) {
                     Log.e("Update", "------------------------UpdateSuccess----------------------------");
                     //通知ContentObserver數據改變了
-                    getContext().getContentResolver().notifyChange(URI_CONTACT, null);//為空所有都可收到
+                    getContext().getContentResolver().notifyChange(URI_SMS, null);//為空所有都可收到
                 }
                 break;
         }
@@ -111,13 +110,12 @@ public class ContactProvider extends ContentProvider {
         int code = mUriMatcher.match(uri);
         Cursor cursor = null;
         switch (code) {
-            case CONTACT:
+            case SMS:
                 SQLiteDatabase db = mHelper.getWritableDatabase();
-                cursor = db.query(ContactOpenHelper.TABLE_CONTACT, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = db.query(SMSOpenHelper.TABLE_SMS, projection, selection, selectionArgs, null, null, sortOrder);
                 Log.e("Query", "------------------------QuerySuccess----------------------------");
                 break;
         }
         return cursor;
     }
-
 }

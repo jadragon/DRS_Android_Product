@@ -1,4 +1,4 @@
-package com.example.alex.xmpp.service;
+package com.example.alex.xmpp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.alex.xmpp.R;
+import com.example.alex.xmpp.service.IMService;
 
 import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SmackConfiguration;
@@ -20,12 +20,10 @@ import org.jivesoftware.smack.packet.Registration;
 public class RegistActivity extends AppCompatActivity {
     EditText rg_account, rg_password;
     Button rg_button;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
-
         rg_account = findViewById(R.id.rg_account);
         rg_password = findViewById(R.id.rg_password);
         rg_button = findViewById(R.id.rg_button);
@@ -36,7 +34,7 @@ public class RegistActivity extends AppCompatActivity {
 //设置类型
                 reg.setType(IQ.Type.SET);
 //发送到服务器
-                reg.setTo(IMService.connection.getServiceName());
+                reg.setTo(IMService.getConnection().getServiceName());
 //设置用户名
                 reg.setUsername(rg_account.getText().toString());
 //设置密码
@@ -50,15 +48,15 @@ public class RegistActivity extends AppCompatActivity {
 //设置android端注册
         reg.addAttribute("android", "geolo_createUser_android");
         */
-
+           
 //创建包过滤器
                 PacketFilter filter = new AndFilter(new PacketIDFilter(reg
                         .getPacketID()), new PacketTypeFilter(IQ.class));
 //创建包收集器
-                PacketCollector collector = IMService.connection
+                PacketCollector collector = IMService.getConnection()
                         .createPacketCollector(filter);
 //发送包
-                IMService.connection.sendPacket(reg);
+                IMService.getConnection().sendPacket(reg);
 //获取返回信息
                 IQ result = (IQ) collector.nextResult(SmackConfiguration
                         .getPacketReplyTimeout());

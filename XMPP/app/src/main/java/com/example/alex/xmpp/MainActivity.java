@@ -1,6 +1,7 @@
 package com.example.alex.xmpp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         list_view = findViewById(R.id.list_view);
         init();
         initData();
-
+        initListener();
     }
 
     private void init() {
@@ -44,10 +46,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initData() {
-
         //同步存入sql
         setOrUpdateAdapter();
+    }
 
+    private void initListener() {
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor c = adapter.getCursor();
+                c.moveToPosition(position);
+                //取得jid
+                String account=c.getString(c.getColumnIndex(ContactOpenHelper.ContactTabke.ACCOUNT));
+                String nickname=c.getString(c.getColumnIndex(ContactOpenHelper.ContactTabke.NICKNAME));
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                intent.putExtra("account",account);
+                intent.putExtra("nickname",nickname);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setOrUpdateAdapter() {
