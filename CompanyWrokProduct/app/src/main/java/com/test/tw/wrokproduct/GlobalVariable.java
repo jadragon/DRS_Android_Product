@@ -10,6 +10,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import library.Http.AuthImageDownloader;
+import library.Http.HttpUtils;
+
 public class GlobalVariable extends Application {
     private String token;     //User token
     private String mvip;//User mvip
@@ -38,6 +41,7 @@ public class GlobalVariable extends Application {
     }
 
     private void initImageLoader() {
+        HttpUtils.setContext(getApplicationContext());
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
                 //.showImageForEmptyUri(R.drawable.ic_launcher)//设置图片Uri为空或是错误的时候显示的图片
@@ -69,6 +73,7 @@ public class GlobalVariable extends Application {
 //                .diskCacheSize(200 * 1024 * 1024) //緩存大小
                 //             .tasksProcessingOrder(QueueProcessingType.LIFO) //工作序列
                 .diskCacheFileCount(200) //緩存的文件數量
+                .imageDownloader(new AuthImageDownloader(getApplicationContext(), 2000, 2000))
                 .build();
         ImageLoader.getInstance().init(config);
 

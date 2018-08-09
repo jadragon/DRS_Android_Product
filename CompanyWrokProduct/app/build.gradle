@@ -77,5 +77,6 @@ dependencies {
     implementation files('third_jar/httpmime-4.3.jar')
     implementation files('third_jar/httpcore-4.3.2.jar')
     implementation files('third_jar/nineoldandroids-2.4.0.jar')
+    implementation 'org.xwalk:xwalk_core_library:15.44.384.12'
 }
 apply plugin: 'com.google.gms.google-services'

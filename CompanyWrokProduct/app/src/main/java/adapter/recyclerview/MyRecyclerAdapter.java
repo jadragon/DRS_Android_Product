@@ -91,7 +91,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
                 tv1.setVisibility(View.INVISIBLE);
             }
 
-            imageView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override

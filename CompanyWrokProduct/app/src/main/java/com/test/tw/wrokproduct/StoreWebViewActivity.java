@@ -3,7 +3,6 @@ package com.test.tw.wrokproduct;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -77,7 +76,8 @@ public class StoreWebViewActivity extends AppCompatActivity {
 
         //自适应屏幕
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        luntanListview.loadData(html, "text/html; charset=utf-8", "UTF-8");
+       // luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         luntanListview.setVerticalScrollBarEnabled(false);
         luntanListview.setVerticalScrollbarOverlay(false);
         luntanListview.setHorizontalScrollBarEnabled(false);

@@ -1,12 +1,11 @@
 package library.GetJsonData;
 
 
-import android.content.Context;
-
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 
+import library.Http.CertJSONParser;
 import library.Http.WebVewJsonParser;
 
 public class GetWebView extends APIInfomation {
@@ -21,18 +20,13 @@ public class GetWebView extends APIInfomation {
     private  final String getMap_url = DOMAIN+"main/cart/getMap.php";
     private  final String setGoldFlow_url = DOMAIN+"main/cart/setGoldFlow.php";
     private WebVewJsonParser jsonParser;
-    public GetWebView() {
-        jsonParser = new WebVewJsonParser();
-        params = new ArrayList<>();
-        params.add(new BasicNameValuePair("gok", GOK));
-        params.add(new BasicNameValuePair("lang", LANG));
-        params.add(new BasicNameValuePair("device", "2"));
-    }
+    private CertJSONParser certJSONParser;
 
-    public GetWebView(Context context) {
-        jsonParser = new WebVewJsonParser(context);
+    public GetWebView() {
+        certJSONParser = new CertJSONParser();
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("gok",  GOK));
+        params.add(new BasicNameValuePair("lang", LANG));
         params.add(new BasicNameValuePair("device", "3"));
     }
 
@@ -79,7 +73,7 @@ public class GetWebView extends APIInfomation {
      */
     private String register(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(register_url, params);
+        return certJSONParser.getJSONFromUrl(register_url, params);
     }
 
     /**
@@ -88,7 +82,7 @@ public class GetWebView extends APIInfomation {
 
     private String activation(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(activation_url, params);
+        return certJSONParser.getJSONFromUrl(activation_url, params);
     }
 
     /**
@@ -96,7 +90,7 @@ public class GetWebView extends APIInfomation {
      */
     private String inactivated(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(inactivated_url, params);
+        return certJSONParser.getJSONFromUrl(inactivated_url, params);
     }
 
     /**
@@ -104,7 +98,7 @@ public class GetWebView extends APIInfomation {
      */
     private String directPush(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(directPush_url, params);
+        return certJSONParser.getJSONFromUrl(directPush_url, params);
     }
 
     /**
@@ -112,7 +106,7 @@ public class GetWebView extends APIInfomation {
      */
     private String placement(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(placement_url, params);
+        return certJSONParser.getJSONFromUrl(placement_url, params);
     }
 
     /**
@@ -120,7 +114,7 @@ public class GetWebView extends APIInfomation {
      */
     private String upgrade(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(upgrade_url, params);
+        return certJSONParser.getJSONFromUrl(upgrade_url, params);
     }
 
     /**
@@ -128,7 +122,7 @@ public class GetWebView extends APIInfomation {
      */
     private String recommend(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(recommend_url, params);
+        return certJSONParser.getJSONFromUrl(recommend_url, params);
     }
 
     /**
@@ -136,7 +130,7 @@ public class GetWebView extends APIInfomation {
      */
     private String agency(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return jsonParser.getJSONFromUrl(agency_url, params);
+        return certJSONParser.getJSONFromUrl(agency_url, params);
     }
 
     /**

@@ -143,7 +143,7 @@ public class Fragment_Community extends Fragment {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final String json = new GetWebView(getContext()).getHtmlByPosition("I0JN9@_fTxybt/YuH1j1Ceg==", position);
+                            final String json = new GetWebView().getHtmlByPosition(gv.getToken(), position);
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {

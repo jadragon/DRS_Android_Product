@@ -289,7 +289,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    try {
+                        loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    }catch (Exception e){
+                        loadedImage = BitmapFactory.decodeResource(getResources(), R.mipmap.quick_login_account);
+                        loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    }
+
                     byte[] bitmapByte = baos.toByteArray();
                     db.updatePhotoImage(bitmapByte);
                     db.close();

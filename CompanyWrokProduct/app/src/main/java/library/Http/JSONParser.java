@@ -7,50 +7,77 @@ package library.Http;
 
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
-/**
- *透過URL及Params取得資料庫的資料(JSON)
- *
- * */
-public class JSONParser {
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
+/**
+ * 透過URL及Params取得資料庫的資料(JSON)
+ */
+public class JSONParser {
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
 
-    // constructor
-    public JSONParser() {
 
-    }
-
-    public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) {
-
+    public JSONObject getJSONFromUrl(String urlString, List<NameValuePair> params) {
+        //建立 ssl context
+        SSLContext sslContext = HttpUtils.prepareSelfSign();
+        if (sslContext == null) {
+            return null;
+        }
+        // Tell the URLConnection to use a SocketFactory from our SSLContext
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if (url == null) {
+            return null;
+        }
         // Making HTTP request
         try {
             // defaultHttpClient
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            // 使用ssl context
+            urlConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+            urlConnection.setRequestMethod("POST");
+            //"sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+            String urlParameters = "";
+            for (NameValuePair nameValuePair : params) {
+                if (urlParameters.length() != 0)
+                    urlParameters = urlParameters + "&" + nameValuePair.getName() + "=" + nameValuePair.getValue();
+                else
+                    urlParameters = nameValuePair.getName() + "=" + nameValuePair.getValue();
+            }
+            //发送Post请求
+            urlConnection.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr, "UTF-8"));
+            writer.write(urlParameters);
+            writer.close();
+            wr.flush();
+            wr.close();
 
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            is = httpEntity.getContent();
+            // 讀取結果
+            is = urlConnection.getInputStream();
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -70,7 +97,7 @@ public class JSONParser {
             }
             is.close();
             json = sb.toString();
-          //  Log.e("JSON", json);
+            Log.e("JSON", json);
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         } finally {
@@ -95,4 +122,6 @@ public class JSONParser {
         return jObj;
 
     }
+
+
 }
