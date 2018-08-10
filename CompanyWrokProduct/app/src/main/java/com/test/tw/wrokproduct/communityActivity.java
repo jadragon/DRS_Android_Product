@@ -14,10 +14,11 @@ import org.xwalk.core.XWalkView;
 
 public class CommunityActivity extends AppCompatActivity {
     private XWalkView luntanListview;
-    String title,html;
+    String title, html;
     ViewGroup container;
     Intent intent;
     Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,7 @@ public class CommunityActivity extends AppCompatActivity {
         initToolbar();
         showWebView();
     }
+
     private void initToolbar() {
         //Toolbar 建立
         toolbar = findViewById(R.id.include_toolbar);
@@ -46,7 +48,7 @@ public class CommunityActivity extends AppCompatActivity {
         XWalkPreferences.setValue("enable-javascript", true);
         XWalkPreferences.setValue(XWalkPreferences.REMOTE_DEBUGGING, true);
         luntanListview = findViewById(R.id.community_webview);
-        luntanListview.load(null,html);
+        luntanListview.load(null, html);
         luntanListview.setUIClient(new XWalkUIClient(luntanListview));
     }
 
@@ -59,8 +61,10 @@ public class CommunityActivity extends AppCompatActivity {
             if (container != null)
                 container.removeView(webView);
             webView.setTag(null);
-         //   webView.clearHistory();
-         //   webView.destroy();
+
+            //   webView.clearHistory();
+            //   webView.destroy();
+            webView.onDestroy();
         }
     }
 

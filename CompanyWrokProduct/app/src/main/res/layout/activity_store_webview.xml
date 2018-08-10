@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".StoreWebViewActivity"
     android:orientation="vertical">
-<WebView
+<org.xwalk.core.XWalkView
     android:id="@+id/store_webview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
