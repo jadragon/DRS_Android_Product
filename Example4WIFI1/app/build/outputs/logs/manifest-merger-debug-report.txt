@@ -1,0 +1,91 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:1-36:12
+	package
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:3:5-40
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:5:5-30
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:4:5-28
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+uses-sdk
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:7:5-9:41
+INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:7:5-9:41
+	android:targetSdkVersion
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:9:9-38
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:8:9-34
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:10:2-71
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:10:19-68
+uses-permission#android.permission.BLUETOOTH
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:11:5-68
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:11:22-65
+uses-permission#android.permission.INTERNET
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:12:5-66
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:12:22-64
+application
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:13:5-27:19
+	android:label
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:16:9-41
+	android:icon
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:15:9-45
+	android:allowBackup
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:14:9-35
+	android:theme
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:17:9-40
+activity#net.xprinter.example4wifi.MainActivity
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:18:9-26:20
+	android:label
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:20:13-45
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:19:13-66
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:21:13-25:29
+action#android.intent.action.MAIN
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:22:17-69
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:22:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:24:17-77
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:24:27-74
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:28:2-29:23
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:28:19-73
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:30:5-31:23
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:30:22-73
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:32:5-33:23
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:32:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:34:5-35:23
+	android:name
+		ADDED from D:\GitHub\DRS_Android_Product\Example4WIFI1\app\src\main\AndroidManifest.xml:34:22-73
