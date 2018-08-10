@@ -6,6 +6,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 
 import library.Http.CertJSONParser;
+import library.Http.WebVewJsonParser;
 
 public class GetWebView extends APIInfomation {
     private  final String register_url = DOMAIN+"main/snetwork/register.php";
@@ -18,6 +19,7 @@ public class GetWebView extends APIInfomation {
     private  final String agency_url = DOMAIN+"main/snetwork/agency.php";
     private  final String getMap_url = DOMAIN+"main/cart/getMap.php";
     private  final String setGoldFlow_url = DOMAIN+"main/cart/setGoldFlow.php";
+    private WebVewJsonParser jsonParser;
     private CertJSONParser certJSONParser;
 
     public GetWebView() {
@@ -29,10 +31,10 @@ public class GetWebView extends APIInfomation {
     }
 
     public GetWebView(String logistics) {
-        certJSONParser = new CertJSONParser();
+        jsonParser = new WebVewJsonParser();
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("logistics", logistics));
-        params.add(new BasicNameValuePair("device", "2"));
+        params.add(new BasicNameValuePair("device", "1"));
     }
 
     public String getHtmlByPosition(String token, int position) {
@@ -135,7 +137,7 @@ public class GetWebView extends APIInfomation {
      * 超商位置
      */
     public String getMap() {
-        return certJSONParser.getJSONFromUrl(getMap_url, params);
+        return jsonParser.getJSONFromUrl(getMap_url, params);
     }
 
     /**
@@ -143,6 +145,6 @@ public class GetWebView extends APIInfomation {
      */
     public String setGoldFlow(String token) {
         params.add(new BasicNameValuePair("token", token));
-        return certJSONParser.getJSONFromUrl(setGoldFlow_url, params);
+        return jsonParser.getJSONFromUrl(setGoldFlow_url, params);
     }
 }

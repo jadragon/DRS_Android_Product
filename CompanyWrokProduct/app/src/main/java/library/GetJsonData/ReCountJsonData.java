@@ -3,7 +3,7 @@ package library.GetJsonData;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import library.Http.CertJSONParser;
+import library.Http.WebVewJsonParser;
 
 public class ReCountJsonData extends APIInfomation {
     public static final int COUNT = 0;
@@ -182,13 +182,13 @@ public class ReCountJsonData extends APIInfomation {
      * 3.1.18	重新結帳 - 處理金流流程
      */
     public String setGoldFlow(int count_type, String token) {
-        CertJSONParser certJSONParser = new CertJSONParser();
+        WebVewJsonParser webVewJsonParser = new WebVewJsonParser();
         params.add(new BasicNameValuePair("device", "1"));
         params.add(new BasicNameValuePair("token", token));
         if (count_type == COUNT) {
-            return certJSONParser.getJSONFromUrl(count_url + setGoldFlow_url, params);
+            return webVewJsonParser.getJSONFromUrl(count_url + setGoldFlow_url, params);
         } else {
-            return certJSONParser.getJSONFromUrl(recount_url + setGoldFlow_url, params);
+            return webVewJsonParser.getJSONFromUrl(recount_url + setGoldFlow_url, params);
         }
     }
 

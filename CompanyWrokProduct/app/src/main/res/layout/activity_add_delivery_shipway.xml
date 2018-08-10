@@ -108,7 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:textColor="@color/white"
-        android:background="@drawable/arcangle_button_red"
+        android:background="@color/red"
         android:text="確認"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
