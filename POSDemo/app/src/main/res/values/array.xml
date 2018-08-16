@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="slider_main_arrow">
+        <item>@drawable/slider_home_arrow2</item>
+        <item>@drawable/slider_home_arrow3</item>
+        <item>@drawable/slider_home_arrow4</item>
+        <item>@drawable/slider_home_arrow5</item>
+        <item>@drawable/slider_home_arrow6</item>
+        <item>@drawable/slider_home_arrow7</item>
+        <item>@drawable/slider_home_arrow8</item>
+        <item>@drawable/slider_home_arrow9</item>
+    </array>
+    <array name="slider_main_bg">
+        <item>@drawable/slider_home_bg1</item>
+        <item>@drawable/slider_home_bg2</item>
+        <item>@drawable/slider_home_bg3</item>
+        <item>@drawable/slider_home_bg4</item>
+        <item>@drawable/slider_home_bg5</item>
+        <item>@drawable/slider_home_bg6</item>
+        <item>@drawable/slider_home_bg7</item>
+        <item>@drawable/slider_home_bg8</item>
+        <item>@drawable/slider_home_bg9</item>
+    </array>
+    <array name="slider_main_img">
+        <item>@drawable/slider_home_img1</item>
+        <item>@drawable/slider_home_img2</item>
+        <item>@drawable/slider_home_img3</item>
+        <item>@drawable/slider_home_img4</item>
+        <item>@drawable/slider_home_img5</item>
+        <item>@drawable/slider_home_img6</item>
+        <item>@drawable/slider_home_img7</item>
+        <item>@drawable/slider_home_img8</item>
+        <item>@drawable/slider_home_img9</item>
+    </array>
+    <string-array name="slider_main_txt">
+        <item>首頁</item>
+        <item>店面管理</item>
+        <item>商品管理</item>
+        <item>進銷存管理</item>
+        <item>行銷管理</item>
+        <item>報表管理</item>
+        <item>客戶關係</item>
+        <item>權限管理</item>
+        <item>基本設定</item>
+    </string-array>
+</resources>

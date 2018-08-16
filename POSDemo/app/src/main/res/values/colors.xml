@@ -11,7 +11,10 @@
     <color name="login_green3">#96ad00</color>
     <color name="login_green4">#738600</color>
     //home
+
     <color name="home_gray1">#f2f2f2</color>
+    <color name="home_gray2">#cc808080</color>
+    <color name="home_gray3">#e61a1a1a</color>
     <color name="home_red">#ff0000</color>
     <color name="home_dismiss">#c8ffffff</color>
 </resources>
