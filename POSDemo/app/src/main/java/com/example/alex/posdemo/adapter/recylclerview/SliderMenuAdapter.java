@@ -16,7 +16,7 @@ import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
 
 import Utils.ComponentUtil;
-import library.MyCustomAnimation;
+import library.SubSlideMenuAnimation;
 
 public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.RecycleHolder> {
     private Context ctx;
@@ -90,11 +90,11 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
                     popWin.dismiss();
                 if (subIsShow) {
                     componentUtil.hideDissMiss(dismiss);
-                    MyCustomAnimation a = new MyCustomAnimation(subview, 200, MyCustomAnimation.COLLAPSE);
+                    SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
                     subview.startAnimation(a);
                     mainActivity.setSubIsShow(false);
                 } else {
-                    MyCustomAnimation a = new MyCustomAnimation(subview, 200, MyCustomAnimation.EXPAND);
+                    SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.EXPAND);
                     subview.startAnimation(a);
                     ((MainActivity) ctx).setAlertIsShow(false);
                     ((MainActivity) ctx).setAccOpIsShow(false);
@@ -102,7 +102,7 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
                 }
             } else {
                 componentUtil.showDissMiss(dismiss);
-                MyCustomAnimation a = new MyCustomAnimation(subview, 200, MyCustomAnimation.EXPAND);
+                SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.EXPAND);
                 subview.startAnimation(a);
                 ((MainActivity) ctx).setSubIsShow(true);
             }

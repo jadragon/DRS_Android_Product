@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-public class MyCustomAnimation extends Animation {
+public class SubSlideMenuAnimation extends Animation {
 
     public final static int COLLAPSE = 1;
     public final static int EXPAND = 0;
@@ -13,7 +13,7 @@ public class MyCustomAnimation extends Animation {
     private int mEndWidth;
     private int mType;
 
-    public MyCustomAnimation(View view, int duration, int type) {
+    public SubSlideMenuAnimation(View view, int duration, int type) {
         setDuration(duration);
         view.setVisibility(View.VISIBLE);
         mView = view;

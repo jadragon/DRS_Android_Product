@@ -10,13 +10,15 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.example.alex.posdemo.adapter.recylclerview.SliderMenuAdapter;
 import com.example.alex.posdemo.fragment.Fragment_Home;
 
 import Utils.ComponentUtil;
-import library.MyCustomAnimation;
+import library.MainSlideMenuAnimation;
+import library.SubSlideMenuAnimation;
 import library.ScrollSliderMenu;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     DisplayMetrics dm;
     private RecyclerView mainslide_reclerview, subslide_recylcetview;
     private SliderMenuAdapter mainslide_adapter, subslide_adapter;
-    private View subview;
+    private View subview, menu, content;
     private ComponentUtil componentUtil;
 
     @Override
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Home fragment_home = new Fragment_Home();
         switchFrament(fragment_home);
     }
-
 
     private void initReyclerView() {
         subview = findViewById(R.id.home_subslide_layout);
@@ -100,27 +101,39 @@ public class MainActivity extends AppCompatActivity {
         return popWin;
     }
 
+    private int menuWidth;
+    private boolean isMenuVisible;
+
     private void initToolbarButton() {
+        //main_slider
+        menu = findViewById(R.id.menu);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) menu.getLayoutParams();
+        menuWidth = layoutParams.width;
+        layoutParams.leftMargin = -menuWidth;
+        //
+        content = findViewById(R.id.content);
         dismiss = findViewById(R.id.home_dismiss);
         dismiss.setAlpha(0);
         slider_menu_btn = findViewById(R.id.slider_menu_btn);
         slider_menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (scrollSliderMenu.isMenuVisible()) {
-                    scrollSliderMenu.scrollToContent();
-                    scrollSliderMenu.setMenuVisible(false);
+                if (isMenuVisible) {
+                    MainSlideMenuAnimation aa = new MainSlideMenuAnimation(dm, menu, content, menuWidth, 200, MainSlideMenuAnimation.COLLAPSE);
+                    menu.startAnimation(aa);
+                    isMenuVisible = false;
                     if (subIsShow) {
                         if (!(alertIsShow || accOpIsShow)) {
                             componentUtil.hideDissMiss(dismiss);
                         }
-                        MyCustomAnimation a = new MyCustomAnimation(subview, 200, MyCustomAnimation.COLLAPSE);
+                        SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
                         subview.startAnimation(a);
                         subIsShow = false;
                     }
                 } else {
-                    scrollSliderMenu.scrollToMenu();
-                    scrollSliderMenu.setMenuVisible(true);
+                    MainSlideMenuAnimation aa = new MainSlideMenuAnimation(dm, menu, content, menuWidth, 200, MainSlideMenuAnimation.EXPAND);
+                    menu.startAnimation(aa);
+                    isMenuVisible = true;
                 }
             }
         });
@@ -139,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                                 R.layout.item_alert, null);
                         popUpMyOverflow(popView, TYPE_ALERT);
                         if (subview.getVisibility() == View.VISIBLE) {
-                            MyCustomAnimation a = new MyCustomAnimation(subview, 200, MyCustomAnimation.COLLAPSE);
+                            SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
                             subview.startAnimation(a);
                         }
                         alertIsShow = true;
@@ -171,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                 R.layout.item_logout, null);
                         popUpMyOverflow(popView, TYPE_OPTION);
                         if (subview.getVisibility() == View.VISIBLE) {
-                            MyCustomAnimation a = new MyCustomAnimation(subview, 200, MyCustomAnimation.COLLAPSE);
+                            SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
                             subview.startAnimation(a);
                         }
                         alertIsShow = false;
@@ -195,12 +208,10 @@ public class MainActivity extends AppCompatActivity {
     private void initValues() {
         View content = findViewById(R.id.content);
         View menu = findViewById(R.id.menu);
-        scrollSliderMenu = new ScrollSliderMenu(content, menu, dm.widthPixels);
+        //scrollSliderMenu = new ScrollSliderMenu(content, menu, dm.widthPixels);
     }
 
-
 //============================================================================================================================================
-
 
     public void popUpMyOverflow(View popView, int type) {
         /**
@@ -219,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
         popWin.showAtLocation(getCurrentFocus(), Gravity.TOP | Gravity.RIGHT, 0, (int) (50 * dm.density));
     }
 
-
     /**
      * 切换Fragment
      */
@@ -228,6 +238,5 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_content, fragment).commitAllowingStateLoss();
 
     }
-
 
 }
