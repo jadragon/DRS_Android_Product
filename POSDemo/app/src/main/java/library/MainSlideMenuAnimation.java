@@ -1,6 +1,5 @@
 package library;
 
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -12,22 +11,23 @@ public class MainSlideMenuAnimation extends Animation {
     public final static int EXPAND = 0;
 
     private View main_menu, content;
+    private int maxWidth;
     private int mEndWidth;
     private int mType;
     private LinearLayout.LayoutParams menuParams;
     private LinearLayout.LayoutParams contentParams;
-    private DisplayMetrics dm;
 
-    public MainSlideMenuAnimation(DisplayMetrics dm, View main_menu, View content,int mEndWidth, int duration, int type) {
+    public MainSlideMenuAnimation(int maxWidth, View main_menu, View content, int duration, int type) {
         setDuration(duration);
         main_menu.setVisibility(View.VISIBLE);
+        this.maxWidth = maxWidth;
         this.main_menu = main_menu;
         this.content = content;
-        this.dm = dm;
-        this.mEndWidth =mEndWidth;
-        contentParams = (LinearLayout.LayoutParams) content.getLayoutParams();
-        menuParams = (LinearLayout.LayoutParams) main_menu.getLayoutParams();
         this.mType = type;
+        menuParams = (LinearLayout.LayoutParams) main_menu.getLayoutParams();
+        contentParams = (LinearLayout.LayoutParams) content.getLayoutParams();
+        this.mEndWidth = menuParams.width;
+
 
     }
 
@@ -36,36 +36,23 @@ public class MainSlideMenuAnimation extends Animation {
         super.applyTransformation(interpolatedTime, t);
         if (interpolatedTime < 1.0f) {
             if (mType == EXPAND) {
-                //  main_menu.setTranslationX(-(int) (mEndWidth * (1 - interpolatedTime)));
-                // menuParams.width = (int) (mEndWidth * interpolatedTime);
                 menuParams.leftMargin = -(int) (mEndWidth * (1 - interpolatedTime));
-                contentParams.width = dm.widthPixels - (int) (mEndWidth * interpolatedTime);
-                content.requestLayout();
+                contentParams.width = maxWidth - (int) (mEndWidth * interpolatedTime);
             } else {
-                //   main_menu.setTranslationX(-(int) (mEndWidth * interpolatedTime));
-                //   menuParams.width = (int) (mEndWidth * (1 - interpolatedTime));
                 menuParams.leftMargin = -(int) (mEndWidth * interpolatedTime);
-
-                contentParams.width = dm.widthPixels - (int) (mEndWidth * (1 - interpolatedTime));
-                content.requestLayout();
-
+                contentParams.width = maxWidth - (int) (mEndWidth * (1 - interpolatedTime));
             }
-            main_menu.requestLayout();
+            content.setLayoutParams(contentParams);
         } else {
             if (mType == EXPAND) {
-                //  main_menu.setTranslationX(0);
-                menuParams.leftMargin =0;
-                main_menu.requestLayout();
-                contentParams.width = dm.widthPixels - mEndWidth;
-                content.requestLayout();
-                main_menu.requestLayout();
+                menuParams.leftMargin = 0;
+                contentParams.width = maxWidth - mEndWidth;
             } else {
-                menuParams.leftMargin =-mEndWidth;
-                contentParams.width = dm.widthPixels;
-                content.requestLayout();
-                main_menu.requestLayout();
+                menuParams.leftMargin = -mEndWidth;
+                contentParams.width = maxWidth;
                 main_menu.setVisibility(View.GONE);
             }
+            content.setLayoutParams(contentParams);
         }
     }
 }

@@ -15,11 +15,9 @@ import android.widget.PopupWindow;
 
 import com.example.alex.posdemo.adapter.recylclerview.SliderMenuAdapter;
 import com.example.alex.posdemo.fragment.Fragment_Home;
+import com.example.alex.posdemo.pojo.CheckMainButtonPojo;
 
 import Utils.ComponentUtil;
-import library.MainSlideMenuAnimation;
-import library.SubSlideMenuAnimation;
-import library.ScrollSliderMenu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private SliderMenuAdapter mainslide_adapter, subslide_adapter;
     private View subview, menu, content;
     private ComponentUtil componentUtil;
+    public static CheckMainButtonPojo checkMainButtonPojo = new CheckMainButtonPojo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         componentUtil = new ComponentUtil();
         dm = getResources().getDisplayMetrics();
-        initValues();
         initFragment();
         initReyclerView();
         initToolbarButton();
@@ -52,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
         subview = findViewById(R.id.home_subslide_layout);
         //main
         mainslide_reclerview = findViewById(R.id.home_mainslide_recylcetview);
-        mainslide_adapter = new SliderMenuAdapter(this, R.array.slider_main_bg, R.array.slider_main_img, getResources().getStringArray(R.array.slider_main_txt), 0);
+        mainslide_adapter = new SliderMenuAdapter(this, R.array.slider_main_bg, R.array.slider_main_img, R.array.slider_main_arrow, getResources().getStringArray(R.array.slider_main_txt), SliderMenuAdapter.MAIN_SLIDER);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
         mainslide_reclerview.setLayoutManager(layoutManager1);
         mainslide_reclerview.setAdapter(mainslide_adapter);
         //sub
         subslide_recylcetview = findViewById(R.id.home_subslide_recylcetview);
-        subslide_adapter = new SliderMenuAdapter(this, R.array.slider_main_bg, R.array.slider_main_img, getResources().getStringArray(R.array.slider_main_txt), 0);
+        subslide_adapter = new SliderMenuAdapter(this, R.array.slider_main_bg, R.array.slider_main_img, R.array.slider_main_arrow, getResources().getStringArray(R.array.slider_main_txt), SliderMenuAdapter.SUB_SLIDER);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         subslide_recylcetview.setLayoutManager(layoutManager2);
@@ -69,31 +67,7 @@ public class MainActivity extends AppCompatActivity {
     //============================================================================================================================================
     private static final int TYPE_ALERT = 1;
     private static final int TYPE_OPTION = 2;
-    private boolean alertIsShow, accOpIsShow, subIsShow;
 
-    public boolean isAlertIsShow() {
-        return alertIsShow;
-    }
-
-    public void setAlertIsShow(boolean alertIsShow) {
-        this.alertIsShow = alertIsShow;
-    }
-
-    public boolean isAccOpIsShow() {
-        return accOpIsShow;
-    }
-
-    public void setAccOpIsShow(boolean accOpIsShow) {
-        this.accOpIsShow = accOpIsShow;
-    }
-
-    public boolean isSubIsShow() {
-        return subIsShow;
-    }
-
-    public void setSubIsShow(boolean subIsShow) {
-        this.subIsShow = subIsShow;
-    }
 
     PopupWindow popWin;
 
@@ -101,128 +75,145 @@ public class MainActivity extends AppCompatActivity {
         return popWin;
     }
 
-    private int menuWidth;
+
     private boolean isMenuVisible;
 
     private void initToolbarButton() {
         //main_slider
         menu = findViewById(R.id.menu);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) menu.getLayoutParams();
-        menuWidth = layoutParams.width;
+        int menuWidth = layoutParams.width;
         layoutParams.leftMargin = -menuWidth;
-        //
+        //主內容
         content = findViewById(R.id.content);
+        //遮罩
         dismiss = findViewById(R.id.home_dismiss);
         dismiss.setAlpha(0);
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (popWin != null)
+                    popWin.dismiss();
+                if (checkMainButtonPojo.subIsShow) {
+                    componentUtil.showSubMenu(subview, false);
+                }
+                checkMainButtonPojo.accOpIsShow = false;
+                checkMainButtonPojo.alertIsShow = false;
+                checkMainButtonPojo.subIsShow = false;
+                componentUtil.showDissMiss(dismiss, false);
+                checkMainButtonPojo.isSelectSlide[checkMainButtonPojo.preClick] = false;
+                mainslide_adapter.notifyDataSetChanged();
+            }
+        });
+        dismiss.setClickable(false);
+        //slidermenu
         slider_menu_btn = findViewById(R.id.slider_menu_btn);
         slider_menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isMenuVisible) {
-                    MainSlideMenuAnimation aa = new MainSlideMenuAnimation(dm, menu, content, menuWidth, 200, MainSlideMenuAnimation.COLLAPSE);
-                    menu.startAnimation(aa);
+                    componentUtil.showMainMenu(dm.widthPixels, menu, content, false);
                     isMenuVisible = false;
-                    if (subIsShow) {
-                        if (!(alertIsShow || accOpIsShow)) {
-                            componentUtil.hideDissMiss(dismiss);
+                    if (checkMainButtonPojo.subIsShow) {
+                        if (!(checkMainButtonPojo.alertIsShow || checkMainButtonPojo.accOpIsShow)) {
+                            componentUtil.showDissMiss(dismiss, false);
                         }
-                        SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
-                        subview.startAnimation(a);
-                        subIsShow = false;
+                        componentUtil.showSubMenu(subview, false);
+                        checkMainButtonPojo.subIsShow = false;
+                        checkMainButtonPojo.isSelectSlide[checkMainButtonPojo.preClick] = false;
+                        mainslide_adapter.notifyDataSetChanged();
                     }
                 } else {
-                    MainSlideMenuAnimation aa = new MainSlideMenuAnimation(dm, menu, content, menuWidth, 200, MainSlideMenuAnimation.EXPAND);
-                    menu.startAnimation(aa);
+                    componentUtil.showMainMenu(dm.widthPixels, menu, content, true);
                     isMenuVisible = true;
                 }
             }
         });
+        //通知按鈕
         alert_btn = findViewById(R.id.alert_btn);
         alert_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (alertIsShow || accOpIsShow || subIsShow) {
+                if (checkMainButtonPojo.alertIsShow || checkMainButtonPojo.accOpIsShow) {
                     if (popWin != null)
                         popWin.dismiss();
-                    if (alertIsShow) {
-                        componentUtil.hideDissMiss(dismiss);
-                        alertIsShow = false;
+                    if (checkMainButtonPojo.alertIsShow) {
+                        componentUtil.showDissMiss(dismiss, false);
+                        checkMainButtonPojo.alertIsShow = false;
                     } else {
-                        View popView = getLayoutInflater().inflate(
-                                R.layout.item_alert, null);
-                        popUpMyOverflow(popView, TYPE_ALERT);
-                        if (subview.getVisibility() == View.VISIBLE) {
-                            SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
-                            subview.startAnimation(a);
-                        }
-                        alertIsShow = true;
-                        accOpIsShow = false;
-                        subIsShow = false;
+                        popUpMyOverflow(TYPE_ALERT);
+                        checkMainButtonPojo.alertIsShow = true;
+                        checkMainButtonPojo.accOpIsShow = false;
+                        checkMainButtonPojo.subIsShow = false;
                     }
-
                 } else {
-                    componentUtil.showDissMiss(dismiss);
-                    View popView = getLayoutInflater().inflate(
-                            R.layout.item_alert, null);
-                    popUpMyOverflow(popView, TYPE_ALERT);
-                    alertIsShow = true;
+                    if (checkMainButtonPojo.subIsShow) {
+                        componentUtil.showSubMenu(subview, false);
+                        checkMainButtonPojo.subIsShow = false;
+                        checkMainButtonPojo.isSelectSlide[checkMainButtonPojo.preClick] = false;
+                        mainslide_adapter.notifyDataSetChanged();
+                    } else {
+                        componentUtil.showDissMiss(dismiss, true);
+                    }
+                    popUpMyOverflow(TYPE_ALERT);
+                    checkMainButtonPojo.alertIsShow = true;
+
                 }
             }
         });
+        //帳戶設定
         accoption_btn = findViewById(R.id.accoption_btn);
         accoption_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (alertIsShow || accOpIsShow || subIsShow) {
+                if (checkMainButtonPojo.alertIsShow || checkMainButtonPojo.accOpIsShow) {
                     if (popWin != null)
                         popWin.dismiss();
-                    if (accOpIsShow) {
-                        componentUtil.hideDissMiss(dismiss);
-                        accOpIsShow = false;
+                    if (checkMainButtonPojo.accOpIsShow) {
+                        componentUtil.showDissMiss(dismiss, false);
+                        checkMainButtonPojo.accOpIsShow = false;
                     } else {
-                        View popView = getLayoutInflater().inflate(
-                                R.layout.item_logout, null);
-                        popUpMyOverflow(popView, TYPE_OPTION);
-                        if (subview.getVisibility() == View.VISIBLE) {
-                            SubSlideMenuAnimation a = new SubSlideMenuAnimation(subview, 200, SubSlideMenuAnimation.COLLAPSE);
-                            subview.startAnimation(a);
-                        }
-                        alertIsShow = false;
-                        accOpIsShow = true;
-                        subIsShow = false;
+                        popUpMyOverflow(TYPE_OPTION);
+                        checkMainButtonPojo.alertIsShow = false;
+                        checkMainButtonPojo.accOpIsShow = true;
+                        checkMainButtonPojo.subIsShow = false;
                     }
                 } else {
-                    componentUtil.showDissMiss(dismiss);
-                    View popView = getLayoutInflater().inflate(
-                            R.layout.item_logout, null);
-                    popUpMyOverflow(popView, TYPE_OPTION);
-                    accOpIsShow = true;
+                    if (checkMainButtonPojo.subIsShow) {
+                        componentUtil.showSubMenu(subview, false);
+                        checkMainButtonPojo.subIsShow = false;
+                        checkMainButtonPojo.isSelectSlide[checkMainButtonPojo.preClick] = false;
+                        mainslide_adapter.notifyDataSetChanged();
+                    } else {
+                        componentUtil.showDissMiss(dismiss, true);
+                    }
+                    popUpMyOverflow(TYPE_OPTION);
+                    checkMainButtonPojo.accOpIsShow = true;
+
                 }
             }
+
         });
     }
 
-    //============================================================================================================================================
-    ScrollSliderMenu scrollSliderMenu;
-
-    private void initValues() {
-        View content = findViewById(R.id.content);
-        View menu = findViewById(R.id.menu);
-        //scrollSliderMenu = new ScrollSliderMenu(content, menu, dm.widthPixels);
-    }
 
 //============================================================================================================================================
 
-    public void popUpMyOverflow(View popView, int type) {
+    public void popUpMyOverflow(int type) {
         /**
          * 定位PopupWindow，让它恰好显示在Action Bar的下方。 通过设置Gravity，确定PopupWindow的大致位置。
          * 首先获得状态栏的高度，再获取Action bar的高度，这两者相加设置y方向的offset样PopupWindow就显示在action
          * bar的下方了。 通过dp计算出px，就可以在不同密度屏幕统一X方向的offset.但是要注意不要让背景阴影大于所设置的offset，
          * 否则阴影的宽度为offset.
          */
+        View popView;
         if (type == TYPE_ALERT) {
+            popView = getLayoutInflater().inflate(
+                    R.layout.item_alert, null);
             popWin = new PopupWindow(popView, (int) (800 * dm.density), (int) (300 * dm.density), false);
         } else if (type == TYPE_OPTION) {
+            popView = getLayoutInflater().inflate(
+                    R.layout.item_logout, null);
             popWin = new PopupWindow(popView, (int) (200 * dm.density), (int) (150 * dm.density), false);
         }
         popWin.setAnimationStyle(android.R.style.Animation_Dialog);    //设置一个动画。

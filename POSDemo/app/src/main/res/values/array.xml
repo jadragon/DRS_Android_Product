@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="slider_main_arrow">
+        <item>null</item>
         <item>@drawable/slider_home_arrow2</item>
         <item>@drawable/slider_home_arrow3</item>
         <item>@drawable/slider_home_arrow4</item>
