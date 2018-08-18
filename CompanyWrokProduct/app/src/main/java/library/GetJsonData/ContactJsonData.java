@@ -1,12 +1,7 @@
 package library.GetJsonData;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-
-import java.util.List;
-
-import library.Http.JSONParser;
 
 public class ContactJsonData extends APIInfomation {
     private final String getContact_url = DOMAIN + "main/mcenter/contact/getContact.php";
@@ -14,8 +9,6 @@ public class ContactJsonData extends APIInfomation {
     private final String setContact_url = DOMAIN + "main/mcenter/contact/setContact.php";
     private final String delContact_url = DOMAIN + "main/mcenter/contact/delContact.php";
     private final String setContactCont_url = DOMAIN + "main/mcenter/contact/setContactCont.php";
-    private JSONParser jsonParser;
-    List<NameValuePair> params;
 
     public ContactJsonData() {
         super();

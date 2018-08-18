@@ -14,10 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.example.alex.posdemo.adapter.recylclerview.SliderMenuAdapter;
-import com.example.alex.posdemo.fragment.Fragment_Home;
+import com.example.alex.posdemo.fragment.Fragment_home;
 import com.example.alex.posdemo.pojo.CheckMainButtonPojo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import Utils.ComponentUtil;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private View subview, menu, content;
     private ComponentUtil componentUtil;
     public static CheckMainButtonPojo checkMainButtonPojo = new CheckMainButtonPojo();
+
+    public SliderMenuAdapter getSubslide_adapter() {
+        return subslide_adapter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragment() {
-        Fragment_Home fragment_home = new Fragment_Home();
+        Fragment_home fragment_home = new Fragment_home();
         switchFrament(fragment_home);
     }
 
@@ -50,14 +58,19 @@ public class MainActivity extends AppCompatActivity {
         subview = findViewById(R.id.home_subslide_layout);
         //main
         mainslide_reclerview = findViewById(R.id.home_mainslide_recylcetview);
-        mainslide_adapter = new SliderMenuAdapter(this, R.array.slider_main_bg, R.array.slider_main_img, R.array.slider_main_arrow, getResources().getStringArray(R.array.slider_main_txt), SliderMenuAdapter.MAIN_SLIDER);
+        Map<String,Integer> map=new HashMap<>();
+        map.put("background",R.array.slider_main_bg);
+        map.put("image",R.array.slider_main_img);
+        map.put("arrow",R.array.slider_main_arrow);
+        map.put("text",R.array.slider_main_txt);
+        mainslide_adapter = new SliderMenuAdapter(this, map, SliderMenuAdapter.MAIN_SLIDER);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
         mainslide_reclerview.setLayoutManager(layoutManager1);
         mainslide_reclerview.setAdapter(mainslide_adapter);
         //sub
         subslide_recylcetview = findViewById(R.id.home_subslide_recylcetview);
-        subslide_adapter = new SliderMenuAdapter(this, R.array.slider_main_bg, R.array.slider_main_img, R.array.slider_main_arrow, getResources().getStringArray(R.array.slider_main_txt), SliderMenuAdapter.SUB_SLIDER);
+        subslide_adapter = new SliderMenuAdapter(this,null, SliderMenuAdapter.SUB_SLIDER);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         subslide_recylcetview.setLayoutManager(layoutManager2);

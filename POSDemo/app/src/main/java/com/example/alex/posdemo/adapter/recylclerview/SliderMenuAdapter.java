@@ -14,6 +14,11 @@ import android.widget.TextView;
 
 import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
+import com.example.alex.posdemo.fragment.Fragment_home;
+import com.example.alex.posdemo.fragment.Fragment_punch;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import Utils.ComponentUtil;
 
@@ -26,16 +31,17 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
     String[] list;
     private TypedArray bg, image, arrow;
 
-    public SliderMenuAdapter(Context ctx, int bg_array, int image_array, int arrow_array, String[] list, int type) {
+    public SliderMenuAdapter(Context ctx, Map<String, Integer> map, int type) {
         this.ctx = ctx;
         this.type = type;
-        this.list = list;
-        bg = ctx.getResources().obtainTypedArray(bg_array);
-        image = ctx.getResources().obtainTypedArray(image_array);
-        arrow = ctx.getResources().obtainTypedArray(arrow_array);
-        MainActivity.checkMainButtonPojo.isSelectSlide = new boolean[list.length];
         dm = ctx.getResources().getDisplayMetrics();
-
+        if (map != null) {
+            bg = ctx.getResources().obtainTypedArray(map.get("background"));
+            image = ctx.getResources().obtainTypedArray(map.get("image"));
+            arrow = ctx.getResources().obtainTypedArray(map.get("arrow"));
+            list = ctx.getResources().getStringArray(map.get("text"));
+            MainActivity.checkMainButtonPojo.isSelectSlide = new boolean[list.length];
+        }
     }
 
     @Override
@@ -68,6 +74,9 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
 
     @Override
     public int getItemCount() {
+        if (list == null) {
+            return 0;
+        }
         return list.length;
     }
 
@@ -90,15 +99,45 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (position > 0) {
-                checkMenuButton(position);
+                //控制遮罩及箭頭
                 if (type == MAIN_SLIDER) {
+                    checkMenuButton(position);
                     notifyDataSetChanged();
+                } else {
 
+
+                    Fragment_punch fragment_punch = new Fragment_punch();
+
+                    ((MainActivity) ctx).switchFrament(fragment_punch);
+
+
+                    MainActivity.checkMainButtonPojo.subIsShow = false;
+                    MainActivity.checkMainButtonPojo.isSelectSlide[MainActivity.checkMainButtonPojo.preClick] = false;
+                    componentUtil.showSubMenu(((MainActivity) ctx).findViewById(R.id.home_subslide_layout), false);
+                    componentUtil.showDissMiss(((MainActivity) ctx).findViewById(R.id.home_dismiss), false);
                 }
+            }else {
+                Fragment_home fragment_home = new Fragment_home();
+
+                ((MainActivity) ctx).switchFrament(fragment_home);
             }
         }
 
         private void checkMenuButton(int position) {
+            Map<String, Integer> map = new HashMap<>();
+            if (position % 2 == 0) {
+                map.put("background", R.array.slider_main_bg);
+                map.put("image", R.array.slider_main_img);
+                map.put("arrow", R.array.slider_main_arrow);
+                map.put("text", R.array.slider_main_txt);
+            } else {
+                map.put("background", R.array.slider_sub_bg);
+                map.put("image", R.array.slider_sub_img);
+                map.put("arrow", R.array.slider_sub_arrow);
+                map.put("text", R.array.slider_sub_txt);
+            }
+
+
             MainActivity mainActivity = ((MainActivity) ctx);
             View subview = mainActivity.findViewById(R.id.home_subslide_layout);
             View dismiss = mainActivity.findViewById(R.id.home_dismiss);
@@ -108,6 +147,11 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
                     popWin.dismiss();
 
                 componentUtil.showSubMenu(subview, true);
+
+
+                mainActivity.getSubslide_adapter().setFilter(map);
+
+
                 MainActivity.checkMainButtonPojo.alertIsShow = false;
                 MainActivity.checkMainButtonPojo.accOpIsShow = false;
                 MainActivity.checkMainButtonPojo.subIsShow = true;
@@ -118,6 +162,7 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
                     if (MainActivity.checkMainButtonPojo.preClick != position) {
                         MainActivity.checkMainButtonPojo.isSelectSlide[MainActivity.checkMainButtonPojo.preClick] = false;
                         MainActivity.checkMainButtonPojo.isSelectSlide[position] = true;
+                        mainActivity.getSubslide_adapter().setFilter(map);
                     } else {
                         componentUtil.showSubMenu(subview, false);
                         componentUtil.showDissMiss(dismiss, false);
@@ -128,6 +173,8 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
                 } else {
                     componentUtil.showDissMiss(dismiss, true);
                     componentUtil.showSubMenu(subview, true);
+
+                    mainActivity.getSubslide_adapter().setFilter(map);
                     MainActivity.checkMainButtonPojo.subIsShow = true;
                     MainActivity.checkMainButtonPojo.isSelectSlide[position] = true;
                 }
@@ -138,8 +185,11 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
     }
 
 
-    public void setFilter(String[] list) {
-        this.list = list;
+    public void setFilter(Map<String, Integer> map) {
+        bg = ctx.getResources().obtainTypedArray(map.get("background"));
+        image = ctx.getResources().obtainTypedArray(map.get("image"));
+        arrow = ctx.getResources().obtainTypedArray(map.get("arrow"));
+        list = ctx.getResources().getStringArray(map.get("text"));
         notifyDataSetChanged();
 
     }

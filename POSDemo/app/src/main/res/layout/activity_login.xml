@@ -31,22 +31,26 @@
             android:layout_marginBottom="40dp"/>
 
         <EditText
+            android:id="@+id/login_account"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@color/white"
             android:padding="5dp"
-            android:hint="帳&#8194;號" />
+            android:hint="帳&#8194;號"
+            android:singleLine="true"/>
 
         <EditText
+            android:id="@+id/login_password"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@color/white"
             android:padding="5dp"
-            android:hint="密&#8194;碼" />
+            android:hint="密&#8194;碼"
+            android:singleLine="true"/>
 
         <Button
             android:id="@+id/login_confirm"

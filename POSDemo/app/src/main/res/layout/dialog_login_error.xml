@@ -1,37 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".LoginActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/login_green"
-        android:textColor="@color/white"
-        android:text="警告"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:layout_gravity="center"/>
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="帳號或密碼有誤"
-        android:textSize="20sp"
-        android:layout_gravity="center"
-        android:paddingTop="30sp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@drawable/login_green"
-        android:text="確認"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:layout_marginLeft="200dp"
-        android:layout_marginRight="200dp"/>
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/home_toolbar"
+            android:textColor="@color/white"
+            android:text="警告"
+            android:gravity="center"
+            android:textSize="20sp" />
+        <library.Component.GifView
+            android:id="@+id/dialog_warning"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            custom:gif="@raw/warning" />
+        <TextView
+            android:id="@+id/dialog_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="帳號或密碼有誤"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"/>
+        <Button
+            android:id="@+id/dialog_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/login_green"
+            android:text="確認"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginRight="200dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

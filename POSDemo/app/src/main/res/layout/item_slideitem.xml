@@ -16,7 +16,7 @@
             android:layout_gravity="center"
             android:paddingBottom="40dp"
             android:paddingTop="10dp"
-            android:src="@drawable/slider_home_img1" />
+            android:src="@drawable/mainslider_home_img1" />
 
         <TextView
             android:id="@+id/slide_item_txt"
@@ -26,6 +26,7 @@
             android:paddingBottom="10dp"
             android:text="首頁"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:fontFamily="@font/test"/>
     </FrameLayout>
 </LinearLayout>

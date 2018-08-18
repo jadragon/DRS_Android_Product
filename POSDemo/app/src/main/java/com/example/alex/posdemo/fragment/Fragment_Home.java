@@ -38,7 +38,7 @@ import java.util.ArrayList;
  * Created by user on 2017/5/30.
  */
 
-public class Fragment_Home extends Fragment {
+public class Fragment_home extends Fragment {
     View v;
     private View top_itme1, top_itme2, top_itme3, top_itme4;
     private RecyclerView recyclerView_announce, recyclerView_viersion;
