@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/home_gray1"
+            android:background="@color/punch_gray2"
             android:orientation="vertical">
 
             <LinearLayout
@@ -35,17 +35,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="門市選擇"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
 
                     <Spinner
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -55,20 +57,29 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="日期/起"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/punch_clenderstart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/punch_clender" />
 
                     <TextView
+                        android:id="@+id/punch_datestart"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="3" />
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -89,17 +100,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="員工姓名"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -109,20 +122,29 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="日期/迄"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/punch_clenderend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/punch_clender" />
 
                     <TextView
+                        android:id="@+id/punch_dateend"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3" />
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -146,26 +168,30 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="員工編號"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/punch_search"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/home_blue_bg"
                     android:text="搜尋"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -174,7 +200,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/home_gray2"
+            android:background="@color/punch_gray1"
             android:orientation="vertical">
 
             <LinearLayout
@@ -183,7 +209,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -194,17 +220,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="班別"
-                        android:textSize="25sp" />
+                        android:text="班&#8195;別&#8195;"
+                        android:textSize="20sp" />
 
                     <Spinner
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -214,17 +242,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="帳號"
-                        android:textSize="25sp" />
+                        android:text="帳&#8195;號&#8195;"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -245,17 +275,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="上下班"
-                        android:textSize="25sp" />
+                        android:text="上下班&#8195;"
+                        android:textSize="20sp" />
 
                     <Spinner
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -265,17 +297,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="密碼"
-                        android:textSize="25sp" />
+                        android:text="密&#8195;碼&#8195;"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -297,17 +331,19 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="備註"
-                        android:textSize="25sp" />
+                        android:text="備&#8195;註&#8195;"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/white" />
                 </LinearLayout>
 
                 <Button
@@ -315,8 +351,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/login_green"
-                    android:text="搜尋"
-                    android:textColor="@color/white" />
+                    android:text="打卡"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -327,7 +364,8 @@
         android:background="@drawable/home_toolbar"
         android:gravity="center"
         android:text="出勤打卡紀錄"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

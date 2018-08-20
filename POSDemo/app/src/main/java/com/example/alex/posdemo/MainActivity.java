@@ -7,13 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import com.example.alex.posdemo.adapter.recylclerview.SliderMenuAdapter;
+import com.example.alex.posdemo.GlobalVariable.UserInfo;
+import com.example.alex.posdemo.adapter.recylclerview.SliderMainMenuAdapter;
+import com.example.alex.posdemo.adapter.recylclerview.SliderSubMenuAdapter;
 import com.example.alex.posdemo.fragment.Fragment_home;
 import com.example.alex.posdemo.pojo.CheckMainButtonPojo;
 
@@ -29,12 +32,14 @@ public class MainActivity extends AppCompatActivity {
     private View dismiss;
     DisplayMetrics dm;
     private RecyclerView mainslide_reclerview, subslide_recylcetview;
-    private SliderMenuAdapter mainslide_adapter, subslide_adapter;
+    private SliderMainMenuAdapter mainslide_adapter;
+    private SliderSubMenuAdapter subslide_adapter;
     private View subview, menu, content;
     private ComponentUtil componentUtil;
     public static CheckMainButtonPojo checkMainButtonPojo = new CheckMainButtonPojo();
+    private UserInfo userInfo;
 
-    public SliderMenuAdapter getSubslide_adapter() {
+    public SliderSubMenuAdapter getSubslide_adapter() {
         return subslide_adapter;
     }
 
@@ -42,11 +47,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userInfo = (UserInfo) getApplicationContext();
         componentUtil = new ComponentUtil();
         dm = getResources().getDisplayMetrics();
+        initUserData();
         initFragment();
         initReyclerView();
         initToolbarButton();
+    }
+
+    private void initUserData() {
+        Log.e("User", userInfo.getDu_no() + "\n" + userInfo.getS_no());
     }
 
     private void initFragment() {
@@ -58,19 +69,19 @@ public class MainActivity extends AppCompatActivity {
         subview = findViewById(R.id.home_subslide_layout);
         //main
         mainslide_reclerview = findViewById(R.id.home_mainslide_recylcetview);
-        Map<String,Integer> map=new HashMap<>();
-        map.put("background",R.array.slider_main_bg);
-        map.put("image",R.array.slider_main_img);
-        map.put("arrow",R.array.slider_main_arrow);
-        map.put("text",R.array.slider_main_txt);
-        mainslide_adapter = new SliderMenuAdapter(this, map, SliderMenuAdapter.MAIN_SLIDER);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("background", R.array.slider_main_bg);
+        map.put("image", R.array.slider_main_img);
+        map.put("arrow", R.array.slider_main_arrow);
+        map.put("text", R.array.slider_main_txt);
+        mainslide_adapter = new SliderMainMenuAdapter(this, map);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
         mainslide_reclerview.setLayoutManager(layoutManager1);
         mainslide_reclerview.setAdapter(mainslide_adapter);
         //sub
         subslide_recylcetview = findViewById(R.id.home_subslide_recylcetview);
-        subslide_adapter = new SliderMenuAdapter(this,null, SliderMenuAdapter.SUB_SLIDER);
+        subslide_adapter = new SliderSubMenuAdapter(this, null);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         subslide_recylcetview.setLayoutManager(layoutManager2);
@@ -231,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         }
         popWin.setAnimationStyle(android.R.style.Animation_Dialog);    //设置一个动画。
         //设置Gravity，让它显示在右上角。
-        popWin.showAtLocation(getCurrentFocus(), Gravity.TOP | Gravity.RIGHT, 0, (int) (50 * dm.density));
+        popWin.showAtLocation(content, Gravity.TOP | Gravity.RIGHT, 0, (int) (50 * dm.density));
     }
 
     /**

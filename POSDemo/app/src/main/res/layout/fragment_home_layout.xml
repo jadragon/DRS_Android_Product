@@ -21,7 +21,7 @@
             <LinearLayout
                 android:id="@+id/home_top_item1"
                 android:layout_width="wrap_content"
-                android:layout_height="130dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
@@ -32,7 +32,7 @@
 
                 <FrameLayout
                     android:layout_width="100dp"
-                    android:layout_height="130dp">
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -49,25 +49,25 @@
                         android:paddingBottom="20dp"
                         android:text="今日銷售"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
-                     />
+                        android:textSize="20sp" />
                 </FrameLayout>
+
                 <TextView
+                    android:id="@+id/home_txt_todaysale"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/test"
                     android:gravity="center_vertical|right"
-                    android:text="25555"
-                    android:textColor="@color/white"
                     android:padding="15dp"
-                    android:textSize="35sp"
-                    android:fontFamily="@font/test"/>
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/home_top_item2"
                 android:layout_width="wrap_content"
-                android:layout_height="130dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
@@ -77,7 +77,7 @@
 
                 <FrameLayout
                     android:layout_width="100dp"
-                    android:layout_height="130dp">
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -94,24 +94,25 @@
                         android:paddingBottom="20dp"
                         android:text="昨日銷售"
                         android:textColor="@color/white"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
                 </FrameLayout>
+
                 <TextView
+                    android:id="@+id/home_txt_yesterdaysale"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/test"
                     android:gravity="center_vertical|right"
-                    android:text="0"
-                    android:textColor="@color/white"
                     android:padding="15dp"
-                    android:textSize="35sp"
-                    android:fontFamily="@font/test"/>
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/home_top_item3"
                 android:layout_width="wrap_content"
-                android:layout_height="130dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
@@ -120,7 +121,7 @@
 
                 <FrameLayout
                     android:layout_width="100dp"
-                    android:layout_height="130dp">
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -141,21 +142,21 @@
                 </FrameLayout>
 
                 <TextView
+                    android:id="@+id/home_txt_todayorder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/test"
                     android:gravity="center_vertical|right"
-                    android:text="0"
-                    android:textColor="@color/white"
                     android:padding="15dp"
-                    android:textSize="35sp"
-                    android:fontFamily="@font/test"/>
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/home_top_item4"
                 android:layout_width="wrap_content"
-                android:layout_height="130dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
@@ -164,7 +165,7 @@
 
                 <FrameLayout
                     android:layout_width="100dp"
-                    android:layout_height="130dp">
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -183,16 +184,17 @@
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </FrameLayout>
+
                 <TextView
+                    android:id="@+id/home_txt_yesterdayorder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/test"
                     android:gravity="center_vertical|right"
-                    android:text="0"
-                    android:textColor="@color/white"
                     android:padding="15dp"
-                    android:textSize="35sp"
-                    android:fontFamily="@font/test"/>
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -203,12 +205,12 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="20dp"
@@ -226,14 +228,14 @@
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/home_post_recyclerview"
+                    <WebView
+                        android:id="@+id/home_webview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
@@ -254,18 +256,18 @@
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/home_todaysale_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="20dp"
                     android:layout_marginLeft="20dp"
@@ -290,7 +292,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="20dp"
                     android:layout_marginLeft="10dp"
@@ -308,10 +310,10 @@
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
-                  <com.github.mikephil.charting.charts.PieChart
-                      android:id="@+id/home_salecompare_chart"
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"/>
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/home_salecompare_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

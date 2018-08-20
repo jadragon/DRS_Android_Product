@@ -15,25 +15,20 @@ import android.widget.TextView;
 import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.fragment.Fragment_home;
-import com.example.alex.posdemo.fragment.Fragment_punch;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import Utils.ComponentUtil;
 
-public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.RecycleHolder> {
-    public static int MAIN_SLIDER = 0;
-    public static int SUB_SLIDER = 1;
+public class SliderMainMenuAdapter extends RecyclerView.Adapter<SliderMainMenuAdapter.RecycleHolder> {
     private Context ctx;
-    int type;
     DisplayMetrics dm;
     String[] list;
     private TypedArray bg, image, arrow;
 
-    public SliderMenuAdapter(Context ctx, Map<String, Integer> map, int type) {
+    public SliderMainMenuAdapter(Context ctx, Map<String, Integer> map) {
         this.ctx = ctx;
-        this.type = type;
         dm = ctx.getResources().getDisplayMetrics();
         if (map != null) {
             bg = ctx.getResources().obtainTypedArray(map.get("background"));
@@ -45,15 +40,15 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
     }
 
     @Override
-    public SliderMenuAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SliderMainMenuAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_slideitem, parent, false);
-        return new SliderMenuAdapter.RecycleHolder(view);
+        return new SliderMainMenuAdapter.RecycleHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
 
-        if (type == MAIN_SLIDER) {
+
             if (MainActivity.checkMainButtonPojo.isSelectSlide[position]) {
                 holder.background.setBackgroundResource(arrow.getResourceId(position, 0));
                 holder.imageView.setImageResource(0);
@@ -63,12 +58,6 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
                 holder.imageView.setImageResource(image.getResourceId(position, 0));
                 holder.textView.setText(list[position]);
             }
-        } else {
-            holder.background.setBackgroundResource(bg.getResourceId(position, 0));
-            holder.imageView.setImageResource(image.getResourceId(position, 0));
-            holder.textView.setText(list[position]);
-        }
-
     }
 
 
@@ -100,22 +89,8 @@ public class SliderMenuAdapter extends RecyclerView.Adapter<SliderMenuAdapter.Re
             int position = getAdapterPosition();
             if (position > 0) {
                 //控制遮罩及箭頭
-                if (type == MAIN_SLIDER) {
                     checkMenuButton(position);
                     notifyDataSetChanged();
-                } else {
-
-
-                    Fragment_punch fragment_punch = new Fragment_punch();
-
-                    ((MainActivity) ctx).switchFrament(fragment_punch);
-
-
-                    MainActivity.checkMainButtonPojo.subIsShow = false;
-                    MainActivity.checkMainButtonPojo.isSelectSlide[MainActivity.checkMainButtonPojo.preClick] = false;
-                    componentUtil.showSubMenu(((MainActivity) ctx).findViewById(R.id.home_subslide_layout), false);
-                    componentUtil.showDissMiss(((MainActivity) ctx).findViewById(R.id.home_dismiss), false);
-                }
             }else {
                 Fragment_home fragment_home = new Fragment_home();
 

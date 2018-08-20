@@ -9,8 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alex.posdemo.GlobalVariable.UserInfo;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.adapter.recylclerview.SimpleTextAdapter;
 import com.github.mikephil.charting.animation.Easing;
@@ -31,8 +35,16 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import Utils.AsyncTaskUtils;
+import Utils.IDataCallBack;
+import library.AnalyzeJSON.APIpojo.HomeHeaderPojo;
+import library.AnalyzeJSON.Analyze_UserInfo;
+import library.JsonApi.RegistAndLoginApi;
 
 /**
  * Created by user on 2017/5/30.
@@ -45,16 +57,71 @@ public class Fragment_home extends Fragment {
     private SimpleTextAdapter adapter_announce, adapter_viersion;
     private PieChart salecompare_chart;
     private LineChart home_todaysale_chart;
+    private UserInfo userInfo;
+    private TextView today_sale, yesterday_sale, today_order, yesterday_order;
+    private WebView luntanListview;
+    private RegistAndLoginApi registAndLoginApi;
+    private Analyze_UserInfo analyze_userInfo;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_home_layout, container, false);
+        userInfo = (UserInfo) getContext().getApplicationContext();
+        registAndLoginApi = new RegistAndLoginApi();
+        analyze_userInfo = new Analyze_UserInfo();
         initTopItem();
+        initWebView();
         initRecylcerView();
         initPieChart();
         initLineChart();
         return v;
+    }
+
+    private void initWebView() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public void onTaskBefore() {
+
+            }
+
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return registAndLoginApi.board();
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                showWebView(analyze_userInfo.getBoard(jsonObject));
+            }
+        });
+
+    }
+
+    private void showWebView(String html) {
+        luntanListview = v.findViewById(R.id.home_webview);
+        luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        luntanListview.setWebViewClient(new WebViewClient());
+    }
+
+    public void clearWebViewResource(ViewGroup container, WebView webView) {
+        if (webView != null) {
+            webView.removeAllViews();
+            // in android 5.1(sdk:21) we should invoke this to avoid memory leak
+            // see (https://coolpers.github.io/webview/memory/leak/2015/07/16/
+            // android-5.1-webview-memory-leak.html)
+            if (container != null)
+                container.removeView(webView);
+            webView.setTag(null);
+            webView.clearHistory();
+            webView.destroy();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        clearWebViewResource((ViewGroup) v, luntanListview);
     }
 
     private void initLineChart() {
@@ -326,16 +393,13 @@ public class Fragment_home extends Fragment {
         for (int i = 0; i < 20; i++) {
             arrayList.add("2018/4/11 系統更新 v1.28版本");
         }
-        //main
-        recyclerView_announce = v.findViewById(R.id.home_post_recyclerview);
-        adapter_announce = new SimpleTextAdapter(getContext(), arrayList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView_announce.setLayoutManager(layoutManager);
-        recyclerView_announce.setAdapter(adapter_announce);
+
+
         //sub
         recyclerView_viersion = v.findViewById(R.id.home_version_recyclerview);
         adapter_viersion = new SimpleTextAdapter(getContext(), arrayList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView_viersion.setLayoutManager(layoutManager);
@@ -343,11 +407,16 @@ public class Fragment_home extends Fragment {
     }
 
     private void initTopItem() {
-
+        //layout
         top_itme1 = v.findViewById(R.id.home_top_item1);
         top_itme2 = v.findViewById(R.id.home_top_item2);
         top_itme3 = v.findViewById(R.id.home_top_item3);
         top_itme4 = v.findViewById(R.id.home_top_item4);
+        //textc
+        today_sale = v.findViewById(R.id.home_txt_todaysale);
+        yesterday_sale = v.findViewById(R.id.home_txt_yesterdaysale);
+        today_order = v.findViewById(R.id.home_txt_todayorder);
+        yesterday_order = v.findViewById(R.id.home_txt_yesterdayorder);
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -372,6 +441,27 @@ public class Fragment_home extends Fragment {
         top_itme2.setOnClickListener(onClickListener);
         top_itme3.setOnClickListener(onClickListener);
         top_itme4.setOnClickListener(onClickListener);
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public void onTaskBefore() {
+
+            }
+
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return registAndLoginApi.home_header(userInfo.getS_no());
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                HomeHeaderPojo homeHeaderPojo = analyze_userInfo.getHomeHeader(jsonObject);
+                today_sale.setText(homeHeaderPojo.getN_sale());
+                yesterday_sale.setText(homeHeaderPojo.getN_order());
+                today_order.setText(homeHeaderPojo.getY_sale());
+                yesterday_order.setText(homeHeaderPojo.getY_orde());
+            }
+        });
+
 
     }
 

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="即&#8194;時&#8194;銷&#8194;售&#8194;管&#8194;理&#8194;系&#8194;統"
+            android:text="即&#8195;時&#8195;銷&#8195;售&#8195;管&#8195;理&#8195;系&#8195;統"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="POS&#8194;System"
+            android:text="POS&#8195;System"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:layout_marginBottom="40dp"/>
@@ -38,7 +38,7 @@
             android:layout_margin="10dp"
             android:background="@color/white"
             android:padding="5dp"
-            android:hint="帳&#8194;號"
+            android:hint="帳&#8195;號"
             android:singleLine="true"/>
 
         <EditText
@@ -49,7 +49,7 @@
             android:layout_margin="10dp"
             android:background="@color/white"
             android:padding="5dp"
-            android:hint="密&#8194;碼"
+            android:hint="密&#8195;碼"
             android:singleLine="true"/>
 
         <Button
