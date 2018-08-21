@@ -1,5 +1,6 @@
 package com.example.alex.posdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -7,12 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.example.alex.posdemo.GlobalVariable.UserInfo;
 import com.example.alex.posdemo.adapter.recylclerview.SliderMainMenuAdapter;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Utils.ComponentUtil;
+import db.SQLiteDatabaseHandler;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,14 +52,16 @@ public class MainActivity extends AppCompatActivity {
         userInfo = (UserInfo) getApplicationContext();
         componentUtil = new ComponentUtil();
         dm = getResources().getDisplayMetrics();
-        initUserData();
+        initTitleData();
         initFragment();
         initReyclerView();
         initToolbarButton();
     }
 
-    private void initUserData() {
-        Log.e("User", userInfo.getDu_no() + "\n" + userInfo.getS_no());
+    private void initTitleData() {
+        ((TextView) findViewById(R.id.main_store)).setText(userInfo.getStore());
+        ((TextView) findViewById(R.id.main_name)).setText("使用者:" + userInfo.getName());
+        ((TextView) findViewById(R.id.main_dname)).setText("部門:" + userInfo.getDname());
     }
 
     private void initFragment() {
@@ -238,6 +242,17 @@ public class MainActivity extends AppCompatActivity {
         } else if (type == TYPE_OPTION) {
             popView = getLayoutInflater().inflate(
                     R.layout.item_logout, null);
+
+            popView.findViewById(R.id.main_logout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(MainActivity.this);
+                    db.resetTables();
+                    db.close();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }
+            });
             popWin = new PopupWindow(popView, (int) (200 * dm.density), (int) (150 * dm.density), false);
         }
         popWin.setAnimationStyle(android.R.style.Animation_Dialog);    //设置一个动画。

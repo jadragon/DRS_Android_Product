@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
+import com.example.alex.posdemo.fragment.Fragment_count;
 import com.example.alex.posdemo.fragment.Fragment_punch;
 
 import java.util.Map;
@@ -46,9 +47,9 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
 
 
-            holder.background.setBackgroundResource(bg.getResourceId(position, 0));
-            holder.imageView.setImageResource(image.getResourceId(position, 0));
-            holder.textView.setText(list[position]);
+        holder.background.setBackgroundResource(bg.getResourceId(position, 0));
+        holder.imageView.setImageResource(image.getResourceId(position, 0));
+        holder.textView.setText(list[position]);
 
 
     }
@@ -80,12 +81,13 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-
-            Fragment_punch fragment_punch = new Fragment_punch();
-
-            ((MainActivity) ctx).switchFrament(fragment_punch);
-
-
+            if (position % 2 == 0) {
+                Fragment_punch fragment_punch = new Fragment_punch();
+                ((MainActivity) ctx).switchFrament(fragment_punch);
+            } else {
+                Fragment_count fragment_count = new Fragment_count();
+                ((MainActivity) ctx).switchFrament(fragment_count);
+            }
             MainActivity.checkMainButtonPojo.subIsShow = false;
             MainActivity.checkMainButtonPojo.isSelectSlide[MainActivity.checkMainButtonPojo.preClick] = false;
             componentUtil.showSubMenu(((MainActivity) ctx).findViewById(R.id.home_subslide_layout), false);

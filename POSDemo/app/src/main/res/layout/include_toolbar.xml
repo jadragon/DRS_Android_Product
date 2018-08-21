@@ -20,12 +20,13 @@
             android:background="@drawable/home_slidermenu_btn" />
 
         <TextView
+            android:id="@+id/main_store"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="TONG YU(總倉) ID:ABS12345"
+            android:text="TONG YU(總倉)"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp" />c
     </LinearLayout>
 
     <LinearLayout
@@ -35,6 +36,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/main_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -43,6 +45,7 @@
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/main_dname"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

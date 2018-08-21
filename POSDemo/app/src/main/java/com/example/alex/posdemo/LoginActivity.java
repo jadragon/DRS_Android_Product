@@ -11,8 +11,11 @@ import com.example.alex.posdemo.GlobalVariable.UserInfo;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import Utils.AsyncTaskUtils;
 import Utils.IDataCallBack;
+import db.SQLiteDatabaseHandler;
 import library.AnalyzeJSON.APIpojo.LoginInfoPojo;
 import library.AnalyzeJSON.AnalyzeUtil;
 import library.AnalyzeJSON.Analyze_UserInfo;
@@ -23,12 +26,26 @@ public class LoginActivity extends AppCompatActivity {
     Button login_confirm;
     EditText login_account, login_password;
     private UserInfo userInfo;
+    SQLiteDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        db = new SQLiteDatabaseHandler(this);
         userInfo = (UserInfo) getApplicationContext();
+        if (db.getUserInfo() != null) {
+            Map<String, String> map = db.getUserInfo();
+            userInfo.setName(map.get("name"));
+            userInfo.setEn(map.get("en"));
+            userInfo.setDu_no(map.get("du_no"));
+            userInfo.setDname(map.get("dname"));
+            userInfo.setS_no(map.get("s_no"));
+            userInfo.setStore(map.get("store"));
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
         login_account = findViewById(R.id.login_account);
         login_password = findViewById(R.id.login_password);
         login_confirm = findViewById(R.id.login_confirm);
@@ -52,8 +69,13 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             LoginInfoPojo loginInfoPojo = new Analyze_UserInfo().getLoginInfo(jsonObject);
                             if (loginInfoPojo != null) {
+                                db.addItem(loginInfoPojo.getName(), loginInfoPojo.getEn(), loginInfoPojo.getDu_no(), loginInfoPojo.getDname(), loginInfoPojo.getS_no(), loginInfoPojo.getStore());
+                                userInfo.setName(loginInfoPojo.getName());
+                                userInfo.setEn(loginInfoPojo.getEn());
                                 userInfo.setDu_no(loginInfoPojo.getDu_no());
+                                userInfo.setDname(loginInfoPojo.getDname());
                                 userInfo.setS_no(loginInfoPojo.getS_no());
+                                userInfo.setStore(loginInfoPojo.getStore());
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -66,5 +88,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }

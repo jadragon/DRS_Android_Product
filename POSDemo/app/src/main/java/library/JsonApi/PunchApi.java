@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class PunchApi extends APIInfomation {
     private final String attendance_seach_url = DOMAIN + "judd/main/index/attendance_seach.php";
+    private final String attendance_puch_url = DOMAIN + "judd/main/index/attendance_puch.php";
 
     public PunchApi() {
         super();
@@ -25,5 +26,19 @@ public class PunchApi extends APIInfomation {
         params.add(new BasicNameValuePair("start_day", start_day));
         params.add(new BasicNameValuePair("end_day", end_day));
         return jsonParser.getJSONFromUrl(attendance_seach_url, params);
+    }
+
+    /**
+     * 2.2出勤打卡
+     */
+    public JSONObject attendance_puch(int classnum, int commute, String note, String account, String pawd) {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("pos", POS));
+        params.add(new BasicNameValuePair("classnum", classnum+""));
+        params.add(new BasicNameValuePair("commute", commute+""));
+        params.add(new BasicNameValuePair("note", note));
+        params.add(new BasicNameValuePair("account", account));
+        params.add(new BasicNameValuePair("pawd", pawd));
+        return jsonParser.getJSONFromUrl(attendance_puch_url, params);
     }
 }

@@ -11,9 +11,44 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class UserInfo extends Application {
-
+    private String name;
+    private String en;
     private String du_no;
+    private String dname;
     private String s_no;
+    private String store;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEn() {
+        return en;
+    }
+
+    public void setEn(String en) {
+        this.en = en;
+    }
+
+    public String getDname() {
+        return dname;
+    }
+
+    public void setDname(String dname) {
+        this.dname = dname;
+    }
+
+    public String getStore() {
+        return store;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
+    }
 
     public String getDu_no() {
         return du_no;
