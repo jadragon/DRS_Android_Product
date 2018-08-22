@@ -27,6 +27,8 @@ public class Analyze_UserInfo {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }catch (NullPointerException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -48,6 +50,8 @@ public class Analyze_UserInfo {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }catch (NullPointerException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -63,6 +67,8 @@ public class Analyze_UserInfo {
             }
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (NullPointerException e) {
             e.printStackTrace();
         }
         return null;

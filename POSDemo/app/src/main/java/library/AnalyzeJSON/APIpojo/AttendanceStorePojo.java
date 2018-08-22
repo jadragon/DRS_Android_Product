@@ -1,22 +1,24 @@
 package library.AnalyzeJSON.APIpojo;
 
-public class AttendanceStorePojo {
-    String[] s_no;
-    String[] store;
+import java.util.ArrayList;
 
-    public String[] getS_no() {
+public class AttendanceStorePojo {
+   ArrayList<String> s_no;
+    ArrayList<String> store;
+
+    public  ArrayList<String> getS_no() {
         return s_no;
     }
 
-    public void setS_no(String[] s_no) {
+    public void setS_no( ArrayList<String> s_no) {
         this.s_no = s_no;
     }
 
-    public String[] getStore() {
+    public  ArrayList<String> getStore() {
         return store;
     }
 
-    public void setStore(String[] store) {
+    public void setStore( ArrayList<String> store) {
         this.store = store;
     }
 }

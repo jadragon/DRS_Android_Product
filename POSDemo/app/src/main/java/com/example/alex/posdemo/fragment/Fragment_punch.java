@@ -140,7 +140,7 @@ public class Fragment_punch extends Fragment {
 
                     @Override
                     public JSONObject onTasking(Void... params) {
-                        return punchApi.attendance_seach(attendanceStorePojo.getS_no()[punch_search_store.getSelectedItemPosition()], punch_search_name.getText().toString(), punch_search_en.getText().toString(), punch_search_datestart.getText().toString(), punch_search_dateend.getText().toString());
+                        return punchApi.attendance_seach(attendanceStorePojo.getS_no().get(punch_search_store.getSelectedItemPosition()), punch_search_name.getText().toString(), punch_search_en.getText().toString(), punch_search_datestart.getText().toString(), punch_search_dateend.getText().toString());
                     }
 
                     @Override
@@ -189,7 +189,7 @@ public class Fragment_punch extends Fragment {
 
             @Override
             public JSONObject onTasking(Void... params) {
-                return punchApi.attendance_seach(attendanceStorePojo.getS_no()[punch_search_store.getSelectedItemPosition()], punch_search_name.getText().toString(),
+                return punchApi.attendance_seach(attendanceStorePojo.getS_no().get(punch_search_store.getSelectedItemPosition()), punch_search_name.getText().toString(),
                         punch_search_en.getText().toString(), punch_search_datestart.getText().toString(), punch_search_dateend.getText().toString());
             }
 

@@ -20,12 +20,12 @@ public class Analyze_PunchInfo {
                 AttendanceStorePojo attendanceStorePojo = new AttendanceStorePojo();
                 JSONArray jsonArray = json.getJSONObject("Data").getJSONArray("store");
                 JSONObject json_obj;
-                String[] s_no = new String[jsonArray.length()];
-                String[] store = new String[jsonArray.length()];
+                ArrayList<String> s_no = new ArrayList<>();
+                ArrayList<String> store = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     json_obj = jsonArray.getJSONObject(i);
-                    s_no[i] = json_obj.getString("s_no");
-                    store[i] = json_obj.getString("store");
+                    s_no.add(json_obj.getString("s_no"));
+                    store.add(json_obj.getString("store"));
                 }
                 attendanceStorePojo.setS_no(s_no);
                 attendanceStorePojo.setStore(store);
@@ -33,6 +33,8 @@ public class Analyze_PunchInfo {
             }
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (NullPointerException e) {
             e.printStackTrace();
         }
         return null;
@@ -64,6 +66,8 @@ public class Analyze_PunchInfo {
             }
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (NullPointerException e) {
             e.printStackTrace();
         }
         return arrayList;

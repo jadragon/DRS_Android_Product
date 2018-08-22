@@ -71,7 +71,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Re
 
         public RecycleHolder(View view) {
             super(view);
-            background = view.findViewWithTag("backfround");
+            background = view.findViewWithTag("background");
             line = view.findViewWithTag("line");
             classnum = view.findViewWithTag("classnum");
             commute = view.findViewWithTag("commute");
