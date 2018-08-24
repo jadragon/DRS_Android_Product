@@ -171,7 +171,7 @@ public class Fragment_punch extends Fragment {
                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
                             setFilter();
                         } else {
-                            new ToastMessageDialog(getContext()).confirm(AnalyzeUtil.getMessage(jsonObject));
+                            new ToastMessageDialog(getContext(),ToastMessageDialog.TYPE_ERROR).confirm(AnalyzeUtil.getMessage(jsonObject));
                         }
 
                     }

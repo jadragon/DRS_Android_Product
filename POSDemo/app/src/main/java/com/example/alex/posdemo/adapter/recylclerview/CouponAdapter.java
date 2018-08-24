@@ -10,22 +10,28 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.RecycleHolder> {
+import library.AnalyzeJSON.APIpojo.CouponPojo;
+import library.AnalyzeJSON.Analyze_CountInfo;
+
+public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.RecycleHolder> {
     private Context ctx;
     DisplayMetrics dm;
-    ArrayList<String> list;
+    ArrayList<CouponPojo> list;
 
-    public SimpleTextAdapter(Context ctx, ArrayList<String> list) {
+    public CouponAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        this.list = list;
         dm = ctx.getResources().getDisplayMetrics();
-
+        list = new Analyze_CountInfo().getPreferential_ContentBD(json);
+        list.addAll(new Analyze_CountInfo().getPreferential_ContentFD(json));
+        list.addAll(new Analyze_CountInfo().getPreferential_ContentMC(json));
     }
 
     @Override
-    public SimpleTextAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CouponAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (36 * dm.density), 1.0f);
         LinearLayout linearLayout = new LinearLayout(ctx);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -34,30 +40,26 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
         TextView tv = new TextView(ctx);
         tv.setTag("title");
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        tv.setGravity(Gravity.CENTER_VERTICAL);
-        //     tv.setBackgroundColor(ctx.getResources().getColor(R.color.default_gray));
-        params.setMargins(0, 0, 0, 0);
+        tv.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         tv.setPadding((int) (dm.density * 10), 0, 0, 0);
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0.8f);
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f);
         tv.setLayoutParams(params);
         linearLayout.addView(tv);
         tv = new TextView(ctx);
         tv.setTag("price");
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         tv.setGravity(Gravity.CENTER_VERTICAL);
-        //     tv.setBackgroundColor(ctx.getResources().getColor(R.color.default_gray));
-        params.setMargins(0, 0, 0, 0);
         tv.setPadding((int) (dm.density * 10), 0, 0, 0);
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0.2f);
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f);
         tv.setLayoutParams(params);
         linearLayout.addView(tv);
-        return new SimpleTextAdapter.RecycleHolder(linearLayout);
+        return new CouponAdapter.RecycleHolder(linearLayout);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        holder.title.setText(list.get(position));
-        holder.price.setText(list.get(position));
+        holder.title.setText("＊" + list.get(position).getName());
+        holder.price.setText("| " + list.get(position).getDiscount());
     }
 
 
@@ -84,8 +86,10 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
 
     }
 
-    public void setFilter(ArrayList<String> list) {
-        this.list = list;
+    public void setFilter(JSONObject json) {
+        list = new Analyze_CountInfo().getPreferential_ContentBD(json);
+        list.addAll(new Analyze_CountInfo().getPreferential_ContentFD(json));
+        list.addAll(new Analyze_CountInfo().getPreferential_ContentMC(json));
         notifyDataSetChanged();
 
     }

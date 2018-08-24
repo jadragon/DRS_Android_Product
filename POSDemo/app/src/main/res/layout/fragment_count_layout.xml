@@ -252,13 +252,15 @@
                     android:textSize="18sp" />
 
                 <Switch
+                    android:id="@+id/count_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textOff="      "
-                    android:textOn="      "
+                    android:textOff="  "
+                    android:textOn="  "
                     android:thumb="@drawable/switch_thumb"
-                    android:track="@drawable/switch_track" />
+                    android:track="@drawable/switch_track"
+                    android:switchMinWidth="40dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -309,6 +311,7 @@
                     android:textSize="18sp" />
 
                 <Spinner
+                    android:id="@+id/count_spinner_returntype"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
@@ -340,6 +343,7 @@
                         android:textSize="20sp" />
 
                     <EditText
+                        android:id="@+id/count_edit_pcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
@@ -446,6 +450,7 @@
                 android:textSize="18sp" />
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/count_coupon_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

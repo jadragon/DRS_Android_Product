@@ -11,6 +11,12 @@ public class ProductListPojo {
     int samount;
     int sum;
     String note;
+    //item
+    String p_no;
+    String pi_no;
+    int stotal;
+    int total;
+
 
     public String getMoi_no() {
         return moi_no;
@@ -90,5 +96,38 @@ public class ProductListPojo {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+
+    public String getP_no() {
+        return p_no;
+    }
+
+    public void setP_no(String p_no) {
+        this.p_no = p_no;
+    }
+
+    public String getPi_no() {
+        return pi_no;
+    }
+
+    public void setPi_no(String pi_no) {
+        this.pi_no = pi_no;
+    }
+
+    public int getStotal() {
+        return stotal;
+    }
+
+    public void setStotal(int stotal) {
+        this.stotal = stotal;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

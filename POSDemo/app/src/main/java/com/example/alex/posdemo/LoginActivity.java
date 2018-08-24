@@ -79,10 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                new ToastMessageDialog(LoginActivity.this).confirm("資料異常");
+                                new ToastMessageDialog(LoginActivity.this,ToastMessageDialog.TYPE_ERROR).confirm("資料異常");
                             }
                         } else {
-                            new ToastMessageDialog(LoginActivity.this).confirm(AnalyzeUtil.getMessage(jsonObject));
+                            new ToastMessageDialog(LoginActivity.this,ToastMessageDialog.TYPE_ERROR).confirm(AnalyzeUtil.getMessage(jsonObject));
                         }
                     }
                 });
