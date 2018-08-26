@@ -40,7 +40,7 @@ public class Fragment_count extends Fragment {
     UserInfo userInfo;
     Spinner count_store, count_payment, count_spinner_returntype;
     EditText count_edit_en, count_edit_m_type, count_edit_member_order;
-    TextView count_txt_en, count_txt_m_type, count_edit_pcode;
+    TextView count_txt_en, count_txt_m_type, count_edit_pcode,count_txt_total;
     RecyclerView count_productlist_recyclerview, count_coupon_recyclerview;
     ProductListAdapter productListAdapter;
     CouponAdapter couponAdapter;

@@ -363,6 +363,7 @@
             android:showDividers="middle">
 
             <TextView
+                android:id="@+id/count_txt_total"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:background="@drawable/home_toolbar"

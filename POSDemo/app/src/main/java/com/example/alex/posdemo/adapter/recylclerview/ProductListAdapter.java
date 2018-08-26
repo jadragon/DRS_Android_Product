@@ -1,5 +1,6 @@
 package com.example.alex.posdemo.adapter.recylclerview;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -35,13 +36,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     ArrayList<ProductListPojo> list;
     Analyze_CountInfo analyze_countInfo;
     private byte type;
-    ArrayList<Integer> scount;
 
     public ProductListAdapter(Context ctx, JSONObject json, byte type) {
         this.ctx = ctx;
         this.type = type;
         dm = ctx.getResources().getDisplayMetrics();
-        scount = new ArrayList<>();
         analyze_countInfo = new Analyze_CountInfo();
         list = analyze_countInfo.getSearch_Member_Order(json);
     }
@@ -70,7 +69,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.size.setText(list.get(position).getSize());
         holder.fprice.setText(list.get(position).getFprice() + "");
         holder.price.setText(list.get(position).getPrice() + "");
-        holder.samount.setSelection(scount.get(position));
+        holder.samount.setSelection(list.get(position).getCurrentCount());
         holder.sum.setText(list.get(position).getPrice() * Integer.parseInt(holder.samount.getSelectedItem().toString()) + "");
 
         // holder.note.setText(list.get(position).getNote());
@@ -116,7 +115,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 }
                 samount.setAdapter(new ArrayAdapter(ctx, android.R.layout.simple_list_item_1, arrayList));
                 samount.setSelection(arrayList.size() - 1);
-                scount.add(arrayList.size() - 1);
+                list.get(index).setCurrentCount(arrayList.size() - 1);
             } else if (type == TYPE_SELL) {
                 ArrayList<Integer> arrayList = new ArrayList<>();
                 arrayList.add(0);
@@ -125,7 +124,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 }
                 samount.setAdapter(new ArrayAdapter(ctx, android.R.layout.simple_list_item_1, arrayList));
                 samount.setSelection(1);
-                scount.add(1);
+                list.get(index).setCurrentCount(1);
             }
 
             //samount
@@ -133,7 +132,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     sum.setText(list.get(getAdapterPosition()).getPrice() * position + "");
-                    scount.set(getAdapterPosition(), position);
+                    list.get(getAdapterPosition()).setCurrentCount(position);
+                    showTotalCount();
                 }
 
                 @Override
@@ -148,10 +148,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).confirm("確定要刪除此商品?", new ToastMessageDialog.OnConfirmListener() {
                         @Override
                         public void onConfirm(AlertDialog alertDialog) {
-                            int position = getAdapterPosition();
-                            list.remove(position);
-                            scount.remove(position);
+                            list.remove(getAdapterPosition());
                             notifyDataSetChanged();
+                            showTotalCount();
                         }
                     });
                 }
@@ -202,11 +201,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     }
 
-
     public void setFilter(JSONObject json) {
         list = analyze_countInfo.getSearch_Member_Order(json);
         notifyDataSetChanged();
-
+        showTotalCount();
     }
 
     public void addItem(JSONObject json) {
@@ -217,5 +215,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         } else {
             new ToastMessageDialog(ctx, TYPE_SELL).confirm("查無商品");
         }
+        showTotalCount();
+    }
+
+    private void showTotalCount() {
+        int total_price = 0;
+            for (ProductListPojo productListPojo : list) {
+                total_price += (productListPojo.getPrice() * productListPojo.getCurrentCount());
+            }
+        ((TextView) ((Activity) ctx).findViewById(R.id.count_txt_total)).setText("" + total_price);
     }
 }

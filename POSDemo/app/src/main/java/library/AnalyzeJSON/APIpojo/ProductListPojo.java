@@ -16,7 +16,7 @@ public class ProductListPojo {
     String pi_no;
     int stotal;
     int total;
-
+    int currentCount;
 
     public String getMoi_no() {
         return moi_no;
@@ -98,7 +98,6 @@ public class ProductListPojo {
         this.note = note;
     }
 
-
     public String getP_no() {
         return p_no;
     }
@@ -129,5 +128,13 @@ public class ProductListPojo {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public int getCurrentCount() {
+        return currentCount;
+    }
+
+    public void setCurrentCount(int currentCount) {
+        this.currentCount = currentCount;
     }
 }
