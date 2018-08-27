@@ -52,23 +52,87 @@
         <item>@drawable/mainslider_home_arrow4</item>
         <item>@drawable/mainslider_home_arrow5</item>
     </array>
-    <array name="slider_sub_bg">
+    <array name="slider_sub_bg1">
         <item>@drawable/slider_home_bg2</item>
         <item>@drawable/slider_home_bg5</item>
         <item>@drawable/slider_home_bg6</item>
         <item>@drawable/slider_home_bg7</item>
     </array>
-    <array name="slider_sub_img">
+    <array name="slider_sub_img1">
         <item>@drawable/mainslider_home_img6</item>
         <item>@drawable/mainslider_home_img7</item>
         <item>@drawable/mainslider_home_img8</item>
         <item>@drawable/mainslider_home_img9</item>
     </array>
-    <string-array name="slider_sub_txt">
+    <string-array name="slider_sub_txt1">
         <item>結帳</item>
         <item>交易管理</item>
         <item>出勤打卡</item>
         <item>公佈欄編輯</item>
+    </string-array>
+    <array name="slider_sub_bg2">
+        <item>@drawable/slider_home_bg2</item>
+    </array>
+    <array name="slider_sub_img2">
+        <item>@drawable/mainslider_home_img2</item>
+    </array>
+    <string-array name="slider_sub_txt2">
+        <item>相簿管理</item>
+    </string-array>
+    <array name="slider_sub_bg3">
+        <item>@drawable/slider_home_bg3</item>
+    </array>
+    <array name="slider_sub_img3">
+        <item>@drawable/mainslider_home_img3</item>
+    </array>
+    <string-array name="slider_sub_txt3">
+        <item>不知道+1</item>
+    </string-array>
+    <array name="slider_sub_bg4">
+        <item>@drawable/slider_home_bg4</item>
+    </array>
+    <array name="slider_sub_img4">
+        <item>@drawable/mainslider_home_img4</item>
+    </array>
+    <string-array name="slider_sub_txt4">
+        <item>不知道+2</item>
+    </string-array>
+    <array name="slider_sub_bg5">
+        <item>@drawable/slider_home_bg5</item>
+    </array>
+    <array name="slider_sub_img5">
+        <item>@drawable/mainslider_home_img5</item>
+    </array>
+    <string-array name="slider_sub_txt5">
+        <item>不知道+3</item>
+    </string-array>
+    <array name="slider_sub_bg6">
+        <item>@drawable/slider_home_bg6</item>
+    </array>
+
+    <array name="slider_sub_img6">
+        <item>@drawable/mainslider_home_img6</item>
+    </array>
+    <string-array name="slider_sub_txt6">
+        <item>不知道+4</item>
+    </string-array>
+    <array name="slider_sub_bg7">
+        <item>@drawable/slider_home_bg7</item>
+    </array>
+    <array name="slider_sub_img7">
+        <item>@drawable/mainslider_home_img7</item>
+    </array>
+    <string-array name="slider_sub_txt7">
+        <item>不知道+5</item>
+    </string-array>
+    <array name="slider_sub_bg8">
+        <item>@drawable/slider_home_bg8</item>
+    </array>
+    <array name="slider_sub_img8">
+        <item>@drawable/mainslider_home_img8</item>
+    </array>
+    <string-array name="slider_sub_txt8">
+        <item>不知道+6</item>
     </string-array>
     <string-array name="attendance_classnum">
         <item>早班</item>
@@ -80,4 +144,18 @@
         <item>上班</item>
         <item>下班</item>
     </string-array>
+    <array name="quick_menu_image">
+        <item>@drawable/quick_menu1</item>
+        <item>@drawable/quick_menu2</item>
+        <item>@drawable/quick_menu3</item>
+        <item>@drawable/quick_menu4</item>
+    </array>
+    <string-array name="quick_menu_txt">
+        <item>公佈欄</item>
+        <item>會員交易歷程</item>
+        <item>會員交易分析</item>
+        <item>優惠券資訊</item>
+    </string-array>
+
+
 </resources>

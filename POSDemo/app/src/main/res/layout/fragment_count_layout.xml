@@ -65,6 +65,7 @@
                     android:id="@+id/count_edit_en"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="2"
                     android:background="@color/white"
                     android:singleLine="true" />
@@ -74,6 +75,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/edit_background"
                     android:gravity="center"
                     android:textSize="18sp" />
 
@@ -159,6 +161,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/edit_background"
                         android:gravity="center"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -256,11 +259,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:switchMinWidth="40dp"
                     android:textOff="  "
                     android:textOn="  "
                     android:thumb="@drawable/switch_thumb"
-                    android:track="@drawable/switch_track"
-                    android:switchMinWidth="40dp"/>
+                    android:track="@drawable/switch_track" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -331,9 +334,8 @@
                     android:layout_gravity="bottom"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@color/punch_gray1"
+                    android:background="@drawable/edit_background"
                     android:orientation="vertical"
-
                     android:padding="10dp">
 
                     <TextView
@@ -370,7 +372,7 @@
                 android:fontFamily="@font/test"
                 android:gravity="center_vertical|right"
                 android:padding="30dp"
-                android:text="25,123,456"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="60sp" />
 
@@ -407,15 +409,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="9"
             android:orientation="vertical">
 
             <TextView
@@ -423,153 +426,173 @@
                 android:layout_height="45dp"
                 android:background="@drawable/home_toolbar"
                 android:gravity="center"
-                android:text="快速功能"
+                android:text="交易明細"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/punch_gray1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:tag="delete"
+                    android:text="刪除" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:tag="line"
+                    android:text="項次" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:tag="pname"
+                    android:text="品名" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:tag="pcode"
+                    android:text="商品編號" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:tag="color"
+                    android:text="顏色" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:tag="size"
+                    android:text="尺寸" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:tag="fprice"
+                    android:text="定價" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:tag="price"
+                    android:text="售價" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:tag="samount"
+                    android:text="數量" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:tag="sum"
+                    android:text="小計" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:tag="note"
+                    android:text="備註" />
+            </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/count_productlist_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
             android:orientation="vertical">
 
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/home_toolbar"
-                android:gravity="center"
-                android:text="優惠明細"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:layout_weight="4"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/count_coupon_recyclerview"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/home_toolbar"
+                    android:gravity="center"
+                    android:text="快速功能"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/count_quickmenu_recylcerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:layout_weight="8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/home_toolbar"
+                    android:gravity="center"
+                    android:text="優惠明細"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/count_coupon_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@drawable/home_toolbar"
-        android:gravity="center"
-        android:text="交易明細"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/punch_gray1"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="delete"
-            android:text="刪除" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="line"
-            android:text="項次" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:tag="pname"
-            android:text="品名" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:tag="pcode"
-            android:text="商品編號" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:tag="color"
-            android:text="顏色" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="size"
-            android:text="尺寸" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:tag="fprice"
-            android:text="定價" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:tag="price"
-            android:text="售價" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="samount"
-            android:text="數量" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="sum"
-            android:text="小計" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:tag="note"
-            android:text="備註" />
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/count_productlist_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </LinearLayout>

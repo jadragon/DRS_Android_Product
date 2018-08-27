@@ -42,7 +42,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.RecycleHol
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         tv.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         tv.setPadding((int) (dm.density * 10), 0, 0, 0);
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f);
+        params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f);
         tv.setLayoutParams(params);
         linearLayout.addView(tv);
         tv = new TextView(ctx);
@@ -50,7 +50,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.RecycleHol
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         tv.setGravity(Gravity.CENTER_VERTICAL);
         tv.setPadding((int) (dm.density * 10), 0, 0, 0);
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f);
+        params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f);
         tv.setLayoutParams(params);
         linearLayout.addView(tv);
         return new CouponAdapter.RecycleHolder(linearLayout);

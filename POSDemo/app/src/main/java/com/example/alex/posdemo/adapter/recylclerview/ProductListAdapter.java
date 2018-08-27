@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import Utils.AsyncTaskUtils;
 import Utils.IDataCallBack;
+import Utils.StringUtil;
 import library.AnalyzeJSON.APIpojo.ProductListPojo;
 import library.AnalyzeJSON.AnalyzeUtil;
 import library.AnalyzeJSON.Analyze_CountInfo;
@@ -67,10 +68,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.pcode.setText(list.get(position).getPcode());
         holder.color.setText(list.get(position).getColor());
         holder.size.setText(list.get(position).getSize());
-        holder.fprice.setText(list.get(position).getFprice() + "");
-        holder.price.setText(list.get(position).getPrice() + "");
+        holder.fprice.setText(StringUtil.getDeciamlString(list.get(position).getFprice()));
+        holder.price.setText(StringUtil.getDeciamlString(list.get(position).getPrice()));
         holder.samount.setSelection(list.get(position).getCurrentCount());
-        holder.sum.setText(list.get(position).getPrice() * Integer.parseInt(holder.samount.getSelectedItem().toString()) + "");
+        holder.sum.setText(StringUtil.getDeciamlString(list.get(position).getPrice() * holder.samount.getSelectedItemPosition()));
 
         // holder.note.setText(list.get(position).getNote());
 
@@ -131,7 +132,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             samount.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    sum.setText(list.get(getAdapterPosition()).getPrice() * position + "");
+                    sum.setText(StringUtil.getDeciamlString(list.get(getAdapterPosition()).getPrice() * position));
                     list.get(getAdapterPosition()).setCurrentCount(position);
                     showTotalCount();
                 }
@@ -188,7 +189,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                             }
                         });
                     } else if (type == TYPE_SELL) {
-                        new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_EDIT).confirm("");
+                        new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_EDIT).confirm("",null);
                     }
                 }
             });
@@ -220,9 +221,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private void showTotalCount() {
         int total_price = 0;
-            for (ProductListPojo productListPojo : list) {
-                total_price += (productListPojo.getPrice() * productListPojo.getCurrentCount());
-            }
-        ((TextView) ((Activity) ctx).findViewById(R.id.count_txt_total)).setText("" + total_price);
+        for (ProductListPojo productListPojo : list) {
+            total_price += (productListPojo.getPrice() * productListPojo.getCurrentCount());
+        }
+        ((TextView) ((Activity) ctx).findViewById(R.id.count_txt_total)).setText(StringUtil.getDeciamlString(total_price));
     }
 }

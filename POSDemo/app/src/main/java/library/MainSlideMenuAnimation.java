@@ -15,7 +15,7 @@ public class MainSlideMenuAnimation extends Animation {
     private int mEndWidth;
     private int mType;
     private LinearLayout.LayoutParams menuParams;
-    private LinearLayout.LayoutParams contentParams;
+ //   private LinearLayout.LayoutParams contentParams;
 
     public MainSlideMenuAnimation(int maxWidth, View main_menu, View content, int duration, int type) {
         setDuration(duration);
@@ -25,7 +25,7 @@ public class MainSlideMenuAnimation extends Animation {
         this.content = content;
         this.mType = type;
         menuParams = (LinearLayout.LayoutParams) main_menu.getLayoutParams();
-        contentParams = (LinearLayout.LayoutParams) content.getLayoutParams();
+    //    contentParams = (LinearLayout.LayoutParams) content.getLayoutParams();
         this.mEndWidth = menuParams.width;
 
 
@@ -37,22 +37,24 @@ public class MainSlideMenuAnimation extends Animation {
         if (interpolatedTime < 1.0f) {
             if (mType == EXPAND) {
                 menuParams.leftMargin = -(int) (mEndWidth * (1 - interpolatedTime));
-                contentParams.width = maxWidth - (int) (mEndWidth * interpolatedTime);
+       //         contentParams.width = maxWidth - (int) (mEndWidth * interpolatedTime);
             } else {
                 menuParams.leftMargin = -(int) (mEndWidth * interpolatedTime);
-                contentParams.width = maxWidth - (int) (mEndWidth * (1 - interpolatedTime));
+          //      contentParams.width = maxWidth - (int) (mEndWidth * (1 - interpolatedTime));
             }
-            content.setLayoutParams(contentParams);
+         //   content.setLayoutParams(contentParams);
+            main_menu.requestLayout();
         } else {
             if (mType == EXPAND) {
                 menuParams.leftMargin = 0;
-                contentParams.width = maxWidth - mEndWidth;
+          //      contentParams.width = maxWidth - mEndWidth;
             } else {
                 menuParams.leftMargin = -mEndWidth;
-                contentParams.width = maxWidth;
+          //      contentParams.width = maxWidth;
                 main_menu.setVisibility(View.GONE);
             }
-            content.setLayoutParams(contentParams);
+            main_menu.requestLayout();
+//            content.setLayoutParams(contentParams);
         }
     }
 }

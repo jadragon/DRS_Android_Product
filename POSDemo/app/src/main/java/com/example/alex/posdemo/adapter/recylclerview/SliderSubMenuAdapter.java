@@ -2,6 +2,7 @@ package com.example.alex.posdemo.adapter.recylclerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -80,23 +81,60 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
-            if (position % 2 == 0) {
-                Fragment_punch fragment_punch = new Fragment_punch();
-                ((MainActivity) ctx).switchFrament(fragment_punch);
-            } else {
-                Fragment_count fragment_count = new Fragment_count();
-                ((MainActivity) ctx).switchFrament(fragment_count);
+            int main_position = MainActivity.checkMainButtonPojo.preClick;
+            int sub_position = getAdapterPosition();
+            switchFragment(main_position, sub_position);
+            close();
+
+
+        }
+
+        private void switchFragment(int main_position, int sub_position) {
+            Fragment fragment = null;
+            switch (main_position) {
+                case 1:
+                    switch (sub_position) {
+                        case 0:
+                            fragment = new Fragment_count();
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            fragment = new Fragment_punch();
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (sub_position) {
+                        case 0:
+                            fragment = new Fragment_count();
+                            break;
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
             }
+            if (fragment != null)
+                ((MainActivity) ctx).switchFrament(fragment);
+        }
+
+        private void close() {
             MainActivity.checkMainButtonPojo.subIsShow = false;
             MainActivity.checkMainButtonPojo.isSelectSlide[MainActivity.checkMainButtonPojo.preClick] = false;
             componentUtil.showSubMenu(((MainActivity) ctx).findViewById(R.id.home_subslide_layout), false);
             componentUtil.showDissMiss(((MainActivity) ctx).findViewById(R.id.home_dismiss), false);
-
         }
-
     }
-
 
     public void setFilter(Map<String, Integer> map) {
         bg = ctx.getResources().obtainTypedArray(map.get("background"));

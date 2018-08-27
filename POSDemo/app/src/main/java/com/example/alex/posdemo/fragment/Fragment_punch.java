@@ -171,7 +171,7 @@ public class Fragment_punch extends Fragment {
                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
                             setFilter();
                         } else {
-                            new ToastMessageDialog(getContext(),ToastMessageDialog.TYPE_ERROR).confirm(AnalyzeUtil.getMessage(jsonObject));
+                            new ToastMessageDialog(getContext(), ToastMessageDialog.TYPE_ERROR).confirm(AnalyzeUtil.getMessage(jsonObject));
                         }
 
                     }
@@ -206,16 +206,16 @@ public class Fragment_punch extends Fragment {
         final DatePicker datePicker1 = new DatePicker(getContext());
 
         int year = time.year;
-        int month = time.month + 1;
+        int month = time.month;
         int day = time.monthDay;
-        punch_search_datestart.setText(dateFormat(year, month, day));
+        punch_search_datestart.setText(dateFormat(year, month + 1, day));
         datePicker1.init(year, month, day, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setPositiveButton("完成", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                punch_search_datestart.setText(dateFormat(datePicker1.getYear(), datePicker1.getMonth(), datePicker1.getDayOfMonth()));
+                punch_search_datestart.setText(dateFormat(datePicker1.getYear(), datePicker1.getMonth() + 1, datePicker1.getDayOfMonth()));
                 dialogInterface.dismiss();
             }
         });
@@ -232,14 +232,14 @@ public class Fragment_punch extends Fragment {
         //end
         punch_search_dateend = v.findViewById(R.id.punch_search_dateend);
         final DatePicker datePicker2 = new DatePicker(getContext());
-        punch_search_dateend.setText(dateFormat(year, month, day));
+        punch_search_dateend.setText(dateFormat(year, month + 1, day));
         datePicker2.init(year, month, day, null);
 
         builder = new AlertDialog.Builder(getContext());
         builder.setPositiveButton("完成", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                punch_search_dateend.setText(dateFormat(datePicker2.getYear(), datePicker2.getMonth(), datePicker2.getDayOfMonth()));
+                punch_search_dateend.setText(dateFormat(datePicker2.getYear(), datePicker2.getMonth() + 1, datePicker2.getDayOfMonth()));
                 dialogInterface.dismiss();
             }
         });

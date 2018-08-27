@@ -49,15 +49,15 @@ public class SliderMainMenuAdapter extends RecyclerView.Adapter<SliderMainMenuAd
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
 
 
-            if (MainActivity.checkMainButtonPojo.isSelectSlide[position]) {
-                holder.background.setBackgroundResource(arrow.getResourceId(position, 0));
-                holder.imageView.setImageResource(0);
-                holder.textView.setText("");
-            } else {
-                holder.background.setBackgroundResource(bg.getResourceId(position, 0));
-                holder.imageView.setImageResource(image.getResourceId(position, 0));
-                holder.textView.setText(list[position]);
-            }
+        if (MainActivity.checkMainButtonPojo.isSelectSlide[position]) {
+            holder.background.setBackgroundResource(arrow.getResourceId(position, 0));
+            holder.imageView.setImageResource(0);
+            holder.textView.setText("");
+        } else {
+            holder.background.setBackgroundResource(bg.getResourceId(position, 0));
+            holder.imageView.setImageResource(image.getResourceId(position, 0));
+            holder.textView.setText(list[position]);
+        }
     }
 
 
@@ -89,9 +89,9 @@ public class SliderMainMenuAdapter extends RecyclerView.Adapter<SliderMainMenuAd
             int position = getAdapterPosition();
             if (position > 0) {
                 //控制遮罩及箭頭
-                    checkMenuButton(position);
-                    notifyDataSetChanged();
-            }else {
+                checkMenuButton(position);
+                notifyDataSetChanged();
+            } else {
                 Fragment_home fragment_home = new Fragment_home();
 
                 ((MainActivity) ctx).switchFrament(fragment_home);
@@ -100,16 +100,47 @@ public class SliderMainMenuAdapter extends RecyclerView.Adapter<SliderMainMenuAd
 
         private void checkMenuButton(int position) {
             Map<String, Integer> map = new HashMap<>();
-            if (position % 2 == 0) {
-                map.put("background", R.array.slider_main_bg);
-                map.put("image", R.array.slider_main_img);
-                map.put("arrow", R.array.slider_main_arrow);
-                map.put("text", R.array.slider_main_txt);
-            } else {
-                map.put("background", R.array.slider_sub_bg);
-                map.put("image", R.array.slider_sub_img);
-                map.put("arrow", R.array.slider_sub_arrow);
-                map.put("text", R.array.slider_sub_txt);
+            switch (position) {
+                case 1:
+                    map.put("background", R.array.slider_sub_bg1);
+                    map.put("image", R.array.slider_sub_img1);
+                    map.put("text", R.array.slider_sub_txt1);
+                    break;
+                case 2:
+                    map.put("background", R.array.slider_sub_bg2);
+                    map.put("image", R.array.slider_sub_img2);
+                    map.put("text", R.array.slider_sub_txt2);
+                    break;
+                case 3:
+                    map.put("background", R.array.slider_sub_bg3);
+                    map.put("image", R.array.slider_sub_img3);
+                    map.put("text", R.array.slider_sub_txt3);
+                    break;
+                case 4:
+                    map.put("background", R.array.slider_sub_bg4);
+                    map.put("image", R.array.slider_sub_img4);
+                    map.put("text", R.array.slider_sub_txt4);
+                    break;
+                case 5:
+                    map.put("background", R.array.slider_sub_bg5);
+                    map.put("image", R.array.slider_sub_img5);
+                    map.put("text", R.array.slider_sub_txt5);
+                    break;
+                case 6:
+                    map.put("background", R.array.slider_sub_bg6);
+                    map.put("image", R.array.slider_sub_img6);
+                    map.put("text", R.array.slider_sub_txt6);
+                    break;
+                case 7:
+                    map.put("background", R.array.slider_sub_bg7);
+                    map.put("image", R.array.slider_sub_img7);
+                    map.put("text", R.array.slider_sub_txt7);
+                    break;
+                case 8:
+                    map.put("background", R.array.slider_sub_bg8);
+                    map.put("image", R.array.slider_sub_img8);
+                    map.put("text", R.array.slider_sub_txt8);
+                    break;
             }
 
 

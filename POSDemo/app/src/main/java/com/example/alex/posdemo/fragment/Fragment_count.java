@@ -19,9 +19,13 @@ import com.example.alex.posdemo.GlobalVariable.UserInfo;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.adapter.recylclerview.CouponAdapter;
 import com.example.alex.posdemo.adapter.recylclerview.ProductListAdapter;
+import com.example.alex.posdemo.adapter.recylclerview.QuickMenuAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import Utils.AsyncTaskUtils;
 import Utils.IDataCallBack;
@@ -40,9 +44,10 @@ public class Fragment_count extends Fragment {
     UserInfo userInfo;
     Spinner count_store, count_payment, count_spinner_returntype;
     EditText count_edit_en, count_edit_m_type, count_edit_member_order;
-    TextView count_txt_en, count_txt_m_type, count_edit_pcode,count_txt_total;
-    RecyclerView count_productlist_recyclerview, count_coupon_recyclerview;
+    TextView count_txt_en, count_txt_m_type, count_edit_pcode;
+    RecyclerView count_productlist_recyclerview, count_coupon_recyclerview,count_quickmenu_recylcerview;
     ProductListAdapter productListAdapter;
+    QuickMenuAdapter quickMenuAdapter;
     CouponAdapter couponAdapter;
     Switch count_switch;
 
@@ -51,6 +56,7 @@ public class Fragment_count extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_count_layout, container, false);
         userInfo = (UserInfo) getContext().getApplicationContext();
+        initQuickMenu();
         initSearchEnAndSearchmember();
         initSearch_Pcode();
         initSearch_Member_Order();
@@ -93,6 +99,18 @@ public class Fragment_count extends Fragment {
         return v;
     }
 
+    private void initQuickMenu() {
+        count_quickmenu_recylcerview = v.findViewById(R.id.count_quickmenu_recylcerview);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("image", R.array.quick_menu_image);
+        map.put("text", R.array.quick_menu_txt);
+        quickMenuAdapter = new QuickMenuAdapter(getContext(), map);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        count_quickmenu_recylcerview.setLayoutManager(layoutManager);
+        count_quickmenu_recylcerview.setAdapter(quickMenuAdapter);
+    }
+
 
     private void initSwitch() {
         count_switch = v.findViewById(R.id.count_switch);
@@ -103,6 +121,7 @@ public class Fragment_count extends Fragment {
         count_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                initProductListRecyclerView(null);
                 if (isChecked) {
                     productListAdapter.setType(ProductListAdapter.TYPE_RETURN);
                     count_spinner_returntype.setEnabled(true);
