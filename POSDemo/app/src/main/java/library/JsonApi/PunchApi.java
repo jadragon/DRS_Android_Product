@@ -6,8 +6,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class PunchApi extends APIInfomation {
-    private final String attendance_seach_url = DOMAIN + "judd/main/index/attendance_seach.php";
-    private final String attendance_puch_url = DOMAIN + "judd/main/index/attendance_puch.php";
+    private final String attendance_seach_url = DOMAIN + "judd/main/index/attendance/seach.php";
+    private final String attendance_puch_url = DOMAIN + "judd/main/index/attendance/puch.php";
 
     public PunchApi() {
         super();

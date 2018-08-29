@@ -30,7 +30,7 @@ import db.SQLiteDatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button slider_menu_btn, alert_btn, accoption_btn;
+    private Button main_back, slider_menu_btn, alert_btn, accoption_btn;
     private View dismiss;
     DisplayMetrics dm;
     private RecyclerView mainslide_reclerview, subslide_recylcetview;
@@ -40,6 +40,27 @@ public class MainActivity extends AppCompatActivity {
     private ComponentUtil componentUtil;
     public static CheckMainButtonPojo checkMainButtonPojo = new CheckMainButtonPojo();
     private UserInfo userInfo;
+    private String SUB_FRAGMENT_TAG = "";
+
+    public void setSUB_FRAGMENT_TAG(String SUB_FRAGMENT_TAG) {
+        this.SUB_FRAGMENT_TAG = SUB_FRAGMENT_TAG;
+    }
+
+    public void showBack(boolean ok) {
+        if (ok) {
+            main_back.setVisibility(View.VISIBLE);
+            slider_menu_btn.setVisibility(View.GONE);
+            if (isMenuVisible) {
+                componentUtil.showMainMenu(dm.widthPixels, menu, content, false);
+                isMenuVisible = false;
+            }
+        } else {
+            main_back.setVisibility(View.GONE);
+            slider_menu_btn.setVisibility(View.VISIBLE);
+        }
+
+
+    }
 
     public SliderSubMenuAdapter getSubslide_adapter() {
         return subslide_adapter;
@@ -107,6 +128,16 @@ public class MainActivity extends AppCompatActivity {
     private boolean isMenuVisible;
 
     private void initToolbarButton() {
+        //main_back
+        main_back = findViewById(R.id.main_back);
+        main_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(SUB_FRAGMENT_TAG)).commit();
+                showBack(false);
+            }
+        });
+        main_back.setVisibility(View.GONE);
         //main_slider
         menu = findViewById(R.id.menu);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) menu.getLayoutParams();

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
+import com.example.alex.posdemo.fragment.Fragment_album;
 import com.example.alex.posdemo.fragment.Fragment_count;
 import com.example.alex.posdemo.fragment.Fragment_punch;
 
@@ -107,7 +108,7 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
                 case 2:
                     switch (sub_position) {
                         case 0:
-                            fragment = new Fragment_count();
+                            fragment = new Fragment_album();
                             break;
                     }
                     break;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -34,18 +35,52 @@
                 android:src="@drawable/album_search" />
         </LinearLayout>
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="30dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:background="@drawable/album_bg1"
-            android:gravity="center"
-            android:text="批次刪除"
-            android:textColor="@color/white" />
+            android:divider="@drawable/invisible_divider10dp"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <Button
+                android:id="@+id/album_multidelete"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+
+                android:background="@drawable/album_bg1"
+                android:gravity="center"
+                android:text="批次刪除"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/album_cancel"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+
+                android:background="@drawable/count_gray1"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/album_confirm"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+
+                android:background="@drawable/login_green"
+                android:gravity="center"
+                android:text="確認"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/album_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        app:spanCount="6" />
 </LinearLayout>

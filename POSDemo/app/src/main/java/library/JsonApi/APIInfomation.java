@@ -7,7 +7,7 @@ import java.util.List;
 import library.Http.JSONParser;
 
 public class APIInfomation {
-    static String DOMAIN = "http://judd.tongyuplus.com/";
+    static String DOMAIN = "http://judd.sunrens.com/";
     static String POS = "piVaJRaxvZDeLlWk7OwKnA==";
     JSONParser jsonParser;
     List<NameValuePair> params;

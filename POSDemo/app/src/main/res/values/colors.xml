@@ -17,8 +17,9 @@
     <color name="home_gray3">#e61a1a1a</color>
     <color name="home_red">#ff0000</color>
     <color name="home_dismiss">#c8ffffff</color>
-
     //home
     <color name="punch_gray1">#cccccc</color>
     <color name="punch_gray2">#e6e6e6</color>
+    //album
+    <color name="album_white70">#96ffffff</color>
 </resources>
