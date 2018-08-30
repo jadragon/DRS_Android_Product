@@ -2,7 +2,9 @@
 <library.Component.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/home_gray2">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/home_gray2"
+    app:ratio="1">
 
 
     <ImageView

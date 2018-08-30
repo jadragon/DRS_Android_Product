@@ -72,12 +72,15 @@
     </string-array>
     <array name="slider_sub_bg2">
         <item>@drawable/slider_home_bg2</item>
+        <item>@drawable/slider_home_bg3</item>
     </array>
     <array name="slider_sub_img2">
         <item>@drawable/mainslider_home_img2</item>
+        <item>@drawable/mainslider_home_img3</item>
     </array>
     <string-array name="slider_sub_txt2">
         <item>相簿管理</item>
+        <item>品牌管理</item>
     </string-array>
     <array name="slider_sub_bg3">
         <item>@drawable/slider_home_bg3</item>

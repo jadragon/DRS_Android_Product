@@ -290,7 +290,10 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 bundle.putString("a_no", list.get(getAdapterPosition()).getA_no());
                 fragment_photo.setArguments(bundle);
                 ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
+                        .hide(((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("album")).commit();
+                ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
                         .add(R.id.content, fragment_photo, "photo").commit();
+                ((MainActivity) ctx).setMAIN_FRAGMENT_TAG("album");
                 ((MainActivity) ctx).setSUB_FRAGMENT_TAG("photo");
                 ((MainActivity) ctx).showBack(true);
             }

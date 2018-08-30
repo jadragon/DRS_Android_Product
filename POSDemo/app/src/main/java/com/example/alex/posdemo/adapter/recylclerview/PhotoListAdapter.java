@@ -2,9 +2,7 @@ package com.example.alex.posdemo.adapter.recylclerview;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.alex.posdemo.CameraActivity;
 import com.example.alex.posdemo.GlobalVariable.UserInfo;
-import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
-import com.example.alex.posdemo.fragment.sub.Fragment_photo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
@@ -38,7 +35,8 @@ import library.JsonApi.PhotoApi;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static byte TYPE_NORMAL = 0;
-    public static byte TYPE_SELECT = 1;
+    public static byte TYPE_CHECK = 1;
+    public static byte TYPE_SELECT = 2;
     int type;
     private Context ctx;
     DisplayMetrics dm;
@@ -47,6 +45,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     Analyze_AlbumInfo analyze_albumInfo;
     UserInfo userInfo;
     String a_no;
+    int pre_select;
 
     public PhotoListAdapter(Context ctx, JSONObject json, String a_no, byte type) {
         this.ctx = ctx;
@@ -67,8 +66,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         View view = null;
         if (type == TYPE_NORMAL) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_albumlist, parent, false);
-            return new PhotoListAdapter.NormalHolder(view, viewType);
-        } else if (type == TYPE_SELECT) {
+            return new PhotoListAdapter.NormalHolder(view);
+        } else if (type == TYPE_CHECK || type == TYPE_SELECT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_albumselect, parent, false);
             return new PhotoListAdapter.SelectHolder(view);
         }
@@ -77,10 +76,12 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if (type == TYPE_NORMAL) {
-            return position;
+        if (type == TYPE_CHECK) {
+            return TYPE_CHECK;
+        } else if (type == TYPE_SELECT) {
+            return TYPE_SELECT;
         } else {
-            return -position - 1;
+            return TYPE_NORMAL;
         }
     }
 
@@ -95,12 +96,10 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 } else {
                     ImageLoader.getInstance().displayImage(list.get(position).getImg(), normalHolder.photo);
                 }
-
                 normalHolder.title.setText(list.get(position).getName());
-                normalHolder.count.setText("[" + list.get(position).getCount() + "張相片]");
             } else {
-                normalHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_add));
-                normalHolder.title.setText("新增相簿");
+                normalHolder.layout.setVisibility(View.GONE);
+                normalHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.photo_add));
             }
         } else {
             SelectHolder selectHolder = (SelectHolder) holder;
@@ -119,7 +118,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     selectHolder.checkbox.setChecked(false);
                 }
             } else {
-                selectHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_add));
+                selectHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.photo_add));
                 selectHolder.checkbox.setVisibility(View.INVISIBLE);
             }
         }
@@ -144,23 +143,42 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         };
 
+
         public SelectHolder(View itemView) {
             super(itemView);
             handler = new Handler(ctx.getMainLooper());
             photo = itemView.findViewWithTag("photo");
             cover = itemView.findViewWithTag("cover");
             checkbox = itemView.findViewWithTag("checkbox");
-            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        list.get(getAdapterPosition()).setCheck(true);
-                    } else {
-                        list.get(getAdapterPosition()).setCheck(false);
+            if (type == TYPE_CHECK) {
+                checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            list.get(getAdapterPosition()).setCheck(true);
+                        } else {
+                            list.get(getAdapterPosition()).setCheck(false);
+                        }
+                        handler.post(runnable);
                     }
-                    handler.post(runnable);
-                }
-            });
+                });
+            } else if (type == TYPE_SELECT) {
+                checkbox.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.checkbox_green));
+                checkbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (pre_select != getAdapterPosition()) {
+                            list.get(getAdapterPosition()).setCheck(true);
+                            list.get(pre_select).setCheck(false);
+                        }
+                        if (pre_select != 0)
+                            notifyItemChanged(pre_select);
+                        pre_select = getAdapterPosition();
+                        notifyItemChanged(pre_select);
+
+                    }
+                });
+            }
         }
     }
 
@@ -172,19 +190,45 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView title, count;
 
 
-        public NormalHolder(View view, final int position) {
+        public NormalHolder(View view) {
             super(view);
             layout = view.findViewWithTag("layout");
-            if (position == 0) {
-                layout.setVisibility(View.GONE);
-            }
+            edit = view.findViewWithTag("edit");
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_EDIT).sendApi(list.get(getAdapterPosition()).getName(), new ToastMessageDialog.OnSendApiListener() {
+                        @Override
+                        public void onConfirm(AlertDialog alertDialog, final String note) {
+                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                @Override
+                                public void onTaskBefore() {
+
+                                }
+
+                                @Override
+                                public JSONObject onTasking(Void... params) {
+                                    return photoApi.update_photo_name(list.get(getAdapterPosition()).getA_no(), userInfo.getDu_no(), note);
+                                }
+
+                                @Override
+                                public void onTaskAfter(JSONObject jsonObject) {
+                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                        resetAdapter();
+                                    }
+                                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).confirm(AnalyzeUtil.getMessage(jsonObject));
+                                }
+                            });
+                        }
+                    });
+                }
+            });
             photo = view.findViewWithTag("photo");
             delete = view.findViewWithTag("delete");
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).confirm("確定要刪除此相簿?", new ToastMessageDialog.OnConfirmListener() {
+                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).confirm("確定要刪除此照片?", new ToastMessageDialog.OnConfirmListener() {
                         @Override
                         public void onConfirm(AlertDialog alertDialog) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
@@ -195,8 +239,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                                 @Override
                                 public JSONObject onTasking(Void... params) {
-                                    // return photoApi.remove_album(list.get(getAdapterPosition()).getA_no());
-                                    return null;
+                                    return photoApi.remove_photo(list.get(getAdapterPosition()).getA_no());
                                 }
 
                                 @Override
@@ -213,6 +256,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
             title = view.findViewWithTag("title");
             count = view.findViewWithTag("count");
+            count.setVisibility(View.GONE);
             itemView.setOnClickListener(this);
         }
 
@@ -220,40 +264,12 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (position == 0) {
-                new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_EDIT).sendApi("", new ToastMessageDialog.OnSendApiListener() {
-                    @Override
-                    public void onConfirm(AlertDialog alertDialog, final String note) {
-                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
+                Intent intent = new Intent(ctx, CameraActivity.class);
+                intent.putExtra("a_no", a_no);
+                ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("photo").startActivityForResult(intent, 100);
 
-                            }
-
-                            @Override
-                            public JSONObject onTasking(Void... params) {
-                                Bitmap bitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.mainslider_home_img1);
-                                return photoApi.insert_photo(a_no,userInfo.getDu_no(), note, bitmap);
-                            }
-
-                            @Override
-                            public void onTaskAfter(JSONObject jsonObject) {
-                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                    resetAdapter();
-                                }
-                                new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).confirm(AnalyzeUtil.getMessage(jsonObject));
-                            }
-                        });
-                    }
-                });
             } else {
-                Fragment_photo fragment_photo = new Fragment_photo();
-                Bundle bundle = new Bundle();
-                bundle.putString("a_no", list.get(getAdapterPosition()).getA_no());
-                fragment_photo.setArguments(bundle);
-                ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
-                        .add(R.id.content, fragment_photo, "photo").commit();
-                ((MainActivity) ctx).setSUB_FRAGMENT_TAG("photo");
-                ((MainActivity) ctx).showBack(true);
+
             }
 
 
@@ -300,7 +316,14 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return builder.toString();
     }
 
+    public String getAlbumCover() {
+        String sname = list.get(pre_select).getImg();
+        sname = sname.substring(sname.lastIndexOf("/") + 1, sname.length());
+        return sname;
+    }
+
     public void changeType(byte type) {
+        pre_select = 0;
         this.type = type;
         for (AlbumListPojo pojo : list) {
             if (pojo.isCheck()) {

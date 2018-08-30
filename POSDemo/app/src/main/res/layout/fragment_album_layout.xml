@@ -24,15 +24,18 @@
                 android:text="相簿搜尋" />
 
             <EditText
+                android:id="@+id/album_edit_search"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:background="@color/white" />
 
             <ImageView
+                android:id="@+id/album_btn_search"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:background="@color/home_gray2"
-                android:src="@drawable/album_search" />
+                android:src="@drawable/album_search"
+                android:padding="5dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -51,6 +54,16 @@
                 android:background="@drawable/album_bg1"
                 android:gravity="center"
                 android:text="批次刪除"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/photo_changecover"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+
+                android:background="@drawable/login_green"
+                android:gravity="center"
+                android:text="封面圖設定"
                 android:textColor="@color/white" />
 
             <Button

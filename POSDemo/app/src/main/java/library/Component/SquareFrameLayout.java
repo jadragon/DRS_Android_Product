@@ -1,22 +1,40 @@
 package library.Component;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Paint;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-public class SquareFrameLayout extends FrameLayout {
+import com.example.alex.posdemo.R;
 
-    public SquareFrameLayout(Context context, AttributeSet attrs,
-                                int defStyle) {
-        super(context, attrs, defStyle);
+public class SquareFrameLayout extends FrameLayout {
+    float ratio;
+
+    public SquareFrameLayout(Context context) {
+        this(context, (AttributeSet) null);
     }
 
     public SquareFrameLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, R.style.Widget_GifView);
     }
 
-    public SquareFrameLayout(Context context) {
-        super(context);
+    public SquareFrameLayout(Context context, AttributeSet attrs,
+                             int defStyle) {
+        super(context, attrs, defStyle);
+        this.setViewAttributes(context, attrs, defStyle);
+    }
+
+    @SuppressLint({"NewApi"})
+    private void setViewAttributes(Context context, AttributeSet attrs, int defStyle) {
+        if (Build.VERSION.SDK_INT >= 11) {
+            this.setLayerType(1, (Paint) null);
+        }
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SquareFrameLayout, defStyle, R.style.Widget_GifView);
+        this.ratio = array.getFloat(R.styleable.SquareFrameLayout_ratio, 1f);
+        array.recycle();
     }
 
     @Override
@@ -24,10 +42,23 @@ public class SquareFrameLayout extends FrameLayout {
         setMeasuredDimension(getDefaultSize(0, widthMeasureSpec),
                 getDefaultSize(0, heightMeasureSpec));
 
-        int childWidthSize = getMeasuredWidth();
-        // 高度和宽度一样
-        heightMeasureSpec = widthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                childWidthSize, MeasureSpec.EXACTLY);
+        // 父容器传过来的宽度方向上的模式
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        // 父容器传过来的高度方向上的模式
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
+        // 父容器传过来的宽度的值
+        int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft()
+                - getPaddingRight();
+
+        // 父容器传过来的高度的值
+        int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingBottom()
+                - getPaddingTop();
+
+        height = (int) (width / ratio + 0.5f);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,
+                MeasureSpec.EXACTLY);
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 

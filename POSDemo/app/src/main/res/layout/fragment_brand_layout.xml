@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/punch_gray1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="50dp"
+                android:gravity="center"
+                android:text="品牌搜尋" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="名稱" />
+
+            <EditText
+                android:id="@+id/brand_edit_namesearch"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <ImageView
+                android:id="@+id/brand_btn_namesearch"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="50dp"
+                android:background="@color/home_gray2"
+                android:padding="5dp"
+                android:src="@drawable/album_search" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="代碼" />
+
+            <EditText
+                android:id="@+id/brand_edit_codesearch"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <ImageView
+                android:id="@+id/brand_btn_codesearch"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:background="@color/home_gray2"
+                android:padding="5dp"
+                android:src="@drawable/album_search" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/brand_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        app:spanCount="3" />
+</LinearLayout>

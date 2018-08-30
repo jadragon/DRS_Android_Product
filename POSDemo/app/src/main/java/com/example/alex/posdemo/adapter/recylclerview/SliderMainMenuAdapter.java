@@ -93,8 +93,7 @@ public class SliderMainMenuAdapter extends RecyclerView.Adapter<SliderMainMenuAd
                 notifyDataSetChanged();
             } else {
                 Fragment_home fragment_home = new Fragment_home();
-
-                ((MainActivity) ctx).switchFrament(fragment_home);
+                ((MainActivity) ctx).switchFrament(fragment_home, "home");
             }
         }
 

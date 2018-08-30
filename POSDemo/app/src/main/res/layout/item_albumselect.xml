@@ -22,7 +22,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_gravity="right|top"
-        android:background="@drawable/checkbox"
+        android:background="@drawable/checkbox_red"
         android:button="@null"
         android:tag="checkbox"
         android:layout_margin="10dp"/>

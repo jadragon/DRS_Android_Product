@@ -10,19 +10,16 @@ public class MainSlideMenuAnimation extends Animation {
     public final static int COLLAPSE = 1;
     public final static int EXPAND = 0;
 
-    private View main_menu, content;
-    private int maxWidth;
+    private View main_menu;
     private int mEndWidth;
     private int mType;
     private LinearLayout.LayoutParams menuParams;
  //   private LinearLayout.LayoutParams contentParams;
 
-    public MainSlideMenuAnimation(int maxWidth, View main_menu, View content, int duration, int type) {
+    public MainSlideMenuAnimation(View main_menu, int duration, int type) {
         setDuration(duration);
         main_menu.setVisibility(View.VISIBLE);
-        this.maxWidth = maxWidth;
         this.main_menu = main_menu;
-        this.content = content;
         this.mType = type;
         menuParams = (LinearLayout.LayoutParams) main_menu.getLayoutParams();
     //    contentParams = (LinearLayout.LayoutParams) content.getLayoutParams();

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.alex.posdemo.GlobalVariable.UserInfo;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.adapter.recylclerview.AlbumListAdapter;
 
@@ -29,15 +28,13 @@ import library.JsonApi.AlbumApi;
 public class Fragment_album extends Fragment {
     View v;
     RecyclerView album_recyclerview;
-    private UserInfo userInfo;
     AlbumListAdapter albumListAdapter;
-    Button album_multidelete, album_cancel, album_confirm;
+    Button album_multidelete, photo_changecover, album_cancel, album_confirm;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_album_layout, container, false);
-        userInfo = (UserInfo) getContext().getApplicationContext();
         initDeleteButton();
         initButton();
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
@@ -62,8 +59,10 @@ public class Fragment_album extends Fragment {
     private void initButton() {
         album_cancel = v.findViewById(R.id.album_cancel);
         album_confirm = v.findViewById(R.id.album_confirm);
+        photo_changecover = v.findViewById(R.id.photo_changecover);
         album_cancel.setVisibility(View.GONE);
         album_confirm.setVisibility(View.GONE);
+        photo_changecover.setVisibility(View.GONE);
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,4 +134,15 @@ public class Fragment_album extends Fragment {
         }
 
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+            return;
+        } else {  // 在最前端显示 相当于调用了onResume();
+            albumListAdapter.resetAdapter();
+        }
+    }
+
 }

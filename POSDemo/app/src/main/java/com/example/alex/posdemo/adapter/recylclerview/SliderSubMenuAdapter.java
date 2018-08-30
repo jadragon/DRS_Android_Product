@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.fragment.Fragment_album;
+import com.example.alex.posdemo.fragment.Fragment_brand;
 import com.example.alex.posdemo.fragment.Fragment_count;
 import com.example.alex.posdemo.fragment.Fragment_punch;
 
@@ -92,16 +93,19 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
 
         private void switchFragment(int main_position, int sub_position) {
             Fragment fragment = null;
+            String tag = "";
             switch (main_position) {
                 case 1:
                     switch (sub_position) {
                         case 0:
                             fragment = new Fragment_count();
+                            tag = "count";
                             break;
                         case 1:
                             break;
                         case 2:
                             fragment = new Fragment_punch();
+                            tag = "punch";
                             break;
                     }
                     break;
@@ -109,6 +113,11 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
                     switch (sub_position) {
                         case 0:
                             fragment = new Fragment_album();
+                            tag = "album";
+                            break;
+                        case 1:
+                            fragment = new Fragment_brand();
+                            tag = "brand";
                             break;
                     }
                     break;
@@ -126,7 +135,7 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
                     break;
             }
             if (fragment != null)
-                ((MainActivity) ctx).switchFrament(fragment);
+                ((MainActivity) ctx).switchFrament(fragment, tag);
         }
 
         private void close() {

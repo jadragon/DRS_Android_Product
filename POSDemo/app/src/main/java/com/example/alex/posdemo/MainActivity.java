@@ -40,10 +40,15 @@ public class MainActivity extends AppCompatActivity {
     private ComponentUtil componentUtil;
     public static CheckMainButtonPojo checkMainButtonPojo = new CheckMainButtonPojo();
     private UserInfo userInfo;
+    private String MAIN_FRAGMENT_TAG = "";
     private String SUB_FRAGMENT_TAG = "";
 
     public void setSUB_FRAGMENT_TAG(String SUB_FRAGMENT_TAG) {
         this.SUB_FRAGMENT_TAG = SUB_FRAGMENT_TAG;
+    }
+
+    public void setMAIN_FRAGMENT_TAG(String MAIN_FRAGMENT_TAG) {
+        this.MAIN_FRAGMENT_TAG = MAIN_FRAGMENT_TAG;
     }
 
     public void showBack(boolean ok) {
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragment() {
         Fragment_home fragment_home = new Fragment_home();
-        switchFrament(fragment_home);
+        switchFrament(fragment_home, "home");
     }
 
     private void initReyclerView() {
@@ -133,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         main_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG)).commit();
                 getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(SUB_FRAGMENT_TAG)).commit();
                 showBack(false);
             }
@@ -294,10 +300,15 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 切换Fragment
      */
-    public void switchFrament(Fragment fragment) {
+    public void switchFrament(Fragment fragment, String tag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, fragment).commitAllowingStateLoss();
+        Fragment fragmentfrom = getSupportFragmentManager().findFragmentByTag(tag);
 
+        if (fragmentfrom != null) {    // 先判断是否被add过
+            transaction.show(fragmentfrom).commit();
+        } else {
+            transaction.replace(R.id.fragment_content, fragment, tag).commitAllowingStateLoss();
+        }
     }
 
 }

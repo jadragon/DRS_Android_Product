@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class AlbumApi extends APIInfomation {
     private final String album_data_url = DOMAIN + "judd/main/index/album/album_data.php";
+    private final String update_album_cover_url = DOMAIN + "judd/main/index/album/update_album_cover.php";
     private final String update_album_name_url = DOMAIN + "judd/main/index/album/update_album_name.php";
     private final String insert_album_url = DOMAIN + "judd/main/index/album/insert_album.php";
     private final String remove_album_url = DOMAIN + "judd/main/index/album/remove_album.php";
@@ -23,6 +24,17 @@ public class AlbumApi extends APIInfomation {
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("pos", POS));
         return jsonParser.getJSONFromUrl(album_data_url, params);
+    }
+
+    /**
+     * 4.2更新相簿封面
+     */
+    public JSONObject update_album_cover(String a_no, String sname) {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("pos", POS));
+        params.add(new BasicNameValuePair("a_no", a_no));
+        params.add(new BasicNameValuePair("sname", sname));
+        return jsonParser.getJSONFromUrl(update_album_cover_url, params);
     }
 
     /**
