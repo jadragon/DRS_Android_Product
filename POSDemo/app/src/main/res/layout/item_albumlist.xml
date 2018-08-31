@@ -3,9 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/home_gray2"
-    app:ratio="1">
-
+    app:ratio="1"
+    android:background="@color/home_gray1">
+<include
+    layout="@layout/include_add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 
     <ImageView
         android:layout_width="match_parent"

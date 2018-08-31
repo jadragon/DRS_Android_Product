@@ -3,48 +3,174 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/punch_gray2"
     android:tag="background"
-    app:ratio="2"
-    android:background="@color/punch_gray2">
+    app:ratio="2.5">
+
+    <include
+        layout="@layout/include_add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="5dp"
         android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:tag="layout">
+
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:background="@color/black"
             android:src="@drawable/home_accout_img"
-            android:background="@color/black" />
+            android:tag="image" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="名&#8195;&#8195;稱：" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="名稱:" />
+                    android:tag="title"
+                    android:text="WABIS" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="代&#8195;&#8195;碼：" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="名稱:" />
+                    android:tag="code"
+                    android:text="WAB" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="修改日期：" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:tag="c_time"
+                    android:text="2018-05-11-19:20"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="上架日期：" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:tag="u_time"
+                    android:text="2018-05-11-19:20"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="cover" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/home_gray2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:background="@color/black"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="已下架"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:tag="exist"
+            android:text="下架"
+            android:background="@drawable/brand_gray"
+            android:textColor="@color/white"
+            android:layout_marginRight="20dp"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:tag="edit"
+            android:text="修改"
+            android:background="@drawable/brand_orange"
+            android:textColor="@color/white" />
     </LinearLayout>
 </library.Component.SquareFrameLayout>

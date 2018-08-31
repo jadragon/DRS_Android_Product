@@ -12,6 +12,7 @@ import com.example.alex.posdemo.R;
 
 public class SquareFrameLayout extends FrameLayout {
     float ratio;
+    boolean ratio_by_heigh;
 
     public SquareFrameLayout(Context context) {
         this(context, (AttributeSet) null);
@@ -34,6 +35,7 @@ public class SquareFrameLayout extends FrameLayout {
         }
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SquareFrameLayout, defStyle, R.style.Widget_GifView);
         this.ratio = array.getFloat(R.styleable.SquareFrameLayout_ratio, 1f);
+        this.ratio_by_heigh = array.getBoolean(R.styleable.SquareFrameLayout_ratio_by_heigh, false);
         array.recycle();
     }
 
@@ -43,21 +45,27 @@ public class SquareFrameLayout extends FrameLayout {
                 getDefaultSize(0, heightMeasureSpec));
 
         // 父容器传过来的宽度方向上的模式
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        // int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         // 父容器传过来的高度方向上的模式
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        //   int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
         // 父容器传过来的宽度的值
-        int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft()
-                - getPaddingRight();
+        int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
+
 
         // 父容器传过来的高度的值
-        int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingBottom()
-                - getPaddingTop();
+        int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingBottom() - getPaddingTop();
 
-        height = (int) (width / ratio + 0.5f);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,
-                MeasureSpec.EXACTLY);
+        if (ratio_by_heigh) {
+            width = (int) (height / ratio + 0.5f);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(width,
+                    MeasureSpec.EXACTLY);
+        } else {
+            height = (int) (width / ratio + 0.5f);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,
+                    MeasureSpec.EXACTLY);
+
+        }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }

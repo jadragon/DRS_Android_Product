@@ -63,7 +63,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         View view = null;
         if (type == TYPE_NORMAL) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_albumlist, parent, false);
-            return new AlbumListAdapter.NormalHolder(view, viewType);
+            return new AlbumListAdapter.NormalHolder(view);
         } else if (type == TYPE_SELECT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_albumselect, parent, false);
             return new AlbumListAdapter.SelectHolder(view);
@@ -74,9 +74,9 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         if (type == TYPE_NORMAL) {
-            return position;
+            return TYPE_NORMAL;
         } else {
-            return -position - 1;
+            return TYPE_SELECT;
         }
     }
 
@@ -86,21 +86,33 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (type == TYPE_NORMAL) {
             NormalHolder normalHolder = (NormalHolder) holder;
             if (position > 0) {
+                normalHolder.add_image.setVisibility(View.GONE);
+                normalHolder.add_title.setVisibility(View.GONE);
+                normalHolder.photo.setVisibility(View.VISIBLE);
+                normalHolder.layout.setVisibility(View.VISIBLE);
                 if (list.get(position).getImg().equals("")) {
                     normalHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_default));
                 } else {
                     ImageLoader.getInstance().displayImage(list.get(position).getImg(), normalHolder.photo);
                 }
-
                 normalHolder.title.setText(list.get(position).getName());
                 normalHolder.count.setText("[" + list.get(position).getCount() + "張相片]");
+
+
             } else {
-                normalHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_add));
-                normalHolder.title.setText("新增相簿");
+                normalHolder.photo.setVisibility(View.GONE);
+                normalHolder.layout.setVisibility(View.GONE);
+                normalHolder.add_image.setVisibility(View.VISIBLE);
+                normalHolder.add_title.setVisibility(View.VISIBLE);
+                normalHolder.add_image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_add));
+                normalHolder.add_title.setText("新增相簿");
             }
         } else {
             SelectHolder selectHolder = (SelectHolder) holder;
             if (position > 0) {
+                selectHolder.photo.setVisibility(View.VISIBLE);
+                selectHolder.add_image.setVisibility(View.GONE);
+                selectHolder.add_title.setVisibility(View.GONE);
                 if (list.get(position).getImg().equals("")) {
                     selectHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_default));
                 } else {
@@ -109,14 +121,18 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if (list.get(position).isCheck()) {
                     selectHolder.cover.setVisibility(View.VISIBLE);
                     selectHolder.checkbox.setChecked(true);
-
                 } else {
                     selectHolder.cover.setVisibility(View.INVISIBLE);
                     selectHolder.checkbox.setChecked(false);
                 }
+
             } else {
-                selectHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_add));
+                selectHolder.photo.setVisibility(View.GONE);
+                selectHolder.add_image.setVisibility(View.VISIBLE);
+                selectHolder.add_title.setVisibility(View.VISIBLE);
                 selectHolder.checkbox.setVisibility(View.INVISIBLE);
+                selectHolder.add_image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_add));
+                selectHolder.add_title.setText("新增相簿");
             }
         }
 
@@ -132,6 +148,8 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView photo;
         View cover;
         CheckBox checkbox;
+        ImageView add_image;
+        TextView add_title;
         Handler handler;
         Runnable runnable = new Runnable() {
             @Override
@@ -140,12 +158,14 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         };
 
-        public SelectHolder(View itemView) {
-            super(itemView);
+        public SelectHolder(View view) {
+            super(view);
             handler = new Handler(ctx.getMainLooper());
-            photo = itemView.findViewWithTag("photo");
-            cover = itemView.findViewWithTag("cover");
-            checkbox = itemView.findViewWithTag("checkbox");
+            add_image = view.findViewWithTag("add_image");
+            add_title = view.findViewWithTag("add_title");
+            photo = view.findViewWithTag("photo");
+            cover = view.findViewWithTag("cover");
+            checkbox = view.findViewWithTag("checkbox");
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -166,20 +186,21 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView photo;
         ImageView edit, delete;
         TextView title, count;
+        ImageView add_image;
+        TextView add_title;
 
-
-        public NormalHolder(View view, final int position) {
+        public NormalHolder(View view) {
             super(view);
             layout = view.findViewWithTag("layout");
-            if (position == 0) {
-                layout.setVisibility(View.GONE);
-            }
+            photo = view.findViewWithTag("photo");
+            add_image = view.findViewWithTag("add_image");
+            add_title = view.findViewWithTag("add_title");
             photo = view.findViewWithTag("photo");
             edit = view.findViewWithTag("edit");
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_EDIT).sendApi(list.get(position).getName(), new ToastMessageDialog.OnSendApiListener() {
+                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_EDIT).sendApi(list.get(getAdapterPosition()).getName(), new ToastMessageDialog.OnSendApiListener() {
                         @Override
                         public void onConfirm(AlertDialog alertDialog, final String note) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
@@ -238,6 +259,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
             title = view.findViewWithTag("title");
             count = view.findViewWithTag("count");
+
             itemView.setOnClickListener(this);
         }
 

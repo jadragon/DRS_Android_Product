@@ -91,19 +91,30 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (type == TYPE_NORMAL) {
             NormalHolder normalHolder = (NormalHolder) holder;
             if (position > 0) {
+                normalHolder.add_image.setVisibility(View.GONE);
+                normalHolder.add_title.setVisibility(View.GONE);
+                normalHolder.photo.setVisibility(View.VISIBLE);
                 if (list.get(position).getImg().equals("")) {
                     normalHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_default));
                 } else {
                     ImageLoader.getInstance().displayImage(list.get(position).getImg(), normalHolder.photo);
                 }
                 normalHolder.title.setText(list.get(position).getName());
+
             } else {
+                normalHolder.photo.setVisibility(View.GONE);
                 normalHolder.layout.setVisibility(View.GONE);
-                normalHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.photo_add));
+                normalHolder.add_image.setVisibility(View.VISIBLE);
+                normalHolder.add_title.setVisibility(View.VISIBLE);
+                normalHolder.add_image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.photo_add));
+                normalHolder.add_title.setText("新增相片");
             }
         } else {
             SelectHolder selectHolder = (SelectHolder) holder;
             if (position > 0) {
+                selectHolder.add_image.setVisibility(View.GONE);
+                selectHolder.add_title.setVisibility(View.GONE);
+                selectHolder.photo.setVisibility(View.VISIBLE);
                 if (list.get(position).getImg().equals("")) {
                     selectHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.album_default));
                 } else {
@@ -118,8 +129,12 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     selectHolder.checkbox.setChecked(false);
                 }
             } else {
-                selectHolder.photo.setImageDrawable(ctx.getResources().getDrawable(R.drawable.photo_add));
+                selectHolder.photo.setVisibility(View.GONE);
+                selectHolder.add_image.setVisibility(View.VISIBLE);
+                selectHolder.add_title.setVisibility(View.VISIBLE);
                 selectHolder.checkbox.setVisibility(View.INVISIBLE);
+                selectHolder.add_image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.photo_add));
+                selectHolder.add_title.setText("新增相片");
             }
         }
 
@@ -135,6 +150,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView photo;
         View cover;
         CheckBox checkbox;
+        ImageView add_image;
+        TextView add_title;
         Handler handler;
         Runnable runnable = new Runnable() {
             @Override
@@ -144,12 +161,14 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         };
 
 
-        public SelectHolder(View itemView) {
-            super(itemView);
+        public SelectHolder(View view) {
+            super(view);
             handler = new Handler(ctx.getMainLooper());
-            photo = itemView.findViewWithTag("photo");
-            cover = itemView.findViewWithTag("cover");
-            checkbox = itemView.findViewWithTag("checkbox");
+            add_image = view.findViewWithTag("add_image");
+            add_title = view.findViewWithTag("add_title");
+            photo = view.findViewWithTag("photo");
+            cover = view.findViewWithTag("cover");
+            checkbox = view.findViewWithTag("checkbox");
             if (type == TYPE_CHECK) {
                 checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -188,10 +207,13 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView photo;
         ImageView edit, delete;
         TextView title, count;
-
+        ImageView add_image;
+        TextView add_title;
 
         public NormalHolder(View view) {
             super(view);
+            add_image = itemView.findViewWithTag("add_image");
+            add_title = itemView.findViewWithTag("add_title");
             layout = view.findViewWithTag("layout");
             edit = view.findViewWithTag("edit");
             edit.setOnClickListener(new View.OnClickListener() {
