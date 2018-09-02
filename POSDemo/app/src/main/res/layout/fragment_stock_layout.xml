@@ -98,54 +98,65 @@
 
 
     </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="@color/punch_gray1"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/home_gray2">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:tag="line"
-            android:text="項次" />
+            android:text="項次"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="3"
             android:gravity="center"
             android:tag="pname"
-            android:text="品名" />
+            android:text="門市"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="3"
             android:gravity="center"
             android:tag="pcode"
-            android:text="商品編號" />
+            android:text="品牌"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:gravity="center"
             android:tag="color"
-            android:text="顏色" />
+            android:text="圖片"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:gravity="center"
             android:tag="size"
-            android:text="尺寸" />
+            android:text="商品名稱"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -153,33 +164,19 @@
             android:layout_weight="3"
             android:gravity="center"
             android:tag="fprice"
-            android:text="定價" />
+            android:text="商品編號"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:gravity="center"
             android:tag="price"
-            android:text="售價" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="samount"
-            android:text="數量" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="sum"
-            android:text="小計" />
+            android:text="顏色"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
 
         <TextView
@@ -187,15 +184,68 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center"
-            android:paddingLeft="10dp"
+            android:tag="samount"
+            android:text="尺寸"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="sum"
+            android:text="牌價"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
             android:tag="note"
-            android:text="備註" />
+            android:text="售價"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="note"
+            android:text="庫存"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="note"
+            android:text="安全庫存"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="note"
+            android:text="累積瑕疵數"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/brand_recyclerview"
+        android:id="@+id/stock_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:spanCount="3" />
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 </LinearLayout>
