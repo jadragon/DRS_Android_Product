@@ -14,6 +14,9 @@ public class BrandApi extends APIInfomation {
     private final String brand_data_url = DOMAIN + "judd/main/index/brand/brand_data.php";
     private final String insert_brand_url = DOMAIN + "judd/main/index/brand/insert_brand.php";
     private final String up_down_brand_url = DOMAIN + "judd/main/index/brand/up_down_brand.php";
+    private final String search_name_url = DOMAIN + "judd/main/index/brand/search_name.php";
+    private final String search_code_url = DOMAIN + "judd/main/index/brand/search_code.php";
+    private final String updata_brand_url = DOMAIN + "judd/main/index/brand/updata_brand.php";
 
     public BrandApi() {
         super();
@@ -56,5 +59,39 @@ public class BrandApi extends APIInfomation {
         return jsonParser.getJSONFromUrl(up_down_brand_url, params);
     }
 
+    /**
+     * 5.4搜尋品牌名稱
+     */
+    public JSONObject search_name(String title) {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("pos", POS));
+        params.add(new BasicNameValuePair("title", title));
+        return jsonParser.getJSONFromUrl(search_name_url, params);
+    }
+
+    /**
+     * 5.5搜尋品牌代碼
+     */
+    public JSONObject search_code(String code) {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("pos", POS));
+        params.add(new BasicNameValuePair("code", code));
+        return jsonParser.getJSONFromUrl(search_code_url, params);
+    }
+
+    /**
+     * 5.6更新圖片照片
+     */
+    public JSONObject updata_brand(String pb_no, String du_no, String code, Bitmap bitmap) {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("pos", POS));
+        params.add(new BasicNameValuePair("pb_no", pb_no));
+        params.add(new BasicNameValuePair("du_no", du_no));
+        params.add(new BasicNameValuePair("code", code));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos);
+        byte[] data = bos.toByteArray();
+        return new PostByteArrayformImage().getJSONFromUrl(updata_brand_url, params, data);
+    }
 
 }

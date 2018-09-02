@@ -1,31 +1,26 @@
 package com.example.alex.posdemo.fragment;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.adapter.recylclerview.BrandListAdapter;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import Utils.AsyncTaskUtils;
 import Utils.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.GridSpacingItemDecoration;
 import library.JsonApi.BrandApi;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by user on 2017/5/30.
@@ -35,6 +30,8 @@ public class Fragment_brand extends Fragment {
     View v;
     RecyclerView brand_recyclerview;
     BrandListAdapter brandListAdapter;
+    EditText brand_edit_namesearch, brand_edit_codesearch;
+    ImageView brand_btn_namesearch, brand_btn_codesearch;
 
     @Nullable
     @Override
@@ -56,7 +53,67 @@ public class Fragment_brand extends Fragment {
                 initRecyclerView(jsonObject);
             }
         });
+        initSearch();
         return v;
+    }
+
+    private void initSearch() {
+        brand_edit_namesearch = v.findViewById(R.id.brand_edit_namesearch);
+        brand_edit_codesearch = v.findViewById(R.id.brand_edit_codesearch);
+        brand_btn_namesearch = v.findViewById(R.id.brand_btn_namesearch);
+        brand_btn_codesearch = v.findViewById(R.id.brand_btn_codesearch);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.brand_btn_namesearch:
+
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                            @Override
+                            public void onTaskBefore() {
+
+                            }
+
+                            @Override
+                            public JSONObject onTasking(Void... params) {
+                                return new BrandApi().search_name(brand_edit_namesearch.getText().toString());
+                            }
+
+                            @Override
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    brandListAdapter.setFilter(jsonObject);
+                                }
+                            }
+                        });
+
+                        break;
+
+                    case R.id.brand_btn_codesearch:
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                            @Override
+                            public void onTaskBefore() {
+
+                            }
+
+                            @Override
+                            public JSONObject onTasking(Void... params) {
+                                return new BrandApi().search_code(brand_edit_codesearch.getText().toString());
+                            }
+
+                            @Override
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    brandListAdapter.setFilter(jsonObject);
+                                }
+                            }
+                        });
+                        break;
+                }
+            }
+        };
+        brand_btn_namesearch.setOnClickListener(onClickListener);
+        brand_btn_codesearch.setOnClickListener(onClickListener);
     }
 
 
@@ -79,54 +136,10 @@ public class Fragment_brand extends Fragment {
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
-            return;
-        } else {  // 在最前端显示 相当于调用了onResume();
-            brandListAdapter.resetAdapter();
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) { //此處的 RESULT_OK 是系統自定義得一個常量
-            return;
+        if (resultCode == 100) {
+            brandListAdapter.resetAdapter();
         }
-//外界的程式訪問ContentProvider所提供數據 可以通過ContentResolver介面
-        ContentResolver resolver = getContext().getContentResolver();
-//此處的用於判斷接收的Activity是不是你想要的那個
-        if (requestCode == 200) {
-            try {
-                Uri originalUri = data.getData(); //獲得圖片的uri
-         Bitmap  bitmap = MediaStore.Images.Media.getBitmap(resolver, originalUri); //顯得到bitmap圖片
-                int width = bitmap.getWidth();
-                int height = bitmap.getHeight();
-                if (width > height) {
-                    bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
-                } else if (width < height) {
-                    bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
-                }
-
-                brandListAdapter.reloadImage(bitmap);
-
-                /*
-                // 這裏開始的第二部分，獲取圖片的路徑：
-                String[] proj = {MediaStore.Images.Media.DATA};
-//好像是android多媒體數據庫的封裝介面，具體的看Android文檔
-                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
-//按我個人理解 這個是獲得用戶選擇的圖片的索引值
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//將光標移至開頭 ，這個很重要，不小心很容易引起越界
-                cursor.moveToFirst();
-//最後根據索引值獲取圖片路徑
-                String path = cursor.getString(column_index);
-                */
-            } catch (IOException e) {
-            }
-
-        }
-
     }
 }

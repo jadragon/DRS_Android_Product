@@ -89,7 +89,7 @@
         <item>@drawable/mainslider_home_img3</item>
     </array>
     <string-array name="slider_sub_txt3">
-        <item>不知道+1</item>
+        <item>商品庫存</item>
     </string-array>
     <array name="slider_sub_bg4">
         <item>@drawable/slider_home_bg4</item>

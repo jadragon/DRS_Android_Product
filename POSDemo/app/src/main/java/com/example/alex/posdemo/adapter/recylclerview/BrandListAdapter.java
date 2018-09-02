@@ -1,9 +1,8 @@
 package com.example.alex.posdemo.adapter.recylclerview;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -38,7 +37,6 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
     BrandApi brandApi;
     Analyze_BrandInfo analyze_brandInfo;
     UserInfo userInfo;
-    ImageView imageView;
 
     public BrandListAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
@@ -119,7 +117,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
         ImageView add_image;
         TextView add_title;
         View cover;
-        AlertDialog dialog;
+        Intent intent;
 
         public ViewHolder(View view) {
             super(view);
@@ -161,71 +159,31 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
                 }
             });
             edit = view.findViewWithTag("edit");
+            edit.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if (position == 0) {
-
-                ctx.startActivity(new Intent(ctx, NewBrandActivity.class));
-            /*
-                View inflate = LayoutInflater.from(ctx).inflate(R.layout.dialog_brand, null);
-                dialog = new CustomerDialog().init(ctx, inflate);
-                final EditText code = inflate.findViewWithTag("code");
-                final EditText name = inflate.findViewWithTag("name");
-                imageView = inflate.findViewWithTag("image");
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                        intent.setType("image/*");
-                        ((FragmentActivity) ctx).startActivityForResult(intent, 200);
+            switch (view.getTag().toString()) {
+                case "edit":
+                    intent = new Intent(ctx, NewBrandActivity.class);
+                    intent.putExtra("type", "update");
+                    intent.putExtra("pb_no", list.get(position).getPb_no());
+                    intent.putExtra("code", list.get(position).getCode());
+                    intent.putExtra("title", list.get(position).getTitle());
+                    ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("brand").startActivityForResult(intent, 100);
+                    break;
+                default:
+                    if (position == 0) {
+                        intent = new Intent(ctx, NewBrandActivity.class);
+                        intent.putExtra("type", "insert");
+                        ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("brand").startActivityForResult(new Intent(ctx, NewBrandActivity.class), 100);
                     }
-                });
-                Button cancel = inflate.findViewWithTag("cancel");
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                Button confirm = inflate.findViewWithTag("confirm");
-                confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!code.getText().toString().equals("") && !name.getText().toString().equals("")) {
-                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-
-                                }
-
-                                @Override
-                                public JSONObject onTasking(Void... params) {
-
-                                    BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();
-                                    Bitmap bitmap = bitmapDrawable.getBitmap();
-                                    return new BrandApi().insert_brand(userInfo.getDu_no(), code.getText().toString(), name.getText().toString(), bitmap);
-
-                                }
-
-                                @Override
-                                public void onTaskAfter(JSONObject jsonObject) {
-                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                        resetAdapter();
-                                    }
-                                    dialog.dismiss();
-                                    new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).confirm(AnalyzeUtil.getMessage(jsonObject));
-                                }
-                            });
-                        }
-                    }
-                });
-                dialog.show();
-                */
+                    break;
             }
+
 
         }
 
@@ -257,8 +215,5 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
         notifyDataSetChanged();
     }
 
-    public void reloadImage(Bitmap bitmap) {
-        imageView.setImageBitmap(bitmap);
-    }
 
 }
