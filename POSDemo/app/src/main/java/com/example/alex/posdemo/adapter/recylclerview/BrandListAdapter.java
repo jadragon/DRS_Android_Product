@@ -179,7 +179,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
                     if (position == 0) {
                         intent = new Intent(ctx, NewBrandActivity.class);
                         intent.putExtra("type", "insert");
-                        ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("brand").startActivityForResult(new Intent(ctx, NewBrandActivity.class), 100);
+                        ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("brand").startActivityForResult(intent, 100);
                     }
                     break;
             }

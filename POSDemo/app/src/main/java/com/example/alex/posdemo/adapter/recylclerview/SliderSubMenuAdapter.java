@@ -17,6 +17,7 @@ import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.fragment.Fragment_album;
 import com.example.alex.posdemo.fragment.Fragment_brand;
 import com.example.alex.posdemo.fragment.Fragment_count;
+import com.example.alex.posdemo.fragment.Fragment_distribution;
 import com.example.alex.posdemo.fragment.Fragment_stock;
 import com.example.alex.posdemo.fragment.Fragment_punch;
 
@@ -126,7 +127,11 @@ public class SliderSubMenuAdapter extends RecyclerView.Adapter<SliderSubMenuAdap
                     switch (sub_position) {
                         case 0:
                             fragment = new Fragment_stock();
-                            tag = "inventory";
+                            tag = "stock";
+                            break;
+                        case 1:
+                            fragment = new Fragment_distribution();
+                            tag = "distribution";
                             break;
                     }
 

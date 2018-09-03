@@ -16,7 +16,7 @@ public class StockApi extends APIInfomation {
     /**
      * 6.1 全部門市與品牌
      */
-    public JSONObject remove_album() {
+    public JSONObject all_store_brand() {
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("pos", POS));
         return jsonParser.getJSONFromUrl(all_store_brand_url, params);
