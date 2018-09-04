@@ -116,8 +116,7 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
-        android:tag="samount"
-        style="@style/spinnerItemStyle"/>
+        android:tag="samount" />
 
     <View
         android:layout_width="1px"

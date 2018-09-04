@@ -25,15 +25,15 @@ public class StockApi extends APIInfomation {
     /**
      * 6.2 商品庫存
      */
-    public JSONObject stock_data(String sno_array, String pbno_array, String name, String pcode, String total_type, String page) {
+    public JSONObject stock_data(String sno_array, String pbno_array, String name, String pcode, int total_type, int page) {
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("pos", POS));
         params.add(new BasicNameValuePair("sno_array", sno_array));
         params.add(new BasicNameValuePair("pbno_array", pbno_array));
         params.add(new BasicNameValuePair("name", name));
         params.add(new BasicNameValuePair("pcode", pcode));
-        params.add(new BasicNameValuePair("total_type", total_type));
-        params.add(new BasicNameValuePair("page", page));
+        params.add(new BasicNameValuePair("total_type", total_type+""));
+        params.add(new BasicNameValuePair("page", page+""));
         return jsonParser.getJSONFromUrl(stock_data_url, params);
     }
 }

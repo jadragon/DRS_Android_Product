@@ -76,21 +76,18 @@ public class Fragment_punch extends Fragment {
         //
         punch_attendance_classnum = v.findViewById(R.id.punch_attendance_classnum);
         punch_attendance_classnum.setAdapter(new ArrayAdapter(getContext(),
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.attendance_classnum)));
+                R.layout.item_spinner, getResources().getStringArray(R.array.attendance_classnum)));
         //
         punch_attendance_commute = v.findViewById(R.id.punch_attendance_commute);
         punch_attendance_commute.setAdapter(new ArrayAdapter(getContext(),
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.attendance_commute)));
+                R.layout.item_spinner, getResources().getStringArray(R.array.attendance_commute)));
 
 
     }
 
     private void initSearchAttendance(final Time time) {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
 
-            }
 
             @Override
             public JSONObject onTasking(Void... params) {
@@ -114,7 +111,7 @@ public class Fragment_punch extends Fragment {
         punch_search_store = v.findViewById(R.id.punch_search_store);
         attendanceStorePojo = new Analyze_PunchInfo().getAttendanceStore(jsonObject);
         punch_search_store.setAdapter(new ArrayAdapter(getContext(),
-                android.R.layout.simple_list_item_1, attendanceStorePojo.getStore()));
+                R.layout.item_spinner, attendanceStorePojo.getStore()));
     }
 
     private void initRecyclerView(JSONObject jsonObject) {
@@ -133,10 +130,6 @@ public class Fragment_punch extends Fragment {
             @Override
             public void onClick(View v) {
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public void onTaskBefore() {
-
-                    }
 
                     @Override
                     public JSONObject onTasking(Void... params) {
@@ -155,11 +148,6 @@ public class Fragment_punch extends Fragment {
             @Override
             public void onClick(View v) {
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public void onTaskBefore() {
-
-                    }
-
                     @Override
                     public JSONObject onTasking(Void... params) {
                         return punchApi.attendance_puch(punch_attendance_classnum.getSelectedItemPosition(), punch_attendance_commute.getSelectedItemPosition(),
@@ -182,10 +170,7 @@ public class Fragment_punch extends Fragment {
 
     private void setFilter() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
 
-            }
 
             @Override
             public JSONObject onTasking(Void... params) {

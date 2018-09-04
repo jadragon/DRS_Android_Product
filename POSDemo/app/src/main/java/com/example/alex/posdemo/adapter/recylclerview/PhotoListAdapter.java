@@ -223,10 +223,6 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onConfirm(AlertDialog alertDialog, final String note) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-
-                                }
 
                                 @Override
                                 public JSONObject onTasking(Void... params) {
@@ -254,10 +250,6 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onConfirm(AlertDialog alertDialog) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-
-                                }
 
                                 @Override
                                 public JSONObject onTasking(Void... params) {
@@ -301,11 +293,6 @@ public class PhotoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void resetAdapter() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
-
             @Override
             public JSONObject onTasking(Void... params) {
                 return photoApi.photo_data(a_no);

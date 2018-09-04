@@ -61,11 +61,6 @@ public class NewBrandActivity extends Activity {
                         if (!ed_code.getText().toString().equals("") && !ed_title.getText().toString().equals("") && bitmap != null) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                 @Override
-                                public void onTaskBefore() {
-
-                                }
-
-                                @Override
                                 public JSONObject onTasking(Void... params) {
                                     if (type.equals("insert")) {
                                         return new BrandApi().insert_brand(userInfo.getDu_no(), ed_code.getText().toString(), ed_title.getText().toString(), bitmap);

@@ -2,7 +2,7 @@ package library.AnalyzeJSON.APIpojo;
 
 public class Distribution2Pojo {
     String store;
-    String total;
+    int total;
 
     public String getStore() {
         return store;
@@ -12,11 +12,11 @@ public class Distribution2Pojo {
         this.store = store;
     }
 
-    public String getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 }

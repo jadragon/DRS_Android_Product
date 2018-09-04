@@ -81,11 +81,6 @@ public class Fragment_home extends Fragment {
     private void initWebView() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void onTaskBefore() {
-
-            }
-
-            @Override
             public JSONObject onTasking(Void... params) {
                 return registAndLoginApi.board();
             }
@@ -442,10 +437,6 @@ public class Fragment_home extends Fragment {
         top_itme3.setOnClickListener(onClickListener);
         top_itme4.setOnClickListener(onClickListener);
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
 
             @Override
             public JSONObject onTasking(Void... params) {

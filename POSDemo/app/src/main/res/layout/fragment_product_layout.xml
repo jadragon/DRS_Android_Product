@@ -21,34 +21,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="門市" />
-
-            <Spinner
-                android:id="@+id/stock_spinner_store"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:background="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="品牌" />
-
-            <Spinner
-                android:id="@+id/stock_spinner_brand"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:background="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="商品名稱" />
+                android:text="商品" />
 
             <EditText
-                android:id="@+id/stock_edit_name"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -61,7 +36,6 @@
                 android:text="商品編號" />
 
             <EditText
-                android:id="@+id/stock_edit_pcode"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -71,19 +45,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="庫存" />
+                android:text="品項" />
 
-            <Spinner
-                android:id="@+id/stock_spinner_total_type"
-                android:layout_width="80dp"
+            <EditText
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="安全庫存" />
+                android:text="品牌" />
+
+            <Spinner
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
 
         </LinearLayout>
@@ -107,9 +86,9 @@
             <Button
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/count_green1"
+                android:background="@drawable/brand_orange"
                 android:gravity="center"
-                android:text="匯出"
+                android:text="商品綁定圖"
                 android:textColor="@color/white" />
         </LinearLayout>
     </FrameLayout>
@@ -134,10 +113,10 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:gravity="center"
             android:tag="pname"
-            android:text="門市"
+            android:text="商品圖片"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -147,7 +126,7 @@
             android:layout_weight="3"
             android:gravity="center"
             android:tag="pcode"
-            android:text="品牌"
+            android:text="商品名稱"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -158,30 +137,10 @@
             android:layout_weight="3"
             android:gravity="center"
             android:tag="color"
-            android:text="圖片"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="size"
-            android:text="商品名稱"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:tag="fprice"
             android:text="商品編號"
             android:textColor="@color/white"
             android:textSize="12sp" />
+
 
         <TextView
             android:layout_width="0dp"
@@ -197,13 +156,42 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:tag="samount"
             android:text="尺寸"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="size"
+            android:text="品項"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="size"
+            android:text="品牌"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:tag="size"
+            android:text="成本"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -211,7 +199,7 @@
             android:layout_weight="2"
             android:gravity="center"
             android:tag="sum"
-            android:text="牌價"
+            android:text="定價"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -226,20 +214,11 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="庫存"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:tag="note"
             android:text="安全庫存"
@@ -249,10 +228,30 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:gravity="center"
             android:tag="note"
-            android:text="累積瑕疵數"
+            android:text="修改時間"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:tag="note"
+            android:text="下架時間"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:tag="note"
+            android:text="管理"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
@@ -264,71 +263,6 @@
         android:layout_weight="1"
         android:orientation="vertical"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/home_gray2">
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="24.5"
-            android:gravity="right|center_vertical"
-            android:paddingRight="10dp"
-            android:text="商品庫存總數量:"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/home_gray2" />
-
-        <TextView
-            android:id="@+id/fragment_stock_total"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="庫存"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/home_gray2" />
-
-        <TextView
-            android:id="@+id/fragment_stock_stotal"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="安全庫存"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/home_gray2" />
-
-        <TextView
-            android:id="@+id/fragment_stock_ftotal"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="累積瑕疵數"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
 
 
 </LinearLayout>

@@ -25,7 +25,7 @@
 
             <Spinner
                 android:id="@+id/distribution_spinner_brand"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white" />
 
@@ -33,12 +33,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="商品" />
+                android:text="商品名稱" />
 
             <EditText
-                android:layout_width="150dp"
+                android:id="@+id/distribution_edit_name"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:textSize="15sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -47,17 +49,27 @@
                 android:text="商品編號" />
 
             <EditText
-                android:layout_width="150dp"
+                android:id="@+id/distribution_edit_pcode"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:textSize="15sp"/>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
 
             <Button
-                android:layout_width="100dp"
+                android:id="@+id/distribution_btn_search"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/punch_blue"
@@ -66,7 +78,7 @@
                 android:textColor="@color/white" />
 
             <Button
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/count_green1"
                 android:gravity="center"
@@ -74,22 +86,20 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
-
     </FrameLayout>
 
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
@@ -97,7 +107,8 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="700dp"
+                    android:id="@+id/fragment_distribution_titlelayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
@@ -108,18 +119,16 @@
                         android:gravity="center"
                         android:tag="line"
                         android:text="項次"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
-                        android:background="@color/home_gray2" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/home_gray1" />
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:background="@color/home_gray2" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -128,13 +137,33 @@
                         android:gravity="center"
                         android:tag="brand_title"
                         android:text="品牌"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
-                        android:background="@color/home_gray2" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/home_gray1" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:tag="img"
+                        android:text="圖片"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/home_gray1" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -143,13 +172,16 @@
                         android:gravity="center"
                         android:tag="name"
                         android:text="商品名稱"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
-                        android:background="@color/home_gray2" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/home_gray1" />
+
 
                     <TextView
                         android:layout_width="0dp"
@@ -158,13 +190,15 @@
                         android:gravity="center"
                         android:tag="pcode"
                         android:text="商品編號"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
-                        android:background="@color/home_gray2" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/home_gray1" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -173,13 +207,15 @@
                         android:gravity="center"
                         android:tag="color"
                         android:text="顏色"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
-                        android:background="@color/home_gray2" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/home_gray1" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -188,239 +224,72 @@
                         android:gravity="center"
                         android:tag="size"
                         android:text="尺寸"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-
-                <View
-                    android:layout_width="1px"
+                <LinearLayout
+                    android:id="@+id/fragment_distribution_layout1"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
+                    android:divider="@drawable/black_divider10dp"
+                    android:orientation="horizontal"
+                    android:showDividers="beginning|middle|end"
+                    android:tag="store_layout">
 
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:tag="brand_title"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="name"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="pcode"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="color"
-                    android:text="中壢\n大江店"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="@color/home_gray2" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:tag="size"
+                    android:tag="stotal"
                     android:text="小計"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/distribution_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/home_gray2"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/distribution_total_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+
+                <LinearLayout
+                    android:id="@+id/fragment_distribution_layout2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:divider="@drawable/black_divider10dp"
+                    android:orientation="horizontal"
+                    android:showDividers="beginning|middle|end" />
+
+                <TextView
+                    android:id="@+id/distribution_sum"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:tag="note"
+                    android:text="小計"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
         </LinearLayout>
     </HorizontalScrollView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/home_gray2">
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="24.5"
-            android:gravity="right|center_vertical"
-            android:paddingRight="10dp"
-            android:text="商品庫存總數量:"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/home_gray2" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="庫存"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/home_gray2" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="安全庫存"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/home_gray2" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:tag="note"
-            android:text="累積瑕疵數"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
 
 
 </LinearLayout>

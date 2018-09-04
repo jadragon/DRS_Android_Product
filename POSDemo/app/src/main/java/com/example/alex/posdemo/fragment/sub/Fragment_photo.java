@@ -48,10 +48,6 @@ public class Fragment_photo extends Fragment {
         initButton();
         a_no = getArguments().getString("a_no");
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
 
             @Override
             public JSONObject onTasking(Void... params) {
@@ -74,11 +70,6 @@ public class Fragment_photo extends Fragment {
             public void onClick(View v) {
 
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public void onTaskBefore() {
-
-
-                    }
 
                     @Override
                     public JSONObject onTasking(Void... params) {
@@ -115,10 +106,6 @@ public class Fragment_photo extends Fragment {
                     case R.id.album_confirm:
                         if (photoListAdapter != null) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-                                }
-
                                 @Override
                                 public JSONObject onTasking(Void... params) {
                                     if (type == PhotoListAdapter.TYPE_CHECK)
@@ -180,19 +167,21 @@ public class Fragment_photo extends Fragment {
     private void initRecyclerView(JSONObject jsonObject) {
         if (photoListAdapter != null && album_recyclerview != null) {
             photoListAdapter.setFilter(jsonObject);
-        } else {
-            album_recyclerview = v.findViewById(R.id.album_recyclerview);
-            type = PhotoListAdapter.TYPE_NORMAL;
-            photoListAdapter = new PhotoListAdapter(getContext(), jsonObject, a_no, type);
-            int spanCount = 6;//跟布局里面的spanCount属性是一致的
-            int spacing = 20;//每一个矩形的间距
-            boolean includeEdge = true;//如果设置成false那边缘地带就没有间距
-            //设置每个item间距
-            album_recyclerview.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-            //   GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 6,GridLayoutManager.VERTICAL,false);
-            //    album_recyclerview.setLayoutManager(layoutManager);
-            album_recyclerview.setAdapter(photoListAdapter);
+            return;
         }
+
+        album_recyclerview = v.findViewById(R.id.album_recyclerview);
+        type = PhotoListAdapter.TYPE_NORMAL;
+        photoListAdapter = new PhotoListAdapter(getContext(), jsonObject, a_no, type);
+        int spanCount = 6;//跟布局里面的spanCount属性是一致的
+        int spacing = 20;//每一个矩形的间距
+        boolean includeEdge = true;//如果设置成false那边缘地带就没有间距
+        //设置每个item间距
+        album_recyclerview.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        //   GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 6,GridLayoutManager.VERTICAL,false);
+        //    album_recyclerview.setLayoutManager(layoutManager);
+        album_recyclerview.setAdapter(photoListAdapter);
+
 
     }
 

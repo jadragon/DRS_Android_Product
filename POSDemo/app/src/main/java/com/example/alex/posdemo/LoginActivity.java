@@ -54,11 +54,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public void onTaskBefore() {
-
-                    }
-
-                    @Override
                     public JSONObject onTasking(Void... params) {
                         return new RegistAndLoginApi().login_user(login_account.getText().toString(), login_password.getText().toString());
                     }

@@ -34,7 +34,7 @@ import library.JsonApi.StockApi;
  * Created by user on 2017/5/30.
  */
 
-public class Fragment_stock extends Fragment {
+public class Fragment_product extends Fragment {
     private View v;
     private UserInfo userInfo;
     private RecyclerView stock_recyclerview;
@@ -51,7 +51,7 @@ public class Fragment_stock extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_stock_layout, container, false);
+        v = inflater.inflate(R.layout.fragment_product_layout, container, false);
         userInfo = (UserInfo) getContext().getApplicationContext();
         initEditTextAndButton();
         initSpinner();

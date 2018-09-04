@@ -8,26 +8,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.alex.posdemo.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import library.AnalyzeJSON.APIpojo.ProductListPojo;
-import library.AnalyzeJSON.Analyze_CountInfo;
+import library.AnalyzeJSON.APIpojo.StockDataPojo;
+import library.AnalyzeJSON.Analyze_StockInfo;
+import library.Component.ToastMessageDialog;
 
 public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.RecycleHolder> {
     private Context ctx;
     DisplayMetrics dm;
-    ArrayList<ProductListPojo> list;
+    ArrayList<StockDataPojo> list;
+    Analyze_StockInfo analyze_stockInfo;
 
     public StockListAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         dm = ctx.getResources().getDisplayMetrics();
+        analyze_stockInfo = new Analyze_StockInfo();
+        list = analyze_stockInfo.getStock_data(json);
     }
 
     @Override
@@ -44,13 +48,24 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Recy
             holder.background.setBackgroundColor(ctx.getResources().getColor(R.color.punch_gray1));
         }
         holder.line.setText("" + (position + 1));
-
+        holder.store.setText(list.get(position).getStore());
+        ImageLoader.getInstance().displayImage(list.get(position).getImg(), holder.img);
+        holder.brand_title.setText(list.get(position).getBrand_title());
+        holder.name.setText(list.get(position).getName());
+        holder.pcode.setText(list.get(position).getPcode());
+        holder.color.setText(list.get(position).getColor());
+        holder.size.setText(list.get(position).getSize());
+        holder.fprice.setText(list.get(position).getFprice());
+        holder.price.setText(list.get(position).getPrice());
+        holder.total.setText(list.get(position).getTotal());
+        holder.stotal.setText(list.get(position).getStotal());
+        holder.flaw_total.setText(list.get(position).getFlaw_total());
     }
 
     @Override
     public int getItemCount() {
         // return list.size();
-        return 20;
+        return list.size();
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,7 +100,23 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Recy
     }
 
     public void setFilter(JSONObject json) {
+        list = new Analyze_StockInfo().getStock_data(json);
         notifyDataSetChanged();
     }
 
+    public boolean setFilterMore(JSONObject json) {
+        int presize = list.size();
+        if (presize > 0) {
+            if (json != null && analyze_stockInfo.getStock_data(json).size() > 0) {
+                list.addAll(analyze_stockInfo.getStock_data(json));
+                notifyItemInserted(presize + 1);
+                //  notifyItemChanged(presize + 1, itemsList.size() + 1);
+                return true;
+            } else {
+                new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).show("已無更多資料");
+                return false;
+            }
+        }
+        return false;
+    }
 }

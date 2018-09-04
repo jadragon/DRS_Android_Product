@@ -45,7 +45,7 @@ public class Fragment_count extends Fragment {
     Spinner count_store, count_payment, count_spinner_returntype;
     EditText count_edit_en, count_edit_m_type, count_edit_member_order;
     TextView count_txt_en, count_txt_m_type, count_edit_pcode;
-    RecyclerView count_productlist_recyclerview, count_coupon_recyclerview,count_quickmenu_recylcerview;
+    RecyclerView count_productlist_recyclerview, count_coupon_recyclerview, count_quickmenu_recylcerview;
     ProductListAdapter productListAdapter;
     QuickMenuAdapter quickMenuAdapter;
     CouponAdapter couponAdapter;
@@ -65,11 +65,6 @@ public class Fragment_count extends Fragment {
         initSwitch();
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void onTaskBefore() {
-
-            }
-
-            @Override
             public JSONObject onTasking(Void... params) {
                 return new CountApi().store_payment_style(userInfo.getS_no());
             }
@@ -81,10 +76,6 @@ public class Fragment_count extends Fragment {
         });
 
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
 
             @Override
             public JSONObject onTasking(Void... params) {
@@ -146,10 +137,6 @@ public class Fragment_count extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                        @Override
-                        public void onTaskBefore() {
-
-                        }
 
                         @Override
                         public JSONObject onTasking(Void... params) {
@@ -175,28 +162,30 @@ public class Fragment_count extends Fragment {
     private void initProductListRecyclerView(JSONObject jsonObject) {
         if (productListAdapter != null && count_productlist_recyclerview != null) {
             productListAdapter.setFilter(jsonObject);
-        } else {
-            count_productlist_recyclerview = v.findViewById(R.id.count_productlist_recyclerview);
-            productListAdapter = new ProductListAdapter(getContext(), jsonObject, ProductListAdapter.TYPE_SELL);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            count_productlist_recyclerview.setLayoutManager(layoutManager);
-            count_productlist_recyclerview.setAdapter(productListAdapter);
+            return;
         }
+        count_productlist_recyclerview = v.findViewById(R.id.count_productlist_recyclerview);
+        productListAdapter = new ProductListAdapter(getContext(), jsonObject, ProductListAdapter.TYPE_SELL);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        count_productlist_recyclerview.setLayoutManager(layoutManager);
+        count_productlist_recyclerview.setAdapter(productListAdapter);
+
 
     }
 
     private void initCouponRecyclerView(JSONObject jsonObject) {
         if (couponAdapter != null && count_coupon_recyclerview != null) {
             couponAdapter.setFilter(jsonObject);
-        } else {
-            count_coupon_recyclerview = v.findViewById(R.id.count_coupon_recyclerview);
-            couponAdapter = new CouponAdapter(getContext(), jsonObject);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            count_coupon_recyclerview.setLayoutManager(layoutManager);
-            count_coupon_recyclerview.setAdapter(couponAdapter);
+            return;
         }
+        count_coupon_recyclerview = v.findViewById(R.id.count_coupon_recyclerview);
+        couponAdapter = new CouponAdapter(getContext(), jsonObject);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        count_coupon_recyclerview.setLayoutManager(layoutManager);
+        count_coupon_recyclerview.setAdapter(couponAdapter);
+
 
     }
 
@@ -209,10 +198,6 @@ public class Fragment_count extends Fragment {
                 if (!hasFocus) {
                     if (!count_edit_member_order.getText().toString().equals("")) {
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
-
-                            }
 
                             @Override
                             public JSONObject onTasking(Void... params) {
@@ -242,10 +227,6 @@ public class Fragment_count extends Fragment {
                 if (!hasFocus) {
                     if (!count_edit_en.getText().toString().equals("")) {
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
-
-                            }
 
                             @Override
                             public JSONObject onTasking(Void... params) {
@@ -283,10 +264,7 @@ public class Fragment_count extends Fragment {
                 if (!hasFocus) {
                     if (!count_edit_m_type.getText().toString().equals("")) {
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
 
-                            }
 
                             @Override
                             public JSONObject onTasking(Void... params) {
@@ -323,10 +301,10 @@ public class Fragment_count extends Fragment {
         //store
         Store_PaymentStylePojo store_paymentStylePojo = new Analyze_CountInfo().getStore_Payment_Style(jsonObject);
         count_store.setAdapter(new ArrayAdapter(getContext(),
-                android.R.layout.simple_list_item_1, store_paymentStylePojo.getStore().getStore()));
+                R.layout.item_spinner, store_paymentStylePojo.getStore().getStore()));
         //payment
         count_payment.setAdapter(new ArrayAdapter(getContext(),
-                android.R.layout.simple_list_item_1, store_paymentStylePojo.getPayment().getStyle()));
+                R.layout.item_spinner, store_paymentStylePojo.getPayment().getStyle()));
     }
 
 

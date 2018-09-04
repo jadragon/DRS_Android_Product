@@ -70,6 +70,16 @@
         <item>出勤打卡</item>
         <item>公佈欄編輯</item>
     </string-array>
+    <string-array name="attendance_classnum">
+        <item>早班</item>
+        <item>中班</item>
+        <item>晚班</item>
+        <item>全班</item>
+    </string-array>
+    <string-array name="attendance_commute">
+        <item>上班</item>
+        <item>下班</item>
+    </string-array>
     <array name="slider_sub_bg2">
         <item>@drawable/slider_home_bg2</item>
         <item>@drawable/slider_home_bg3</item>
@@ -93,6 +103,12 @@
     <string-array name="slider_sub_txt3">
         <item>商品庫存</item>
         <item>商品庫存分佈</item>
+    </string-array>
+
+    <string-array name="total_type">
+        <item>全部</item>
+        <item>大於</item>
+        <item>小於等於</item>
     </string-array>
     <array name="slider_sub_bg4">
         <item>@drawable/slider_home_bg4</item>
@@ -140,16 +156,7 @@
     <string-array name="slider_sub_txt8">
         <item>不知道+6</item>
     </string-array>
-    <string-array name="attendance_classnum">
-        <item>早班</item>
-        <item>中班</item>
-        <item>晚班</item>
-        <item>全班</item>
-    </string-array>
-    <string-array name="attendance_commute">
-        <item>上班</item>
-        <item>下班</item>
-    </string-array>
+
     <array name="quick_menu_image">
         <item>@drawable/quick_menu1</item>
         <item>@drawable/quick_menu2</item>

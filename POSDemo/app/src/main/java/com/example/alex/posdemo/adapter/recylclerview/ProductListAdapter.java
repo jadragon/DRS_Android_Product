@@ -114,7 +114,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 for (int i = 1; i < list.get(index).getSamount(); i++) {
                     arrayList.add(i);
                 }
-                samount.setAdapter(new ArrayAdapter(ctx, android.R.layout.simple_list_item_1, arrayList));
+                samount.setAdapter(new ArrayAdapter(ctx, R.layout.item_spinner, arrayList));
                 samount.setSelection(arrayList.size() - 1);
                 list.get(index).setCurrentCount(arrayList.size() - 1);
             } else if (type == TYPE_SELL) {
@@ -123,7 +123,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 for (int i = 1; i < list.get(index).getTotal(); i++) {
                     arrayList.add(i);
                 }
-                samount.setAdapter(new ArrayAdapter(ctx, android.R.layout.simple_list_item_1, arrayList));
+                samount.setAdapter(new ArrayAdapter(ctx, R.layout.item_spinner, arrayList));
                 samount.setSelection(1);
                 list.get(index).setCurrentCount(1);
             }
@@ -165,10 +165,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                             @Override
                             public void onConfirm(AlertDialog alertDialog, final String note) {
                                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                    @Override
-                                    public void onTaskBefore() {
-
-                                    }
 
                                     @Override
                                     public JSONObject onTasking(Void... params) {

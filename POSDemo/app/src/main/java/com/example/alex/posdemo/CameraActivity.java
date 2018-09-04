@@ -216,10 +216,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 //finish
                 if (bitmap != null && !camera_photo_name.getText().toString().equals("")) {
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                        @Override
-                        public void onTaskBefore() {
-
-                        }
 
                         @Override
                         public JSONObject onTasking(Void... params) {

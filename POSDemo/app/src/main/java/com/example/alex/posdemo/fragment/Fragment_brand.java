@@ -39,11 +39,6 @@ public class Fragment_brand extends Fragment {
         v = inflater.inflate(R.layout.fragment_brand_layout, container, false);
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void onTaskBefore() {
-
-            }
-
-            @Override
             public JSONObject onTasking(Void... params) {
                 return new BrandApi().brand_data();
             }
@@ -69,10 +64,6 @@ public class Fragment_brand extends Fragment {
                     case R.id.brand_btn_namesearch:
 
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
-
-                            }
 
                             @Override
                             public JSONObject onTasking(Void... params) {
@@ -91,10 +82,6 @@ public class Fragment_brand extends Fragment {
 
                     case R.id.brand_btn_codesearch:
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
-
-                            }
 
                             @Override
                             public JSONObject onTasking(Void... params) {
@@ -120,18 +107,19 @@ public class Fragment_brand extends Fragment {
     private void initRecyclerView(JSONObject jsonObject) {
         if (brandListAdapter != null && brand_recyclerview != null) {
             brandListAdapter.setFilter(jsonObject);
-        } else {
-            brand_recyclerview = v.findViewById(R.id.brand_recyclerview);
-            brandListAdapter = new BrandListAdapter(getContext(), jsonObject);
-            int spanCount = 3;//跟布局里面的spanCount属性是一致的
-            int spacing = 20;//每一个矩形的间距
-            boolean includeEdge = true;//如果设置成false那边缘地带就没有间距
-            //设置每个item间距
-            brand_recyclerview.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-            //   GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 6,GridLayoutManager.VERTICAL,false);
-            //    album_recyclerview.setLayoutManager(layoutManager);
-            brand_recyclerview.setAdapter(brandListAdapter);
+            return;
         }
+        brand_recyclerview = v.findViewById(R.id.brand_recyclerview);
+        brandListAdapter = new BrandListAdapter(getContext(), jsonObject);
+        int spanCount = 3;//跟布局里面的spanCount属性是一致的
+        int spacing = 20;//每一个矩形的间距
+        boolean includeEdge = true;//如果设置成false那边缘地带就没有间距
+        //设置每个item间距
+        brand_recyclerview.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        //   GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 6,GridLayoutManager.VERTICAL,false);
+        //    album_recyclerview.setLayoutManager(layoutManager);
+        brand_recyclerview.setAdapter(brandListAdapter);
+
 
     }
 

@@ -136,11 +136,6 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
                 public void onClick(View v) {
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public void onTaskBefore() {
-
-                        }
-
-                        @Override
                         public JSONObject onTasking(Void... params) {
                             if (list.get(getAdapterPosition()).isExist()) {
                                 return new BrandApi().up_down_brand(userInfo.getDu_no(), list.get(getAdapterPosition()).getPb_no(), "1");
@@ -191,11 +186,6 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
     public void resetAdapter() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
-
             @Override
             public JSONObject onTasking(Void... params) {
                 return brandApi.brand_data();

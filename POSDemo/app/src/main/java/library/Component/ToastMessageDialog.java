@@ -2,6 +2,7 @@ package library.Component;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +38,18 @@ public class ToastMessageDialog {
         dialog.setCanceledOnTouchOutside(false);
 //        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
-
+    public void show(String message) {
+        confirm.setVisibility(View.GONE);
+        cancel.setVisibility(View.GONE);
+        dialog_message.setText(message);
+        dialog.show();//显示对话框
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, 1500);
+    }
     public void confirm() {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -204,10 +204,6 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onConfirm(AlertDialog alertDialog, final String note) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-
-                                }
 
                                 @Override
                                 public JSONObject onTasking(Void... params) {
@@ -235,10 +231,6 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onConfirm(AlertDialog alertDialog) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-
-                                }
 
                                 @Override
                                 public JSONObject onTasking(Void... params) {
@@ -271,10 +263,6 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     @Override
                     public void onConfirm(AlertDialog alertDialog, final String note) {
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                            @Override
-                            public void onTaskBefore() {
-
-                            }
 
                             @Override
                             public JSONObject onTasking(Void... params) {
@@ -285,11 +273,6 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             public void onTaskAfter(JSONObject jsonObject) {
                                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                        @Override
-                                        public void onTaskBefore() {
-
-                                        }
-
                                         @Override
                                         public JSONObject onTasking(Void... params) {
                                             return albumApi.album_data();
@@ -327,11 +310,6 @@ public class AlbumListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void resetAdapter() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
-
             @Override
             public JSONObject onTasking(Void... params) {
                 return albumApi.album_data();

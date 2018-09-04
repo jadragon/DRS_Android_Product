@@ -39,11 +39,6 @@ public class Fragment_album extends Fragment {
         initButton();
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void onTaskBefore() {
-
-            }
-
-            @Override
             public JSONObject onTasking(Void... params) {
                 return new AlbumApi().album_data();
             }
@@ -76,10 +71,6 @@ public class Fragment_album extends Fragment {
                     case R.id.album_confirm:
                         if (albumListAdapter != null) {
                             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                @Override
-                                public void onTaskBefore() {
-
-                                }
 
                                 @Override
                                 public JSONObject onTasking(Void... params) {
@@ -120,18 +111,19 @@ public class Fragment_album extends Fragment {
     private void initRecyclerView(JSONObject jsonObject) {
         if (albumListAdapter != null && album_recyclerview != null) {
             albumListAdapter.setFilter(jsonObject);
-        } else {
-            album_recyclerview = v.findViewById(R.id.album_recyclerview);
-            albumListAdapter = new AlbumListAdapter(getContext(), jsonObject, AlbumListAdapter.TYPE_NORMAL);
-            int spanCount = 6;//跟布局里面的spanCount属性是一致的
-            int spacing = 20;//每一个矩形的间距
-            boolean includeEdge = true;//如果设置成false那边缘地带就没有间距
-            //设置每个item间距
-            album_recyclerview.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-            //   GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 6,GridLayoutManager.VERTICAL,false);
-            //    album_recyclerview.setLayoutManager(layoutManager);
-            album_recyclerview.setAdapter(albumListAdapter);
+            return;
         }
+        album_recyclerview = v.findViewById(R.id.album_recyclerview);
+        albumListAdapter = new AlbumListAdapter(getContext(), jsonObject, AlbumListAdapter.TYPE_NORMAL);
+        int spanCount = 6;//跟布局里面的spanCount属性是一致的
+        int spacing = 20;//每一个矩形的间距
+        boolean includeEdge = true;//如果设置成false那边缘地带就没有间距
+        //设置每个item间距
+        album_recyclerview.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        //   GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 6,GridLayoutManager.VERTICAL,false);
+        //    album_recyclerview.setLayoutManager(layoutManager);
+        album_recyclerview.setAdapter(albumListAdapter);
+
 
     }
 
