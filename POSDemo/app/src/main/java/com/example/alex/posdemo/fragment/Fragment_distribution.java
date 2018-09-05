@@ -58,6 +58,7 @@ public class Fragment_distribution extends Fragment {
     EditText distribution_edit_name, distribution_edit_pcode;
     Button distribution_btn_search;
     String name = "", pcode = "";
+    boolean isINIT_RECYCLERVIEW;
 
     @Nullable
     @Override
@@ -81,13 +82,13 @@ public class Fragment_distribution extends Fragment {
             public void onClick(View v) {
                 name = distribution_edit_name.getText().toString();
                 pcode = distribution_edit_pcode.getText().toString();
-                resetData();
+                resetData(false);
             }
         });
     }
 
     private void initLayoutSize() {
-        int width = (int) (getActivity().findViewById(R.id.content).getWidth()-90*dm.density*4);
+        int width = (int) (getActivity().findViewById(R.id.content).getWidth() - 90 * dm.density * 4);
         v.findViewById(R.id.fragment_distribution_titlelayout).getLayoutParams().width = width;
         v.findViewById(R.id.distribution_total_label).getLayoutParams().width = width;
     }
@@ -147,7 +148,9 @@ public class Fragment_distribution extends Fragment {
                 distribution_spinner_brand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                       // resetData();
+                        if (isINIT_RECYCLERVIEW) {
+                            resetData(false);
+                        }
                     }
 
                     @Override
@@ -156,12 +159,12 @@ public class Fragment_distribution extends Fragment {
                     }
                 });
 
-                resetData();
+                resetData(true);
             }
         });
     }
 
-    private void resetData() {
+    private void resetData(final boolean init) {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
@@ -176,6 +179,9 @@ public class Fragment_distribution extends Fragment {
                     endLessOnScrollListener.reset();
                 initTitleView(jsonObject);
                 initRecyclerView(jsonObject);
+                if (init) {
+                    isINIT_RECYCLERVIEW = true;
+                }
             }
         });
 

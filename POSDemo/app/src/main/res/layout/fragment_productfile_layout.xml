@@ -17,6 +17,16 @@
             android:layout_height="30dp"
             android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/productfile_btn_add"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/productfile_blue"
+                android:gravity="center"
+                android:text="＋新增商品"
+                android:textColor="@color/white" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -24,6 +34,7 @@
                 android:text="商品" />
 
             <EditText
+                android:id="@+id/productfile_edit_name"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -36,6 +47,7 @@
                 android:text="商品編號" />
 
             <EditText
+                android:id="@+id/productfile_edit_pcode"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -48,6 +60,7 @@
                 android:text="品項" />
 
             <EditText
+                android:id="@+id/productfile_edit_title"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -60,6 +73,7 @@
                 android:text="品牌" />
 
             <Spinner
+                android:id="@+id/productfile_spinner_brand"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@color/white" />
@@ -74,11 +88,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/stock_btn_search"
+                android:id="@+id/productfile_btn_search"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/punch_blue"
+                android:background="@drawable/productfile_blue"
                 android:gravity="center"
                 android:text="搜尋"
                 android:textColor="@color/white" />
@@ -257,7 +271,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/stock_recyclerview"
+        android:id="@+id/productfile_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

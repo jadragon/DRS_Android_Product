@@ -47,6 +47,7 @@ public class Fragment_stock extends Fragment {
     EditText stock_edit_name, stock_edit_pcode;
     Button stock_btn_search;
     String name = "", pcode = "";
+    boolean isINIT_RECYCLERVIEW;
 
     @Nullable
     @Override
@@ -68,7 +69,7 @@ public class Fragment_stock extends Fragment {
             public void onClick(View v) {
                 name = stock_edit_name.getText().toString();
                 pcode = stock_edit_pcode.getText().toString();
-                resetData();
+                resetData(false);
             }
         });
     }
@@ -104,7 +105,9 @@ public class Fragment_stock extends Fragment {
                 stock_spinner_store.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                     //   resetData();
+                        if (isINIT_RECYCLERVIEW) {
+                            resetData(false);
+                        }
                     }
 
                     @Override
@@ -118,7 +121,9 @@ public class Fragment_stock extends Fragment {
                 stock_spinner_brand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                       // resetData();
+                        if (isINIT_RECYCLERVIEW) {
+                            resetData(false);
+                        }
                     }
 
                     @Override
@@ -132,7 +137,10 @@ public class Fragment_stock extends Fragment {
                 stock_spinner_total_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                      //  resetData();
+                        if (isINIT_RECYCLERVIEW) {
+                            resetData(false);
+                        }
+
                     }
 
                     @Override
@@ -140,12 +148,12 @@ public class Fragment_stock extends Fragment {
 
                     }
                 });
-                resetData();
+                resetData(true);
             }
         });
     }
 
-    private void resetData() {
+    private void resetData(final boolean init) {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
 
             @Override
@@ -162,6 +170,9 @@ public class Fragment_stock extends Fragment {
                     endLessOnScrollListener.reset();
                 initTotalView(jsonObject);
                 initRecyclerView(jsonObject);
+                if (init) {
+                    isINIT_RECYCLERVIEW = true;
+                }
             }
         });
 
@@ -186,6 +197,7 @@ public class Fragment_stock extends Fragment {
                                 all_store_brandPojo.getPb_no().get(stock_spinner_brand.getSelectedItemPosition()),
                                 name, pcode, stock_spinner_total_type.getSelectedItemPosition(), nextpage);
                     }
+
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
                         if (stockListAdapter != null && stockListAdapter.setFilterMore(jsonObject)) {

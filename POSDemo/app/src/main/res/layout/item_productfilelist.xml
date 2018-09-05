@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:layout_marginTop="10dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:tag="background">
 
     <TextView
         android:layout_width="0dp"
@@ -70,7 +70,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:tag="cost"
+        android:tag="title"
         android:text="品項"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -80,7 +80,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:tag="fprice"
+        android:tag="brand_title"
         android:text="品牌"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -90,7 +90,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:tag="price"
+        android:tag="cost"
         android:text="成本"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -100,7 +100,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:tag="stotal"
+        android:tag="fprice"
         android:text="定價"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -111,7 +111,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:tag="note"
+        android:tag="price"
         android:text="售價"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -122,7 +122,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:tag="note"
+        android:tag="stotal"
         android:text="安全庫存"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -132,7 +132,7 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
-        android:tag="note"
+        android:tag="u_time"
         android:text="修改時間"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -142,7 +142,7 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
-        android:tag="note"
+        android:tag="expired_date"
         android:text="下架時間"
         android:textColor="@color/black"
         android:textSize="12sp" />
@@ -154,7 +154,6 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/stock_btn_search"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
@@ -164,7 +163,8 @@
             android:background="@drawable/brand_orange"
             android:gravity="center"
             android:text="修改"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:tag="button1"/>
 
         <Button
             android:layout_width="match_parent"
@@ -176,6 +176,7 @@
             android:background="@drawable/count_gray1"
             android:gravity="center"
             android:text="下架"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:tag="button2"/>
     </LinearLayout>
 </LinearLayout>

@@ -95,14 +95,17 @@
     <array name="slider_sub_bg3">
         <item>@drawable/slider_home_bg3</item>
         <item>@drawable/slider_home_bg4</item>
+        <item>@drawable/slider_home_bg5</item>
     </array>
     <array name="slider_sub_img3">
         <item>@drawable/mainslider_home_img3</item>
         <item>@drawable/mainslider_home_img4</item>
+        <item>@drawable/mainslider_home_img5</item>
     </array>
     <string-array name="slider_sub_txt3">
         <item>商品庫存</item>
         <item>商品庫存分佈</item>
+        <item>產品建檔</item>
     </string-array>
 
     <string-array name="total_type">
