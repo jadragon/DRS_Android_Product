@@ -43,7 +43,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:background="@color/white" />
+                    android:background="@drawable/background_edit_white" />
             </LinearLayout>
 
             <LinearLayout
@@ -67,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:layout_weight="2"
-                    android:background="@color/white"
+                    android:background="@drawable/background_edit_white"
                     android:singleLine="true" />
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/edit_background"
+                    android:background="@drawable/background_edit_invisible"
                     android:gravity="center"
                     android:textSize="18sp" />
 
@@ -101,7 +101,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:background="@color/white" />
+                    android:background="@drawable/background_edit_white" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,7 +123,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:background="@color/white"
+                    android:background="@drawable/background_edit_white"
                     android:singleLine="true" />
             </LinearLayout>
 
@@ -153,7 +153,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:background="@color/white"
+                        android:background="@drawable/background_edit_white"
                         android:singleLine="true" />
 
                     <TextView
@@ -161,7 +161,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/edit_background"
+                        android:background="@drawable/background_edit_invisible"
                         android:gravity="center"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -194,14 +194,14 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:background="@color/white"
+                        android:background="@drawable/background_edit_white"
                         android:singleLine="true" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@color/white"
+                        android:background="@drawable/background_edit_white"
                         android:singleLine="true"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -226,7 +226,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:background="@color/white"
+                    android:background="@drawable/background_edit_white"
                     android:singleLine="true" />
             </LinearLayout>
         </LinearLayout>
@@ -294,7 +294,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:background="@color/white"
+                    android:background="@drawable/background_edit_white"
                     android:singleLine="true" />
             </LinearLayout>
 
@@ -318,7 +318,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:background="@color/white" />
+                    android:background="@drawable/background_edit_white" />
             </LinearLayout>
 
 
@@ -334,7 +334,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/edit_background"
+                    android:background="@drawable/background_edit_invisible"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -348,7 +348,7 @@
                         android:id="@+id/count_edit_pcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
+                        android:background="@drawable/background_edit_white"
                         android:singleLine="true"
                         android:textSize="25sp" />
                 </LinearLayout>

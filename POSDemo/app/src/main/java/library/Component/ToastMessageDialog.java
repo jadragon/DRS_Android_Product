@@ -13,11 +13,11 @@ import com.example.alex.posdemo.R;
 
 public class ToastMessageDialog {
     public static final byte TYPE_ERROR = 0;
-    public static final byte TYPE_WARM = 1;
+  //  public static final byte TYPE_WARM = 1;
     public static final byte TYPE_INFO = 2;
     public static final byte TYPE_EDIT = 3;
     private AlertDialog dialog;
-    private TextView dialog_message;
+    private TextView dialog_title, dialog_message;
     private Button confirm, cancel;
 
     public ToastMessageDialog(Context context, byte type) {
@@ -31,6 +31,7 @@ public class ToastMessageDialog {
             inflate = LayoutInflater.from(context).inflate(R.layout.dialog_edit, null);
         }
         builder.setView(inflate);
+        dialog_title = inflate.findViewById(R.id.dialog_title);
         dialog_message = inflate.findViewById(R.id.dialog_message);
         confirm = inflate.findViewById(R.id.dialog_confirm);
         cancel = inflate.findViewById(R.id.dialog_cancel);
@@ -38,6 +39,7 @@ public class ToastMessageDialog {
         dialog.setCanceledOnTouchOutside(false);
 //        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
+
     public void show(String message) {
         confirm.setVisibility(View.GONE);
         cancel.setVisibility(View.GONE);
@@ -50,6 +52,7 @@ public class ToastMessageDialog {
             }
         }, 1500);
     }
+
     public void confirm() {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +74,33 @@ public class ToastMessageDialog {
         dialog.show();//显示对话框
     }
 
+    public void setTtitle(String title) {
+        dialog_title.setText(title);
+    }
+
+    public void setMessage(String message) {
+        dialog_message.setText(message);
+    }
+    public void confirm(final OnConfirmListener onConfirmListener) {
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.dialog_confirm:
+                        if (onConfirmListener != null)
+                            onConfirmListener.onConfirm(dialog);
+                        dialog.dismiss();
+                        break;
+                    case R.id.dialog_cancel:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        confirm.setOnClickListener(clickListener);
+        cancel.setOnClickListener(clickListener);
+        dialog.show();//显示对话框
+    }
     public void confirm(String message, final OnConfirmListener onConfirmListener) {
         dialog_message.setText(message);
         View.OnClickListener clickListener = new View.OnClickListener() {

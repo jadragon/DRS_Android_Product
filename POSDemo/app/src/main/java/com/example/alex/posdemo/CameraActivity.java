@@ -37,8 +37,6 @@ import com.example.alex.posdemo.GlobalVariable.UserInfo;
 
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -126,7 +124,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
             surfaceView1 = findViewById(R.id.surfaceView1);
             //Orientation
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             initShow();
             initChangeCamera();
             surfaceHolder = surfaceView1.getHolder();
@@ -267,7 +265,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             imageView1.setImageBitmap(null);
             imageView1.setImageBitmap(bitmap);
             //拍下圖片顯示在下面的ImageView裡
-
+            /*
             FileOutputStream fop;
             try {
                 fop = new FileOutputStream("/sdcard/dd.jpg");
@@ -288,6 +286,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 e.printStackTrace();
                 System.out.println("IOException");
             }
+            */
             camera.startPreview();
             //需要手動重新startPreview，否則停在拍下的瞬間
 
@@ -454,6 +453,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        camera.release();
+        if (camera != null)
+            camera.release();
     }
 }

@@ -34,7 +34,7 @@
                 android:id="@+id/brand_edit_namesearch"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@drawable/background_edit_white" />
 
             <ImageView
                 android:id="@+id/brand_btn_namesearch"
@@ -55,7 +55,7 @@
                 android:id="@+id/brand_edit_codesearch"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@drawable/background_edit_white" />
 
             <ImageView
                 android:id="@+id/brand_btn_codesearch"

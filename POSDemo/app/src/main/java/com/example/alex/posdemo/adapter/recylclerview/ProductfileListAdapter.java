@@ -1,9 +1,9 @@
 package com.example.alex.posdemo.adapter.recylclerview;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +35,13 @@ public class ProductfileListAdapter extends RecyclerView.Adapter<ProductfileList
     Analyze_ProductfileInfo analyze_productfileInfo;
     ProductfileApi productfileApi;
     private UserInfo userInfo;
+    ToastMessageDialog toastMessageDialog;
 
     public ProductfileListAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         dm = ctx.getResources().getDisplayMetrics();
         userInfo = (UserInfo) ctx.getApplicationContext();
+        toastMessageDialog = new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO);
         productfileApi = new ProductfileApi();
         analyze_productfileInfo = new Analyze_ProductfileInfo();
         list = analyze_productfileInfo.getProduct_filing(json);
@@ -115,11 +117,6 @@ public class ProductfileListAdapter extends RecyclerView.Adapter<ProductfileList
             button1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (list.get(getAdapterPosition()).isExist()) {
-
-                    } else {
-
-                    }
                 }
             });
 
@@ -127,7 +124,19 @@ public class ProductfileListAdapter extends RecyclerView.Adapter<ProductfileList
             button2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setUporDown(getAdapterPosition());
+                    if (list.get(getAdapterPosition()).isExist()) {
+                        toastMessageDialog.setTtitle("商品下架");
+                        toastMessageDialog.setMessage("是否將該商品下架?");
+                    } else {
+                        toastMessageDialog.setTtitle("商品上架");
+                        toastMessageDialog.setMessage("是否將該商品上架?");
+                    }
+                    toastMessageDialog.confirm(new ToastMessageDialog.OnConfirmListener() {
+                        @Override
+                        public void onConfirm(AlertDialog alertDialog) {
+                            setUporDown(getAdapterPosition());
+                        }
+                    });
                 }
             });
 
@@ -165,14 +174,12 @@ public class ProductfileListAdapter extends RecyclerView.Adapter<ProductfileList
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                Log.e("gg", list.get(position).getName() + "\n" + list.get(position).getPcode() + "\n" + list.get(position).getTitle());
                 return productfileApi.product_filing("sl87fy2O9oevXUDAxG9l9Q==,XgH1q1g@_Cl0ay0/M9ST@_vQ==,mSdI5KxZJPcbsnzuUJUQnA==,bWg9NFf4nSTZAqt1AVrZ9A==,a42LeDpQoCqr43FmcC@_Dpw==,ZbsLf8P0GQmGXu3w/NVHCg==,bUhx03Gk6LAH8dZ8NkiNog==",
                         list.get(position).getName(), list.get(position).getPcode(), list.get(position).getTitle(), 0);
             }
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-
                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
                     ArrayList<ProductfilePojo> arrayList = analyze_productfileInfo.getProduct_filing(jsonObject);
                     if (arrayList.size() == 1) {

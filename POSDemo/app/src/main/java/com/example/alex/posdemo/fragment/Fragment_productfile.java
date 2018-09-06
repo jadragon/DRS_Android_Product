@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.adapter.recylclerview.ProductfileListAdapter;
 import com.example.alex.posdemo.adapter.recylclerview.Util.EndLessOnScrollListener;
@@ -41,7 +42,7 @@ public class Fragment_productfile extends Fragment {
     All_Store_BrandPojo all_store_brandPojo;
     ProductfileApi productfileApi;
     EditText productfile_edit_name, productfile_edit_pcode, productfile_edit_title;
-    Button productfile_btn_search;
+    Button productfile_btn_add, productfile_btn_search;
     String name = "", pcode = "", title = "";
     boolean isINIT_RECYCLERVIEW;
 
@@ -68,6 +69,24 @@ public class Fragment_productfile extends Fragment {
                 pcode = productfile_edit_pcode.getText().toString();
                 title = productfile_edit_title.getText().toString();
                 resetData(false);
+            }
+        });
+
+        productfile_btn_add = v.findViewById(R.id.productfile_btn_add);
+        productfile_btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment_newproduct fragmentNewproduct = new Fragment_newproduct();
+                Bundle bundle = new Bundle();
+                //   bundle.putString("a_no", list.get(getAdapterPosition()).getA_no());
+                //     fragmentNewproduct.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .hide(getActivity().getSupportFragmentManager().findFragmentByTag("productfile")).commit();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.content, fragmentNewproduct, "newproduct").commit();
+                ((MainActivity) getActivity()).setMAIN_FRAGMENT_TAG("productfile");
+                ((MainActivity) getActivity()).setSUB_FRAGMENT_TAG("newproduct");
+                ((MainActivity) getActivity()).showBack(true);
             }
         });
     }
