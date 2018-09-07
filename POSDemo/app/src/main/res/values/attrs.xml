@@ -13,5 +13,9 @@
         <attr name="gifViewStyle" format="reference" />
     </declare-styleable>
 
-
+    <declare-styleable name="MultiTextColor">
+        <attr name="text_start" format="integer"/>
+        <attr name="text_end" format="integer"/>
+        <attr name="text_color" format="integer"/>
+    </declare-styleable>
 </resources>

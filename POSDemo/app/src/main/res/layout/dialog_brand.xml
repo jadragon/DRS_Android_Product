@@ -86,12 +86,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/brand_selectbg" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/brand_selectimg"
+                    android:src="@drawable/brand_image_select"
                     android:tag="image" />
             </library.Component.SquareFrameLayout>
 
@@ -116,7 +111,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/count_gray1"
+                android:background="@drawable/corner_gray"
                 android:tag="cancel"
                 android:text="取消"
                 android:textColor="@color/white" />
@@ -128,7 +123,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/count_green1"
+                android:background="@drawable/corner_green"
                 android:tag="confirm"
                 android:text="確認"
                 android:textColor="@color/white" />

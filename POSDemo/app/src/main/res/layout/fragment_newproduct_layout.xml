@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -8,15 +9,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:background="@color/white"
+        android:layout_margin="15dp"
+        android:background="@drawable/background_corner20dp_gray1"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingBottom="20dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="20dp">
 
-        <TextView
+        <library.Component.MuiltiColorTextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:shadowColor="@color/red"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+
             android:text="備註:請依序step1->step6填入,紅色【*】必填，會自動產生商品編號，亦可手動修改商品編號,儲存後就無法變更商品編號" />
 
 
@@ -32,11 +42,15 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*品牌(step1.)" />
+                android:gravity="center_vertical"
+                android:text="*品牌(step1.)"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -49,23 +63,27 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*品牌(step1.)" />
+                android:text="*年份(step2.)"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="@drawable/background_edit_white" />
+
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:background="@drawable/background_edit_white" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:text="2017年" />
+                android:gravity="center_vertical"
+                android:text="2017年第一季171" />
         </LinearLayout>
 
         <LinearLayout
@@ -75,16 +93,21 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*品項(step3.)" />
+                android:gravity="center_vertical"
+                android:text="*品項(step3.)"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="代碼" />
 
             <EditText
@@ -97,12 +120,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="搜尋" />
+                android:background="@drawable/corner_blue"
+                android:text="搜尋"
+                android:textColor="@color/white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="代碼" />
 
             <EditText
@@ -111,98 +137,20 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*品牌(step1.)" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@drawable/background_edit_white" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:text="*顏色(step5.)" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="代碼" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/background_edit_white" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="搜尋" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="代碼" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/background_edit_white" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:text="*品牌(step1.)" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@drawable/background_edit_white" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:text="*商品編號" />
+                android:text="*品項流水號(step4.)"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="9"
                 android:background="@drawable/background_edit_white" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -212,11 +160,82 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*商品名稱" />
+                android:gravity="center_vertical"
+                android:text="*顏色(step5.)"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
+
+            <library.Component.MuiltiColorTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="代碼" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/background_edit_white" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/corner_blue"
+                android:text="搜尋"
+                android:textColor="@color/white" />
+
+            <library.Component.MuiltiColorTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="代碼" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/background_edit_white" />
+
+            <library.Component.MuiltiColorTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="*尺寸(step6.)"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:background="@drawable/background_edit_white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <library.Component.MuiltiColorTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:text="*商品編號"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -237,11 +256,44 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*外幣進價" />
+                android:gravity="center_vertical"
+                android:text="*商品名稱"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:background="@drawable/background_edit_white" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <library.Component.MuiltiColorTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:text="*外幣進價"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -249,11 +301,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*匯率" />
+                android:gravity="center_vertical"
+                android:text="*匯率"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -261,11 +317,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*關稅" />
+                android:gravity="center_vertical"
+                android:text="*關稅"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -287,11 +347,15 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*進價成本" />
+                android:gravity="center_vertical"
+                android:text="*進價成本"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -299,11 +363,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*倍率" />
+                android:gravity="center_vertical"
+                android:text="*倍率"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -311,11 +379,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*倍率定價NT$" />
+                android:gravity="center_vertical"
+                android:text="*倍率定價NT$"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -336,11 +408,15 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*原廠定價NT$" />
+                android:gravity="center_vertical"
+                android:text="*原廠定價NT$"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -348,11 +424,14 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*定價" />
+                android:text="*定價"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -360,11 +439,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*售價" />
+                android:gravity="center_vertical"
+                android:text="*售價"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -372,16 +455,17 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
                 android:text="折數%" />
 
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:background="@drawable/background_edit_white" />
         </LinearLayout>
 
@@ -392,10 +476,11 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
+                android:gravity="center_vertical"
                 android:text="毛利率%" />
 
             <EditText
@@ -404,11 +489,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*原廠貨號" />
+                android:gravity="center_vertical"
+                android:text="*原廠貨號"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -416,11 +505,15 @@
                 android:layout_weight="3"
                 android:background="@drawable/background_edit_white" />
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*安全庫存" />
+                android:gravity="center_vertical"
+                android:text="*安全庫存"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -442,22 +535,31 @@
             android:orientation="horizontal"
             android:paddingTop="10dp">
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="商品圖\n註:只限圖片(JPG/PNG/GIF)每張圖請勿上船超過150K" />
+                android:text="*商品圖\n註:只限圖片(JPG/PNG/GIF)每張圖請勿上船超過150K"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3" />
+                android:layout_weight="3"
+                android:src="@drawable/brand_image_select"
+                android:padding="10dp"
+                android:background="@drawable/background_edit_white"/>
 
-            <TextView
+            <library.Component.MuiltiColorTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="*商品介紹" />
+                android:text="*商品介紹"
+                app:text_color="@color/red"
+                app:text_end="1"
+                app:text_start="0" />
 
             <EditText
                 android:layout_width="0dp"
@@ -481,11 +583,18 @@
 
             <Button
                 android:layout_width="200dp"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/corner_gray"
+                android:text="取消"
+                android:textColor="@color/white" />
 
             <Button
                 android:layout_width="200dp"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@drawable/corner_green"
+                android:text="確認"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

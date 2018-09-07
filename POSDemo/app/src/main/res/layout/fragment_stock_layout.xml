@@ -99,7 +99,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/punch_blue"
+                android:background="@drawable/corner_blue"
                 android:gravity="center"
                 android:text="搜尋"
                 android:textColor="@color/white" />
@@ -107,7 +107,7 @@
             <Button
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/count_green1"
+                android:background="@drawable/corner_green"
                 android:gravity="center"
                 android:text="匯出"
                 android:textColor="@color/white" />

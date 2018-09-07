@@ -189,7 +189,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/punch_blue"
+                    android:background="@drawable/corner_blue"
                     android:text="搜尋"
                     android:textColor="@color/white"
                     android:textSize="18sp" />

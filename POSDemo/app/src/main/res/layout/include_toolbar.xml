@@ -16,7 +16,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/main_bsck" />
+            android:background="@drawable/main_back" />
 
         <Button
             android:id="@+id/slider_menu_btn"

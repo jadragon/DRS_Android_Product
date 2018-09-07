@@ -76,11 +76,11 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
             if (list.get(position).isExist()) {
                 holder.cover.setVisibility(View.GONE);
-                holder.exist.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.brand_gray));
+                holder.exist.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.corner_gray));
                 holder.exist.setText("下架");
             } else {
                 holder.cover.setVisibility(View.VISIBLE);
-                holder.exist.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.count_green1));
+                holder.exist.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.corner_green));
                 holder.exist.setText("上架");
             }
             holder.title.setText(list.get(position).getTitle());

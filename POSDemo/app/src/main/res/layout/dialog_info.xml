@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/count_gray1"
+                android:background="@drawable/corner_gray"
                 android:text="取消"
                 android:textColor="@color/white" />
             <Button
@@ -55,7 +55,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/count_green1"
+                android:background="@drawable/corner_green"
                 android:text="確認"
                 android:textColor="@color/white" />
         </LinearLayout>

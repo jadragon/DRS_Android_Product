@@ -19,6 +19,8 @@ public class Fragment_newproduct extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_newproduct_layout, container, false);
+
+
         return v;
     }
 

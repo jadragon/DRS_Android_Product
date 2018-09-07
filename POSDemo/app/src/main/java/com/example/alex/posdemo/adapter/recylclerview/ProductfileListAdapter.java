@@ -73,15 +73,15 @@ public class ProductfileListAdapter extends RecyclerView.Adapter<ProductfileList
         if (list.get(position).isExist()) {
             holder.background.setBackgroundColor(ctx.getResources().getColor(R.color.white));
             holder.button1.setText("修改");
-            holder.button1.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.brand_orange));
+            holder.button1.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.corner_orange));
             holder.button2.setText("下架");
-            holder.button2.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.count_gray1));
+            holder.button2.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.corner_gray));
         } else {
             holder.background.setBackgroundColor(ctx.getResources().getColor(R.color.home_gray2));
             holder.button1.setText("檢視");
-            holder.button1.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.productfile_blue));
+            holder.button1.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.corner_blue));
             holder.button2.setText("上架");
-            holder.button2.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.count_green1));
+            holder.button2.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.corner_green));
         }
     }
 

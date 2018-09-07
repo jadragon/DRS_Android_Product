@@ -22,7 +22,7 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/productfile_blue"
+                android:background="@drawable/corner_blue"
                 android:gravity="center"
                 android:text="＋新增商品"
                 android:textColor="@color/white" />
@@ -92,7 +92,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/productfile_blue"
+                android:background="@drawable/corner_blue"
                 android:gravity="center"
                 android:text="搜尋"
                 android:textColor="@color/white" />
@@ -100,7 +100,7 @@
             <Button
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/brand_orange"
+                android:background="@drawable/corner_orange"
                 android:gravity="center"
                 android:text="商品綁定圖"
                 android:textColor="@color/white" />
