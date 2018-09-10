@@ -165,6 +165,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
                 case "edit":
                     intent = new Intent(ctx, NewBrandActivity.class);
                     intent.putExtra("type", "update");
+                    intent.putExtra("image", list.get(position).getImg());
                     intent.putExtra("pb_no", list.get(position).getPb_no());
                     intent.putExtra("code", list.get(position).getCode());
                     intent.putExtra("title", list.get(position).getTitle());

@@ -1,7 +1,6 @@
 package com.example.alex.posdemo;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -66,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void finishCurrentFragment() {
+        getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG)).commit();
+        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag(SUB_FRAGMENT_TAG)).commit();
+        showBack(false);
     }
 
     public SliderSubMenuAdapter getSubslide_adapter() {

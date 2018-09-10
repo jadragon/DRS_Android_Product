@@ -10,7 +10,7 @@
         android:right="1dp"
         android:top="1dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
+            <solid android:color="@color/selectbrand_green" />
             <stroke
                 android:width="3sp"
                 android:color="@color/punch_gray1" />

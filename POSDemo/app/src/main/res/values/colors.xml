@@ -24,4 +24,7 @@
     <color name="punch_gray2">#e6e6e6</color>
     //album
     <color name="album_white70">#96ffffff</color>
+
+    //selectbrand
+    <color name="selectbrand_green">#c3edc5</color>
 </resources>

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.alex.posdemo.GlobalVariable.UserInfo;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -30,13 +31,14 @@ public class NewBrandActivity extends Activity {
     UserInfo userInfo;
     Bitmap bitmap;
     String type;
-    String pb_no, title, code;
+    String image, pb_no, title, code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_brand);
         type = getIntent().getStringExtra("type");
+        image = getIntent().getStringExtra("image");
         pb_no = getIntent().getStringExtra("pb_no");
         title = getIntent().getStringExtra("title");
         code = getIntent().getStringExtra("code");
@@ -65,7 +67,7 @@ public class NewBrandActivity extends Activity {
                                     if (type.equals("insert")) {
                                         return new BrandApi().insert_brand(userInfo.getDu_no(), ed_code.getText().toString(), ed_title.getText().toString(), bitmap);
                                     } else if (type.equals("update")) {
-                                        return new BrandApi().updata_brand(pb_no, userInfo.getDu_no(), ed_code.getText().toString().toString(), bitmap);
+                                        return new BrandApi().updata_brand(pb_no, userInfo.getDu_no(), ed_code.getText().toString(), bitmap);
                                     } else {
                                         return null;
                                     }
@@ -102,6 +104,9 @@ public class NewBrandActivity extends Activity {
 
     private void initImageView() {
         imageView = findViewById(R.id.new_brand_image);
+        if (image != null && !image.equals("")) {
+            ImageLoader.getInstance().displayImage(image, imageView);
+        }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +160,7 @@ public class NewBrandActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(bitmap!=null)
+        if (bitmap != null)
             bitmap.recycle();
     }
 }

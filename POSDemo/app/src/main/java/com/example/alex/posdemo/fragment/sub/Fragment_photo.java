@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.alex.posdemo.MainActivity;
 import com.example.alex.posdemo.R;
 import com.example.alex.posdemo.adapter.recylclerview.PhotoListAdapter;
 
@@ -116,10 +117,18 @@ public class Fragment_photo extends Fragment {
 
                                 @Override
                                 public void onTaskAfter(JSONObject jsonObject) {
-                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                        photoListAdapter.resetAdapter();
+
+                                    if (type == PhotoListAdapter.TYPE_CHECK) {
+                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            photoListAdapter.resetAdapter();
+                                        }
+                                        new ToastMessageDialog(getContext(), ToastMessageDialog.TYPE_INFO).confirm(AnalyzeUtil.getMessage(jsonObject));
+                                    } else {
+                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            ((MainActivity) getContext()).finishCurrentFragment();
+                                        }
                                     }
-                                    new ToastMessageDialog(getContext(), ToastMessageDialog.TYPE_INFO).confirm(AnalyzeUtil.getMessage(jsonObject));
+
                                 }
                             });
                         }

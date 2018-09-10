@@ -7,9 +7,22 @@
     android:theme="@android:style/Theme.Translucent"
     android:background="@color/invisible"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:orientation="horizontal">
+        <View
+            android:id="@+id/select_brand_back"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
 <android.support.v7.widget.RecyclerView
     android:id="@+id/select_brand_recycleview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="45dp"/>
+    android:background="@color/home_gray1"
+    android:paddingRight="20dp"/>
 </LinearLayout>

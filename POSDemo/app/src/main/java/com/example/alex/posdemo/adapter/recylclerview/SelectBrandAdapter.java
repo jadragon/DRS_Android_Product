@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,62 +13,68 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.alex.posdemo.R;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import library.AnalyzeJSON.APIpojo.StockDataPojo;
-import library.AnalyzeJSON.Analyze_StockInfo;
-import library.Component.ToastMessageDialog;
+import library.AnalyzeJSON.APIpojo.NewBrandListPojo;
+import library.AnalyzeJSON.Analyze_NewBrandInfo;
 
 public class SelectBrandAdapter extends RecyclerView.Adapter<SelectBrandAdapter.RecycleHolder> {
     private Context ctx;
     DisplayMetrics dm;
-    ArrayList<StockDataPojo> list;
-    Analyze_StockInfo analyze_stockInfo;
-    private static byte TYPE_HEADER = 0;
-    private static byte TYPE_CONTENT = 1;
+    ArrayList<NewBrandListPojo> list;
+    Analyze_NewBrandInfo analyze_newBrandInfo;
+    public static byte TYPE_HEADER = 0;
+    public static byte TYPE_CONTENT = 1;
+    int pre_select;
 
     public SelectBrandAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
         dm = ctx.getResources().getDisplayMetrics();
-        analyze_stockInfo = new Analyze_StockInfo();
-        list = analyze_stockInfo.getStock_data(json);
+        analyze_newBrandInfo = new Analyze_NewBrandInfo();
+        list = analyze_newBrandInfo.getTypeRel(json);
     }
 
     @Override
     public SelectBrandAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stocklist, parent, false);
-        return new SelectBrandAdapter.RecycleHolder(view);
+        View view = null;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (250 * dm.density), ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (viewType == TYPE_HEADER) {
+            TextView textView = new TextView(ctx);
+            params.setMargins((int) (20 * dm.density), 0, (int) (20 * dm.density), (int) (20 * dm.density));
+            textView.setLayoutParams(params);
+            textView.setPadding((int) (15 * dm.density), (int) (15 * dm.density), (int) (15 * dm.density), (int) (15 * dm.density));
+            textView.setTextColor(ctx.getResources().getColor(R.color.white));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+            textView.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.background_corner6dp_gray));
+            view = textView;
+        } else if (viewType == TYPE_CONTENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newbrand_textview, parent, false);
+        }
+        return new SelectBrandAdapter.RecycleHolder(view, viewType);
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, int position) {
-        if (position % 2 == 0) {
-            holder.background.setBackgroundColor(ctx.getResources().getColor(R.color.punch_gray2));
-        } else {
-            holder.background.setBackgroundColor(ctx.getResources().getColor(R.color.punch_gray1));
+        holder.title.setText("(" + list.get(position).getCode() + ")" + list.get(position).getTitle());
+        if (getItemViewType(position) == TYPE_CONTENT) {
+            if (list.get(position).isSelect()) {
+                holder.nike.setVisibility(View.VISIBLE);
+                holder.title.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.background_edit_green));
+                holder.title.setPadding((int) (15 * dm.density), (int) (15 * dm.density), (int) (15 * dm.density), (int) (15 * dm.density));
+            } else {
+                holder.nike.setVisibility(View.INVISIBLE);
+                holder.title.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.background_edit_white));
+                holder.title.setPadding((int) (15 * dm.density), (int) (15 * dm.density), (int) (15 * dm.density), (int) (15 * dm.density));
+            }
         }
-        holder.line.setText("" + (position + 1));
-        holder.store.setText(list.get(position).getStore());
-        ImageLoader.getInstance().displayImage(list.get(position).getImg(), holder.img);
-        holder.brand_title.setText(list.get(position).getBrand_title());
-        holder.name.setText(list.get(position).getName());
-        holder.pcode.setText(list.get(position).getPcode());
-        holder.color.setText(list.get(position).getColor());
-        holder.size.setText(list.get(position).getSize());
-        holder.fprice.setText(list.get(position).getFprice());
-        holder.price.setText(list.get(position).getPrice());
-        holder.total.setText(list.get(position).getTotal());
-        holder.stotal.setText(list.get(position).getStotal());
-        holder.flaw_total.setText(list.get(position).getFlaw_total());
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == TYPE_HEADER) {
+        if (list.get(position).getType() == TYPE_HEADER) {
             return TYPE_HEADER;
         } else {
             return TYPE_CONTENT;
@@ -97,54 +104,54 @@ public class SelectBrandAdapter extends RecyclerView.Adapter<SelectBrandAdapter.
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        LinearLayout background;
-        ImageView img;
-        TextView line, store, brand_title, name, pcode, color, size, fprice, price, total, stotal, flaw_total;
+        TextView title;
+        ImageView nike;
 
-        public RecycleHolder(View view) {
+        public RecycleHolder(View view, int viewType) {
             super(view);
-            background = view.findViewWithTag("background");
-            line = view.findViewWithTag("line");
-            store = view.findViewWithTag("store");
-            img = view.findViewWithTag("img");
-            brand_title = view.findViewWithTag("brand_title");
-            name = view.findViewWithTag("name");
-            pcode = view.findViewWithTag("pcode");
-            color = view.findViewWithTag("color");
-            size = view.findViewWithTag("size");
-            fprice = view.findViewWithTag("fprice");
-            price = view.findViewWithTag("price");
-            total = view.findViewWithTag("total");
-            stotal = view.findViewWithTag("stotal");
-            flaw_total = view.findViewWithTag("flaw_total");
-            itemView.setOnClickListener(this);
+            if (viewType == TYPE_HEADER) {
+                title = (TextView) view;
+            } else {
+                title = view.findViewWithTag("text");
+                nike = view.findViewWithTag("nike");
+                itemView.setOnClickListener(this);
+            }
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-        }
+            if (pre_select != position) {
+                list.get(position).setSelect(true);
+                list.get(pre_select).setSelect(false);
+            }
+            if (pre_select != 0)
+                notifyItemChanged(pre_select);
+            pre_select = position;
+            notifyItemChanged(pre_select);
 
+        }
+    }
+
+    public String getSelectTitle() {
+        if (pre_select != 0) {
+            return list.get(pre_select).getTitle();
+        } else {
+            return "";
+        }
+    }
+
+    public String getSelectCode() {
+        if (pre_select != 0) {
+            return list.get(pre_select).getCode();
+        } else {
+            return "";
+        }
     }
 
     public void setFilter(JSONObject json) {
-        list = new Analyze_StockInfo().getStock_data(json);
+        list = analyze_newBrandInfo.getTypeRel(json);
         notifyDataSetChanged();
     }
 
-    public boolean setFilterMore(JSONObject json) {
-        int presize = list.size();
-        if (presize > 0) {
-            if (json != null && analyze_stockInfo.getStock_data(json).size() > 0) {
-                list.addAll(analyze_stockInfo.getStock_data(json));
-                notifyItemInserted(presize + 1);
-                //  notifyItemChanged(presize + 1, itemsList.size() + 1);
-                return true;
-            } else {
-                new ToastMessageDialog(ctx, ToastMessageDialog.TYPE_INFO).show("已無更多資料");
-                return false;
-            }
-        }
-        return false;
-    }
 }
