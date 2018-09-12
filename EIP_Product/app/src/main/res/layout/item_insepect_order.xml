@@ -3,84 +3,86 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+
     <View
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
     <TextView
+        android:id="@+id/row1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
         android:padding="2.5dp"
-        android:text="序\n號"
-        android:tag="row1"/>
+        android:text="序號" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
     <TextView
+        android:id="@+id/row2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="5"
+        android:background="@android:color/white"
         android:gravity="center"
         android:padding="2.5dp"
-        android:text="Item No"
-        android:tag="row2"/>
+        android:text="Item No" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
     <TextView
+        android:id="@+id/row3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
         android:padding="2.5dp"
-        android:text="採樣總數"
-        android:tag="row3"/>
+        android:text="採樣總數" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
+
+    <EditText
+        android:id="@+id/row4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:padding="2.5dp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
 
     <TextView
+        android:id="@+id/row5"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
         android:padding="2.5dp"
-        android:text="出貨總數"
-        android:tag="row4"/>
+        android:text="抽樣數" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:text="抽樣數"
-        android:tag="row5"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="4"
         android:orientation="vertical">
 
@@ -91,56 +93,56 @@
             android:layout_weight="2"
             android:orientation="horizontal">
 
-            <TextView
+            <EditText
+                android:id="@+id/row6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/white"
                 android:gravity="center"
-                android:padding="2.5dp"
-                android:text="尺\n寸"
-                android:tag="row6"/>
+                android:padding="2.5dp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#000000" />
+                android:background="@android:color/black" />
 
-            <TextView
+            <EditText
+                android:id="@+id/row7"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/white"
                 android:gravity="center"
-                android:padding="2.5dp"
-                android:text="功\n能"
-                android:tag="row7"/>
+                android:padding="2.5dp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#000000" />
+                android:background="@android:color/black" />
 
-            <TextView
+            <EditText
+                android:id="@+id/row8"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/white"
                 android:gravity="center"
-                android:padding="2.5dp"
-                android:text="表\n面"
-                android:tag="row8"/>
+                android:padding="2.5dp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#000000" />
+                android:background="@android:color/black" />
 
-            <TextView
+            <EditText
+                android:id="@+id/row9"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/white"
                 android:gravity="center"
-                android:padding="2.5dp"
-                android:text="包\n裝"
-                android:tag="row9"/>
+                android:padding="2.5dp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -148,162 +150,192 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
-    <TextView
+    <CheckBox
+        android:id="@+id/row10"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="2.5dp"
-        android:text="正嘜"
-        android:tag="row10"/>
+        android:padding="2.5dp" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
-    <TextView
+    <CheckBox
+        android:id="@+id/row11"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="2.5dp"
-        android:text="測嘜"
-        android:tag="row11"/>
+        android:padding="2.5dp" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:text="外箱\n長*寬*高\n(公分)"
-        android:tag="row12"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#000000" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:text="毛重\nKG"
-        android:tag="row13"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:orientation="vertical">
+        android:layout_weight="3"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+        <EditText
+            android:id="@+id/row12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:padding="2.5dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:text="可\n出"
-                android:tag="row14"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="*" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#000000" />
+        <EditText
+            android:id="@+id/row13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:padding="2.5dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:text="特\n採"
-                android:tag="row15"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="*" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#000000" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:text="重\n工"
-                android:tag="row16"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#000000" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:text="拒\n收"
-                android:tag="row17"/>
-
-        </LinearLayout>
+        <EditText
+            android:id="@+id/row14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:padding="2.5dp" />
     </LinearLayout>
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
+
+    <EditText
+        android:id="@+id/row15"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:padding="2.5dp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/row16"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="2.5dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
+
+            <RadioButton
+                android:id="@+id/row17"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="2.5dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
+
+            <RadioButton
+                android:id="@+id/row18"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="2.5dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
+
+            <RadioButton
+                android:id="@+id/row19"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="2.5dp" />
+
+        </RadioGroup>
+    </FrameLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
 
     <TextView
+        android:id="@+id/row20"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
         android:gravity="center"
         android:padding="2.5dp"
-        android:text="預定出貨日"
-        android:tag="row18"/>
+        android:text="輕觸選擇日期" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
-    <TextView
+    <EditText
+        android:id="@+id/row21"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
+        android:background="@android:color/white"
         android:gravity="center"
-        android:padding="2.5dp"
-        android:text="備註"
-        android:tag="row19"/>
+        android:padding="2.5dp" />
 
     <View
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="@android:color/black" />
 
 
 </LinearLayout>

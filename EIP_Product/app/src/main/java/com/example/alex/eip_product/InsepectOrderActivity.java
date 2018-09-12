@@ -5,27 +5,29 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import Component.PaintView;
+import db.SQLiteDatabaseHandler;
 
 public class InsepectOrderActivity extends AppCompatActivity {
 
 
-    private TableLayout alltable, courseTable;
-    private Button academyButton, saveButton;
+    private LinearLayout alltable, courseTable;
+    private Button academyButton, saveButton, resetSignButton;
+    int line = 1;
+    PaintView paintView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,12 @@ public class InsepectOrderActivity extends AppCompatActivity {
                 startActivity(new Intent(InsepectOrderActivity.this, ImageViewActivity.class));
             }
         });
+        resetSignButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paintView.resetCanvas();
+            }
+        });
     }
 
     void findView() {
@@ -56,6 +64,8 @@ public class InsepectOrderActivity extends AppCompatActivity {
         courseTable = findViewById(R.id.kccx_course_table);
         academyButton = findViewById(R.id.kccx_chaxun1);
         saveButton = findViewById(R.id.kccx_chaxun2);
+        resetSignButton = findViewById(R.id.kccx_chaxun3);
+        paintView = findViewById(R.id.paintView);
     }
 
     /**
@@ -88,7 +98,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
          * 该主要完成将查询得到的数据以tablerow形式显示。
          */
         protected void onPostExecute(String result) {
-            TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 3);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
             int rows = resultList.size();
             if (result.equals("flag")) {
                 if (rows != 0) {
@@ -107,9 +117,9 @@ public class InsepectOrderActivity extends AppCompatActivity {
                         courseTable.addView(view);
                     }
                     view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
-                    for (int i = 1; i < 20; i++) {
-                        ((TextView) view.findViewWithTag("row" + i)).setText("123");
-                    }
+
+                    ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
+                    setAnimation(view.findViewById(R.id.row20));
                     courseTable.addView(view);
 
 
@@ -117,11 +127,22 @@ public class InsepectOrderActivity extends AppCompatActivity {
             }
         }
 
+        public void setAnimation(View view) {
+            //闪烁
+            AlphaAnimation alphaAnimation1 = new AlphaAnimation(0.1f, 1.0f);
+            alphaAnimation1.setDuration(1000);
+            alphaAnimation1.setRepeatCount(Animation.INFINITE);
+            alphaAnimation1.setRepeatMode(Animation.REVERSE);
+            view.setAnimation(alphaAnimation1);
+            alphaAnimation1.start();
+        }
     }
 
 
     //save as picture
     public void savePicture(View v) {
+        //儲存在SD卡
+        /*
         try {
             File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "test.png");
             newFile.getParentFile().mkdirs();
@@ -134,25 +155,23 @@ public class InsepectOrderActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*
-            FileOutputStream fout=new FileOutputStream("/sdcard/draw.png");
-            vBitmap.compress(Bitmap.CompressFormat.PNG,100,fout);
-            fout.close();
-            */
         } catch (Exception x) {
             x.printStackTrace();
         }
+        */
+        //儲存在資料庫
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap vBitmap = convertViewToBitmap(v);
+        vBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bitmapByte = baos.toByteArray();
+        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(InsepectOrderActivity.this);
+        db.addImage(bitmapByte);
+        db.close();
     }
 
 
     public static Bitmap convertViewToBitmap(View view) {
-        // view.setDrawingCacheEnabled(true);
-        // view.buildDrawingCache();
-        //   Bitmap bitmap = view.getDrawingCache();
-
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-
-
         view.draw(new Canvas(bitmap));
         return bitmap;
     }
