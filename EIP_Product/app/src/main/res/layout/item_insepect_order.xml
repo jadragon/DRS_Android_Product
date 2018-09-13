@@ -158,7 +158,9 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@drawable/checkbox_nike"
+        android:button="@null"/>
 
     <View
         android:layout_width="1dp"
@@ -171,7 +173,9 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@drawable/checkbox_nike"
+        android:button="@null"/>
 
     <View
         android:layout_width="1dp"
@@ -260,7 +264,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:padding="2.5dp" />
+                android:padding="2.5dp"
+                android:button="@null"
+                android:background="@drawable/radio_nike"/>
 
             <View
                 android:layout_width="1dp"
@@ -273,7 +279,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:padding="2.5dp" />
+                android:padding="2.5dp"
+                android:button="@null"
+                android:background="@drawable/radio_nike"/>
 
             <View
                 android:layout_width="1dp"
@@ -286,7 +294,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:padding="2.5dp" />
+                android:padding="2.5dp"
+                android:button="@null"
+                android:background="@drawable/radio_nike"/>
 
             <View
                 android:layout_width="1dp"
@@ -299,7 +309,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:padding="2.5dp" />
+                android:padding="2.5dp"
+                android:button="@null"
+                android:background="@drawable/radio_nike"/>
 
         </RadioGroup>
     </FrameLayout>
@@ -309,14 +321,14 @@
         android:layout_height="match_parent"
         android:background="@android:color/black" />
 
-    <TextView
+    <EditText
         android:id="@+id/row20"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
         android:gravity="center"
         android:padding="2.5dp"
-        android:text="輕觸選擇日期" />
+        android:background="@android:color/white"/>
 
     <View
         android:layout_width="1dp"

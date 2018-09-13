@@ -14,7 +14,7 @@ public class GlobalVariable extends Application {
 
 
     private void initImageLoader() {
-        HttpUtils.setContext(getApplicationContext());
+       HttpUtils.setContext(getApplicationContext());
         /*
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
@@ -53,4 +53,5 @@ public class GlobalVariable extends Application {
 
 */
     }
+
 }

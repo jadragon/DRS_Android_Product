@@ -4,33 +4,23 @@ import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
+import java.util.List;
 
 public class PostByteArrayformImage {
     /**
@@ -40,52 +30,14 @@ public class PostByteArrayformImage {
     static InputStream is = null;
     static String json = "";
 
-    public JSONObject getJSONFromUrl(String url, String token, byte[] image) {
+    public JSONObject getJSONFromUrl(String url, List<NameValuePair> params, byte[] image) throws Exception {
+
         // Making HTTP request
         try {
-            KeyStore trustStore = null;
-            SSLSocketFactory socketFactory = null;
-            try {
-                trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            } catch (KeyStoreException e) {
-                e.printStackTrace();
-            }
-            if (trustStore == null) {
-                return null;
-            }
-            InputStream crtInput = null;
-            // 載入憑證檔
-            try {
-                // 載入憑證檔
-                crtInput = HttpUtils.getContext().getAssets().open("cert.crt");
-                CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                InputStream caInput = new BufferedInputStream(crtInput);
-                Certificate ca = cf.generateCertificate(caInput);
-                trustStore.load(null, null);
-                trustStore.setCertificateEntry("ca", ca);
-                socketFactory = new SSLSocketFactory(trustStore);
-            } catch (CertificateException e) {
-                e.printStackTrace();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (KeyStoreException e) {
-                e.printStackTrace();
-            } catch (UnrecoverableKeyException e) {
-                e.printStackTrace();
-            } catch (KeyManagementException e) {
-                e.printStackTrace();
-            }
-            HttpClient httpClient = new DefaultHttpClient();
-            // Create socket factory with given keystore.
-            Scheme sch = new Scheme("https", socketFactory, 443);
-            httpClient.getConnectionManager().getSchemeRegistry().register(sch);
-
-
             // defaultHttpClient
+            DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            /* example for setting a HttpMultipartMode */
-            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
             /*
             if (bm != null) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -93,19 +45,17 @@ public class PostByteArrayformImage {
                 byte[] data = bos.toByteArray();
                 }
                 */
-            /* example for adding an image part */
-            try {
-                ByteArrayBody bab = new ByteArrayBody(image, 123 + ".jpg");
-                builder.addPart("fimg", bab);
-                builder.addPart("token", new StringBody(token));
-                builder.addPart("gok", new StringBody("Dr@_K4y51G2A0w26B8OWkfQ=="));
-                builder.addPart("lang", new StringBody("0"));
+            ByteArrayBody bab = new ByteArrayBody(image, 123 + ".jpg");
+            entity.addPart("fimg", bab);
 
+            try {
+                for (NameValuePair nameValuePair : params) {
+                    entity.addPart(nameValuePair.getName(), new StringBody(nameValuePair.getValue()));
+                }
             } catch (UnsupportedEncodingException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            HttpEntity entity = builder.build();
             httpPost.setEntity(entity);
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -148,10 +98,13 @@ public class PostByteArrayformImage {
         // try parse the string to a JSON object
         try {
             jObj = new JSONObject(json);
+            if (!jObj.getBoolean("Success")) {
+                throw new Exception("Success is false!!!!");
+            }
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
-
+        Log.e("JSON", "" + jObj);
         // return JSON String
         return jObj;
 

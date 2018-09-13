@@ -2,7 +2,6 @@ package com.example.alex.eip_product;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Component.PaintView;
+import Utils.CommonUtil;
 import db.SQLiteDatabaseHandler;
 
 public class InsepectOrderActivity extends AppCompatActivity {
@@ -28,6 +28,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
     private Button academyButton, saveButton, resetSignButton;
     int line = 1;
     PaintView paintView;
+    TextView title, online;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,8 @@ public class InsepectOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_insepect_order);
 
         findView();
-
-
+        setAnimation(title);
+        setAnimation(online);
         // Apply the adapter to the spinner
         academyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +67,8 @@ public class InsepectOrderActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.kccx_chaxun2);
         resetSignButton = findViewById(R.id.kccx_chaxun3);
         paintView = findViewById(R.id.paintView);
+        online = findViewById(R.id.online);
+        title = findViewById(R.id.title);
     }
 
     /**
@@ -119,7 +122,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
                     view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
 
                     ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
-                    setAnimation(view.findViewById(R.id.row20));
+                    //setAnimation(view.findViewById(R.id.row20));
                     courseTable.addView(view);
 
 
@@ -127,17 +130,17 @@ public class InsepectOrderActivity extends AppCompatActivity {
             }
         }
 
-        public void setAnimation(View view) {
-            //闪烁
-            AlphaAnimation alphaAnimation1 = new AlphaAnimation(0.1f, 1.0f);
-            alphaAnimation1.setDuration(1000);
-            alphaAnimation1.setRepeatCount(Animation.INFINITE);
-            alphaAnimation1.setRepeatMode(Animation.REVERSE);
-            view.setAnimation(alphaAnimation1);
-            alphaAnimation1.start();
-        }
-    }
 
+    }
+    public void setAnimation(View view) {
+        //闪烁
+        AlphaAnimation alphaAnimation1 = new AlphaAnimation(0.1f, 1.0f);
+        alphaAnimation1.setDuration(1000);
+        alphaAnimation1.setRepeatCount(Animation.INFINITE);
+        alphaAnimation1.setRepeatMode(Animation.REVERSE);
+        view.setAnimation(alphaAnimation1);
+        alphaAnimation1.start();
+    }
 
     //save as picture
     public void savePicture(View v) {
@@ -161,7 +164,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
         */
         //儲存在資料庫
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Bitmap vBitmap = convertViewToBitmap(v);
+        Bitmap vBitmap = CommonUtil.convertViewToBitmap(v);
         vBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] bitmapByte = baos.toByteArray();
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(InsepectOrderActivity.this);
@@ -170,10 +173,13 @@ public class InsepectOrderActivity extends AppCompatActivity {
     }
 
 
-    public static Bitmap convertViewToBitmap(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        view.draw(new Canvas(bitmap));
-        return bitmap;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
+            online.setText("線上模式");
+        } else {
+            online.setText("離線模式");
+        }
     }
-
 }
