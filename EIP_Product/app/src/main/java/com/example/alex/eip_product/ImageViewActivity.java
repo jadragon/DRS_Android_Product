@@ -64,13 +64,13 @@ public class ImageViewActivity extends AppCompatActivity {
                         for (final ImagePojo data : arrayList) {
                             int number = new Random().nextInt(50);
                             try {
-                                json = new PhotoApi().insert_photo("H9Tv7tBs8Esr914/MB62Aw==", "RalpBDfrS2EPx6t8QzgpcA==", number + "", data.getImage());
+                                json = new PhotoApi().updatePortrait("MNj@_xDWWV6wdtdgBYOKssw==", data.getImage());
                                 db.updatePhotoStatus(data.getId(), 1);
                                 t++;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        progress.setProgress((int) (((float)t / arrayList.size()) * 100));
+                                        progress.setProgress((int) (((float) t / arrayList.size()) * 100));
                                     }
                                 });
                             } catch (Exception e) {
