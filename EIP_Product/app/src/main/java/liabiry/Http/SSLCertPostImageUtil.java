@@ -45,7 +45,7 @@ public class SSLCertPostImageUtil {
                 byte[] data = bos.toByteArray();
                 }
                 */
-            ByteArrayBody bab = new ByteArrayBody(image, 123 + ".jpg");
+            ByteArrayBody bab = new ByteArrayBody(image, 123 + ".png");
             entity.addPart("fimg", bab);
 
             try {

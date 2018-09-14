@@ -11,10 +11,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.alex.eip_product.R;
+
 import java.util.ArrayList;
 
 public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
-
+    Context context;
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -23,25 +25,37 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "android_common";
 
 
-    // Login table name
+    // Insepect table name
     private static final String TABLE_INSEPECT = "getInsepect";
-    // Login Table Columns names
+    // Insepect Table Columns names
     private static final String KEY_ID = "_id";
     private static final String KEY_STATUS = "status";
     private static final String KEY_IMAGE = "image";
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_INSEPECT + "("
+    private static final String CREATE_INSEPECT_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_INSEPECT + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_STATUS + " INTEGER ,"
             + KEY_IMAGE + " BLOB" + ")";
 
+    // Failed table name
+    private static final String TABLE_FAILED = "getFailed";
+    // Failed Table Columns names
+    private static final String KEY_TYPE = "type";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String CREATE_FAILED_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_FAILED + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_TYPE + " INTEGER ,"
+            + KEY_DESCRIPTION + " TEXT" + ")";
+
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_INSEPECT_TABLE);
+        db.execSQL(CREATE_FAILED_TABLE);
     }
 
     // Upgrading database
@@ -49,6 +63,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSEPECT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAILED);
         // Create tables again
         onCreate(db);
     }
@@ -85,7 +100,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      */
-    public void updatePhotoStatus(int id,int status) {
+    public void updatePhotoStatus(int id, int status) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_STATUS, status);
@@ -103,6 +118,61 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // Delete All Rows
         db.delete(TABLE_INSEPECT, null, null);
         db.close();
+    }
+
+    public void initFailTable() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String[] type = context.getResources().getStringArray(R.array.type1);
+        for (String description : type) {
+            values.put(KEY_TYPE, 0);
+            values.put(KEY_DESCRIPTION, description);
+            db.insert(TABLE_FAILED, null, values);
+        }
+        type = context.getResources().getStringArray(R.array.type2);
+        for (String description : type) {
+            values.put(KEY_TYPE, 1);
+            values.put(KEY_DESCRIPTION, description);
+            db.insert(TABLE_FAILED, null, values);
+        }
+        type = context.getResources().getStringArray(R.array.type3);
+        for (String description : type) {
+            values.put(KEY_TYPE, 2);
+            values.put(KEY_DESCRIPTION, description);
+            db.insert(TABLE_FAILED, null, values);
+        }
+        type = context.getResources().getStringArray(R.array.type4);
+        for (String description : type) {
+            values.put(KEY_TYPE, 3);
+            values.put(KEY_DESCRIPTION, description);
+            db.insert(TABLE_FAILED, null, values);
+        }
+        db.close(); // Closing database connection
+    }
+
+    public void addFailTableItem(int type, String description) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TYPE, type);
+        values.put(KEY_DESCRIPTION, description);
+        db.insert(TABLE_FAILED, null, values);
+        db.close(); // Closing database connection
+    }
+
+    public ArrayList<String> getFailedDescription(int type) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        String selectQuery = "SELECT  " + KEY_DESCRIPTION + " FROM " + TABLE_FAILED + " WHERE " + KEY_TYPE + " = " + type;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        while (cursor.moveToNext()) {
+            arrayList.add(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return arrayList;
     }
 
 }

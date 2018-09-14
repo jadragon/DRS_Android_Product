@@ -15,26 +15,22 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import Component.PaintView;
 import Utils.CommonUtil;
 import db.SQLiteDatabaseHandler;
 
 public class InsepectOrderActivity extends AppCompatActivity {
-
-
     private LinearLayout alltable, courseTable;
     private Button academyButton, saveButton, resetSignButton;
     int line = 1;
     PaintView paintView;
-    TextView title, online;
-
+    TextView title, online, faild_txt_description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insepect_order);
-
+        initFailedTable();
         findView();
         setAnimation(title);
         setAnimation(online);
@@ -42,7 +38,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
         academyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MyTask1().execute();
+                new AddColumTask().execute();
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +54,12 @@ public class InsepectOrderActivity extends AppCompatActivity {
                 paintView.resetCanvas();
             }
         });
+        faild_txt_description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+           startActivity(new Intent(InsepectOrderActivity.this,SelectFailedActivity.class));
+            }
+        });
     }
 
     void findView() {
@@ -69,69 +71,46 @@ public class InsepectOrderActivity extends AppCompatActivity {
         paintView = findViewById(R.id.paintView);
         online = findViewById(R.id.online);
         title = findViewById(R.id.title);
+        faild_txt_description = findViewById(R.id.faild_txt_description);
     }
 
-    /**
-     * @author zhuzhp
-     * @ClassName: MyTask1
-     * @Description: 根据学院名查询课程的AsyncTask内部类
-     * @date 2014年4月8日 下午8:24:37
-     */
-    private class MyTask1 extends AsyncTask<String, Integer, String> {
 
-        List<String> resultList = new ArrayList<>();
-        int i = 0;
-
+    private class AddColumTask extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
-            resultList.add("11111");
-            resultList.add("22222");
-            resultList.add("33333");
-            resultList.add("44444");
-            resultList.add("55555");
-            resultList.add("66666");
-            resultList.add("77777");
-            resultList.add("88888");
-            resultList.add("99999");
             return "flag";
         }
 
         @Override
-        /**
-         * 该主要完成将查询得到的数据以tablerow形式显示。
-         */
         protected void onPostExecute(String result) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
-            int rows = resultList.size();
             if (result.equals("flag")) {
-                if (rows != 0) {
-                    View view = null;
-
-                    if (courseTable.getChildCount() % 3 == 0) {
-                        view = new View(InsepectOrderActivity.this);
-                        view.setLayoutParams(params);
-                        view.setBackgroundColor(getResources().getColor(android.R.color.black));
-                        courseTable.addView(view);
-                    } else {
-                        view = new View(InsepectOrderActivity.this);
-                        params.height = 1;
-                        view.setLayoutParams(params);
-                        view.setBackgroundColor(getResources().getColor(android.R.color.black));
-                        courseTable.addView(view);
-                    }
-                    view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
-
-                    ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
-                    //setAnimation(view.findViewById(R.id.row20));
+                View view = null;
+                if (courseTable.getChildCount() % 3 == 0) {
+                    view = new View(InsepectOrderActivity.this);
+                    view.setLayoutParams(params);
+                    view.setBackgroundColor(getResources().getColor(android.R.color.black));
                     courseTable.addView(view);
-
-
+                } else {
+                    view = new View(InsepectOrderActivity.this);
+                    params.height = 1;
+                    view.setLayoutParams(params);
+                    view.setBackgroundColor(getResources().getColor(android.R.color.black));
+                    courseTable.addView(view);
                 }
+                view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
+
+                ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
+                //setAnimation(view.findViewById(R.id.row20));
+                courseTable.addView(view);
+
+
             }
         }
 
 
     }
+
     public void setAnimation(View view) {
         //闪烁
         AlphaAnimation alphaAnimation1 = new AlphaAnimation(0.1f, 1.0f);
@@ -181,5 +160,15 @@ public class InsepectOrderActivity extends AppCompatActivity {
         } else {
             online.setText("離線模式");
         }
+    }
+
+
+    void initFailedTable() {
+        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(this);
+        ArrayList<String> arrayList = db.getFailedDescription(0);
+        if (arrayList.size() <= 0) {
+            db.initFailTable();
+        }
+        db.close();
     }
 }

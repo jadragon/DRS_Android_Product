@@ -1,0 +1,35 @@
+<resources>
+    <string-array name="type1">
+        <item>尺寸與圖面不符</item>
+        <item>尺寸超過公差</item>
+        <item>孔位cc超過公差</item>
+    </string-array>
+    <string-array name="type2">
+        <item>牙型錯誤</item>
+        <item>漏攻牙/崩牙</item>
+        <item>牙深不足/歪斜</item>
+        <item>牙洞難鎖</item>
+        <item>把手翹腳</item>
+        <item>活動性不佳</item>
+        <item>機構做動異常</item>
+    </string-array>
+    <string-array name="type3">
+        <item>刮傷.撞傷.變形.毛邊.麻點.生鏽</item>
+        <item>起泡.亮點.毛刺.沙孔.吐酸.髒汙.白斑</item>
+        <item>烤漆橘皮.流漆.色差.顏色錯誤.脫落</item>
+        <item>電鍍色差.顏色錯誤.脫落</item>
+        <item>未過3H硬度測試</item>
+        <item>未過24小時中性鹽霧測試</item>
+        <item>未過48小時中性鹽霧測試</item>
+    </string-array>
+    <string-array name="type4">
+        <item>產品混裝/型號錯誤</item>
+        <item>各項配件/螺絲/包裝錯誤.遺漏</item>
+        <item>各項配件/螺絲/尺寸錯誤</item>
+        <item>條碼/標籤/貼紙張貼錯誤.遺漏</item>
+        <item>產品/外箱/內盒包裝數量錯誤</item>
+        <item>正/側嘜/內盒印刷錯誤</item>
+        <item>外箱/內盒/包材尺寸錯誤</item>
+        <item>包材/內外箱/棧板破損</item>
+    </string-array>
+</resources>
