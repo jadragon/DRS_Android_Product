@@ -1,3 +1,114 @@
 <resources>
     <string name="app_name">EIP_Product</string>
+    <string name="title_name1">ship: </string>
+        
+    <string name="title_name2">Supplier: </string>
+        
+    <string name="title_name3">Purchase order number: </string>
+        
+    <string name="title_name4">print date: </string>
+        
+    <string name="title_name5">Customer: </string>
+        
+    <string name="title_name6">INVOICE NO.:</string>
+        
+    <string name="table_header1">order number </string>
+        
+    <string name="table_header2">Item No</string>
+        
+    <string name="table_header3">total number of samples</string>
+        
+    <string name="table_header4">Total shipments </string>
+        
+    <string name="table_header5">sample number </string>
+        
+    <string name="table_header6">Number of bad quality </string>
+        
+    <string name="table_header7">size </string>
+        
+    <string name="table_header8">function </string>
+        
+    <string name="table_header9"> surface </string>
+        
+    <string name="table_header10">Package </string>
+        
+    <string name="table_header11">Positive</string>
+        
+    <string name="table_header12">Negative</string>
+        
+    <string name="table_header13"> outer box \nlength * width * height (cm) </string>
+        
+    <string name="table_header14">hair weight\nKG</string>
+        
+    <string name="table_header15">can be shipped </string>
+        
+    <string name="table_header16"> not shipping </string>
+        
+    <string name="table_header17"> can be out </string>
+        
+    <string name="table_header18"> special </string>
+        
+    <string name="table_header19">Rework </string>
+        
+    <string name="table_header20">Rejected</string>
+        
+    <string name="table_header21"> scheduled shipping date </string>
+        
+    <string name="table_header22">Remarks </string>
+        
+    <string name="table_footer1">not qualified </string>
+        
+    <string name="table_footer2">Three thousand inspectors failed to record the name </string>
+        
+    <string name="table_footer3">Three thousand business reply follow-up suggestions </string>
+        
+    <string name="table_footer4">Inspector: </string>
+        
+    <string name="table_footer5">date</string>
+        
+    <string name="table_footer6">business personnel: </string>
+        
+    <string name="table_footer7">fill out the description </string>
+        
+    <string name="table_footer8">* Sampling inspection standards are subject to the requirements of the finished product inspection specification procedure. * If the total number of purchases is equal to the total number of shipments, the total number of shipments is exempt. If there is any discrepancy, please fill in the total shipments according to the actual data. * If the positive side is consistent, please indicate it as V; if the foreign country is wide and the gross weight is the same as the purchase order, it is exempted. If it does not match the purchase order, you need to fill in the notice to modify the shipping information. * Please confirm the shipment with V. It means that if it is determined that it is specially shipped or rejected, the 3,000 business needs to reply to the follow-up suggestions, and the rework can be shipped free.</string>
+        
+    <string name="table_footer9">vendor tester: </string>
+    <string-array name="language">
+        <item>English</item>
+        <item>简体中文</item>
+        <item>繁體中文</item>
+    </string-array>
+    <string-array name="type1">
+                <item> size does not match the drawing </item>
+                <item> size exceeds tolerance </item>
+                <item> hole position cc exceeds tolerance </item>
+            </string-array>
+        <string-array name="type2">
+            <item>dental error</item>
+            <item> missing tapping/disintegration</item>
+            <item> insufficient tooth depth/skew</item>
+            <item> difficult to lock the cavity</item>
+            <item>Handle feet</item>
+            <item> is not active</item>
+            <item>Institutional anomaly</item>
+        </string-array>
+        <string-array name="type3">
+            <item>Scratch. Bump. Deformation. Burr. Pitting. Rusty</item>
+            <item>bubble. Highlights. Burr. Shakong. Sour acid. Dirty. White spots</item>
+            <item>painted orange peel. Flow paint. Chromatic aberration. Color error. Shedding</item>
+            <item> plating color difference. Color error. Shedding</item>
+            <item> has not passed 3H hardness test </item>
+            <item> less than 24 hours of neutral salt spray test</item>
+            <item> less than 48 hours of neutral salt spray test</item>
+        </string-array>
+        <string-array name="type4">
+            <item> product mix / model error </item>
+            <item> Accessories / Screws / Packaging Errors. Missing </item>
+            <item> Accessories/screws/size error</item>
+            <item>Barcode/Label/Paste Paper Sticker Error. Missing </item>
+            <item> product / outer box / inner box packaging error </item>
+            <item> positive/side 唛/inside box printing error </item>
+            <item> wrong size of outer box/inner box/package material </item>
+            <item>Package / inner and outer box / pallet damage </item>
+        </string-array>
 </resources>

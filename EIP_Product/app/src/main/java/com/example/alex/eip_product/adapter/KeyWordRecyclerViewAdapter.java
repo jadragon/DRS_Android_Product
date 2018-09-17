@@ -1,5 +1,6 @@
 package com.example.alex.eip_product.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -7,14 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONObject;
+import com.example.alex.eip_product.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +83,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
+        map.put("failed_type", "0");
         map.put("description", "其他");
         list.add(map);
         map = new HashMap<>();
@@ -96,6 +100,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
+        map.put("failed_type", "1");
         map.put("description", "其他");
         list.add(map);
         map = new HashMap<>();
@@ -112,6 +117,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
+        map.put("failed_type", "2");
         map.put("description", "其他");
         list.add(map);
         map = new HashMap<>();
@@ -128,6 +134,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
+        map.put("failed_type", "3");
         map.put("description", "其他");
         list.add(map);
     }
@@ -145,7 +152,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         //layoutParams.setMargins((int) (20 * dm.density), (int) (20 * dm.density), (int) (20 * dm.density), (int) (20 * dm.density));
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
-        textView.setPadding((int) (20 * dm.density), (int) (20* dm.density), (int) (20 * dm.density), (int) (20 * dm.density));
+        textView.setPadding((int) (20 * dm.density), (int) (10 * dm.density), (int) (20 * dm.density), (int) (10 * dm.density));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(10 * dm.density);
@@ -214,18 +221,39 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             }
 
             if (KeyWordRecyclerViewAdapter.this.getItemViewType(position) == TYPE_OTHER) {
-                Toast.makeText(ctx, "其他", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                View customerview = LayoutInflater.from(ctx).inflate(R.layout.add_faild_reason, null);
+                builder.setView(customerview);
+                final AlertDialog alertDialog = builder.create();
+                final EditText editText = customerview.findViewById(R.id.add_failed_reason_edit);
+                Button cancel = customerview.findViewById(R.id.add_failed_reason_cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                Button confirm = customerview.findViewById(R.id.add_failed_reason_confrim);
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!editText.getText().toString().equals("")) {
+                            SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
+                            db.addFailTableItem(Integer.parseInt(list.get(getAdapterPosition()).get("failed_type")), editText.getText().toString());
+                            db.close();
+                            setFilter();
+                            alertDialog.dismiss();
+                        }
+                    }
+                });
+                alertDialog.show();
                 return;
             }
         }
     }
 
-    public void setFilter(JSONObject json) {
-        if (json != null) {
-            initList();
-        } else {
-            list = new ArrayList<>();
-        }
+    public void setFilter() {
+        initList();
         notifyDataSetChanged();
     }
 

@@ -18,6 +18,7 @@ KeyWordRecyclerViewAdapter keyWordRecyclerViewAdapter;
         recyclerView = findViewById(R.id.select_failed_recyclerview);
         keyWordRecyclerViewAdapter=new KeyWordRecyclerViewAdapter(this);
         AutoNewLineLayoutManager   autoNewLineLayoutManager = new AutoNewLineLayoutManager(this);
+        autoNewLineLayoutManager.setDivider(20);
         autoNewLineLayoutManager.setAloneViewType(KeyWordRecyclerViewAdapter.TYPE_HEADER);
         recyclerView.setLayoutManager(autoNewLineLayoutManager);
         recyclerView.setAdapter(keyWordRecyclerViewAdapter);

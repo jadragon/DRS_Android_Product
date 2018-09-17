@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">验货表单系统</string>
+    <string name="title_name1">船务：</string>
+    <string name="title_name3">採购单号码：</string>
+    <string name="title_name4">列印日期：</string>
+    <string name="title_name5">客户：</string>
+    <string name="title_name6">INVOICE NO.：</string>
+    <string name="table_header1">序\n号</string>
+    <string name="table_header2">Item No</string>
+    <string name="table_header3">採样总数</string>
+    <string name="table_header4">出货总数</string>
+    <string name="table_header5">抽样数</string>
+    <string name="table_header6">品质不良件数</string>
+    <string name="table_header7">尺\n寸</string>
+    <string name="table_header8">功\n能</string>
+    <string name="table_header9">表\n面</string>
+    <string name="table_header10">包\n装</string>
+    <string name="table_header11">正\n唛</string>
+    <string name="table_header12">测\n唛</string>
+    <string name="table_header13">外箱\n长*宽*高\n(公分)</string>
+    <string name="table_header14">毛重\nKG</string>
+    <string name="table_header15">可出货</string>
+    <string name="table_header16">不可出货</string>
+    <string name="table_header17">可\n出</string>
+    <string name="table_header18">特\n採</string>
+    <string name="table_header19">重\n工</string>
+    <string name="table_header20">拒\n收</string>
+    <string name="table_header21">预定出货日</string>
+    <string name="table_header22">备注</string>
+    <string name="table_footer1">不\n合\n格\n处\n理</string>
+    <string name="table_footer2">三千检验人员载名不合格原因</string>
+    <string name="table_footer3">三千业务回复后续建议事项</string>
+    <string name="table_footer4">检验人员:</string>
+    <string name="table_footer5">日期</string>
+    <string name="table_footer6">业务人员:</string>
+    <string name="table_footer7">填\n表\n说\n明</string>
+    <string name="table_footer8">＊ 抽样检验标准请依成品检验规范程序书要求. \n＊ 如採购总数与出货总数相等,则出货总数免填，如有不符请依实际数据填入出货总数. \n＊ 正侧唛如相符请以V表示；如外乡成宽高以及毛重与採购单相同则免填，如与採购单不符需另填入通知船务修改资料. \n＊ 出货判定请以V表示，如判定为特採出货或拒收者，三千业务需另回复后续建议事项，可出货重工则免.</string>
+    <string name="table_footer9">供应商检测人员:</string>
+    <string-array name="type1">
+        <item>尺寸与图面不符</item>
+        <item>尺寸超过公差</item>
+        <item>孔位cc超过公差</item>
+    </string-array>
+    <string-array name="type2">
+        <item>牙型错误</item>
+        <item>漏攻牙/崩牙</item>
+        <item>牙深不足/歪斜</item>
+        <item>牙洞难锁</item>
+        <item>把手翘脚</item>
+        <item>活动性不佳</item>
+        <item>机构做动异常</item>
+    </string-array>
+    <string-array name="type3">
+        <item>刮伤.撞伤.变形.毛边.麻点.生鏽</item>
+        <item>起泡.亮点.毛刺.沙孔.吐酸.髒污.白斑</item>
+        <item>烤漆橘皮.流漆.色差.颜色错误.脱落</item>
+        <item>电镀色差.颜色错误.脱落</item>
+        <item>未过3H硬度测试</item>
+        <item>未过24小时中性盐雾测试</item>
+        <item>未过48小时中性盐雾测试</item>
+    </string-array>
+    <string-array name="type4">
+        <item>产品溷装/型号错误</item>
+        <item>各项配件/螺丝/包装错误.遗漏</item>
+        <item>各项配件/螺丝/尺寸错误</item>
+        <item>条码/标籤/贴纸张贴错误.遗漏</item>
+        <item>产品/外箱/内盒包装数量错误</item>
+        <item>正/侧唛/内盒印刷错误</item>
+        <item>外箱/内盒/包材尺寸错误</item>
+        <item>包材/内外箱/栈板破损</item>
+    </string-array>
+</resources>

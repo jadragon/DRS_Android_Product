@@ -25,7 +25,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
+<Spinner
+    android:id="@+id/language"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -74,7 +77,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:padding="2.5dp"
-                        android:text="船務：" />
+                        android:text="@string/title_name1" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -82,7 +85,7 @@
                         android:layout_weight="7"
                         android:gravity="right"
                         android:padding="2.5dp"
-                        android:text="列印日期：" />
+                        android:text="@string/title_name4" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -101,7 +104,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:padding="2.5dp"
-                        android:text="供應商：" />
+                        android:text="@string/title_name2" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -109,7 +112,7 @@
                         android:layout_weight="7"
                         android:gravity="right"
                         android:padding="2.5dp"
-                        android:text="客戶：" />
+                        android:text="@string/title_name5" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -128,7 +131,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:padding="2.5dp"
-                        android:text="採購單號碼：" />
+                        android:text="@string/title_name3" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -136,7 +139,7 @@
                         android:layout_weight="7"
                         android:gravity="right"
                         android:padding="2.5dp"
-                        android:text="INVOICE NO.：" />
+                        android:text="@string/title_name6" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -167,7 +170,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="序\n號" />
+                        android:text="@string/table_header1" />
 
                     <View
                         android:layout_width="1dp"
@@ -180,7 +183,7 @@
                         android:layout_weight="5"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="Item No" />
+                        android:text="@string/table_header2" />
 
                     <View
                         android:layout_width="1dp"
@@ -193,7 +196,7 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="採樣總數" />
+                        android:text="@string/table_header3" />
 
                     <View
                         android:layout_width="1dp"
@@ -206,7 +209,7 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="出貨總數" />
+                        android:text="@string/table_header4" />
 
                     <View
                         android:layout_width="1dp"
@@ -219,7 +222,7 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="抽樣數" />
+                        android:text="@string/table_header5" />
 
                     <View
                         android:layout_width="1dp"
@@ -237,7 +240,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="品質不良件數" />
+                            android:text="@string/table_header6" />
 
                         <View
                             android:layout_width="match_parent"
@@ -256,7 +259,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="尺\n寸" />
+                                android:text="@string/table_header7" />
 
                             <View
                                 android:layout_width="1dp"
@@ -269,7 +272,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="功\n能" />
+                                android:text="@string/table_header8" />
 
                             <View
                                 android:layout_width="1dp"
@@ -282,7 +285,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="表\n面" />
+                                android:text="@string/table_header9" />
 
                             <View
                                 android:layout_width="1dp"
@@ -295,7 +298,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="包\n裝" />
+                                android:text="@string/table_header10" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -311,7 +314,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="正嘜" />
+                        android:text="@string/table_header11" />
 
                     <View
                         android:layout_width="1dp"
@@ -324,7 +327,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="測嘜" />
+                        android:text="@string/table_header12" />
 
                     <View
                         android:layout_width="1dp"
@@ -337,7 +340,7 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="外箱\n長*寬*高\n(公分)" />
+                        android:text="@string/table_header13" />
 
                     <View
                         android:layout_width="1dp"
@@ -350,7 +353,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="毛重\nKG" />
+                        android:text="@string/table_header14" />
 
                     <View
                         android:layout_width="1dp"
@@ -374,7 +377,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="可出貨" />
+                                android:text="@string/table_header15" />
 
                             <View
                                 android:layout_width="1dp"
@@ -386,7 +389,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="不可出貨" />
+                                android:text="@string/table_header16" />
                         </LinearLayout>
 
                         <View
@@ -406,7 +409,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="可\n出" />
+                                android:text="@string/table_header17" />
 
                             <View
                                 android:layout_width="1dp"
@@ -419,7 +422,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="特\n採" />
+                                android:text="@string/table_header18" />
 
                             <View
                                 android:layout_width="1dp"
@@ -432,7 +435,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="重\n工" />
+                                android:text="@string/table_header19" />
 
                             <View
                                 android:layout_width="1dp"
@@ -445,7 +448,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="拒\n收" />
+                                android:text="@string/table_header20" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -461,7 +464,7 @@
                         android:layout_weight="4"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="預定出貨日" />
+                        android:text="@string/table_header21" />
 
                     <View
                         android:layout_width="1dp"
@@ -474,7 +477,7 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="備註" />
+                        android:text="@string/table_header22" />
 
                     <View
                         android:layout_width="3dp"
@@ -512,7 +515,7 @@
                         android:gravity="center"
                         android:padding="2.5dp"
 
-                        android:text="不\n合\n格\n處\n理" />
+                        android:text="@string/table_footer1" />
 
                     <View
                         android:layout_width="1dp"
@@ -537,7 +540,7 @@
                                 android:layout_weight="11"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="三千檢驗人員載名不合格原因" />
+                                android:text="@string/table_footer2" />
 
                             <View
                                 android:layout_width="1dp"
@@ -570,7 +573,7 @@
                                     android:gravity="center"
                                     android:padding="2.5dp"
 
-                                    android:text="檢驗人員:" />
+                                    android:text="@string/table_footer4" />
 
                                 <View
                                     android:layout_width="match_parent"
@@ -583,7 +586,7 @@
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:padding="2.5dp"
-                                    android:text="日期" />
+                                    android:text="@string/table_footer5" />
                             </LinearLayout>
 
 
@@ -636,7 +639,7 @@
                                 android:layout_weight="11"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="三千業務回覆後續建議事項" />
+                                android:text="@string/table_footer3" />
 
                             <View
                                 android:layout_width="1dp"
@@ -668,7 +671,7 @@
                                     android:gravity="center"
                                     android:padding="2.5dp"
 
-                                    android:text="檢驗人員:" />
+                                    android:text="@string/table_footer6" />
 
                                 <View
                                     android:layout_width="match_parent"
@@ -681,7 +684,7 @@
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:padding="2.5dp"
-                                    android:text="日期" />
+                                    android:text="@string/table_footer5" />
                             </LinearLayout>
 
 
@@ -748,8 +751,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-
-                        android:text="填\n表\n說\n明" />
+                        android:text="@string/table_footer7" />
 
                     <View
                         android:layout_width="1dp"
@@ -762,10 +764,7 @@
                         android:layout_weight="28"
                         android:padding="2.5dp"
 
-                        android:text="＊  抽樣檢驗標準請依成品檢驗規範程序書要求.
-\n＊  如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數.
-\n＊  正側嘜如相符請以V表示；如外鄉成寬高以及毛重與採購單相同則免填，如與採購單不符需另填入通知船務修改資料.
-\n＊  出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免." />
+                        android:text="@string/table_footer8" />
 
                     <View
                         android:layout_width="1dp"
@@ -785,7 +784,7 @@
                             android:gravity="center"
                             android:padding="2.5dp"
 
-                            android:text="供應商檢測人員:" />
+                            android:text="@string/table_footer9" />
 
                         <View
                             android:layout_width="match_parent"
@@ -798,7 +797,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:padding="2.5dp"
-                            android:text="日期" />
+                            android:text="@string/table_footer5" />
                     </LinearLayout>
 
 
