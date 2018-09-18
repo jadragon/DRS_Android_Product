@@ -1,11 +1,14 @@
 package com.example.alex.eip_product;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -20,7 +23,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import Component.PaintView;
@@ -29,20 +31,22 @@ import Utils.PreferenceUtil;
 import db.SQLiteDatabaseHandler;
 
 public class InsepectOrderActivity extends AppCompatActivity {
+    private final static int SELECT_FAIL_REASON = 110;
     private LinearLayout alltable, courseTable;
     private Button academyButton, saveButton, resetSignButton;
     int line = 1;
     PaintView paintView;
-    TextView title, online, faild_txt_description;
+    TextView title, online, faild_txt_description, pdf_view;
     Spinner spinner;
     boolean init_Activity = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insepect_order);
+        initPdfView();
         initLanguageSpinner();
-        initFailedTable();
         findView();
         setAnimation(title);
         setAnimation(online);
@@ -69,7 +73,17 @@ public class InsepectOrderActivity extends AppCompatActivity {
         faild_txt_description.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(InsepectOrderActivity.this, SelectFailedActivity.class));
+                startActivityForResult(new Intent(InsepectOrderActivity.this, SelectFailedActivity.class), SELECT_FAIL_REASON);
+            }
+        });
+    }
+
+    private void initPdfView() {
+        pdf_view = findViewById(R.id.pdf_view);
+        pdf_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InsepectOrderActivity.this, PDFFromServerActivity.class));
             }
         });
     }
@@ -199,21 +213,36 @@ public class InsepectOrderActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
-            online.setText("線上模式");
-        } else {
-            online.setText("離線模式");
-        }
+        toastCheckWIFI();
     }
 
-
-    void initFailedTable() {
-        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(this);
-        ArrayList<String> arrayList = db.getFailedDescription(0);
-        if (arrayList.size() <= 0) {
-            db.initFailTable();
+    private void toastCheckWIFI() {
+        if (!CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("請確認網路是否為連線狀態?");
+            builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (!CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
+                        toastCheckWIFI();
+                    } else {
+                        online.setText("線上模式");
+                    }
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    online.setText("離線模式");
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        } else {
+            online.setText("線上模式");
         }
-        db.close();
     }
 
     /**
@@ -242,4 +271,14 @@ public class InsepectOrderActivity extends AppCompatActivity {
         PreferenceUtil.commitString("language", language);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_FAIL_REASON) {
+            if (resultCode == 110) {
+                String failed_reason = data.getStringExtra("failed_reason");
+                faild_txt_description.setText(failed_reason);
+            }
+        }
+    }
 }

@@ -70,72 +70,76 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         list = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
         map.put("type", "" + TYPE_HEADER);
-        map.put("description", "尺寸");
+        map.put("description", ctx.getResources().getString(R.string.size));
         list.add(map);
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
         ArrayList<String> arrayList = db.getFailedDescription(0);
+        String[] type = ctx.getResources().getStringArray(R.array.type1);
         for (int i = 0; i < arrayList.size(); i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
-            map.put("description", arrayList.get(i));
+            map.put("description", type[i]);
             list.add(map);
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
         map.put("failed_type", "0");
-        map.put("description", "其他");
+        map.put("description",  ctx.getResources().getString(R.string.other));
         list.add(map);
         map = new HashMap<>();
         map.put("type", "" + TYPE_HEADER);
-        map.put("description", "功能");
+        map.put("description",  ctx.getResources().getString(R.string.function));
         list.add(map);
         arrayList = db.getFailedDescription(1);
+        type = ctx.getResources().getStringArray(R.array.type2);
         for (int i = 0; i < arrayList.size(); i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
-            map.put("description", arrayList.get(i));
+            map.put("description", type[i]);
             list.add(map);
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
         map.put("failed_type", "1");
-        map.put("description", "其他");
+        map.put("description", ctx.getResources().getString(R.string.other));
         list.add(map);
         map = new HashMap<>();
         map.put("type", "" + TYPE_HEADER);
-        map.put("description", "表面");
+        map.put("description",  ctx.getResources().getString(R.string.surface));
         list.add(map);
         arrayList = db.getFailedDescription(2);
+        type = ctx.getResources().getStringArray(R.array.type3);
         for (int i = 0; i < arrayList.size(); i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
-            map.put("description", arrayList.get(i));
+            map.put("description", type[i]);
             list.add(map);
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
         map.put("failed_type", "2");
-        map.put("description", "其他");
+        map.put("description",  ctx.getResources().getString(R.string.other));
         list.add(map);
         map = new HashMap<>();
         map.put("type", "" + TYPE_HEADER);
-        map.put("description", "包裝");
+        map.put("description", ctx.getResources().getString(R.string.packaging));
         list.add(map);
         arrayList = db.getFailedDescription(3);
+        type = ctx.getResources().getStringArray(R.array.type4);
         for (int i = 0; i < arrayList.size(); i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
-            map.put("description", arrayList.get(i));
+            map.put("description", type[i]);
             list.add(map);
         }
         map = new HashMap<>();
         map.put("type", "" + TYPE_OTHER);
         map.put("failed_type", "3");
-        map.put("description", "其他");
+        map.put("description",  ctx.getResources().getString(R.string.other));
         list.add(map);
     }
 
@@ -250,6 +254,20 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
                 return;
             }
         }
+    }
+
+    public String getSelectItems() {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).get("type").equals("" + TYPE_ITEM) && list.get(i).get("select").equals("1")) {
+                builder.append("，" + list.get(i).get("description"));
+            }
+        }
+        if (builder.length() > 0) {
+            builder.deleteCharAt(0);
+        }
+        return builder.toString();
     }
 
     public void setFilter() {

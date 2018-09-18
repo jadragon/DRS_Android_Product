@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">EIP_Product</string>
+    <string name="other">Other</string>
+    <string name="size">Size</string>
+    <string name="function">Function</string>
+    <string name="surface">Surface</string>
+    <string name="packaging">Packaging</string>
+
     <string name="title_name1">ship: </string>
         
     <string name="title_name2">Supplier: </string>
@@ -70,7 +76,7 @@
         
     <string name="table_footer7">fill out the description </string>
         
-    <string name="table_footer8">* Sampling inspection standards are subject to the requirements of the finished product inspection specification procedure. * If the total number of purchases is equal to the total number of shipments, the total number of shipments is exempt. If there is any discrepancy, please fill in the total shipments according to the actual data. * If the positive side is consistent, please indicate it as V; if the foreign country is wide and the gross weight is the same as the purchase order, it is exempted. If it does not match the purchase order, you need to fill in the notice to modify the shipping information. * Please confirm the shipment with V. It means that if it is determined that it is specially shipped or rejected, the 3,000 business needs to reply to the follow-up suggestions, and the rework can be shipped free.</string>
+    <string name="table_footer8">* Sampling inspection standards are subject to the requirements of the finished product inspection specification procedure. \n* If the total number of purchases is equal to the total number of shipments, the total number of shipments is exempt. If there is any discrepancy, please fill in the total shipments according to the actual data. \n* If the positive side is consistent, please indicate it as V; if the foreign country is wide and the gross weight is the same as the purchase order, it is exempted. If it does not match the purchase order, you need to fill in the notice to modify the shipping information. \n* Please confirm the shipment with V. It means that if it is determined that it is specially shipped or rejected, the 3,000 business needs to reply to the follow-up suggestions, and the rework can be shipped free.</string>
         
     <string name="table_footer9">vendor tester: </string>
     <string-array name="language">
@@ -79,36 +85,68 @@
         <item>繁體中文</item>
     </string-array>
     <string-array name="type1">
-                <item> size does not match the drawing </item>
-                <item> size exceeds tolerance </item>
-                <item> hole position cc exceeds tolerance </item>
-            </string-array>
-        <string-array name="type2">
-            <item>dental error</item>
-            <item> missing tapping/disintegration</item>
-            <item> insufficient tooth depth/skew</item>
-            <item> difficult to lock the cavity</item>
-            <item>Handle feet</item>
-            <item> is not active</item>
-            <item>Institutional anomaly</item>
-        </string-array>
-        <string-array name="type3">
-            <item>Scratch. Bump. Deformation. Burr. Pitting. Rusty</item>
-            <item>bubble. Highlights. Burr. Shakong. Sour acid. Dirty. White spots</item>
-            <item>painted orange peel. Flow paint. Chromatic aberration. Color error. Shedding</item>
-            <item> plating color difference. Color error. Shedding</item>
-            <item> has not passed 3H hardness test </item>
-            <item> less than 24 hours of neutral salt spray test</item>
-            <item> less than 48 hours of neutral salt spray test</item>
-        </string-array>
-        <string-array name="type4">
-            <item> product mix / model error </item>
-            <item> Accessories / Screws / Packaging Errors. Missing </item>
-            <item> Accessories/screws/size error</item>
-            <item>Barcode/Label/Paste Paper Sticker Error. Missing </item>
-            <item> product / outer box / inner box packaging error </item>
-            <item> positive/side 唛/inside box printing error </item>
-            <item> wrong size of outer box/inner box/package material </item>
-            <item>Package / inner and outer box / pallet damage </item>
-        </string-array>
+                
+        <item> size does not match the drawing </item>
+                
+        <item> size exceeds tolerance </item>
+                
+        <item> hole position cc exceeds tolerance </item>
+            
+    </string-array>
+        
+    <string-array name="type2">
+                
+        <item>dental error</item>
+                
+        <item> missing tapping/disintegration</item>
+                
+        <item> insufficient tooth depth/skew</item>
+                
+        <item> difficult to lock the cavity</item>
+                
+        <item>Handle feet</item>
+                
+        <item> is not active</item>
+                
+        <item>Institutional anomaly</item>
+            
+    </string-array>
+        
+    <string-array name="type3">
+                
+        <item>Scratch. Bump. Deformation. Burr. Pitting. Rusty</item>
+                
+        <item>bubble. Highlights. Burr. Shakong. Sour acid. Dirty. White spots</item>
+                
+        <item>painted orange peel. Flow paint. Chromatic aberration. Color error. Shedding</item>
+                
+        <item> plating color difference. Color error. Shedding</item>
+                
+        <item> has not passed 3H hardness test </item>
+                
+        <item> less than 24 hours of neutral salt spray test</item>
+                
+        <item> less than 48 hours of neutral salt spray test</item>
+            
+    </string-array>
+        
+    <string-array name="type4">
+                
+        <item> product mix / model error </item>
+                
+        <item> Accessories / Screws / Packaging Errors. Missing </item>
+                
+        <item> Accessories/screws/size error</item>
+                
+        <item>Barcode/Label/Paste Paper Sticker Error. Missing </item>
+                
+        <item> product / outer box / inner box packaging error </item>
+                
+        <item> positive/negative/inside box printing error </item>
+                
+        <item> wrong size of outer box/inner box/package material </item>
+                
+        <item>Package / inner and outer box / pallet damage </item>
+            
+    </string-array>
 </resources>

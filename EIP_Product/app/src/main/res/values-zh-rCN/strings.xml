@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">验货表单系统</string>
+    <string name="other">其他</string>
+    <string name="size">尺寸</string>
+        
+    <string name="function">功能</string>
+        
+    <string name="surface">表面</string>
+        
+    <string name="packaging">包装</string>
     <string name="title_name1">船务：</string>
     <string name="title_name3">採购单号码：</string>
     <string name="title_name4">列印日期：</string>

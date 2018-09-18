@@ -25,10 +25,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-<Spinner
-    android:id="@+id/language"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+
+                    <Spinner
+                        android:id="@+id/language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -65,6 +67,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/pdf_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="圖面資料" />
                 </FrameLayout>
 
                 <LinearLayout

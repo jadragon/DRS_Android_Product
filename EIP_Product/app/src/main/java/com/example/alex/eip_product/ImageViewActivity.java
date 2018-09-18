@@ -1,5 +1,7 @@
 package com.example.alex.eip_product;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Component.SimpleRoundProgress;
+import Utils.CommonUtil;
 import db.ImagePojo;
 import db.SQLiteDatabaseHandler;
 import liabiry.GetJsonData.PhotoApi;
@@ -57,47 +60,73 @@ public class ImageViewActivity extends AppCompatActivity {
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        arrayList = db.getPhotoImage();
-                        for (final ImagePojo data : arrayList) {
-                            int number = new Random().nextInt(50);
-                            try {
-                                json = new PhotoApi().insert_photo("H9Tv7tBs8Esr914/MB62Aw==", "RalpBDfrS2EPx6t8QzgpcA==", number + "", data.getImage());
-                                db.updatePhotoStatus(data.getId(), 1);
-                                t++;
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progress.setProgress((int) (((float)t / arrayList.size()) * 100));
-                                    }
-                                });
-                            } catch (Exception e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        db.updatePhotoStatus(data.getId(), 0);
-                                        Toast.makeText(ImageViewActivity.this, "上傳失敗", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
+                if(CommonUtil.checkWIFI(ImageViewActivity.this)) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            arrayList = db.getPhotoImage();
+                            for (final ImagePojo data : arrayList) {
+                                int number = new Random().nextInt(50);
+                                try {
+                                    json = new PhotoApi().insert_photo("H9Tv7tBs8Esr914/MB62Aw==", "RalpBDfrS2EPx6t8QzgpcA==", number + "", data.getImage());
+                                    db.updatePhotoStatus(data.getId(), 1);
+                                    t++;
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            progress.setProgress((int) (((float) t / arrayList.size()) * 100));
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            db.updatePhotoStatus(data.getId(), 0);
+                                            Toast.makeText(ImageViewActivity.this, "上傳失敗", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    break;
+                                }
                             }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    arrayList = db.getPhotoImage();
+                                    total_image.setText("目前圖片有:" + arrayList.size() + "張  未上傳");
+                                }
+                            });
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                arrayList = db.getPhotoImage();
-                                total_image.setText("目前圖片有:" + arrayList.size() + "張  未上傳");
-                            }
-                        });
-                    }
-                }).start();
+                    }).start();
+                }else {
+                    toastCheckWIFI();
+                }
             }
         });
 
     }
-
+    private void toastCheckWIFI() {
+        if (!CommonUtil.checkWIFI(ImageViewActivity.this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("請確認網路是否為連線狀態?");
+            builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (!CommonUtil.checkWIFI(ImageViewActivity.this)) {
+                        toastCheckWIFI();
+                    }
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        }
+    }
 
     @Override
     protected void onDestroy() {
