@@ -42,7 +42,18 @@
     <string name="table_footer7">填\n表\n說\n明</string>
     <string name="table_footer8">＊ 抽樣檢驗標準請依成品檢驗規範程序書要求. \n＊ 如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數. \n＊ 正側嘜如相符請以V表示；如外鄉成寬高以及毛重與採購單相同則免填，如與採購單不符需另填入通知船務修改資料. \n＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
     <string name="table_footer9">供應商檢測人員:</string>
-
+    <string-array name="menu_item">
+        <item>驗貨單</item>
+        <item>項目2</item>
+        <item>項目3</item>
+        <item>項目4</item>
+        <item>項目5</item>
+        <item>項目6</item>
+        <item>項目7</item>
+        <item>項目8</item>
+        <item>項目9</item>
+        <item>設定</item>
+    </string-array>
     <string-array name="type1">
         <item>尺寸與圖面不符</item>
         <item>尺寸超過公差</item>

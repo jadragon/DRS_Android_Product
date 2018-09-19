@@ -45,6 +45,19 @@
     <string name="table_footer7">填\n表\n说\n明</string>
     <string name="table_footer8">＊ 抽样检验标准请依成品检验规范程序书要求. \n＊ 如採购总数与出货总数相等,则出货总数免填，如有不符请依实际数据填入出货总数. \n＊ 正侧唛如相符请以V表示；如外乡成宽高以及毛重与採购单相同则免填，如与採购单不符需另填入通知船务修改资料. \n＊ 出货判定请以V表示，如判定为特採出货或拒收者，三千业务需另回复后续建议事项，可出货重工则免.</string>
     <string name="table_footer9">供应商检测人员:</string>
+
+    <string-array name="menu_item">
+        <item>验货单</item>
+        <item>项目2</item>
+        <item>项目3</item>
+        <item>项目4</item>
+        <item>项目5</item>
+        <item>项目6</item>
+        <item>项目7</item>
+        <item>项目8</item>
+        <item>项目9</item>
+        <item>设定</item>
+    </string-array>
     <string-array name="type1">
         <item>尺寸与图面不符</item>
         <item>尺寸超过公差</item>

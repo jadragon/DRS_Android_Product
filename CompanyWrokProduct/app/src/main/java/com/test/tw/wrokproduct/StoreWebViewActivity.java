@@ -8,7 +8,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -19,7 +18,6 @@ public class StoreWebViewActivity extends AppCompatActivity {
     private WebView luntanListview;
     String html;
     ViewGroup container;
-    TextView textView;
     String name, address, deliver;
     Intent intent;
     String logistics;
@@ -68,7 +66,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
         webSettings.setDisplayZoomControls(false); //隐藏原生的缩放控件
 
         //其他细节操作
-      //  webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存
+        //  webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存
         webSettings.setAllowFileAccess(true); //设置可以访问文件
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
         webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
@@ -77,7 +75,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
         //自适应屏幕
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         luntanListview.loadData(html, "text/html; charset=utf-8", "UTF-8");
-       // luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        // luntanListview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         luntanListview.setVerticalScrollBarEnabled(false);
         luntanListview.setVerticalScrollbarOverlay(false);
         luntanListview.setHorizontalScrollBarEnabled(false);
@@ -87,7 +85,7 @@ public class StoreWebViewActivity extends AppCompatActivity {
         //webSettings.setAllowUniversalAccessFromFileURLs(true);
         luntanListview.clearCache(true);//清除暫存
         luntanListview.setWebChromeClient(new WebChromeClient());
-                luntanListview.setWebViewClient(new WebViewClient() {
+        luntanListview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);

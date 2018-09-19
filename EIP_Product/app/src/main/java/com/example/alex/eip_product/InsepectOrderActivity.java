@@ -3,31 +3,24 @@ package com.example.alex.eip_product;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Locale;
 
 import Component.PaintView;
 import Utils.CommonUtil;
-import Utils.PreferenceUtil;
 import db.SQLiteDatabaseHandler;
 
 public class InsepectOrderActivity extends AppCompatActivity {
@@ -37,8 +30,8 @@ public class InsepectOrderActivity extends AppCompatActivity {
     int line = 1;
     PaintView paintView;
     TextView title, online, faild_txt_description, pdf_view;
-    Spinner spinner;
-    boolean init_Activity = false;
+
+
 
 
     @Override
@@ -46,7 +39,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insepect_order);
         initPdfView();
-        initLanguageSpinner();
         findView();
         setAnimation(title);
         setAnimation(online);
@@ -88,37 +80,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
         });
     }
 
-    private void initLanguageSpinner() {
-        // 初始化PreferenceUtil
-        PreferenceUtil.init(this);
-        // 依據上次的語言設置，又一次設置語言
-        int index = PreferenceUtil.getInt("language", 2);
-        switchLanguage(index);
-        spinner = findViewById(R.id.language);
-        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.language)));
-        spinner.setSelection(index);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switchLanguage(position);
-                //更新語言後。destroy當前頁面，又一次繪製
-                if (init_Activity) {
-                    finish();
-                    Intent it = new Intent(InsepectOrderActivity.this, InsepectOrderActivity.class);
-                    startActivity(it);
-                } else {
-                    init_Activity = true;
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-    }
 
     void findView() {
         alltable = findViewById(R.id.alltable);
@@ -245,31 +206,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * <切換語言>
-     *
-     * @param language
-     * @see [類、類#方法、類#成員]
-     */
-    protected void switchLanguage(int language) {
-        // 設置應用語言類型
-        Resources resources = getResources();
-        Configuration config = resources.getConfiguration();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        if (language == 0) {
-            config.locale = Locale.ENGLISH;
-        } else if (language == 1) {
-            // 中文簡體
-            config.locale = Locale.SIMPLIFIED_CHINESE;
-        } else {
-            // 中文繁體
-            config.locale = Locale.TRADITIONAL_CHINESE;
-        }
-        resources.updateConfiguration(config, dm);
-
-        // 保存設置語言的類型
-        PreferenceUtil.commitString("language", language);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -31,10 +31,10 @@ public class GetWebView extends APIInfomation {
     }
 
     public GetWebView(String logistics) {
-        jsonParser = new WebVewJsonParser();
+        certJSONParser = new CertJSONParser();
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("logistics", logistics));
-        params.add(new BasicNameValuePair("device", "1"));
+        params.add(new BasicNameValuePair("device", "2"));
     }
 
     public String getHtmlByPosition(String token, int position) {
@@ -137,7 +137,7 @@ public class GetWebView extends APIInfomation {
      * 超商位置
      */
     public String getMap() {
-        return jsonParser.getJSONFromUrl(getMap_url, params);
+        return certJSONParser.getJSONFromUrl(getMap_url, params);
     }
 
     /**

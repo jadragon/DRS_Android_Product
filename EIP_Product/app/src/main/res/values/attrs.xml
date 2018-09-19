@@ -25,4 +25,8 @@
             <enum name="FILL" value="1" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="SquareFrameLayout">
+        <attr name="ratio" format="float" />
+        <attr name="ratio_by_heigh" format="boolean" />
+    </declare-styleable>
 </resources>
