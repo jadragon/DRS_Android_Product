@@ -12,31 +12,24 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.alex.qrcodescanner.pojo.DataPojo;
+
+import java.util.List;
 
 public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.RecycleHolder> {
     private Context ctx;
-    private ArrayList<Item> arrayList;
+    private List<DataPojo> list;
     private DisplayMetrics dm;
     int pre_select = 0;
 
-    public SimpleTextAdapter(Context ctx, ArrayList<String> list) {
+    public SimpleTextAdapter(Context ctx, List<DataPojo> list) {
         this.ctx = ctx;
+        this.list = list;
         dm = ctx.getResources().getDisplayMetrics();
-        initList(list);
+
 
     }
 
-    private void initList(ArrayList<String> list) {
-        arrayList = new ArrayList<>();
-        Item item = null;
-        for (String code : list) {
-            item = new Item();
-            item.code = code;
-            item.select = false;
-            arrayList.add(item);
-        }
-    }
 
     @Override
     public SimpleTextAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,14 +52,14 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        holder.text.setText(arrayList.get(position).code);
+        holder.text.setText(list.get(position).id);
         if (position == 0) {
             setBackground(holder.text, Color.RED, Color.GREEN);
         } else {
             setBackground(holder.text, Color.RED, Color.WHITE);
         }
 
-        if (arrayList.get(position).select) {
+        if (list.get(position).select) {
             setBackground(holder.text, Color.RED, Color.GRAY);
         } else {
             if (position == 0) {
@@ -80,7 +73,7 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return list.size();
     }
 
 
@@ -103,14 +96,14 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
             int position = getAdapterPosition();
             if (position != -1) {
                 if (position == pre_select) {
-                    if (arrayList.get(position).select) {
-                        arrayList.get(position).select = false;
+                    if (list.get(position).select) {
+                        list.get(position).select = false;
                     } else {
-                        arrayList.get(position).select = true;
+                        list.get(position).select = true;
                     }
                 } else {
-                    arrayList.get(pre_select).select = false;
-                    arrayList.get(position).select = true;
+                    list.get(pre_select).select = false;
+                    list.get(position).select = true;
                 }
                 pre_select = position;
                 notifyDataSetChanged();
@@ -119,15 +112,15 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
     }
 
 
-    public void setFilter(ArrayList<String> list) {
-        initList(list);
+    public void setFilter(List<DataPojo> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 
     public int getSelectPosition() {
         pre_select = 0;
-        for (int i = 0; i < arrayList.size(); i++) {
-            if (arrayList.get(i).select) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).select) {
                 return i;
             }
         }
@@ -135,8 +128,4 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
         return -1;
     }
 
-    private class Item {
-        public String code;
-        public boolean select;
-    }
 }

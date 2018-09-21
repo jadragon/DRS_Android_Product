@@ -1,9 +1,7 @@
 package com.shidian.excel;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,7 +76,7 @@ public class ExcelUtils {
 				file.createNewFile();
 			}
 			workbook = Workbook.createWorkbook(file);
-			WritableSheet sheet = workbook.createSheet("成绩表", 0);
+			WritableSheet sheet = workbook.createSheet("第一页", 0);
 			//创建标题栏
 			sheet.addCell((WritableCell) new Label(0, 0, fileName,arial14format));
 			for (int col = 0; col < colName.length; col++) {

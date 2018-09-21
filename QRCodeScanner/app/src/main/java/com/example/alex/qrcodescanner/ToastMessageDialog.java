@@ -54,7 +54,7 @@ public class ToastMessageDialog {
     }
 
     public void show() {
-        confirm.setVisibility(View.INVISIBLE);
+        confirm.setVisibility(View.GONE);
         dialog.show();//显示对话框
         new Handler().postDelayed(new Runnable() {
             @Override

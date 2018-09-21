@@ -33,7 +33,6 @@
                     android:id="@+id/classes"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="進站"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -52,7 +51,6 @@
                     android:id="@+id/process"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="A102"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -71,7 +69,6 @@
                     android:id="@+id/staff"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="15030001"
                     android:textSize="20sp" />
             </LinearLayout>
 
