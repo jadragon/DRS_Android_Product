@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, REQUEST_ALL_PERMISSION);
         }
 
-
     }
 
     @Override
@@ -190,32 +189,37 @@ public class MainActivity extends AppCompatActivity {
                         if (scan_result.equals("IN")) {
                             checkClassAndProcessAndStaff();
                             classes.setText("進站");
+                            loadExcelData();
 
                         } else if (scan_result.equals("OUT")) {
 
                             checkClassAndProcessAndStaff();
                             classes.setText("出站");
+                            loadExcelData();
 
                         } else if (scan_result.equals("DF")) {
 
                             checkClassAndProcessAndStaff();
                             classes.setText("報廢");
+                            loadExcelData();
 
                         } else if (scan_result.equals("RE")) {
 
                             checkClassAndProcessAndStaff();
                             classes.setText("反修");
+                            loadExcelData();
 
                         } else if (scan_result.contains("ST")) {
 
                             checkClassAndProcessAndStaff();
                             process.setText(scan_result.substring(3, scan_result.length()));
+                            loadExcelData();
 
                         } else if (scan_result.contains("EM")) {
 
                             checkClassAndProcessAndStaff();
                             staff.setText(scan_result.substring(3, scan_result.length()));
-
+                            loadExcelData();
                         } else if (scan_result.contains("PT")) {
                             barcodeView.pause();
                             if (checkSameID(scan_result)) {
@@ -258,10 +262,13 @@ public class MainActivity extends AppCompatActivity {
         if (classes.getText().toString().equals("") || process.getText().toString().equals("") || staff.getText().toString().equals("")) {
         } else {
             saveExcel();
-            String fileName = getSDPath() + "/Record" + "/" + classes.getText().toString() + "-" + process.getText().toString() + "-" + staff.getText().toString() + "-" + getData(YEAR) + getData(MONTH) + getData(DAY_OF_MONTH) + ".xls";
-            exelarratyList = ExcelUtils.read2DB(new File(fileName));
-            simpleTextAdapter.setFilter(exelarratyList);
         }
+    }
+
+    private void loadExcelData() {
+        String fileName = getSDPath() + "/Record" + "/" + classes.getText().toString() + "-" + process.getText().toString() + "-" + staff.getText().toString() + "-" + getData(YEAR) + getData(MONTH) + getData(DAY_OF_MONTH) + ".xls";
+        exelarratyList = ExcelUtils.read2DB(new File(fileName));
+        simpleTextAdapter.setFilter(exelarratyList);
     }
 
     @Override
@@ -277,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
             barcodeView.pause();
         super.onPause();
     }
-
 
     public String getData(byte type) {
         Calendar calendar = Calendar.getInstance();
@@ -310,7 +316,6 @@ public class MainActivity extends AppCompatActivity {
                 return null;
 
         }
-
 
     }
 

@@ -1,7 +1,7 @@
 package com.example.alex.qrcodescanner.Utils;
 
 import android.content.Context;
-import android.util.Log;
+
 
 import com.example.alex.qrcodescanner.ToastMessageDialog;
 import com.example.alex.qrcodescanner.pojo.DataPojo;
