@@ -161,13 +161,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@android:color/black">
 
 
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+
 
                     <TextView
                         android:layout_width="0dp"
@@ -175,25 +173,11 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header1" />
+                        android:text="@string/table_header1"
+                        android:background="@android:color/white"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="1dp"/>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_header2" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -201,12 +185,9 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header3" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header2"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -214,12 +195,9 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header4" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header3"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -227,18 +205,30 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header5" />
+                        android:text="@string/table_header4"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
-                    <View
-                        android:layout_width="1dp"
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:padding="2.5dp"
+                        android:text="@string/table_header5"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
+
+
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:orientation="vertical"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -308,10 +298,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -319,12 +305,9 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header11" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header11"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -332,12 +315,9 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header12" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header12"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -345,12 +325,9 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header13" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header13"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -358,18 +335,17 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header14" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header14"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:orientation="vertical"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -458,23 +434,17 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header21" />
+                        android:text="@string/table_header21"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+
 
                     <TextView
                         android:layout_width="0dp"
@@ -482,12 +452,9 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_header22" />
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                        android:text="@string/table_header22"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="3dp"/>
 
 
                 </LinearLayout>
@@ -506,70 +473,64 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@android:color/black">
 
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
+                        android:text="@string/table_footer1"
+                        android:background="@android:color/white"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="1dp"/>
 
-                        android:text="@string/table_footer1" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="35"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="34"
+                        android:orientation="vertical"
+                        android:background="@android:color/white">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:background="@android:color/black">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="11"
+                                android:layout_weight="9"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="@string/table_footer2" />
+                                android:text="@string/table_footer2"
+                                android:background="@android:color/white"
+                                android:layout_marginRight="1dp"/>
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
 
                             <TextView
                                 android:id="@+id/faild_txt_description"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="17"
+                                android:layout_weight="19"
                                 android:padding="2.5dp"
-                                android:text="" />
+                                android:background="@android:color/white"
+                                android:layout_marginRight="1dp" />
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:orientation="vertical">
+                                android:layout_height="match_parent"
+                                android:layout_weight="3"
+                                android:orientation="vertical"
+                                android:background="@android:color/white"
+                                android:layout_marginRight="1dp">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -594,17 +555,13 @@
                                     android:text="@string/table_footer5" />
                             </LinearLayout>
 
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
-
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="3"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:background="@android:color/white"
+                                android:layout_marginRight="3dp">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -636,38 +593,34 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:background="@android:color/black">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="11"
+                                android:layout_weight="9"
                                 android:gravity="center"
                                 android:padding="2.5dp"
-                                android:text="@string/table_footer3" />
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
+                                android:text="@string/table_footer3"
+                                android:background="@android:color/white"
+                                android:layout_marginRight="1dp"/>
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="17"
+                                android:layout_weight="19"
                                 android:padding="2.5dp"
-                                android:text="" />
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
+                                android:background="@android:color/white"
+                                android:layout_marginRight="1dp"/>
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:orientation="vertical">
+                                android:layout_weight="3"
+                                android:orientation="vertical"
+                                android:background="@android:color/white"
+                                android:layout_marginRight="1dp">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -693,16 +646,13 @@
                             </LinearLayout>
 
 
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
-
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="3"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:background="@android:color/white"
+                                android:layout_marginRight="3dp">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -727,41 +677,32 @@
                     </LinearLayout>
 
 
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="3dp"
                     android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+                    android:orientation="horizontal"
+                    android:background="@android:color/black">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="2.5dp"
-                        android:text="@string/table_footer7" />
+                        android:text="@string/table_footer7"
+                        android:background="@android:color/white"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="1dp"/>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -769,18 +710,19 @@
                         android:layout_weight="28"
                         android:padding="2.5dp"
 
-                        android:text="@string/table_footer8" />
+                        android:text="@string/table_footer8"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp"/>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
+
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:layout_weight="3"
+                        android:orientation="vertical"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="1dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -805,17 +747,13 @@
                             android:text="@string/table_footer5" />
                     </LinearLayout>
 
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
-
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="3"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="@android:color/white"
+                        android:layout_marginRight="3dp">
 
                         <Component.PaintView
                             android:id="@+id/paintView"
@@ -838,11 +776,6 @@
                             android:padding="2.5dp" />
                     </LinearLayout>
 
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/black" />
 
 
                 </LinearLayout>

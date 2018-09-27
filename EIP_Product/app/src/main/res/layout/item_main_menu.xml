@@ -25,7 +25,7 @@
                 android:src="@drawable/mainslider_home_img1"
                 android:tag="image" />
 
-            <TextView
+            <com.example.alex.eip_product.AutoVerticalTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"

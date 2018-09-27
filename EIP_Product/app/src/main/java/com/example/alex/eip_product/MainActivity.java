@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         main_recylcerview = findViewById(R.id.main_recylcerview);
         mainMenuAdapter=new MainMenuAdapter(this);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(this,3);
-        int imagewidth=129;
+        int imagewidth=250;
         gridLayoutManager.setSpanCount(dm.widthPixels/imagewidth);
         main_recylcerview.setLayoutManager(gridLayoutManager);
         main_recylcerview.setAdapter(mainMenuAdapter);

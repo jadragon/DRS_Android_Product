@@ -2,12 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <View
-        android:layout_width="3dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
+    android:orientation="horizontal"
+    android:background="@android:color/black">
 
     <TextView
         android:id="@+id/row1"
@@ -15,26 +11,23 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
+
 
     <TextView
         android:id="@+id/row2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="5"
-        android:background="@android:color/white"
+        android:layout_weight="3"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <TextView
         android:id="@+id/row3"
@@ -42,26 +35,21 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <EditText
         android:id="@+id/row4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:background="@android:color/white"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <TextView
         android:id="@+id/row5"
@@ -69,24 +57,24 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="5"
             android:orientation="horizontal">
 
             <EditText
@@ -143,11 +131,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
-
     <CheckBox
         android:id="@+id/row10"
         android:layout_width="0dp"
@@ -156,12 +139,8 @@
         android:gravity="center"
         android:padding="2.5dp"
         android:background="@drawable/checkbox_nike"
-        android:button="@null"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
+        android:button="@null"
+        android:layout_marginRight="1dp"/>
 
     <CheckBox
         android:id="@+id/row11"
@@ -171,18 +150,15 @@
         android:gravity="center"
         android:padding="2.5dp"
         android:background="@drawable/checkbox_nike"
-        android:button="@null"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
-
+        android:button="@null"
+        android:layout_marginRight="1dp"/>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp">
 
         <EditText
             android:id="@+id/row12"
@@ -224,35 +200,26 @@
             android:padding="2.5dp" />
     </LinearLayout>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <EditText
         android:id="@+id/row15"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@android:color/white"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4">
 
         <RadioGroup
             android:id="@+id/radio_group"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_weight="5"
+            android:background="@android:color/white"
+            android:layout_marginRight="1dp">
 
             <RadioButton
                 android:id="@+id/row16"
@@ -310,40 +277,29 @@
                 android:background="@drawable/radio_nike"/>
 
         </RadioGroup>
-    </FrameLayout>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <EditText
         android:id="@+id/row20"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="4"
+        android:layout_weight="3"
         android:gravity="center"
         android:padding="2.5dp"
-        android:background="@android:color/white"/>
+        android:background="@android:color/white"
+        android:layout_marginRight="1dp"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
     <EditText
         android:id="@+id/row21"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:background="@android:color/white"
         android:gravity="center"
-        android:padding="2.5dp" />
+        android:padding="2.5dp"
+        android:background="@android:color/white"
+        android:layout_marginRight="3dp"/>
 
-    <View
-        android:layout_width="3dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/black" />
 
 
 </LinearLayout>
