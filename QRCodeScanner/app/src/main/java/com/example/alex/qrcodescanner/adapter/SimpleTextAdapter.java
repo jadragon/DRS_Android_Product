@@ -42,10 +42,10 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
         return new SimpleTextAdapter.RecycleHolder(ctx, textView);
     }
 
-    private void setBackground(View view, int strole_color, int background_color) {
+    private void setBackground(View view, int stroke_color, int background_color) {
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(10 * dm.density);
-        shape.setStroke((int) (1 * dm.density), strole_color);
+        shape.setStroke((int) (1 * dm.density), stroke_color);
         shape.setColor(background_color);
         view.setBackgroundDrawable(shape);
     }

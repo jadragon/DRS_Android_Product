@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        html {
+            height: 500px
+        }
+
+        body {
+            height: 500px;
+            margin: 0;
+            padding: 0
+        }
+
+        #map_canvas {
+            height: 100%
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&language=zh-tw"></script>
+    </script>
+
+    <script type="text/javascript">
+        // initialize
+        var map;
+        var myLatlng = new google.maps.LatLng(25.016886, 121.533491);
+        var panorama;
+        var lineCoordinates;
+        var marker;
+
+
+
+
+        function initialize() {
+            var mapOptions = {
+                zoom: 17,
+                center: myLatlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+            marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+
+            });
+
+            panorama = map.getStreetView();
+            panorama.setPosition(myLatlng);
+            panorama.setPov(({
+                heading: 265,
+                pitch: 0
+            }));
+        }
+
+        // Ubah ke Hybrid
+        function ubahHybrid() {
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 17,
+                title: 'Hybrid',
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        }
+        // Kembali ke default normal.
+        function ubahStandard() {
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 17,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        }
+        // Ubah ke Satellite
+        function ubahSatellite() {
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 17,
+                mapTypeId: "satellite"
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+            map.setTilt(45);
+        }
+        // Ubah ke Terrain
+        function ubahTerrain() {
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 17,
+                mapTypeId: google.maps.MapTypeId.TERRAIN
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        }
+
+
+        function centerAt(latitude, longitude) { //地圖以給予的座標為中心，即移動地圖至給定的座標
+
+            myLatlng = new google.maps.LatLng(latitude, longitude);
+            marker.setMap(null);
+            map.panTo(myLatlng);
+            marker.setMap(null);
+            marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+
+            });
+        }
+        window.onload = loadScript;
+    </script>
+</head>
+
+<body onload="initialize()">
+<table border="10">
+    <tr>:::Pengaturan(顯示方式):::
+        <td>
+            <button name="Standard" onclick="ubahStandard()">Standard(標準)</button>
+            <button name="Hybrid" onclick="ubahHybrid()">Hybrid(混和)</button>
+            <button name="Satellite" onclick="ubahSatellite()">Satellite(衛星)</button>
+            <button name="Terrain" onclick="ubahTerrain()">Terrain(地形)</button>
+    </tr>
+    </td>
+</table>
+<div id="map_canvas" style="width:500; height:500" />
+
+
+</body>
+
+</html>
