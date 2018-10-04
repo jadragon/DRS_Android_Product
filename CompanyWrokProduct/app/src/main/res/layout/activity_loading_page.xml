@@ -11,7 +11,7 @@
         android:id="@+id/loading_page_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/loading_page" />
+        android:background="@mipmap/loading_page" />
     android:scaleType="fitXY"
     android:adjustViewBounds="true"
 </LinearLayout>

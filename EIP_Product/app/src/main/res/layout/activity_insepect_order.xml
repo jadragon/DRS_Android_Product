@@ -27,7 +27,6 @@
                     android:orientation="horizontal">
 
 
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -81,22 +80,24 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="2.5dp"
-                        android:text="@string/title_name1" />
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name1"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="right"
-                        android:padding="2.5dp"
-                        android:text="@string/title_name4" />
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name5"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="2.5dp" />
+                        android:padding="@dimen/table_padding" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -108,22 +109,24 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="2.5dp"
-                        android:text="@string/title_name2" />
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name2"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="right"
-                        android:padding="2.5dp"
-                        android:text="@string/title_name5" />
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name6"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="2.5dp" />
+                        android:padding="@dimen/table_padding" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -135,22 +138,51 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="2.5dp"
-                        android:text="@string/title_name3" />
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name3"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="right"
-                        android:padding="2.5dp"
-                        android:text="@string/title_name6" />
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name7"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="2.5dp" />
+                        android:padding="@dimen/table_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name4"
+                        android:textSize="@dimen/table_text_size"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:gravity="right"
+                        android:padding="@dimen/table_padding" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:padding="@dimen/table_padding" />
                 </LinearLayout>
 
                 <View
@@ -161,81 +193,91 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/black"
+                    android:divider="@drawable/divider_black_1dp"
                     android:orientation="horizontal"
-                    android:background="@android:color/black">
-
-
+                    android:showDividers="middle"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="@dimen/title1_weight"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_header1"
-                        android:background="@android:color/white"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="@dimen/title2_weight"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_header2"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+
+                        android:layout_weight="@dimen/title3_weight"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_header3"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+
+                        android:layout_weight="@dimen/title4_weight"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_header4"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_header5"
+                        android:layout_weight="@dimen/title5_weight"
                         android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+                        android:gravity="center"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/table_header5"
+                        android:textSize="@dimen/table_text_size"/>
 
-
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="@dimen/title6_weight"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/table_header6"
+                        android:textSize="@dimen/table_text_size"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:orientation="vertical"
+                        android:layout_weight="@dimen/title7_weight"
                         android:background="@android:color/white"
-                        android:layout_marginRight="1dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/table_header6" />
+                            android:text="@string/table_header7"
+                            android:textSize="@dimen/table_text_size"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -244,8 +286,8 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:orientation="horizontal">
 
                             <TextView
@@ -253,8 +295,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header7" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header8"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -266,8 +309,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header8" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header9"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -279,8 +323,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header9" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header10"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -292,8 +337,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header10" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header11"
+                                android:textSize="@dimen/table_text_size"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -302,63 +348,43 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_header11"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="@dimen/title8_weight"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_header12"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="@dimen/title9_weight"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_header13"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_header14"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:orientation="vertical"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp">
+                        android:layout_weight="@dimen/title10_weight"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:text="@string/table_header15" />
+                                android:text="@string/table_header14"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -369,8 +395,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:text="@string/table_header16" />
+                                android:text="@string/table_header15"
+                                android:textSize="@dimen/table_text_size"/>
                         </LinearLayout>
 
                         <View
@@ -380,17 +408,19 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header17" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header16"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -401,9 +431,11 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header18" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header17"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -414,9 +446,11 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header19" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header18"
+                                android:textSize="@dimen/table_text_size"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -427,9 +461,11 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="2.5dp"
-                                android:text="@string/table_header20" />
+                                android:padding="@dimen/table_padding"
+                                android:text="@string/table_header19"
+                                android:textSize="@dimen/table_text_size"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -437,24 +473,23 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_header21"
+                        android:layout_weight="@dimen/title11_weight"
                         android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
-
+                        android:gravity="center"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/table_header20"
+                        android:textSize="@dimen/table_text_size"/>
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_header22"
+                        android:layout_weight="@dimen/title12_weight"
                         android:background="@android:color/white"
-                        android:layout_marginRight="3dp"/>
+                        android:gravity="center"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/table_header21"
+                        android:textSize="@dimen/table_text_size"/>
 
 
                 </LinearLayout>
@@ -473,73 +508,117 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/black"
+                    android:divider="@drawable/divider_black_1dp"
                     android:orientation="horizontal"
-                    android:background="@android:color/black">
+                    android:showDividers="middle"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="2.5dp"
-                        android:text="@string/table_footer1"
+                        android:layout_weight="@dimen/footer1_weight"
                         android:background="@android:color/white"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="1dp"/>
+                        android:gravity="center"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/table_footer1"
+                        android:textSize="@dimen/table_text_size"/>
 
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="34"
-                        android:orientation="vertical"
-                        android:background="@android:color/white">
+                        android:layout_weight="22"
+                        android:background="@android:color/black"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:divider="@drawable/divider_black_1dp"
                             android:orientation="horizontal"
-                            android:background="@android:color/black">
+                            android:showDividers="middle">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="9"
+                                android:layout_weight="@dimen/footer2_weight"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="2.5dp"
+                                android:padding="@dimen/table_padding"
                                 android:text="@string/table_footer2"
-                                android:background="@android:color/white"
-                                android:layout_marginRight="1dp"/>
+                                android:textSize="@dimen/table_text_size"/>
 
-
-                            <TextView
-                                android:id="@+id/faild_txt_description"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="19"
-                                android:padding="2.5dp"
+                                android:layout_weight="@dimen/footer3_weight"
                                 android:background="@android:color/white"
-                                android:layout_marginRight="1dp" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@android:color/white"
+                                    android:gravity="center"
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer4"
+                                    android:textSize="@dimen/table_text_size"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="@dimen/footer4_weight"
+                                android:background="@android:color/white"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@android:color/white"
+                                    android:gravity="center"
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer5"
+                                    android:textSize="@dimen/table_text_size"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="@dimen/footer5_weight"
+                                android:background="@android:color/white"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/faild_txt_description"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@android:color/white"
+                                    android:gravity="center"
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer6"
+                                    android:textSize="@dimen/table_text_size"/>
+                            </LinearLayout>
 
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:orientation="vertical"
+                                android:layout_weight="@dimen/footer6_weight"
                                 android:background="@android:color/white"
-                                android:layout_marginRight="1dp">
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="2.5dp"
-
-                                    android:text="@string/table_footer4" />
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer7"
+                                    android:textSize="@dimen/table_text_size"/>
 
                                 <View
                                     android:layout_width="match_parent"
@@ -551,24 +630,25 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="2.5dp"
-                                    android:text="@string/table_footer5" />
+                                    android:padding="@dimen/table_padding" />
+
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:orientation="vertical"
+                                android:layout_weight="@dimen/footer7_weight"
                                 android:background="@android:color/white"
-                                android:layout_marginRight="3dp">
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="2.5dp" />
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer8"
+                                    android:textSize="@dimen/table_text_size"/>
 
                                 <View
                                     android:layout_width="match_parent"
@@ -580,86 +660,59 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="2.5dp" />
+                                    android:padding="@dimen/table_padding" />
+
+
                             </LinearLayout>
+
                         </LinearLayout>
-
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
+                            android:layout_height="3dp"
                             android:background="@android:color/black" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:divider="@drawable/divider_black_1dp"
                             android:orientation="horizontal"
-                            android:background="@android:color/black">
+                            android:showDividers="middle">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="9"
+                                android:layout_weight="@dimen/footer2_weight"
+                                android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="2.5dp"
+                                android:padding="@dimen/table_padding"
                                 android:text="@string/table_footer3"
-                                android:background="@android:color/white"
-                                android:layout_marginRight="1dp"/>
+                                android:textSize="@dimen/table_text_size"/>
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="19"
-                                android:padding="2.5dp"
+                                android:layout_weight="14"
                                 android:background="@android:color/white"
-                                android:layout_marginRight="1dp"/>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:orientation="vertical"
-                                android:background="@android:color/white"
-                                android:layout_marginRight="1dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:padding="2.5dp"
-
-                                    android:text="@string/table_footer6" />
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:background="@android:color/black" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:padding="2.5dp"
-                                    android:text="@string/table_footer5" />
-                            </LinearLayout>
+                                android:gravity="center"
+                                android:padding="@dimen/table_padding" />
 
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:orientation="vertical"
+
+                                android:layout_weight="@dimen/footer6_weight"
                                 android:background="@android:color/white"
-                                android:layout_marginRight="3dp">
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="2.5dp" />
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer9"
+                                    android:textSize="@dimen/table_text_size"/>
 
                                 <View
                                     android:layout_width="match_parent"
@@ -671,12 +724,44 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="2.5dp" />
+                                    android:padding="@dimen/table_padding" />
+
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="@dimen/footer7_weight"
+                                android:background="@android:color/white"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:padding="@dimen/table_padding"
+                                    android:text="@string/table_footer8"
+                                    android:textSize="@dimen/table_text_size"/>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@android:color/black" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:padding="@dimen/table_padding" />
+
+
+                            </LinearLayout>
+
                         </LinearLayout>
+
                     </LinearLayout>
-
-
 
 
                 </LinearLayout>
@@ -689,71 +774,81 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/black"
                     android:orientation="horizontal"
-                    android:background="@android:color/black">
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:divider="@drawable/divider_black_1dp"
+                    android:showDividers="middle">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@android:color/white"
                         android:gravity="center"
-                        android:padding="2.5dp"
+                        android:padding="@dimen/table_padding"
                         android:text="@string/table_footer7"
-                        android:background="@android:color/white"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="1dp"/>
+                        android:textSize="@dimen/table_text_size"/>
 
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="28"
-                        android:padding="2.5dp"
-
-                        android:text="@string/table_footer8"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="1dp"/>
+<LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="18">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="@dimen/table_padding"
+        android:text="@string/table_footer11"
+        android:textSize="@dimen/table_text_size"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="@dimen/table_padding"
+        android:text="@string/table_footer12"
+        android:textSize="@dimen/table_text_size"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="@dimen/table_padding"
+        android:text="@string/table_footer13"
+        android:textSize="@dimen/table_text_size"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="@dimen/table_padding"
+        android:text="@string/table_footer14"
+        android:textSize="@dimen/table_text_size"/>
+</LinearLayout>
 
 
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:orientation="vertical"
+                        android:layout_weight="2"
                         android:background="@android:color/white"
-                        android:layout_marginRight="1dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="2.5dp"
+                            android:padding="@dimen/table_padding"
 
-                            android:text="@string/table_footer9" />
+                            android:text="@string/table_footer15"
+                            android:textSize="@dimen/table_text_size"/>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/black" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:padding="2.5dp"
-                            android:text="@string/table_footer5" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:orientation="vertical"
-                        android:background="@android:color/white"
-                        android:layout_marginRight="3dp">
 
                         <Component.PaintView
                             android:id="@+id/paintView"
@@ -761,8 +856,25 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="2.5dp" />
+                            android:padding="@dimen/table_padding" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@android:color/white"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="@dimen/table_padding"
+                            android:text="@string/table_footer8"
+                            android:textSize="@dimen/table_text_size"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -773,10 +885,70 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="2.5dp" />
+                            android:padding="@dimen/table_padding" />
                     </LinearLayout>
 
 
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@android:color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@android:color/black"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:divider="@drawable/divider_black_1dp"
+                    android:showDividers="middle">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/table_padding"
+                        android:layout_weight="1"
+                        android:text="船務備註"
+                        android:background="@android:color/white"
+                        android:textSize="@dimen/table_text_size"
+                        android:gravity="center"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/table_padding"
+                        android:layout_weight="18"
+                        android:background="@android:color/white"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="取消"
+                        android:background="@android:color/white"
+                        android:textSize="@dimen/table_text_size"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="編輯"
+                        android:background="@android:color/white"
+                        android:textSize="@dimen/table_text_size"/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="暫"
+                        android:background="@android:color/white"
+                        android:textSize="@dimen/table_text_size"/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="送出"
+                        android:background="@android:color/white"
+                        android:textSize="@dimen/table_text_size"/>
 
                 </LinearLayout>
 

@@ -9,43 +9,81 @@
     <string name="surface">表面</string>
         
     <string name="packaging">包装</string>
-    <string name="title_name1">船务：</string>
-    <string name="title_name3">採购单号码：</string>
-    <string name="title_name4">列印日期：</string>
-    <string name="title_name5">客户：</string>
-    <string name="title_name6">INVOICE NO.：</string>
-    <string name="table_header1">序\n号</string>
-    <string name="table_header2">Item No</string>
-    <string name="table_header3">採样总数</string>
-    <string name="table_header4">出货总数</string>
-    <string name="table_header5">抽样数</string>
-    <string name="table_header6">品质不良件数</string>
-    <string name="table_header7">尺\n寸</string>
-    <string name="table_header8">功\n能</string>
-    <string name="table_header9">表\n面</string>
-    <string name="table_header10">包\n装</string>
-    <string name="table_header11">正\n唛</string>
-    <string name="table_header12">测\n唛</string>
-    <string name="table_header13">外箱\n长*宽*高\n(公分)</string>
-    <string name="table_header14">毛重\nKG</string>
-    <string name="table_header15">可出货</string>
-    <string name="table_header16">不可出货</string>
-    <string name="table_header17">可\n出</string>
-    <string name="table_header18">特\n採</string>
-    <string name="table_header19">重\n工</string>
-    <string name="table_header20">拒\n收</string>
-    <string name="table_header21">预定出货日</string>
-    <string name="table_header22">备注</string>
-    <string name="table_footer1">不\n合\n格\n处\n理</string>
-    <string name="table_footer2">三千检验人员载名不合格原因</string>
-    <string name="table_footer3">三千业务回复后续建议事项</string>
-    <string name="table_footer4">检验人员:</string>
-    <string name="table_footer5">日期</string>
-    <string name="table_footer6">业务人员:</string>
-    <string name="table_footer7">填\n表\n说\n明</string>
-    <string name="table_footer8">＊ 抽样检验标准请依成品检验规范程序书要求. \n＊ 如採购总数与出货总数相等,则出货总数免填，如有不符请依实际数据填入出货总数. \n＊ 正侧唛如相符请以V表示；如外乡成宽高以及毛重与採购单相同则免填，如与採购单不符需另填入通知船务修改资料. \n＊ 出货判定请以V表示，如判定为特採出货或拒收者，三千业务需另回复后续建议事项，可出货重工则免.</string>
-    <string name="table_footer9">供应商检测人员:</string>
+    <string name="title_name1">业务人员：</string>
+        
+    <string name="title_name2">船务人员: </string>
+        
+    <string name="title_name3">供应商名称：</string>
+        
+    <string name="title_name4">供应商代码：</string>
+        
+    <string name="title_name5">验表单号：</string>
+        
+    <string name="title_name6">采购单号：</string>
+        
+    <string name="title_name7">图面资料：</string>
 
+
+    <string name="table_header1">序号</string>
+        
+    <string name="table_header2">ITEM NO</string>
+        
+    <string name="table_header3">采样总数</string>
+        
+    <string name="table_header4">出货总数</string>
+        
+    <string name="table_header5">抽样数</string>
+        
+    <string name="table_header6">单位</string>
+        
+    <string name="table_header7">品质不良件数</string>
+        
+    <string name="table_header8">尺寸</string>
+        
+    <string name="table_header9">功能</string>
+        
+    <string name="table_header10">表面</string>
+        
+    <string name="table_header11">包装</string>
+        
+    <string name="table_header12">正唛</string>
+        
+    <string name="table_header13">测唛</string>
+        
+    <string name="table_header14">合格</string>
+        
+    <string name="table_header15">不合格</string>
+        
+    <string name="table_header16">可出</string>
+        
+    <string name="table_header17">特采</string>
+        
+    <string name="table_header18">重工</string>
+        
+    <string name="table_header19">拒收</string>
+        
+    <string name="table_header20">预定再验货日</string>
+        
+    <string name="table_header21">备注</string>
+
+
+    <string name="table_footer1">不合格處理</string>
+    <string name="table_footer2">三千檢驗人員載名不合格原因</string>
+    <string name="table_footer3">三千業務回覆後續建議事項</string>
+    <string name="table_footer4">不合格序號</string>
+    <string name="table_footer5">ITEM NO</string>
+    <string name="table_footer6">不合格原因</string>
+
+    <string name="table_footer7">檢驗人員:</string>
+    <string name="table_footer8">日期</string>
+    <string name="table_footer9">業務人員:</string>
+    <string name="table_footer10">填表說明</string>
+    <string name="table_footer11">＊ 抽樣檢驗標準請依成品檢驗規範程序書要求.</string>
+    <string name="table_footer12">＊ 如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數. </string>
+    <string name="table_footer13">＊ 正側嘜如相符請以V表示；如外鄉成寬高以及毛重與採購單相同則免填，如與採購單不符需另填入通知船務修改資料. </string>
+    <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
+    <string name="table_footer15">供應商檢測人員:</string>
+    <string name="table_footer16">船务备注:</string>
     <string-array name="menu_item">
         <item>验货单</item>
         <item>项目2</item>

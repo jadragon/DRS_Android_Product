@@ -6,21 +6,23 @@
     <string name="surface">Surface</string>
     <string name="packaging">Packaging</string>
 
-    <string name="title_name1">ship: </string>
+    <string name="title_name1">Business Person: </string>
         
-    <string name="title_name2">Supplier: </string>
+    <string name="title_name2">Shipkeeper: </string>
         
-    <string name="title_name3">Purchase order number: </string>
+    <string name="title_name3">Vendor Name: </string>
         
-    <string name="title_name4">print date: </string>
+    <string name="title_name4">vendor code: </string>
         
-    <string name="title_name5">Customer: </string>
+    <string name="title_name5">Check the form number: </string>
         
-    <string name="title_name6">INVOICE NO.:</string>
+    <string name="title_name6">Purchase order number: </string>
         
-    <string name="table_header1">order number </string>
+    <string name="title_name7">Figure data: </string>
         
-    <string name="table_header2">Item No</string>
+    <string name="table_header1">serial number </string>
+        
+    <string name="table_header2">ITEM NO</string>
         
     <string name="table_header3">total number of samples</string>
         
@@ -28,57 +30,69 @@
         
     <string name="table_header5">sample number </string>
         
-    <string name="table_header6">Number of bad quality </string>
+    <string name="table_header6">unit </string>
         
-    <string name="table_header7">size </string>
+    <string name="table_header7">the number of bad quality </string>
         
-    <string name="table_header8">function </string>
+    <string name="table_header8">size </string>
         
-    <string name="table_header9"> surface </string>
+    <string name="table_header9">features</string>
         
-    <string name="table_header10">Package </string>
+    <string name="table_header10">surface </string>
         
-    <string name="table_header11">Positive</string>
+    <string name="table_header11">package </string>
         
-    <string name="table_header12">Negative</string>
+    <string name="table_header12">正唛</string>
         
-    <string name="table_header13"> outer box \nlength * width * height (cm) </string>
+    <string name="table_header13">Test </string>
         
-    <string name="table_header14">hair weight\nKG</string>
+    <string name="table_header14"> qualified </string>
         
-    <string name="table_header15">can be shipped </string>
+    <string name="table_header15">failed </string>
         
-    <string name="table_header16"> not shipping </string>
+    <string name="table_header16"> can be exported </string>
         
-    <string name="table_header17"> can be out </string>
+    <string name="table_header17">Special </string>
         
-    <string name="table_header18"> special </string>
+    <string name="table_header18">Rework </string>
         
-    <string name="table_header19">Rework </string>
+    <string name="table_header19">rejected</string>
         
-    <string name="table_header20">Rejected</string>
+    <string name="table_header20"> scheduled re-inspection day </string>
         
-    <string name="table_header21"> scheduled shipping date </string>
+    <string name="table_header21">Remarks </string>
         
-    <string name="table_header22">Remarks </string>
-        
-    <string name="table_footer1">not qualified </string>
+    <string name="table_footer1">failed processing</string>
         
     <string name="table_footer2">Three thousand inspectors failed to record the name </string>
         
     <string name="table_footer3">Three thousand business reply follow-up suggestions </string>
         
-    <string name="table_footer4">Inspector: </string>
+    <string name="table_footer4">Unqualified serial number </string>
         
-    <string name="table_footer5">date</string>
+    <string name="table_footer5">ITEM NO</string>
         
-    <string name="table_footer6">business personnel: </string>
+    <string name="table_footer6"> reason for failure </string>
+
         
-    <string name="table_footer7">fill out the description </string>
+    <string name="table_footer7">Inspector: </string>
         
-    <string name="table_footer8">* Sampling inspection standards are subject to the requirements of the finished product inspection specification procedure. \n* If the total number of purchases is equal to the total number of shipments, the total number of shipments is exempt. If there is any discrepancy, please fill in the total shipments according to the actual data. \n* If the positive side is consistent, please indicate it as V; if the foreign country is wide and the gross weight is the same as the purchase order, it is exempted. If it does not match the purchase order, you need to fill in the notice to modify the shipping information. \n* Please confirm the shipment with V. It means that if it is determined that it is specially shipped or rejected, the 3,000 business needs to reply to the follow-up suggestions, and the rework can be shipped free.</string>
+    <string name="table_footer8">date</string>
         
-    <string name="table_footer9">vendor tester: </string>
+    <string name="table_footer9">business personnel: </string>
+        
+    <string name="table_footer10">fill the form description </string>
+        
+    <string name="table_footer11">* Sampling inspection standards are subject to the requirements of the finished product inspection specification procedure.</string>
+        
+    <string name="table_footer12">* If the total number of purchases is equal to the total number of shipments, the total number of shipments is exempt. If there is any discrepancy, please fill in the total shipments according to the actual data. </string>
+        
+    <string name="table_footer13">* If the positive side is consistent, please indicate it as V; if the foreign country is wide and the gross weight is the same as the purchase order, it will be free of charge. If it does not match the purchase order, you need to fill in the notice to modify the shipping information. </string>
+        
+    <string name="table_footer14">* Please indicate the shipment judgment by V. If it is judged that it is specially shipped or rejected, the 3,000 business needs to reply to the follow-up suggestions, but the shipment can be free. </string>
+        
+    <string name="table_footer15"> Vendor Detector: </string>
+    <string name="table_footer16"> Shipping Remarks: </string>
     <string-array name="language">
         <item>English</item>
         <item>简体中文</item>

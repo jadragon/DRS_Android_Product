@@ -2,304 +2,234 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/black"
     android:orientation="horizontal"
-    android:background="@android:color/black">
+    android:showDividers="middle"
+    android:divider="@drawable/divider_black_1dp">
 
     <TextView
         android:id="@+id/row1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:background="@android:color/white"
         android:layout_marginLeft="3dp"
-        android:layout_marginRight="1dp"/>
-
+        android:layout_weight="@dimen/title1_weight"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:padding="2.5dp" />
 
 
     <TextView
         android:id="@+id/row2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
+
+        android:layout_weight="@dimen/title2_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp"/>
+        android:gravity="center"
+        android:padding="2.5dp" />
 
 
     <TextView
         android:id="@+id/row3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
+
+        android:layout_weight="@dimen/title3_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp"/>
+        android:gravity="center"
+        android:padding="2.5dp" />
 
 
     <EditText
         android:id="@+id/row4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
+
+        android:layout_weight="@dimen/title4_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp"/>
+        android:gravity="center"
+        android:padding="2.5dp" />
 
 
     <TextView
         android:id="@+id/row5"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:background="@android:color/white"
-        android:layout_marginRight="1dp"/>
 
+        android:layout_weight="@dimen/title5_weight"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:padding="2.5dp" />
+    <TextView
+        android:id="@+id/row6"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="@dimen/title6_weight"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:padding="2.5dp" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:orientation="vertical"
+        android:layout_weight="@dimen/title7_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp">
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/row7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:padding="2.5dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:orientation="horizontal">
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-            <EditText
-                android:id="@+id/row6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:padding="2.5dp" />
+        <EditText
+            android:id="@+id/row8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:padding="2.5dp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-            <EditText
-                android:id="@+id/row7"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:padding="2.5dp" />
+        <EditText
+            android:id="@+id/row9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="2.5dp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-            <EditText
-                android:id="@+id/row8"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:padding="2.5dp" />
+        <EditText
+            android:id="@+id/row10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="2.5dp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black" />
-
-            <EditText
-                android:id="@+id/row9"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:padding="2.5dp" />
-
-        </LinearLayout>
     </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/row10"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:background="@drawable/checkbox_nike"
-        android:button="@null"
-        android:layout_marginRight="1dp"/>
 
     <CheckBox
         android:id="@+id/row11"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="2.5dp"
-        android:background="@drawable/checkbox_nike"
-        android:button="@null"
-        android:layout_marginRight="1dp"/>
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="horizontal"
+        android:layout_weight="@dimen/title8_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp">
+        android:button="@drawable/checkbox_nike" />
 
-        <EditText
-            android:id="@+id/row12"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:padding="2.5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="*" />
-
-        <EditText
-            android:id="@+id/row13"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:padding="2.5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="*" />
-
-        <EditText
-            android:id="@+id/row14"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:padding="2.5dp" />
-    </LinearLayout>
-
-
-    <EditText
-        android:id="@+id/row15"
+    <CheckBox
+        android:id="@+id/row12"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="2.5dp"
+        android:layout_weight="@dimen/title9_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp"/>
+        android:button="@drawable/checkbox_nike"
+        android:padding="2.5dp" />
 
 
-        <RadioGroup
-            android:id="@+id/radio_group"
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+
+        android:layout_weight="@dimen/title10_weight"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/row16"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="5"
+            android:layout_weight="1"
             android:background="@android:color/white"
-            android:layout_marginRight="1dp">
+            android:button="@drawable/radio_nike"
+            android:padding="2.5dp" />
 
-            <RadioButton
-                android:id="@+id/row16"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:button="@null"
-                android:background="@drawable/radio_nike"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black" />
+        <RadioButton
+            android:id="@+id/row17"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@drawable/radio_nike"
+            android:padding="2.5dp" />
 
-            <RadioButton
-                android:id="@+id/row17"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:button="@null"
-                android:background="@drawable/radio_nike"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black" />
+        <RadioButton
+            android:id="@+id/row18"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@drawable/radio_nike"
+            android:padding="2.5dp" />
 
-            <RadioButton
-                android:id="@+id/row18"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:button="@null"
-                android:background="@drawable/radio_nike"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black" />
+        <RadioButton
+            android:id="@+id/row19"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@drawable/radio_nike"
+            android:padding="2.5dp" />
 
-            <RadioButton
-                android:id="@+id/row19"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="2.5dp"
-                android:button="@null"
-                android:background="@drawable/radio_nike"/>
-
-        </RadioGroup>
+    </RadioGroup>
 
 
     <EditText
         android:id="@+id/row20"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
+
+        android:layout_weight="@dimen/title11_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="1dp"/>
+        android:gravity="center"
+        android:padding="2.5dp" />
 
 
     <EditText
         android:id="@+id/row21"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="2.5dp"
+        android:layout_marginRight="3dp"
+        android:layout_weight="@dimen/title12_weight"
         android:background="@android:color/white"
-        android:layout_marginRight="3dp"/>
-
+        android:gravity="center"
+        android:padding="2.5dp" />
 
 
 </LinearLayout>
