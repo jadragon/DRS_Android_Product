@@ -84,6 +84,14 @@
     <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
     <string name="table_footer15">供應商檢測人員:</string>
     <string name="table_footer16">船务备注:</string>
+
+    <string name="table_button1">取消</string>
+        
+    <string name="table_button2">编辑</string>
+        
+    <string name="table_button3">暂</string>
+        
+    <string name="table_button4">送出</string>
     <string-array name="menu_item">
         <item>验货单</item>
         <item>项目2</item>

@@ -15,7 +15,6 @@ public class SelectFailedActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     KeyWordRecyclerViewAdapter keyWordRecyclerViewAdapter;
     Button select_failed_confirm, select_failed_cancel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +36,7 @@ public class SelectFailedActivity extends AppCompatActivity {
         select_failed_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = getIntent();
                 intent.putExtra("failed_reason", keyWordRecyclerViewAdapter.getSelectItems());
                 setResult(110,intent);
                 finish();

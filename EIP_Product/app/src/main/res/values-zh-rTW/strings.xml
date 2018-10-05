@@ -17,7 +17,6 @@
     <string name="title_name7">圖面資料：</string>
 
 
-
     <string name="table_header1">序號</string>
     <string name="table_header2">ITEM NO</string>
     <string name="table_header3">採樣總數</string>
@@ -30,7 +29,7 @@
     <string name="table_header10">表面</string>
     <string name="table_header11">包裝</string>
     <string name="table_header12">正嘜</string>
-    <string name="table_header13">測嘜</string>
+    <string name="table_header13">側嘜</string>
     <string name="table_header14">合格</string>
     <string name="table_header15">不合格</string>
     <string name="table_header16">可出</string>
@@ -58,6 +57,12 @@
     <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
     <string name="table_footer15">供應商檢測人員:</string>
     <string name="table_footer16">船務備註:</string>
+
+
+    <string name="table_button1">取消</string>
+    <string name="table_button2">編輯</string>
+    <string name="table_button3">暫</string>
+    <string name="table_button4">送出</string>
     <string-array name="menu_item">
         <item>驗貨單</item>
         <item>項目2</item>

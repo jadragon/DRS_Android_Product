@@ -42,9 +42,9 @@
         
     <string name="table_header11">package </string>
         
-    <string name="table_header12">正唛</string>
+    <string name="table_header12">positive </string>
         
-    <string name="table_header13">Test </string>
+    <string name="table_header13">negative </string>
         
     <string name="table_header14"> qualified </string>
         
@@ -93,6 +93,16 @@
         
     <string name="table_footer15"> Vendor Detector: </string>
     <string name="table_footer16"> Shipping Remarks: </string>
+
+    <string name="table_button1">Cancel </string>
+        
+    <string name="table_button2">edit </string>
+        
+    <string name="table_button3">temporary </string>
+        
+    <string name="table_button4">send </string>
+
+
     <string-array name="language">
         <item>English</item>
         <item>简体中文</item>

@@ -74,8 +74,15 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         list.add(map);
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
         ArrayList<String> arrayList = db.getFailedDescription(0);
-        String[] type = ctx.getResources().getStringArray(R.array.type1);
         for (int i = 0; i < arrayList.size(); i++) {
+            map = new HashMap<>();
+            map.put("type", "" + TYPE_ITEM);
+            map.put("select", "0");
+            map.put("description", arrayList.get(i));
+            list.add(map);
+        }
+        String[] type = ctx.getResources().getStringArray(R.array.type1);
+        for (int i = 0; i < type.length; i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
@@ -92,8 +99,15 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         map.put("description",  ctx.getResources().getString(R.string.function));
         list.add(map);
         arrayList = db.getFailedDescription(1);
-        type = ctx.getResources().getStringArray(R.array.type2);
         for (int i = 0; i < arrayList.size(); i++) {
+            map = new HashMap<>();
+            map.put("type", "" + TYPE_ITEM);
+            map.put("select", "0");
+            map.put("description", arrayList.get(i));
+            list.add(map);
+        }
+        type = ctx.getResources().getStringArray(R.array.type2);
+        for (int i = 0; i < type.length; i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
@@ -110,8 +124,15 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         map.put("description",  ctx.getResources().getString(R.string.surface));
         list.add(map);
         arrayList = db.getFailedDescription(2);
-        type = ctx.getResources().getStringArray(R.array.type3);
         for (int i = 0; i < arrayList.size(); i++) {
+            map = new HashMap<>();
+            map.put("type", "" + TYPE_ITEM);
+            map.put("select", "0");
+            map.put("description", arrayList.get(i));
+            list.add(map);
+        }
+        type = ctx.getResources().getStringArray(R.array.type3);
+        for (int i = 0; i < type.length; i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
@@ -128,8 +149,15 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         map.put("description", ctx.getResources().getString(R.string.packaging));
         list.add(map);
         arrayList = db.getFailedDescription(3);
-        type = ctx.getResources().getStringArray(R.array.type4);
         for (int i = 0; i < arrayList.size(); i++) {
+            map = new HashMap<>();
+            map.put("type", "" + TYPE_ITEM);
+            map.put("select", "0");
+            map.put("description", arrayList.get(i));
+            list.add(map);
+        }
+        type = ctx.getResources().getStringArray(R.array.type4);
+        for (int i = 0; i < type.length; i++) {
             map = new HashMap<>();
             map.put("type", "" + TYPE_ITEM);
             map.put("select", "0");
