@@ -29,4 +29,44 @@
         <attr name="ratio" format="float" />
         <attr name="ratio_by_heigh" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="CalendarView">
+        <attr name="week_background" format="color" /><!--星期欄背景色-->
+        <attr name="week_line_background" format="color" /><!--星期欄線的顏色-->
+        <attr name="week_text_color" format="color" /><!--星期欄文字顏色-->
+        <attr name="week_bar_view" format="string" /><!--如果需要的話使用自定義星期欄-->
+        <attr name="month_view" format="string" /><!--完全自定義月檢視路徑-->
+        <attr name="week_view" format="string" /><!--完全自定義周檢視路徑-->
+        <attr name="scheme_text" format="string" /><!--標記的文字，一般可忽略-->
+        <attr name="day_text_size" format="dimension" /><!--日期字型大小-->
+        <attr name="lunar_text_size" format="dimension" /><!--農曆字型大小-->
+        <attr name="calendar_height" format="dimension" /><!--日曆卡的高度，每一項，不是整體-->
+        <attr name="scheme_text_color" format="color" /><!--標記的文字顏色-->
+        <attr name="scheme_month_text_color" format="color" /><!--標記的月字型顏色-->
+        <attr name="scheme_lunar_text_color" format="color" /><!--標記的農曆字型顏色-->
+        <attr name="scheme_theme_color" format="color" /><!--標記的背景主題顏色-->
+        <attr name="selected_theme_color" format="color" /><!--選擇的背景主題顏色-->
+        <attr name="selected_text_color" format="color" /><!--選中的月字型顏色-->
+        <attr name="selected_lunar_text_color" format="color" /><!--選中的農曆字型顏色-->
+        <attr name="current_day_text_color" format="color" /><!--今天的日子字型顏色-->
+        <attr name="current_day_lunar_text_color" format="color" /><!--今天的日子農曆字型顏色-->
+        <attr name="current_month_text_color" format="color" /><!--當前月份卡的月字型顏色，非今天所在的月份-->
+        <attr name="other_month_text_color" format="color" /><!--當前月份卡其它月字型顏色-->
+        <attr name="current_month_lunar_text_color" format="color" /><!--當前月份月農曆顏色-->
+        <attr name="other_month_lunar_text_color" format="color" /><!--其它月份農曆字型顏色-->        <!-- 年檢視相關 -->
+        <attr name="year_view_month_text_size" format="dimension" /><!--年檢視月字型大小-->
+        <attr name="year_view_day_text_size" format="dimension" /><!--年檢視日字型大小-->
+        <attr name="year_view_month_text_color" format="color" /><!--年檢視月字型顏色-->
+        <attr name="year_view_day_text_color" format="color" /><!--年檢視日子字型顏色-->
+        <attr name="year_view_scheme_color" format="color" /><!--年檢視標記字型顏色-->
+        <attr name="year_view_background" format="color" /><!--年檢視背景-->        <!---->
+        <attr name="min_year" format="integer" /><!--最小年份-->
+        <attr name="max_year" format="integer" /><!--最大年份-->
+        <attr name="min_year_month" format="integer" /><!--最小年份對應最小月份-->
+        <attr name="max_year_month" format="integer" /><!--最大年份對應月份-->                <!--配置你喜歡的月檢視顯示模式模式-->
+        <attr name="month_view_show_mode">
+            <enum name="mode_all" value="0" /> <!--全部顯示-->
+            <enum name="mode_only_current" value="1" /> <!--僅顯示當前月份-->
+            <enum name="mode_fix" value="2" /> <!--自適應顯示，不會多出一行，但是會自動填充-->
+        </attr>
+    </declare-styleable>
 </resources>

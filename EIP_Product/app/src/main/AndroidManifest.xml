@@ -32,7 +32,8 @@
         <activity
             android:name=".ImageViewActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".SelectFailedActivity" />
+        <activity android:name=".SelectFailedActivity"
+            android:screenOrientation="landscape"/>
         <activity android:name=".PDFFromServerActivity" />
 
         <provider

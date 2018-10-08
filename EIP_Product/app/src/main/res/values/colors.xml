@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="light_orange">#ffe8d7</color>
     <color name="light_blue">#ecf7fd</color>
+
+    //language
+    <color name="light_green">#8fb786</color>
+    <color name="light_purple">#919fa6</color>
+    <color name="orange">#f59738</color>
 </resources>

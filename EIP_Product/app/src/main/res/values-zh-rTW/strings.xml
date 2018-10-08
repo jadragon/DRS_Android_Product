@@ -64,15 +64,8 @@
     <string name="table_button3">暫</string>
     <string name="table_button4">送出</string>
     <string-array name="menu_item">
+        <item>首頁</item>
         <item>驗貨單</item>
-        <item>項目2</item>
-        <item>項目3</item>
-        <item>項目4</item>
-        <item>項目5</item>
-        <item>項目6</item>
-        <item>項目7</item>
-        <item>項目8</item>
-        <item>項目9</item>
         <item>設定</item>
     </string-array>
     <string-array name="type1">
