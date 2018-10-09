@@ -5,9 +5,15 @@
     <color name="colorAccent">#FF4081</color>
     <color name="light_orange">#ffe8d7</color>
     <color name="light_blue">#ecf7fd</color>
-
+    <color name="blue">#1ad7f9</color>
+    <color name="purple">#7a31e1</color>
+    <color name="invisible">#00000000</color>
     //language
     <color name="light_green">#8fb786</color>
     <color name="light_purple">#919fa6</color>
     <color name="orange">#f59738</color>
+
+    <color name="gray1">#cccccc</color>
+    <color name="gray2">#cc808080</color>
+
 </resources>

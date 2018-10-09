@@ -3,38 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+   android:orientation="vertical">
 
-    <liabiry.Component.SquareFrameLayout
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/slider_home_bg1"
-        app:ratio="1">
+        android:gravity="center"
+        android:tag="title"
+        android:text="首頁"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:background="@drawable/background_edit_invisible"
+        android:layout_margin="20dp"
+        android:padding="10dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:src="@drawable/mainslider_home_img1"
-                android:tag="image" />
-
-            <com.example.alex.eip_product.AutoVerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:tag="title"
-                android:text="首頁"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-    </liabiry.Component.SquareFrameLayout>
 </LinearLayout>

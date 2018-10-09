@@ -28,7 +28,9 @@
         </activity>
         <activity
             android:name=".InsepectOrderActivity"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape">
+
+        </activity>
         <activity
             android:name=".ImageViewActivity"
             android:screenOrientation="landscape" />
