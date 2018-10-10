@@ -12,34 +12,31 @@ import android.widget.TextView;
 
 import com.example.alex.eip_product.MainActivity;
 import com.example.alex.eip_product.R;
+import com.example.alex.eip_product.fragment.Fragment_calendar;
+import com.example.alex.eip_product.fragment.Fragment_home;
 import com.example.alex.eip_product.fragment.Fragment_inspect_content;
 
 import java.util.ArrayList;
 
-public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.RecycleHolder> {
+public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.RecycleHolder> {
     private ArrayList<String> list;
     private Context ctx;
 
-    public CompanyListAdapter(Context ctx) {
+    public MainMenuAdapter(Context ctx) {
         this.ctx = ctx;
         initList();
     }
 
     private void initList() {
         list = new ArrayList<>();
-        list.add("鑫力來");
-        list.add("勝萬");
-        list.add("澳邦");
-        list.add("強生");
-        list.add("忠縣順生");
-        list.add("華氏");
-
+        list.add("驗表行程");
+        list.add("出貨檢驗表");
     }
 
     @Override
-    public CompanyListAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_companyitem, null);
-        return new CompanyListAdapter.RecycleHolder(view);
+    public MainMenuAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_menu, null);
+        return new MainMenuAdapter.RecycleHolder(view);
     }
 
     @Override
@@ -64,15 +61,11 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
 
         @Override
         public void onClick(View view) {
-            Fragment fragment_inspect_content = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("inspect_content");
-            if (fragment_inspect_content == null) {
-                fragment_inspect_content = new Fragment_inspect_content();
+            Fragment fragment_calendar = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("calendar");
+            if (fragment_calendar == null) {
+                fragment_calendar = new Fragment_calendar();
             }
-            Bundle bundle = new Bundle();
-            bundle.putString("date", ((MainActivity) ctx).getCurrent_date());
-            fragment_inspect_content.setArguments(bundle);
-            ((MainActivity) ctx).switchFrament(fragment_inspect_content, "inspect_content");
-            // ctx.startActivity(new Intent(ctx, InsepectOrderActivity.class));
+            ((MainActivity) ctx).switchFrament(fragment_calendar, "calendar");
         }
     }
 

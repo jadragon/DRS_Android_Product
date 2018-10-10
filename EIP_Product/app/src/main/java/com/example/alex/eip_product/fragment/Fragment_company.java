@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.alex.eip_product.MainActivity;
 import com.example.alex.eip_product.R;
 import com.example.alex.eip_product.adapter.CompanyListAdapter;
 
@@ -19,10 +20,10 @@ import java.util.Calendar;
  */
 
 public class Fragment_company extends Fragment {
-    View v;
-    RecyclerView recyclerview;
-    CompanyListAdapter companyListAdapter;
-    TextView company_txt_title, prepage, nextpage;
+    private View v;
+    private RecyclerView recyclerview;
+    private CompanyListAdapter companyListAdapter;
+    private TextView title, prepage, nextpage;
 
     @Nullable
     @Override
@@ -40,7 +41,7 @@ public class Fragment_company extends Fragment {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-              //  cal.setTime(new Date());
+                //  cal.setTime(new Date());
                 cal.add(Calendar.DATE, -1);
 
             }
@@ -50,14 +51,13 @@ public class Fragment_company extends Fragment {
             @Override
             public void onClick(View v) {
 
-
             }
         });
     }
 
     private void initTextView() {
-        company_txt_title = v.findViewById(R.id.company_txt_title);
-        company_txt_title.setText(getArguments().getString("date") + "驗貨行程");
+        title = v.findViewById(R.id.company_txt_title);
+        title.setText(getArguments().getString("date") + "驗貨行程");
 
     }
 
@@ -67,4 +67,11 @@ public class Fragment_company extends Fragment {
         recyclerview.setAdapter(companyListAdapter);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            title.setText(getArguments().getString("date") + "驗貨行程");
+        }
+    }
 }

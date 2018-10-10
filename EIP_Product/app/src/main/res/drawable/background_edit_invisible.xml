@@ -11,7 +11,7 @@
         android:right="1dp"
         android:top="1dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/invisible" />
+            <solid android:color="@color/defalut_gray" />
             <stroke
                 android:width="3sp"
                 android:color="@color/gray1" />

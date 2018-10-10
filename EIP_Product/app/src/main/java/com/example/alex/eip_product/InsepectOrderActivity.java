@@ -28,12 +28,12 @@ public class InsepectOrderActivity extends AppCompatActivity {
     private final static int SELECT_FAIL_REASON = 110;
     private LinearLayout alltable, courseTable, failed_item_layout;
     private Button academyButton, saveButton;
-    int line = 1;
-    ImageView paintView;
-    TextView title, online, pdf_view;
+    private int line = 1;
+    private ImageView paintView;
+    private TextView title, online, pdf_view;
 
-    PaintView view;
-    ArrayList<View> failItemList = new ArrayList<>();
+    private PaintView view;
+    private ArrayList<View> failItemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void initPdfView() {
@@ -105,7 +104,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
         });
     }
 
-
     void findView() {
         alltable = findViewById(R.id.alltable);
         courseTable = findViewById(R.id.kccx_course_table);
@@ -116,7 +114,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         failed_item_layout = findViewById(R.id.failed_item_layout);
     }
-
 
     private class AddColumTask extends AsyncTask<String, Integer, String> {
         int index;
@@ -153,7 +150,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
                 //setAnimation(view.findViewById(R.id.row20));
                 courseTable.addView(view);
 
-
             } else if (result.equals("item")) {
                 View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
                 view.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +164,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
                 failItemList.add(view);
             }
         }
-
 
     }
 
@@ -212,7 +207,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
         db.close();
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -247,7 +241,6 @@ public class InsepectOrderActivity extends AppCompatActivity {
             online.setText("線上模式");
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

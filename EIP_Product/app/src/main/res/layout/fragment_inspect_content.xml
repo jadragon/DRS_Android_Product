@@ -170,6 +170,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
+                android:id="@+id/wirte_txt_inspect1"
                 android:background="@color/blue"
                 android:padding="5dip"
                 android:text="(填寫驗貨表)"
@@ -293,6 +294,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
+                android:id="@+id/wirte_txt_inspect2"
                 android:background="@color/blue"
                 android:padding="5dip"
                 android:text="(填寫驗貨表)"

@@ -12,13 +12,14 @@ import com.example.alex.eip_product.MainActivity;
 import com.example.alex.eip_product.R;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by user on 2017/5/30.
  */
 
 public class Fragment_calendar extends Fragment {
-    View v;
+    private View v;
     private CalendarView calendarView;
 
     @Nullable
@@ -29,49 +30,24 @@ public class Fragment_calendar extends Fragment {
         return v;
     }
 
-
     private void initCalendarView() {
         calendarView = v.findViewById(R.id.calendarView);
-        Calendar c = Calendar.getInstance();
-        ((MainActivity) getContext()).setCurrent_date(c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.DAY_OF_MONTH) + "(" + getDayOfWeek(c.get(Calendar.DAY_OF_WEEK)) + ")");
+        ((MainActivity) getContext()).setCurrent_date(new Date());
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, dayOfMonth);
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-                ((MainActivity) getContext()).setCurrent_date(year + "/" + (month + 1) + "/" + dayOfMonth + "(" + getDayOfWeek(dayOfWeek) + ")");
+                ((MainActivity) getContext()).setCurrent_date(calendar.getTime());
             }
         });
     }
 
-    public String getDayOfWeek(int dayofweek) {
-        String day = "";
-        switch (dayofweek) {
-            case Calendar.SUNDAY:
-                day = "日";
-                break;
-            case Calendar.MONDAY:
-                day = "一";
-                break;
-            case Calendar.TUESDAY:
-                day = "二";
-                break;
-            case Calendar.WEDNESDAY:
-                day = "三";
-                break;
-            case Calendar.THURSDAY:
-                day = "四";
-                break;
-            case Calendar.FRIDAY:
-                day = "五";
-                break;
-            case Calendar.SATURDAY:
-                day = "六";
-                break;
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            calendarView.setDate(calendarView.getDate());
         }
-        return day;
     }
-
 }
