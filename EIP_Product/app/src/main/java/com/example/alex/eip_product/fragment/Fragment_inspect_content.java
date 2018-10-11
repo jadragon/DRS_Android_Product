@@ -18,7 +18,7 @@ import com.example.alex.eip_product.R;
 
 public class Fragment_inspect_content extends Fragment {
     private View v;
-    private TextView title, wirte_txt_inspect1, wirte_txt_inspect2;
+    private TextView title, company_name, wirte_txt_inspect1, wirte_txt_inspect2;
 
     @Nullable
     @Override
@@ -29,8 +29,13 @@ public class Fragment_inspect_content extends Fragment {
     }
 
     private void initTextView() {
+        //標題
         title = v.findViewById(R.id.inspect_content_txt_title);
         title.setText(getArguments().getString("date") + "驗貨內容");
+        //廠商名稱
+        company_name = v.findViewById(R.id.company_name);
+        company_name.setText(getArguments().getString("name"));
+        //填寫資料
         wirte_txt_inspect1 = v.findViewById(R.id.wirte_txt_inspect1);
         wirte_txt_inspect2 = v.findViewById(R.id.wirte_txt_inspect2);
         View.OnClickListener clickListener = new View.OnClickListener() {

@@ -17,21 +17,25 @@
             android:id="@+id/company_txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2018/10/09(三) 驗貨行程"
-            android:textSize="30sp" />
-
+            android:text="2018/10/09(三)"
+            android:textSize="25sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_title"
+            android:textSize="25sp" />
         <TextView
             android:id="@+id/company_prepage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="＜前一頁＞"
+            android:text="@string/commpany_prepage"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/company_nextpage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="＜後一頁＞"
+            android:text="@string/company_nextpage"
             android:textSize="20sp" />
     </LinearLayout>
 

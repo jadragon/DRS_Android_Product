@@ -1,7 +1,6 @@
 package com.example.alex.eip_product.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +12,11 @@ import android.widget.TextView;
 import com.example.alex.eip_product.MainActivity;
 import com.example.alex.eip_product.R;
 import com.example.alex.eip_product.fragment.Fragment_calendar;
-import com.example.alex.eip_product.fragment.Fragment_home;
-import com.example.alex.eip_product.fragment.Fragment_inspect_content;
-
-import java.util.ArrayList;
+import com.example.alex.eip_product.fragment.Fragment_selectFailed;
+import com.example.alex.eip_product.fragment.Fragment_setting;
 
 public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.RecycleHolder> {
-    private ArrayList<String> list;
+    private String[] list;
     private Context ctx;
 
     public MainMenuAdapter(Context ctx) {
@@ -28,9 +25,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.Recycl
     }
 
     private void initList() {
-        list = new ArrayList<>();
-        list.add("驗表行程");
-        list.add("出貨檢驗表");
+        list = ctx.getResources().getStringArray(R.array.menu_item);
     }
 
     @Override
@@ -41,13 +36,13 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.Recycl
 
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
-        holder.title.setText(list.get(position));
+        holder.title.setText(list[position]);
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.length;
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -61,11 +56,31 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.Recycl
 
         @Override
         public void onClick(View view) {
-            Fragment fragment_calendar = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("calendar");
-            if (fragment_calendar == null) {
-                fragment_calendar = new Fragment_calendar();
+            int position = getAdapterPosition();
+            switch (position) {
+                case 0:
+                    Fragment calendar = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("calendar");
+                    if (calendar == null) {
+                        calendar = new Fragment_calendar();
+                    }
+                    ((MainActivity) ctx).switchFrament(calendar, "calendar");
+                    break;
+                case 1:
+                    Fragment selectfailed = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("selectfailed");
+                    if (selectfailed == null) {
+                        selectfailed = new Fragment_selectFailed();
+                    }
+                    ((MainActivity) ctx).switchFrament(selectfailed, "selectfailed");
+                    break;
+                case 2:
+                    Fragment setting = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("setting");
+                    if (setting == null) {
+                        setting = new Fragment_setting();
+                    }
+                    ((MainActivity) ctx).switchFrament(setting, "setting");
+                    break;
             }
-            ((MainActivity) ctx).switchFrament(fragment_calendar, "calendar");
+
         }
     }
 

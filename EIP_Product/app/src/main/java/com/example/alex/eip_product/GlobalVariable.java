@@ -2,9 +2,42 @@ package com.example.alex.eip_product;
 
 import android.app.Application;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import liabiry.Http.HttpUtils;
 
 public class GlobalVariable extends Application {
+
+
+    private Date current_date;
+
+    public String getCurrent_date() {//取得現在日期名稱
+        Calendar c = Calendar.getInstance();
+        c.setTime(current_date);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        return year + "/" + (month + 1) + "/" + dayOfMonth + "(" + getDayOfWeek(dayOfWeek) + ")";
+    }
+
+    public Object getCurrent_date(int type) {
+        switch (type) {
+            case 0:
+                return current_date;
+            case 1:
+                return current_date.getTime();
+            default:
+                return current_date;
+        }
+
+    }
+
+    public void setCurrent_date(Date current_date) {
+        this.current_date = current_date;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -12,9 +45,8 @@ public class GlobalVariable extends Application {
     }
 
 
-
     private void initImageLoader() {
-       HttpUtils.setContext(getApplicationContext());
+        HttpUtils.setContext(getApplicationContext());
         /*
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 //.showImageOnLoading(R.drawable.loading) //设置图片在下载期间显示的图片
@@ -54,4 +86,31 @@ public class GlobalVariable extends Application {
 */
     }
 
+    public String getDayOfWeek(int dayofweek) {
+        String day = "";
+        switch (dayofweek) {
+            case Calendar.SUNDAY:
+                day = "日";
+                break;
+            case Calendar.MONDAY:
+                day = "一";
+                break;
+            case Calendar.TUESDAY:
+                day = "二";
+                break;
+            case Calendar.WEDNESDAY:
+                day = "三";
+                break;
+            case Calendar.THURSDAY:
+                day = "四";
+                break;
+            case Calendar.FRIDAY:
+                day = "五";
+                break;
+            case Calendar.SATURDAY:
+                day = "六";
+                break;
+        }
+        return day;
+    }
 }

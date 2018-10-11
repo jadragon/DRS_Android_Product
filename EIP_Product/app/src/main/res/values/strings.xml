@@ -1,189 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EIP_Product</string>
-    <string name="other">Other</string>
-    <string name="size">Size</string>
-    <string name="function">Function</string>
-    <string name="surface">Surface</string>
-    <string name="packaging">Packaging</string>
 
-    <string name="title_name1">Business Person: </string>
-        
-    <string name="title_name2">Shipkeeper: </string>
-        
-    <string name="title_name3">Vendor Name: </string>
-        
-    <string name="title_name4">vendor code: </string>
-        
-    <string name="title_name5">Check the form number: </string>
-        
-    <string name="title_name6">Purchase order number: </string>
-        
-    <string name="title_name7">Figure data: </string>
-        
-    <string name="table_header1">serial number </string>
-        
+    <string name="app_name">驗貨表單系統</string>
+    <string name="other">其他</string>
+    <string name="size">尺寸</string>
+    <string name="function">功能</string>
+    <string name="surface">表面</string>
+    <string name="packaging">包裝</string>
+    <string name="title_name1">業務人員：</string>
+    <string name="title_name2">船務人員: </string>
+    <string name="title_name3">供應商名稱：</string>
+    <string name="title_name4">供應商代碼：</string>
+    <string name="title_name5">驗表單號：</string>
+    <string name="title_name6">採購單號：</string>
+    <string name="title_name7">圖面資料：</string>
+
+
+    <string name="table_header1">序號</string>
     <string name="table_header2">ITEM NO</string>
-        
-    <string name="table_header3">total number of samples</string>
-        
-    <string name="table_header4">Total shipments </string>
-        
-    <string name="table_header5">sample number </string>
-        
-    <string name="table_header6">unit </string>
-        
-    <string name="table_header7">the number of bad quality </string>
-        
-    <string name="table_header8">size </string>
-        
-    <string name="table_header9">features</string>
-        
-    <string name="table_header10">surface </string>
-        
-    <string name="table_header11">package </string>
-        
-    <string name="table_header12">positive </string>
-        
-    <string name="table_header13">negative </string>
-        
-    <string name="table_header14"> qualified </string>
-        
-    <string name="table_header15">failed </string>
-        
-    <string name="table_header16"> can be exported </string>
-        
-    <string name="table_header17">Special </string>
-        
-    <string name="table_header18">Rework </string>
-        
-    <string name="table_header19">rejected</string>
-        
-    <string name="table_header20"> scheduled re-inspection day </string>
-        
-    <string name="table_header21">Remarks </string>
-        
-    <string name="table_footer1">failed processing</string>
-        
-    <string name="table_footer2">Three thousand inspectors failed to record the name </string>
-        
-    <string name="table_footer3">Three thousand business reply follow-up suggestions </string>
-        
-    <string name="table_footer4">Unqualified serial number </string>
-        
+    <string name="table_header3">採樣總數</string>
+    <string name="table_header4">出貨總數</string>
+    <string name="table_header5">抽樣數</string>
+    <string name="table_header6">單位</string>
+    <string name="table_header7">品質不良件數</string>
+    <string name="table_header8">尺寸</string>
+    <string name="table_header9">功能</string>
+    <string name="table_header10">表面</string>
+    <string name="table_header11">包裝</string>
+    <string name="table_header12">正嘜</string>
+    <string name="table_header13">側嘜</string>
+    <string name="table_header14">合格</string>
+    <string name="table_header15">不合格</string>
+    <string name="table_header16">可出</string>
+    <string name="table_header17">特採</string>
+    <string name="table_header18">重工</string>
+    <string name="table_header19">拒收</string>
+    <string name="table_header20">預定再驗貨日</string>
+    <string name="table_header21">備註</string>
+
+
+    <string name="table_footer1">不合格處理</string>
+    <string name="table_footer2">三千檢驗人員載名不合格原因</string>
+    <string name="table_footer3">三千業務回覆後續建議事項</string>
+    <string name="table_footer4">不合格序號</string>
     <string name="table_footer5">ITEM NO</string>
-        
-    <string name="table_footer6"> reason for failure </string>
+    <string name="table_footer6">不合格原因</string>
 
-        
-    <string name="table_footer7">Inspector: </string>
-        
-    <string name="table_footer8">date</string>
-        
-    <string name="table_footer9">business personnel: </string>
-        
-    <string name="table_footer10">fill the form description </string>
-        
-    <string name="table_footer11">* Sampling inspection standards are subject to the requirements of the finished product inspection specification procedure.</string>
-        
-    <string name="table_footer12">* If the total number of purchases is equal to the total number of shipments, the total number of shipments is exempt. If there is any discrepancy, please fill in the total shipments according to the actual data. </string>
-        
-    <string name="table_footer13">* If the positive side is consistent, please indicate it as V; if the foreign country is wide and the gross weight is the same as the purchase order, it will be free of charge. If it does not match the purchase order, you need to fill in the notice to modify the shipping information. </string>
-        
-    <string name="table_footer14">* Please indicate the shipment judgment by V. If it is judged that it is specially shipped or rejected, the 3,000 business needs to reply to the follow-up suggestions, but the shipment can be free. </string>
-        
-    <string name="table_footer15"> Vendor Detector: </string>
-    <string name="table_footer16"> Shipping Remarks: </string>
-
-    <string name="table_button1">Cancel </string>
-        
-    <string name="table_button2">edit </string>
-        
-    <string name="table_button3">temporary </string>
-        
-    <string name="table_button4">send </string>
-    <string name="language_CN">简体中文</string>
-    <string name="language_TW">繁體中文</string>
-    <string name="language_VN">Tiếng Việt</string>
-
-
+    <string name="table_footer7">檢驗人員:</string>
+    <string name="table_footer8">日期</string>
+    <string name="table_footer9">業務人員:</string>
+    <string name="table_footer10">填表說明</string>
+    <string name="table_footer11">＊ 抽樣檢驗標準請依成品檢驗規範程序書要求.</string>
+    <string name="table_footer12">＊ 如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數. </string>
+    <string name="table_footer13">＊ 正側嘜如相符請以V表示；如外鄉成寬高以及毛重與採購單相同則免填，如與採購單不符需另填入通知船務修改資料. </string>
+    <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
+    <string name="table_footer15">供應商檢測人員:</string>
+    <string name="table_footer16">船務備註:</string>
+    <string name="language_text">語言:</string>
     <string-array name="language">
-        <item>English</item>
-        <item>简体中文</item>
         <item>繁體中文</item>
+        <item>简体中文</item>
     </string-array>
-
+    <string name="table_button1">取消</string>
+    <string name="table_button2">編輯</string>
+    <string name="table_button3">暫</string>
+    <string name="table_button4">送出</string>
+    <string name="login_name">姓名:</string>
+    <string name="login_pass">密碼:</string>
+    <string name="login_button">登入</string>
+    <string name="comfirm_button">確認</string>
+    <string name="company_title">驗貨行程</string>
+    <string name="commpany_prepage">＜前一頁＞</string>
+    <string name="company_nextpage">＜後一頁＞</string>
+    <string name="inspect_content_title">驗貨內容</string>
+    <string name="inspect_content_title1">供應商名稱</string>
+    <string name="inspect_content_title2">採購單 編號</string>
+    <string name="inspect_content_title3">採購單 版本</string>
+    <string name="inspect_content_title4">驗貨完畢</string>
+    <string name="inspect_content_title5">可否出貨</string>
+    <string name="inspect_content_title6">驗表預覽</string>
+    <string name="inspect_content_title7">是</string>
+    <string name="inspect_content_title8">否</string>
+    <string name="inspect_content_title9">未驗</string>
+    <string name="inspect_content_title10">(預覽)</string>
+    <string name="inspect_content_title11">(填寫驗貨表)</string>
     <string-array name="menu_item">
-                 <item>Home</item>
-        <item>Checklist</item>
-                
-
-                
-        <item> Settings</item>
-            
+        <item>驗表行程</item>
+        <item>不合格原因</item>
+        <item>語言設定</item>
     </string-array>
     <string-array name="type1">
-                
-        <item> size does not match the drawing </item>
-                
-        <item> size exceeds tolerance </item>
-                
-        <item> hole position cc exceeds tolerance </item>
-            
+        <item>尺寸與圖面不符</item>
+        <item>尺寸超過公差</item>
+        <item>孔位cc超過公差</item>
     </string-array>
-        
     <string-array name="type2">
-                
-        <item>dental error</item>
-                
-        <item> missing tapping/disintegration</item>
-                
-        <item> insufficient tooth depth/skew</item>
-                
-        <item> difficult to lock the cavity</item>
-                
-        <item>Handle feet</item>
-                
-        <item> is not active</item>
-                
-        <item>Institutional anomaly</item>
-            
+        <item>牙型錯誤</item>
+        <item>漏攻牙/崩牙</item>
+        <item>牙深不足/歪斜</item>
+        <item>牙洞難鎖</item>
+        <item>把手翹腳</item>
+        <item>活動性不佳</item>
+        <item>機構做動異常</item>
     </string-array>
-        
     <string-array name="type3">
-                
-        <item>Scratch. Bump. Deformation. Burr. Pitting. Rusty</item>
-                
-        <item>bubble. Highlights. Burr. Shakong. Sour acid. Dirty. White spots</item>
-                
-        <item>painted orange peel. Flow paint. Chromatic aberration. Color error. Shedding</item>
-                
-        <item> plating color difference. Color error. Shedding</item>
-                
-        <item> has not passed 3H hardness test </item>
-                
-        <item> less than 24 hours of neutral salt spray test</item>
-                
-        <item> less than 48 hours of neutral salt spray test</item>
-            
+        <item>刮傷.撞傷.變形.毛邊.麻點.生鏽</item>
+        <item>起泡.亮點.毛刺.沙孔.吐酸.髒汙.白斑</item>
+        <item>烤漆橘皮.流漆.色差.顏色錯誤.脫落</item>
+        <item>電鍍色差.顏色錯誤.脫落</item>
+        <item>未過3H硬度測試</item>
+        <item>未過24小時中性鹽霧測試</item>
+        <item>未過48小時中性鹽霧測試</item>
     </string-array>
-        
     <string-array name="type4">
-                
-        <item> product mix / model error </item>
-                
-        <item> Accessories / Screws / Packaging Errors. Missing </item>
-                
-        <item> Accessories/screws/size error</item>
-                
-        <item>Barcode/Label/Paste Paper Sticker Error. Missing </item>
-                
-        <item> product / outer box / inner box packaging error </item>
-                
-        <item> positive/negative/inside box printing error </item>
-                
-        <item> wrong size of outer box/inner box/package material </item>
-                
-        <item>Package / inner and outer box / pallet damage </item>
-            
+        <item>產品混裝/型號錯誤</item>
+        <item>各項配件/螺絲/包裝錯誤.遺漏</item>
+        <item>各項配件/螺絲/尺寸錯誤</item>
+        <item>條碼/標籤/貼紙張貼錯誤.遺漏</item>
+        <item>產品/外箱/內盒包裝數量錯誤</item>
+        <item>正/側嘜/內盒印刷錯誤</item>
+        <item>外箱/內盒/包材尺寸錯誤</item>
+        <item>包材/內外箱/棧板破損</item>
     </string-array>
 </resources>

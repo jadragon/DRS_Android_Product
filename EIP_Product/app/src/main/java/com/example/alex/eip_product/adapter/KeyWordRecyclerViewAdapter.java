@@ -175,7 +175,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
     public KeyWordRecyclerViewAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
             TextView textView = new TextView(ctx);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             textView.setTextColor(Color.BLACK);
             return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView);
         }
@@ -185,7 +185,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         //layoutParams.setMargins((int) (20 * dm.density), (int) (20 * dm.density), (int) (20 * dm.density), (int) (20 * dm.density));
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
         textView.setPadding((int) (20 * dm.density), (int) (10 * dm.density), (int) (20 * dm.density), (int) (10 * dm.density));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(10 * dm.density);
         shape.setStroke((int) (1 * dm.density), Color.RED);

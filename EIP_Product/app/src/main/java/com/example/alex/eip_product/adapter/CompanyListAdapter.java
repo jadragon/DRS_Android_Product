@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.alex.eip_product.GlobalVariable;
 import com.example.alex.eip_product.MainActivity;
 import com.example.alex.eip_product.R;
 import com.example.alex.eip_product.fragment.Fragment_inspect_content;
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.RecycleHolder> {
     private ArrayList<String> list;
     private Context ctx;
+    private GlobalVariable gv;
 
     public CompanyListAdapter(Context ctx) {
         this.ctx = ctx;
+        gv = (GlobalVariable) ctx.getApplicationContext();
         initList();
     }
 
@@ -45,7 +48,6 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
         holder.title.setText(list.get(position));
-
     }
 
     @Override
@@ -65,11 +67,12 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         @Override
         public void onClick(View view) {
             Fragment fragment_inspect_content = ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("inspect_content");
-            if (fragment_inspect_content == null) {
+            if (fragment_inspect_content == null) {//判斷Fragment_inspect_content是否已存在
                 fragment_inspect_content = new Fragment_inspect_content();
             }
             Bundle bundle = new Bundle();
-            bundle.putString("date", ((MainActivity) ctx).getCurrent_date());
+            bundle.putString("name", list.get(getAdapterPosition()));
+            bundle.putString("date", gv.getCurrent_date());
             fragment_inspect_content.setArguments(bundle);
             ((MainActivity) ctx).switchFrament(fragment_inspect_content, "inspect_content");
             // ctx.startActivity(new Intent(ctx, InsepectOrderActivity.class));

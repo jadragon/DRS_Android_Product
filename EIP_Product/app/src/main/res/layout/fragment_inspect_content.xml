@@ -7,434 +7,462 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/inspect_content_txt_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="30sp" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_margin="20dp"
-    android:background="@android:color/black">
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginTop="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginBottom="1dp">
-        <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:padding="5dip"
-        android:text="供應商名稱"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/inspect_content_txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:layout_weight="1"
-            android:padding="5dip"
-            android:text="鑫力來"
-            android:gravity="center"
-            android:layout_marginTop="1dp"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
+            android:text="@string/inspect_content_title"
+            android:textSize="25sp" />
     </LinearLayout>
-    <TableLayout
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="match_parent"
-        android:stretchColumns="0"
-        android:layout_margin="1dp">
-
-        <!-- 2個欄位 -->
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="採購單 編號"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="採購單 版本"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="驗貨完畢"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="可否出貨"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="驗表預覽"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_blue"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_green"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:background="@color/orange"
-                android:padding="5dip"
-                android:text="(預覽)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_orange"
-                android:padding="5dip"
-                android:text="否"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="未驗"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/wirte_txt_inspect1"
-                android:background="@color/blue"
-                android:padding="5dip"
-                android:text="(填寫驗貨表)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_blue"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_green"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:background="@color/orange"
-                android:padding="5dip"
-                android:text="(預覽)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_blue"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/purple"
-                android:padding="5dip"
-                android:text="否"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:background="@color/orange"
-                android:padding="5dip"
-                android:text="(預覽)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_orange"
-                android:padding="5dip"
-                android:text="否"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="未驗"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/wirte_txt_inspect2"
-                android:background="@color/blue"
-                android:padding="5dip"
-                android:text="(填寫驗貨表)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_blue"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_green"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:background="@color/orange"
-                android:padding="5dip"
-                android:text="(預覽)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp">
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="SC150309"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@android:color/white"
-                android:padding="5dip"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/light_blue"
-                android:padding="5dip"
-                android:text="是"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_marginRight="1dp"
-                android:background="@color/purple"
-                android:padding="5dip"
-                android:text="否"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:background="@color/orange"
-                android:padding="5dip"
-                android:text="(預覽)"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <!--
-                將按鈕延伸至2個欄位寬
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dip">
-
-            <Button
-                android:layout_span="2"
-                android:text="第 1 和 2 欄" />
-
-
-        </TableRow>
-
-
-        3個欄位
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dip">
-
-            <TextView
-                android:text="第 1 欄"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <Button android:text="第 2 欄" />
-
-            <Button android:text="第 3 欄" />
-        </TableRow>
-
-       利用layout_columnundefinedbase is 0),將按鈕放在第2欄
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dip">
-
-            <Button
-                android:layout_column="1"
-                android:text="第 2 欄" />
-        </TableRow>
-
-         利用layout_columnundefinedbase is 0),將按鈕放在第3欄
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dip">
-
-            <Button
-                android:layout_column="2"
-                android:text="第  3 欄" />
-        </TableRow>
--->
-    </TableLayout>
-</LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@android:color/black"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:padding="5dp"
+                        android:text="@string/inspect_content_title1"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="鑫力來"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+                </LinearLayout>
+
+                <TableLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="5"
+                    android:stretchColumns="0">
+
+                    <!-- 2個欄位 -->
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title2"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title3"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title4"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title5"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title6"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_green"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:background="@color/orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title10"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title8"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title9"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:id="@+id/wirte_txt_inspect1"
+                            android:background="@color/blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title11"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_green"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:background="@color/orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title10"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/purple"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title8"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:background="@color/orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title10"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title8"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title9"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:id="@+id/wirte_txt_inspect2"
+                            android:background="@color/blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title11"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_green"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:background="@color/orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title10"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp">
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="SC150309"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="1"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/light_blue"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title7"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@color/purple"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title8"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <TextView
+                            android:background="@color/orange"
+                            android:padding="5dp"
+                            android:text="@string/inspect_content_title10"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    </TableRow>
+
+                    <!--
+                            將按鈕延伸至2個欄位寬
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp">
+
+                        <Button
+                            android:layout_span="2"
+                            android:text="第 1 和 2 欄" />
+
+
+                    </TableRow>
+
+
+                    3個欄位
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:text="第 1 欄"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <Button android:text="第 2 欄" />
+
+                        <Button android:text="第 3 欄" />
+                    </TableRow>
+
+                   利用layout_columnundefinedbase is 0),將按鈕放在第2欄
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp">
+
+                        <Button
+                            android:layout_column="1"
+                            android:text="第 2 欄" />
+                    </TableRow>
+
+                     利用layout_columnundefinedbase is 0),將按鈕放在第3欄
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp">
+
+                        <Button
+                            android:layout_column="2"
+                            android:text="第  3 欄" />
+                    </TableRow>
+            -->
+                </TableLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
 </LinearLayout>

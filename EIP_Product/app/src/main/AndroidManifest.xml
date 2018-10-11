@@ -20,22 +20,17 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".InsepectOrderActivity"
-            android:screenOrientation="landscape">
-
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".ImageViewActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".SelectFailedActivity"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".SelectFailedActivity"
+            android:screenOrientation="landscape" />
         <activity android:name=".PDFFromServerActivity" />
 
         <provider
@@ -48,7 +43,15 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

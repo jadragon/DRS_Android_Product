@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.alex.eip_product.MainActivity;
+import com.example.alex.eip_product.GlobalVariable;
 import com.example.alex.eip_product.R;
 import com.example.alex.eip_product.adapter.CompanyListAdapter;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by user on 2017/5/30.
@@ -24,11 +25,13 @@ public class Fragment_company extends Fragment {
     private RecyclerView recyclerview;
     private CompanyListAdapter companyListAdapter;
     private TextView title, prepage, nextpage;
+    private GlobalVariable gv;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_company, container, false);
+        gv = (GlobalVariable) getContext().getApplicationContext();
         initButton();
         initTextView();
         initRecylcerView();
@@ -41,23 +44,28 @@ public class Fragment_company extends Fragment {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                //  cal.setTime(new Date());
+                cal.setTime((Date) gv.getCurrent_date(0));
                 cal.add(Calendar.DATE, -1);
-
+                gv.setCurrent_date(cal.getTime());
+                title.setText(gv.getCurrent_date());
             }
         });
         nextpage = v.findViewById(R.id.company_nextpage);
         nextpage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Calendar cal = Calendar.getInstance();
+                cal.setTime((Date) gv.getCurrent_date(0));
+                cal.add(Calendar.DATE, +1);
+                gv.setCurrent_date(cal.getTime());
+                title.setText(gv.getCurrent_date());
             }
         });
     }
 
     private void initTextView() {
         title = v.findViewById(R.id.company_txt_title);
-        title.setText(getArguments().getString("date") + "驗貨行程");
+        title.setText(getArguments().getString("date"));
 
     }
 
@@ -71,7 +79,7 @@ public class Fragment_company extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            title.setText(getArguments().getString("date") + "驗貨行程");
+            title.setText(getArguments().getString("date"));
         }
     }
 }
