@@ -20,32 +20,30 @@ import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import Component.PaintView;
 import Utils.CommonUtil;
 import db.SQLiteDatabaseHandler;
 
 public class InsepectOrderActivity extends AppCompatActivity {
     private final static int SELECT_FAIL_REASON = 110;
-    private LinearLayout alltable, courseTable, failed_item_layout;
+    private LinearLayout alltable, courseTable, layout1, layout2, layout3;
     private Button academyButton, saveButton;
     private int line = 1;
     private ImageView paintView;
-    private TextView title, online, pdf_view;
+    private TextView title, pdf_view;
 
-    private PaintView view;
     private ArrayList<View> failItemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insepect_order);
+        setContentView(R.layout.activity_test);
         initPdfView();
         findView();
         initPaintView();
         initFailItem();
         setAnimation(title);
-        setAnimation(online);
         // Apply the adapter to the spinner
+
         academyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,16 +68,16 @@ public class InsepectOrderActivity extends AppCompatActivity {
     }
 
     private void initPaintView() {
+
         paintView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view = new PaintView(InsepectOrderActivity.this);
-                view.setPenStrokeWidth(10);
+                final LinePathView view = new LinePathView(InsepectOrderActivity.this);
                 AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this).setView(view)
                         .setPositiveButton("確定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                paintView.setImageBitmap(view.getPaintBitmap());
+                                paintView.setImageBitmap(view.getBitMap());
                                 dialog.dismiss();
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -88,6 +86,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         });
+
                 builder.show();
             }
         });
@@ -110,9 +109,10 @@ public class InsepectOrderActivity extends AppCompatActivity {
         academyButton = findViewById(R.id.kccx_chaxun1);
         saveButton = findViewById(R.id.kccx_chaxun2);
         paintView = findViewById(R.id.paintView);
-        online = findViewById(R.id.online);
         title = findViewById(R.id.title);
-        failed_item_layout = findViewById(R.id.failed_item_layout);
+        layout1 = findViewById(R.id.layout1);
+        layout2 = findViewById(R.id.layout2);
+        layout3 = findViewById(R.id.layout3);
     }
 
     private class AddColumTask extends AsyncTask<String, Integer, String> {
@@ -151,6 +151,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
                 courseTable.addView(view);
 
             } else if (result.equals("item")) {
+                /*
                 View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -160,8 +161,10 @@ public class InsepectOrderActivity extends AppCompatActivity {
                         startActivityForResult(intent, SELECT_FAIL_REASON);
                     }
                 });
-                failed_item_layout.addView(view);
-                failItemList.add(view);
+                */
+                TextView textView = new TextView(InsepectOrderActivity.this);
+                layout1.addView(textView);
+                failItemList.add(textView);
             }
         }
 
@@ -223,7 +226,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
                     if (!CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
                         toastCheckWIFI();
                     } else {
-                        online.setText("線上模式");
+
                     }
                 }
             });
@@ -231,14 +234,14 @@ public class InsepectOrderActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    online.setText("離線模式");
+
                 }
             });
             AlertDialog alertDialog = builder.create();
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.show();
         } else {
-            online.setText("線上模式");
+
         }
     }
 
