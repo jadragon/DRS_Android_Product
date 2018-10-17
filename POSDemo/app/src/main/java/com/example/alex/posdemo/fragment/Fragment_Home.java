@@ -126,7 +126,7 @@ public class Fragment_home extends Fragment {
         Description description = new Description();
         description.setText("测试图表");
         description.setTextColor(Color.RED);
-        description.setTextSize(20);
+        description.setTextSize(10);
         home_todaysale_chart.setDescription(description);//设置图表描述信息
         home_todaysale_chart.setNoDataText("没有数据熬");//没有数据时显示的文字
         home_todaysale_chart.setNoDataTextColor(Color.BLUE);//没有数据时显示文字的颜色
@@ -182,7 +182,7 @@ public class Fragment_home extends Fragment {
             set1.setHighlightLineWidth(2f);//设置点击交点后显示高亮线宽
             set1.setHighlightEnabled(true);//是否禁用点击高亮线
             set1.setHighLightColor(Color.RED);//设置点击交点后显示交高亮线的颜色
-            set1.setValueTextSize(9f);//设置显示值的文字大小
+            set1.setValueTextSize(5f);//设置显示值的文字大小
             set1.setDrawFilled(false);//设置禁用范围背景填充
 
             //格式化显示数据
@@ -209,7 +209,7 @@ public class Fragment_home extends Fragment {
             set2.setCircleColor(Color.GRAY);
             set2.setLineWidth(1f);
             set2.setCircleRadius(3f);
-            set2.setValueTextSize(10f);
+            set2.setValueTextSize(8f);
 
             //保存LineDataSet集合
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -276,7 +276,7 @@ public class Fragment_home extends Fragment {
 
             Legend l = home_todaysale_chart.getLegend();//图例
             l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART_INSIDE);//设置图例的位置
-            l.setTextSize(10f);//设置文字大小
+            l.setTextSize(8f);//设置文字大小
             l.setForm(Legend.LegendForm.CIRCLE);//正方形，圆形或线
             l.setFormSize(10f); // 设置Form的大小
             l.setWordWrapEnabled(true);//是否支持自动换行 目前只支持BelowChartLeft, BelowChartRight, BelowChartCenter
@@ -301,7 +301,7 @@ public class Fragment_home extends Fragment {
         salecompare_chart.setDrawEntryLabels(true);              //设置pieChart是否只显示饼图上百分比不显示文字（true：下面属性才有效果）
         salecompare_chart.setEntryLabelColor(Color.WHITE);       //设置pieChart图表文本字体颜色
         //   salecompare_chart.setEntryLabelTypeface(mTfRegular);     //设置pieChart图表文本字体样式
-        salecompare_chart.setEntryLabelTextSize(10);            //设置pieChart图表文本字体大小
+        salecompare_chart.setEntryLabelTextSize(8f);            //设置pieChart图表文本字体大小
 
 // 设置 pieChart 内部圆环属性
         salecompare_chart.setDrawHoleEnabled(true);              //是否显示PieChart内部圆环(true:下面属性才有意义)
@@ -313,7 +313,7 @@ public class Fragment_home extends Fragment {
         salecompare_chart.setDrawCenterText(true);               //是否绘制PieChart内部中心文本（true：下面属性才有意义）
         //  salecompare_chart.setCenterTextTypeface(mTfLight);       //设置PieChart内部圆文字的字体样式
         salecompare_chart.setCenterText("NT$\n257898");                 //设置PieChart内部圆文字的内容
-        salecompare_chart.setCenterTextSize(10f);                //设置PieChart内部圆文字的大小
+        salecompare_chart.setCenterTextSize(8f);                //设置PieChart内部圆文字的大小
         salecompare_chart.setCenterTextColor(Color.RED);         //设置PieChart内部圆文字的颜色
 
 // pieChart添加数据
@@ -327,13 +327,13 @@ public class Fragment_home extends Fragment {
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setForm(Legend.LegendForm.DEFAULT); //设置图例的形状
         l.setFormSize(10);                      //设置图例的大小
-        l.setFormToTextSpace(10f);              //设置每个图例实体中标签和形状之间的间距
+        l.setFormToTextSpace(8f);              //设置每个图例实体中标签和形状之间的间距
         l.setDrawInside(false);
         l.setWordWrapEnabled(true);              //设置图列换行(注意使用影响性能,仅适用legend位于图表下面)
         l.setXEntrySpace(10f);                  //设置图例实体之间延X轴的间距（setOrientation = HORIZONTAL有效）
         l.setYEntrySpace(8f);                  //设置图例实体之间延Y轴的间距（setOrientation = VERTICAL 有效）
         l.setYOffset(0f);                      //设置比例块Y轴偏移量
-        l.setTextSize(14f);                      //设置图例标签文本的大小
+        l.setTextSize(10f);                      //设置图例标签文本的大小
         l.setTextColor(Color.parseColor("#ff9933"));//设置图例标签文本的颜色
 
 
@@ -375,7 +375,7 @@ public class Fragment_home extends Fragment {
         PieData pieData = new PieData(pieDataSet);
         pieData.setDrawValues(true);            //设置是否显示数据实体(百分比，true:以下属性才有意义)
         pieData.setValueTextColor(Color.BLUE);  //设置所有DataSet内数据实体（百分比）的文本颜色
-        pieData.setValueTextSize(10);          //设置所有DataSet内数据实体（百分比）的文本字体大小
+        pieData.setValueTextSize(8f);          //设置所有DataSet内数据实体（百分比）的文本字体大小
         // pieData.setValueTypeface(mTfLight);     //设置所有DataSet内数据实体（百分比）的文本字体样式
         pieData.setValueFormatter(new PercentFormatter());//设置所有DataSet内数据实体（百分比）的文本字体格式
         salecompare_chart.setData(pieData);

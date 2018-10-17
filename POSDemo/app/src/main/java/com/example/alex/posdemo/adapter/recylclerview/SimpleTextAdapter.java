@@ -33,7 +33,7 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
 
         TextView tv = new TextView(ctx);
         tv.setTag("title");
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         tv.setGravity(Gravity.CENTER_VERTICAL);
         //     tv.setBackgroundColor(ctx.getResources().getColor(R.color.default_gray));
         params.setMargins(0, 0, 0, 0);
@@ -43,7 +43,7 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Re
         linearLayout.addView(tv);
         tv = new TextView(ctx);
         tv.setTag("price");
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         tv.setGravity(Gravity.CENTER_VERTICAL);
         //     tv.setBackgroundColor(ctx.getResources().getColor(R.color.default_gray));
         params.setMargins(0, 0, 0, 0);
