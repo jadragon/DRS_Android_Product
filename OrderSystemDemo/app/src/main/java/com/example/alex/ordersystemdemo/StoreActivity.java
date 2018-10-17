@@ -14,7 +14,7 @@ import java.util.List;
 public class StoreActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
-    String[] tablist = new String[]{"未接單", "已接單", "配送中", "已配送"};
+    private String[] tablist = new String[]{"未接單", "已接單", "配送中", "已配送"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
