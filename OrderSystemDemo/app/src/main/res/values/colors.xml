@@ -9,4 +9,11 @@
     <color name="defalut_gray">#f4f4f4</color>
     <color name="gray1">#cccccc</color>
     <color name="gray2">#cc808080</color>
+
+    <!-- Google -->
+    <color name="blue_grey_500">#607D8B</color>
+    <color name="blue_grey_600">#546E7A</color>
+    <color name="blue_grey_700">#455A64</color>
+    <color name="blue_grey_800">#37474F</color>
+    <color name="blue_grey_900">#263238</color>
 </resources>

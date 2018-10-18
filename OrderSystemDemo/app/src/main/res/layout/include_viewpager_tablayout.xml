@@ -7,6 +7,30 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/defalut_gray"
+        android:orientation="vertical"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="標題"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray2" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
@@ -16,7 +40,7 @@
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="43dp"
-            app:tabIndicatorHeight="2dp"/>
+            app:tabIndicatorHeight="2dp" />
 
     </android.support.v4.view.ViewPager>
 

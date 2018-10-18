@@ -1,17 +1,16 @@
 package com.example.alex.ordersystemdemo;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.example.alex.ordersystemdemo.Fragment.Fragment_orderlist;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryActivity extends AppCompatActivity {
+public class DeliveryActivity extends ToolbarAcitvity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
     private String[] tablist = new String[]{"未配送", "配送中", "已配送"};
@@ -19,11 +18,11 @@ public class DeliveryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
+        initToolbar("外送");
         initViewPagerAndTabLayout();
     }
     private void initViewPagerAndTabLayout() {
         viewPager = findViewById(R.id.viewpager);
-
         fragmentArrayList = new ArrayList<>();
         fragmentArrayList.add(new Fragment_orderlist());
         fragmentArrayList.add(new Fragment_orderlist());

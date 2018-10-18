@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     View fb, gplus, login;
@@ -31,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch (view.getId()) {
             case R.id.login:
-                startActivity(new Intent(LoginActivity.this, StudentAcitvity.class));
+                startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
                 break;
             case R.id.login_fb:
                 startActivity(new Intent(LoginActivity.this, StoreActivity.class));

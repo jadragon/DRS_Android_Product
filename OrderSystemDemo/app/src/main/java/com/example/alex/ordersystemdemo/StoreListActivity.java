@@ -5,32 +5,33 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.example.alex.ordersystemdemo.Fragment.Fragment_orderlist;
+import com.example.alex.ordersystemdemo.Fragment.Fragment_storelist;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentAcitvity extends ToolbarAcitvity {
+public class StoreListActivity  extends ToolbarAcitvity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
-    private String[] tablist = new String[]{"未接單", "已接單", "配送中", "已配送"};
-
+    private String[] tablist = new String[]{"早餐", "中餐", "晚餐", "甜點"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student);
-        initToolbar("客人");
+        setContentView(R.layout.activity_store_list);
+        initToolbar("商家列表");
         initViewPagerAndTabLayout();
     }
+
+
 
     private void initViewPagerAndTabLayout() {
         viewPager = findViewById(R.id.viewpager);
 
         fragmentArrayList = new ArrayList<>();
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
+        fragmentArrayList.add(new Fragment_storelist());
+        fragmentArrayList.add(new Fragment_storelist());
+        fragmentArrayList.add(new Fragment_storelist());
+        fragmentArrayList.add(new Fragment_storelist());
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int i) {
@@ -48,4 +49,5 @@ public class StudentAcitvity extends ToolbarAcitvity {
             }
         });
     }
+
 }
