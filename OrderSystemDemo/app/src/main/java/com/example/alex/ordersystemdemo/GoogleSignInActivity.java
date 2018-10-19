@@ -51,8 +51,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements
          * 設定Sign In 選項
          * */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))//
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))//取得性別..等
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .requestEmail()
                 .build();
         // [END configure_signin]

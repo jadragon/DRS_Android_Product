@@ -58,8 +58,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- Google+ End -->
+
         </activity>
+        <!-- Google+ End -->
     </application>
 
 </manifest>
