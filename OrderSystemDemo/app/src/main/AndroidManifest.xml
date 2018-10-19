@@ -3,6 +3,7 @@
     package="com.example.alex.ordersystemdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,23 +13,24 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
         <activity android:name=".StudentAcitvity" />
-        <activity android:name=".StoreActivity"></activity>
+        <activity android:name=".StoreActivity" />
         <activity android:name=".DeliveryActivity" />
-        <activity android:name=".OrderListDetailActivity"></activity>
+        <activity android:name=".OrderListDetailActivity" />
         <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".StoreListActivity"></activity>
-
-
-        <activity android:name=".FacebookActivity">
-        </activity>
+        <activity android:name=".StoreListActivity" />
+        <activity android:name=".FacebookActivity"></activity>
         <!-- Facebook Start -->
         <!-- FB Login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <!-- FB Share ex:photo、video、webLink-->
+        <!-- FB Share ex:photo、video、webLink -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider279289052925102"
@@ -52,15 +54,9 @@
         </activity>
         <!-- Facebook End -->
         <!-- Google+ Start -->
-        <activity android:name=".GoogleSignInActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+        <activity android:name=".GoogleSignInActivity"></activity>
         <!-- Google+ End -->
+        <activity android:name=".StoreDetailActivity"></activity>
     </application>
 
 </manifest>

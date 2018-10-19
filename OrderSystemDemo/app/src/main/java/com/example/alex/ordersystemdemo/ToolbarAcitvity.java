@@ -1,14 +1,11 @@
 package com.example.alex.ordersystemdemo;
 
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 public class ToolbarAcitvity extends AppCompatActivity {
@@ -37,10 +34,11 @@ public class ToolbarAcitvity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                startActivity(new Intent());
+                startActivity(new Intent(ToolbarAcitvity.this,StudentAcitvity.class));
                 return true;
             }
         });
+        /*
           menuItem = menu.findItem(R.id.menu_search);
         //通过MenuItem得到SearchView
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
@@ -64,6 +62,9 @@ public class ToolbarAcitvity extends AppCompatActivity {
                 return false;
             }
         });
+        */
         return super.onCreateOptionsMenu(menu);
+
     }
+
 }
