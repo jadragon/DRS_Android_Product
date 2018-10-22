@@ -9,35 +9,38 @@ import android.view.View;
 import android.widget.TextView;
 
 public class ToolbarAcitvity extends AppCompatActivity {
-
-    protected void initToolbar(String toolbarTitle) {
+    boolean menuVisible = false;
+    boolean navigationVisible = false;
+    protected void initToolbar(String toolbarTitle, boolean navigationVisible,boolean menuVisible) {
+        this.menuVisible = menuVisible;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
-
-
         ((TextView) findViewById(R.id.toolbar_title)).setText(toolbarTitle);
-        toolbar.setNavigationIcon(R.drawable.ic_action_name);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        if(navigationVisible) {
+            toolbar.setNavigationIcon(R.drawable.ic_action_name);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.searchmenu, menu);
-        MenuItem menuItem = menu.findItem(R.id.menu_send);
-        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                startActivity(new Intent(ToolbarAcitvity.this,StudentAcitvity.class));
-                return true;
-            }
-        });
+        if (menuVisible) {
+            getMenuInflater().inflate(R.menu.searchmenu, menu);
+            MenuItem menuItem = menu.findItem(R.id.menu_send);
+            menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    startActivity(new Intent(ToolbarAcitvity.this, StudentAcitvity.class));
+                    return true;
+                }
+            });
+        }
         /*
           menuItem = menu.findItem(R.id.menu_search);
         //通过MenuItem得到SearchView

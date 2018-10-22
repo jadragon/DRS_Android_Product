@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,9 @@ public class Fragment_orderlist extends Fragment {
     private void initViewPagerAndRecyclerView() {
         recyclerView = v.findViewById(R.id.include_recyclerview);
         recyclerView.setAdapter(new OrderListAdapter(getContext(), null));
+        DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.divider_1dp_gray));
+        recyclerView.addItemDecoration(decoration);
     }
 
 }

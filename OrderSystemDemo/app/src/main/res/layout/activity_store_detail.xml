@@ -7,14 +7,22 @@
     tools:context=".StoreDetailActivity">
 
     <include
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include
         layout="@layout/include_refresh_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_default"
         android:text="送出"
-        android:textSize="20sp"
-        android:background="@android:drawable/btn_default"/>
+        android:textSize="15sp" />
 </LinearLayout>

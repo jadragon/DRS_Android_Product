@@ -3,7 +3,10 @@ package com.example.alex.ordersystemdemo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     View fb, gplus, login;
@@ -11,6 +14,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final static int STORE = 1;
     private final static int DELIVERY = 2;
     private int currentType = 0;
+    private SwitchCompat login_switch;
+    private TextView login_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         gplus = findViewById(R.id.login_gplus);
         gplus.setOnClickListener(this);
 
+
+        login_switch = findViewById(R.id.login_switch);
+        login_title = findViewById(R.id.login_title);
+        login_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    login_title.setText("外送員登入");
+                } else {
+                    login_title.setText("商家登入");
+                }
+            }
+        });
     }
 
     @Override

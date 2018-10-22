@@ -13,12 +13,12 @@ import java.util.List;
 public class StoreListActivity  extends ToolbarAcitvity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
-    private String[] tablist = new String[]{"早餐", "中餐", "晚餐", "甜點"};
+    private String[] tablist = new String[]{"中式", "西式", "飲品", "點心"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_list);
-        initToolbar("商家列表");
+        initToolbar("商家列表",false,true);
         initViewPagerAndTabLayout();
     }
 

@@ -44,12 +44,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView detail;
 
         public RecycleHolder(View view) {
             super(view);
-            detail = view.findViewWithTag("detail");
-            detail.setOnClickListener(this);
+
+            itemView.setOnClickListener(this);
         }
 
         @Override
