@@ -34,7 +34,7 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="31">
+            <state relative-caret-position="369">
               <caret line="101" column="38" selection-start-line="101" selection-start-column="32" selection-end-line="101" selection-end-column="38" />
             </state>
           </provider>
@@ -43,8 +43,8 @@
       <file leaf-file-name="XprinterCodeUtilByte.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/Utils/XprinterCodeUtilByte.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9951">
-              <caret line="321" column="25" selection-start-line="321" selection-start-column="25" selection-end-line="321" selection-end-column="25" />
+            <state relative-caret-position="248">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -2090,7 +2090,6 @@
     <panes>
       <pane id="ProjectPane" />
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -2113,6 +2112,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2277,6 +2277,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -2317,6 +2318,20 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2573">
+          <caret line="101" column="38" selection-start-line="101" selection-start-column="32" selection-end-line="101" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/Utils/XprinterCodeUtilByte.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9951">
+          <caret line="321" column="25" selection-start-line="321" selection-start-column="25" selection-end-line="321" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3131">
           <caret line="101" column="38" selection-start-line="101" selection-start-column="32" selection-end-line="101" selection-end-column="38" />
         </state>
@@ -2345,14 +2360,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/Utils/XprinterCodeUtilByte.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9951">
-          <caret line="321" column="25" selection-start-line="321" selection-start-column="25" selection-end-line="321" selection-end-column="25" />
+        <state relative-caret-position="248">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4wifi/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="31">
+        <state relative-caret-position="369">
           <caret line="101" column="38" selection-start-line="101" selection-start-column="32" selection-end-line="101" selection-end-column="38" />
         </state>
       </provider>

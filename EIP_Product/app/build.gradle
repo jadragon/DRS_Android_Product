@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        repositories {
+            maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases' }
+        }
     }
     //會導致無法import libary dependency
     packagingOptions {
@@ -42,4 +45,6 @@ dependencies {
     implementation files('libs/httpmime-4.3.jar')
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation files('libs/itextpdf-5.4.1.jar')
+    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.0'
+
 }
