@@ -52,66 +52,66 @@ public class MainActivity extends Activity {
 
 
     public void main() throws IOException {
-        String ip = test_edit.getText().toString();
-        int port = 9100;
-        String code = "1234567890";
-        int skip = 2;
-        Socket client = new java.net.Socket();
-        OutputStreamWriter outSW = null;
-        client.connect(new InetSocketAddress(ip, port), 10000); // 创建一个 socket
-//        socketWriter = new PrintWriter(client.getOutputStream());// 创建输入输出数据流
-        outSW = new OutputStreamWriter(client.getOutputStream(), "GBK");
-        BufferedWriter socketWriter = new BufferedWriter(outSW);
-/*
-        socketWriter.write(new String(justification_center(), "UTF-8"));
-        socketWriter.write("***测试***\n");
-        socketWriter.write("快来买吧\n");
-        socketWriter.write(new String(justification_left(), "UTF-8"));
-        socketWriter.write("订单号：170426543103\n");
-        socketWriter.write("哈哈哈\n");
-        socketWriter.write("-------------------------------------------\n");
-        socketWriter.write(new String(emphasized_on(), "UTF-8"));
-        socketWriter.write(new String(double_height_width_on(), "UTF-8"));
-        socketWriter.write("367#085_1300\n");
-        socketWriter.write(new String(double_height_width_off(), "UTF-8"));
-        socketWriter.write(new String(emphasized_off(), "UTF-8"));
-        socketWriter.write("测试人：王大帅哥\n");
-        socketWriter.write("手机：13052235269\n");
-        socketWriter.write(new String(emphasized_on(), "UTF-8"));
-        socketWriter.write(new String(set_chinese_super_on(), "UTF-8"));
-        socketWriter.write(new String(double_height_width_on(), "UTF-8"));
-        socketWriter.write("你说我是不是帅哥\n");
-        socketWriter.write(new String(double_height_width_off(), "UTF-8"));
-        socketWriter.write(new String(set_chinese_super_off(), "UTF-8"));
-        socketWriter.write(new String(emphasized_off(), "UTF-8"));
-          socketWriter.write("\n\n");
-        socketWriter.write(new String(set_bar_code_width(2), "UTF-8"));
-        socketWriter.write(new String(print_bar_code128(BarCode.CODE128, "{Bcb7099132890012345"), "UTF-8"));
-        socketWriter.write("\n");
-        socketWriter.write("cb7099132890012345");
-
-        for (int i = 0; i < skip; i++) {
+            String ip = test_edit.getText().toString();
+            int port = 9100;
+            String code = "1234567890";
+            int skip = 2;
+            Socket client = new java.net.Socket();
+            OutputStreamWriter outSW = null;
+            client.connect(new InetSocketAddress(ip, port), 10000); // 创建一个 socket
+    //        socketWriter = new PrintWriter(client.getOutputStream());// 创建输入输出数据流
+            outSW = new OutputStreamWriter(client.getOutputStream(), "GBK");
+            BufferedWriter socketWriter = new BufferedWriter(outSW);
+    /*
+            socketWriter.write(new String(justification_center(), "UTF-8"));
+            socketWriter.write("***测试***\n");
+            socketWriter.write("快来买吧\n");
+            socketWriter.write(new String(justification_left(), "UTF-8"));
+            socketWriter.write("订单号：170426543103\n");
+            socketWriter.write("哈哈哈\n");
+            socketWriter.write("-------------------------------------------\n");
+            socketWriter.write(new String(emphasized_on(), "UTF-8"));
+            socketWriter.write(new String(double_height_width_on(), "UTF-8"));
+            socketWriter.write("367#085_1300\n");
+            socketWriter.write(new String(double_height_width_off(), "UTF-8"));
+            socketWriter.write(new String(emphasized_off(), "UTF-8"));
+            socketWriter.write("测试人：王大帅哥\n");
+            socketWriter.write("手机：13052235269\n");
+            socketWriter.write(new String(emphasized_on(), "UTF-8"));
+            socketWriter.write(new String(set_chinese_super_on(), "UTF-8"));
+            socketWriter.write(new String(double_height_width_on(), "UTF-8"));
+            socketWriter.write("你说我是不是帅哥\n");
+            socketWriter.write(new String(double_height_width_off(), "UTF-8"));
+            socketWriter.write(new String(set_chinese_super_off(), "UTF-8"));
+            socketWriter.write(new String(emphasized_off(), "UTF-8"));
+              socketWriter.write("\n\n");
+            socketWriter.write(new String(set_bar_code_width(2), "UTF-8"));
+            socketWriter.write(new String(print_bar_code128(BarCode.CODE128, "{Bcb7099132890012345"), "UTF-8"));
             socketWriter.write("\n");
-        }
-        socketWriter.write(new String(feedpapercut(), "UTF-8"));
-        socketWriter.flush();
-        socketWriter.close();
-*/
-        socketWriter.write(new String(justification_center(), "UTF-8"));
-        socketWriter.write("商品名稱:綠藻碇\n");
-        socketWriter.write("規格:50入\n");
-        socketWriter.write("vt-525897\n");
-        socketWriter.write(new String(set_bar_code_width(2), "UTF-8"));
-        socketWriter.write(new String(barcode_height((byte) 80), "UTF-8"));
-        socketWriter.write(new String(printBarcode(XprinterCodeUtilByte.BarCode.CODE39,"1234567891012"), "UTF-8"));
+            socketWriter.write("cb7099132890012345");
 
-        socketWriter.write("1234567891012");
-        for (int i = 0; i < skip; i++) {
-            socketWriter.write("\n");
-        }
-        socketWriter.write(new String(feedpapercut(), "UTF-8"));
-        socketWriter.flush();
-        socketWriter.close();
+            for (int i = 0; i < skip; i++) {
+                socketWriter.write("\n");
+            }
+            socketWriter.write(new String(feedpapercut(), "UTF-8"));
+            socketWriter.flush();
+            socketWriter.close();
+    */
+            socketWriter.write(new String(justification_center(), "UTF-8"));
+            socketWriter.write("商品名稱:綠藻碇\n");
+            socketWriter.write("規格:50入\n");
+            socketWriter.write("vt-525897\n");
+            socketWriter.write(new String(set_bar_code_width(2), "UTF-8"));
+            socketWriter.write(new String(barcode_height((byte) 80), "UTF-8"));
+            socketWriter.write(new String(printBarcode(XprinterCodeUtilByte.BarCode.CODE39,"1234567891012"), "UTF-8"));
+
+            socketWriter.write("1234567891012");
+            for (int i = 0; i < skip; i++) {
+                socketWriter.write("\n");
+            }
+            socketWriter.write(new String(feedpapercut(), "UTF-8"));
+            socketWriter.flush();
+            socketWriter.close();
 
     }
 
