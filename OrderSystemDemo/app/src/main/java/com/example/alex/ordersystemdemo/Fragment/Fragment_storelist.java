@@ -7,21 +7,31 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
+import com.example.alex.ordersystemdemo.API.List.RestaurantApi;
 import com.example.alex.ordersystemdemo.R;
 import com.example.alex.ordersystemdemo.RecyclerViewAdapter.StoreListAdapter;
+import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
+import com.example.alex.ordersystemdemo.library.IDataCallBack;
+
+import org.json.JSONObject;
 
 
 public class Fragment_storelist extends Fragment {
     private RecyclerView recyclerView;
     private View v;
     private SwipeRefreshLayout mSwipeLayout;
+    private StoreListAdapter storeListAdapter;
+    private String type;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
+        type = getArguments().getString("type");
         initViewPagerAndRecyclerView();
         initSwipeLayout();
         return v;
@@ -47,7 +57,24 @@ public class Fragment_storelist extends Fragment {
 
     private void initViewPagerAndRecyclerView() {
         recyclerView = v.findViewById(R.id.include_recyclerview);
-        recyclerView.setAdapter(new StoreListAdapter(getContext(), null));
+        storeListAdapter = new StoreListAdapter(getContext(), null);
+        recyclerView.setAdapter(storeListAdapter);
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return new RestaurantApi().store_data(type);
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    storeListAdapter.setFilter(jsonObject);
+                } else {
+                }
+                Log.e("STORE", jsonObject + "");
+            }
+        });
+
     }
 
 }

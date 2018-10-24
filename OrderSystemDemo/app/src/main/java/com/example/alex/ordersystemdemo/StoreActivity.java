@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 
 import com.example.alex.ordersystemdemo.Fragment.Fragment_orderlist;
 
@@ -14,25 +13,39 @@ import java.util.List;
 public class StoreActivity extends ToolbarAcitvity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
-    private String[] tablist = new String[]{"未接單", "已接單", "配送中"};
+    private String[] tablist = new String[]{"未接單", "未配對", "已配對"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
-        initToolbar("商家",false,false);
+        initToolbar("商家", false, false);
         initViewPagerAndTabLayout();
     }
 
 
-
     private void initViewPagerAndTabLayout() {
         viewPager = findViewById(R.id.viewpager);
-
         fragmentArrayList = new ArrayList<>();
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
+
+
+        Fragment_orderlist fragment_orderlist = new Fragment_orderlist();
+        Bundle bundle = new Bundle();
+        bundle.putString("status", "0");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
+
+        fragment_orderlist = new Fragment_orderlist();
+        bundle = new Bundle();
+        bundle.putString("status", "1");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
+
+        fragment_orderlist = new Fragment_orderlist();
+        bundle = new Bundle();
+        bundle.putString("status", "2");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int i) {

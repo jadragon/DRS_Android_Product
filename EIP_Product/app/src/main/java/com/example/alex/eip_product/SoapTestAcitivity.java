@@ -35,8 +35,13 @@ public class SoapTestAcitivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            JSONObject jsonObject=new API_OrderInfo().getOrderInfo();
-                            test_text.setText(jsonObject+"");
+                            final JSONObject jsonObject=new API_OrderInfo().getOrderInfo();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    test_text.setText(jsonObject+"");
+                                }
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (XmlPullParserException e) {

@@ -13,14 +13,16 @@ import java.util.List;
 public class DeliveryActivity extends ToolbarAcitvity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
-    private String[] tablist = new String[]{"未配送", "配送中", "已配送"};
+    private String[] tablist = new String[]{"未配送", "已配對", "配送中"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
-        initToolbar("外送",false,false);
+        initToolbar("外送", false, false);
         initViewPagerAndTabLayout();
     }
+
     private void initViewPagerAndTabLayout() {
         viewPager = findViewById(R.id.viewpager);
         fragmentArrayList = new ArrayList<>();

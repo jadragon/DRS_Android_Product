@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SwitchCompat;
-import android.widget.CompoundButton;
-import android.widget.TextView;
 
 import com.example.alex.ordersystemdemo.Fragment.Fragment_orderlist;
 
@@ -16,7 +13,7 @@ import java.util.List;
 public class StudentAcitvity extends ToolbarAcitvity {
     private ViewPager viewPager;
     private List<Fragment> fragmentArrayList;
-    private String[] tablist = new String[]{"已下定", "配送中", "已完成"};
+    private String[] tablist = new String[]{"已下單", "配送中", "已完成"};
 
 
     @Override

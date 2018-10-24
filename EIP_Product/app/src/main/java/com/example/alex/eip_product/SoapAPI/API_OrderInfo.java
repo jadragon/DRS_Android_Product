@@ -13,7 +13,7 @@ public class API_OrderInfo extends SoapSetting {
 
     public JSONObject getOrderInfo() throws JSONException, XmlPullParserException, IOException {
 //            创建soapObject,即拼装soap bodyin
-        SoapObject  request = new SoapObject(NAMESPACE, NAMESPACE + METHOD_NAME);
+        SoapObject  request = new SoapObject(NAMESPACE,METHOD_NAME);
 //            添加传入参数，根据具体格式测试
         request.addProperty("username", "test01");
         request.addProperty("pw", "Test123456");
