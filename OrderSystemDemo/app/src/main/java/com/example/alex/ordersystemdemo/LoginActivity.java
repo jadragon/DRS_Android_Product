@@ -26,13 +26,13 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     View fb, gplus, login;
     GoogleQL googleQL;
-    private final static int STORE = 0;
-    private final static int DELIVERY = 1;
-    private final static int STUDENT = 2;
-    private int currentType = 0;
+    private final static int STUDENT = 0;
+    private final static int STORE = 1;
+    private final static int DELIVERY = 2;
+
+    private int currentType = 1;
     private SwitchCompat login_switch;
     private TextView login_title;
-    private String[] members = {"商家登入", "外送員登入"};
     private EditText account, password;
     private GlobalVariable gv;
 
@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initTextView();
         initClickView();
         initSwitch();
-
 
     }
 
@@ -61,10 +60,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     currentType = DELIVERY;
-                    login_title.setText(members[currentType]);
+                    login_title.setText("外送員登入");
                 } else {
                     currentType = STORE;
-                    login_title.setText(members[currentType]);
+                    login_title.setText("商家登入");
                 }
             }
         });
@@ -94,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                gv.setType(STORE);
                                 gv.setToken(AnalyzeUtil.getToken(jsonObject, STORE));
                                 startActivity(new Intent(LoginActivity.this, StoreActivity.class));
                                 finish();
@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                gv.setType(DELIVERY);
                                 gv.setToken(AnalyzeUtil.getToken(jsonObject, DELIVERY));
                                 startActivity(new Intent(LoginActivity.this, DeliveryActivity.class));
                                 finish();
@@ -131,16 +132,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
 
-
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
         googleQL.onStart();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -156,6 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onTaskAfter(JSONObject jsonObject) {
                     if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        gv.setType(STUDENT);
                         gv.setToken(AnalyzeUtil.getToken(jsonObject, STUDENT));
                         startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
                         finish();

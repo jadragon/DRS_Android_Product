@@ -77,6 +77,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Recy
             int position = getAdapterPosition();
             Intent intent=new Intent(ctx, StoreDetailActivity.class);
             intent.putExtra("s_id",list.get(position).getS_id());
+            intent.putExtra("name",list.get(position).getName());
             ctx.startActivity(intent);
         }
 

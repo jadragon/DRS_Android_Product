@@ -12,13 +12,21 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class GlobalVariable extends Application {
     private String token;
-
+    private int type;
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override

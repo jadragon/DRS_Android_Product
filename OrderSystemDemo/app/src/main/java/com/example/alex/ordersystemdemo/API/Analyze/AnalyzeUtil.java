@@ -28,14 +28,15 @@ public class AnalyzeUtil {
             json = json.getJSONObject("Data");
             switch (type) {
                 case 0:
-                    //store
-                    return json.getString("s_id");
-                case 1:
-                    //deliver
-                    return json.getString("d_id");
-                case 2:
                     //student
                     return json.getString("m_id");
+                case 1:
+                    //store
+                    return json.getString("s_id");
+                case 2:
+                    //deliver
+                    return json.getString("d_id");
+
             }
 
             return null;

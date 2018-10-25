@@ -2,6 +2,7 @@ package com.example.alex.ordersystemdemo.RecyclerViewAdapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import java.util.ArrayList;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.RecycleHolder> {
     private Context ctx;
     private ArrayList<OrderDataPojo> list;
+    private String status;
 
-    public OrderListAdapter(Context ctx, JSONObject jsonObject) {
+    public OrderListAdapter(Context ctx, JSONObject jsonObject, String status) {
         this.ctx = ctx;
+        this.status = status;
         if (jsonObject != null) {
             list = new Analyze_Order().getOrder_data(jsonObject);
         } else {
@@ -44,7 +47,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
         holder.f_content.setText(list.get(position).getF_content());
     }
 
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -64,7 +66,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            ctx.startActivity(new Intent(ctx, OrderListDetailActivity.class));
+            Intent intent = new Intent(ctx, OrderListDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("OrderDataPojo", list.get(position));
+            intent.putExtras(bundle);
+            intent.putExtra("status", status);
+            ctx.startActivity(intent);
         }
 
     }

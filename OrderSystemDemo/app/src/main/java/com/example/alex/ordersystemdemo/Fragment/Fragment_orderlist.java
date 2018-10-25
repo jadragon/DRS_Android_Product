@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
 import com.example.alex.ordersystemdemo.API.List.OrderApi;
+import com.example.alex.ordersystemdemo.GlobalVariable;
 import com.example.alex.ordersystemdemo.R;
 import com.example.alex.ordersystemdemo.RecyclerViewAdapter.OrderListAdapter;
 import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
@@ -27,10 +28,11 @@ public class Fragment_orderlist extends Fragment {
     private SwipeRefreshLayout mSwipeLayout;
     private OrderListAdapter orderListAdapter;
     private String status;
-
+    private GlobalVariable gv;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
         status = getArguments().getString("status");
+        gv = (GlobalVariable) getContext().getApplicationContext();
         initViewPagerAndRecyclerView();
         initSwipeLayout();
         return v;
@@ -46,7 +48,7 @@ public class Fragment_orderlist extends Fragment {
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
                     public JSONObject onTasking(Void... params) {
-                        return new OrderApi().order_data(status);
+                        return new OrderApi().order_data(status,gv.getType()+"");
                     }
 
                     @Override
@@ -66,7 +68,7 @@ public class Fragment_orderlist extends Fragment {
 
     private void initViewPagerAndRecyclerView() {
         recyclerView = v.findViewById(R.id.include_recyclerview);
-        orderListAdapter = new OrderListAdapter(getContext(), null);
+        orderListAdapter = new OrderListAdapter(getContext(), null,status);
         recyclerView.setAdapter(orderListAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.divider_1dp_gray));
@@ -75,15 +77,13 @@ public class Fragment_orderlist extends Fragment {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                return new OrderApi().order_data(status);
+                return new OrderApi().order_data(status,gv.getType()+"");
             }
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
                     orderListAdapter.setFilter(jsonObject);
-                } else {
-
                 }
             }
         });

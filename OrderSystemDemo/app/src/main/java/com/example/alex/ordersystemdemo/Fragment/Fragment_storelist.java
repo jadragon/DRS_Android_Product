@@ -69,9 +69,7 @@ public class Fragment_storelist extends Fragment {
             public void onTaskAfter(JSONObject jsonObject) {
                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
                     storeListAdapter.setFilter(jsonObject);
-                } else {
                 }
-                Log.e("STORE", jsonObject + "");
             }
         });
 

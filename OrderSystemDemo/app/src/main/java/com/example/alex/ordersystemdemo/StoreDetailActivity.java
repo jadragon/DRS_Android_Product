@@ -19,7 +19,7 @@ import java.util.Map;
 public class StoreDetailActivity extends ToolbarAcitvity {
     private RecyclerView recyclerView;
     private MenuListAdapter menuListAdapter;
-    private String s_id;
+    private String s_id, name;
     private GlobalVariable gv;
 
     @Override
@@ -28,7 +28,8 @@ public class StoreDetailActivity extends ToolbarAcitvity {
         setContentView(R.layout.activity_store_detail);
         gv = (GlobalVariable) getApplicationContext();
         s_id = getIntent().getStringExtra("s_id");
-        initToolbar("食富通超坑錢飯館", true, false);
+        name = getIntent().getStringExtra("name");
+        initToolbar(name, true, false);
         initRecyclerView();
         initButton();
 
@@ -38,24 +39,35 @@ public class StoreDetailActivity extends ToolbarAcitvity {
         findViewById(R.id.store_detail_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public JSONObject onTasking(Void... params) {
-                        Map<String, String> map = menuListAdapter.getStudentInfo();
-                        return new OrderApi().checkout(gv.getToken(), s_id, map.get("name"), map.get("phone"), map.get("address"), menuListAdapter.getContent(), menuListAdapter.getTotalMoney() + "");
-                    }
+                final Map<String, String> map = menuListAdapter.getStudentInfo();
 
-                    @Override
-                    public void onTaskAfter(JSONObject jsonObject) {
-                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                            finish();
-                        }
-                        Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                if (!(map.get("name").equals("") || map.get("phone").equals("") || map.get("address").equals(""))) {
+                    if (menuListAdapter.getTotalMoney() > 0) {
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                            @Override
+                            public JSONObject onTasking(Void... params) {
+
+                                return new OrderApi().checkout(gv.getToken(), s_id, map.get("name"), map.get("phone"), map.get("address"), menuListAdapter.getContent(), menuListAdapter.getTotalMoney() + "");
+                            }
+
+                            @Override
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    finish();
+                                }
+                                Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(StoreDetailActivity.this, "請選擇要購買的餐點", Toast.LENGTH_SHORT).show();
                     }
-                });
+                } else {
+                    Toast.makeText(StoreDetailActivity.this, "請確認資料是否填寫完整", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
+
     }
 
     private void initRecyclerView() {

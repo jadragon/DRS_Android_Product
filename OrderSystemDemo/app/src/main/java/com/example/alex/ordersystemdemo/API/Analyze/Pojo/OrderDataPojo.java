@@ -1,6 +1,8 @@
 package com.example.alex.ordersystemdemo.API.Analyze.Pojo;
 
-public class OrderDataPojo {
+import java.io.Serializable;
+
+public class OrderDataPojo implements Serializable {
   private   String o_id;
     private  String m_id;
     private  String s_id;
