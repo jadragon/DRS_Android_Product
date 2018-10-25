@@ -26,9 +26,24 @@ public class DeliveryActivity extends ToolbarAcitvity {
     private void initViewPagerAndTabLayout() {
         viewPager = findViewById(R.id.viewpager);
         fragmentArrayList = new ArrayList<>();
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
-        fragmentArrayList.add(new Fragment_orderlist());
+
+        Fragment_orderlist fragment_orderlist = new Fragment_orderlist();
+        Bundle bundle = new Bundle();
+        bundle.putString("status", "2");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
+
+        fragment_orderlist = new Fragment_orderlist();
+        bundle = new Bundle();
+        bundle.putString("status", "3");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
+
+        fragment_orderlist = new Fragment_orderlist();
+        bundle = new Bundle();
+        bundle.putString("status", "4");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int i) {

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
+import com.example.alex.ordersystemdemo.API.List.DelivertApi;
 import com.example.alex.ordersystemdemo.API.List.StoreApi;
 import com.example.alex.ordersystemdemo.API.List.StudentApi;
 import com.example.alex.ordersystemdemo.QuickLoginUtil.GoogleQL;
@@ -33,11 +34,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView login_title;
     private String[] members = {"商家登入", "外送員登入"};
     private EditText account, password;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        gv = (GlobalVariable) getApplicationContext();
         googleQL = new GoogleQL(this);
         initTextView();
         initClickView();
@@ -91,7 +94,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                gv.setToken(AnalyzeUtil.getToken(jsonObject, STORE));
                                 startActivity(new Intent(LoginActivity.this, StoreActivity.class));
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                } else if (currentType == DELIVERY) {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                        @Override
+                        public JSONObject onTasking(Void... params) {
+                            return new DelivertApi().deliver_login(account.getText().toString(), password.getText().toString());
+                        }
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                gv.setToken(AnalyzeUtil.getToken(jsonObject, DELIVERY));
+                                startActivity(new Intent(LoginActivity.this, DeliveryActivity.class));
                                 finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
@@ -99,30 +122,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.e("STORE", jsonObject + "");
                         }
                     });
-
-                } else if (currentType == DELIVERY) {
-                    startActivity(new Intent(LoginActivity.this, DeliveryActivity.class));
-                    finish();
                 }
                 break;
             case R.id.login_fb:
-                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public JSONObject onTasking(Void... params) {
-                        return new StoreApi().store_login(account.getText().toString(), password.getText().toString());
-                    }
-
-                    @Override
-                    public void onTaskAfter(JSONObject jsonObject) {
-                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                            startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                        }
-                        Log.e("STORE", jsonObject + "");
-                    }
-                });
                 break;
             case R.id.login_gplus:
                 googleQL.signIn();
@@ -154,6 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onTaskAfter(JSONObject jsonObject) {
                     if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        gv.setToken(AnalyzeUtil.getToken(jsonObject, STUDENT));
                         startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
                         finish();
                     } else {

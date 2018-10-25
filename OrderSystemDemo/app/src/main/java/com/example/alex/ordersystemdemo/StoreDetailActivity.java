@@ -2,9 +2,11 @@ package com.example.alex.ordersystemdemo;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
+import com.example.alex.ordersystemdemo.API.List.OrderApi;
 import com.example.alex.ordersystemdemo.API.List.RestaurantApi;
 import com.example.alex.ordersystemdemo.RecyclerViewAdapter.MenuListAdapter;
 import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
@@ -12,19 +14,48 @@ import com.example.alex.ordersystemdemo.library.IDataCallBack;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class StoreDetailActivity extends ToolbarAcitvity {
     private RecyclerView recyclerView;
     private MenuListAdapter menuListAdapter;
     private String s_id;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_detail);
+        gv = (GlobalVariable) getApplicationContext();
         s_id = getIntent().getStringExtra("s_id");
         initToolbar("食富通超坑錢飯館", true, false);
         initRecyclerView();
+        initButton();
 
+    }
+
+    private void initButton() {
+        findViewById(R.id.store_detail_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        Map<String, String> map = menuListAdapter.getStudentInfo();
+                        return new OrderApi().checkout(gv.getToken(), s_id, map.get("name"), map.get("phone"), map.get("address"), menuListAdapter.getContent(), menuListAdapter.getTotalMoney() + "");
+                    }
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            finish();
+                        }
+                        Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -43,9 +74,7 @@ public class StoreDetailActivity extends ToolbarAcitvity {
             public void onTaskAfter(JSONObject jsonObject) {
                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
                     menuListAdapter.setFilter(jsonObject);
-                } else {
                 }
-                Log.e("STORE", jsonObject + "");
             }
         });
 

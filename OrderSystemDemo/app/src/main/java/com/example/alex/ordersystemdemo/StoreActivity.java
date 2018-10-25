@@ -31,12 +31,6 @@ public class StoreActivity extends ToolbarAcitvity {
 
         Fragment_orderlist fragment_orderlist = new Fragment_orderlist();
         Bundle bundle = new Bundle();
-        bundle.putString("status", "0");
-        fragment_orderlist.setArguments(bundle);
-        fragmentArrayList.add(fragment_orderlist);
-
-        fragment_orderlist = new Fragment_orderlist();
-        bundle = new Bundle();
         bundle.putString("status", "1");
         fragment_orderlist.setArguments(bundle);
         fragmentArrayList.add(fragment_orderlist);
@@ -44,6 +38,12 @@ public class StoreActivity extends ToolbarAcitvity {
         fragment_orderlist = new Fragment_orderlist();
         bundle = new Bundle();
         bundle.putString("status", "2");
+        fragment_orderlist.setArguments(bundle);
+        fragmentArrayList.add(fragment_orderlist);
+
+        fragment_orderlist = new Fragment_orderlist();
+        bundle = new Bundle();
+        bundle.putString("status", "3");
         fragment_orderlist.setArguments(bundle);
         fragmentArrayList.add(fragment_orderlist);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {

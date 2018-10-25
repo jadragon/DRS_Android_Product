@@ -22,4 +22,26 @@ public class AnalyzeUtil {
         }
         return "伺服器異常";
     }
+
+    public static String getToken(JSONObject json, int type) {
+        try {
+            json = json.getJSONObject("Data");
+            switch (type) {
+                case 0:
+                    //store
+                    return json.getString("s_id");
+                case 1:
+                    //deliver
+                    return json.getString("d_id");
+                case 2:
+                    //student
+                    return json.getString("m_id");
+            }
+
+            return null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "伺服器異常";
+    }
 }

@@ -60,7 +60,7 @@ public class Analyze_Restaurant {
                     menuPojo.setSo_id(json_obj.getString("so_id"));
                     menuPojo.setS_id(json_obj.getString("s_id"));
                     menuPojo.setFood(json_obj.getString("food"));
-                    menuPojo.setMoney(json_obj.getString("money"));
+                    menuPojo.setMoney(json_obj.getInt("money"));
                     arrayList.add(menuPojo);
                 }
                 return arrayList;

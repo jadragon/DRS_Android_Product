@@ -1,10 +1,19 @@
 package com.example.alex.ordersystemdemo.API.Analyze.Pojo;
 
 public class MenuPojo {
-    private  String so_id;
-    private  String s_id;
-    private  String food;
-    private   String money;
+    private String so_id;
+    private String s_id;
+    private String food;
+    private int money;
+    private int number;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
     public String getSo_id() {
         return so_id;
@@ -30,11 +39,11 @@ public class MenuPojo {
         this.food = food;
     }
 
-    public String getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(String money) {
+    public void setMoney(int money) {
         this.money = money;
     }
 }
