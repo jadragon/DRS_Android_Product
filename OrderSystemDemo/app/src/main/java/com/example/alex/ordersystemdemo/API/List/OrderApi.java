@@ -27,9 +27,10 @@ public class OrderApi implements APISetting {
     /**
      * 4.1	訂單資訊
      */
-    public JSONObject order_data(String status,String type) {
+    public JSONObject order_data(String msd_id, String status, String type) {
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("sOrder", sOrder));
+        params.add(new BasicNameValuePair("msd_id", msd_id));
         params.add(new BasicNameValuePair("status", status));
         params.add(new BasicNameValuePair("type", type));
         return jsonParser.getJSONFromUrl(order_data_url, params);

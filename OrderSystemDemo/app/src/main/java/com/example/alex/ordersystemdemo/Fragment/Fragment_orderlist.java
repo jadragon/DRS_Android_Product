@@ -48,7 +48,7 @@ public class Fragment_orderlist extends Fragment {
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
                     public JSONObject onTasking(Void... params) {
-                        return new OrderApi().order_data(status,gv.getType()+"");
+                        return new OrderApi().order_data(gv.getToken(),status,gv.getType()+"");
                     }
 
                     @Override
@@ -77,7 +77,7 @@ public class Fragment_orderlist extends Fragment {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                return new OrderApi().order_data(status,gv.getType()+"");
+                return new OrderApi().order_data(gv.getToken(),status,gv.getType()+"");
             }
 
             @Override
