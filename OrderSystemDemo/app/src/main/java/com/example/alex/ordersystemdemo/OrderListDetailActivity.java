@@ -1,10 +1,11 @@
 package com.example.alex.ordersystemdemo;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
@@ -14,6 +15,8 @@ import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
 import com.example.alex.ordersystemdemo.library.IDataCallBack;
 
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 public class OrderListDetailActivity extends ToolbarAcitvity {
     private GlobalVariable gv;
@@ -59,6 +62,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                 switch (gv.getType()) {
                     case 0:
                         button.setText("取消");
+                        button.setBackgroundColor(getResources().getColor(R.color.red));
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -71,6 +75,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
                                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            setResult(100);
                                             finish();
                                         }
                                         Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
@@ -81,28 +86,37 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                         break;
                     case 1:
                         button.setText("接受");
+                        button.setBackgroundColor(getResources().getColor(R.color.green));
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                    @Override
-                                    public JSONObject onTasking(Void... params) {
-                                        return new OrderApi().order_accept(orderDataPojo.getO_id(), gv.getToken(),"23:35");
-                                    }
+                                Calendar calendar = Calendar.getInstance();
+                                new TimePickerDialog(OrderListDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
 
                                     @Override
-                                    public void onTaskAfter(JSONObject jsonObject) {
-                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                            finish();
-                                        }
-                                        Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                    public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
+                                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                            @Override
+                                            public JSONObject onTasking(Void... params) {
+                                                return new OrderApi().order_accept(orderDataPojo.getO_id(), gv.getToken(), hourOfDay + ":" + minute);
+                                            }
+
+                                            @Override
+                                            public void onTaskAfter(JSONObject jsonObject) {
+                                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                    setResult(100);
+                                                    finish();
+                                                }
+                                                Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
-                                });
+                                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+
                             }
                         });
                         break;
                     case 2:
-
                         break;
                 }
 
@@ -112,9 +126,11 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                     case 0:
                         break;
                     case 1:
+                        button.setVisibility(View.INVISIBLE);
                         break;
                     case 2:
                         button.setText("接單");
+                        button.setBackgroundColor(getResources().getColor(R.color.green));
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -127,6 +143,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
                                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            setResult(100);
                                             finish();
                                         }
                                         Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
@@ -141,10 +158,10 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
             case "3":
                 switch (gv.getType()) {
                     case 0:
-
                         break;
                     case 1:
                         button.setText("確認轉移");
+                        button.setBackgroundColor(getResources().getColor(R.color.red));
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -157,6 +174,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
                                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            setResult(100);
                                             finish();
                                         }
                                         Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
@@ -166,6 +184,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                         });
                         break;
                     case 2:
+                        button.setVisibility(View.INVISIBLE);
                         break;
                 }
 
@@ -174,6 +193,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                 switch (gv.getType()) {
                     case 0:
                         button.setText("確認取餐");
+                        button.setBackgroundColor(getResources().getColor(R.color.red));
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -186,6 +206,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
                                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            setResult(100);
                                             finish();
                                         }
                                         Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
@@ -197,12 +218,13 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                     case 1:
                         break;
                     case 2:
-
+                        button.setVisibility(View.INVISIBLE);
                         break;
                 }
 
                 break;
             case "5":
+                button.setVisibility(View.INVISIBLE);
                 break;
         }
 

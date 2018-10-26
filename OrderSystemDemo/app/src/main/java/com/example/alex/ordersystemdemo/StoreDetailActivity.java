@@ -46,7 +46,6 @@ public class StoreDetailActivity extends ToolbarAcitvity {
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                             @Override
                             public JSONObject onTasking(Void... params) {
-
                                 return new OrderApi().checkout(gv.getToken(), s_id, map.get("name"), map.get("phone"), map.get("address"), menuListAdapter.getContent(), menuListAdapter.getTotalMoney() + "");
                             }
 

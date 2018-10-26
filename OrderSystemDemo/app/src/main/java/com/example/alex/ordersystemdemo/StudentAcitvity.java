@@ -1,5 +1,6 @@
 package com.example.alex.ordersystemdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class StudentAcitvity extends ToolbarAcitvity {
     private ViewPager viewPager;
-    private List<Fragment> fragmentArrayList;
+    private List<Fragment_orderlist> fragmentArrayList;
     private String[] tablist = new String[]{"已下單", "配送中", "已完成"};
 
 
@@ -61,5 +62,17 @@ public class StudentAcitvity extends ToolbarAcitvity {
                 return tablist[position];
             }
         });
+    }
+    public void refreashAllFragment() {
+        for (Fragment_orderlist fragment_orderlist : fragmentArrayList) {
+            fragment_orderlist.refreashAdapter();
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == 100) {
+            refreashAllFragment();
+        }
     }
 }

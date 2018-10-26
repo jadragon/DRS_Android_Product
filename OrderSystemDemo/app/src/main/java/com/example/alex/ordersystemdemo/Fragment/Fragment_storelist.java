@@ -2,12 +2,10 @@ package com.example.alex.ordersystemdemo.Fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,12 +42,21 @@ public class Fragment_storelist extends Fragment {
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public void run() {
+                    public JSONObject onTasking(Void... params) {
+                        return new RestaurantApi().store_data(type);
+                    }
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            storeListAdapter.setFilter(jsonObject);
+                        }
                         mSwipeLayout.setRefreshing(false);
                     }
-                }, 2000);
+                });
+
             }
 
         });

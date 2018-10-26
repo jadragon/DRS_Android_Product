@@ -3,6 +3,7 @@ package com.example.alex.ordersystemdemo.RecyclerViewAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +72,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
             bundle.putSerializable("OrderDataPojo", list.get(position));
             intent.putExtras(bundle);
             intent.putExtra("status", status);
-            ctx.startActivity(intent);
+            ((FragmentActivity)  ctx).startActivityForResult(intent,100);
         }
 
     }

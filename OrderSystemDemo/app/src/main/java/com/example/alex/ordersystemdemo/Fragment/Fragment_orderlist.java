@@ -29,6 +29,7 @@ public class Fragment_orderlist extends Fragment {
     private OrderListAdapter orderListAdapter;
     private String status;
     private GlobalVariable gv;
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
         status = getArguments().getString("status");
@@ -48,7 +49,11 @@ public class Fragment_orderlist extends Fragment {
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
                     public JSONObject onTasking(Void... params) {
-                        return new OrderApi().order_data(gv.getToken(),status,gv.getType()+"");
+                        if (status.equals("2") && gv.getType() == 2) {
+                            return new OrderApi().order_data("2w7t6rwcsblfl0cl8QxGkg==", status, gv.getType() + "");
+                        } else {
+                            return new OrderApi().order_data(gv.getToken(), status, gv.getType() + "");
+                        }
                     }
 
                     @Override
@@ -68,7 +73,7 @@ public class Fragment_orderlist extends Fragment {
 
     private void initViewPagerAndRecyclerView() {
         recyclerView = v.findViewById(R.id.include_recyclerview);
-        orderListAdapter = new OrderListAdapter(getContext(), null,status);
+        orderListAdapter = new OrderListAdapter(getContext(), null, status);
         recyclerView.setAdapter(orderListAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.divider_1dp_gray));
@@ -77,7 +82,11 @@ public class Fragment_orderlist extends Fragment {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                return new OrderApi().order_data(gv.getToken(),status,gv.getType()+"");
+                if (status.equals("2") && gv.getType() == 2) {
+                    return new OrderApi().order_data("2w7t6rwcsblfl0cl8QxGkg==", status, gv.getType() + "");
+                } else {
+                    return new OrderApi().order_data(gv.getToken(), status, gv.getType() + "");
+                }
             }
 
             @Override
@@ -87,7 +96,28 @@ public class Fragment_orderlist extends Fragment {
                 }
             }
         });
+    }
 
+    public void refreashAdapter() {
+        if (orderListAdapter != null) {
+            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                @Override
+                public JSONObject onTasking(Void... params) {
+                    if (status.equals("2") && gv.getType() == 2) {
+                        return new OrderApi().order_data("2w7t6rwcsblfl0cl8QxGkg==", status, gv.getType() + "");
+                    } else {
+                        return new OrderApi().order_data(gv.getToken(), status, gv.getType() + "");
+                    }
+                }
+
+                @Override
+                public void onTaskAfter(JSONObject jsonObject) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        orderListAdapter.setFilter(jsonObject);
+                    }
+                }
+            });
+        }
     }
 
 }

@@ -96,10 +96,21 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
                 food = view.findViewWithTag("food");
                 money = view.findViewWithTag("money");
                 number = view.findViewWithTag("number");
+                number.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(hasFocus){
+                            number.setText("");
+                        }else {
+                            if(number.getText().toString().equals("")){
+                                number.setText("0");
+                            }
+                        }
+                    }
+                });
                 number.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                     }
 
                     @Override

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
     android:orientation="vertical"
     tools:context=".OrderListDetailActivity">
 
@@ -15,7 +14,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/defalut_gray">
 
 
         <LinearLayout
@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:divider="@drawable/divider_1dp_gray"
             android:orientation="vertical"
-            android:showDividers="middle">
+            android:showDividers="middle"
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -243,28 +244,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:padding="5dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="金額:" />
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:text="總金額:"
+            android:gravity="center_vertical"
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/f_sum"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="10dp"
-            android:text="1000" />
+            android:paddingLeft="10dp"
+            android:text="1000"
+            android:gravity="center_vertical"
+            android:background="@drawable/background_edit_invisible"
+            android:layout_margin="5dp"
+            android:textSize="15sp"/>
 
         <Button
             android:id="@+id/confirm"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:drawable/btn_default"
-            android:text="確定" />
+            android:text="確定"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:layout_margin="5dp"/>
     </LinearLayout>
 </LinearLayout>
