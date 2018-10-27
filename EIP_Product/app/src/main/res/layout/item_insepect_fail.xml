@@ -8,6 +8,7 @@
     android:showDividers="middle">
 
         <TextView
+            android:tag="line"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="@dimen/footer3_weight"
@@ -16,15 +17,16 @@
             android:textSize="@dimen/table_text_size" />
 
         <TextView
+            android:tag="number"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="@dimen/footer4_weight"
             android:gravity="center"
             android:padding="@dimen/table_padding"
             android:textSize="@dimen/table_text_size" />
 
         <TextView
-            android:id="@+id/faild_txt_description"
+            android:tag="description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="@dimen/footer5_weight"

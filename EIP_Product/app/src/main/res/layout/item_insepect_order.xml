@@ -85,7 +85,8 @@
             android:padding="2.5dp"
             android:textSize="@dimen/table_text_size"
             android:inputType="number"
-            android:background="@color/light_blue"/>
+            android:text="0"
+            android:background="@color/light_blue" />
 
         <View
             android:layout_width="1dp"
@@ -100,6 +101,7 @@
             android:padding="2.5dp"
             android:textSize="@dimen/table_text_size"
             android:inputType="number"
+            android:text="0"
             android:background="@color/light_blue"/>
 
         <View
@@ -115,6 +117,7 @@
             android:padding="2.5dp"
             android:textSize="@dimen/table_text_size"
             android:inputType="number"
+            android:text="0"
             android:background="@color/light_blue"/>
 
         <View
@@ -130,6 +133,7 @@
             android:padding="2.5dp"
             android:textSize="@dimen/table_text_size"
             android:inputType="number"
+            android:text="0"
             android:background="@color/light_blue"/>
 
     </LinearLayout>

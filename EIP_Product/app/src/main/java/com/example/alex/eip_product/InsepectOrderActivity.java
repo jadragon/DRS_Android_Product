@@ -1,6 +1,7 @@
 package com.example.alex.eip_product;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,11 +9,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,20 +29,24 @@ import java.util.ArrayList;
 import Utils.CommonUtil;
 import db.SQLiteDatabaseHandler;
 
-public class InsepectOrderActivity extends AppCompatActivity {
+public class InsepectOrderActivity extends AppCompatActivity implements TextWatcher {
     private final static int SELECT_FAIL_REASON = 110;
-    private LinearLayout alltable, courseTable, layout1, layout2, layout3;
+    private LinearLayout alltable, courseTable, failed_item_layout;
     private Button academyButton, saveButton;
     private int line = 1;
     private ImageView paintView;
     private TextView title, pdf_view;
-
+    private DisplayMetrics dm;
+    private ArrayList<View> ItemList = new ArrayList<>();
     private ArrayList<View> failItemList = new ArrayList<>();
+    private LinePathView linePathView;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_insepect_order);
+        dm = getResources().getDisplayMetrics();
         initPdfView();
         findView();
         initPaintView();
@@ -72,22 +82,38 @@ public class InsepectOrderActivity extends AppCompatActivity {
         paintView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final LinePathView view = new LinePathView(InsepectOrderActivity.this);
-                AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this).setView(view)
-                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                paintView.setImageBitmap(view.getBitMap());
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                if (linePathView == null)
+                    linePathView = new LinePathView(InsepectOrderActivity.this);
+                else
+                    linePathView.clear();
 
-                builder.show();
+                if (dialog == null) {
+                    final int bitmapwidth = paintView.getWidth();
+                    final int bitmapheight = paintView.getHeight();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this).setView(linePathView)
+                            .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    paintView.setImageBitmap(linePathView.getBitMap(paintView.getWidth(), paintView.getHeight()));
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                    dialog = builder.create();
+                    dialog.show();
+                    android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
+                    p.width = (int) (dm.heightPixels * ((float) bitmapwidth / bitmapheight) / 3 * 2);
+                    p.height = (int) ((float) dm.heightPixels / 3 * 2);
+                    dialog.getWindow().setAttributes(p);     //设置生效
+                } else {
+                    dialog.show();
+                }
+
             }
         });
 
@@ -110,9 +136,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.kccx_chaxun2);
         paintView = findViewById(R.id.paintView);
         title = findViewById(R.id.title);
-        layout1 = findViewById(R.id.layout1);
-        layout2 = findViewById(R.id.layout2);
-        layout3 = findViewById(R.id.layout3);
+        failed_item_layout = findViewById(R.id.failed_item_layout);
     }
 
     private class AddColumTask extends AsyncTask<String, Integer, String> {
@@ -145,15 +169,26 @@ public class InsepectOrderActivity extends AppCompatActivity {
                     courseTable.addView(view);
                 }
                 view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
-
-                ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
-                //setAnimation(view.findViewById(R.id.row20));
                 courseTable.addView(view);
+                ItemList.add(view);
+                ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
+                ((EditText) view.findViewById(R.id.row7)).addTextChangedListener(InsepectOrderActivity.this);
+                ((EditText) view.findViewById(R.id.row8)).addTextChangedListener(InsepectOrderActivity.this);
+                ((EditText) view.findViewById(R.id.row9)).addTextChangedListener(InsepectOrderActivity.this);
+                ((EditText) view.findViewById(R.id.row10)).addTextChangedListener(InsepectOrderActivity.this);
 
             } else if (result.equals("item")) {
-                /*
                 View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
-                view.setOnClickListener(new View.OnClickListener() {
+                ((TextView) view.findViewWithTag("line")).setText(index + "");
+                TextView textView = view.findViewWithTag("number");
+                textView.setText("102540" + index);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(InsepectOrderActivity.this, PDFFromServerActivity.class));
+                    }
+                });
+                view.findViewWithTag("description").setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(InsepectOrderActivity.this, SelectFailedActivity.class);
@@ -161,14 +196,49 @@ public class InsepectOrderActivity extends AppCompatActivity {
                         startActivityForResult(intent, SELECT_FAIL_REASON);
                     }
                 });
-                */
-                TextView textView = new TextView(InsepectOrderActivity.this);
-                layout1.addView(textView);
-                failItemList.add(textView);
+
+                failItemList.add(view);
+                failed_item_layout.addView(view);
+
             }
         }
 
     }
+
+    //監聽品質不良品數Start
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+            for (View view : ItemList) {
+                if (!((EditText) view.findViewById(R.id.row7)).getText().toString().equals("")&&Integer.parseInt(((EditText) view.findViewById(R.id.row7)).getText().toString()) > 0) {
+                    new AddColumTask(0).execute("item");
+                } else {
+                    if (!((EditText) view.findViewById(R.id.row8)).getText().toString().equals("")&&Integer.parseInt(((EditText) view.findViewById(R.id.row8)).getText().toString()) > 0) {
+                        new AddColumTask(0).execute("item");
+                    } else {
+                        if (!((EditText) view.findViewById(R.id.row9)).getText().toString().equals("")&&Integer.parseInt(((EditText) view.findViewById(R.id.row9)).getText().toString()) > 0) {
+                            new AddColumTask(0).execute("item");
+                        } else {
+                            if (!((EditText) view.findViewById(R.id.row10)).getText().toString().equals("")&&Integer.parseInt(((EditText) view.findViewById(R.id.row10)).getText().toString()) > 0) {
+                                new AddColumTask(0).execute("item");
+                            }
+                        }
+                    }
+                }
+            }
+
+    }
+    //監聽品質不良品數End
 
     public void setAnimation(View view) {
         //闪烁
@@ -251,7 +321,7 @@ public class InsepectOrderActivity extends AppCompatActivity {
         if (requestCode == SELECT_FAIL_REASON) {
             if (resultCode == 110) {
                 String failed_reason = data.getStringExtra("failed_reason");
-                ((TextView) failItemList.get(data.getIntExtra("index", 0)).findViewById(R.id.faild_txt_description)).setText(failed_reason);
+                ((TextView) failItemList.get(data.getIntExtra("index", 0)).findViewWithTag("description")).setText(failed_reason);
             }
         }
     }
