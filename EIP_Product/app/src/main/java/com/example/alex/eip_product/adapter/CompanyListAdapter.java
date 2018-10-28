@@ -34,11 +34,11 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         list = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
         map.put("title", "鑫力來");
-        map.put("company", "sunchain");
+        map.put("company", "驗貨人員1");
         list.add(map);
         map = new HashMap<>();
         map.put("title", "勝萬");
-        map.put("company", "sunchain");
+        map.put("company", "驗貨人員1");
         list.add(map);
         map = new HashMap<>();
         map.put("title", "澳邦");
@@ -50,7 +50,7 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         list.add(map);
         map = new HashMap<>();
         map.put("title", "忠縣順生");
-        map.put("company", "sunchain");
+        map.put("company", "驗貨人員1");
         list.add(map);
         map = new HashMap<>();
         map.put("title", "華氏");
@@ -68,10 +68,11 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
         holder.title.setText(list.get(position).get("title"));
-        if (list.get(position).get("company").equals("sunchain")) {
-            holder.company.setVisibility(View.VISIBLE);
-        } else {
+        if (list.get(position).get("company").equals("")) {
             holder.company.setVisibility(View.INVISIBLE);
+        } else {
+            holder.company.setVisibility(View.VISIBLE);
+            holder.company.setText(list.get(position).get("company"));
         }
 
     }

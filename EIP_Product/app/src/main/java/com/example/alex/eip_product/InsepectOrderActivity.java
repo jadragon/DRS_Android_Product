@@ -1,7 +1,6 @@
 package com.example.alex.eip_product;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +13,6 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -25,6 +23,7 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import Utils.CommonUtil;
 import db.SQLiteDatabaseHandler;
@@ -107,8 +106,8 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                     dialog = builder.create();
                     dialog.show();
                     android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
-                    p.width = (int) (dm.heightPixels * ((float) bitmapwidth / bitmapheight) / 3 * 2);
-                    p.height = (int) ((float) dm.heightPixels / 3 * 2);
+                    p.width = (int) (dm.heightPixels * ((float) bitmapwidth / bitmapheight) / 6 * 5);
+                    p.height = (int) ((float) dm.heightPixels / 6 * 5);
                     dialog.getWindow().setAttributes(p);     //设置生效
                 } else {
                     dialog.show();
@@ -171,7 +170,13 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                 view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
                 courseTable.addView(view);
                 ItemList.add(view);
-                ((TextView) view.findViewById(R.id.row1)).setText("" + line++);
+                Random random=new Random();
+                ((TextView) view.findViewById(R.id.row1)).setText("" + (line));
+                ((TextView) view.findViewById(R.id.row2)).setText("102540"+line++);
+                ((TextView) view.findViewById(R.id.row3)).setText(random.nextInt(20)+"");
+                ((TextView) view.findViewById(R.id.row4)).setText(random.nextInt(20)+"");
+                ((TextView) view.findViewById(R.id.row5)).setText(random.nextInt(20)+"");
+                ((TextView) view.findViewById(R.id.row6)).setText("鑫力來");
                 ((EditText) view.findViewById(R.id.row7)).addTextChangedListener(InsepectOrderActivity.this);
                 ((EditText) view.findViewById(R.id.row8)).addTextChangedListener(InsepectOrderActivity.this);
                 ((EditText) view.findViewById(R.id.row9)).addTextChangedListener(InsepectOrderActivity.this);
@@ -179,9 +184,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
 
             } else if (result.equals("item")) {
                 View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
-                ((TextView) view.findViewWithTag("line")).setText(index + "");
+                ((TextView) view.findViewWithTag("line")).setText((index+1) + "");
                 TextView textView = view.findViewWithTag("number");
-                textView.setText("102540" + index);
+                textView.setText("102540" + (index+1));
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -218,7 +223,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
 
     @Override
     public void afterTextChanged(Editable editable) {
-
+/*
             for (View view : ItemList) {
                 if (!((EditText) view.findViewById(R.id.row7)).getText().toString().equals("")&&Integer.parseInt(((EditText) view.findViewById(R.id.row7)).getText().toString()) > 0) {
                     new AddColumTask(0).execute("item");
@@ -236,7 +241,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                     }
                 }
             }
-
+*/
     }
     //監聽品質不良品數End
 

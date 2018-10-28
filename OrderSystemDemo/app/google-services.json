@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "993499791659",
-    "firebase_url": "https://ordersystemdemo-219807.firebaseio.com",
-    "project_id": "ordersystemdemo-219807",
-    "storage_bucket": "ordersystemdemo-219807.appspot.com"
+    "project_number": "354150309383",
+    "firebase_url": "https://foodbar-188a6.firebaseio.com",
+    "project_id": "foodbar-188a6",
+    "storage_bucket": "foodbar-188a6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993499791659:android:6be50183b8c50175",
+        "mobilesdk_app_id": "1:354150309383:android:6be50183b8c50175",
         "android_client_info": {
           "package_name": "com.example.alex.ordersystemdemo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "993499791659-i2pabg8tbuovev4fqgcsrc2bnekq18l1.apps.googleusercontent.com",
+          "client_id": "354150309383-463vbvltdj5i28gptglm3ncfjs7o3iiv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.alex.ordersystemdemo",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "993499791659-35mi0epof7dnb99ob59hk5k7frkcqt57.apps.googleusercontent.com",
+          "client_id": "354150309383-a7oa3521l2kj6vmlsq9p6jvrn03l4ioa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAZRNWHa6-s7uv7NaaEYYLSmMsamLC_WUM"
+          "current_key": "AIzaSyDlmFfm1Bj1q3vzd_z6lFx724QOMbYVLXs"
         }
       ],
       "services": {
@@ -40,8 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "993499791659-35mi0epof7dnb99ob59hk5k7frkcqt57.apps.googleusercontent.com",
+              "client_id": "354150309383-a7oa3521l2kj6vmlsq9p6jvrn03l4ioa.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "354150309383-inuda37ghv7pad44rpnghajk191mha4d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "tw.xy.mall.restaurant.OrderingSystem"
+              }
             }
           ]
         },
