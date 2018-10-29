@@ -29,6 +29,7 @@ public class Analyze_Order {
                     orderDataPojo.setD_id(json_obj.getString("d_id"));
                     orderDataPojo.setM_name(json_obj.getString("m_name"));
                     orderDataPojo.setM_phone(json_obj.getString("m_phone"));
+                    orderDataPojo.setM_note(json_obj.getString("m_note"));
                     orderDataPojo.setM_address(json_obj.getString("m_address"));
                     orderDataPojo.setS_name(json_obj.getString("s_name"));
                     orderDataPojo.setS_phone(json_obj.getString("s_phone"));

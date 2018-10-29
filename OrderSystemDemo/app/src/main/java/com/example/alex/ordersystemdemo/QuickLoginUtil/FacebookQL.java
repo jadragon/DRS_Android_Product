@@ -1,14 +1,17 @@
-package com.example.alex.ordersystemdemo;
+package com.example.alex.ordersystemdemo.QuickLoginUtil;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
+import com.example.alex.ordersystemdemo.API.List.StudentApi;
+import com.example.alex.ordersystemdemo.GlobalVariable;
+import com.example.alex.ordersystemdemo.StudentAcitvity;
+import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
+import com.example.alex.ordersystemdemo.library.IDataCallBack;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -26,66 +29,22 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class FacebookActivity extends AppCompatActivity {
+public class FacebookQL {
 
-    private static final String TAG = FacebookActivity.class.getSimpleName();
-    private ImageView mImgPhoto;
-    private TextView mTextDescription;
-
+    private static final String TAG = FacebookQL.class.getSimpleName();
+    private Context context;
     // FB
     private LoginManager loginManager;
     private CallbackManager callbackManager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_facebook);
-
+    public FacebookQL(Context context) {
+        this.context = context;
         // init facebook
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(context.getApplicationContext());
         // init LoginManager & CallbackManager
         loginManager = LoginManager.getInstance();
         callbackManager = CallbackManager.Factory.create();
-
-        findViewById(R.id.mImgFBBut).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Facebook Login
-                loginFB();
-            }
-        });
-        findViewById(R.id.mImgLogoutBut).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Facebook Logout
-                loginManager.logOut();
-              /*
-                Glide.with(FacebookActivity.this)
-                        .load(R.drawable.actmember)
-                        //.crossFade()
-                        .into(mImgPhoto);
-
-*/
-                mTextDescription.setText("");
-            }
-        });
-        mImgPhoto = (ImageView) findViewById(R.id.mImgPhoto);
-        mTextDescription = (TextView) findViewById(R.id.mTextDescription);
-
-        // method_1.判斷用戶是否登入過
-        if (Profile.getCurrentProfile() != null) {
-            Profile profile = Profile.getCurrentProfile();
-            // 取得用戶大頭照
-            Uri userPhoto = profile.getProfilePictureUri(300, 300);
-            String id = profile.getId();
-            String name = profile.getName();
-//            Log.d(TAG, "Facebook userPhoto: " + userPhoto);
-//            Log.d(TAG, "Facebook id: " + id);
-//            Log.d(TAG, "Facebook name: " + name);
-        }
-
         // method_2.判斷用戶是否登入過
         /*if (AccessToken.getCurrentAccessToken() != null) {
             Log.d(TAG, "Facebook getApplicationId: " + AccessToken.getCurrentAccessToken().getApplicationId());
@@ -95,9 +54,28 @@ public class FacebookActivity extends AppCompatActivity {
             Log.d(TAG, "Facebook getToken: " + AccessToken.getCurrentAccessToken().getToken());
             Log.d(TAG, "Facebook getSource: " + AccessToken.getCurrentAccessToken().getSource());
         }*/
+
+
     }
 
-    private void loginFB() {
+    public void checkLogin() {
+        // method_1.判斷用戶是否登入過
+        if (Profile.getCurrentProfile() != null) {
+            Profile profile = Profile.getCurrentProfile();
+            // 取得用戶大頭照
+            //  Uri userPhoto = profile.getProfilePictureUri(300, 300);
+            String id = profile.getId();
+            String name = profile.getName();
+            //          Log.d(TAG, "Facebook userPhoto: " + userPhoto);
+//            Log.d(TAG, "Facebook id: " + id);
+//            Log.d(TAG, "Facebook name: " + name);
+            sendApi(id, name, "");
+        } else {
+            loginFB();
+        }
+    }
+
+    public void loginFB() {
         // 設定FB login的顯示方式 ; 預設是：NATIVE_WITH_FALLBACK
         /**
          * 1. NATIVE_WITH_FALLBACK
@@ -119,7 +97,7 @@ public class FacebookActivity extends AppCompatActivity {
         permissions.add("user_gender");
 
         // 設定要讀取的權限
-        loginManager.logInWithReadPermissions(this, permissions);
+        loginManager.logInWithReadPermissions((Activity) context, permissions);
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
@@ -141,20 +119,20 @@ public class FacebookActivity extends AppCompatActivity {
                         try {
                             if (response.getConnection().getResponseCode() == 200) {
                                 /**
-                                                     * 值在這裡取得
-                                                         */
-                                long id = object.getLong("id");
+                                 * 值在這裡取得
+                                 */
+                                String id = object.getString("id");
                                 String name = object.getString("name");
                                 String email = object.getString("email");
                                 //      String gender = object.getString("gender");
 //                                String birthday = object.getString("birthday");
-                                String picture = "https://graph.facebook.com/" + id + "/picture?width=" + 300 +"&height=" + 300;
-                            //    Log.e(TAG, "Facebook id:" + object);
+                                //      String picture = "https://graph.facebook.com/" + id + "/picture?width=" + 300 + "&height=" + 300;
+                                //    Log.e(TAG, "Facebook id:" + object);
 //                                Log.e(TAG, "Facebook id:" + id);
 //                                Log.e(TAG, "Facebook name:" + name);
 //                                Log.e(TAG, "Facebook email:" + email);
                                 //    Log.d(TAG, "Facebook gender:" + gender);
-                         //       Log.d(TAG, "Facebook birthday:" + birthday);
+                                //       Log.d(TAG, "Facebook birthday:" + birthday);
                                 /*
                                 // 此時如果登入成功，就可以順便取得用戶大頭照
                                 Profile profile = Profile.getCurrentProfile();
@@ -167,8 +145,9 @@ public class FacebookActivity extends AppCompatActivity {
                                       //  .crossFade()
                                         .into(mImgPhoto);
                                     */
-                        //        ImageLoader.getInstance().displayImage(picture, mImgPhoto);
-                                mTextDescription.setText(String.format(Locale.TAIWAN, "Name:%s\nE-mail:%s", name, email));
+                                //        ImageLoader.getInstance().displayImage(picture, mImgPhoto);
+
+                                sendApi(id, name, email);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -181,8 +160,8 @@ public class FacebookActivity extends AppCompatActivity {
                 // 如果要取得email，需透過添加參數的方式來獲取(如下)
                 // 不添加只能取得id & name
                 /**
-                            * 想取得的資訊在這裡設定
-                           */
+                 * 想取得的資訊在這裡設定
+                 */
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email,gender, birthday");
                 graphRequest.setParameters(parameters);
@@ -203,9 +182,27 @@ public class FacebookActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void sendApi(final String id, final String name, final String email) {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return new StudentApi().student_login(id, name, email, "0");
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
+                    gv.setType(0);
+                    gv.setToken(AnalyzeUtil.getToken(jsonObject, 0));
+                    context.startActivity(new Intent(context, StudentAcitvity.class));
+                    ((Activity) context).finish();
+                }
+            }
+        });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

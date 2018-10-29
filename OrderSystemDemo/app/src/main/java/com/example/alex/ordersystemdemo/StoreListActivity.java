@@ -19,7 +19,8 @@ public class StoreListActivity extends ToolbarAcitvity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_list);
-        initToolbar("商家列表", false, true);
+        setNavigationType(1);
+        initToolbar("商家列表", true, true);
         initViewPagerAndTabLayout();
     }
 

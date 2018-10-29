@@ -3,7 +3,7 @@
     package="com.example.alex.ordersystemdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:name=".GlobalVariable"
         android:allowBackup="true"
@@ -12,20 +12,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".StudentAcitvity" />
-        <activity android:name=".StoreActivity" />
-        <activity android:name=".DeliveryActivity" />
-        <activity android:name=".OrderListDetailActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".StudentAcitvity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".StoreActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DeliveryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".OrderListDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StoreListActivity" />
-        <activity android:name=".FacebookActivity"></activity>
+        <activity android:name=".StoreListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FacebookActivity">
+
+        </activity>
         <!-- Facebook Start -->
         <!-- FB Login -->
         <meta-data
@@ -34,7 +43,7 @@
         <!-- FB Share ex:photo、video、webLink -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider279289052925102"
+            android:authorities="com.facebook.app.FacebookContentProvider494486867737708"
             android:exported="true" />
 
         <activity
@@ -57,7 +66,8 @@
         <!-- Google+ Start -->
         <activity android:name=".GoogleSignInActivity"></activity>
         <!-- Google+ End -->
-        <activity android:name=".StoreDetailActivity"></activity>
+        <activity android:name=".StoreDetailActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

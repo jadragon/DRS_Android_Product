@@ -3,23 +3,24 @@ package com.example.alex.ordersystemdemo.API.Analyze.Pojo;
 import java.io.Serializable;
 
 public class OrderDataPojo implements Serializable {
-  private   String o_id;
-    private  String m_id;
-    private  String s_id;
-    private  String d_id;
-    private  String m_name;
-    private  String m_phone;
-    private   String m_address;
-    private  String s_name;
-    private  String s_phone;
-    private  String s_address;
-    private  String s_complete_time;
-    private  String d_name;
-    private  String d_phone;
-    private  String f_content;
-    private  String f_sum;
+    private String o_id;
+    private String m_id;
+    private String s_id;
+    private String d_id;
+    private String m_name;
+    private String m_phone;
+    private String m_note;
+    private String m_address;
+    private String s_name;
+    private String s_phone;
+    private String s_address;
+    private String s_complete_time;
+    private String d_name;
+    private String d_phone;
+    private String f_content;
+    private String f_sum;
     private String m_time;
-    private   String s_time;
+    private String s_time;
     private String d_time;
 
     public String getO_id() {
@@ -68,6 +69,14 @@ public class OrderDataPojo implements Serializable {
 
     public void setM_phone(String m_phone) {
         this.m_phone = m_phone;
+    }
+
+    public String getM_note() {
+        return m_note;
+    }
+
+    public void setM_note(String m_note) {
+        this.m_note = m_note;
     }
 
     public String getM_address() {

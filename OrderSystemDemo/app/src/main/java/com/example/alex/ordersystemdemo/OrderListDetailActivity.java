@@ -37,21 +37,22 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
     private void initInfomation() {
         //學生
-        ((TextView) findViewById(R.id.m_name)).setText(orderDataPojo.getM_name());
-        ((TextView) findViewById(R.id.m_phone)).setText(orderDataPojo.getM_phone());
-        ((TextView) findViewById(R.id.m_address)).setText(orderDataPojo.getM_address());
+        ((TextView) findViewById(R.id.m_name)).setText("學生姓名:    "+orderDataPojo.getM_name());
+        ((TextView) findViewById(R.id.m_phone)).setText("學生手機:    "+orderDataPojo.getM_phone());
+        ((TextView) findViewById(R.id.m_address)).setText("學生地址:    "+orderDataPojo.getM_address());
         //外送員
-        ((TextView) findViewById(R.id.d_name)).setText(orderDataPojo.getD_name());
-        ((TextView) findViewById(R.id.d_phone)).setText(orderDataPojo.getD_phone());
+        ((TextView) findViewById(R.id.d_name)).setText("外送員姓名:    "+orderDataPojo.getD_name());
+        ((TextView) findViewById(R.id.d_phone)).setText("外送員手機:    "+orderDataPojo.getD_phone());
         //商家
-        ((TextView) findViewById(R.id.s_name)).setText(orderDataPojo.getS_name());
-        ((TextView) findViewById(R.id.s_phone)).setText(orderDataPojo.getS_phone());
-        ((TextView) findViewById(R.id.s_address)).setText(orderDataPojo.getS_address());
-        ((TextView) findViewById(R.id.s_complete_time)).setText(orderDataPojo.getS_complete_time());
+        ((TextView) findViewById(R.id.s_name)).setText("商家名稱:    "+orderDataPojo.getS_name());
+        ((TextView) findViewById(R.id.s_phone)).setText("商家手機:    "+orderDataPojo.getS_phone());
+        ((TextView) findViewById(R.id.s_address)).setText("商家地址:    "+orderDataPojo.getS_address());
+        ((TextView) findViewById(R.id.s_complete_time)).setText("預計完成時間:    "+orderDataPojo.getS_complete_time());
 
         //點餐資訊
-        ((TextView) findViewById(R.id.f_content)).setText(orderDataPojo.getF_content());
+        ((TextView) findViewById(R.id.f_content)).setText("餐點內容:\n"+orderDataPojo.getF_content());
         ((TextView) findViewById(R.id.f_sum)).setText(orderDataPojo.getF_sum());
+        ((TextView) findViewById(R.id.m_note)).setText("備註:    "+orderDataPojo.getM_note());
 
     }
 

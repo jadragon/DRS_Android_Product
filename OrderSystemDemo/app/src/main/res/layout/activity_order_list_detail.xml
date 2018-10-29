@@ -21,10 +21,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:divider="@drawable/divider_1dp_gray"
             android:orientation="vertical"
-            android:showDividers="middle"
-            android:layout_margin="10dp">
+            android:showDividers="middle">
 
             <TextView
                 android:layout_width="match_parent"
@@ -35,62 +35,29 @@
                 android:text="學生資訊"
                 android:textColor="@color/white" />
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/m_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="學生姓名:" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="學生姓名:" />
 
-                <TextView
-                    android:id="@+id/m_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/m_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="學生手機:" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="學生手機:" />
 
-                <TextView
-                    android:id="@+id/m_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/m_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="學生地址:" />
-
-                <TextView
-                    android:id="@+id/m_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
+                android:padding="5dp"
+                android:text="學生地址:" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -101,43 +68,21 @@
                 android:text="外送員資訊"
                 android:textColor="@color/white" />
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/d_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="外送員姓名:" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="外送員姓名:" />
 
-                <TextView
-                    android:id="@+id/d_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/d_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="外送員手機:" />
-
-                <TextView
-                    android:id="@+id/d_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
+                android:padding="5dp"
+                android:text="外送員手機:" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -148,81 +93,38 @@
                 android:text="商家資訊"
                 android:textColor="@color/white" />
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/s_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="商家名稱:" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="商家名稱:" />
 
-                <TextView
-                    android:id="@+id/s_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/s_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="商家手機:" />
 
-                <TextView
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="商家手機:" />
-
-                <TextView
-                    android:id="@+id/s_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/s_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="商家地址:" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="商家地址:" />
 
-                <TextView
-                    android:id="@+id/s_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
-            <LinearLayout
+            <TextView
+                android:id="@+id/s_complete_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:text="預計完成時間:" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="預計完成時間:" />
-
-                <TextView
-                    android:id="@+id/s_complete_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="123" />
-            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -237,45 +139,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="焗烤*1,焗烤*2,焗烤*4" />
+                android:text="餐點內容:" />
+
+            <TextView
+                android:id="@+id/m_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="備註:" />
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@color/white"
+        android:orientation="horizontal"
         android:padding="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="總金額:"
-            android:gravity="center_vertical"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/f_sum"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
+            android:background="@drawable/background_edit_invisible"
+            android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="1000"
-            android:gravity="center_vertical"
-            android:background="@drawable/background_edit_invisible"
-            android:layout_margin="5dp"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/confirm"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="確定"
             android:background="@color/red"
-            android:textColor="@color/white"
-            android:layout_margin="5dp"/>
+            android:text="確定"
+            android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.alex.ordersystemdemo;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,6 +22,17 @@ public class StoreDetailActivity extends ToolbarAcitvity {
     private MenuListAdapter menuListAdapter;
     private String s_id, name;
     private GlobalVariable gv;
+    private SharedPreferences settings;
+
+
+    public void saveData(String name, String phone, String address) {
+        settings = getSharedPreferences("user_data", 0);
+        settings.edit()
+                .putString("name", name)
+                .putString("phone", phone)
+                .putString("address", address)
+                .commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +41,9 @@ public class StoreDetailActivity extends ToolbarAcitvity {
         gv = (GlobalVariable) getApplicationContext();
         s_id = getIntent().getStringExtra("s_id");
         name = getIntent().getStringExtra("name");
-        initToolbar(name, true, false);
+        setSid(s_id);
+        setMenutype(2);
+        initToolbar(name, true, true);
         initRecyclerView();
         initButton();
 
@@ -46,12 +60,13 @@ public class StoreDetailActivity extends ToolbarAcitvity {
                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                             @Override
                             public JSONObject onTasking(Void... params) {
-                                return new OrderApi().checkout(gv.getToken(), s_id, map.get("name"), map.get("phone"), map.get("address"), menuListAdapter.getContent(), menuListAdapter.getTotalMoney() + "");
+                                return new OrderApi().checkout(gv.getToken(), s_id, map.get("name"), map.get("phone"), map.get("note"), map.get("address"), menuListAdapter.getContent(), menuListAdapter.getTotalMoney() + "");
                             }
 
                             @Override
                             public void onTaskAfter(JSONObject jsonObject) {
                                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    saveData(map.get("name"), map.get("phone"), map.get("address"));
                                     finish();
                                 }
                                 Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();

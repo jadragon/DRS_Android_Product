@@ -2,10 +2,10 @@ package com.example.alex.ordersystemdemo.RecyclerViewAdapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,21 +26,31 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
     private static int CONTENT = 0;
     private static int FOOTER = 1;
     private Context ctx;
-    private DisplayMetrics dm;
     private ArrayList<MenuPojo> list;
     private TextView totalmoney;
     private Map<String, String> map;
+    private SharedPreferences settings;
+
+    private Map<String, String> readData() {
+        settings = ctx.getSharedPreferences("user_data", 0);
+        String name = settings.getString("name", "");
+        String phone = settings.getString("phone", "");
+        String address = settings.getString("address", "");
+        if (!(name.equals("") && phone.equals("") && address.equals(""))) {
+            Map<String, String> map = new HashMap<>();
+            map.put("name", name);
+            map.put("phone", phone);
+            map.put("address", address);
+            map.put("note", "");
+            return map;
+        }
+        return null;
+    }
 
     public MenuListAdapter(Context ctx, JSONObject jsonObject) {
         this.ctx = ctx;
-        dm = ctx.getResources().getDisplayMetrics();
         totalmoney = ((Activity) ctx).findViewById(R.id.total_money);
-        map = new HashMap<>();
-        map.put("name", "");
-        map.put("phone", "");
-        map.put("address", "");
-
-
+        map = readData();
         if (jsonObject != null) {
             list = new Analyze_Restaurant().getMenu(jsonObject);
         } else {
@@ -87,7 +97,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView food, money;
         EditText number;
-        EditText student_name, student_phone, student_address;
+        EditText student_name, student_phone, student_address,student_note;
 
 
         public RecycleHolder(View view, int viewType) {
@@ -99,10 +109,10 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
                 number.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if(hasFocus){
+                        if (hasFocus) {
                             number.setText("");
-                        }else {
-                            if(number.getText().toString().equals("")){
+                        } else {
+                            if (number.getText().toString().equals("")) {
                                 number.setText("0");
                             }
                         }
@@ -181,6 +191,35 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
                         map.put("address", s.toString());
                     }
                 });
+                student_note = view.findViewWithTag("student_note");
+                student_note.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        map.put("note", s.toString());
+                    }
+                });
+                map = readData();
+                if (map != null) {
+                    student_name.setText(map.get("name"));
+                    student_phone.setText(map.get("phone"));
+                    student_address.setText(map.get("address"));
+                } else {
+                    map = new HashMap<>();
+                    map.put("name", "");
+                    map.put("phone", "");
+                    map.put("address", "");
+                    map.put("note", "");
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 package com.example.alex.ordersystemdemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
 import com.example.alex.ordersystemdemo.API.List.DelivertApi;
 import com.example.alex.ordersystemdemo.API.List.StoreApi;
 import com.example.alex.ordersystemdemo.API.List.StudentApi;
+import com.example.alex.ordersystemdemo.QuickLoginUtil.FacebookQL;
 import com.example.alex.ordersystemdemo.QuickLoginUtil.GoogleQL;
 import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
 import com.example.alex.ordersystemdemo.library.IDataCallBack;
@@ -26,6 +28,7 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     View fb, gplus, login;
     GoogleQL googleQL;
+    FacebookQL facebookQL;
     private final static int STUDENT = 0;
     private final static int STORE = 1;
     private final static int DELIVERY = 2;
@@ -35,13 +38,55 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView login_title;
     private EditText account, password;
     private GlobalVariable gv;
+    private SharedPreferences settings;
+
+    public void saveData(String id, int type) {
+        settings = getSharedPreferences("user_data", 0);
+        settings.edit()
+                .putString("id", id)
+                .putInt("type", type)
+                .commit();
+        gv.setToken(id);
+        gv.setType(type);
+    }
+
+    private boolean readData() {
+        settings = getSharedPreferences("user_data", 0);
+        String id = settings.getString("id", "");
+        int type = settings.getInt("type", 0);
+        if (!id.equals("")) {
+            gv.setToken(id);
+            gv.setType(type);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         gv = (GlobalVariable) getApplicationContext();
+        if (readData()) {
+
+            switch (gv.getType()) {
+                case STUDENT:
+                    startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
+                    finish();
+                    break;
+                case STORE:
+                    startActivity(new Intent(LoginActivity.this, StoreActivity.class));
+                    finish();
+                    break;
+                case DELIVERY:
+                    startActivity(new Intent(LoginActivity.this, DeliveryActivity.class));
+                    finish();
+                    break;
+            }
+
+        }
         googleQL = new GoogleQL(this);
+        facebookQL = new FacebookQL(this);
         initTextView();
         initClickView();
         initSwitch();
@@ -93,8 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                gv.setType(STORE);
-                                gv.setToken(AnalyzeUtil.getToken(jsonObject, STORE));
+                                saveData(AnalyzeUtil.getToken(jsonObject, STORE), STORE);
                                 startActivity(new Intent(LoginActivity.this, StoreActivity.class));
                                 finish();
                             } else {
@@ -113,19 +157,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                gv.setType(DELIVERY);
-                                gv.setToken(AnalyzeUtil.getToken(jsonObject, DELIVERY));
+                                saveData(AnalyzeUtil.getToken(jsonObject, DELIVERY), DELIVERY);
                                 startActivity(new Intent(LoginActivity.this, DeliveryActivity.class));
                                 finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             }
-                            Log.e("STORE", jsonObject + "");
                         }
                     });
                 }
                 break;
             case R.id.login_fb:
+                facebookQL.loginFB();
                 break;
             case R.id.login_gplus:
                 googleQL.signIn();
@@ -134,15 +177,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        googleQL.onStart();
-    }
-
+    /*
+        @Override
+        protected void onStart() {
+            super.onStart();
+            googleQL.onStart();
+        }
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        facebookQL.onActivityResult(requestCode, resultCode, data);
         final GoogleSignInAccount signInAccount = googleQL.onActivityResult(requestCode, resultCode, data);
         if (signInAccount != null) {
             AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
@@ -154,17 +199,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onTaskAfter(JSONObject jsonObject) {
                     if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        gv.setType(STUDENT);
-                        gv.setToken(AnalyzeUtil.getToken(jsonObject, STUDENT));
+                        saveData(AnalyzeUtil.getToken(jsonObject, STUDENT), STUDENT);
                         startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
                         finish();
                     } else {
                         Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                     }
-                    Log.e("STORE", jsonObject + "");
                 }
             });
-            Log.e("Google+", signInAccount.getId() + "\n" + signInAccount.getDisplayName() + "\n" + signInAccount.getEmail());
         }
     }
 }

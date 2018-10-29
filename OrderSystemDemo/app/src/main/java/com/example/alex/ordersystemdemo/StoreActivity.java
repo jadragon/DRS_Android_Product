@@ -20,7 +20,9 @@ public class StoreActivity extends ToolbarAcitvity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
-        initToolbar("商家", false, false);
+        setNavigationType(1);
+        setMenutype(1);
+        initToolbar("商家", true, true);
         initViewPagerAndTabLayout();
     }
 

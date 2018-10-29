@@ -20,7 +20,9 @@ public class DeliveryActivity extends ToolbarAcitvity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
-        initToolbar("外送", false, false);
+        setNavigationType(1);
+        initToolbar("外送", true, false);
+
         initViewPagerAndTabLayout();
     }
 
