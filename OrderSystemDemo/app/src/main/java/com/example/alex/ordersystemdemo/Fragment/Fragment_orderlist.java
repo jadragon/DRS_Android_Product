@@ -60,8 +60,6 @@ public class Fragment_orderlist extends Fragment {
                     public void onTaskAfter(JSONObject jsonObject) {
                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
                             orderListAdapter.setFilter(jsonObject);
-                        } else {
-
                         }
                         mSwipeLayout.setRefreshing(false);
                     }

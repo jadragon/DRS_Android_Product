@@ -174,7 +174,7 @@
             android:background="@drawable/background_edit_invisible"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="1000"
+            android:text="0"
             android:textSize="15sp" />
 
         <Button

@@ -23,6 +23,7 @@ import com.example.alex.ordersystemdemo.API.Analyze.Analyze_Restaurant;
 import com.example.alex.ordersystemdemo.API.Analyze.Pojo.StoreDataPojo;
 import com.example.alex.ordersystemdemo.R;
 import com.example.alex.ordersystemdemo.StoreDetailActivity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.RecycleHolder> {
     private Context ctx;
     private ArrayList<StoreDataPojo> list;
-    private int MY_PERMISSIONS_REQUEST_CALL_PHONE=100;
+    private int MY_PERMISSIONS_REQUEST_CALL_PHONE = 100;
 
     public StoreListAdapter(Context ctx, JSONObject jsonObject) {
         this.ctx = ctx;
@@ -51,10 +52,15 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Recy
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
+        if (!list.get(position).getImage().equals("")) {
+            ImageLoader.getInstance().displayImage(list.get(position).getImage(), holder.image);
+        } else {
+            holder.image.setImageDrawable(ctx.getResources().getDrawable(R.mipmap.no_image));
+        }
         holder.name.setText(list.get(position).getName());
         holder.time.setText(list.get(position).getTime());
         holder.address.setText(list.get(position).getAddress());
-        holder.phone.setText("撥打電話:"+list.get(position).getPhone());
+        holder.phone.setText("撥打電話:" + list.get(position).getPhone());
         if (list.get(position).getD_default().equals("1")) {
             holder.d_default.setVisibility(View.VISIBLE);
         } else {
@@ -71,6 +77,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Recy
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         LinearLayout content;
         TextView name, time, address;
+        ImageView image;
         ImageView d_default;
         Button phone;
 
@@ -78,6 +85,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Recy
             super(view);
             name = view.findViewWithTag("name");
             time = view.findViewWithTag("time");
+            image = view.findViewWithTag("image");
             address = view.findViewWithTag("address");
             content = view.findViewWithTag("content");
             d_default = view.findViewWithTag("d_default");

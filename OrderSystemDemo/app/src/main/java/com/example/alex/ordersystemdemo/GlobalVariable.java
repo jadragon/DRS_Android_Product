@@ -2,7 +2,6 @@ package com.example.alex.ordersystemdemo;
 
 import android.app.Application;
 import android.graphics.Bitmap;
-
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -13,6 +12,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 public class GlobalVariable extends Application {
     private String token;
     private int type;
+
     public String getToken() {
         return token;
     }

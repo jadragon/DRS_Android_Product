@@ -19,7 +19,6 @@
             android:layout_weight="5"
             android:background="@drawable/background_edit_invisible"
             android:padding="8dp"
-            android:text="滷肉飯"
             android:textSize="15sp"/>
 
         <TextView
@@ -37,7 +36,7 @@
             android:layout_weight="2"
             android:gravity="right"
             android:tag="money"
-            android:text="30"
+            android:text="0"
             android:textSize="15sp" />
 
         <TextView

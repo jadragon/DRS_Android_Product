@@ -19,4 +19,6 @@
         <item name="colorButtonNormal">@color/blue_grey_500</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+
+    <style name="Widget.GifView" parent="@android:style/Widget"/>
 </resources>

@@ -97,7 +97,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView food, money;
         EditText number;
-        EditText student_name, student_phone, student_address,student_note;
+        EditText student_name, student_phone, student_address, student_note;
 
 
         public RecycleHolder(View view, int viewType) {
@@ -240,6 +240,17 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
         notifyDataSetChanged();
 
     }
+
+    public int searchItem(String keyword) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFood().contains(keyword)) {
+                return i;
+            }
+        }
+        return -1;
+
+    }
+
 
     public int getTotalMoney() {
         int totalmoney = 0;

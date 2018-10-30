@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StoreDetailActivity">
+    tools:context=".StoreDetailActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <include
         layout="@layout/include_toolbar"
@@ -41,7 +43,7 @@
             android:background="@drawable/background_edit_invisible"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="1000"
+            android:text="0"
             android:textSize="15sp" />
 
         <Button

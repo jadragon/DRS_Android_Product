@@ -21,7 +21,8 @@ public class DeliveryActivity extends ToolbarAcitvity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
         setNavigationType(1);
-        initToolbar("外送", true, false);
+        setMenutype(2);
+        initToolbar("外送", true, true);
 
         initViewPagerAndTabLayout();
     }

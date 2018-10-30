@@ -20,11 +20,20 @@ public class OrderApi implements APISetting {
 
     private final String store_status_url = DOMAIN + "judd_student/main/index/student/store_status.php";
     private final String search_storeStatus_url = DOMAIN + "judd_student/main/index/student/search_storeStatus.php";
+    private final String board_url = DOMAIN + "judd_student/main/index/student/board.php";
     List<NameValuePair> params;
     JSONParser jsonParser;
 
     public OrderApi() {
         jsonParser = new JSONParser();
+    }
+    /**
+     * 1.4	公布欄
+     */
+    public JSONObject board() {
+        params = new ArrayList<>();
+        params.add(new BasicNameValuePair("sOrder", sOrder));
+        return jsonParser.getJSONFromUrl(board_url, params);
     }
 
     /**
