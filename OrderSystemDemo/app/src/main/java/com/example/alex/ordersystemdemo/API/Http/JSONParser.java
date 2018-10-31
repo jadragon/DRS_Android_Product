@@ -25,6 +25,7 @@ import java.util.List;
  * 透過URL及Params取得資料庫的資料(JSON)
  */
 public class JSONParser {
+    final static String TAG="JSONParser";
     InputStream is = null;
     JSONObject jObj = null;
     String json = "";
@@ -88,7 +89,7 @@ public class JSONParser {
             is.close();
             json = sb.toString();
         } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
+            Log.e(TAG, "Error converting result " + e.toString());
         } finally {
 
             try {
@@ -104,7 +105,7 @@ public class JSONParser {
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+            Log.e(TAG, "Error parsing data " + e.toString());
         }
 
         // return JSON String

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
 import com.example.alex.ordersystemdemo.API.List.OrderApi;
@@ -58,8 +59,12 @@ public class Fragment_orderlist extends Fragment {
 
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
-                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                            orderListAdapter.setFilter(jsonObject);
+                        if (jsonObject != null) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                orderListAdapter.setFilter(jsonObject);
+                            }
+                        }else {
+                            Toast.makeText(getContext(), "連線異常", Toast.LENGTH_SHORT).show();
                         }
                         mSwipeLayout.setRefreshing(false);
                     }
@@ -89,8 +94,12 @@ public class Fragment_orderlist extends Fragment {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                    orderListAdapter.setFilter(jsonObject);
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        orderListAdapter.setFilter(jsonObject);
+                    }
+                }else {
+                    Toast.makeText(getContext(), "連線異常", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -110,8 +119,12 @@ public class Fragment_orderlist extends Fragment {
 
                 @Override
                 public void onTaskAfter(JSONObject jsonObject) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        orderListAdapter.setFilter(jsonObject);
+                    if (jsonObject != null) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            orderListAdapter.setFilter(jsonObject);
+                        }
+                    }else {
+                        Toast.makeText(getContext(), "連線異常", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

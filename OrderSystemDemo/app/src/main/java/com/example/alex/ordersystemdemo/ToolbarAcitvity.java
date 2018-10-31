@@ -129,18 +129,22 @@ public class ToolbarAcitvity extends AppCompatActivity {
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                try {
-                                    Dialog dialog = new Dialog(ToolbarAcitvity.this);
-                                    View view = LayoutInflater.from(ToolbarAcitvity.this).inflate(R.layout.dialog_board, null);
-                                    TextView textView = view.findViewWithTag("text");
-                                    textView.setText(jsonObject.getString("Data"));
-                                    dialog.setContentView(view);
-                                    dialog.show();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            if (jsonObject != null) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    try {
+                                        Dialog dialog = new Dialog(ToolbarAcitvity.this);
+                                        View view = LayoutInflater.from(ToolbarAcitvity.this).inflate(R.layout.dialog_board, null);
+                                        TextView textView = view.findViewWithTag("text");
+                                        textView.setText(jsonObject.getString("Data"));
+                                        dialog.setContentView(view);
+                                        dialog.show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
+                                }
+                            } else {
+                                Toast.makeText(ToolbarAcitvity.this, "連線異常", Toast.LENGTH_SHORT).show();
                             }
                             boardOn = false;
                         }
@@ -182,66 +186,78 @@ public class ToolbarAcitvity extends AppCompatActivity {
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                Dialog dialog = new Dialog(ToolbarAcitvity.this);
-                                dialog.setContentView(R.layout.dialog_delivery);
-                                final TextView text_delivery = dialog.findViewById(R.id.text_delivery);
-                                text_delivery.setText("開啟接單");
-                                Switch toggle = dialog.findViewById(R.id.switch_delivery);
-                                try {
-                                    if (jsonObject.getString("Data").equals("0")) {
-                                        text_delivery.setText("關閉接單");
-                                        toggle.setChecked(false);
-                                    } else {
-                                        text_delivery.setText("開啟接單");
-                                        toggle.setChecked(true);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                        if (isChecked) {
-                                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                                @Override
-                                                public JSONObject onTasking(Void... params) {
-                                                    return new OrderApi().store_status(gv.getToken(), "1");
-                                                }
-
-                                                @Override
-                                                public void onTaskAfter(JSONObject jsonObject) {
-                                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                                        text_delivery.setText("開啟接單");
-                                                    }
-                                                    Toast.makeText(ToolbarAcitvity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                                                }
-
-                                            });
+                            if (jsonObject != null) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    Dialog dialog = new Dialog(ToolbarAcitvity.this);
+                                    dialog.setContentView(R.layout.dialog_delivery);
+                                    final TextView text_delivery = dialog.findViewById(R.id.text_delivery);
+                                    text_delivery.setText("開啟接單");
+                                    Switch toggle = dialog.findViewById(R.id.switch_delivery);
+                                    try {
+                                        if (jsonObject.getString("Data").equals("0")) {
+                                            text_delivery.setText("關閉接單");
+                                            toggle.setChecked(false);
                                         } else {
-                                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                                @Override
-                                                public JSONObject onTasking(Void... params) {
-                                                    return new OrderApi().store_status(gv.getToken(), "0");
-                                                }
-
-                                                @Override
-                                                public void onTaskAfter(JSONObject jsonObject) {
-                                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                                        text_delivery.setText("關閉接單");
-                                                    }
-                                                    Toast.makeText(ToolbarAcitvity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                                                }
-
-                                            });
+                                            text_delivery.setText("開啟接單");
+                                            toggle.setChecked(true);
                                         }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                                dialog.show();
-                                toggleOn = false;
+
+                                    toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                        @Override
+                                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                            if (isChecked) {
+                                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                                    @Override
+                                                    public JSONObject onTasking(Void... params) {
+                                                        return new OrderApi().store_status(gv.getToken(), "1");
+                                                    }
+
+                                                    @Override
+                                                    public void onTaskAfter(JSONObject jsonObject) {
+                                                        if (jsonObject != null) {
+                                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                                text_delivery.setText("開啟接單");
+                                                            }
+                                                            Toast.makeText(ToolbarAcitvity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(ToolbarAcitvity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                });
+                                            } else {
+                                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                                    @Override
+                                                    public JSONObject onTasking(Void... params) {
+                                                        return new OrderApi().store_status(gv.getToken(), "0");
+                                                    }
+
+                                                    @Override
+                                                    public void onTaskAfter(JSONObject jsonObject) {
+                                                        if (jsonObject != null) {
+                                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                                text_delivery.setText("關閉接單");
+                                                            }
+                                                            Toast.makeText(ToolbarAcitvity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                                        }else {
+                                                            Toast.makeText(ToolbarAcitvity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                });
+                                            }
+                                        }
+                                    });
+                                    dialog.show();
+                                    toggleOn = false;
+                                }
+                                Toast.makeText(ToolbarAcitvity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ToolbarAcitvity.this, "連線異常", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(ToolbarAcitvity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

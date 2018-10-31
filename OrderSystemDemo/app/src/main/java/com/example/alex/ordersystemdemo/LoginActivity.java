@@ -5,12 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
@@ -26,16 +22,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    View fb, gplus, login;
+    View fb, gplus, delivery_login, store_login;
     GoogleQL googleQL;
     FacebookQL facebookQL;
     private final static int STUDENT = 0;
     private final static int STORE = 1;
     private final static int DELIVERY = 2;
-
-    private int currentType = 1;
-    private SwitchCompat login_switch;
-    private TextView login_title;
     private EditText account, password;
     private GlobalVariable gv;
     private SharedPreferences settings;
@@ -68,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         gv = (GlobalVariable) getApplicationContext();
         if (readData()) {
-
             switch (gv.getType()) {
                 case STUDENT:
                     startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
@@ -83,40 +74,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     finish();
                     break;
             }
-
         }
         googleQL = new GoogleQL(this);
         facebookQL = new FacebookQL(this);
         initTextView();
         initClickView();
-        initSwitch();
+        //  initSwitch();
 
     }
 
     private void initTextView() {
-        login_title = findViewById(R.id.login_title);
         account = findViewById(R.id.account);
         password = findViewById(R.id.password);
     }
 
-    private void initSwitch() {
-        login_switch = findViewById(R.id.login_switch);
-        login_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    currentType = DELIVERY;
-                    login_title.setText("外送員登入");
-                } else {
-                    currentType = STORE;
-                    login_title.setText("商家登入");
+    /*
+        private void initSwitch() {
+            login_switch = findViewById(R.id.login_switch);
+            login_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        currentType = DELIVERY;
+                        login_title.setText("外送員登入");
+                    } else {
+                        currentType = STORE;
+                        login_title.setText("商家登入");
+                    }
                 }
-            }
-        });
-    }
-
+            });
+        }
+    */
     private void initClickView() {
-        login = findViewById(R.id.login);
-        login.setOnClickListener(this);
+        store_login = findViewById(R.id.store_login);
+        store_login.setOnClickListener(this);
+        delivery_login = findViewById(R.id.delivery_login);
+        delivery_login.setOnClickListener(this);
         fb = findViewById(R.id.login_fb);
         fb.setOnClickListener(this);
         gplus = findViewById(R.id.login_gplus);
@@ -127,16 +119,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.login:
-                if (currentType == STORE) {
-                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                        @Override
-                        public JSONObject onTasking(Void... params) {
-                            return new StoreApi().store_login(account.getText().toString(), password.getText().toString());
-                        }
+            case R.id.store_login:
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        return new StoreApi().store_login(account.getText().toString(), password.getText().toString());
+                    }
 
-                        @Override
-                        public void onTaskAfter(JSONObject jsonObject) {
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (jsonObject != null) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                 saveData(AnalyzeUtil.getToken(jsonObject, STORE), STORE);
                                 startActivity(new Intent(LoginActivity.this, StoreActivity.class));
@@ -144,18 +136,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             } else {
                                 Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             }
+                        }else {
+                            Toast.makeText(LoginActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                });
+                break;
+            case R.id.delivery_login:
 
-                } else if (currentType == DELIVERY) {
-                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                        @Override
-                        public JSONObject onTasking(Void... params) {
-                            return new DelivertApi().deliver_login(account.getText().toString(), password.getText().toString());
-                        }
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        return new DelivertApi().deliver_login(account.getText().toString(), password.getText().toString());
+                    }
 
-                        @Override
-                        public void onTaskAfter(JSONObject jsonObject) {
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (jsonObject != null) {
                             if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                 saveData(AnalyzeUtil.getToken(jsonObject, DELIVERY), DELIVERY);
                                 startActivity(new Intent(LoginActivity.this, DeliveryActivity.class));
@@ -163,9 +160,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             } else {
                                 Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             }
+                        }else {
+                            Toast.makeText(LoginActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }
+                    }
+                });
                 break;
             case R.id.login_fb:
                 facebookQL.loginFB();
@@ -198,12 +197,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onTaskAfter(JSONObject jsonObject) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        saveData(AnalyzeUtil.getToken(jsonObject, STUDENT), STUDENT);
-                        startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                    if (jsonObject != null) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            saveData(AnalyzeUtil.getToken(jsonObject, STUDENT), STUDENT);
+                            startActivity(new Intent(LoginActivity.this, StoreListActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(LoginActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

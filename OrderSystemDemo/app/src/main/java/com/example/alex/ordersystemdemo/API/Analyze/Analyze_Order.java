@@ -24,6 +24,7 @@ public class Analyze_Order {
                     orderDataPojo = new OrderDataPojo();
                     json_obj = jsonArray.getJSONObject(i);
                     orderDataPojo.setO_id(json_obj.getString("o_id"));
+                    orderDataPojo.setO_number(json_obj.getString("order_number"));
                     orderDataPojo.setM_id(json_obj.getString("m_id"));
                     orderDataPojo.setS_id(json_obj.getString("s_id"));
                     orderDataPojo.setD_id(json_obj.getString("d_id"));

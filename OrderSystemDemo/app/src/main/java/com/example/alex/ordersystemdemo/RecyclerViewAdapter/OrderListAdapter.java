@@ -43,9 +43,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
+        holder.o_number.setText("單號:"+list.get(position).getO_number());
         holder.s_name.setText(list.get(position).getS_name());
-        holder.f_sum.setText(list.get(position).getF_sum());
-        holder.f_content.setText(list.get(position).getF_content());
+        holder.f_sum.setText(list.get(position).getF_sum() + "元");
+
     }
 
     @Override
@@ -54,13 +55,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView s_name, f_sum, f_content;
+        TextView o_number, s_name, f_sum;
 
         public RecycleHolder(View view) {
             super(view);
+            o_number = view.findViewWithTag("o_number");
             s_name = view.findViewWithTag("s_name");
             f_sum = view.findViewWithTag("f_sum");
-            f_content = view.findViewWithTag("f_content");
             itemView.setOnClickListener(this);
         }
 
@@ -72,9 +73,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Recy
             bundle.putSerializable("OrderDataPojo", list.get(position));
             intent.putExtras(bundle);
             intent.putExtra("status", status);
-            ((FragmentActivity)  ctx).startActivityForResult(intent,100);
+            ((FragmentActivity) ctx).startActivityForResult(intent, 100);
         }
-
     }
 
     public void setFilter(JSONObject jsonObject) {

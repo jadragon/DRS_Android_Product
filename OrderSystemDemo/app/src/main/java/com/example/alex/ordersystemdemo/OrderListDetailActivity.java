@@ -37,22 +37,24 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
     private void initInfomation() {
         //學生
-        ((TextView) findViewById(R.id.m_name)).setText("學生姓名:    "+orderDataPojo.getM_name());
-        ((TextView) findViewById(R.id.m_phone)).setText("學生手機:    "+orderDataPojo.getM_phone());
-        ((TextView) findViewById(R.id.m_address)).setText("學生地址:    "+orderDataPojo.getM_address());
+        ((TextView) findViewById(R.id.order_number)).setText("訂單單號:    " + orderDataPojo.getO_number());
+        ((TextView) findViewById(R.id.m_name)).setText("學生姓名:    " + orderDataPojo.getM_name());
+        ((TextView) findViewById(R.id.m_phone)).setText("學生手機:    " + orderDataPojo.getM_phone());
+        ((TextView) findViewById(R.id.m_address)).setText("學生地址:    " + orderDataPojo.getM_address());
         //外送員
-        ((TextView) findViewById(R.id.d_name)).setText("外送員姓名:    "+orderDataPojo.getD_name());
-        ((TextView) findViewById(R.id.d_phone)).setText("外送員手機:    "+orderDataPojo.getD_phone());
+        ((TextView) findViewById(R.id.d_name)).setText("外送員姓名:    " + orderDataPojo.getD_name());
+        ((TextView) findViewById(R.id.d_phone)).setText("外送員手機:    " + orderDataPojo.getD_phone());
+        ((TextView) findViewById(R.id.s_time)).setText("取得餐點時間:    " + orderDataPojo.getS_time());
         //商家
-        ((TextView) findViewById(R.id.s_name)).setText("商家名稱:    "+orderDataPojo.getS_name());
-        ((TextView) findViewById(R.id.s_phone)).setText("商家手機:    "+orderDataPojo.getS_phone());
-        ((TextView) findViewById(R.id.s_address)).setText("商家地址:    "+orderDataPojo.getS_address());
-        ((TextView) findViewById(R.id.s_complete_time)).setText("預計完成時間:    "+orderDataPojo.getS_complete_time());
+        ((TextView) findViewById(R.id.s_name)).setText("商家名稱:    " + orderDataPojo.getS_name());
+        ((TextView) findViewById(R.id.s_phone)).setText("商家手機:    " + orderDataPojo.getS_phone());
+        ((TextView) findViewById(R.id.s_address)).setText("商家地址:    " + orderDataPojo.getS_address());
+        ((TextView) findViewById(R.id.s_complete_time)).setText("預計餐點完成時間:    " + orderDataPojo.getS_complete_time());
 
         //點餐資訊
-        ((TextView) findViewById(R.id.f_content)).setText("餐點內容:\n"+orderDataPojo.getF_content());
+        ((TextView) findViewById(R.id.f_content)).setText("餐點內容:\n" + orderDataPojo.getF_content());
         ((TextView) findViewById(R.id.f_sum)).setText(orderDataPojo.getF_sum());
-        ((TextView) findViewById(R.id.m_note)).setText("備註:    "+orderDataPojo.getM_note());
+        ((TextView) findViewById(R.id.m_note)).setText("備註:\n" + orderDataPojo.getM_note());
 
     }
 
@@ -75,11 +77,15 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
-                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                            setResult(100);
-                                            finish();
+                                        if (jsonObject != null) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                setResult(100);
+                                                finish();
+                                            }
+                                            Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -104,11 +110,15 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
                                             @Override
                                             public void onTaskAfter(JSONObject jsonObject) {
-                                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                                    setResult(100);
-                                                    finish();
+                                                if (jsonObject != null) {
+                                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                        setResult(100);
+                                                        finish();
+                                                    }
+                                                    Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                                 }
-                                                Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -143,11 +153,15 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
-                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                            setResult(100);
-                                            finish();
+                                        if (jsonObject != null) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                setResult(100);
+                                                finish();
+                                            }
+                                            Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -174,11 +188,15 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
-                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                            setResult(100);
-                                            finish();
+                                        if (jsonObject != null) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                setResult(100);
+                                                finish();
+                                            }
+                                            Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -206,11 +224,15 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
 
                                     @Override
                                     public void onTaskAfter(JSONObject jsonObject) {
-                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                            setResult(100);
-                                            finish();
+                                        if (jsonObject != null) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                setResult(100);
+                                                finish();
+                                            }
+                                            Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }

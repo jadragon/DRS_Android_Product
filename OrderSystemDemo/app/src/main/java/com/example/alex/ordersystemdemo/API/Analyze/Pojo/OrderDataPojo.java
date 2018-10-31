@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class OrderDataPojo implements Serializable {
     private String o_id;
+    private String o_number;
     private String m_id;
     private String s_id;
     private String d_id;
@@ -29,6 +30,14 @@ public class OrderDataPojo implements Serializable {
 
     public void setO_id(String o_id) {
         this.o_id = o_id;
+    }
+
+    public String getO_number() {
+        return o_number;
+    }
+
+    public void setO_number(String o_number) {
+        this.o_number = o_number;
     }
 
     public String getM_id() {

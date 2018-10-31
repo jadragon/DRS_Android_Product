@@ -9,7 +9,7 @@ import android.util.Log;
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
 import com.example.alex.ordersystemdemo.API.List.StudentApi;
 import com.example.alex.ordersystemdemo.GlobalVariable;
-import com.example.alex.ordersystemdemo.StudentAcitvity;
+import com.example.alex.ordersystemdemo.StoreListActivity;
 import com.example.alex.ordersystemdemo.library.AsyncTaskUtils;
 import com.example.alex.ordersystemdemo.library.IDataCallBack;
 import com.facebook.CallbackManager;
@@ -93,8 +93,8 @@ public class FacebookQL {
         List<String> permissions = new ArrayList<>();
         permissions.add("public_profile");
         permissions.add("email");
-        permissions.add("user_birthday");
-        permissions.add("user_gender");
+        //   permissions.add("user_birthday");
+        //  permissions.add("user_gender");
 
         // 設定要讀取的權限
         loginManager.logInWithReadPermissions((Activity) context, permissions);
@@ -163,7 +163,8 @@ public class FacebookQL {
                  * 想取得的資訊在這裡設定
                  */
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender, birthday");
+                //   parameters.putString("fields", "id,name,email,gender, birthday");
+                parameters.putString("fields", "id,name,email");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
             }
@@ -191,12 +192,14 @@ public class FacebookQL {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                    GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
-                    gv.setType(0);
-                    gv.setToken(AnalyzeUtil.getToken(jsonObject, 0));
-                    context.startActivity(new Intent(context, StudentAcitvity.class));
-                    ((Activity) context).finish();
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
+                        gv.setType(0);
+                        gv.setToken(AnalyzeUtil.getToken(jsonObject, 0));
+                        context.startActivity(new Intent(context, StoreListActivity.class));
+                        ((Activity) context).finish();
+                    }
                 }
             }
         });

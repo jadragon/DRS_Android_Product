@@ -118,11 +118,15 @@ public class StoreDetailActivity extends ToolbarAcitvity {
 
                                 @Override
                                 public void onTaskAfter(JSONObject jsonObject) {
-                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                        saveData(map.get("name"), map.get("phone"), map.get("address"));
-                                        finish();
+                                    if (jsonObject != null) {
+                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            saveData(map.get("name"), map.get("phone"), map.get("address"));
+                                            finish();
+                                        }
+                                        Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(StoreDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                     }
-                                    Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -153,15 +157,19 @@ public class StoreDetailActivity extends ToolbarAcitvity {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                    menuListAdapter.setFilter(jsonObject);
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        menuListAdapter.setFilter(jsonObject);
+                    }
+                } else {
+                    Toast.makeText(StoreDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
 
-    private void checkOrder(){
+    private void checkOrder() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
@@ -170,20 +178,24 @@ public class StoreDetailActivity extends ToolbarAcitvity {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                    try {
-                        if(jsonObject.getString("Data").equals("1")){
-                            send.setEnabled(true);
-                            send.setBackgroundResource(R.color.green);
-                        }else {
-                            send.setEnabled(false);
-                            send.setBackgroundResource(R.color.gray2);
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        try {
+                            if (jsonObject.getString("Data").equals("1")) {
+                                send.setEnabled(true);
+                                send.setBackgroundResource(R.color.green);
+                            } else {
+                                send.setEnabled(false);
+                                send.setBackgroundResource(R.color.gray2);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                    Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(StoreDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
             }
         });
     }
