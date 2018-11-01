@@ -30,6 +30,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
     private TextView totalmoney;
     private Map<String, String> map;
     private SharedPreferences settings;
+    private String search_keyword = "";
 
     private Map<String, String> readData() {
         settings = ctx.getSharedPreferences("user_data", 0);
@@ -79,10 +80,21 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
         if (getItemViewType(position) == CONTENT) {
+
+            if (!search_keyword.equals("") && list.get(position).getFood().contains(search_keyword)) {
+                holder.food.setTextColor(ctx.getResources().getColor(R.color.red));
+            } else {
+                holder.food.setTextColor(ctx.getResources().getColor(R.color.black));
+            }
             holder.food.setText(list.get(position).getFood());
+
             holder.money.setText(list.get(position).getMoney() + "");
             holder.number.setText(list.get(position).getNumber() + "");
-        } else if (getItemViewType(position) == FOOTER) {
+        } else if (
+
+                getItemViewType(position) == FOOTER)
+
+        {
 
         }
 
@@ -242,11 +254,16 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
     }
 
     public int searchItem(String keyword) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getFood().contains(keyword)) {
-                return i;
+        search_keyword = keyword;
+        if (!keyword.equals("")) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getFood().contains(keyword)) {
+                    notifyDataSetChanged();
+                    return i;
+                }
             }
         }
+        notifyDataSetChanged();
         return -1;
 
     }
@@ -264,12 +281,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.Recycl
         StringBuilder builder = new StringBuilder();
         for (MenuPojo menuPojo : list) {
             if (menuPojo.getNumber() > 0) {
-                builder.append("," + menuPojo.getFood() + "*" + menuPojo.getNumber());
+                builder.append(menuPojo.getFood() + "*" + menuPojo.getNumber() + ",");
             }
-        }
-
-        if (builder.length() > 0) {
-            builder.replace(0, 1, "");
         }
         return builder.toString();
     }

@@ -27,6 +27,7 @@ public class OrderApi implements APISetting {
     public OrderApi() {
         jsonParser = new JSONParser();
     }
+
     /**
      * 1.4	公布欄
      */
@@ -51,7 +52,7 @@ public class OrderApi implements APISetting {
     /**
      * 3.1	學生下訂單
      */
-    public JSONObject checkout(String m_id, String s_id, String m_name, String m_phone,String m_note ,String m_address, String f_content, String f_sum) {
+    public JSONObject checkout(String m_id, String s_id, String m_name, String m_phone, String m_note, String m_address, String f_content, String f_sum) {
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("sOrder", sOrder));
         params.add(new BasicNameValuePair("m_id", m_id));
@@ -91,11 +92,12 @@ public class OrderApi implements APISetting {
     /**
      * 4.4	外送人員接單
      */
-    public JSONObject order_delivery_man(String o_id, String d_id) {
+    public JSONObject order_delivery_man(String o_id, String d_id, String d_complete_time) {
         params = new ArrayList<>();
         params.add(new BasicNameValuePair("sOrder", sOrder));
         params.add(new BasicNameValuePair("o_id", o_id));
         params.add(new BasicNameValuePair("d_id", d_id));
+        params.add(new BasicNameValuePair("d_complete_time", d_complete_time));
         return jsonParser.getJSONFromUrl(order_delivery_man_url, params);
     }
 

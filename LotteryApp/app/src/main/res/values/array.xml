@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="type_list">
+        <item>頭獎</item>
+        <item>二獎</item>
+        <item>三獎</item>
+        <item>四獎</item>
+        <item>五獎</item>
+        <item>六獎</item>
+        <item>同樂獎</item>
+    </string-array>
+</resources>

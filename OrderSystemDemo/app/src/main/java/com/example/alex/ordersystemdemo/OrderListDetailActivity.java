@@ -1,11 +1,11 @@
 package com.example.alex.ordersystemdemo;
 
-import android.app.TimePickerDialog;
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.alex.ordersystemdemo.API.Analyze.AnalyzeUtil;
@@ -16,12 +16,11 @@ import com.example.alex.ordersystemdemo.library.IDataCallBack;
 
 import org.json.JSONObject;
 
-import java.util.Calendar;
-
 public class OrderListDetailActivity extends ToolbarAcitvity {
     private GlobalVariable gv;
     private OrderDataPojo orderDataPojo;
     private String status;
+    private String time = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
         ((TextView) findViewById(R.id.s_complete_time)).setText("預計餐點完成時間:    " + orderDataPojo.getS_complete_time());
 
         //點餐資訊
-        ((TextView) findViewById(R.id.f_content)).setText("餐點內容:\n" + orderDataPojo.getF_content());
+        ((TextView) findViewById(R.id.f_content)).setText("餐點內容:\n" + orderDataPojo.getF_content().replace(",","\n"));
         ((TextView) findViewById(R.id.f_sum)).setText(orderDataPojo.getF_sum());
         ((TextView) findViewById(R.id.m_note)).setText("備註:\n" + orderDataPojo.getM_note());
 
@@ -97,15 +96,29 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Calendar calendar = Calendar.getInstance();
-                                new TimePickerDialog(OrderListDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
-
+                                 AlertDialog.Builder builder = new AlertDialog.Builder(OrderListDetailActivity.this);
+                                View view = LayoutInflater.from(OrderListDetailActivity.this).inflate(R.layout.dialog_time_selector, null);
+                                View.OnClickListener onClickListener = new View.OnClickListener() {
                                     @Override
-                                    public void onTimeSet(TimePicker view, final int hourOfDay, final int minute) {
+                                    public void onClick(View v) {
+                                        switch (v.getTag().toString()) {
+                                            case "5min":
+                                                time = "5";
+                                                break;
+                                            case "10min":
+                                                time = "10";
+                                                break;
+                                            case "15min":
+                                                time = "15";
+                                                break;
+                                            case "20min":
+                                                time = "20";
+                                                break;
+                                        }
                                         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                             @Override
                                             public JSONObject onTasking(Void... params) {
-                                                return new OrderApi().order_accept(orderDataPojo.getO_id(), gv.getToken(), hourOfDay + ":" + minute);
+                                                return new OrderApi().order_accept(orderDataPojo.getO_id(), gv.getToken(), time);
                                             }
 
                                             @Override
@@ -122,10 +135,19 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                             }
                                         });
                                     }
-                                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
-
+                                };
+                                view.findViewWithTag("5min").setOnClickListener(onClickListener);
+                                view.findViewWithTag("10min").setOnClickListener(onClickListener);
+                                view.findViewWithTag("15min").setOnClickListener(onClickListener);
+                                view.findViewWithTag("20min").setOnClickListener(onClickListener);
+                                builder.setView(view);
+                                AlertDialog dialog=builder.create();
+                                //dialog.getWindow().setBackgroundDrawableResource(R.color.invisible);
+                                dialog.show();
                             }
                         });
+
+
                         break;
                     case 2:
                         break;
@@ -145,25 +167,62 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                    @Override
-                                    public JSONObject onTasking(Void... params) {
-                                        return new OrderApi().order_delivery_man(orderDataPojo.getO_id(), gv.getToken());
-                                    }
 
+                                AlertDialog.Builder builder = new AlertDialog.Builder(OrderListDetailActivity.this);
+                                View view = LayoutInflater.from(OrderListDetailActivity.this).inflate(R.layout.dialog_time_selector, null);
+                                View.OnClickListener onClickListener = new View.OnClickListener() {
                                     @Override
-                                    public void onTaskAfter(JSONObject jsonObject) {
-                                        if (jsonObject != null) {
-                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                                setResult(100);
-                                                finish();
-                                            }
-                                            Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                                    public void onClick(View v) {
+                                        switch (v.getTag().toString()) {
+                                            case "5min":
+                                                time = "5";
+                                                break;
+                                            case "10min":
+                                                time = "10";
+                                                break;
+                                            case "15min":
+                                                time = "15";
+                                                break;
+                                            case "20min":
+                                                time = "20";
+                                                break;
                                         }
+                                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                            @Override
+                                            public JSONObject onTasking(Void... params) {
+                                                return new OrderApi().order_delivery_man(orderDataPojo.getO_id(), gv.getToken(),time);
+                                            }
+
+                                            @Override
+                                            public void onTaskAfter(JSONObject jsonObject) {
+                                                if (jsonObject != null) {
+                                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                        setResult(100);
+                                                        finish();
+                                                    }
+                                                    Toast.makeText(OrderListDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(OrderListDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
-                                });
+                                };
+                                view.findViewWithTag("5min").setOnClickListener(onClickListener);
+                                view.findViewWithTag("10min").setOnClickListener(onClickListener);
+                                view.findViewWithTag("15min").setOnClickListener(onClickListener);
+                                view.findViewWithTag("20min").setOnClickListener(onClickListener);
+                                builder.setView(view);
+                                AlertDialog dialog=builder.create();
+                                //dialog.getWindow().setBackgroundDrawableResource(R.color.invisible);
+                                dialog.show();
+
+
+
+
+
+
+
                             }
                         });
                         break;

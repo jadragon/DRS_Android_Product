@@ -28,7 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:divider="@drawable/divider_1dp_gray"
             android:orientation="vertical"
             android:showDividers="middle">
@@ -150,14 +150,18 @@
                 android:id="@+id/f_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
                 android:text="餐點內容:" />
 
             <TextView
                 android:id="@+id/m_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
                 android:text="備註:" />
         </LinearLayout>
     </ScrollView>

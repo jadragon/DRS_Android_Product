@@ -78,12 +78,9 @@ public class StoreDetailActivity extends ToolbarAcitvity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
+                if (s.equals("")) {
+                    menuListAdapter.searchItem(s);
+                }
                 return false;
             }
         });

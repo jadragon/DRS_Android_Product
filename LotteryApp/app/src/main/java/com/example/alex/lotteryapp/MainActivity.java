@@ -1,128 +1,46 @@
 package com.example.alex.lotteryapp;
 
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button btnplay, btnstop, btnpause;
-    private SurfaceView surfaceView;
-    private MediaPlayer mediaPlayer;
-    private int position;
-    private ImageView imageview;
+    private Button main_lottery, main_setting, main_status;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageview = findViewById(R.id.imageview);
 
+        main_lottery = this.findViewById(R.id.main_lottery);
+        main_setting = this.findViewById(R.id.main_setting);
+        main_status = this.findViewById(R.id.main_status);
 
-        btnplay = (Button) this.findViewById(R.id.btnplay);
-        btnstop = (Button) this.findViewById(R.id.btnstop);
-        btnpause = (Button) this.findViewById(R.id.btnpause);
-
-        btnstop.setOnClickListener(this);
-        btnplay.setOnClickListener(this);
-        btnpause.setOnClickListener(this);
-
-        mediaPlayer = new MediaPlayer();
-        surfaceView = (SurfaceView) this.findViewById(R.id.surfaceView);
-
-        // 设置SurfaceView自己不管理的缓冲区
-        surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-            }
-
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                if (position > 0) {
-                    try {
-                        // 开始播放
-                        play();
-                        // 并直接从指定位置开始播放
-                        mediaPlayer.seekTo(position);
-                        position = 0;
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            }
-        });
+        main_lottery.setOnClickListener(this);
+        main_setting.setOnClickListener(this);
+        main_status.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnplay:
-                play();
+            case R.id.main_lottery:
+                startActivity(new Intent(MainActivity.this, LotteryActivity.class));
                 break;
 
-            case R.id.btnpause:
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                } else {
-                    mediaPlayer.start();
-                }
+            case R.id.main_setting:
+                startActivity(new Intent(MainActivity.this, AllListActivity.class));
                 break;
 
-            case R.id.btnstop:
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.stop();
-                }
+            case R.id.main_status:
+
                 break;
             default:
                 break;
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        // 先判断是否正在播放
-        if (mediaPlayer.isPlaying()) {
-            // 如果正在播放我们就先保存这个播放位置
-            position = mediaPlayer.getCurrentPosition();
-            mediaPlayer.stop();
-        }
-        super.onPause();
-    }
-
-    private void play() {
-        try {
-            imageview.setVisibility(View.INVISIBLE);
-            mediaPlayer.reset();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            // 设置需要播放的视频
-            String path = "android.resource://" + getPackageName() + "/" + R.raw.boom;
-            Uri uri = Uri.parse(path);
-            mediaPlayer.setDataSource(getApplicationContext(), uri);
-            // 把视频画面输出到SurfaceView
-            mediaPlayer.setDisplay(surfaceView.getHolder());
-            mediaPlayer.prepare();
-            // 播放
-            mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    imageview.setVisibility(View.VISIBLE);
-                }
-            });
-            Toast.makeText(this, "开始播放！", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-        }
     }
 
 
