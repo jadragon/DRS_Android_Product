@@ -1,9 +1,11 @@
 package com.example.alex.ordersystemdemo;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.TableLayout;
 
 import com.example.alex.ordersystemdemo.Fragment.Fragment_storelist;
 
@@ -24,11 +26,10 @@ public class StoreListActivity extends ToolbarAcitvity {
         initViewPagerAndTabLayout();
     }
 
-
     private void initViewPagerAndTabLayout() {
         viewPager = findViewById(R.id.viewpager);
         fragmentArrayList = new ArrayList<>();
-
+        ((TabLayout) findViewById(R.id.tablayout)).setTabMode(TabLayout.MODE_SCROLLABLE);
         Fragment_storelist fragment_storelist = new Fragment_storelist();
         Bundle bundle = new Bundle();
         bundle.putString("type", "中式");
@@ -41,13 +42,11 @@ public class StoreListActivity extends ToolbarAcitvity {
         fragment_storelist.setArguments(bundle);
         fragmentArrayList.add(fragment_storelist);
 
-
         fragment_storelist = new Fragment_storelist();
         bundle = new Bundle();
         bundle.putString("type", "飲品");
         fragment_storelist.setArguments(bundle);
         fragmentArrayList.add(fragment_storelist);
-
 
         fragment_storelist = new Fragment_storelist();
         bundle = new Bundle();

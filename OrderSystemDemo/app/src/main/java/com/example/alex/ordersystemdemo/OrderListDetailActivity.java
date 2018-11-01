@@ -43,12 +43,12 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
         //外送員
         ((TextView) findViewById(R.id.d_name)).setText("外送員姓名:    " + orderDataPojo.getD_name());
         ((TextView) findViewById(R.id.d_phone)).setText("外送員手機:    " + orderDataPojo.getD_phone());
-        ((TextView) findViewById(R.id.s_time)).setText("取得餐點時間:    " + orderDataPojo.getS_time());
+        ((TextView) findViewById(R.id.s_time)).setText("預計送達時間:    " + orderDataPojo.getD_time());
         //商家
         ((TextView) findViewById(R.id.s_name)).setText("商家名稱:    " + orderDataPojo.getS_name());
         ((TextView) findViewById(R.id.s_phone)).setText("商家手機:    " + orderDataPojo.getS_phone());
         ((TextView) findViewById(R.id.s_address)).setText("商家地址:    " + orderDataPojo.getS_address());
-        ((TextView) findViewById(R.id.s_complete_time)).setText("預計餐點完成時間:    " + orderDataPojo.getS_complete_time());
+        ((TextView) findViewById(R.id.s_complete_time)).setText("預計完成時間:    " + orderDataPojo.getS_complete_time());
 
         //點餐資訊
         ((TextView) findViewById(R.id.f_content)).setText("餐點內容:\n" + orderDataPojo.getF_content().replace(",","\n"));
@@ -136,6 +136,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                         });
                                     }
                                 };
+                                ((TextView)view.findViewWithTag("title")).setText("注意\n請選擇預計餐點完成時間");
                                 view.findViewWithTag("5min").setOnClickListener(onClickListener);
                                 view.findViewWithTag("10min").setOnClickListener(onClickListener);
                                 view.findViewWithTag("15min").setOnClickListener(onClickListener);
@@ -208,6 +209,7 @@ public class OrderListDetailActivity extends ToolbarAcitvity {
                                         });
                                     }
                                 };
+                                ((TextView)view.findViewWithTag("title")).setText("注意\n請選擇預計送達時間");
                                 view.findViewWithTag("5min").setOnClickListener(onClickListener);
                                 view.findViewWithTag("10min").setOnClickListener(onClickListener);
                                 view.findViewWithTag("15min").setOnClickListener(onClickListener);

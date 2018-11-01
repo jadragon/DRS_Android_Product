@@ -1,8 +1,10 @@
 package com.example.alex.ordersystemdemo;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -41,7 +43,6 @@ public class StoreDetailActivity extends ToolbarAcitvity {
                 .putString("address", address)
                 .commit();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,9 +119,17 @@ public class StoreDetailActivity extends ToolbarAcitvity {
                                     if (jsonObject != null) {
                                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                             saveData(map.get("name"), map.get("phone"), map.get("address"));
-                                            finish();
+                                            AlertDialog dialog = new AlertDialog.Builder(StoreDetailActivity.this).setTitle("貼心提醒").setMessage("稍後將通知您餐點送達時間").setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    finish();
+                                                }
+                                            }).create();
+                                            dialog.setCanceledOnTouchOutside(false);
+                                            dialog.show();
+                                        } else {
+                                            Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(StoreDetailActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(StoreDetailActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
                                     }
@@ -164,7 +173,6 @@ public class StoreDetailActivity extends ToolbarAcitvity {
             }
         });
     }
-
 
     private void checkOrder() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
