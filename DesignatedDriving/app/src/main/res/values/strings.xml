@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">DesignatedDriving</string>
+    <string name="app_close">Close</string>
+    <string name="app_open">Open</string>
     <string name="title_activity_maps">Map</string>
 </resources>
