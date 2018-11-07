@@ -3,10 +3,14 @@ package tw.com.lccnet.app.designateddriving;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -37,17 +41,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
     private View view;
+    private TextView toolbar_txt_title;
+    private Toolbar toolbar_main;
     private SupportMapFragment mapFragment;
     private ActionBarDrawerToggle actionBarDrawerToggle_main;
     private GoogleMap mgooglemap;
     private double mLatitude, mLongitude;
-    private LocationManager mLocationManager;
     String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     // 声明一个集合，在后面的代码中用来存储用户拒绝授权的权
     List<String> mPermissionList = new ArrayList<>();
@@ -56,6 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        startService(new Intent(this, GpsService.class));
         initToo();
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -64,13 +72,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     protected void initToo() {
         //Toolbar 建立
-        Toolbar toolbar_main = findViewById(R.id.toolbar_title);
+        toolbar_main = findViewById(R.id.toolbar_title);
+        toolbar_txt_title = findViewById(R.id.toolbar_txt_title);
         setSupportActionBar(toolbar_main);
         DrawerLayout drawerLayout_main = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle_main = new ActionBarDrawerToggle(this, drawerLayout_main, R.string.app_open, R.string.app_close);
         drawerLayout_main.addDrawerListener(actionBarDrawerToggle_main);
         actionBarDrawerToggle_main.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //取得toolbar寬度
+        toolbar_main.post(new Runnable() {
+            @Override
+            public void run() {
+                mgooglemap.setPadding(0, toolbar_main.getHeight(), 0, 0);
+            }
+        });
     }
 
     @Override
@@ -85,10 +101,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap map) {
         //DO WHATEVER YOU WANT WITH GOOGLEMAP
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setTrafficEnabled(true);
-        map.setIndoorEnabled(true);
-        map.setBuildingsEnabled(true);
-        map.getUiSettings().setZoomControlsEnabled(true);
+        //  map.setTrafficEnabled(true);//交通
+        // map.setIndoorEnabled(true);//室內
+        map.setBuildingsEnabled(true);//建築物
+        map.getUiSettings().setZoomControlsEnabled(true);//縮放按鈕
         mgooglemap = map;
         //Set Custom InfoWindow Adapter
         /*
@@ -110,10 +126,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void initGoogleMap() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mgooglemap.setMyLocationEnabled(true);
+        mgooglemap.setMyLocationEnabled(true);//取得當前位置按鈕
+
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);//高精度
+        criteria.setAltitudeRequired(false);//无海拔要求
+        criteria.setBearingRequired(false);//无方位要求
+        criteria.setCostAllowed(true);//允许产生资费
+        criteria.setPowerRequirement(Criteria.POWER_LOW);//低功耗
+        // 获取最佳服务对象
+        LocationManager locationManager = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location location = ((LocationManager) getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(provider);
+        mLatitude = location.getLatitude();
+        mLongitude = location.getLongitude();
+        showAddress();
+        LatLng latlng = new LatLng(mLatitude, mLongitude);
+        MarkerOptions markerOpt = new MarkerOptions();
+        markerOpt.position(getLatLng(0.002, latlng, 0))
+                .icon(getMarkerIcon(R.drawable.north_koria, "金正恩", "★2.3"));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 60))
+                .icon(getMarkerIcon(R.drawable.usa, "歐巴馬", "★4.9"));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 120))
+                .icon(getMarkerIcon(R.drawable.russia, "普丁", "★2.5"));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 180))
+                .icon(getMarkerIcon(R.drawable.china, "習近平", "★3.2"));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 240))
+                .icon(getMarkerIcon(R.drawable.taiwan, "孫中山", "★5.0"));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 300))
+                .icon(getMarkerIcon(R.drawable.south_koria, "朴槿惠", "★2.4"));
+        mgooglemap.addMarker(markerOpt);
+        mgooglemap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+        mgooglemap.moveCamera(CameraUpdateFactory.zoomTo(17));
         mgooglemap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
@@ -122,7 +171,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (Math.abs(mLatitude - latLng.latitude) > 0.0005 || Math.abs(mLongitude - latLng.longitude) > 0.0005) {
                     mLatitude = latLng.latitude;
                     mLongitude = latLng.longitude;
-
+                    showAddress();
                     //  mgooglemap.clear();
                     /*
                     MarkerOptions markerOpt = new MarkerOptions();
@@ -139,37 +188,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);    //取得系統定位服務
-        Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);    //使用GPS定位座標
-        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOpt = new MarkerOptions();
-        markerOpt.position(getLatLng(0.002,latlng,0))
-                .icon(getMarkerIcon(R.drawable.north_koria,"金正恩","★2.3"));
-        mgooglemap.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002,latlng,60))
-                .icon(getMarkerIcon(R.drawable.usa,"歐巴馬","★4.9"));
-        mgooglemap.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002,latlng,120))
-                .icon(getMarkerIcon(R.drawable.russia,"普丁","★2.5"));
-        mgooglemap.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002,latlng,180))
-                .icon(getMarkerIcon(R.drawable.china,"習近平","★3.2"));
-        mgooglemap.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002,latlng,240))
-                .icon(getMarkerIcon(R.drawable.taiwan,"孫中山","★5.0"));
-        mgooglemap.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002,latlng,300))
-                .icon(getMarkerIcon(R.drawable.south_koria,"朴槿惠","★2.4"));
-        mgooglemap.addMarker(markerOpt);
-        mgooglemap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-        mgooglemap.moveCamera(CameraUpdateFactory.zoomTo(16));
-        getLocation(location);
+
     }
-    private LatLng getLatLng(double radius,LatLng center,int angle) {
-        double cos=Math.cos(Math.toRadians(angle));
-        double sin=Math.sin(Math.toRadians(angle));
-        return  new LatLng(center.latitude + radius*cos, center.longitude +  radius*sin);
+
+    private void showAddress() {
+        try {
+            Geocoder gc = new Geocoder(MapsActivity.this, Locale.TRADITIONAL_CHINESE);
+            List<Address> lstAddress = gc.getFromLocation(mLatitude, mLongitude, 1);
+            toolbar_txt_title.setText(lstAddress.get(0).getAddressLine(0));
+                        /*
+                        Log.e("Address", "returnAddress:" + lstAddress.get(0).getAddressLine(0)
+                                + "\ngetCountryName:" + lstAddress.get(0).getCountryName()  //台灣省
+                                + "\ngetAdminArea:" + lstAddress.get(0).getAdminArea()  //台北市
+                                + "\ngetLocality:" + lstAddress.get(0).getLocality()  //中正區
+                                + "\ngetThoroughfare:" + lstAddress.get(0).getThoroughfare()  //信陽街(包含路巷弄)
+                                + "\ngetFeatureName:" + lstAddress.get(0).getFeatureName()  //會得到33(號)
+                                + "\ngetPostalCode:" + lstAddress.get(0).getPostalCode());  //會得到100(郵遞區號)
+*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    private LatLng getLatLng(double radius, LatLng center, int angle) {
+        double cos = Math.cos(Math.toRadians(angle));
+        double sin = Math.sin(Math.toRadians(angle));
+        return new LatLng(center.latitude + radius * cos, center.longitude + radius * sin);
+    }
+
     private BitmapDescriptor getMarkerIcon(int imageRes, String title, String subtitle) {
         if (view == null) {
             view = LayoutInflater.from(this).inflate(R.layout.custominfowindow, null);
@@ -228,15 +274,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 + centerFromPoint.latitude);
     }
 
-    private void getLocation(Location location) {    //將定位資訊顯示在畫面中
-        if (location != null) {
-            mLatitude = location.getLongitude();    //取得經度
-            mLongitude = location.getLatitude();    //取得緯度
-        } else {
-            Toast.makeText(this, "無法定位座標", Toast.LENGTH_LONG).show();
-        }
-    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     public static Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
