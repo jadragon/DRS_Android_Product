@@ -3,6 +3,7 @@ package com.example.alex.ordersystemdemo.QuickLoginUtil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -194,15 +195,24 @@ public class FacebookQL {
             public void onTaskAfter(JSONObject jsonObject) {
                 if (jsonObject != null) {
                     if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
-                        gv.setType(0);
-                        gv.setToken(AnalyzeUtil.getToken(jsonObject, 0));
+                        saveData(AnalyzeUtil.getToken(jsonObject, 0), 0);
                         context.startActivity(new Intent(context, StoreListActivity.class));
                         ((Activity) context).finish();
                     }
                 }
             }
         });
+    }
+
+    public void saveData(String id, int type) {
+        SharedPreferences settings = context.getSharedPreferences("user_data", 0);
+        settings.edit()
+                .putString("id", id)
+                .putInt("type", type)
+                .commit();
+        GlobalVariable gv = (GlobalVariable) context.getApplicationContext();
+        gv.setToken(id);
+        gv.setType(type);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
