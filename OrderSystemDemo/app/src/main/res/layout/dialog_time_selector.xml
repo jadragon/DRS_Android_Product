@@ -1,57 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:tag="title"
+        android:text="注意\n請填寫外送員可來店取餐時間" />
 
-        <TextView
-            android:tag="title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="注意\n請填寫外送員可來店取餐時間" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray1" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray1"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_edit_invisible"
-            android:tag="5min"
-            android:text="5分鐘" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_edit_invisible"
-            android:tag="10min"
-            android:text="10分鐘" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_edit_invisible"
-            android:tag="15min"
-            android:text="15分鐘" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_edit_invisible"
-            android:tag="20min"
-            android:text="20分鐘" />
-    </LinearLayout>
+    <ListView
+    android:tag="listview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    <Button
+        android:tag="cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:textColor="@color/white"
+        android:text="取消"
+        android:textSize="18sp"
+        android:layout_margin="10dp"/>
+</LinearLayout>
 
 

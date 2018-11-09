@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.alex.ordersystemdemo"
+        applicationId "com.company.alex.ordersystemdemo"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     useLibrary 'org.apache.http.legacy'
@@ -18,11 +18,11 @@ android {
         }
     }
     signingConfigs {
-        debug {
-            storeFile file('keystore/debug.keystore')
-            storePassword '123456'
-            keyAlias "androiddebugkey"
+        ordersystem {
+            keyAlias 'ordersystem'
+            storeFile file('D:/GitHub/DRS_Android_Product/OrderSystemDemo/app/keystore/ordersystem.jks')
             keyPassword '123456'
+            storePassword '123456'
         }
     }
 }
@@ -39,10 +39,10 @@ dependencies {
     // Here FB
     implementation 'com.facebook.android:facebook-android-sdk:4.33.0'
     //Here Google Sign in
-    implementation 'com.google.firebase:firebase-core:16.0.0'
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
-    implementation 'com.google.android.gms:play-services-plus:15.0.1'
-    implementation 'com.google.firebase:firebase-auth:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'com.google.android.gms:play-services-plus:16.0.0'
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation files('libs/universal-image-loader-1.9.5.jar')
 }
 apply plugin: 'com.google.gms.google-services'
