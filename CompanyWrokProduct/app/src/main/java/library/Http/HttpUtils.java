@@ -19,15 +19,18 @@ import javax.net.ssl.TrustManagerFactory;
 public class HttpUtils {
 
     private static SSLContext sslContext = null;
-    private static Context context=null;
-
+    private static Context context = null;
 
     public static void setContext(Context context) {
         HttpUtils.context = context;
     }
 
+    public static Context getContext() {
+        return context;
+    }
+
     public static SSLContext prepareSelfSign() {
-        if (context!=null&&sslContext == null) {
+        if (context != null && sslContext == null) {
             KeyStore trustStore = null;
             try {
                 trustStore = KeyStore.getInstance(KeyStore.getDefaultType());

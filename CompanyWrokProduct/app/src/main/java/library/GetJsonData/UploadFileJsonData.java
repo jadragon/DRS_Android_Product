@@ -9,13 +9,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import library.Http.PostByteArrayformImage;
+import library.Http.SSLCertPostImageUtil;
 
 public class UploadFileJsonData extends APIInfomation {
     private final String updatePortrait_url = DOMAIN + "main/mcenter/person/updatePortrait.php";
-    private PostByteArrayformImage postByteArrayformImage;
+    private SSLCertPostImageUtil sslCertPostImageUtil;
 
     public UploadFileJsonData() {
-        postByteArrayformImage = new PostByteArrayformImage();
+        sslCertPostImageUtil = new SSLCertPostImageUtil();
     }
 
     /**
@@ -26,8 +27,7 @@ public class UploadFileJsonData extends APIInfomation {
         params.add(new BasicNameValuePair("gok", GOK));
         params.add(new BasicNameValuePair("lang", LANG));
         params.add(new BasicNameValuePair("token", token));
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        return new PostByteArrayformImage().getJSONFromUrl(updatePortrait_url, params, data);
+        return sslCertPostImageUtil.getJSONFromUrl(updatePortrait_url, params, data);
     }
 
     /**
