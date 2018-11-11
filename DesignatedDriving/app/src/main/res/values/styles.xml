@@ -7,5 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <!-- 低版本 -->
+    <style name="ItemHeight">
+        <item name="android:listPreferredItemHeightSmall">60dp</item>
+    </style>
 </resources>

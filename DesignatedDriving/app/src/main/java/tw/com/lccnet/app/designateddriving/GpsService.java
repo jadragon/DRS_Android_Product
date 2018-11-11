@@ -40,11 +40,11 @@ public class GpsService extends Service {
 
             if (location == null) return;
 
-
             Location dest = new Location(location); //取得現在位置
             gv.setmLatitude(dest.getLatitude());
             gv.setmLongitude(dest.getLongitude());
-
+            Log.e(TAG, "Location Changed, now latitude:" + gv.getmLatitude() +
+                    "\nlongitude:" + gv.getmLongitude());
             Toast.makeText(getApplicationContext(), "Location Changed, now latitude:" + gv.getmLatitude() +
                     ", longitude:" + gv.getmLongitude(), Toast.LENGTH_SHORT).show();
 
