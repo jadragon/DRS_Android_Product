@@ -48,11 +48,11 @@ import java.util.List;
 import java.util.Map;
 
 import library.AnalyzeJSON.AnalyzeMember;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
-import library.Component.ToastMessageDialog;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity_Copy extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
     EditText login_edit_account, login_edit_password;
     Button login_button;
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                startActivity(new Intent(LoginActivity_Copy.this, RegisterActivity.class));
             }
         });
 
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_btn_forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, ForgetPassActivity.class);
+                Intent intent = new Intent(LoginActivity_Copy.this, ForgetPassActivity.class);
                 startActivity(intent);
             }
         });
@@ -345,6 +345,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         List<String> permissions = new ArrayList<>();
         permissions.add("public_profile");
         permissions.add("email");
+        permissions.add("user_birthday");
+        permissions.add("user_gender");
 
         // 設定要讀取的權限
         loginManager.logInWithReadPermissions(this, permissions);
@@ -397,10 +399,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                  * 想取得的資訊在這裡設定
                  */
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email");
+                parameters.putString("fields", "id,name,email,gender, birthday");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
-                login_cover_bg.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -414,7 +415,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onError(FacebookException error) {
                 // 登入失敗
                 Log.d(TAG, "Facebook onError:" + error.toString());
-                login_cover_bg.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -431,7 +431,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
          * */
         if (gso == null) {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestIdToken(getString(R.string.default_web_client_id))//
+                    .requestScopes(new Scope(Scopes.PLUS_LOGIN))//取得性別..等
                     .requestEmail()
                     .build();
         }

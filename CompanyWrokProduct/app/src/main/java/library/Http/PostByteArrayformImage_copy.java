@@ -4,7 +4,6 @@ import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -20,11 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
-import javax.net.ssl.SSLContext;
-
-public class PostByteArrayformImage {
+public class PostByteArrayformImage_copy {
     /**
      * 透過URL及Params取得資料庫的資料(JSON)
      */
@@ -32,7 +28,8 @@ public class PostByteArrayformImage {
     static InputStream is = null;
     static String json = "";
 
-    public JSONObject getJSONFromUrl(String url, List<NameValuePair> params, byte[] image) {
+    public JSONObject getJSONFromUrl(String url, String token, byte[] image) {
+
         // Making HTTP request
         try {
             // defaultHttpClient
@@ -50,14 +47,16 @@ public class PostByteArrayformImage {
             entity.addPart("fimg", bab);
 
             try {
-                for (NameValuePair nameValuePair : params) {
-                    entity.addPart(nameValuePair.getName(), new StringBody(nameValuePair.getValue()));
-                }
+                entity.addPart("token", new StringBody(token));
+                entity.addPart("gok", new StringBody("Dr@_K4y51G2A0w26B8OWkfQ=="));
+                entity.addPart("lang", new StringBody("0"));
+
             } catch (UnsupportedEncodingException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             httpPost.setEntity(entity);
+
             HttpResponse httpResponse = httpClient.execute(httpPost);
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();

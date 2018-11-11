@@ -31,6 +31,7 @@ import java.util.TimerTask;
 import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
 import library.BottomNavigationViewHelper;
+import library.Component.BottomNavigationViewEx;
 import library.GetJsonData.MemberJsonData;
 import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_notification fragment_notification;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
-    private  BottomNavigationView navigation;
+    private BottomNavigationViewEx navigation;
     private  SQLiteDatabaseHandler db;
 
     @Override
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void initBtnNav() {//BottomLayout
         navigation = findViewById(R.id.tab_layout);
+        navigation.enableShiftingMode(false);
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) navigation.getChildAt(0);
         View v = bottomNavigationMenuView.getChildAt(3);
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 .inflate(R.layout.notification_badge, bottomNavigationMenuView, false);
 
         itemView.addView(badge);
-        new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
+       // new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {//監聽事件
 
             @Override

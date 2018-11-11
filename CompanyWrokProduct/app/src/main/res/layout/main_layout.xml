@@ -19,7 +19,7 @@
             android:layout_weight="1"/>
 
 
-        <android.support.design.widget.BottomNavigationView
+        <library.Component.BottomNavigationViewEx
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tab_layout"
