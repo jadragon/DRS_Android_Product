@@ -1,13 +1,13 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
 public class MyCommenttopPojo  {
-    double tscore;
-    int tnum;
-    int num1;
-    int num2;
-    int num3;
-    int num4;
-    int num5;
+    private double tscore;
+    private  int tnum;
+    private  int num1;
+    private  int num2;
+    private  int num3;
+    private  int num4;
+    private  int num5;
 
     public double getTscore() {
         return tscore;

@@ -1,15 +1,15 @@
 package com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo;
 
 public class AppreciatePojo {
-    String moino;
-    String pname;
-    String img;
-    String color;
-    String size;
-    String comment;
-    double comscore;
-    int comtimes;
-    String comdate;
+    private String moino;
+    private  String pname;
+    private   String img;
+    private   String color;
+    private   String size;
+    private   String comment;
+    private  double comscore;
+    private   int comtimes;
+    private  String comdate;
 
     public String getMoino() {
         return moino;

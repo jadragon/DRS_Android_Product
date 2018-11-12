@@ -14,27 +14,26 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.CouponActivity;
 import com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.pojo.CouponPojo;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import library.AnalyzeJSON.AnalyzeBill;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.BillJsonData;
-import library.JsonDataThread;
 
 public class CouponRecyclerAdapter extends RecyclerView.Adapter<CouponRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    JSONObject json;
     private List<CouponPojo> itemPojoList;
     private ToastMessageDialog toastMessageDialog;
-    GlobalVariable gv;
+    private  GlobalVariable gv;
 
     public CouponRecyclerAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        this.json = json;
         gv = (GlobalVariable) ctx.getApplicationContext();
         toastMessageDialog = new ToastMessageDialog(ctx);
         if (json != null) {
@@ -95,29 +94,24 @@ public class CouponRecyclerAdapter extends RecyclerView.Adapter<CouponRecyclerAd
                 copyToClipboard(itemPojoList.get(position).getCoupon());
             } else if (itemPojoList.get(position).getIsuse() == 1) {
                 toastMessageDialog.setTitleText("是否要刪除此折價券?");
-                toastMessageDialog.showCheck(false,new ToastMessageDialog.ClickListener() {
+                toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                     @Override
                     public void ItemClicked(Dialog dialog, View view, String note) {
-                        new JsonDataThread() {
+
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                             @Override
-                            public JSONObject getJsonData() {
+                            public JSONObject onTasking(Void... params) {
                                 return new BillJsonData().delCoupon(gv.getToken(), itemPojoList.get(position).getMcno());
                             }
 
                             @Override
-                            public void runUiThread(JSONObject json) {
-                                try {
-                                    toastMessageDialog.setTitleText("注意");
-                                    toastMessageDialog.setMessageText(json.getString("Message"));
-                                    toastMessageDialog.show();
-                                    ((CouponActivity) ctx).setFilter();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                toastMessageDialog.setTitleText("注意");
+                                toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                toastMessageDialog.show();
+                                ((CouponActivity) ctx).setFilter();
                             }
-                        }.start();
+                        });
                         dialog.dismiss();
                     }
 
@@ -128,7 +122,6 @@ public class CouponRecyclerAdapter extends RecyclerView.Adapter<CouponRecyclerAd
 
 
     public void setFilter(JSONObject json) {
-        this.json = json;
         if (json != null) {
             itemPojoList = new AnalyzeBill().getCouponPojo(json);
         } else {

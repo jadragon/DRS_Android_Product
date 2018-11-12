@@ -22,23 +22,17 @@ import Util.AsyncTaskUtils;
 import Util.IDataCallBack;
 import adapter.recyclerview.MyAppraiseRecyclerViewAdapter;
 import library.AnalyzeJSON.AnalyzeComment;
-import library.Component.ToastMessageDialog;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
 
 public class Fragment_Myappreciate extends Fragment {
-    JSONObject json;
-    View v;
-    int type, rule;
-    GlobalVariable gv;
-    ToastMessageDialog toastMessageDialog;
-    MyAppraiseRecyclerViewAdapter adapter;
-    RecyclerView recyclerView;
+    private  View v;
+    private int type, rule;
+    private  GlobalVariable gv;
+    private MyAppraiseRecyclerViewAdapter adapter;
+    private  RecyclerView recyclerView;
     String token = "LpESIVhpKXZ5ZxJQyl19Ug==";
 
-    public void setJson(JSONObject json) {
-        this.json = json;
-    }
 
     public void setType(int type) {
         this.type = type;
@@ -51,7 +45,6 @@ public class Fragment_Myappreciate extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.include_refresh_recycler, container, false);
         gv = (GlobalVariable) getContext().getApplicationContext();
-        toastMessageDialog = new ToastMessageDialog(getContext());
         initRecyclerView();
         return v;
     }
@@ -71,11 +64,6 @@ public class Fragment_Myappreciate extends Fragment {
 
     public void setFilter() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-
-            }
-
             @Override
             public JSONObject onTasking(Void... params) {
                 if (type == 0)

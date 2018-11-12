@@ -16,11 +16,11 @@ import org.json.JSONObject;
 import adapter.recyclerview.ShipAddressRecyclerAdapter;
 
 public class Fragment_shipAddress extends Fragment {
-    View v;
-    ShipAddressRecyclerAdapter adapter;
-    RecyclerView recyclerView;
-    JSONObject json;
-    int type;
+    private  View v;
+    private ShipAddressRecyclerAdapter adapter;
+    private  RecyclerView recyclerView;
+    private JSONObject json;
+    private  int type;
 
     public void setType(int type) {
         this.type = type;

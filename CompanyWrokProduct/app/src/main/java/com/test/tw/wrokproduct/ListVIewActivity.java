@@ -16,12 +16,12 @@ import java.util.Map;
 import library.SQLiteDatabaseHandler;
 
 public class ListVIewActivity extends ListActivity {
-    Toolbar toolbar;
-    TextView toolbar_title;
-    String[] array;
-    SQLiteDatabaseHandler db;
-    String land, city, area, zipcode;
-    Intent intent;
+    private  Toolbar toolbar;
+    private TextView toolbar_title;
+    private String[] array;
+    private  SQLiteDatabaseHandler db;
+    private  String land, city, area, zipcode;
+    private  Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

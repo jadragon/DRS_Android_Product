@@ -18,10 +18,10 @@ import android.widget.TextView;
 
 public class CommunityActivity extends AppCompatActivity {
     private WebView luntanListview;
-    String title, html;
-    ViewGroup container;
-    Intent intent;
-    Toolbar toolbar;
+    private  String title, html;
+    private  ViewGroup container;
+    private  Intent intent;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

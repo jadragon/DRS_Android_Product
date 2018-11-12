@@ -14,21 +14,22 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ReCountRecyclerViewAdapter;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ReCountJsonData;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CountActivity extends AppCompatActivity {
-    JSONObject json;
-    RecyclerView recyclerView;
-    ReCountRecyclerViewAdapter countRecyclerViewAdapter;
-    Toolbar toolbar;
-    TextView toolbar_title;
-    GlobalVariable gv;
-    Button count_gotobuy;
-    int count_type;
-    ToastMessageDialog toastMessageDialog;
+    private  RecyclerView recyclerView;
+    private  ReCountRecyclerViewAdapter countRecyclerViewAdapter;
+    private  Toolbar toolbar;
+    private  TextView toolbar_title;
+    private  GlobalVariable gv;
+    private  Button count_gotobuy;
+    private int count_type;
+    private ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +51,24 @@ public class CountActivity extends AppCompatActivity {
             @Override
             public void ItemClicked(Dialog dialog, View view, String note) {
                 if (countRecyclerViewAdapter.checkShipwayAndPayWay()) {
-                    new Thread(new Runnable() {
+
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public void run() {
-                            new ReCountJsonData().setVat(count_type, gv.getToken(), countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
-                                    intent.putExtra("count_type", count_type);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
+                        public JSONObject onTasking(Void... params) {
+                            return new ReCountJsonData().setVat(count_type, gv.getToken(), countRecyclerViewAdapter.getInvoice(), countRecyclerViewAdapter.getCtitle(), countRecyclerViewAdapter.getVat());
                         }
-                    }).start();
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+                            Intent intent = new Intent(CountActivity.this, GoldFlowActivity.class);
+                            intent.putExtra("count_type", count_type);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
                 } else {
-                    new ToastMessageDialog(CountActivity.this,"請填寫運送方式及付款方式").confirm();
+                    new ToastMessageDialog(CountActivity.this, "請填寫運送方式及付款方式").confirm();
                 }
                 dialog.dismiss();
             }
@@ -74,33 +76,32 @@ public class CountActivity extends AppCompatActivity {
     }
 
     private void initRecycleView() {
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new ReCountJsonData().getCheckout(count_type, gv.getToken());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView = findViewById(R.id.count_review);
-                        recyclerView.setHasFixedSize(true);
-                        countRecyclerViewAdapter = new ReCountRecyclerViewAdapter(CountActivity.this, json, count_type);
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(countRecyclerViewAdapter);
-                        DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL);
-                        decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
-                        recyclerView.addItemDecoration(decoration);
-                        //IOS like
-                        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
-                        //第三方 彈跳效果
-                        //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
-                        initButton();
-
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new ReCountJsonData().getCheckout(count_type, gv.getToken());
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                recyclerView = findViewById(R.id.count_review);
+                recyclerView.setHasFixedSize(true);
+                countRecyclerViewAdapter = new ReCountRecyclerViewAdapter(CountActivity.this, jsonObject, count_type);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(countRecyclerViewAdapter);
+                DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL);
+                decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
+                recyclerView.addItemDecoration(decoration);
+                //IOS like
+                OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+                //第三方 彈跳效果
+                //  ElasticityHelper.setUpOverScroll(recyclerView, ORIENTATION.VERTICAL);
+                initButton();
+            }
+        });
+
 
     }
 
@@ -132,18 +133,17 @@ public class CountActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new ReCountJsonData().getCheckout(count_type, gv.getToken());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        countRecyclerViewAdapter.setFilter(json);
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new ReCountJsonData().getCheckout(count_type, gv.getToken());
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                countRecyclerViewAdapter.setFilter(jsonObject);
+            }
+        });
     }
 
 }

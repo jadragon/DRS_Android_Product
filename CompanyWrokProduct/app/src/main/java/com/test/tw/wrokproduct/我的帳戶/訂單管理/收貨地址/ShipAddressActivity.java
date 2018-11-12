@@ -23,11 +23,11 @@ import java.util.List;
 import library.GetJsonData.LogisticsJsonData;
 
 public class ShipAddressActivity extends AppCompatActivity {
-    JSONObject json1, json2;
-    List<Fragment_shipAddress> fragmentList;
-    ViewPager viewpager;
-    String[] mTabtitle = {"超商地址", "一般地址"};
-    GlobalVariable gv;
+    private  JSONObject json1, json2;
+    private  List<Fragment_shipAddress> fragmentList;
+    private ViewPager viewpager;
+    private String[] mTabtitle = {"超商地址", "一般地址"};
+    private  GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

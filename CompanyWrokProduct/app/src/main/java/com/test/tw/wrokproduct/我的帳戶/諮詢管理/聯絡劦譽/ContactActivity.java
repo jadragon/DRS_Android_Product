@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.test.tw.wrokproduct.Fragment.Fragment_Contact;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -18,17 +19,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_Contact;
 import library.GetJsonData.ContactJsonData;
 
 public class ContactActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    ViewPager contact_viewpager;
-    TabLayout tabLayout;
-    List<Fragment_Contact> fragmentList;
-    String[] mTabtitle = {"收件夾", "寄信備份"};
-    JSONObject json1, json2;
-    GlobalVariable gv;
+    private Toolbar toolbar;
+    private ViewPager contact_viewpager;
+    private TabLayout tabLayout;
+    private List<Fragment_Contact> fragmentList;
+    private String[] mTabtitle = {"收件夾", "寄信備份"};
+    private JSONObject json1, json2;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

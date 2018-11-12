@@ -16,11 +16,11 @@ import library.GetJsonData.GetWebView;
 
 public class StoreWebViewActivity extends AppCompatActivity {
     private WebView luntanListview;
-    String html;
-    ViewGroup container;
-    String name, address, deliver;
-    Intent intent;
-    String logistics;
+    private String html;
+    private ViewGroup container;
+    private String name, address, deliver;
+    private  Intent intent;
+    private String logistics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

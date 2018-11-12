@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
@@ -25,9 +24,9 @@ import library.GetJsonData.HelpCenterJsonData;
 
 public class HelpCenterActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    SearchView searchView;
-    HelpCenterRecyclerViewAdapter adapter;
+    private   RecyclerView recyclerView;
+    private  SearchView searchView;
+    private  HelpCenterRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

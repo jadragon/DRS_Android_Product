@@ -4,7 +4,7 @@ public interface IDataCallBack<T> {
     /**
      * 任務執行前
      */
-    void onTaskBefore();
+   // void onTaskBefore();
 
     /**
      * 任務執行中

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.test.tw.wrokproduct.Fragment.Fragment_ExchangePoint;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -14,17 +15,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_ExchangePoint;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
 
 public class ExchangePointActivity extends ToolbarActivity {
-    List<Fragment_ExchangePoint> fragmentList;
-    String[] mTabtitle = {"波克點值", "庫瓦點值"};
-    int count = 2;
-    int point_type;
-    JSONObject json1, json2;
-    GlobalVariable gv;
+    private  List<Fragment_ExchangePoint> fragmentList;
+    private  String[] mTabtitle = {"波克點值", "庫瓦點值"};
+    private  int count = 2;
+    private  JSONObject json1, json2;
+    private  GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,6 @@ public class ExchangePointActivity extends ToolbarActivity {
         Fragment_ExchangePoint fragment_exchangePoint;
         for (int i = 1; i <= count; i++) {
             fragment_exchangePoint = new Fragment_ExchangePoint();
-            fragment_exchangePoint.setPoint_type(point_type);
             fragment_exchangePoint.setType(i);
             fragmentList.add(fragment_exchangePoint);
         }

@@ -15,17 +15,19 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
-import library.JsonDataThread;
 
 public class EwalletActivity extends ToolbarActivity {
-    GlobalVariable gv;
-    TextView exchange_point, exchange_rate1;
-    EditText exchange_edit1;
-    Button exchange_confirm;
-    ToastMessageDialog toastMessageDialog;
+    private  GlobalVariable gv;
+    private   TextView exchange_point, exchange_rate1;
+    private  EditText exchange_edit1;
+    private   Button exchange_confirm;
+    private  ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,26 +44,25 @@ public class EwalletActivity extends ToolbarActivity {
             public void onClick(View view) {
                 String edit1 = exchange_edit1.getText().toString().equals("") ? "0" : exchange_edit1.getText().toString();
                 if (!edit1.equals("0")) {
-                    new JsonDataThread() {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public JSONObject getJsonData() {
+                        public JSONObject onTasking(Void... params) {
                             return new BillJsonData().getEwalletTrans(gv.getToken(), exchange_edit1.getText().toString());
                         }
 
                         @Override
-                        public void runUiThread(JSONObject json) {
-                            try {
-                                if (json.getBoolean("Success")) {
-                                    exchange_edit1.setText(null);
-                                    setText();
-                                }
-                                toastMessageDialog.setMessageText(json.getString("Message"));
-                                toastMessageDialog.show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        public void onTaskAfter(JSONObject jsonObject) {
+
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                exchange_edit1.setText(null);
+                                setText();
                             }
+                            toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                            toastMessageDialog.show();
+
                         }
-                    }.start();
+                    });
+
                 }
 
             }
@@ -85,26 +86,31 @@ public class EwalletActivity extends ToolbarActivity {
 
 
     public void setText() {
-        new JsonDataThread() {
+
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new BillJsonData().getEwalletRate(gv.getToken());
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                if (json != null) {
+            public void onTaskAfter(JSONObject jsonObject) {
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
                     try {
-                        String point = json.getJSONObject("Data").getString("point");
+                        String point = jsonObject.getJSONObject("Data").getString("point");
                         exchange_point.setText(point);
-                        BigDecimal rate = new BigDecimal(json.getJSONObject("Data").getString("cash_rate"));
+                        BigDecimal rate = new BigDecimal(jsonObject.getJSONObject("Data").getString("cash_rate"));
                         exchange_rate1.setText("1:" + rate);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
+
+
             }
-        }.start();
+        });
+
 
     }
 

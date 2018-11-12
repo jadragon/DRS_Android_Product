@@ -25,11 +25,11 @@ import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
 
 public class OrderInfoDetailActivity extends AppCompatActivity {
-    LinearLayout orderinfo_detail_prolayout;
-    String type, mono, token;
-    JSONObject json;
-    MOrderItemPojo mOrderItemPojo;
-    ArrayList<MOrderItemContentPojo> pojoArrayList;
+    private LinearLayout orderinfo_detail_prolayout;
+    private String type, mono, token;
+    private JSONObject json;
+    private MOrderItemPojo mOrderItemPojo;
+    private ArrayList<MOrderItemContentPojo> pojoArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

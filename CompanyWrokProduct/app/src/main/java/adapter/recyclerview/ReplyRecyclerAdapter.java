@@ -38,18 +38,18 @@ import library.SQLiteDatabaseHandler;
 
 public class ReplyRecyclerAdapter extends RecyclerView.Adapter<ReplyRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    JSONObject json;
-    String msno;
+    private  JSONObject json;
+    private  String msno;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTENT = 1;
     private static final int TYPE_FOOTER = 2;
     private ReplyRecyclerAdapter.ClickListener clickListener;
     private List<ItemPojo> itemPojoList;
     private DisplayMetrics dm;
-    Bitmap myphoto;
-    String myname;
-    Bitmap[] photos;
-GlobalVariable gv;
+    private Bitmap myphoto;
+    private  String myname;
+    private  Bitmap[] photos;
+    private GlobalVariable gv;
     public void setMsno(String msno) {
         this.msno = msno;
     }

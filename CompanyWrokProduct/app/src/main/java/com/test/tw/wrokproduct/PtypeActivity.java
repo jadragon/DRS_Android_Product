@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.PtypeRecyclerAdapter;
 import adapter.recyclerview.ShopRecyclerViewAdapter;
 import adapter.viewpager.ShopViewPagerAdapter;
@@ -33,23 +35,23 @@ import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
 public class PtypeActivity extends AppCompatActivity {
-    DisplayMetrics dm;
-    TabLayout tabLayout;
-    ViewPager viewPager;
+    private DisplayMetrics dm;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
-    RecyclerView recyclerView;
-    JSONObject json;
-    ArrayList<Map<String, String>> list;
-    ShopViewPagerAdapter shopViewPagerAdapter;
-    int index;
-    int POSITION;
-    PtypeRecyclerAdapter adapter;
-    ArrayList<Fragment_shop_content> fragmentArrayList;
-    Fragment_shop_content fragment_shop_content;
-    String currentPtno;
-    GlobalVariable gv;
-    String mvip;
-    ArrayList<String> tabtitle;
+    private RecyclerView recyclerView;
+    private JSONObject json;
+    private ArrayList<Map<String, String>> list;
+    private ShopViewPagerAdapter shopViewPagerAdapter;
+    private int index;
+    private int POSITION;
+    private PtypeRecyclerAdapter adapter;
+    private ArrayList<Fragment_shop_content> fragmentArrayList;
+    private Fragment_shop_content fragment_shop_content;
+    private String currentPtno;
+    private GlobalVariable gv;
+    private String mvip;
+    private ArrayList<String> tabtitle;
     private Fragment_shop_content fragment_shop_content1, fragment_shop_content2, fragment_shop_content3, fragment_shop_content4, fragment_shop_content5;
 
     @Override
@@ -82,21 +84,20 @@ public class PtypeActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         resetViewPager(mvip);
         //分類
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new ProductJsonData().getPtype();
-                list = ResolveJsonData.getPtypeDetail(json, POSITION);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initRecyclerView();
-                        currentPtno = list.get(0).get("ptno");
-                        setFilter();
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new ProductJsonData().getPtype();
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                list = ResolveJsonData.getPtypeDetail(jsonObject, POSITION);
+                initRecyclerView();
+                currentPtno = list.get(0).get("ptno");
+                setFilter();
+            }
+        });
     }
 
     public void resetViewPager(String mvip) {

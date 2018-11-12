@@ -15,13 +15,15 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.OrderInfoRecyclerViewAdapter;
 import adapter.recyclerview.ProductOrderRecyclerViewAdapter;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.BasePageFragment;
 import library.EndLessOnScrollListener;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
-import library.JsonDataThread;
 import library.LoadingView;
 
 public class Fragment_OrderInfo extends BasePageFragment {
@@ -97,9 +99,10 @@ public class Fragment_OrderInfo extends BasePageFragment {
         endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-                new JsonDataThread() {
+
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public JSONObject getJsonData() {
+                    public JSONObject onTasking(Void... params) {
                         if (type == 0) {
                             return new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, nextpage);
                         } else if (type == 1) {
@@ -109,12 +112,15 @@ public class Fragment_OrderInfo extends BasePageFragment {
                     }
 
                     @Override
-                    public void runUiThread(JSONObject json) {
-                        if (adapter.setFilterMore(json)) {
-                            nextpage++;
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if(AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (adapter.setFilterMore(jsonObject)) {
+                                nextpage++;
+                            }
                         }
                     }
-                }.start();
+                });
+
             }
         };
         recyclerView.addOnScrollListener(endLessOnScrollListener);
@@ -128,9 +134,9 @@ public class Fragment_OrderInfo extends BasePageFragment {
 
     @Override
     public void fetchData() {
-        new JsonDataThread() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 if (type == 0) {
                     return new OrderInfoJsonData().getMemberOrder(gv.getToken(), index, 1);
                 } else if (type == 1) {
@@ -141,17 +147,18 @@ public class Fragment_OrderInfo extends BasePageFragment {
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                adapter.setFilter(json);
-                if (adapter.getItemCount() > 0) {
-                    no_data.setVisibility(View.INVISIBLE);
-                } else {
-                    no_data.setVisibility(View.VISIBLE);
+            public void onTaskAfter(JSONObject jsonObject) {
+                if(AnalyzeUtil.checkSuccess(jsonObject)) {
+                    adapter.setFilter(jsonObject);
+                    if (adapter.getItemCount() > 0) {
+                        no_data.setVisibility(View.INVISIBLE);
+                    } else {
+                        no_data.setVisibility(View.VISIBLE);
+                    }
                 }
-
                 mSwipeLayout.setRefreshing(false);
                 LoadingView.hide();
             }
-        }.start();
+        });
     }
 }

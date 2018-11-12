@@ -24,11 +24,10 @@ import pojo.ProductInfoPojo;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    int type;
-    JSONObject json;
-    View view;
-    ArrayList<ProductInfoPojo> list;
-    DisplayMetrics dm;
+    private  int type;
+    private   View view;
+    private   ArrayList<ProductInfoPojo> list;
+    private   DisplayMetrics dm;
 
     public MyRecyclerAdapter(Context ctx, ArrayList<ProductInfoPojo> list, int type) {
         this.ctx = ctx;
@@ -41,7 +40,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
     @Override
     public MyRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_home, parent, false);
-        return new MyRecyclerAdapter.RecycleHolder(ctx, view, json);
+        return new MyRecyclerAdapter.RecycleHolder(ctx, view);
     }
 
     @Override
@@ -63,9 +62,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
         Context ctx;
         JSONObject json;
 
-        public RecycleHolder(Context ctx, View view, JSONObject json) {
+        public RecycleHolder(Context ctx, View view) {
             super(view);
-            this.json = json;
             this.ctx = ctx;
             imageView = view.findViewById(R.id.imView);
             tv1 = view.findViewById(R.id.tV1);

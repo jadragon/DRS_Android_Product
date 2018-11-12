@@ -9,4 +9,7 @@
     <color name="gray2">#cccccc</color>
     <color name="green">#13b758</color>
     <color name="invisible">#00000000</color>
+
+    <color name="orange1">#fec018</color>
+    <color name="green1">#8cc63f</color>
 </resources>

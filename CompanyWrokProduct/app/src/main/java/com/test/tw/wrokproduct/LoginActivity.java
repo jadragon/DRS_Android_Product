@@ -29,9 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -47,23 +45,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import library.AnalyzeJSON.AnalyzeMember;
+import library.AnalyzeJSON.AnalyzeUtil;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
-import library.Component.ToastMessageDialog;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    Toolbar toolbar;
-    EditText login_edit_account, login_edit_password;
-    Button login_button;
-    GlobalVariable gv;
-    ImageView login_img_account, login_img_mobile, login_img_email, login_img_fb, login_img_google;
-    int type;
-    String id;
-    JSONObject jsonObject;
-    TextView login_txt_account, login_btn_forget, login_btn_register;
-    ToastMessageDialog toastMessage;
-    String account;
+    private Toolbar toolbar;
+    private EditText login_edit_account, login_edit_password;
+    private Button login_button;
+    private GlobalVariable gv;
+    private ImageView login_img_account, login_img_mobile, login_img_email, login_img_fb, login_img_google;
+    private int type;
+    private String id;
+    private TextView login_txt_account, login_btn_forget, login_btn_register;
+    private ToastMessageDialog toastMessage;
+    private String account;
     private View login_cover_bg, login_info_layout;
 
     @Override
@@ -231,35 +231,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void sendApi() {
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                jsonObject = new MemberJsonData().login(type, "886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            boolean success = jsonObject.getBoolean("Success");
-                            if (success) {
-                                account = login_edit_account.getText().toString();
-                                initMemberDB(jsonObject);
-
-                            } else {
-                                toastMessage.setMessageText(jsonObject.getString("Message"));
-                                toastMessage.confirm();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new MemberJsonData().login(type, "886", login_edit_account.getText().toString(), login_edit_password.getText().toString());
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    account = login_edit_account.getText().toString();
+                    try {
+                        initMemberDB(jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    toastMessage.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                    toastMessage.confirm();
+                }
+
+            }
+        });
+
     }
 
     private void initMemberDB(final JSONObject json) throws JSONException {
-        gv.setToken(jsonObject.getString("Token"));
-        gv.setMvip(jsonObject.getString("Mvip"));
+        gv.setToken(json.getString("Token"));
+        gv.setMvip(json.getString("Mvip"));
         final Map<String, String> datas = AnalyzeMember.getLogin(json);
         if (datas != null) {
 
@@ -291,7 +292,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     try {
                         loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         loadedImage = BitmapFactory.decodeResource(getResources(), R.mipmap.quick_login_account);
                         loadedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     }
@@ -363,28 +364,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 id = object.getString("id");
                                 String email = object.getString("email");
                                 account = email.substring(0, email.indexOf("@"));
-                                new Thread(new Runnable() {
+                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                     @Override
-                                    public void run() {
-                                        jsonObject = new MemberJsonData().login(type, "886", id, "");
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    boolean success = jsonObject.getBoolean("Success");
-                                                    if (success) {
-                                                        initMemberDB(jsonObject);
-                                                    } else {
-                                                        toastMessage.setMessageText(jsonObject.getString("Message"));
-                                                        toastMessage.confirm();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
+                                    public JSONObject onTasking(Void... params) {
+                                        return new MemberJsonData().login(type, "886", id, "");
                                     }
-                                }).start();
+
+                                    @Override
+                                    public void onTaskAfter(JSONObject jsonObject) {
+
+
+                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            try {
+                                                initMemberDB(jsonObject);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            toastMessage.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                            toastMessage.confirm();
+                                        }
+
+                                    }
+                                });
+
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -487,28 +490,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 id = map.get("id");
                 String email = map.get("email");
                 account = email.substring(0, email.indexOf("@"));
-                new Thread(new Runnable() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public void run() {
-                        jsonObject = new MemberJsonData().login(type, "886", id, "");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    boolean success = jsonObject.getBoolean("Success");
-                                    if (success) {
-                                        initMemberDB(jsonObject);
-                                    } else {
-                                        toastMessage.setMessageText(jsonObject.getString("Message"));
-                                        toastMessage.confirm();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                    public JSONObject onTasking(Void... params) {
+                        return new MemberJsonData().login(type, "886", id, "");
                     }
-                }).start();
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            try {
+                                initMemberDB(jsonObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            toastMessage.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                            toastMessage.confirm();
+                        }
+                    }
+                });
+
             }
         }
 

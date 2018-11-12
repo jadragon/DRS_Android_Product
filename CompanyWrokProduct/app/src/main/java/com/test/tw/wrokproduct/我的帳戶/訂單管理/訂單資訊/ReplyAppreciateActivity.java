@@ -12,21 +12,22 @@ import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MyCommentitemPojo;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
-import library.JsonDataThread;
 
 public class ReplyAppreciateActivity extends ToolbarActivity {
-    MyCommentitemPojo myCommentitemPojo;
-    EditText replyappreciate_comment;
-    Button confirm;
-    GlobalVariable gv;
-    int type;
+    private  MyCommentitemPojo myCommentitemPojo;
+    private   EditText replyappreciate_comment;
+    private   Button confirm;
+    private  GlobalVariable gv;
+    private  int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,9 @@ public class ReplyAppreciateActivity extends ToolbarActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JsonDataThread() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public JSONObject getJsonData() {
+                    public JSONObject onTasking(Void... params) {
                         if (type == 0) {
                             return new OrderInfoJsonData().setMyComment(gv.getToken(), myCommentitemPojo.getMoino(), replyappreciate_comment.getText().toString());
                         } else {
@@ -53,20 +54,18 @@ public class ReplyAppreciateActivity extends ToolbarActivity {
                     }
 
                     @Override
-                    public void runUiThread(JSONObject json) {
-                        try {
-                            if (json.getBoolean("Success")) {
-                                setResult(520, getIntent());
-                                finish();
-                            } else {
-                                new ToastMessageDialog(ReplyAppreciateActivity.this, json.getString("Message")).confirm();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void onTaskAfter(JSONObject jsonObject) {
+
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            setResult(520, getIntent());
+                            finish();
+                        } else {
+                            new ToastMessageDialog(ReplyAppreciateActivity.this, AnalyzeUtil.getMessage(jsonObject)).confirm();
                         }
 
                     }
-                }.start();
+                });
+
             }
         });
     }

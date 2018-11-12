@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,22 +21,25 @@ import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.ContactActivity;
 import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.WriteMailActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ContactRecyclerAdapter;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.GetJsonData.ContactJsonData;
 import library.SQLiteDatabaseHandler;
 
 public class Fragment_Contact extends Fragment {
-    RecyclerView recyclerView;
-    JSONObject json;
-    CheckBox contact_allcheck;
-    View v;
-    ContactRecyclerAdapter adapter;
-    int type;
-    ImageView contact_alldelete, contact_write;
-    GlobalVariable gv;
+    private RecyclerView recyclerView;
+    private   JSONObject json;
+    private  CheckBox contact_allcheck;
+    private   View v;
+    private  ContactRecyclerAdapter adapter;
+    private int type;
+    private  ImageView contact_alldelete, contact_write;
+    private   GlobalVariable gv;
+
     public void setJson(JSONObject json) {
         this.json = json;
     }
@@ -100,25 +101,22 @@ public class Fragment_Contact extends Fragment {
         contact_alldelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public void run() {
-                        final JSONObject jsonObject = new ContactJsonData().delContact(gv.getToken(), adapter.getCheckedList());
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if (jsonObject.getBoolean("Success")) {
-                                        ((ContactActivity) getContext()).setFilter();
-                                        Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                    public JSONObject onTasking(Void... params) {
+                        return new ContactJsonData().delContact(gv.getToken(), adapter.getCheckedList());
                     }
-                }).start();
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            ((ContactActivity) getContext()).setFilter();
+                            Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
             }
         });
     }

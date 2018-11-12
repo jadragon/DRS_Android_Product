@@ -8,28 +8,30 @@ import android.widget.Button;
 
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.AppreciateRecyclerViewAdapter;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.StoreJsonData;
-import library.JsonDataThread;
 
 public class AppreciateActivity extends ToolbarActivity {
-    RecyclerView recyclerView;
-    AppreciateRecyclerViewAdapter adapter;
-    Button appreciate_confirm;
+    private RecyclerView recyclerView;
+    private AppreciateRecyclerViewAdapter adapter;
+    private Button appreciate_confirm;
 
-    String mono, token, type;
-ToastMessageDialog toastMessageDialog;
+    private String mono, token, type;
+    private ToastMessageDialog toastMessageDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appreciate);
-        toastMessageDialog=new ToastMessageDialog(this);
+        toastMessageDialog = new ToastMessageDialog(this);
         token = getIntent().getStringExtra("token");
         mono = getIntent().getStringExtra("mono");
         type = getIntent().getStringExtra("type");
@@ -39,9 +41,9 @@ ToastMessageDialog toastMessageDialog;
             initToolbar(true, "給買家評價");
         }
         initRecyclerView();
-        new JsonDataThread() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 if (type.equals("0")) {
                     return new OrderInfoJsonData().getOrderComment(token, mono);
                 } else if (type.equals("1")) {
@@ -49,21 +51,20 @@ ToastMessageDialog toastMessageDialog;
                 } else {
                     return null;
                 }
-
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                adapter.setFilter(json);
+            public void onTaskAfter(JSONObject jsonObject) {
+                adapter.setFilter(jsonObject);
             }
-        }.start();
+        });
         appreciate_confirm = findViewById(R.id.appreciate_confirm);
         appreciate_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JsonDataThread() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public JSONObject getJsonData() {
+                    public JSONObject onTasking(Void... params) {
                         if (type.equals("0")) {
                             return new OrderInfoJsonData().setOrderComment(token, adapter.getJSONArray());
                         } else if (type.equals("1")) {
@@ -71,22 +72,17 @@ ToastMessageDialog toastMessageDialog;
                         } else {
                             return null;
                         }
-
                     }
 
                     @Override
-                    public void runUiThread(JSONObject json) {
-                        try {
-                            toastMessageDialog.setMessageText(json.getString("Message"));
-                            toastMessageDialog.confirm();
-                            if (json.getBoolean("Success")) {
-                                finish();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            finish();
                         }
+                        toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                        toastMessageDialog.confirm();
                     }
-                }.start();
+                });
             }
         });
     }

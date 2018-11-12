@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -44,24 +43,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.UploadFileJsonData;
 import library.SQLiteDatabaseHandler;
 
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
-    SurfaceHolder surfaceHolder;
-    SurfaceView surfaceView1;
-    Button back, albums, button1, change_camera, confirm, cancel;
-    ImageView imageView1;
-    Camera camera;
-    LinearLayout show_layout;
-    Bitmap bitmap;
-    int currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-    DisplayMetrics dm;
-    Camera.Parameters parameters;
-    GlobalVariable gv;
+    private SurfaceHolder surfaceHolder;
+    private SurfaceView surfaceView1;
+    private Button back, albums, button1, change_camera, confirm, cancel;
+    private ImageView imageView1;
+    private Camera camera;
+    private LinearLayout show_layout;
+    private Bitmap bitmap;
+    private int currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private DisplayMetrics dm;
+    private Camera.Parameters parameters;
+    private GlobalVariable gv;
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-    String shape;
+    private String shape;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -216,32 +218,29 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     setResult(100, intent);
                     finish();
                 } else {
-                    new Thread(new Runnable() {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public void run() {
-                            final JSONObject aa = new UploadFileJsonData().updatePortrait(gv.getToken(), bitmapByte);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        if (aa.getBoolean("Success")) {
-                                            SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
-                                            db.updatePhotoImage(bitmapByte);
-                                            db.close();
-                                            Intent intent = new Intent();
-                                            intent.putExtra("picture", bitmapByte);
-                                            setResult(100, intent);
-                                            finish();
-                                        } else {
-                                            new ToastMessageDialog(CameraActivity.this, aa.getString("Message")).confirm();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
+                        public JSONObject onTasking(Void... params) {
+                            return new UploadFileJsonData().updatePortrait(gv.getToken(), bitmapByte);
                         }
-                    }).start();
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                                db.updatePhotoImage(bitmapByte);
+                                db.close();
+                                Intent intent = new Intent();
+                                intent.putExtra("picture", bitmapByte);
+                                setResult(100, intent);
+                                finish();
+                            } else {
+                                new ToastMessageDialog(CameraActivity.this, AnalyzeUtil.getMessage(jsonObject)).confirm();
+                            }
+
+                        }
+                    });
 
                 }
             }
@@ -354,6 +353,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     heigh = size.height;
                     break;
                 }
+            }
+            if (width == 0 && heigh == 0) {
+                width = list.get(0).width;
+                heigh = list.get(0).height;
             }
             parameters.setPictureSize(width, heigh);
             parameters.setPreviewSize(width, heigh);

@@ -2,7 +2,6 @@ package com.test.tw.wrokproduct;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -20,10 +19,10 @@ import library.GetJsonData.ReCountJsonData;
 public class GoldFlowActivity extends ToolbarActivity {
 
     private WebView webview;
-    String html;
-    ViewGroup container;
-    String success, msg;
-    GlobalVariable gv;
+    private   String html;
+    private   ViewGroup container;
+    private   String success, msg;
+    private   GlobalVariable gv;
     int count_type;
 
     @Override

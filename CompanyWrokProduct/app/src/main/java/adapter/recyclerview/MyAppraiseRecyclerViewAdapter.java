@@ -28,8 +28,8 @@ import library.AnalyzeJSON.AnalyzeComment;
 
 public class MyAppraiseRecyclerViewAdapter extends RecyclerView.Adapter<MyAppraiseRecyclerViewAdapter.BuyerHolder> {
     private Context ctx;
-    GlobalVariable gv;
-    ArrayList<MyCommentitemPojo> itemList;
+    private GlobalVariable gv;
+    private ArrayList<MyCommentitemPojo> itemList;
 
     int type;
 

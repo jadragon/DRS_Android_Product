@@ -11,31 +11,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.LogisticsJsonData;
 import library.GetJsonData.ReCountJsonData;
 import library.SQLiteDatabaseHandler;
 
 public class AddDeliveryShipWayActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    TextView toolbar_title;
-    TextView add_delivery_txt_city, add_delivery_txt_area;
-    EditText add_delivery_edit_name, add_delivery_edit_phone, add_delivery_edit_zipcode, add_delivery_edit_address;
-    Button confirm;
-    String mpcode = "886", shit = "TW";
-    String sno, plno, type, land, logistics;
-    String mlno, name, mp;
-    String sid, sname, city, area, prezipcode, address;
-    JSONObject json;
-    Intent intent;
-    int count_type;
-    GlobalVariable gv;
-    ToastMessageDialog toastMessageDialog;
+    private Toolbar toolbar;
+    private TextView toolbar_title;
+    private TextView add_delivery_txt_city, add_delivery_txt_area;
+    private EditText add_delivery_edit_name, add_delivery_edit_phone, add_delivery_edit_zipcode, add_delivery_edit_address;
+    private Button confirm;
+    private String mpcode = "886", shit = "TW";
+    private String sno, plno, type, land, logistics;
+    private String mlno, name, mp;
+    private String sid, sname, city, area, prezipcode, address;
+    private JSONObject json;
+    private Intent intent;
+    private int count_type;
+    private GlobalVariable gv;
+    private ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,35 +109,30 @@ public class AddDeliveryShipWayActivity extends AppCompatActivity {
                     mp = add_delivery_edit_phone.getText().toString();
                     address = add_delivery_edit_address.getText().toString();
                     if (mp.matches("09[0-9]{8}")) {
-                        if (  name.length() > 0 && name.length() < 40) {
+                        if (name.length() > 0 && name.length() < 40) {
                             if (!address.equals("")) {
-                                new Thread(new Runnable() {
+                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                     @Override
-                                    public void run() {
+                                    public JSONObject onTasking(Void... params) {
                                         if (sno != null) {//運送方式
-                                            json = new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                            return new ReCountJsonData().setMemberLogistics(count_type, gv.getToken(), sno, plno, type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                         } else if (mlno != null) {//修改收貨方式
-                                            json = new LogisticsJsonData().updateLogistics(gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                            return new LogisticsJsonData().updateLogistics(gv.getToken(), mlno, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                         } else {//新增收貨方式
-                                            json = new LogisticsJsonData().setLogistics(gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
+                                            return new LogisticsJsonData().setLogistics(gv.getToken(), type, land, logistics, name, mpcode, mp, sname, sid, shit, city, area, prezipcode, address);
                                         }
-                                        try {
-                                            if (json.getBoolean("Success")) {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
-                                                        setResult(1, null);
-                                                        finish();
-                                                    }
-                                                });
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onTaskAfter(JSONObject jsonObject) {
+                                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                            Toast.makeText(getApplicationContext(), "新增完成", Toast.LENGTH_SHORT).show();
+                                            setResult(1, null);
+                                            finish();
                                         }
 
                                     }
-                                }).start();
+                                });
                             } else {
                                 toastMessageDialog.setMessageText("地址不能為空");
                                 toastMessageDialog.confirm();

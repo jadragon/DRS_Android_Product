@@ -20,27 +20,21 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.BillJsonData;
-import library.JsonDataThread;
 
 public class Fragment_ExchangePoint extends Fragment implements View.OnClickListener {
-    JSONObject json;
-    View v;
-    int type, point_type;
-    GlobalVariable gv;
-    TextView exchange_point, exchange_rate1, exchange_rate2;
-    EditText exchange_edit1, exchange_edit2;
-    Button exchange_confirm;
-    ToastMessageDialog toastMessageDialog;
 
-    public void setPoint_type(int point_type) {
-        this.point_type = point_type;
-    }
-
-    public void setJson(JSONObject json) {
-        this.json = json;
-    }
+    private  View v;
+    private   int type;
+    private  GlobalVariable gv;
+    private  TextView exchange_point, exchange_rate1, exchange_rate2;
+    private   EditText exchange_edit1, exchange_edit2;
+    private  Button exchange_confirm;
+    private  ToastMessageDialog toastMessageDialog;
 
     public void setType(int type) {
         this.type = type;
@@ -112,55 +106,52 @@ public class Fragment_ExchangePoint extends Fragment implements View.OnClickList
     @Override
     public void onClick(View view) {
         String edit1 = exchange_edit1.getText().toString().equals("") ? "0" : exchange_edit1.getText().toString();
-        String edit2 = exchange_edit2!=null&&exchange_edit2.getText().toString().equals("") ? "0" : exchange_edit1.getText().toString();
+        String edit2 = exchange_edit2 != null && exchange_edit2.getText().toString().equals("") ? "0" : exchange_edit1.getText().toString();
         switch (type) {
             case 1:
                 if (!edit1.equals("0")) {
-                    new JsonDataThread() {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public JSONObject getJsonData() {
+                        public JSONObject onTasking(Void... params) {
                             return new BillJsonData().getPolkTrans(gv.getToken(), exchange_edit1.getText().toString());
                         }
 
                         @Override
-                        public void runUiThread(JSONObject json) {
-                            try {
-                                if (json.getBoolean("Success")) {
-                                    exchange_edit1.setText(null);
-                                    ((ExchangePointActivity) getActivity()).refreshText();
-                                }
-                                toastMessageDialog.setMessageText(json.getString("Message"));
-                                toastMessageDialog.show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        public void onTaskAfter(JSONObject jsonObject) {
+
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                exchange_edit1.setText(null);
+                                ((ExchangePointActivity) getActivity()).refreshText();
                             }
+                            toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                            toastMessageDialog.show();
+
                         }
-                    }.start();
+                    });
+
                 }
                 break;
             case 2:
-                if(!edit1.equals("0")||!edit2.equals("0")) {
-                    new JsonDataThread() {
+                if (!edit1.equals("0") || !edit2.equals("0")) {
+
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public JSONObject getJsonData() {
+                        public JSONObject onTasking(Void... params) {
                             return new BillJsonData().getKuvaTrans(gv.getToken(), exchange_edit1.getText().toString(), exchange_edit2.getText().toString());
                         }
 
                         @Override
-                        public void runUiThread(JSONObject json) {
-                            try {
-                                if (json.getBoolean("Success")) {
-                                    exchange_edit1.setText(null);
-                                    exchange_edit2.setText(null);
-                                    ((ExchangePointActivity) getActivity()).refreshText();
-                                }
-                                toastMessageDialog.setMessageText(json.getString("Message"));
-                                toastMessageDialog.show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        public void onTaskAfter(JSONObject jsonObject) {
+
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                exchange_edit1.setText(null);
+                                exchange_edit2.setText(null);
+                                ((ExchangePointActivity) getActivity()).refreshText();
                             }
+                            toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                            toastMessageDialog.show();
                         }
-                    }.start();
+                    });
                 }
                 break;
         }

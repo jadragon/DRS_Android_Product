@@ -17,11 +17,11 @@ import library.Component.CustomerWebView;
 
 public class Fragment_WebView extends Fragment {
     private CustomerWebView webView;
-    String html;
+    private String html;
     private View v;
-    ViewGroup container;
+    private ViewGroup container;
 
-    Fragment_WebView.OnHeighChangerListener onHeighChangerListener;
+    private Fragment_WebView.OnHeighChangerListener onHeighChangerListener;
 
     public Fragment_WebView() {
     }

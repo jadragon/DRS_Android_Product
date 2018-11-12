@@ -25,10 +25,10 @@ import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 import Util.StringUtil;
 
 public class Fragment_notification extends Fragment implements View.OnClickListener {
-    Toolbar toolbar;
-    View v;
-    TextView notification_txt_activity, notification_txt_chaw, notification_txt_store, notification_txt_list;
-    GlobalVariable gv;
+    private Toolbar toolbar;
+    private View v;
+    private TextView notification_txt_activity, notification_txt_chaw, notification_txt_store, notification_txt_list;
+    private  GlobalVariable gv;
 
     @Nullable
     @Override

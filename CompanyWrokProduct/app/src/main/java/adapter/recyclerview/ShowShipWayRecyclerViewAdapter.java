@@ -23,7 +23,6 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,22 +38,22 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
     private JSONObject json;
     private DisplayMetrics dm;
     private int currentItem = -1; //用于记录点击的 Item 的 position，是控制 item 展开的核心
-    ArrayList<Map<String, String>> title_list;
-    ArrayList<ArrayList<Map<String, String>>> items_list;
+    private ArrayList<Map<String, String>> title_list;
+    private ArrayList<ArrayList<Map<String, String>>> items_list;
     private List<HeaderPojo> datas;
-    String[] lanes = {"無", "本島", "離島", "海外"};
-    TypedArray colors;
-   GlobalVariable gv;
-    String sno, plno, mino, sname;
-    int count_type;
+    private String[] lanes = {"無", "本島", "離島", "海外"};
+    private TypedArray colors;
+    private GlobalVariable gv;
+    private String sno, plno, mino, sname;
+    private int count_type;
 
-    public ShowShipWayRecyclerViewAdapter(Context ctx, JSONObject json,int count_type) {
+    public ShowShipWayRecyclerViewAdapter(Context ctx, JSONObject json, int count_type) {
         dm = ctx.getResources().getDisplayMetrics();
         this.ctx = ctx;
         this.json = json;
         this.count_type = count_type;
         colors = ctx.getResources().obtainTypedArray(R.array.shipway_color);
-        gv =( (GlobalVariable) ctx.getApplicationContext());
+        gv = ((GlobalVariable) ctx.getApplicationContext());
         if (json != null) {
             if (AnalyzeShopCart.getStoreLogisticsData(json) != null) {
                 title_list = AnalyzeShopCart.getStoreLogisticsData(json);
@@ -236,8 +235,8 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new ReCountJsonData().setStoreMemberLogistics(count_type,gv.getToken(), sno, plno, mino);
-                        json = new ReCountJsonData().getStoreLogistics(count_type,gv.getToken(), sno);
+                        new ReCountJsonData().setStoreMemberLogistics(count_type, gv.getToken(), sno, plno, mino);
+                        json = new ReCountJsonData().getStoreLogistics(count_type, gv.getToken(), sno);
                     }
                 }).start();
                 break;
@@ -277,8 +276,8 @@ public class ShowShipWayRecyclerViewAdapter extends RecyclerView.Adapter<ShowShi
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new ReCountJsonData().setStoreMemberLogistics(count_type,gv.getToken(), sno, plno, mino);
-                            json = new ReCountJsonData().getStoreLogistics(count_type,gv.getToken(), sno);
+                            new ReCountJsonData().setStoreMemberLogistics(count_type, gv.getToken(), sno, plno, mino);
+                            json = new ReCountJsonData().getStoreLogistics(count_type, gv.getToken(), sno);
                             new Handler(ctx.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {

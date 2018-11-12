@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,9 +37,9 @@ public class AppreciateRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_CONTENT = 1;
     private Context ctx;
-    GlobalVariable gv;
-    DisplayMetrics dm;
-    ArrayList<AppreciatePojo> arrayList;
+    private GlobalVariable gv;
+    private DisplayMetrics dm;
+    private ArrayList<AppreciatePojo> arrayList;
 
     public AppreciateRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;

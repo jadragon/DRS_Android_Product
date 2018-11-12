@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import library.Component.ToolbarActivity;
 
 public class MyAppreciateActivity extends ToolbarActivity {
-    ArrayList<Fragment> fragmentList = new ArrayList<>();
-    String[] mTabtitle;
-    FragmentPagerAdapter fragmentPagerAdapter;
-    int type;
-    TabLayout tabLayout;
+    private   ArrayList<Fragment> fragmentList = new ArrayList<>();
+    private  String[] mTabtitle;
+    private  FragmentPagerAdapter fragmentPagerAdapter;
+    private  int type;
+    private  TabLayout tabLayout;
 
     public void setmTabtitle(String[] mTabtitle) {
         this.mTabtitle = mTabtitle;

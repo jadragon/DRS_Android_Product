@@ -34,16 +34,16 @@ import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
 
 public class Fragment_favorate extends Fragment {
-    Toolbar toolbar;
-    View v;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ArrayList<Fragment_shop_content> fragmentArrayList;
-    Fragment_shop_content fragment_shop_content;
-    GlobalVariable gv;
-    JSONObject json1, json2;
-    String mvip;
-    ArrayList<String> tabtitle;
+    private Toolbar toolbar;
+    private View v;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ArrayList<Fragment_shop_content> fragmentArrayList;
+    private Fragment_shop_content fragment_shop_content;
+    private GlobalVariable gv;
+    private JSONObject json1, json2;
+    private String mvip;
+    private ArrayList<String> tabtitle;
 
     @Nullable
     @Override

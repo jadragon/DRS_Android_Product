@@ -23,8 +23,8 @@ import library.AnalyzeJSON.AnalyzeProduct;
 
 public class ProductAppraiseRecyclerViewAdapter extends RecyclerView.Adapter<ProductAppraiseRecyclerViewAdapter.BuyerHolder> {
     private Context ctx;
-    GlobalVariable gv;
-    ArrayList<ProductCommentPojo> arrayList;
+    private  GlobalVariable gv;
+    private  ArrayList<ProductCommentPojo> arrayList;
 
     public ProductAppraiseRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;

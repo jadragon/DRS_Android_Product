@@ -12,8 +12,8 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.OrderInfoA
 import library.Component.ToolbarActivity;
 
 public class GoldFlowCompeleteActivity extends ToolbarActivity implements View.OnClickListener {
-    Button back_home, check_order_list;
-    String msg, success;
+    private Button back_home, check_order_list;
+    private  String msg, success;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

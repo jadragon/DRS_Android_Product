@@ -19,7 +19,7 @@ import java.io.InputStream;
  */
 
 public class GifView extends View {
-    DisplayMetrics dm;
+    private DisplayMetrics dm;
     private InputStream inputStream;    //Gif檔載入
     private Movie movie;                //Gif播放
     private int movieWidth,movieHeigh;  //Gif寬和高

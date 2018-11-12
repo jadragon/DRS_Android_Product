@@ -30,7 +30,6 @@ import java.util.TimerTask;
 
 import library.AnalyzeJSON.AnalyzeMember;
 import library.AnalyzeJSON.GetAddress;
-import library.BottomNavigationViewHelper;
 import library.Component.BottomNavigationViewEx;
 import library.GetJsonData.MemberJsonData;
 import library.GetJsonData.ProductJsonData;
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] fragments;
     private int lastShowFragment = 0;
     private BottomNavigationViewEx navigation;
-    private  SQLiteDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 .inflate(R.layout.notification_badge, bottomNavigationMenuView, false);
 
         itemView.addView(badge);
-       // new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
+        // new BottomNavigationViewHelper().disableShiftMode(navigation);//取消動畫
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {//監聽事件
 
             @Override
@@ -180,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                db = new SQLiteDatabaseHandler(getApplicationContext());
+                SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
                 JSONObject json = new ProductJsonData().getAddress("0");
                 ArrayList<Map<String, String>> datas = GetAddress.getAddress(json);
                 String lastestmodifydate = GetAddress.checkModifydate(json);

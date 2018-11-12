@@ -6,11 +6,12 @@ public class AsyncTaskUtils {
 
     public static <T> void doAsync(final IDataCallBack<T> callBack) {
         new AsyncTask<Void, Void, T>() {
+            /*
             @Override
             protected void onPreExecute() {
                 callBack.onTaskBefore();
             }
-
+*/
             @Override
             protected T doInBackground(Void... voids) {
                 return callBack.onTasking(voids);

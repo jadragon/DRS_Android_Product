@@ -1,13 +1,13 @@
 package com.test.tw.wrokproduct.商品.pojo;
 
 public class ProductCommentPojo {
-    String mname;
-    String mimg;
-    String comment;
-    int comscore;
-    String comdate;
-    String recomment;
-    String recomdate;
+    private  String mname;
+    private   String mimg;
+    private   String comment;
+    private  int comscore;
+    private  String comdate;
+    private  String recomment;
+    private  String recomdate;
 
     public String getMname() {
         return mname;

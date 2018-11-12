@@ -48,8 +48,8 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
     private List<Item> items;
     private FooterItem footerItem;
     private Item item;
-    GlobalVariable gv;
-    String[] invoiceType;
+    private GlobalVariable gv;
+    private String[] invoiceType;
 
     public CountRecyclerViewAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
@@ -199,7 +199,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_content, parent, false);
         params.height = (int) (dm.heightPixels / 5.5);
-        params.setMargins(0,0,0,0);
+        params.setMargins(0, 0, 0, 0);
         view.setLayoutParams(params);
         view.setTag("content");
         resizeImageView(view.findViewById(R.id.viewitem_count_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));

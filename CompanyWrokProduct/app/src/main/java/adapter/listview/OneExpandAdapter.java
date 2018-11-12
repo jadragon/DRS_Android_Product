@@ -40,15 +40,15 @@ public class OneExpandAdapter extends BaseAdapter implements View.OnClickListene
     private JSONObject json;
     private DisplayMetrics dm;
     private int currentItem = -1; //用于记录点击的 Item 的 position，是控制 item 展开的核心
-    ViewHolder holder;
-    ArrayList<Map<String, String>> title_list;
-    ArrayList<ArrayList<Map<String, String>>> items_list;
+    private   ViewHolder holder;
+    private  ArrayList<Map<String, String>> title_list;
+    private    ArrayList<ArrayList<Map<String, String>>> items_list;
     private List<HeaderPojo> datas;
-    String[] lanes = {"無", "本島", "離島", "海外"};
-    int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
-    View[] holderList;
-    GlobalVariable gv;
-    String sno, plno, mino, sname;
+    private  String[] lanes = {"無", "本島", "離島", "海外"};
+    private  int[] colors = {R.color.sienna, R.color.seagreen, R.color.deepskyblue, R.color.violet, R.color.gold, R.color.limegreen, R.color.darkorange, R.color.navy};
+    private  View[] holderList;
+    private GlobalVariable gv;
+    private String sno, plno, mino, sname;
 
     public OneExpandAdapter(Context context, JSONObject json) {
         super();

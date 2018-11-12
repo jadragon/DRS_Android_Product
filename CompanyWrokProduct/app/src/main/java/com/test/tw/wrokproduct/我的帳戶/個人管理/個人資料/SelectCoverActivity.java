@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,13 +18,13 @@ import java.util.List;
 import library.SQLiteDatabaseHandler;
 
 public class SelectCoverActivity extends AppCompatActivity implements View.OnClickListener {
-    Toolbar toolbar;
-    List<ImageView> imgList;
+    private Toolbar toolbar;
+    private List<ImageView> imgList;
     private DisplayMetrics dm;
-    SQLiteDatabaseHandler db;
-    String[] bg = {"斜魚格調", "冷冽性格", "插圖時間", "紫炫幾何", "漫遊星球", "繽紛生活"};
-    int[] ag = {R.drawable.member_bg2, R.drawable.member_bg1, R.drawable.member_bg3, R.drawable.member_bg4, R.drawable.member_bg5, R.drawable.member_bg6};
-    int coverbg;
+    private SQLiteDatabaseHandler db;
+    private String[] bg = {"斜魚格調", "冷冽性格", "插圖時間", "紫炫幾何", "漫遊星球", "繽紛生活"};
+    private int[] ag = {R.drawable.member_bg2, R.drawable.member_bg1, R.drawable.member_bg3, R.drawable.member_bg4, R.drawable.member_bg5, R.drawable.member_bg6};
+    private int coverbg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +35,14 @@ public class SelectCoverActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_select_cover);
         initToolbar();
         initImageView();
-        try{
+        try {
             coverbg = Integer.parseInt(db.getMemberDetail().get("background"));
-        }catch (Exception e){
-            coverbg=0;
+        } catch (Exception e) {
+            coverbg = 0;
         }
 
         for (int i = 0; i < bg.length; i++) {
-            if (ag[i]==coverbg) {
+            if (ag[i] == coverbg) {
                 imgList.get(i).setImageResource(R.drawable.select_coverbg);
                 break;
             }

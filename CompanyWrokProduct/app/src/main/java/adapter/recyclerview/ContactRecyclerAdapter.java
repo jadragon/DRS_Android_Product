@@ -24,14 +24,12 @@ import library.AnalyzeJSON.AnalyzeContact;
 
 public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    JSONObject json;
     private ContactRecyclerAdapter.ClickListener clickListener;
     private List<ItemPojo> itemPojoList;
-    Bitmap bitmap;
+    private Bitmap bitmap;
 
     public ContactRecyclerAdapter(Context ctx, JSONObject json) {
         this.ctx = ctx;
-        this.json = json;
         ArrayList<Map<String, String>> list;
         if (json != null) {
             list = AnalyzeContact.getContact(json);
@@ -43,7 +41,6 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
 
     public ContactRecyclerAdapter(Context ctx, JSONObject json, Bitmap bitmap) {
         this.ctx = ctx;
-        this.json = json;
         this.bitmap = bitmap;
         ArrayList<Map<String, String>> list;
         if (json != null) {
@@ -151,7 +148,6 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
     }
 
     public void setFilter(JSONObject json) {
-        this.json = json;
         ArrayList<Map<String, String>> list;
         if (json != null) {
             list = AnalyzeContact.getContact(json);

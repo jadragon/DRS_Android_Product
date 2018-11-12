@@ -1,14 +1,14 @@
 package com.test.tw.wrokproduct.我的帳戶.帳務管理.帳戶總覽.pojo;
 
 public class GetBillingPojo {
-    String buname;
-    String bname;
-    String bcard;
-    int xpoint;
-    int ypoint;
-    int acoin;
-    int ewallet;
-    String coupon;
+    private String buname;
+    private String bname;
+    private String bcard;
+    private int xpoint;
+    private int ypoint;
+    private int acoin;
+    private int ewallet;
+    private String coupon;
 
     public String getBuname() {
         return buname;

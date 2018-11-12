@@ -8,22 +8,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
-import library.JsonDataThread;
 import library.LoadingView;
 
 public class ForgetPassActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    int type;
-    EditText forget_edit_account;
-    Button forget_button;
-    ToastMessageDialog toastMessage;
-    JSONObject json;
-
+    private  Toolbar toolbar;
+    private   EditText forget_edit_account;
+    private  Button forget_button;
+    private  ToastMessageDialog toastMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,23 +54,20 @@ public class ForgetPassActivity extends AppCompatActivity {
 
     private void sendAPI(final int type) {
         LoadingView.show(getCurrentFocus());
-        new JsonDataThread() {
+
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new MemberJsonData().forget(type, "886", forget_edit_account.getText().toString());
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                try {
-                    toastMessage.setMessageText(json.getString("Message"));
-                    toastMessage.confirm();
-                    LoadingView.hide();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onTaskAfter(JSONObject jsonObject) {
+                toastMessage.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                toastMessage.confirm();
+                LoadingView.hide();
             }
-        }.start();
+        });
 
     }
 

@@ -15,18 +15,18 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ProductAppraiseRecyclerViewAdapter;
 import library.GetJsonData.ProductJsonData;
-import library.JsonDataThread;
 
 @SuppressLint("ValidFragment")
 public class Fragment_ProductAppraise extends Fragment {
-    RecyclerView recyclerView;
-    JSONObject json;
-    View v;
-    ProductAppraiseRecyclerViewAdapter adapter;
-    GlobalVariable gv;
-    String pno;
+    private  RecyclerView recyclerView;
+    private View v;
+    private  ProductAppraiseRecyclerViewAdapter adapter;
+    private  GlobalVariable gv;
+    private String pno;
 
     @SuppressLint("ValidFragment")
     public Fragment_ProductAppraise(String pno) {
@@ -53,16 +53,17 @@ public class Fragment_ProductAppraise extends Fragment {
     }
 
     public void setFilter() {
-        new JsonDataThread() {
+
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new ProductJsonData().getProductComment(pno);
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                adapter.setFilter(json);
+            public void onTaskAfter(JSONObject jsonObject) {
+                adapter.setFilter(jsonObject);
             }
-        }.start();
+        });
     }
 }

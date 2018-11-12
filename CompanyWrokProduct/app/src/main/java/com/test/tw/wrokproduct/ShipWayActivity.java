@@ -12,45 +12,46 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ShowShipWayRecyclerViewAdapter;
 import library.GetJsonData.ReCountJsonData;
 
 public class ShipWayActivity extends AppCompatActivity implements View.OnClickListener {
-    JSONObject json;
-    String  sno;
-    Toolbar toolbar;
-    TextView toolbar_title;
-    RecyclerView recyclerView;
-    ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
-    LinearLayoutManager layoutManager;
-    int count_type;
-    GlobalVariable gv;
+    private String sno;
+    private Toolbar toolbar;
+    private TextView toolbar_title;
+    private RecyclerView recyclerView;
+    private ShowShipWayRecyclerViewAdapter showShipWayRecyclerViewAdapter;
+    private LinearLayoutManager layoutManager;
+    private int count_type;
+    private GlobalVariable gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipway);
-       gv = (GlobalVariable) getApplicationContext();
+        gv = (GlobalVariable) getApplicationContext();
         sno = getIntent().getStringExtra("sno");
         count_type = getIntent().getIntExtra("count_type", 0);
         initToolbar();
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new ReCountJsonData().getStoreLogistics(count_type, gv.getToken(), sno);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        requestData();
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new ReCountJsonData().getStoreLogistics(count_type, gv.getToken(), sno);
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                requestData(jsonObject);
+            }
+        });
 
     }
 
-    private void requestData() {
+    private void requestData(JSONObject json) {
         recyclerView = findViewById(R.id.lv_products);
-        showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json,count_type);
+        showShipWayRecyclerViewAdapter = new ShowShipWayRecyclerViewAdapter(this, json, count_type);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -91,18 +92,18 @@ public class ShipWayActivity extends AppCompatActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == 1) {
-            new Thread(new Runnable() {
+            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                 @Override
-                public void run() {
-                    json = new ReCountJsonData().getStoreLogistics(count_type,  gv.getToken(), sno);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showShipWayRecyclerViewAdapter.setFilterAfterAdd(json);
-                        }
-                    });
+                public JSONObject onTasking(Void... params) {
+                    return new ReCountJsonData().getStoreLogistics(count_type, gv.getToken(), sno);
                 }
-            }).start();
+
+                @Override
+                public void onTaskAfter(JSONObject jsonObject) {
+                    showShipWayRecyclerViewAdapter.setFilterAfterAdd(jsonObject);
+                }
+            });
+
         }
     }
 }

@@ -22,59 +22,60 @@ import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.ListVIewActivity;
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import de.hdodenhof.circleimageview.CircleImageView;
 import library.AnalyzeJSON.AnalyzeMember;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
-import library.JsonDataThread;
 import library.SQLiteDatabaseHandler;
 
 public class PersonalInfoActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    Button modify_coverbg, pdata_save, adata_save, phone_bind, email_bind, fb_bind, google_bind;
-    SQLiteDatabaseHandler db;
-    View personal_info_bg;
-    int coverbg;
-    CircleImageView select_photo;
-    LinearLayout personal_btn_city, personal_btn_area, personal_btn_bankcode, personal_btn_bankname;
-    TextView personal_txt_account, personal_txt_birthday, personal_txt_city, personal_txt_area, personal_txt_bankcode, personal_txt_bankname;
-    EditText personal_edit_name, personal_edit_memberId, personal_edit_zipcode, personal_edit_address, personal_edit_subbankname, personal_edit_bankaccount, personal_edit_bankaccountname;
-    Intent intent;
-    String prezipcode;
-    Spinner personal_spinner_gender;
-    AlertDialog alertDialog;
-    DatePicker datePicker;
-    GlobalVariable gv;
-    Map<String, String> pdata, adata, bdata;
+    private Toolbar toolbar;
+    private Button modify_coverbg, pdata_save, adata_save, phone_bind, email_bind, fb_bind, google_bind;
+    private SQLiteDatabaseHandler db;
+    private View personal_info_bg;
+    private int coverbg;
+    private CircleImageView select_photo;
+    private LinearLayout personal_btn_city, personal_btn_area, personal_btn_bankcode, personal_btn_bankname;
+    private TextView personal_txt_account, personal_txt_birthday, personal_txt_city, personal_txt_area, personal_txt_bankcode, personal_txt_bankname;
+    private EditText personal_edit_name, personal_edit_memberId, personal_edit_zipcode, personal_edit_address, personal_edit_subbankname, personal_edit_bankaccount, personal_edit_bankaccountname;
+    private Intent intent;
+    private String prezipcode;
+    private Spinner personal_spinner_gender;
+    private AlertDialog alertDialog;
+    private DatePicker datePicker;
+    private GlobalVariable gv;
+    private Map<String, String> pdata, adata, bdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
         gv = ((GlobalVariable) getApplicationContext());
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                JSONObject json = new MemberJsonData().getPersonData(gv.getToken());
-                pdata = AnalyzeMember.getPersonDataPdata(json);
-                adata = AnalyzeMember.getPersonDataAdata(json);
-                bdata = AnalyzeMember.getPersonDataBdata(json);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initGenderAndBirthday();
-                        initMemberInfoText();
-                        initBankInfoText();
-                        initBindButton();
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new MemberJsonData().getPersonData(gv.getToken());
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                pdata = AnalyzeMember.getPersonDataPdata(jsonObject);
+                adata = AnalyzeMember.getPersonDataAdata(jsonObject);
+                bdata = AnalyzeMember.getPersonDataBdata(jsonObject);
+
+                initGenderAndBirthday();
+                initMemberInfoText();
+                initBankInfoText();
+                initBindButton();
+            }
+        });
         getViewById();
         db = new SQLiteDatabaseHandler(getApplicationContext());
 
@@ -128,32 +129,24 @@ public class PersonalInfoActivity extends AppCompatActivity {
         pdata_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public void run() {
-                        new JsonDataThread() {
-                            @Override
-                            public JSONObject getJsonData() {
-                                return new MemberJsonData().updateBasicData(gv.getToken(), personal_edit_name.getText().toString(), personal_edit_memberId.getText().toString(), personal_spinner_gender.getSelectedItemPosition(),
-                                        personal_txt_birthday.getText().toString(), personal_txt_city.getText().toString(), personal_txt_area.getText().toString(), personal_edit_zipcode.getText().toString(), personal_edit_address.getText().toString());
-                            }
+                    public JSONObject onTasking(Void... params) {
+                        return new MemberJsonData().updateBasicData(gv.getToken(), personal_edit_name.getText().toString(), personal_edit_memberId.getText().toString(), personal_spinner_gender.getSelectedItemPosition(),
+                                personal_txt_birthday.getText().toString(), personal_txt_city.getText().toString(), personal_txt_area.getText().toString(), personal_edit_zipcode.getText().toString(), personal_edit_address.getText().toString());
+                    }
 
-                            @Override
-                            public void runUiThread(JSONObject json) {
-                                try {
-                                    if (json.getBoolean("Success")) {
-                                        db.updateName(personal_edit_name.getText().toString());
-                                    }
-                                    new ToastMessageDialog(PersonalInfoActivity.this, json.getString("Message")).show();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }.start();
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
 
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            db.updateName(personal_edit_name.getText().toString());
+                        }
+                        new ToastMessageDialog(PersonalInfoActivity.this, AnalyzeUtil.getMessage(jsonObject)).show();
 
                     }
-                }).start();
+                });
+
             }
         });
 
@@ -223,23 +216,23 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (!gv.getToken().equals("") && !personal_txt_bankcode.getText().toString().equals("") && !personal_edit_subbankname.getText().toString().equals("")
                             && !personal_edit_bankaccount.getText().toString().equals("") && !personal_edit_bankaccountname.getText().toString().equals("")) {
-                        new Thread(new Runnable() {
+
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                             @Override
-                            public void run() {
-                                JSONObject json = new MemberJsonData().updateBillingData(gv.getToken(), personal_txt_bankcode.getText().toString(),
+                            public JSONObject onTasking(Void... params) {
+                                return new MemberJsonData().updateBillingData(gv.getToken(), personal_txt_bankcode.getText().toString(),
                                         personal_edit_subbankname.getText().toString(), personal_edit_bankaccount.getText().toString(), personal_edit_bankaccountname.getText().toString());
-
-                                if (AnalyzeMember.checkSuccess(json)) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            closeBillInfo();
-                                        }
-                                    });
-                                }
                             }
-                        }).start();
 
+                            @Override
+                            public void onTaskAfter(JSONObject jsonObject) {
+
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    closeBillInfo();
+                                }
+
+                            }
+                        });
                     }
                 }
             });

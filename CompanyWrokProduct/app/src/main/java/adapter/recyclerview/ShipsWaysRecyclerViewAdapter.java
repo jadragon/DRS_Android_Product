@@ -18,8 +18,6 @@ import java.util.Map;
 import library.AnalyzeJSON.ResolveJsonData;
 
 public class ShipsWaysRecyclerViewAdapter extends RecyclerView.Adapter<ShipsWaysRecyclerViewAdapter.RecycleHolder> {
-
-
     private Context ctx;
     private View view;
     private ArrayList<Map<String, String>> list;

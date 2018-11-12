@@ -35,7 +35,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
@@ -45,22 +44,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
-import library.JsonDataThread;
 import library.LoadingView;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    Toolbar toolbar;
-    TextView register_txt_account;
-    EditText register_edit_account, register_edit_password;
-    Button register_button, register_btn_gvcode;
-    ImageView register_img_mobile, register_img_email, register_img_fb, register_img_google;
-    int type = 1;
-    String vcode;
-    ToastMessageDialog toastMessage;
+    private Toolbar toolbar;
+    private TextView register_txt_account;
+    private EditText register_edit_account, register_edit_password;
+    private Button register_button, register_btn_gvcode;
+    private ImageView register_img_mobile, register_img_email, register_img_fb, register_img_google;
+    private int type = 1;
+    private String vcode;
+    private ToastMessageDialog toastMessage;
     private View register_cover_bg;
-    View register_info_layout;
+    private View register_info_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,27 +219,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //收鍵盤
         ((InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(RegisterActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         LoadingView.show(getCurrentFocus());
-        new JsonDataThread() {
+
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new MemberJsonData().gvcode(type, "886", register_edit_account.getText().toString());
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
+            public void onTaskAfter(JSONObject jsonObject) {
                 try {
                     LoadingView.hide();
-                    if (json.getBoolean("Success")) {
-                        vcode = json.getString("Data");
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        vcode = jsonObject.getString("Data");
                         register_edit_account.setFocusable(false);
                     }
-                    toastMessage.setMessageText(json.getString("Message"));
+                    toastMessage.setMessageText(AnalyzeUtil.getMessage(jsonObject));
                     toastMessage.confirm();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }.start();
+        });
+
     }
 
     // FB
@@ -410,7 +413,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "getPhotoUrl: " + account.getPhotoUrl());
             */
             // G+
-            Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        //    Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
             /*
             Log.e(TAG, "--------------------------------");
             //    Log.e(TAG, "Display Name: " + person.getDisplayName());
@@ -421,6 +424,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             //   Log.e(TAG, "Current Location: " + person.getCurrentLocation());
             //  Log.e(TAG, "Language: " + person.getLanguage());
             Intent intent = new Intent(RegisterActivity.this, RegisterDetailActivity.class);
+            /*
             switch (person.getGender()) {
                 case Person.Gender.MALE:
                     intent.putExtra("gender", 1);
@@ -431,7 +435,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 case Person.Gender.OTHER:
                     intent.putExtra("gender", 0);
                     break;
-            }
+            }*/
             intent.putExtra("type", type);
             intent.putExtra("id", account.getId());
             intent.putExtra("name", account.getDisplayName());

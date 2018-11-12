@@ -12,8 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.test.tw.wrokproduct.R;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
     private AddCartRecyclerViewAdapter.RecycleHolder recycleHolder;
     private AddCartRecyclerViewAdapter.ItemSelectListener clickListener;
     private boolean[] ischoice;
-    int color_values;
+    private  int color_values;
 
     public AddCartRecyclerViewAdapter(Context ctx, JSONObject json, int color_values) {
         this.ctx = ctx;

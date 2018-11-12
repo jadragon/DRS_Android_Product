@@ -23,7 +23,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -31,7 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import library.AnalyzeJSON.AnalyzeShopCart;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.AutoHorizontalTextView;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ShopCartJsonData;
@@ -52,10 +54,10 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     private ShopCartRecyclerViewAdapter.DataChangeListener dataChangeListener;
     private List<Item> items;
     private Item item;
-    GlobalVariable gv;
-    int size;
-    String mvip = "1";
-    ToastMessageDialog toastMessageDialog;
+    private GlobalVariable gv;
+    private int size;
+    private String mvip = "1";
+    private ToastMessageDialog toastMessageDialog;
 
     public void setMvip(String mvip) {
         this.mvip = mvip;
@@ -175,7 +177,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_content, parent, false);
         params.height = (int) (dm.heightPixels / 5.5);
-        params.setMargins(0,0,0,0);
+        params.setMargins(0, 0, 0, 0);
         view.setLayoutParams(params);
         view.setTag("content");
         resizeImageView(view.findViewById(R.id.viewitem_cart_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));
@@ -341,32 +343,32 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     builder.setMessage("是否要取消此商品?").setPositiveButton("確定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new Thread(new Runnable() {
+                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                 @Override
-                                public void run() {
-                                    try {
-                                        final JSONObject jsonObject = new ShopCartJsonData().delCartProduct(gv.getToken(), items.get(position).getMorno());
-                                        json = new ShopCartJsonData().getCart(gv.getToken(), mvip);
-                                        if (jsonObject.getBoolean("Success")) {
-                                            new Handler(ctx.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    setFilter(json);
-                                                    try {
-                                                        toastMessageDialog.setMessageText(jsonObject.getString("Message"));
-                                                        toastMessageDialog.confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    updatePrice();
-                                                }
-                                            });
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                public JSONObject onTasking(Void... params) {
+                                    return new ShopCartJsonData().delCartProduct(gv.getToken(), items.get(position).getMorno());
                                 }
-                            }).start();
+
+                                @Override
+                                public void onTaskAfter(JSONObject jsonObject) {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                        @Override
+                                        public JSONObject onTasking(Void... params) {
+                                            return new ShopCartJsonData().getCart(gv.getToken(), mvip);
+                                        }
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            setFilter(jsonObject);
+                                            updatePrice();
+                                        }
+                                    });
+                                    toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                    toastMessageDialog.confirm();
+                                }
+                            });
+
+
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
@@ -472,19 +474,12 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                             @Override
                             public void run() {
                                 int total = Integer.parseInt(items.get(position).getStotal()) + 1;
-                                new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(),
-                                        total);
+                                new ShopCartJsonData().addCartProduct(gv.getToken(), items.get(position).getMorno(), total);
                                 json = new ShopCartJsonData().getCart(gv.getToken(), mvip);
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        for (int i = 0; i < items.size(); i++) {
-                                            items.get(i).setCheck(false);
-                                            items.get(i).setTotal_price(0);
-                                        }
-                                        setFilter(json);
-
-                                        updatePrice();
+                                        resetData();
                                     }
                                 });
                             }
@@ -504,12 +499,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                                 new Handler(ctx.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        for (int i = 0; i < items.size(); i++) {
-                                            items.get(i).setCheck(false);
-                                            items.get(i).setTotal_price(0);
-                                        }
-                                        setFilter(json);
-                                        updatePrice();
+                                        resetData();
                                     }
                                 });
 
@@ -520,6 +510,26 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
                     break;
             }
         }
+
+    }
+
+    private void resetData() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return new ShopCartJsonData().getCart(gv.getToken(), mvip);
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                for (int i = 0; i < items.size(); i++) {
+                    items.get(i).setCheck(false);
+                    items.get(i).setTotal_price(0);
+                }
+                setFilter(jsonObject);
+                updatePrice();
+            }
+        });
 
     }
 
@@ -568,10 +578,12 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
     }
 
     public void setFilter(JSONObject json) {
-        this.json = json;
-        if (AnalyzeShopCart.getCartInformation(json) != null) {
+        if (json != null) {
             title_list = AnalyzeShopCart.getCartInformation(json);
             content_list = AnalyzeShopCart.getCartItemArray(json);
+        } else {
+            title_list = new ArrayList<>();
+            content_list = new ArrayList<>();
         }
         initItems();
         notifyDataSetChanged();

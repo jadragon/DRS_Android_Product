@@ -20,13 +20,11 @@ import library.AnalyzeJSON.AnalyzeBill;
 
 public class PointRecyclerAdapter extends RecyclerView.Adapter<PointRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    JSONObject json;
     private List<BillPojo> itemPojoList;
     int type, point_type;
 
     public PointRecyclerAdapter(Context ctx, JSONObject json, int type, int point_type) {
         this.ctx = ctx;
-        this.json = json;
         this.type = type;
         this.point_type = point_type;
         if (json != null) {
@@ -196,7 +194,6 @@ public class PointRecyclerAdapter extends RecyclerView.Adapter<PointRecyclerAdap
 
 
     public void setFilter(JSONObject json) {
-        this.json = json;
         if (json != null) {
 
             itemPojoList = AnalyzeBill.getBillPojo(json);

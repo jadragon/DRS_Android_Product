@@ -20,6 +20,7 @@ public class ProductJsonData extends APIInfomation {
     private final String pcontent_url = DOMAIN + "main/product/pcontent.php";
     private final String getBrowse_url = DOMAIN + "main/record/getBrowse.php";
     private final String getFavorite_url = DOMAIN + "main/record/getFavorite.php";
+    private final String clickProduct_url = DOMAIN + "main/product/clickProduct.php";
 
     public ProductJsonData() {
         super();
@@ -118,6 +119,15 @@ public class ProductJsonData extends APIInfomation {
     public JSONObject getProductComment(String pno) {
         params.add(new BasicNameValuePair("pno", pno));
         return jsonParser.getJSONFromUrl(getProductComment_url, params);
+    }
+
+    /**
+     * 1.2.8	點擊商品
+     */
+    public JSONObject clickProduct( String token ,String pno) {
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("pno", pno));
+        return jsonParser.getJSONFromUrl(clickProduct_url, params);
     }
 
     /**

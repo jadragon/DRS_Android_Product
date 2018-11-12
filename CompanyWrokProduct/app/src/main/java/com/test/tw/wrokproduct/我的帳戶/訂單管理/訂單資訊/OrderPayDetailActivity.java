@@ -21,13 +21,13 @@ import library.AnalyzeJSON.AnalyzeOrderInfo;
 import library.GetJsonData.OrderInfoJsonData;
 
 public class OrderPayDetailActivity extends AppCompatActivity {
-    JSONObject json;
-    String mono;
-    MOrderPayPojo mOrderPayPojo;
-    LinearLayout order_pay_detail_layout;
-    TextView textView;
-    DisplayMetrics dm;
-    GlobalVariable gv;
+    private JSONObject json;
+    private String mono;
+    private MOrderPayPojo mOrderPayPojo;
+    private LinearLayout order_pay_detail_layout;
+    private TextView textView;
+    private DisplayMetrics dm;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

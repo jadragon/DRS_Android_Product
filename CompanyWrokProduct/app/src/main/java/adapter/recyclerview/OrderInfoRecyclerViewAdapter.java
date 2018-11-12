@@ -40,13 +40,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.HelpCenterJsonData;
 import library.GetJsonData.OrderInfoJsonData;
 import library.GetJsonData.ReCountJsonData;
-import library.JsonDataThread;
 
 public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public final int TYPE_HEADER = 0;
@@ -492,25 +494,22 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().cancelMOrder(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(0, 6);
-                                                        }
-                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().cancelMOrder(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(0, 6);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+                                        }
+                                    });
+
 
                                     dialog.dismiss();
                                 }
@@ -525,25 +524,23 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().extendReceipt(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(2);
-                                                        }
-                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().extendReceipt(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(2);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+
+                                        }
+                                    });
+
                                     dialog.dismiss();
                                 }
                             });
@@ -573,29 +570,26 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 case R.id.orderinfo_footer_btn2:
                     switch (index) {
                         case 0:
-                            new Thread(new Runnable() {
+                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                 @Override
-                                public void run() {
-                                    final JSONObject jsonObject = new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
-                                    new Handler(ctx.getMainLooper()).post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                if (jsonObject.getBoolean("Success")) {
-                                                    Intent intent;
-                                                    intent = new Intent(ctx, CountActivity.class);
-                                                    intent.putExtra("count_type", ReCountJsonData.RECOUNT);
-                                                    ((AppCompatActivity) ctx).startActivityForResult(intent, 110);
-                                                } else {
-                                                    new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
+                                public JSONObject onTasking(Void... params) {
+                                    return new ReCountJsonData().goCheckout(ReCountJsonData.RECOUNT, gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                 }
-                            }).start();
+
+                                @Override
+                                public void onTaskAfter(JSONObject jsonObject) {
+
+                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                        Intent intent;
+                                        intent = new Intent(ctx, CountActivity.class);
+                                        intent.putExtra("count_type", ReCountJsonData.RECOUNT);
+                                        ((AppCompatActivity) ctx).startActivityForResult(intent, 110);
+                                    } else {
+                                        new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+                                    }
+
+                                }
+                            });
 
                             break;
                         case 1:
@@ -603,25 +597,20 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(1);
-                                                        }
-                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(1);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+                                        }
+                                    });
 
                                     dialog.dismiss();
                                 }
@@ -632,25 +621,21 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().confirmReceipt(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(2, 3);
-                                                        }
-                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().confirmReceipt(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono());
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(2, 3);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+                                        }
+                                    });
                                     dialog.dismiss();
                                 }
                             });
@@ -666,48 +651,46 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showOhter(true, new ToastMessageDialog.OtherClickListener() {
                                 @Override
                                 public void confirmClicked(Dialog dialog, View view, final String note) {
-                                    new JsonDataThread() {
+
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new OrderInfoJsonData().applyReturnLnum(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            try {
-                                                if (json.getBoolean("Success")) {
-                                                    ((OrderInfoActivity) ctx).setFilterByIndex(4);
-                                                }
-                                                new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(4);
                                             }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
                                         }
-                                    }.start();
+                                    });
                                     dialog.dismiss();
                                 }
 
                                 @Override
                                 public void otherClicked(Dialog dialog, View view) {
-                                    new JsonDataThread() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new HelpCenterJsonData().getCitem("ynvNAzmDHyZXuL3rIqktCw==");
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            Intent intent = new Intent(ctx, CommunityActivity.class);
-
-                                            try {
-                                                intent.putExtra("title", json.getJSONObject("Data").getString("title"));
-                                                intent.putExtra("html", json.getJSONObject("Data").getString("content"));
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                Intent intent = new Intent(ctx, CommunityActivity.class);
+                                                try {
+                                                    intent.putExtra("title", jsonObject.getJSONObject("Data").getString("title"));
+                                                    intent.putExtra("html", jsonObject.getJSONObject("Data").getString("content"));
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                ctx.startActivity(intent);
                                             }
-                                            ctx.startActivity(intent);
                                         }
-                                    }.start();
+                                    });
                                 }
                             });
 
@@ -718,25 +701,22 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().complaintStore(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(5);
-                                                        }
-                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().complaintStore(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(5);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+
+                                        }
+                                    });
+
                                     dialog.dismiss();
                                 }
                             });
@@ -746,25 +726,23 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().complaintStore(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(6);
-                                                        }
-                                                        new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().complaintStore(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(6);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+
+                                        }
+                                    });
+
                                     dialog.dismiss();
                                 }
 
@@ -784,25 +762,22 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new Thread(new Runnable() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public void run() {
-                                            jsonObject = new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        if (jsonObject.getBoolean("Success")) {
-                                                            ((OrderInfoActivity) ctx).setFilterByIndex(2);
-                                                        }
-                                                         new ToastMessageDialog(ctx,jsonObject.getString("Message")).confirm();
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
+                                        public JSONObject onTasking(Void... params) {
+                                            return new OrderInfoJsonData().applyCancel(gv.getToken(), ((MemberOrderFooterPojo) (items.get(position))).getMono(), note);
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((OrderInfoActivity) ctx).setFilterByIndex(2);
+                                            }
+                                            new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
+
+                                        }
+                                    });
 
                                     dialog.dismiss();
                                 }
@@ -865,7 +840,7 @@ public class OrderInfoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(8);
         shape.setColor(ctx.getResources().getColor(color));
-        button.setBackground(shape);
+        button.setBackgroundDrawable(shape);
     }
 
 }

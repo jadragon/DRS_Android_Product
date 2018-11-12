@@ -15,14 +15,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeShopCart;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ReCountJsonData;
 
@@ -63,12 +65,17 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
         count_type = getIntent().getIntExtra("count_type", 0);
         initID();
         initToolbar();
-        new Thread(new Runnable() {
+
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new ReCountJsonData().getMemberPayment(count_type, gv.getToken());
-                data_list = AnalyzeShopCart.getMemberPaymentsData(json);
-                pay_list = AnalyzeShopCart.getMemberPaymentsPay(json);
+            public JSONObject onTasking(Void... params) {
+                return new ReCountJsonData().getMemberPayment(count_type, gv.getToken());
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                data_list = AnalyzeShopCart.getMemberPaymentsData(jsonObject);
+                pay_list = AnalyzeShopCart.getMemberPaymentsPay(jsonObject);
                 xtrans = Integer.parseInt(pay_list.get(0).get("xtrans"));
                 //  ytrans = Integer.parseInt(pay_list.get(0).get("ytrans"));
                 opay = Long.parseLong(pay_list.get(0).get("opay"));
@@ -82,22 +89,20 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
                 total = (opay - (xkeyin / xtrans) -
                         //  (ykeyin / ytrans)
                         -ekeyin);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        payway_activity_txt_isused1.setTag(data_list.get(0).get("pno"));
-                        payway_activity_txt_isused2.setTag(data_list.get(1).get("pno"));
-                        if (data_list.get(0).get("isused").equals("1")) {
-                            payway_activity_txt_isused1.setSelected(true);
-                        } else if (data_list.get(1).get("isused").equals("1")) {
-                            payway_activity_txt_isused2.setSelected(true);
-                        }
-                        initText();
-                        setAnimation();
-                    }
-                });
+
+
+                payway_activity_txt_isused1.setTag(data_list.get(0).get("pno"));
+                payway_activity_txt_isused2.setTag(data_list.get(1).get("pno"));
+                if (data_list.get(0).get("isused").equals("1")) {
+                    payway_activity_txt_isused1.setSelected(true);
+                } else if (data_list.get(1).get("isused").equals("1")) {
+                    payway_activity_txt_isused2.setSelected(true);
+                }
+                initText();
+                setAnimation();
+
             }
-        }).start();
+        });
     }
 
     private void initToolbar() {
@@ -191,28 +196,26 @@ public class PayWayActivity extends AppCompatActivity implements TextView.OnEdit
         payway_activity_btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
+
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
-                    public void run() {
-                        json = new ReCountJsonData().setMemberPayment(count_type, gv.getToken(), xkeyin, 0, ekeyin, pno);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if (json.getBoolean("Success")) {
-                                        finish();
-                                    } else {
-                                        toastMessageDialog.setTitleText("注意");
-                                        toastMessageDialog.setMessageText(json.getString("Message"));
-                                        toastMessageDialog.confirm();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                    public JSONObject onTasking(Void... params) {
+                        return new ReCountJsonData().setMemberPayment(count_type, gv.getToken(), xkeyin, 0, ekeyin, pno);
                     }
-                }).start();
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                finish();
+                            } else {
+                                toastMessageDialog.setTitleText("注意");
+                                toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                toastMessageDialog.confirm();
+                            }
+                    }
+                });
+
             }
         });
     }

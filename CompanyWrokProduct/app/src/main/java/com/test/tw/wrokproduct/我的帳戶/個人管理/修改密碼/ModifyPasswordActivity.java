@@ -11,20 +11,22 @@ import android.widget.TextView;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import library.AnalyzeJSON.AnalyzeMember;
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
+import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
 import library.SQLiteDatabaseHandler;
-import library.Component.ToastMessageDialog;
 
 public class ModifyPasswordActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    EditText modify_account, modify_oldpass, modify_newpass, modify_renewpass;
-    Button modify_confirm;
-    ToastMessageDialog toastMessageDialog;
-    GlobalVariable gv;
+    private Toolbar toolbar;
+    private EditText modify_account, modify_oldpass, modify_newpass, modify_renewpass;
+    private  Button modify_confirm;
+    private   ToastMessageDialog toastMessageDialog;
+    private  GlobalVariable gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,8 @@ public class ModifyPasswordActivity extends AppCompatActivity {
         initToolbar();
         toastMessageDialog = new ToastMessageDialog(this);
         getViewById();
-        SQLiteDatabaseHandler db=new SQLiteDatabaseHandler(this);
-        modify_account.setText( db.getMemberDetail().get("account"));
+        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(this);
+        modify_account.setText(db.getMemberDetail().get("account"));
         modify_account.setEnabled(false);
         db.close();
 
@@ -44,26 +46,18 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                 if (!modify_oldpass.getText().toString().equals("") && !modify_newpass.getText().toString().equals("") && !modify_renewpass.getText().toString().equals("")) {
                     if (!modify_oldpass.getText().toString().equals(modify_newpass.getText().toString())) {
                         if (modify_newpass.getText().toString().equals(modify_renewpass.getText().toString())) {
-                            new Thread(new Runnable() {
+                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                 @Override
-                                public void run() {
-                                    final JSONObject json=new MemberJsonData().updatePersonPawd(gv.getToken(),modify_oldpass.getText().toString(),modify_newpass.getText().toString());
-                                    if(AnalyzeMember.checkSuccess(json)){
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    toastMessageDialog.setMessageText(json.getString("Message"));
-                                                    toastMessageDialog.show();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-
-                                            }
-                                        });
-                                    }
+                                public JSONObject onTasking(Void... params) {
+                                    return new MemberJsonData().updatePersonPawd(gv.getToken(), modify_oldpass.getText().toString(), modify_newpass.getText().toString());
                                 }
-                            }).start();
+
+                                @Override
+                                public void onTaskAfter(JSONObject jsonObject) {
+                                    toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                    toastMessageDialog.show();
+                                }
+                            });
                         } else {
                             toastMessageDialog.setMessageText("再次確認填寫有誤");
                             toastMessageDialog.confirm();

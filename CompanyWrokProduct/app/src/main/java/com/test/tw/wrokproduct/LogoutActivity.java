@@ -12,9 +12,9 @@ import Util.ComponentUtil;
 import library.SQLiteDatabaseHandler;
 
 public class LogoutActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    TextView logout_account;
-    Button logout_button;
+    private Toolbar toolbar;
+    private TextView logout_account;
+    private  Button logout_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -15,11 +15,11 @@ import java.util.List;
 import library.Component.ToolbarActivity;
 
 public class ProductOrderActivity extends ToolbarActivity {
-    List<Fragment_OrderInfo> fragmentList;
-    String[] mTabtitle;
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    FragmentPagerAdapter fragmentPagerAdapter;
+    private  List<Fragment_OrderInfo> fragmentList;
+    private  String[] mTabtitle;
+    private  ViewPager viewPager;
+    private  TabLayout tabLayout;
+    private  FragmentPagerAdapter fragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

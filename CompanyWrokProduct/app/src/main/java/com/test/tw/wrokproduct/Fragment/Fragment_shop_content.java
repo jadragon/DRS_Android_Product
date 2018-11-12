@@ -69,10 +69,6 @@ public class Fragment_shop_content extends Fragment {
         this.banner = banner;
     }
 
-    public void setJson(JSONObject json1, JSONObject json2) {
-        this.json1 = json1;
-        this.json2 = json2;
-    }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.include_refresh_recycler, container, false);

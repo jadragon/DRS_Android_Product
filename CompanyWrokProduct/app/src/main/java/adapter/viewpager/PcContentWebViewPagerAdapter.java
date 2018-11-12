@@ -14,8 +14,8 @@ public class PcContentWebViewPagerAdapter extends FragmentPagerAdapter {
     private String[] mTabtitle;
     private String[] htmls;
     private Fragment_WebView[] fragments;
-    int[] heigh;
-    ViewPager viewPager;
+    private int[] heigh;
+    private ViewPager viewPager;
 
     public ViewPager getViewPager() {
         return viewPager;

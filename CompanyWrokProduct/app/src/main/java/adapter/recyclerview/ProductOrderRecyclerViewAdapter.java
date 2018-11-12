@@ -24,20 +24,21 @@ import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.Membe
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderFooterPojo;
 import com.test.tw.wrokproduct.我的帳戶.訂單管理.訂單資訊.pojo.MemberOrderHeaderPojo;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeOrderInfo;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.StoreJsonData;
-import library.JsonDataThread;
 
 public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapter {
-    String token;
+    private String token;
 
     public ProductOrderRecyclerViewAdapter(Context ctx, JSONObject json, int index) {
         super(ctx, json, index);
@@ -332,25 +333,24 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new JsonDataThread() {
+
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new StoreJsonData().applyCancel(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 1, note);
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            try {
-                                                if (json.getBoolean("Success")) {
-                                                    ((ProductOrderActivity) ctx).setFilterByIndex(0, 2, 3);
-                                                } else {
-                                                    new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((ProductOrderActivity) ctx).setFilterByIndex(0, 2, 3);
+                                            } else {
+                                                new ToastMessageDialog(ctx, "請填寫運送方式及付款方式").confirm();
                                             }
                                         }
-                                    }.start();
+                                    });
+
                                     dialog.dismiss();
                                 }
                             });
@@ -361,25 +361,23 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                 toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, final String note) {
-                                        new JsonDataThread() {
+                                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                             @Override
-                                            public JSONObject getJsonData() {
+                                            public JSONObject onTasking(Void... params) {
                                                 return new StoreJsonData().applyReturn(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 1, note);
                                             }
 
                                             @Override
-                                            public void runUiThread(JSONObject json) {
-                                                try {
-                                                    if (json.getBoolean("Success")) {
-                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1, 5);
-                                                    } else {
-                                                        new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                            public void onTaskAfter(JSONObject jsonObject) {
+
+                                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(1, 5);
+                                                } else {
+                                                    new ToastMessageDialog(ctx, "請填寫運送方式及付款方式").confirm();
                                                 }
                                             }
-                                        }.start();
+                                        });
+
                                         dialog.dismiss();
                                     }
                                 });
@@ -388,25 +386,22 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                 toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, String note) {
-                                        new JsonDataThread() {
+                                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                             @Override
-                                            public JSONObject getJsonData() {
+                                            public JSONObject onTasking(Void... params) {
                                                 return new StoreJsonData().confirmReceipt(token, ((MemberOrderFooterPojo) items.get(position)).getMono());
                                             }
 
                                             @Override
-                                            public void runUiThread(JSONObject json) {
-                                                try {
-                                                    if (json.getBoolean("Success")) {
-                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1);
-                                                    } else {
-                                                        new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                            public void onTaskAfter(JSONObject jsonObject) {
+                                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(1);
+                                                } else {
+                                                    new ToastMessageDialog(ctx, "請填寫運送方式及付款方式").confirm();
                                                 }
                                             }
-                                        }.start();
+                                        });
+
                                         dialog.dismiss();
                                     }
                                 });
@@ -440,25 +435,22 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new JsonDataThread() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new StoreJsonData().applyCancel(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 0, note);
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            try {
-                                                if (json.getBoolean("Success")) {
-                                                    ((ProductOrderActivity) ctx).setFilterByIndex(0, 7);
-                                                } else {
-                                                    new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((ProductOrderActivity) ctx).setFilterByIndex(0, 7);
+                                            } else {
+                                                new ToastMessageDialog(ctx, "請填寫運送方式及付款方式").confirm();
                                             }
                                         }
-                                    }.start();
+                                    });
+
                                     dialog.dismiss();
                                 }
                             });
@@ -469,25 +461,21 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                                 toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                     @Override
                                     public void ItemClicked(Dialog dialog, View view, final String note) {
-                                        new JsonDataThread() {
+                                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                             @Override
-                                            public JSONObject getJsonData() {
+                                            public JSONObject onTasking(Void... params) {
                                                 return new StoreJsonData().applyReturn(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), 0, note);
                                             }
 
                                             @Override
-                                            public void runUiThread(JSONObject json) {
-                                                try {
-                                                    if (json.getBoolean("Success")) {
-                                                        ((ProductOrderActivity) ctx).setFilterByIndex(1);
-                                                    } else {
-                                                        new ToastMessageDialog(ctx,"請填寫運送方式及付款方式").confirm();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                            public void onTaskAfter(JSONObject jsonObject) {
+                                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                    ((ProductOrderActivity) ctx).setFilterByIndex(1);
+                                                } else {
+                                                    new ToastMessageDialog(ctx, "請填寫運送方式及付款方式").confirm();
                                                 }
                                             }
-                                        }.start();
+                                        });
                                         dialog.dismiss();
                                     }
                                 });
@@ -506,25 +494,21 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, String note) {
-                                    new JsonDataThread() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new StoreJsonData().stockingCompleted(token, ((MemberOrderFooterPojo) items.get(position)).getMono());
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            try {
-                                                if (json.getBoolean("Success")) {
-                                                    ((ProductOrderActivity) ctx).setFilterByIndex(2, 3);
-                                                } else {
-                                                    new ToastMessageDialog(ctx,json.getString("Message")).confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((ProductOrderActivity) ctx).setFilterByIndex(2, 3);
+                                            } else {
+                                                new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
                                             }
                                         }
-                                    }.start();
+                                    });
                                     dialog.dismiss();
                                 }
                             });
@@ -545,25 +529,22 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new JsonDataThread() {
+
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new StoreJsonData().complaintMember(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), note);
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            try {
-                                                if (json.getBoolean("Success")) {
-                                                    ((ProductOrderActivity) ctx).setFilterByIndex(6);
-                                                } else {
-                                                    new ToastMessageDialog(ctx,json.getString("Message")).confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((ProductOrderActivity) ctx).setFilterByIndex(6);
+                                            } else {
+                                                new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
                                             }
                                         }
-                                    }.start();
+                                    });
                                     dialog.dismiss();
                                 }
                             });
@@ -573,25 +554,22 @@ public class ProductOrderRecyclerViewAdapter extends OrderInfoRecyclerViewAdapte
                             toastMessageDialog.showCheck(true, new ToastMessageDialog.ClickListener() {
                                 @Override
                                 public void ItemClicked(Dialog dialog, View view, final String note) {
-                                    new JsonDataThread() {
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                         @Override
-                                        public JSONObject getJsonData() {
+                                        public JSONObject onTasking(Void... params) {
                                             return new StoreJsonData().complaintMember(token, ((MemberOrderFooterPojo) items.get(position)).getMono(), note);
                                         }
 
                                         @Override
-                                        public void runUiThread(JSONObject json) {
-                                            try {
-                                                if (json.getBoolean("Success")) {
-                                                    ((ProductOrderActivity) ctx).setFilterByIndex(7);
-                                                } else {
-                                                    new ToastMessageDialog(ctx,json.getString("Message")).confirm();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                ((ProductOrderActivity) ctx).setFilterByIndex(7);
+                                            } else {
+                                                new ToastMessageDialog(ctx, AnalyzeUtil.getMessage(jsonObject)).confirm();
                                             }
                                         }
-                                    }.start();
+                                    });
+
                                     dialog.dismiss();
                                 }
                             });

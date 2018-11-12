@@ -22,19 +22,20 @@ import library.GetJsonData.SearchJsonData;
 import library.LoadingView;
 
 public class SearchResultActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
-    ShopRecyclerViewAdapter adapter;
-    String keyword,unicode;
-    JSONObject json;
-    MySwipeRefreshLayout mSwipeLayout;
-    int nextpage = 2;
-    EndLessOnScrollListener endLessOnScrollListener;
-GlobalVariable gv;
+    private RecyclerView recyclerView;
+    private ShopRecyclerViewAdapter adapter;
+    private String keyword, unicode;
+    private JSONObject json;
+    private MySwipeRefreshLayout mSwipeLayout;
+    private int nextpage = 2;
+    private EndLessOnScrollListener endLessOnScrollListener;
+    private GlobalVariable gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
-        gv=(GlobalVariable)getApplicationContext();
+        gv = (GlobalVariable) getApplicationContext();
         keyword = getIntent().getStringExtra("keyword");
         initSwipeLayout();
         initToolbar();
@@ -54,8 +55,8 @@ GlobalVariable gv;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        unicode=StringUtil.convertStringToUTF8(keyword);
-                        json = new SearchJsonData().search_list(gv.getToken(),unicode, 1);
+                        unicode = StringUtil.convertStringToUTF8(keyword);
+                        json = new SearchJsonData().search_list(gv.getToken(), unicode, 1);
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
@@ -84,8 +85,8 @@ GlobalVariable gv;
             @Override
             public void run() {
                 new SearchJsonData().search_click(unicode);
-                unicode=StringUtil.convertStringToUTF8(keyword);
-                json = new SearchJsonData().search_list(gv.getToken(),unicode, 1);
+                unicode = StringUtil.convertStringToUTF8(keyword);
+                json = new SearchJsonData().search_list(gv.getToken(), unicode, 1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -102,8 +103,8 @@ GlobalVariable gv;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        unicode=StringUtil.convertStringToUTF8(keyword);
-                        json = new SearchJsonData().search_list(gv.getToken(),unicode, nextpage);
+                        unicode = StringUtil.convertStringToUTF8(keyword);
+                        json = new SearchJsonData().search_list(gv.getToken(), unicode, nextpage);
                         nextpage++;
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override

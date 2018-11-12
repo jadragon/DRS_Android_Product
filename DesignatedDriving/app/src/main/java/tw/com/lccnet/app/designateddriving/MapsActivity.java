@@ -7,9 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
 import android.location.Geocoder;
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,9 +42,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
@@ -67,10 +70,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         gv = (GlobalVariable) getApplicationContext();
         dm = getResources().getDisplayMetrics();
         initToolbar();
+        initButton();
         initADToast();
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    private void initButton() {
+        Button btn_long_trip = findViewById(R.id.btn_long_trip);
+        reShapeButton(btn_long_trip, R.color.orange1);
+        Button btn_immediate = findViewById(R.id.btn_immediate);
+        reShapeButton(btn_immediate, R.color.green);
+        Button btn_deliver = findViewById(R.id.btn_deliver);
+        reShapeButton(btn_deliver, R.color.green1);
+    }
+
+    private void reShapeButton(Button button, int color) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setCornerRadius(20);
+        shape.setColor(getResources().getColor(color));
+        button.setBackgroundDrawable(shape);
     }
 
     private void initADToast() {
@@ -85,7 +105,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 text.setText("目前時段10公里內450元");
 
                 Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.BOTTOM, 0, (int) (80 * dm.density)); //顯示位置
+                toast.setGravity(Gravity.BOTTOM, 0, (int) (90 * dm.density)); //顯示位置
                 toast.setDuration(Toast.LENGTH_LONG); //顯示時間長短
                 toast.setView(layout);
                 toast.show();
@@ -108,7 +128,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toolbar_main.post(new Runnable() {
             @Override
             public void run() {
-                mgooglemap.setPadding(0, toolbar_main.getHeight(), 0, 0);
+                mgooglemap.setPadding(0, (int)(toolbar_main.getHeight()+10*dm.density), 0, 0);
             }
         });
     }
@@ -162,28 +182,50 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String provider = locationManager.getBestProvider(criteria, true);
         Location location = ((LocationManager) getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(provider);
         */
-        mLatitude = gv.getmLatitude();
-        mLongitude = gv.getmLongitude();
+        // mLatitude = gv.getmLatitude();
+        //  mLongitude = gv.getmLongitude();
+        mLatitude = 25.016633;
+        mLongitude = 121.300367;
         LatLng latlng = new LatLng(mLatitude, mLongitude);
         showAddress(latlng);
         MarkerOptions markerOpt = new MarkerOptions();
+        Random random = new Random();
+        DecimalFormat df = new DecimalFormat("#.#");
         markerOpt.position(getLatLng(0.002, latlng, 0))
-                .icon(getMarkerIcon(R.drawable.north_koria, "金正恩", "2.3"));
+                .icon(getMarkerIcon(R.drawable.no_photo, "李司機", df.format(5 * random.nextFloat())));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 30))
+                .icon(getMarkerIcon(R.drawable.no_photo, "王司機", df.format(5 * random.nextFloat())));
         mgooglemap.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 60))
-                .icon(getMarkerIcon(R.drawable.usa, "歐巴馬", "4.9"));
+                .icon(getMarkerIcon(R.drawable.no_photo, "張司機", df.format(5 * random.nextFloat())));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 90))
+                .icon(getMarkerIcon(R.drawable.no_photo, "劉司機", df.format(5 * random.nextFloat())));
         mgooglemap.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 120))
-                .icon(getMarkerIcon(R.drawable.russia, "普丁", "2.5"));
+                .icon(getMarkerIcon(R.drawable.no_photo, "陳司機", df.format(5 * random.nextFloat())));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 150))
+                .icon(getMarkerIcon(R.drawable.no_photo, "楊司機", df.format(5 * random.nextFloat())));
         mgooglemap.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 180))
-                .icon(getMarkerIcon(R.drawable.china, "習近平", "3.2"));
+                .icon(getMarkerIcon(R.drawable.no_photo, "趙司機", df.format(5 * random.nextFloat())));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 210))
+                .icon(getMarkerIcon(R.drawable.no_photo, "黃司機", df.format(5 * random.nextFloat())));
         mgooglemap.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 240))
-                .icon(getMarkerIcon(R.drawable.taiwan, "孫中山", "5.0"));
+                .icon(getMarkerIcon(R.drawable.no_photo, "周司機", df.format(5 * random.nextFloat())));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 270))
+                .icon(getMarkerIcon(R.drawable.no_photo, "吳司機", df.format(5 * random.nextFloat())));
         mgooglemap.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 300))
-                .icon(getMarkerIcon(R.drawable.south_koria, "朴槿惠", "2.4"));
+                .icon(getMarkerIcon(R.drawable.no_photo, "林司機", df.format(5 * random.nextFloat())));
+        mgooglemap.addMarker(markerOpt);
+        markerOpt.position(getLatLng(0.002, latlng, 330))
+                .icon(getMarkerIcon(R.drawable.no_photo, "蔡司機", df.format(5 * random.nextFloat())));
         mgooglemap.addMarker(markerOpt);
         mgooglemap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
 

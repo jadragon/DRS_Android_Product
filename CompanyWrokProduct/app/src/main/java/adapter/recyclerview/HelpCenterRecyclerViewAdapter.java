@@ -32,11 +32,10 @@ public class HelpCenterRecyclerViewAdapter extends RecyclerView.Adapter<HelpCent
     private Context ctx;
     private DisplayMetrics dm;
     private int currentItem = -1; //用于记录点击的 Item 的 position，是控制 item 展开的核心
-    ArrayList<String> titleList;
-    ArrayList<ArrayList<Map<String, String>>> itemLists;
+    private  ArrayList<String> titleList;
+    private  ArrayList<ArrayList<Map<String, String>>> itemLists;
     private List<HeaderPojo> datas;
     private ArrayList<Map<String, String>> headerList;
-    View header;
     int had_header;
 
     public void setHeader(ArrayList<Map<String, String>> headerList) {

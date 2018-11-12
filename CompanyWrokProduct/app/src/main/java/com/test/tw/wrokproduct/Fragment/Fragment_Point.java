@@ -17,12 +17,11 @@ import org.json.JSONObject;
 import adapter.recyclerview.PointRecyclerAdapter;
 
 public class Fragment_Point extends Fragment {
-    View v;
-    PointRecyclerAdapter adapter;
-    RecyclerView recyclerView;
-    JSONObject json;
-    int type, point_type;
-    GlobalVariable gv;
+    private View v;
+    private PointRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
+    private int type, point_type;
+    private GlobalVariable gv;
 
     public void setPoint_type(int point_type) {
         this.point_type = point_type;
@@ -53,7 +52,6 @@ public class Fragment_Point extends Fragment {
     }
 
     public void setFilter(JSONObject json) {
-        this.json = json;
         adapter.setFilter(json);
     }
 /*

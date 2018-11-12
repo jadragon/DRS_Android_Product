@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
+import com.test.tw.wrokproduct.Fragment.Fragment_Point;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -16,18 +17,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_Point;
 import Util.StringUtil;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
 
 public class PointActivity extends ToolbarActivity {
-    List<Fragment_Point> fragmentList;
-    String[] mTabtitle;
-    int point_type;
-    int count = 3;
-    JSONObject json1, json2, json3;
-    GlobalVariable gv;
+    private List<Fragment_Point> fragmentList;
+    private String[] mTabtitle;
+    private  int point_type;
+    private int count = 3;
+    private  JSONObject json1, json2, json3;
+    private  GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

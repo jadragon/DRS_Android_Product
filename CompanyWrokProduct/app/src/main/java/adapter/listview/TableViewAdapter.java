@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.tw.wrokproduct.R;
 
@@ -25,12 +24,12 @@ public class TableViewAdapter extends BaseAdapter implements View.OnClickListene
     private Context context;
     private DisplayMetrics dm;
     private int currentItem = -1; //用于记录点击的 Item 的 position，是控制 item 展开的核心
-    TableViewAdapter.ViewHolder holder;
-    View[] holderList;
-    ArrayList<String> titleList;
-    ArrayList<ArrayList<Map<String, String>>> itemLists;
-    View header;
-    int had_header;
+    private TableViewAdapter.ViewHolder holder;
+    private View[] holderList;
+    private ArrayList<String> titleList;
+    private ArrayList<ArrayList<Map<String, String>>> itemLists;
+    private View header;
+    private int had_header;
 
     public TableViewAdapter(Context context, JSONObject json) {
         super();
@@ -45,10 +44,12 @@ public class TableViewAdapter extends BaseAdapter implements View.OnClickListene
         this.header = header;
         had_header = 1;
     }
+
     public void removeHeader() {
-       header=null;
+        header = null;
         had_header = 0;
     }
+
     private void initList(JSONObject json) {
         titleList = AnalyzeHelpCenter.getCategoryTitle(json);
         itemLists = AnalyzeHelpCenter.getCategoryItemArray(json);

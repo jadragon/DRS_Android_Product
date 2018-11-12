@@ -9,15 +9,16 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.CouponRecyclerAdapter;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
-import library.JsonDataThread;
 
 public class CouponActivity extends ToolbarActivity {
-    RecyclerView recyclerView;
-    CouponRecyclerAdapter adapter;
-    GlobalVariable gv;
+    private RecyclerView recyclerView;
+    private  CouponRecyclerAdapter adapter;
+    private  GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +42,17 @@ public class CouponActivity extends ToolbarActivity {
     }
 
     public void setFilter() {
-        new JsonDataThread() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new BillJsonData().getCoupon(gv.getToken());
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                adapter.setFilter(json);
+            public void onTaskAfter(JSONObject jsonObject) {
+                adapter.setFilter(jsonObject);
             }
-        }.start();
+        });
 
     }
 }

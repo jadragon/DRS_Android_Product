@@ -12,24 +12,25 @@ import android.widget.Button;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ReturnAndRefundViewAdapter;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.OrderInfoJsonData;
-import library.JsonDataThread;
 
 public class ReturnAndRefundActivity extends ToolbarActivity {
-    RecyclerView recyclerView;
-    ReturnAndRefundViewAdapter adapter;
-    GlobalVariable gv;
-    String mono;
-    Button comfirm;
-    ToastMessageDialog toastMessageDialog;
+    private RecyclerView recyclerView;
+    private ReturnAndRefundViewAdapter adapter;
+    private GlobalVariable gv;
+    private String mono;
+    private Button comfirm;
+    private ToastMessageDialog toastMessageDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,25 +64,22 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
                     toastMessageDialog.showCheck(false, new ToastMessageDialog.ClickListener() {
                         @Override
                         public void ItemClicked(Dialog dialog, View view, String note) {
-                            new JsonDataThread() {
+                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                                 @Override
-                                public JSONObject getJsonData() {
+                                public JSONObject onTasking(Void... params) {
                                     return new OrderInfoJsonData().applyReturn(gv.getToken(), map.get("type"), mono, map.get("moinoArray"), map.get("numArray"), map.get("note"), null, null, null, null);
                                 }
 
                                 @Override
-                                public void runUiThread(JSONObject json) {
-                                    try {
-                                        if (json.getBoolean("Success")) {
-                                            finish();
-                                        } else {
-                                            new ToastMessageDialog(ReturnAndRefundActivity.this, json.getString("Message")).confirm();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                public void onTaskAfter(JSONObject jsonObject) {
+                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                        finish();
+                                    } else {
+                                        new ToastMessageDialog(ReturnAndRefundActivity.this, AnalyzeUtil.getMessage(jsonObject)).confirm();
                                     }
+
                                 }
-                            }.start();
+                            });
                             dialog.dismiss();
                         }
 
@@ -105,17 +103,17 @@ public class ReturnAndRefundActivity extends ToolbarActivity {
     }
 
     public void setFilter() {
-        new JsonDataThread() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new OrderInfoJsonData().getMOrderReturnItem(gv.getToken(), mono);
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                adapter.setFilter(json);
+            public void onTaskAfter(JSONObject jsonObject) {
+                adapter.setFilter(jsonObject);
             }
-        }.start();
+        });
     }
 
     @Override

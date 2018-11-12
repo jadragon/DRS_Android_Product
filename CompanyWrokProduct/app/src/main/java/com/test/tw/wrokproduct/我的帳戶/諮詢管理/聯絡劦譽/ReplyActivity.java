@@ -15,16 +15,17 @@ import com.test.tw.wrokproduct.R;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ReplyRecyclerAdapter;
 import library.GetJsonData.ContactJsonData;
 
 public class ReplyActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    RecyclerView recyclerView;
-    ReplyRecyclerAdapter adapter;
-    String msno;
-    JSONObject json;
-    GlobalVariable gv;
+    private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    private ReplyRecyclerAdapter adapter;
+    private String msno;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +43,19 @@ public class ReplyActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new ContactJsonData().getContactCont(gv.getToken(), msno);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter = new ReplyRecyclerAdapter(ReplyActivity.this, json);
-                        adapter.setMsno(msno);
-                        recyclerView.setAdapter(adapter);
-                    }
-                });
+            public JSONObject onTasking(Void... params) {
+                return new ContactJsonData().getContactCont(gv.getToken(), msno);
             }
-        }).start();
 
-
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                adapter = new ReplyRecyclerAdapter(ReplyActivity.this, jsonObject);
+                adapter.setMsno(msno);
+                recyclerView.setAdapter(adapter);
+            }
+        });
     }
 
     private void initToolbar() {

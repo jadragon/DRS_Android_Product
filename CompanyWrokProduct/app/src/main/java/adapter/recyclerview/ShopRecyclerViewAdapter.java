@@ -21,18 +21,19 @@ import com.test.tw.wrokproduct.LoginActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.商品.PcContentActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import butterknife.ButterKnife;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ProductJsonData;
 import library.ItemTouchListencer;
-import library.JsonDataThread;
 import pojo.ProductInfoPojo;
 
 public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerViewAdapter.RecycleHolder> implements ItemTouchListencer {
@@ -51,9 +52,9 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
     private View view;
     private ArrayList<ProductInfoPojo> list;
     private DisplayMetrics dm;
-    GlobalVariable gv;
+    private GlobalVariable gv;
     private TypedArray stars;
-    ToastMessageDialog toastMessageDialog;
+    private ToastMessageDialog toastMessageDialog;
 
     public void setmHeaderView(View mHeaderView) {
         this.mHeaderView = mHeaderView;
@@ -265,9 +266,10 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
             switch (view.getId()) {
                 case R.id.linear_heart:
                     if (gv.getToken() != null) {
-                        new JsonDataThread() {
+
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                             @Override
-                            public JSONObject getJsonData() {
+                            public JSONObject onTasking(Void... params) {
                                 if (list.get(position).getFavorite()) {
                                     return new ProductJsonData().delFavoriteProduct(gv.getToken(), list.get(position).getPno());
                                 } else {
@@ -276,33 +278,45 @@ public class ShopRecyclerViewAdapter extends RecyclerView.Adapter<ShopRecyclerVi
                             }
 
                             @Override
-                            public void runUiThread(JSONObject json) {
-                                try {
-                                    if (json.getBoolean("Success")) {
-                                        if (list.get(position).getFavorite()) {
-                                            list.get(position).setFavorite(false);
-                                            heart.setImageResource(R.drawable.heart_off);
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+
+                                    if (list.get(position).getFavorite()) {
+                                        list.get(position).setFavorite(false);
+                                        heart.setImageResource(R.drawable.heart_off);
 
 
-                                        } else {
-                                            list.get(position).setFavorite(true);
-                                            heart.setImageResource(R.drawable.heart_on);
-                                        }
                                     } else {
-                                        toastMessageDialog.setMessageText(json.getString("Message"));
-                                        toastMessageDialog.confirm();
+                                        list.get(position).setFavorite(true);
+                                        heart.setImageResource(R.drawable.heart_on);
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                } else {
+                                    toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                    toastMessageDialog.confirm();
                                 }
+
                             }
-                        }.start();
+                        });
                     } else {
                         ctx.startActivity(new Intent(ctx, LoginActivity.class));
                     }
                     break;
                 default:
                     if (list.size() > position) {
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                            @Override
+                            public JSONObject onTasking(Void... params) {
+                                return new ProductJsonData().clickProduct(gv.getToken(), list.get(position).getPno());
+                            }
+
+                            @Override
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+
+                                }
+                            }
+                        });
+
                         Intent intent = new Intent(ctx, PcContentActivity.class);
                         intent.putExtra("pno", list.get(position).getPno());
                         intent.putExtra("title", list.get(position).getTitle());

@@ -10,22 +10,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.MemberJsonData;
 
 public class RegisterDetailActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    EditText registerdetail_edit_account, registerdetail_edit_password, registerdetail_edit_repassword;
-    Button registerdetail_button;
-    int type = 1;
-    String vcode, account;
-    String id, email, name, photo;
-    int gender;
-    JSONObject jsonObject;
-    ToastMessageDialog toastMessage;
+    private Toolbar toolbar;
+    private EditText registerdetail_edit_account, registerdetail_edit_password, registerdetail_edit_repassword;
+    private Button registerdetail_button;
+    private int type = 1;
+    private String vcode, account;
+    private String id, email, name, photo;
+    private int gender;
+    private ToastMessageDialog toastMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,30 +65,26 @@ public class RegisterDetailActivity extends AppCompatActivity {
                 if (!registerdetail_edit_account.getText().toString().equals("")) {
                     if ((registerdetail_edit_password.getText().length() > 5 && registerdetail_edit_password.getText().length() < 16)) {
                         if (registerdetail_edit_password.getText().toString().equals(registerdetail_edit_repassword.getText().toString())) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
 
+                            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                @Override
+                                public JSONObject onTasking(Void... params) {
                                     switch (type) {
                                         case 1:
-                                            jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
-                                            break;
+                                            return new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
                                         case 2:
-                                            jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
-                                            break;
+                                            return new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", account, vcode, "", 0, "");
                                         case 3:
-                                            jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
-                                            break;
+                                            return new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
                                         case 4:
-                                            jsonObject = new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
-                                            break;
+                                            return new MemberJsonData().register(type, registerdetail_edit_account.getText().toString(), registerdetail_edit_password.getText().toString(), "886", id, vcode, name, gender, photo);
                                     }
+                                    return null;
+                                }
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if (jsonObject.getBoolean("Success")) {
+                                @Override
+                                public void onTaskAfter(JSONObject jsonObject) {
+                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                         Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(RegisterDetailActivity.this, MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -98,17 +95,12 @@ public class RegisterDetailActivity extends AppCompatActivity {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
                                     } else {
-                                        toastMessage.setMessageText(jsonObject.getString("Message"));
+                                        toastMessage.setMessageText(AnalyzeUtil.getMessage(jsonObject));
                                         toastMessage.confirm();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
 
-                    }
-                }).start();
+                                }
+                            });
                         } else {
                             toastMessage.setMessageText("請確認密碼輸入是否正確");
                             toastMessage.confirm();

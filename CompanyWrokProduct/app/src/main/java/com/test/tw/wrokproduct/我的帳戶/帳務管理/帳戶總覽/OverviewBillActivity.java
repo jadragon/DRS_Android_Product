@@ -13,32 +13,35 @@ import com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.CouponA
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import Util.StringUtil;
 import library.AnalyzeJSON.AnalyzeBill;
 import library.Component.ToolbarActivity;
 import library.GetJsonData.BillJsonData;
-import library.JsonDataThread;
 
 public class OverviewBillActivity extends ToolbarActivity implements View.OnClickListener {
-    GlobalVariable gv;
-Intent intent;
+    private GlobalVariable gv;
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview_bill);
         gv = (GlobalVariable) getApplicationContext();
         initToolbar(true, "帳戶總覽");
-        new JsonDataThread() {
+
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new BillJsonData().getBilling(gv.getToken());
             }
 
             @Override
-            public void runUiThread(JSONObject json) {
-                setText(json);
+            public void onTaskAfter(JSONObject jsonObject) {
+                setText(jsonObject);
             }
-        }.start();
+        });
     }
 
     private void setText(JSONObject json) {

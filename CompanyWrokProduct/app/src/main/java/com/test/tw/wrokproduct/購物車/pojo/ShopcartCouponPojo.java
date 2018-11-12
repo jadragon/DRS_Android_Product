@@ -1,10 +1,10 @@
 package com.test.tw.wrokproduct.購物車.pojo;
 
 public class ShopcartCouponPojo {
-    String moprno;
-    String mcoupon;
-    int mdiscount;
-    int mcost;
+    private   String moprno;
+    private  String mcoupon;
+    private  int mdiscount;
+    private  int mcost;
 
     public String getMoprno() {
         return moprno;

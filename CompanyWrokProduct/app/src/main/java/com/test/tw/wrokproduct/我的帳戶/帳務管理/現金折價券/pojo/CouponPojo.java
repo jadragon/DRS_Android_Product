@@ -1,12 +1,12 @@
 package com.test.tw.wrokproduct.我的帳戶.帳務管理.現金折價券.pojo;
 
 public class CouponPojo {
-    String mcno;
-    String coupon;
-    int isuse;
-    int money;
-    int cost;
-    String edate;
+    private String mcno;
+    private String coupon;
+    private int isuse;
+    private int money;
+    private int cost;
+    private String edate;
 
 
     public String getMcno() {

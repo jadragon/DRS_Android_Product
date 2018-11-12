@@ -1,7 +1,6 @@
 package adapter.recyclerview;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -14,22 +13,19 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.test.tw.wrokproduct.R;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Map;
 
 public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    int layout_width, layout_heigh;
-    JSONObject json;
-    View view;
-    ArrayList<Map<String, String>> list;
-    DisplayMetrics dm;
-    PtypeRecyclerAdapter.RecycleHolder recycleHolder;
-    LinearLayout.LayoutParams layoutParams;
+    private int layout_width, layout_heigh;
+    private View view;
+    private ArrayList<Map<String, String>> list;
+    private DisplayMetrics dm;
+    private PtypeRecyclerAdapter.RecycleHolder recycleHolder;
+    private LinearLayout.LayoutParams layoutParams;
     private PtypeRecyclerAdapter.ClickListener clickListener;
-    int lastposition;
+    private int lastposition;
 
     public PtypeRecyclerAdapter(Context ctx, ArrayList<Map<String, String>> list, int layout_width, int layout_heigh) {
         this.ctx = ctx;
@@ -43,15 +39,15 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
     @Override
     public PtypeRecyclerAdapter.RecycleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_ptype, parent, false);
-        recycleHolder = new PtypeRecyclerAdapter.RecycleHolder(ctx, view, json);
+        recycleHolder = new PtypeRecyclerAdapter.RecycleHolder(ctx, view);
         return recycleHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecycleHolder holder, final int position) {
-        layoutParams = new LinearLayout.LayoutParams((int)(layout_width+20* dm.density), layout_heigh);
-     //   layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), 0);
-        resizeImageView(holder.imageView,(int)(layout_width),(int)(layout_width));
+        layoutParams = new LinearLayout.LayoutParams((int) (layout_width + 20 * dm.density), layout_heigh);
+        //   layoutParams.setMargins((int) (10 * dm.density), 0, (int) (10 * dm.density), 0);
+        resizeImageView(holder.imageView, (int) (layout_width), (int) (layout_width));
         holder.ptype_title_linear.setLayoutParams(layoutParams);
         if (lastposition == position) {
             ImageLoader.getInstance().displayImage(list.get(position).get("aimg"), holder.imageView);
@@ -60,6 +56,7 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
         }
         holder.tv.setText(list.get(position).get("title"));
     }
+
     private void resizeImageView(View view, int width, int heigh) {//重構圖片大小
         ViewGroup.LayoutParams params = view.getLayoutParams();  //需import android.view.ViewGroup.LayoutParams;
         params.width = width;
@@ -72,16 +69,14 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
         return list.size();
     }
 
-   class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         LinearLayout ptype_title_linear;
         TextView tv;
         Context ctx;
-        JSONObject json;
 
-        public RecycleHolder(Context ctx, View view, JSONObject json) {
+        public RecycleHolder(Context ctx, View view) {
             super(view);
-            this.json = json;
             this.ctx = ctx;
             ptype_title_linear = view.findViewById(R.id.ptype_title_linear);
             imageView = view.findViewById(R.id.ptype_title_image);
@@ -94,7 +89,7 @@ public class PtypeRecyclerAdapter extends RecyclerView.Adapter<PtypeRecyclerAdap
             int position = getAdapterPosition();
             if (lastposition != position) {
                 notifyItemChanged(lastposition);
-                ImageLoader.getInstance().displayImage(list.get(position).get("aimg"),imageView);
+                ImageLoader.getInstance().displayImage(list.get(position).get("aimg"), imageView);
                 lastposition = position;
             }
             if (clickListener != null) {

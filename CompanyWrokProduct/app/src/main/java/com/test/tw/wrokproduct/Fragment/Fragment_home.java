@@ -52,23 +52,23 @@ import pojo.ProductInfoPojo;
  */
 
 public class Fragment_home extends Fragment {
-    DisplayMetrics dm;
-    List<ImageView> list;
-    RelativeLayout relativeLayout;
-    MySwipeRefreshLayout mSwipeLayout;
-    RecyclerView recyclerView, recyclerView2, recyclerView3;
-    JSONObject json, json1, json2, json3;
-    MyRecyclerAdapter myRecyclerAdapter1, myRecyclerAdapter2, myRecyclerAdapter3;
-    Handler handler;
-    View v;
-    Banner header;
-    int what = 0;
+    private DisplayMetrics dm;
+    private List<ImageView> list;
+    private RelativeLayout relativeLayout;
+    private MySwipeRefreshLayout mSwipeLayout;
+    private RecyclerView recyclerView, recyclerView2, recyclerView3;
+    private JSONObject json, json1, json2, json3;
+    private MyRecyclerAdapter myRecyclerAdapter1, myRecyclerAdapter2, myRecyclerAdapter3;
+    private Handler handler;
+    private View v;
+    private Banner header;
+    private int what = 0;
     //宣告特約工人的經紀人
     private Handler mThreadHandler;
     //宣告特約工人
     private HandlerThread mThread;
-    GlobalVariable gv;
-    String mvip;
+    private GlobalVariable gv;
+    private String mvip;
 
     @Nullable
     @Override
@@ -119,7 +119,7 @@ public class Fragment_home extends Fragment {
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeColors(Color.RED);
         //設定靈敏度
-       // mSwipeLayout.setTouchSlop(400);
+        // mSwipeLayout.setTouchSlop(400);
         //設定刷新動作
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

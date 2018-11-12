@@ -36,26 +36,27 @@ import com.test.tw.wrokproduct.MainActivity;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import Util.StringUtil;
 import adapter.recyclerview.AddCartRecyclerViewAdapter;
 import adapter.recyclerview.ShipsWaysRecyclerViewAdapter;
 import adapter.viewpager.PcContentPagerAdapter;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.AnalyzeJSON.ResolveJsonData;
 import library.Component.AutoNewLineLayoutManager;
 import library.Component.ToastMessageDialog;
 import library.GetJsonData.ProductJsonData;
 import library.GetJsonData.ShopCartJsonData;
-import library.JsonDataThread;
 import pojo.ProductInfoPojo;
 
 public class PcContentActivity extends AppCompatActivity {
-    DisplayMetrics dm;
+    private  DisplayMetrics dm;
     private ViewPager viewPager;
     private ViewPager webviewpager;
     private JSONObject json;
@@ -79,7 +80,7 @@ public class PcContentActivity extends AppCompatActivity {
     private String pino;
     private String Message;
     private ToastMessageDialog toastMessageDialog;
-    GlobalVariable gv;
+    private  GlobalVariable gv;
     private ScrollView scrollview;
     private ProductInfoPojo productInfoPojo;
 
@@ -94,17 +95,16 @@ public class PcContentActivity extends AppCompatActivity {
         stars = getResources().obtainTypedArray(R.array.stars);
         toastMessageDialog = new ToastMessageDialog(this);
         initToolbar();
-      //  initSrcrollView();
+        //  initSrcrollView();
         initHome();
-
-        new JsonDataThread() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public JSONObject getJsonData() {
+            public JSONObject onTasking(Void... params) {
                 return new ProductJsonData().getPcontent(gv.getToken(), pno);
             }
 
             @Override
-            public void runUiThread(JSONObject jsonObject) {
+            public void onTaskAfter(JSONObject jsonObject) {
                 json = jsonObject;
                 initPojo();
                 setText();
@@ -116,7 +116,7 @@ public class PcContentActivity extends AppCompatActivity {
                 initBuyNow();
                 initEnableBackground();
             }
-        }.start();
+        });
 
     }
 
@@ -136,19 +136,20 @@ public class PcContentActivity extends AppCompatActivity {
         productInfoPojo.setScore(Integer.parseInt(map.get("score")));
         productInfoPojo.setRpolicy(map.get("rpolicy"));
     }
-/*
-    private void initSrcrollView() {
-        scrollview = findViewById(R.id.scrollview);
-        scrollview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                if (scrollview.getScrollY() + scrollview.getHeight() - scrollview.getPaddingTop() -
-                        scrollview.getPaddingBottom() == scrollview.getChildAt(0).getHeight()) {
+
+    /*
+        private void initSrcrollView() {
+            scrollview = findViewById(R.id.scrollview);
+            scrollview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                    if (scrollview.getScrollY() + scrollview.getHeight() - scrollview.getPaddingTop() -
+                            scrollview.getPaddingBottom() == scrollview.getChildAt(0).getHeight()) {
+                    }
                 }
-            }
-        });
-    }
-*/
+            });
+        }
+    */
     //設定價錢
     public void setText() {
         //描述
@@ -289,36 +290,28 @@ public class PcContentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (gv.getToken() != null) {
                     if (count > 0 && max > 0 && count <= max) {
-                        new Thread(new Runnable() {
+
+
+                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                             @Override
-                            public void run() {
-
-                                try {
-                                    JSONObject jsonObject = new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
-                                    boolean success = jsonObject.getBoolean("Success");
-                                    Message = jsonObject.getString("Message");
-                                    if (success) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                popWin.dismiss();
-                                                enable_background.setVisibility(View.INVISIBLE);
-                                                if (type == 1) {
-                                                    startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
-                                                }
-
-                                            }
-                                        });
-                                    } else {
-                                        toastMessageDialog.setMessageText(Message);
-                                        toastMessageDialog.confirm();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
+                            public JSONObject onTasking(Void... params) {
+                                return new ShopCartJsonData().setCart(gv.getToken(), pno, pino, count);
                             }
-                        }).start();
+
+                            @Override
+                            public void onTaskAfter(JSONObject jsonObject) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    popWin.dismiss();
+                                    enable_background.setVisibility(View.INVISIBLE);
+                                    if (type == 1) {
+                                        startActivity(new Intent(PcContentActivity.this, ShopCartActivity.class));
+                                    }
+                                } else {
+                                    toastMessageDialog.setMessageText(AnalyzeUtil.getMessage(jsonObject));
+                                    toastMessageDialog.confirm();
+                                }
+                            }
+                        });
 
                     } else {
                         toastMessageDialog.setMessageText("商品數量異常");
@@ -401,27 +394,41 @@ public class PcContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (productInfoPojo.getFavorite()) {
-                    new Thread(new Runnable() {
+
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public void run() {
-                            new ProductJsonData().delFavoriteProduct(gv.getToken(), productInfoPojo.getPno());
+                        public JSONObject onTasking(Void... params) {
+                            return new ProductJsonData().delFavoriteProduct(gv.getToken(), productInfoPojo.getPno());
                         }
-                    }).start();
-                    heart.setImageResource(R.drawable.heart_off);
-                    toastMessageDialog.setMessageText("已取消我的最愛");
-                    toastMessageDialog.show();
-                    productInfoPojo.setFavorite(false);
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                heart.setImageResource(R.drawable.heart_off);
+                                toastMessageDialog.setMessageText("已取消我的最愛");
+                                toastMessageDialog.show();
+                                productInfoPojo.setFavorite(false);
+                            }
+                        }
+                    });
+
                 } else {
-                    new Thread(new Runnable() {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public void run() {
-                            new ProductJsonData().setFavorite(gv.getToken(), productInfoPojo.getPno());
+                        public JSONObject onTasking(Void... params) {
+                            return new ProductJsonData().setFavorite(gv.getToken(), productInfoPojo.getPno());
                         }
-                    }).start();
-                    heart.setImageResource(R.drawable.heart_on);
-                    toastMessageDialog.setMessageText("已加入我的最愛");
-                    toastMessageDialog.show();
-                    productInfoPojo.setFavorite(true);
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                heart.setImageResource(R.drawable.heart_on);
+                                toastMessageDialog.setMessageText("已加入我的最愛");
+                                toastMessageDialog.show();
+                                productInfoPojo.setFavorite(true);
+                            }
+                        }
+                    });
                 }
 
             }

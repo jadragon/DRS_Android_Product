@@ -38,16 +38,16 @@ import library.GetJsonData.LogisticsJsonData;
 
 public class ShipAddressRecyclerAdapter extends RecyclerView.Adapter<ShipAddressRecyclerAdapter.RecycleHolder> {
     private Context ctx;
-    JSONObject json;
+    private JSONObject json;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTENT = 1;
     private List<ItemPojo> itemPojoList;
     private DisplayMetrics dm;
-    String[] shipways;
-    TypedArray colors;
-    int lastuse_position;
-    int type;
-    GlobalVariable gv;
+    private String[] shipways;
+    private TypedArray colors;
+    private int lastuse_position;
+    private int type;
+    private GlobalVariable gv;
 
     public ShipAddressRecyclerAdapter(Context ctx, JSONObject json, int type) {
         this.ctx = ctx;

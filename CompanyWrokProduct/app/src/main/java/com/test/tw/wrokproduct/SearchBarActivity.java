@@ -11,25 +11,27 @@ import android.view.View;
 
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
 import adapter.recyclerview.ChangeTextRecyclerViewAdapter;
 import adapter.recyclerview.KeyWordRecyclerViewAdapter;
 import library.GetJsonData.SearchJsonData;
 import library.Component.AutoNewLineLayoutManager;
 
 public class SearchBarActivity extends AppCompatActivity {
-    RecyclerView search_bar_recyclerview;
-    KeyWordRecyclerViewAdapter keyWordRecyclerViewAdapter;
-    JSONObject json;
-    AutoNewLineLayoutManager autoNewLineLayoutManager;
-    LinearLayoutManager linearLayoutManager;
-    ChangeTextRecyclerViewAdapter changeTextRecyclerViewAdapter;
-    DividerItemDecoration decoration;
-GlobalVariable gv;
+    private RecyclerView search_bar_recyclerview;
+    private KeyWordRecyclerViewAdapter keyWordRecyclerViewAdapter;
+    private AutoNewLineLayoutManager autoNewLineLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
+    private ChangeTextRecyclerViewAdapter changeTextRecyclerViewAdapter;
+    private DividerItemDecoration decoration;
+    private GlobalVariable gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_bar);
-        gv=((GlobalVariable)getApplicationContext());
+        gv = ((GlobalVariable) getApplicationContext());
         search_bar_recyclerview = findViewById(R.id.search_bar_recyclerview);
         decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_line));
@@ -48,24 +50,23 @@ GlobalVariable gv;
 
     private void initSearchbar() {
         SearchView search_bar_searchview = findViewById(R.id.search_bar_searchview);
-        new Thread(new Runnable() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
-            public void run() {
-                json = new SearchJsonData().search(gv.getToken(),"");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        keyWordRecyclerViewAdapter.setFilter(json);
-                    }
-                });
-
+            public JSONObject onTasking(Void... params) {
+                return new SearchJsonData().search(gv.getToken(), "");
             }
-        }).start();
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                keyWordRecyclerViewAdapter.setFilter(jsonObject);
+            }
+        });
+
         search_bar_searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent intent=new Intent(SearchBarActivity.this,SearchResultActivity.class);
-                intent.putExtra("keyword",query);
+                Intent intent = new Intent(SearchBarActivity.this, SearchResultActivity.class);
+                intent.putExtra("keyword", query);
                 startActivity(intent);
                 return true;
             }
@@ -73,21 +74,19 @@ GlobalVariable gv;
             @Override
             public boolean onQueryTextChange(final String newText) {
                 if (!newText.equals("")) {
-                    new Thread(new Runnable() {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
-                        public void run() {
-                            json = new SearchJsonData().search(gv.getToken(),newText);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    search_bar_recyclerview.setAdapter(changeTextRecyclerViewAdapter);
-                                    changeTextRecyclerViewAdapter.setFilter(json);
-                                    search_bar_recyclerview.setLayoutManager(linearLayoutManager);
-                                }
-                            });
-
+                        public JSONObject onTasking(Void... params) {
+                            return new SearchJsonData().search(gv.getToken(), newText);
                         }
-                    }).start();
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+                            search_bar_recyclerview.setAdapter(changeTextRecyclerViewAdapter);
+                            changeTextRecyclerViewAdapter.setFilter(jsonObject);
+                            search_bar_recyclerview.setLayoutManager(linearLayoutManager);
+                        }
+                    });
 
                 } else {
                     search_bar_recyclerview.setAdapter(keyWordRecyclerViewAdapter);

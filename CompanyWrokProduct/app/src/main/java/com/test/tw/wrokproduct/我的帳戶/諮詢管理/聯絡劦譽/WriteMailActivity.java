@@ -16,16 +16,18 @@ import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 import com.test.tw.wrokproduct.我的帳戶.個人管理.個人資料.CameraActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import Util.AsyncTaskUtils;
+import Util.IDataCallBack;
+import library.AnalyzeJSON.AnalyzeUtil;
 import library.GetJsonData.ContactJsonData;
 
 public class WriteMailActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    EditText write_mail_title, write_mail_note;
-    ImageView write_mail_photo1, write_mail_photo2, write_mail_photo3, write_mail_photo4, write_mail_photo5, write_mail_photo6;
-    GlobalVariable gv;
+    private Toolbar toolbar;
+    private EditText write_mail_title, write_mail_note;
+    private ImageView write_mail_photo1, write_mail_photo2, write_mail_photo3, write_mail_photo4, write_mail_photo5, write_mail_photo6;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,24 +111,22 @@ public class WriteMailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_send) {
-            new Thread(new Runnable() {
+
+            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                 @Override
-                public void run() {
-                    final JSONObject jsonObject = new ContactJsonData().setContact(gv.getToken(), write_mail_title.getText().toString(), write_mail_note.getText().toString());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (jsonObject.getBoolean("Success")) {
-                                    finish();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                public JSONObject onTasking(Void... params) {
+                    return new ContactJsonData().setContact(gv.getToken(), write_mail_title.getText().toString(), write_mail_note.getText().toString());
                 }
-            }).start();
+
+                @Override
+                public void onTaskAfter(JSONObject jsonObject) {
+
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        finish();
+                    }
+                }
+            });
+
 
         }
         return super.onOptionsItemSelected(item);
