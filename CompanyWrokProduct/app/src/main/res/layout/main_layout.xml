@@ -16,11 +16,14 @@
             android:id="@+id/content_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/darkgray" />
 
-        <library.Component.BottomNavigationViewEx
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <library.Component.BottomNavigationViewEx xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
@@ -31,6 +34,13 @@
             app:itemIconTint="@color/navigation_home"
             app:itemTextColor="@color/navigation_home"
             app:menu="@menu/navigation" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/darkgray" />
+
+
     </LinearLayout>
 
 </FrameLayout>

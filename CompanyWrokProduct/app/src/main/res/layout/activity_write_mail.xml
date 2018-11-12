@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="8"
-            android:text="劦譽商城"
+            android:text="富裕商城"
             android:textSize="16sp" />
     </LinearLayout>
 

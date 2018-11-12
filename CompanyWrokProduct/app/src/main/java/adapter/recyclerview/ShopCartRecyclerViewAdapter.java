@@ -175,8 +175,7 @@ public class ShopCartRecyclerViewAdapter extends RecyclerView.Adapter<ShopCartRe
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_cart_content, parent, false);
         params.height = (int) (dm.heightPixels / 5.5);
-        params.setMarginStart(0);
-        params.setMarginEnd(0);
+        params.setMargins(0,0,0,0);
         view.setLayoutParams(params);
         view.setTag("content");
         resizeImageView(view.findViewById(R.id.viewitem_cart_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));

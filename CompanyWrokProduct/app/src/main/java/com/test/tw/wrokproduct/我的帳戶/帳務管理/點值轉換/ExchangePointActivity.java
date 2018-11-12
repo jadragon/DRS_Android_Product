@@ -38,7 +38,7 @@ public class ExchangePointActivity extends ToolbarActivity {
     private void initRecylcerViewAndTabLayout() {
         ViewPager viewPager = findViewById(R.id.include_viewpager);
         TabLayout tabLayout = findViewById(R.id.include_tabLayout);
-        tabLayout.setElevation(20);
+       // tabLayout.setElevation(20);
         fragmentList = new ArrayList<>();
         Fragment_ExchangePoint fragment_exchangePoint;
         for (int i = 1; i <= count; i++) {

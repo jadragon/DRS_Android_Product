@@ -15,6 +15,6 @@ public class ComponentUtil {
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(8);
         shape.setColor(ctx.getResources().getColor(color));
-        button.setBackground(shape);
+        button.setBackgroundDrawable(shape);
     }
 }

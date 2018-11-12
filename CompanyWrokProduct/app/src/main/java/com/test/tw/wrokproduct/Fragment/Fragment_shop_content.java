@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +34,6 @@ import library.AnalyzeJSON.ResolveJsonData;
 import library.EndLessOnScrollListener;
 import library.GetJsonData.ProductJsonData;
 import library.LoadingView;
-import library.MyRecyclerViewTouchCallBack;
 import pojo.ProductInfoPojo;
 
 public class Fragment_shop_content extends Fragment {
@@ -146,9 +144,14 @@ public class Fragment_shop_content extends Fragment {
             setHeaderView(myRecyclerAdapter);
         }
         recyclerView.setAdapter(myRecyclerAdapter);
-        MyRecyclerViewTouchCallBack callBack = new MyRecyclerViewTouchCallBack(myRecyclerAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callBack);
-        touchHelper.attachToRecyclerView(recyclerView);
+
+        /**
+         * 按壓拖拉功能
+         *    MyRecyclerViewTouchCallBack callBack = new MyRecyclerViewTouchCallBack(myRecyclerAdapter);
+         *         ItemTouchHelper touchHelper = new ItemTouchHelper(callBack);
+         *         touchHelper.attachToRecyclerView(recyclerView);
+         * */
+
 
         // OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         /*重複一直刷

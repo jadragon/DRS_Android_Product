@@ -82,9 +82,9 @@ public class FacebookActivity extends AppCompatActivity {
             Uri userPhoto = profile.getProfilePictureUri(300, 300);
             String id = profile.getId();
             String name = profile.getName();
-            Log.d(TAG, "Facebook userPhoto: " + userPhoto);
-            Log.d(TAG, "Facebook id: " + id);
-            Log.d(TAG, "Facebook name: " + name);
+         //   Log.d(TAG, "Facebook userPhoto: " + userPhoto);
+         //   Log.d(TAG, "Facebook id: " + id);
+         //   Log.d(TAG, "Facebook name: " + name);
         }
 
         // method_2.判斷用戶是否登入過
@@ -150,12 +150,12 @@ public class FacebookActivity extends AppCompatActivity {
                                 //      String gender = object.getString("gender");
                                 String birthday = object.getString("birthday");
                                 String picture = "https://graph.facebook.com/" + id + "/picture?width=" + 300 +"&height=" + 300;
-                                Log.d(TAG, "Facebook id:" + object);
-                                Log.d(TAG, "Facebook id:" + id);
-                                Log.d(TAG, "Facebook name:" + name);
-                                Log.d(TAG, "Facebook email:" + email);
+                             //   Log.d(TAG, "Facebook id:" + object);
+                             //   Log.d(TAG, "Facebook id:" + id);
+                             //   Log.d(TAG, "Facebook name:" + name);
+                               // Log.d(TAG, "Facebook email:" + email);
                                 //    Log.d(TAG, "Facebook gender:" + gender);
-                                Log.d(TAG, "Facebook birthday:" + birthday);
+                              //  Log.d(TAG, "Facebook birthday:" + birthday);
                                 /*
                                 // 此時如果登入成功，就可以順便取得用戶大頭照
                                 Profile profile = Profile.getCurrentProfile();

@@ -94,7 +94,7 @@ public class PcContentActivity extends AppCompatActivity {
         stars = getResources().obtainTypedArray(R.array.stars);
         toastMessageDialog = new ToastMessageDialog(this);
         initToolbar();
-        initSrcrollView();
+      //  initSrcrollView();
         initHome();
 
         new JsonDataThread() {
@@ -136,7 +136,7 @@ public class PcContentActivity extends AppCompatActivity {
         productInfoPojo.setScore(Integer.parseInt(map.get("score")));
         productInfoPojo.setRpolicy(map.get("rpolicy"));
     }
-
+/*
     private void initSrcrollView() {
         scrollview = findViewById(R.id.scrollview);
         scrollview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -148,7 +148,7 @@ public class PcContentActivity extends AppCompatActivity {
             }
         });
     }
-
+*/
     //設定價錢
     public void setText() {
         //描述

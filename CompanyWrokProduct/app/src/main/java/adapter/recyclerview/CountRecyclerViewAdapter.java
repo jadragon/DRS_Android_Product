@@ -199,8 +199,7 @@ public class CountRecyclerViewAdapter extends RecyclerView.Adapter<CountRecycler
         }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewitem_count_content, parent, false);
         params.height = (int) (dm.heightPixels / 5.5);
-        params.setMarginStart(0);
-        params.setMarginEnd(0);
+        params.setMargins(0,0,0,0);
         view.setLayoutParams(params);
         view.setTag("content");
         resizeImageView(view.findViewById(R.id.viewitem_count_content_img), (int) (dm.heightPixels / 5.5), (int) (dm.heightPixels / 5.5));

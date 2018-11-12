@@ -98,7 +98,7 @@ public class SSLCertPostImageUtil {
         // try parse the string to a JSON object
         try {
             jObj = new JSONObject(json);
-            Log.e("JSON", "" + jObj);
+       //     Log.e("JSON", "" + jObj);
             /*
             if (!jObj.getBoolean("Success")) {
                 throw new Exception("Success is false!!!!");

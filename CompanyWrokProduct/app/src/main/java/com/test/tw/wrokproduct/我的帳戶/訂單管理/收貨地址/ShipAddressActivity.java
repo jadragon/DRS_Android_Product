@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.test.tw.wrokproduct.Fragment.Fragment_shipAddress;
 import com.test.tw.wrokproduct.GlobalVariable;
 import com.test.tw.wrokproduct.R;
 
@@ -19,7 +20,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.test.tw.wrokproduct.Fragment.Fragment_shipAddress;
 import library.GetJsonData.LogisticsJsonData;
 
 public class ShipAddressActivity extends AppCompatActivity {
@@ -41,7 +41,7 @@ public class ShipAddressActivity extends AppCompatActivity {
     private void initRecylcerViewAndTabLayout() {
         viewpager = findViewById(R.id.contact_viewpager);
         TabLayout tabLayout=findViewById(R.id.contact_tablayout);
-        tabLayout.setElevation(20);
+      //  tabLayout.setElevation(20);
         fragmentList = new ArrayList<>();
         new Thread(new Runnable() {
             @Override

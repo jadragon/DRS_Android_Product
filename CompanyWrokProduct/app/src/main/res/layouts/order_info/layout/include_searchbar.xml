@@ -16,7 +16,7 @@
             android:id="@+id/include_search_textview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="劦譽商城"
+            android:text="富裕商城"
             android:textSize="15sp"
             android:gravity="left|center_vertical"
             android:textColor="@color/red"

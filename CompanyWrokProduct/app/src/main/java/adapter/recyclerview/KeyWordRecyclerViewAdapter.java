@@ -102,10 +102,11 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
         textView.setPadding((int) (5 * dm.density), (int) (10 * dm.density), (int) (5 * dm.density), (int) (10 * dm.density));
         GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.WHITE);
         shape.setCornerRadius(10 * dm.density);
         shape.setStroke((int) (1 * dm.density), Color.RED);
         textView.setTextColor(Color.RED);
-        textView.setBackground(shape);
+        textView.setBackgroundDrawable(shape);
         return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView);
     }
 

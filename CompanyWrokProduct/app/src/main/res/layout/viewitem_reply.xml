@@ -40,7 +40,7 @@
                 android:textSize="20sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:text="劦譽商城" />
+                android:text="富裕商城" />
 
             <library.Component.AutoVerticalTextView
                 android:id="@+id/viewitem_reply_time"

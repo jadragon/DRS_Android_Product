@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1071206173493-gb2djfk7j2tvrq7f13uv5sdl589ppv4d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.test.tw.wrokproduct",
+            "certificate_hash": "0383bcd86856b190bce85956aaa5c986fb2f7471"
+          }
+        },
+        {
           "client_id": "1071206173493-gnnk2i31suqm352huakq7va634fepvhu.apps.googleusercontent.com",
           "client_type": 3
         }

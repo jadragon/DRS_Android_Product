@@ -51,19 +51,19 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
         int offsetX = getPaddingLeft();
         int offsetY = getPaddingTop();
         totalHeight = getPaddingTop();
-
         //上一位同學的高
         int preheigh = 0;
-
-//迴圈TAG
+        int width=0;
+        int height=0;
+        //迴圈TAG
         aaa:
         for (int i = 0; i < getItemCount(); i++) {
 
             //这里就是从缓存里面取出
             View view = recycler.getViewForPosition(i);
             measureChildWithMargins(view, 0, 0);
-            int width = getDecoratedMeasuredWidth(view);
-            int height = getDecoratedMeasuredHeight(view);
+            width = getDecoratedMeasuredWidth(view);
+            height = getDecoratedMeasuredHeight(view);
             Rect frame = allItemFrames.get(i);
             if (frame == null) {
                 frame = new Rect();
@@ -73,19 +73,20 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
             for (int viewtype : aloneType) {
                 if (getItemViewType(view) == viewtype) {
                     offsetX = getPaddingLeft();
-                    if (i != 0) {
-                        offsetY += (preheigh + divider);
-                        totalHeight += (preheigh + divider);
-                    }
+
+                    offsetY += (preheigh + divider);
+                    totalHeight += (preheigh + divider);
+
                     frame.set(offsetX, offsetY, offsetX + width, offsetY + height);
                     offsetY += (height + divider);
                     totalHeight += (height + divider);
                     allItemFrames.put(i, frame);
                     hasAttachedItems.put(i, false);
-                    preheigh = height;
+                    preheigh += height;
                     continue aaa;
                 }
             }
+            //當寬度超過，換行
             if (offsetX + width + getPaddingRight() <= dm.widthPixels) {
                 frame.set(offsetX, offsetY, offsetX + width, offsetY + height);
             } else {
@@ -101,9 +102,10 @@ public class AutoNewLineLayoutManager extends RecyclerView.LayoutManager {
             hasAttachedItems.put(i, false);
             //将竖直方向偏移量增大height
             preheigh = height;
-
-
         }
+        //加入最後一行的高度
+        totalHeight += (height+divider);
+
 
         //如果所有子View的高度和没有填满RecyclerView的高度，
         // 则将高度设置为RecyclerView的高度

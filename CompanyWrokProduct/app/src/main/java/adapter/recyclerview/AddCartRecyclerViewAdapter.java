@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.test.tw.wrokproduct.R;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -126,9 +128,10 @@ public class AddCartRecyclerViewAdapter extends RecyclerView.Adapter<AddCartRecy
 
     private void reShapeView(View view, int size, int color) {
         GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.WHITE);
         shape.setCornerRadius(10 * dm.density);
         shape.setStroke((int) (size * dm.density), color);
-        view.setBackground(shape);
+        view.setBackgroundDrawable(shape);
     }
 
 

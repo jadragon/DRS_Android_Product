@@ -58,7 +58,7 @@ public class MyAppreciateActivity extends ToolbarActivity {
         tabLayout.setBackgroundDrawable(stateListDrawable);
         */
         tabLayout.setTabTextColors(getResources().getColor(R.color.black), getResources().getColor(R.color.white));
-        tabLayout.setElevation(20);
+        //  tabLayout.setElevation(20);
         mTabtitle = new String[]{"  全部(0)  ", "  五顆星(0)  ", "  四顆星(0)  ", "  三顆星(0)  ", "  二顆星(0)  ", "  一顆星(0)  "};
         fragmentList = new ArrayList<>();
         Fragment_Myappreciate fragment_myappreciate = new Fragment_Myappreciate();
