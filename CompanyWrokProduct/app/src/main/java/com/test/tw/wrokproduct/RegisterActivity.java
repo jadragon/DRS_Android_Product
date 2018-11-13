@@ -277,8 +277,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         List<String> permissions = new ArrayList<>();
         permissions.add("public_profile");
         permissions.add("email");
-        permissions.add("user_birthday");
-        permissions.add("user_gender");
+      //  permissions.add("user_birthday");
+      //  permissions.add("user_gender");
 
         // 設定要讀取的權限
         loginManager.logInWithReadPermissions(this, permissions);
@@ -298,8 +298,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 String id = object.getString("id");
                                 String name = object.getString("name");
                                 String email = object.getString("email");
-                                String gender = object.getString("gender");
-                                String birthday = object.getString("birthday");
+                          //      String gender = object.getString("gender");
+                           //     String birthday = object.getString("birthday");
                                 String photo = "https://graph.facebook.com/" + id + "/picture?width=" + 400 + "&height=" + 400;
                                 /*
                                 Log.e(TAG, "Facebook id:" + object);
@@ -314,6 +314,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 intent.putExtra("id", id);
                                 intent.putExtra("name", name);
                                 intent.putExtra("email", email);
+                                /*
                                 switch (gender) {
                                     case "male":
                                         intent.putExtra("gender", 1);
@@ -322,10 +323,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         intent.putExtra("gender", 2);
                                         break;
                                     default:
-                                        intent.putExtra("gender", 0);
+
                                         break;
                                 }
-
+*/
+                                intent.putExtra("gender", 0);
                                 intent.putExtra("photo", photo);
                                 startActivity(intent);
                             }
@@ -343,7 +345,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                  * 想取得的資訊在這裡設定
                  */
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender, birthday");
+               // parameters.putString("fields", "id,name,email,gender, birthday");
+                parameters.putString("fields", "id,name,email");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
             }

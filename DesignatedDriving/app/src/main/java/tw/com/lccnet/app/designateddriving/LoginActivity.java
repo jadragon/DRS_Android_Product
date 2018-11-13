@@ -15,7 +15,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        startService(new Intent(this, GpsService.class));
         initToolbar("登入");
 
         login = findViewById(R.id.login);

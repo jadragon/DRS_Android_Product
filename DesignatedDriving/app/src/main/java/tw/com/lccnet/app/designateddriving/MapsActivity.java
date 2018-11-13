@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
-import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -41,12 +41,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
+
+import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
@@ -69,12 +69,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         gv = (GlobalVariable) getApplicationContext();
         dm = getResources().getDisplayMetrics();
-        initToolbar();
-        initButton();
-        initADToast();
+        checkPermission();
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        initToolbar();
+        initButton();
+        initADToast();
+    }
+
+    private void checkPermission() {
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(MapsActivity.this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);
+            }
+        }
+        if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
+            if (LocationUtils.isGpsEnabled(this)) {
+                LocationUtils.register(this, 5000, 10, new LocationUtils.OnLocationChangeListener() {
+                    @Override
+                    public void getLastKnownLocation(Location location) {
+                        mLatitude = location.getLatitude();
+                        mLongitude = location.getLongitude();
+                    }
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        Toast.makeText(MapsActivity.this, "地位更新:緯度:" + location.getLatitude() + "\n經度:" + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+                });
+            } else {
+                LocationUtils.openGpsSettings(this);
+            }
+        } else {//请求权限方法
+            String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
+            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
+        }
     }
 
     private void initButton() {
@@ -93,22 +128,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         button.setBackgroundDrawable(shape);
     }
 
+    private boolean ToastAgain = true;
+
     private void initADToast() {
         ad_info = findViewById(R.id.ad_info);
         ad_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.toast_layout,
-                        (ViewGroup) findViewById(R.id.toast_layout));
-                TextView text = layout.findViewById(R.id.text);
-                text.setText("目前時段10公里內450元");
 
-                Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.BOTTOM, 0, (int) (90 * dm.density)); //顯示位置
-                toast.setDuration(Toast.LENGTH_LONG); //顯示時間長短
-                toast.setView(layout);
-                toast.show();
+                if (ToastAgain) {
+                    ToastAgain = false;
+                    LayoutInflater inflater = getLayoutInflater();
+                    View layout = inflater.inflate(R.layout.toast_layout,
+                            (ViewGroup) findViewById(R.id.toast_layout));
+                    TextView text = layout.findViewById(R.id.text);
+                    text.setText("目前時段10公里內450元");
+
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM, 0, (int) (90 * dm.density)); //顯示位置
+                    toast.setDuration(Toast.LENGTH_LONG); //顯示時間長短
+                    toast.setView(layout);
+                    toast.show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(2000);
+                                ToastAgain = true;
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
             }
         });
 
@@ -128,7 +180,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toolbar_main.post(new Runnable() {
             @Override
             public void run() {
-                mgooglemap.setPadding(0, (int)(toolbar_main.getHeight()+10*dm.density), 0, 0);
+                mgooglemap.setPadding(0, (int) (toolbar_main.getHeight() + 10 * dm.density), 0, 0);
             }
         });
     }
@@ -155,17 +207,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(MapsActivity.this);
         map.setInfoWindowAdapter(adapter);
         */
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(MapsActivity.this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permissions[i]);
-            }
-        }
-        if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
-            initGoogleMap();
-        } else {//请求权限方法
-            String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
-            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
-        }
+        initGoogleMap();
+
     }
 
     private void initGoogleMap() {
@@ -184,8 +227,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         */
         // mLatitude = gv.getmLatitude();
         //  mLongitude = gv.getmLongitude();
-        mLatitude = 25.016633;
-        mLongitude = 121.300367;
+        //mLatitude = 25.016633;
+        //  mLongitude = 121.300367;
         LatLng latlng = new LatLng(mLatitude, mLongitude);
         showAddress(latlng);
         MarkerOptions markerOpt = new MarkerOptions();
@@ -244,21 +287,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void showAddress(LatLng latLng) {
-        try {
-            Geocoder gc = new Geocoder(MapsActivity.this, Locale.TRADITIONAL_CHINESE);
-            List<Address> lstAddress = gc.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            toolbar_txt_title.setText(lstAddress.get(0).getAddressLine(0));
-                        /*
-                        Log.e("Address", "returnAddress:" + lstAddress.get(0).getAddressLine(0)
-                                + "\ngetCountryName:" + lstAddress.get(0).getCountryName()  //台灣省
-                                + "\ngetAdminArea:" + lstAddress.get(0).getAdminArea()  //台北市
-                                + "\ngetLocality:" + lstAddress.get(0).getLocality()  //中正區
-                                + "\ngetThoroughfare:" + lstAddress.get(0).getThoroughfare()  //信陽街(包含路巷弄)
-                                + "\ngetFeatureName:" + lstAddress.get(0).getFeatureName()  //會得到33(號)
-                                + "\ngetPostalCode:" + lstAddress.get(0).getPostalCode());  //會得到100(郵遞區號)
-*/
-        } catch (IOException e) {
-            e.printStackTrace();
+        Address address = LocationUtils.getAddress(this, latLng.latitude, latLng.longitude);
+        if (address != null) {
+            toolbar_txt_title.setText(address.getAddressLine(0));
+        } else {
+            Toast.makeText(this, "取的定位異常", Toast.LENGTH_SHORT).show();
         }
     }
 

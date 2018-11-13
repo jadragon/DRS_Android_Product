@@ -16,7 +16,6 @@ public class GpsService extends Service {
     private static final int LOCATION_INTERVAL = 1000 * 2; // 1 minute
     private static final float LOCATION_DISTANCE = 10f;
     private GlobalVariable gv;
-
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES2 = 10; // 10 meters
 
@@ -106,6 +105,8 @@ public class GpsService extends Service {
         } catch (IllegalArgumentException ex) {
             Log.d(TAG, "gps provider does not exist " + ex.getMessage());
         }
+
+
     }
 
     @Override
