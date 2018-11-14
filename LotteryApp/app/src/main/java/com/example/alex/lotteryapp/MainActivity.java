@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_lottery:
-                startActivity(new Intent(MainActivity.this, LotteryActivity.class));
+                startActivity(new Intent(MainActivity.this, RollBarActivity.class));
                 break;
 
             case R.id.main_setting:
