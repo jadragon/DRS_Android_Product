@@ -1,4 +1,4 @@
-package com.example.alex.lotteryapp;
+package com.example.alex.test;
 
 /**
  * Created by user on 2017/9/17.

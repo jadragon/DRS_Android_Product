@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -40,7 +39,6 @@ public class LotteryActivity extends AppCompatActivity implements View.OnClickLi
         btnpause.setOnClickListener(this);
 
         number = findViewById(R.id.number);
-        Log.e("MAP", db.getItems(0) + "");
         initMediaPlay();
 
     }

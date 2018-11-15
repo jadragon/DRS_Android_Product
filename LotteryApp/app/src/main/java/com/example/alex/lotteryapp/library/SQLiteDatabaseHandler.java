@@ -31,7 +31,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_TYPE = "type";
     public static final String KEY_GIFT = "gift";
     public static final String KEY_WINNER = "winner";
-
+    private Context context;
     private static final String CREATE_ADDRESS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ITEM + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TYPE + " INTEGER,"
@@ -40,6 +40,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     // Creating Tables
@@ -60,32 +61,70 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      */
-    public long addItem(int type, String gift) {
+    public void addItems(String type, String gift, int number) {
         ContentValues values = new ContentValues();
         values.put(KEY_TYPE, type);
         values.put(KEY_GIFT, gift);
-      //  values.put(KEY_WINNER, winner);
+
+        for (int i = 0; i < number; i++) {
+            this.getWritableDatabase().insert(TABLE_ITEM, null, values);
+        }
+        //  values.put(KEY_WINNER, winner);
         // Inserting Row
-        return this.getWritableDatabase().insert(TABLE_ITEM, null, values);
     }
 
     /**
      * Getting user data from database
      */
 
-    public ArrayList<Map<String, String>> getItems(int type) {
+    public ArrayList<String> getTypes() {
+        ArrayList<String> datas = new ArrayList<>();
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT  DISTINCT " + KEY_TYPE + " FROM " + TABLE_ITEM, null);
+        while (cursor.moveToNext()) {
+            datas.add(cursor.getString(0));
+        }
+        cursor.close();
+        // return user
+        return datas;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
+    public ArrayList<Map<String, String>> getItems() {
         ArrayList<Map<String, String>> datas = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_ITEM+ " WHERE " + KEY_TYPE + " = " + type;
+        Map<String, String> data;
+        Cursor cursor;
+        ArrayList<String> array = getTypes();
+        for (int i = 0; i < array.size(); i++) {
+            cursor = this.getReadableDatabase().rawQuery("SELECT  * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + array.get(i) + "'", null);
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                data = new HashMap<>();
+                data.put(KEY_TYPE, cursor.getString(1));
+                data.put(KEY_GIFT, cursor.getString(2));
+                data.put("number", cursor.getCount() + "");
+                datas.add(data);
+                cursor.close();
+            }
+
+        }
+        // return user
+        return datas;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
+    public ArrayList<String> getItems(String type) {
+        ArrayList<String> datas = new ArrayList<>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " =''";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-
-        Map<String, String> data = null;
         while (cursor.moveToNext()) {
-            data = new HashMap<>();
-            data.put(KEY_TYPE, cursor.getString(1));
-            data.put(KEY_GIFT, cursor.getString(2));
-            data.put(KEY_WINNER, cursor.getString(3));
-            datas.add(data);
+            datas.add(cursor.getString(0));
         }
         cursor.close();
         db.close();
@@ -124,7 +163,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      */
-    public void updateUserInfo(int id, String winner) {
+    public void updateUserInfo(String id, String winner) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_WINNER, winner);
@@ -136,10 +175,10 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      */
-    public void deleteItem(int id) {
+    public void deleteItem(String type) {
         SQLiteDatabase db = this.getWritableDatabase();
         // Inserting Row
-        db.delete(TABLE_ITEM, KEY_ID + "=" + id, null);
+        db.delete(TABLE_ITEM, KEY_TYPE + " = '" + type + "'", null);
         db.close(); // Closing database connection
     }
 

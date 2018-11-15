@@ -3,10 +3,8 @@ package com.example.alex.lotteryapp;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.alex.lotteryapp.library.AsyncTaskUtils;
@@ -16,8 +14,8 @@ import com.example.alex.lotteryapp.library.SQLiteDatabaseHandler;
 
 public class NewItemActivity extends ToolbarActivity {
     SQLiteDatabaseHandler db;
-    EditText gift;
-    Spinner type;
+    EditText gift, number;
+    EditText type;
     Button confirm;
 
     @Override
@@ -36,18 +34,17 @@ public class NewItemActivity extends ToolbarActivity {
             public void onClick(View view) {
                 if (!(TextUtils.isEmpty(gift.getText()))) {
 
-                    AsyncTaskUtils.doAsync(new IDataCallBack<Long>() {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<Void>() {
                         @Override
-                        public Long onTasking(Void... params) {
-                            return db.addItem( type.getSelectedItemPosition(), gift.getText().toString());
+                        public Void onTasking(Void... params) {
+                            db.addItems(type.getText().toString(), gift.getText().toString(), Integer.parseInt(number.getText().toString()));
+                            return null;
                         }
 
                         @Override
-                        public void onTaskAfter(Long count) {
-                            if (count > -1) {
-                                Toast.makeText(NewItemActivity.this, "寫入成功", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
+                        public void onTaskAfter(Void aVoid) {
+                            Toast.makeText(NewItemActivity.this, "寫入成功", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                 }
@@ -58,8 +55,7 @@ public class NewItemActivity extends ToolbarActivity {
     private void initView() {
         gift = findViewById(R.id.newitem_ed_gift);
         type = findViewById(R.id.newitem_sp_type);
-        type.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.type_list)));
+        number = findViewById(R.id.newitem_ed_number);
         confirm = findViewById(R.id.newitem_btn_confirm);
     }
 
