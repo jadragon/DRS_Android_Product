@@ -11,6 +11,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="獎項名稱:"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="獎品內容:"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="獎項總人數"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/alllist_listview"
         android:layout_width="match_parent"
@@ -26,22 +70,22 @@
             android:id="@+id/alllist_btn_new"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="新增"
-            android:textSize="20sp"
-            android:textColor="@color/white"
             android:background="@color/orange"
-            android:layout_margin="10dp"/>
+            android:text="新增"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/alllist_btn_ok"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="確定"
-            android:textSize="20sp"
-            android:textColor="@color/white"
             android:background="@color/orange"
-            android:layout_margin="10dp"/>
+            android:text="確定"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -19,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     public static final Random RANDOM = new Random();
     View bar1, bar2, ball;
     int intY1, intY2, intY3;
-    Spinner spinner;
     private DisplayMetrics dm;
 
     @Override

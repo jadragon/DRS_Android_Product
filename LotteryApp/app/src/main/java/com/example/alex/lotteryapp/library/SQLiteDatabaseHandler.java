@@ -31,7 +31,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_TYPE = "type";
     public static final String KEY_GIFT = "gift";
     public static final String KEY_WINNER = "winner";
-    private Context context;
     private static final String CREATE_ADDRESS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ITEM + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TYPE + " INTEGER,"
@@ -40,7 +39,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     // Creating Tables
@@ -114,13 +112,28 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         return datas;
     }
 
+    public String getGift(String type) {
+        String selectQuery = "SELECT " + KEY_GIFT + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        String gift = null;
+        if (cursor.getCount() > 0) {
+            gift = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return gift;
+    }
+
     /**
      * Getting user data from database
      */
 
     public ArrayList<String> getItems(String type) {
         ArrayList<String> datas = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " =''";
+        String selectQuery = "SELECT " + KEY_ID + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NULL";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         while (cursor.moveToNext()) {

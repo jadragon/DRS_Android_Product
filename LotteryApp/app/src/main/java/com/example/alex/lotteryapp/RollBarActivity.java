@@ -1,57 +1,54 @@
 package com.example.alex.lotteryapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alex.lotteryapp.library.SQLiteDatabaseHandler;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class RollBarActivity extends AppCompatActivity {
     TextView txt_total;
-    TextView switcher1, switcher2, switcher3, switcher4;
-    private Wheel wheel1, wheel2, wheel3, wheel4;
+    TextView switcher1, switcher2, switcher3;
+    private Wheel wheel1, wheel2, wheel3;
     private Thread tread;
     // private boolean isStarted, one, two, three;
     public static final Random RANDOM = new Random();
     SQLiteDatabaseHandler db;
     View bar1, bar2, ball;
     int intY1, intY2, intY3;
-    Spinner spinner;
+    ArrayList<String> left_awardlist;
     private DisplayMetrics dm;
+    String award_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rollbar);
+        startActivityForResult(new Intent(this, AnimationActivity.class), 100);
         dm = getResources().getDisplayMetrics();
         db = new SQLiteDatabaseHandler(this);
         initY();
-        initSpinner();
         initBall();
         switcher1 = findViewById(R.id.switcher1);
         switcher2 = findViewById(R.id.switcher2);
         switcher3 = findViewById(R.id.switcher3);
-        switcher4 = findViewById(R.id.switcher4);
         txt_total = findViewById(R.id.total_count);
 
         switcher1.setText(7 + "");
         switcher2.setText(7 + "");
         switcher3.setText(7 + "");
-        switcher4.setText(7 + "");
     }
 
-    private void initSpinner() {
-        spinner = findViewById(R.id.select_type);
-        spinner.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, db.getTypes()));
-    }
 
     private void initY() {
         intY1 = (int) (180 * dm.density + 80 * dm.density);
@@ -156,21 +153,9 @@ public class RollBarActivity extends AppCompatActivity {
                 });
             }
         }, randomLong(50, 100), 0);
-        wheel4 = new Wheel(new Wheel.WheelListener() {
-            @Override
-            public void newImage(final int img) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        switcher4.setText(img + "");
-                    }
-                });
-            }
-        }, randomLong(50, 100), 0);
         wheel1.start();
         wheel2.start();
         wheel3.start();
-        wheel4.start();
         tread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -179,12 +164,11 @@ public class RollBarActivity extends AppCompatActivity {
                     wheel1.stopWheel();
                     wheel2.stopWheel();
                     wheel3.stopWheel();
-                    wheel4.stopWheel();
                     Thread.sleep(200);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            txt_total.setText("得獎人員:" + switcher1.getText().toString() + switcher2.getText().toString() + switcher3.getText().toString() + switcher4.getText().toString());
+                            Toast.makeText(RollBarActivity.this, "得獎人員:" + switcher1.getText().toString() + switcher2.getText().toString() + switcher3.getText().toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (InterruptedException e) {
@@ -199,4 +183,19 @@ public class RollBarActivity extends AppCompatActivity {
         return lower + (long) (RANDOM.nextDouble() * (upper - lower));
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            award_type = data.getStringExtra("type");
+            txt_total.setText("獎項:" + db.getGift(award_type));
+            refreshData();
+            Log.e("id", left_awardlist + "");
+        }
+    }
+
+    private void refreshData() {
+        left_awardlist = db.getItems(award_type);
+    }
 }

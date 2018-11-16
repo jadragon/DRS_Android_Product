@@ -18,16 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AllListActivity">
-
-        </activity>
-        <activity android:name=".NewItemActivity" />
-        <activity android:name=".LotteryActivity">
-
-        </activity>
-        <activity android:name=".RollBarActivity">
-
-        </activity>
+        <activity android:name=".AllListActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".NewItemActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".LotteryActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".RollBarActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".AnimationActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

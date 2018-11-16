@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         main_lottery = this.findViewById(R.id.main_lottery);
         main_setting = this.findViewById(R.id.main_setting);
-        main_status = this.findViewById(R.id.main_status);
+      //  main_status = this.findViewById(R.id.main_status);
 
         main_lottery.setOnClickListener(this);
         main_setting.setOnClickListener(this);
-        main_status.setOnClickListener(this);
+     //   main_status.setOnClickListener(this);
     }
 
     @Override
@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_setting:
                 startActivity(new Intent(MainActivity.this, AllListActivity.class));
                 break;
-
+/*
             case R.id.main_status:
-
                 break;
+                */
             default:
                 break;
         }
