@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -23,18 +24,20 @@ public class AnimationActivity extends AppCompatActivity {
     private Spinner spinner;
     SQLiteDatabaseHandler db;
     boolean back = true;
+    private DisplayMetrics dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animation);
+        dm = getResources().getDisplayMetrics();
         db = new SQLiteDatabaseHandler(this);
         initSpinner();
         btnplay = this.findViewById(R.id.btnplay);
         btnplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                back=false;
+                back = false;
                 play();
                 surfaceView.setBackgroundColor(0);
                 btnplay.setVisibility(View.INVISIBLE);
@@ -47,6 +50,9 @@ public class AnimationActivity extends AppCompatActivity {
     private void initMediaPlay() {
         mediaPlayer = new MediaPlayer();
         surfaceView = this.findViewById(R.id.surfaceView);
+
+        surfaceView.getLayoutParams().height = dm.widthPixels / 16 * 9;
+
         // 设置SurfaceView自己不管理的缓冲区
         surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -114,7 +120,7 @@ public class AnimationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(back){
+        if (back) {
             Intent intent = new Intent(AnimationActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

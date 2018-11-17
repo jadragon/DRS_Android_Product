@@ -15,23 +15,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d92892-059e-4ac3-9bb3-bb39a8f3b594" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CompanyWrokProduct/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/../CompanyWrokProduct/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CompanyWrokProduct/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../CompanyWrokProduct/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/AnimationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/AnimationActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/RollBarActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/RollBarActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/library/SQLiteDatabaseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/java/com/example/alex/lotteryapp/library/SQLiteDatabaseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_all_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_all_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_animation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_animation.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_rollbar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/activity_rollbar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/item_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../LotteryApp/app/src/main/res/layout/item_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Test/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Test/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Test/app/src/main/java/com/example/alex/test/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Test/app/src/main/java/com/example/alex/test/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Test/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Test/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,21 +42,21 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="UsbAdmin.java" pinned="false" current-in-tab="false">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="UsbAdmin.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/UsbAdmin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="165" column="41" lean-forward="true" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
+            <state relative-caret-position="155">
+              <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UsbDeviceConnection.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UsbDeviceConnection.java" pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/hardware/usb/UsbDeviceConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1354">
-              <caret line="387" lean-forward="true" selection-start-line="387" selection-end-line="387" />
+            <state relative-caret-position="2052">
+              <caret line="387" selection-start-line="387" selection-end-line="387" />
             </state>
           </provider>
         </entry>
@@ -75,21 +64,25 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="118" column="31" selection-start-line="118" selection-start-column="31" selection-end-line="118" selection-end-column="31" />
+            <state relative-caret-position="372">
+              <caret line="35" column="27" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="30" />
+              <folding>
+                <element signature="e#3018#3019#0" expanded="true" />
+                <element signature="e#3054#3055#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-          <provider editor-type-id="android-manifest">
-            <state />
-          </provider>
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="186">
               <caret line="6" column="61" selection-start-line="6" selection-start-column="61" selection-end-line="6" selection-end-column="61" />
             </state>
+          </provider>
+          <provider editor-type-id="android-manifest">
+            <state />
           </provider>
         </entry>
       </file>
@@ -2290,6 +2283,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
@@ -2333,7 +2327,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2496,11 +2489,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Android Profiler" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info id="Image Layers" order="7" />
       <window_info id="Build Variants" order="2" side_tool="true" />
@@ -2514,28 +2507,88 @@
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17910448" />
-      <window_info anchor="bottom" id="Build" order="9" visible="true" weight="0.14109743" />
+      <window_info anchor="bottom" id="Build" order="9" weight="0.14109743" />
       <window_info anchor="right" id="Gradle" order="5" weight="0.32995737" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.28807947" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
-      <window_info anchor="right" id="Preview" order="8" weight="0.33582088" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.3297619" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="Preview" order="8" weight="0.33582088" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/UsbAdmin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4650">
+          <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3348">
+          <caret line="118" column="31" selection-start-line="118" selection-start-column="31" selection-end-line="118" selection-end-column="31" />
+          <folding>
+            <element signature="e#3018#3019#0" expanded="true" />
+            <element signature="e#3054#3055#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="6" column="61" selection-start-line="6" selection-start-column="61" selection-end-line="6" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/hardware/usb/UsbDeviceConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10726">
+          <caret line="387" selection-start-line="387" selection-end-line="387" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/UsbAdmin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4650">
+          <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3348">
+          <caret line="118" column="31" selection-start-line="118" selection-start-column="31" selection-end-line="118" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="6" column="61" selection-start-line="6" selection-start-column="61" selection-end-line="6" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/hardware/usb/UsbDeviceConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10726">
+          <caret line="387" lean-forward="true" selection-start-line="387" selection-end-line="387" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/import-summary.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-465" />
@@ -2563,33 +2616,37 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
           <caret line="6" column="61" selection-start-line="6" selection-start-column="61" selection-end-line="6" selection-end-column="61" />
         </state>
       </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/hardware/usb/UsbDeviceConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2052">
+          <caret line="387" selection-start-line="387" selection-end-line="387" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="118" column="31" selection-start-line="118" selection-start-column="31" selection-end-line="118" selection-end-column="31" />
+        <state relative-caret-position="372">
+          <caret line="35" column="27" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="30" />
+          <folding>
+            <element signature="e#3018#3019#0" expanded="true" />
+            <element signature="e#3054#3055#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/net/xprinter/example4usb/UsbAdmin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="165" column="41" lean-forward="true" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/hardware/usb/UsbDeviceConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1354">
-          <caret line="387" lean-forward="true" selection-start-line="387" selection-end-line="387" />
+        <state relative-caret-position="155">
+          <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
         </state>
       </provider>
     </entry>

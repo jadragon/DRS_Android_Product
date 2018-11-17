@@ -80,6 +80,10 @@ public class RollBarActivity extends AppCompatActivity {
                         //getRawX()：是獲取相對顯示螢幕左上角的座標
                         mx = (int) v.getX();
                         my = (int) (event.getRawY() - y);
+                        if (my < y1 || my > intY3) {
+                            return false;
+                        }
+                        v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
                         if (my < intY1) {
                             bar1.setVisibility(View.VISIBLE);
                             bar2.setVisibility(View.INVISIBLE);
@@ -90,18 +94,15 @@ public class RollBarActivity extends AppCompatActivity {
                             bar2.setVisibility(View.VISIBLE);
                             bar1.setVisibility(View.INVISIBLE);
                         }
-                        if (my < y1 || my > intY3) {
-                            return false;
-                        }
-                        v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
+
                         // Log.e("address", String.valueOf(mx) + "~~" + String.valueOf(my)); // 記錄目前位置
                         break;
                     case MotionEvent.ACTION_UP:
+                        bar1.setVisibility(View.VISIBLE);
+                        bar2.setVisibility(View.INVISIBLE);
                         if (my > intY2) {
                             startRoll();
                         }
-                        bar1.setVisibility(View.VISIBLE);
-                        bar2.setVisibility(View.INVISIBLE);
                         v.layout(mx, (int) y1, mx + v.getWidth(), (int) (y1 + v.getHeight()));
                         break;
                 }
