@@ -5,52 +5,79 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    TextView txt_total;
-    TextView switcher1, switcher2, switcher3, switcher4;
-    private Wheel wheel1, wheel2, wheel3, wheel4;
+    private TextView txt_award;
+    private TextView switcher1, switcher2, switcher3;
+    private Wheel wheel1, wheel2, wheel3;
     private Thread tread;
-    // private boolean isStarted, one, two, three;
     public static final Random RANDOM = new Random();
-    View bar1, bar2, ball;
-    int intY1, intY2, intY3;
+    private View bar1, bar2, ball;
+    private int intY1, intY2, intY3;
     private DisplayMetrics dm;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //    startActivityForResult(new Intent(this, AnimationActivity.class), 100);
         dm = getResources().getDisplayMetrics();
+        initView();
         initY();
         initBall();
+    }
+
+
+    private void initView() {
+        findViewById(R.id.logo).getLayoutParams().width = dm.widthPixels / 4;
+        findViewById(R.id.logo).getLayoutParams().height = dm.heightPixels / 3;
+
+        findViewById(R.id.machine).getLayoutParams().height = dm.heightPixels / 2;
+        findViewById(R.id.machine).setPadding(0,0,dm.widthPixels / 16,0);
+        findViewById(R.id.rollbar_layout).getLayoutParams().width = dm.widthPixels / 7;
+        findViewById(R.id.hole).getLayoutParams().width=dm.widthPixels / 8;
+        findViewById(R.id.hole).getLayoutParams().height=dm.widthPixels / 8;
+        bar1 = findViewById(R.id.bar1);
+        bar1.getLayoutParams().width=dm.widthPixels/16;
+        //  ((LinearLayout.LayoutParams)bar1.getLayoutParams()).setMargins(0,dm.heightPixels / 16,0,0);
+        bar2 = findViewById(R.id.bar2);
+        bar2.getLayoutParams().width=dm.widthPixels/16;
+        //  ((LinearLayout.LayoutParams)bar2.getLayoutParams()).setMargins(0,0,0,dm.heightPixels / 16);
+        ball = findViewById(R.id.ball);
+        ball.getLayoutParams().width= dm.widthPixels / 7;
+        ball.getLayoutParams().height= dm.widthPixels / 7;
+        ((FrameLayout.LayoutParams)ball.getLayoutParams()).setMargins(0,dm.heightPixels / 10, dm.widthPixels / 16,0);
+
+
+        findViewById(R.id.switcher_layout).setPadding(dm.widthPixels / 16,dm.heightPixels / 8, 0,dm.heightPixels / 32);
+
         switcher1 = findViewById(R.id.switcher1);
         switcher2 = findViewById(R.id.switcher2);
         switcher3 = findViewById(R.id.switcher3);
-        switcher4 = findViewById(R.id.switcher4);
-        txt_total = findViewById(R.id.total_count);
-
         switcher1.setText(7 + "");
         switcher2.setText(7 + "");
         switcher3.setText(7 + "");
-        switcher4.setText(7 + "");
+        txt_award = findViewById(R.id.txt_award);
+        ((FrameLayout.LayoutParams)txt_award.getLayoutParams()).setMargins(dm.heightPixels / 2,dm.heightPixels / 4, 0,0);
+
+
+
     }
 
-
-
     private void initY() {
-        intY1 = (int) (180 * dm.density + 80 * dm.density);
-        intY2 = intY1 + (int) (140 * dm.density);
-        intY3 = intY2 + (int) (80 * dm.density);
+        intY1 = dm.heightPixels/4;
+        intY2 =dm.heightPixels/2;
+        intY3 = dm.heightPixels/8*7-dm.widthPixels/7;
     }
 
     private void initBall() {
-        bar1 = findViewById(R.id.bar1);
-        bar2 = findViewById(R.id.bar2);
-        ball = findViewById(R.id.ball);
         ball.setOnTouchListener(new View.OnTouchListener() {
             private float y1, y;    // 原本圖片存在的X,Y軸位置
             private int mx, my; // 圖片被拖曳的X ,Y軸距離長度
@@ -71,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
                         //getRawX()：是獲取相對顯示螢幕左上角的座標
                         mx = (int) v.getX();
                         my = (int) (event.getRawY() - y);
+                        if (my < y1 || my > intY3) {
+                            return false;
+                        }
+                        v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
                         if (my < intY1) {
                             bar1.setVisibility(View.VISIBLE);
                             bar2.setVisibility(View.INVISIBLE);
@@ -81,18 +112,15 @@ public class MainActivity extends AppCompatActivity {
                             bar2.setVisibility(View.VISIBLE);
                             bar1.setVisibility(View.INVISIBLE);
                         }
-                        if (my < y1 || my > intY3) {
-                            return false;
-                        }
-                        v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
+
                         // Log.e("address", String.valueOf(mx) + "~~" + String.valueOf(my)); // 記錄目前位置
                         break;
                     case MotionEvent.ACTION_UP:
+                        bar1.setVisibility(View.VISIBLE);
+                        bar2.setVisibility(View.INVISIBLE);
                         if (my > intY2) {
                             startRoll();
                         }
-                        bar1.setVisibility(View.VISIBLE);
-                        bar2.setVisibility(View.INVISIBLE);
                         v.layout(mx, (int) y1, mx + v.getWidth(), (int) (y1 + v.getHeight()));
                         break;
                 }
@@ -144,21 +172,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, randomLong(50, 100), 0);
-        wheel4 = new Wheel(new Wheel.WheelListener() {
-            @Override
-            public void newImage(final int img) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        switcher4.setText(img + "");
-                    }
-                });
-            }
-        }, randomLong(50, 100), 0);
         wheel1.start();
         wheel2.start();
         wheel3.start();
-        wheel4.start();
         tread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -167,12 +183,11 @@ public class MainActivity extends AppCompatActivity {
                     wheel1.stopWheel();
                     wheel2.stopWheel();
                     wheel3.stopWheel();
-                    wheel4.stopWheel();
                     Thread.sleep(200);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            txt_total.setText("得獎人員:" + switcher1.getText().toString() + switcher2.getText().toString() + switcher3.getText().toString() + switcher4.getText().toString());
+                            Toast.makeText(MainActivity.this, "得獎人員:" + switcher1.getText().toString() + switcher2.getText().toString() + switcher3.getText().toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (InterruptedException e) {
