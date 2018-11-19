@@ -2,12 +2,14 @@ package com.example.alex.test;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,46 +19,76 @@ public class MainActivity extends AppCompatActivity {
     private Thread tread;
     public static final Random RANDOM = new Random();
     private View bar1, bar2, ball;
-    private int intY1, intY2, intY3;
-    private DisplayMetrics dm;
 
-
-
+    int ball_lenth;
+    private int bar1_visible_height, bar2_visible_height, limit_top, limit_bottom;
+    int status_height;
+    int screen_width,screen_height;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //    startActivityForResult(new Intent(this, AnimationActivity.class), 100);
-        dm = getResources().getDisplayMetrics();
+
+        int resourceId = getApplicationContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            status_height = getApplicationContext().getResources().getDimensionPixelSize(resourceId);
+        }
+
+        screen_width = getResources().getDisplayMetrics().widthPixels;
+        screen_height= getResources().getDisplayMetrics().heightPixels-status_height;
         initView();
-        initY();
+
         initBall();
     }
 
 
     private void initView() {
-        findViewById(R.id.logo).getLayoutParams().width = dm.widthPixels / 4;
-        findViewById(R.id.logo).getLayoutParams().height = dm.heightPixels / 3;
 
-        findViewById(R.id.machine).getLayoutParams().height = dm.heightPixels / 2;
-        findViewById(R.id.machine).setPadding(0,0,dm.widthPixels / 16,0);
-        findViewById(R.id.rollbar_layout).getLayoutParams().width = dm.widthPixels / 7;
-        findViewById(R.id.hole).getLayoutParams().width=dm.widthPixels / 8;
-        findViewById(R.id.hole).getLayoutParams().height=dm.widthPixels / 8;
+        int main_height = screen_width / 16 * 9;
+
+        int logo_width = screen_width / 3;
+        int logo_height = logo_width / 3;
+
+        int machine_height = screen_width / 3;
+
+
+        ball_lenth = screen_width / 7;
+        int hole_lenth = screen_width / 8;
+
+        int bar_width = screen_width / 16;
+        int bar_marginRight = screen_width / 16;
+
+
+        bar1_visible_height = screen_height / 2 - ball_lenth;
+        bar2_visible_height = screen_height / 2;
+        limit_top = screen_height /2-ball_lenth*3/2;
+        limit_bottom = screen_height /2+ball_lenth/2;
+
+        findViewById(R.id.screen).getLayoutParams().height = main_height;
+
+
+
+        findViewById(R.id.logo).getLayoutParams().width = logo_width;
+        findViewById(R.id.logo).getLayoutParams().height = logo_height;
+
+        findViewById(R.id.machine).getLayoutParams().height = machine_height;
+        findViewById(R.id.machine).setPadding(0, 0, bar_marginRight, 0);
+        // findViewById(R.id.rollbar_layout).getLayoutParams().width = screen_width / 7;
+        findViewById(R.id.hole).getLayoutParams().width = hole_lenth;
+        findViewById(R.id.hole).getLayoutParams().height = hole_lenth;
         bar1 = findViewById(R.id.bar1);
-        bar1.getLayoutParams().width=dm.widthPixels/16;
-        //  ((LinearLayout.LayoutParams)bar1.getLayoutParams()).setMargins(0,dm.heightPixels / 16,0,0);
+        bar1.getLayoutParams().width = bar_width;
+        ((LinearLayout.LayoutParams) bar1.getLayoutParams()).setMargins(0, machine_height / 2 - ball_lenth, 0, 0);
         bar2 = findViewById(R.id.bar2);
-        bar2.getLayoutParams().width=dm.widthPixels/16;
-        //  ((LinearLayout.LayoutParams)bar2.getLayoutParams()).setMargins(0,0,0,dm.heightPixels / 16);
+        bar2.getLayoutParams().width = bar_width;
+        ((LinearLayout.LayoutParams) bar2.getLayoutParams()).setMargins(0, 0, 0, machine_height / 2 - ball_lenth);
         ball = findViewById(R.id.ball);
-        ball.getLayoutParams().width= dm.widthPixels / 7;
-        ball.getLayoutParams().height= dm.widthPixels / 7;
-        ((FrameLayout.LayoutParams)ball.getLayoutParams()).setMargins(0,dm.heightPixels / 10, dm.widthPixels / 16,0);
+        ball.getLayoutParams().width = ball_lenth;
+        ball.getLayoutParams().height = ball_lenth;
+        ((FrameLayout.LayoutParams) ball.getLayoutParams()).setMargins(0, limit_top, bar_marginRight, 0);
 
 
-        findViewById(R.id.switcher_layout).setPadding(dm.widthPixels / 16,dm.heightPixels / 8, 0,dm.heightPixels / 32);
+        findViewById(R.id.switcher_layout).setPadding(screen_width / 16, screen_width / 32 * 3, 0, screen_width / 128 * 3);
 
         switcher1 = findViewById(R.id.switcher1);
         switcher2 = findViewById(R.id.switcher2);
@@ -65,63 +97,68 @@ public class MainActivity extends AppCompatActivity {
         switcher2.setText(7 + "");
         switcher3.setText(7 + "");
         txt_award = findViewById(R.id.txt_award);
-        ((FrameLayout.LayoutParams)txt_award.getLayoutParams()).setMargins(dm.heightPixels / 2,dm.heightPixels / 4, 0,0);
 
+        ((FrameLayout.LayoutParams) txt_award.getLayoutParams()).setMargins(screen_width / 2, screen_width / 4, 0, 0);
 
 
     }
 
-    private void initY() {
-        intY1 = dm.heightPixels/4;
-        intY2 =dm.heightPixels/2;
-        intY3 = dm.heightPixels/8*7-dm.widthPixels/7;
-    }
 
     private void initBall() {
         ball.setOnTouchListener(new View.OnTouchListener() {
-            private float y1, y;    // 原本圖片存在的X,Y軸位置
-            private int mx, my; // 圖片被拖曳的X ,Y軸距離長度
+            private float x, y;    // 原本圖片存在的X,Y軸位置
+            private int preY;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // Log.e("View", v.toString());
-                switch (event.getAction()) {          //判斷觸控的動作
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {          //判斷觸控的動作
 
                     case MotionEvent.ACTION_DOWN:// 按下圖片時
-                        y1 = v.getY();                  //觸控的X軸位置
                         y = event.getY();                  //觸控的Y軸位置
-
+                        x = v.getX();
+                        break;
                     case MotionEvent.ACTION_MOVE:// 移動圖片時
-
                         //getX()：是獲取當前控件(View)的座標
-
                         //getRawX()：是獲取相對顯示螢幕左上角的座標
-                        mx = (int) v.getX();
-                        my = (int) (event.getRawY() - y);
-                        if (my < y1 || my > intY3) {
-                            return false;
+                        int dy = (int) (event.getRawY() - y);
+                        if (Math.abs(dy - preY) > 3) {
+                            // v.scrollTo(0, -dy);
+                            if (dy < limit_top || dy > limit_bottom) {
+                                break;
+                            }
+                            ViewGroup.MarginLayoutParams mlp =
+                                    (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+                            mlp.topMargin = dy;
+                            v.setLayoutParams(mlp);
+                            //  ball.layout((int) x, dy, (int) (x + ball_lenth), dy + ball_lenth);
+                            if (dy < bar1_visible_height) {
+                                bar1.setVisibility(View.VISIBLE);
+                                bar2.setVisibility(View.INVISIBLE);
+                            } else if (dy > bar1_visible_height && dy < bar2_visible_height) {
+                                bar1.setVisibility(View.INVISIBLE);
+                                bar2.setVisibility(View.INVISIBLE);
+                            } else if (dy > bar2_visible_height) {
+                                bar2.setVisibility(View.VISIBLE);
+                                bar1.setVisibility(View.INVISIBLE);
+                            }
+                            preY = dy;
                         }
-                        v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
-                        if (my < intY1) {
-                            bar1.setVisibility(View.VISIBLE);
-                            bar2.setVisibility(View.INVISIBLE);
-                        } else if (my > intY1 && my < intY2) {
-                            bar1.setVisibility(View.INVISIBLE);
-                            bar2.setVisibility(View.INVISIBLE);
-                        } else if (my > intY2) {
-                            bar2.setVisibility(View.VISIBLE);
-                            bar1.setVisibility(View.INVISIBLE);
-                        }
-
                         // Log.e("address", String.valueOf(mx) + "~~" + String.valueOf(my)); // 記錄目前位置
                         break;
                     case MotionEvent.ACTION_UP:
+                        dy = (int) (event.getRawY() - y);
+                        // v.scrollTo(0, (int) -y);
+                        //   ball.layout((int) x, limit_top, (int) (x + ball_lenth), limit_top + ball_lenth);
+                        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+                        mlp.topMargin = limit_top;
+                        v.setLayoutParams(mlp);
                         bar1.setVisibility(View.VISIBLE);
                         bar2.setVisibility(View.INVISIBLE);
-                        if (my > intY2) {
+                        if (dy > bar2_visible_height) {
                             startRoll();
                         }
-                        v.layout(mx, (int) y1, mx + v.getWidth(), (int) (y1 + v.getHeight()));
+
                         break;
                 }
                 return true;

@@ -1,119 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:background="@color/black">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/logo" />
-
-    <LinearLayout
-        android:id="@+id/machine"
+    <FrameLayout
+        android:id="@+id/screen"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/machine"
-        android:orientation="horizontal">
+        android:background="@drawable/bg">
 
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/logo" />
 
         <LinearLayout
-            android:id="@+id/switcher_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:id="@+id/machine"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_gravity="center"
+            android:background="@drawable/machine"
             android:orientation="horizontal">
 
 
-            <com.example.alex.test.AutoVerticalTextView
-                android:id="@+id/switcher1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/side"
-                android:gravity="center"
-                android:text="1"
-                android:textSize="150sp" />
-
-            <com.example.alex.test.AutoVerticalTextView
-                android:id="@+id/switcher2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/side"
-                android:gravity="center"
-                android:text="1"
-                android:textSize="150sp" />
-
-            <com.example.alex.test.AutoVerticalTextView
-                android:id="@+id/switcher3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/side"
-                android:gravity="center"
-                android:text="1"
-                android:textSize="150sp" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/rollbar_layout"
-            android:layout_width="100dp"
-            android:layout_height="match_parent">
-
-            <View
-                android:id="@+id/hole"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/hole" />
-
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/switcher_layout"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_weight="6"
+                android:orientation="horizontal">
 
-                <View
-                    android:id="@+id/bar1"
-                    android:layout_width="50dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/roll"
-                    android:translationY="10dp" />
 
-                <View
-                    android:id="@+id/bar2"
-                    android:layout_width="50dp"
-                    android:layout_height="0dp"
+                <com.example.alex.test.AutoVerticalTextView
+                    android:id="@+id/switcher1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/roll"
-                    android:translationY="-10dp"
-                    android:visibility="invisible" />
+                    android:background="@drawable/side"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="150sp" />
+
+                <com.example.alex.test.AutoVerticalTextView
+                    android:id="@+id/switcher2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/side"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="150sp" />
+
+                <com.example.alex.test.AutoVerticalTextView
+                    android:id="@+id/switcher3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/side"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="150sp" />
             </LinearLayout>
 
+            <FrameLayout
+                android:id="@+id/rollbar_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-        </FrameLayout>
+                <View
+                    android:id="@+id/hole"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/hole" />
 
-    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txt_award"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:text="獎項:"
-        android:textColor="@color/white"
-        android:textSize="40sp" />
+                    <View
+                        android:id="@+id/bar1"
+                        android:layout_width="50dp"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:background="@drawable/roll" />
 
-    <ImageView
-        android:id="@+id/ball"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_gravity="right"
-        android:scaleType="fitXY"
-        android:src="@drawable/ball" />
+                    <View
+                        android:id="@+id/bar2"
+                        android:layout_width="50dp"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:background="@drawable/roll"
+                        android:visibility="invisible" />
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_award"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="獎項:"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+    </FrameLayout>
+
+        <View
+            android:id="@+id/ball"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="right"
+            android:background="@drawable/ball" />
 
 </FrameLayout>
