@@ -8,7 +8,7 @@
     <FrameLayout
         android:id="@+id/screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center"
         android:background="@drawable/bg">
 
@@ -22,8 +22,7 @@
         <LinearLayout
             android:id="@+id/machine"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_gravity="center"
+            android:layout_height="0dp"
             android:background="@drawable/machine"
             android:orientation="horizontal">
 
@@ -42,9 +41,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/side"
-                    android:gravity="center"
                     android:text="1"
-                    android:textSize="150sp" />
+                    android:textSize="150sp"
+                    android:gravity="center"/>
 
                 <com.example.alex.test.AutoVerticalTextView
                     android:id="@+id/switcher2"
@@ -52,9 +51,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/side"
-                    android:gravity="center"
                     android:text="1"
-                    android:textSize="150sp" />
+                    android:textSize="150sp"
+                    android:gravity="center"/>
 
                 <com.example.alex.test.AutoVerticalTextView
                     android:id="@+id/switcher3"
@@ -62,9 +61,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/side"
-                    android:gravity="center"
                     android:text="1"
-                    android:textSize="150sp" />
+                    android:textSize="150sp"
+                    android:gravity="center"/>
             </LinearLayout>
 
             <FrameLayout
@@ -75,8 +74,8 @@
 
                 <View
                     android:id="@+id/hole"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:background="@drawable/hole" />
 
@@ -87,7 +86,7 @@
 
                     <View
                         android:id="@+id/bar1"
-                        android:layout_width="50dp"
+                        android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
@@ -95,7 +94,7 @@
 
                     <View
                         android:id="@+id/bar2"
-                        android:layout_width="50dp"
+                        android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
@@ -108,20 +107,22 @@
 
         </LinearLayout>
 
-        <TextView
+        <com.example.alex.test.AutoVerticalTextView
             android:id="@+id/txt_award"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:text="獎項:"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="50sp"
+            android:gravity="center_vertical"/>
     </FrameLayout>
 
-        <View
-            android:id="@+id/ball"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_gravity="right"
-            android:background="@drawable/ball" />
+
+    <View
+        android:id="@+id/ball"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="right"
+        android:background="@drawable/ball" />
 
 </FrameLayout>

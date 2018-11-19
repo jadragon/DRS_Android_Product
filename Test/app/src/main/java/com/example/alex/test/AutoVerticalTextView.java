@@ -27,7 +27,7 @@ public class AutoVerticalTextView extends AppCompatTextView {
 
     public AutoVerticalTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setGravity(getGravity() | Gravity.CENTER_VERTICAL); // 默认水平居中
+        setGravity(getGravity());
         setLines(1);
         initialise();
     }
@@ -42,18 +42,18 @@ public class AutoVerticalTextView extends AppCompatTextView {
     //文字改变的时候
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        refitText(text.toString(), this.getHeight());   //textview视图的高度
+        refitText(this.getHeight());   //textview视图的高度
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
     }
 
-    private void refitText(String textString, int height) {
+    private void refitText(int height) {
         if (height > 0) {
             int availableHeight = height - this.getPaddingTop() - this.getPaddingBottom();   //减去边距为字体的实际高度
             float trySize = mMaxTextSize;
             mTextPaint.setTextSize(trySize);
-            while (mTextPaint.descent()-mTextPaint.ascent() > availableHeight) {   //测量的字体高度过大，不断地缩放
-                trySize -= 2;  //字体不断地减小来适应
-                if (trySize <= mMinTextSize) {
+            while (mTextPaint.descent() - mTextPaint.ascent() > availableHeight) {   //测量的字体高度过大，不断地缩放
+                trySize -= 5;  //字体不断地减小来适应
+                if (trySize < mMinTextSize) {
                     trySize = mMinTextSize;  //最小为这个
                     break;
                 }
@@ -67,7 +67,7 @@ public class AutoVerticalTextView extends AppCompatTextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (h != oldh) {
-            refitText(this.getText().toString(), h);
+            refitText(h);
         }
     }
 
