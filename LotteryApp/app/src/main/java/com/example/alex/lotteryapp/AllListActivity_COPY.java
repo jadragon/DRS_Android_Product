@@ -47,8 +47,8 @@ public class AllListActivity_COPY extends ToolbarActivity {
 
     private void initView() {
         //btn
-        btn_new = findViewById(R.id.alllist_btn_new);
-        btn_ok = findViewById(R.id.alllist_btn_ok);
+        btn_new = findViewById(R.id.alllist_btn_export);
+        btn_ok = findViewById(R.id.alllist_btn_reset);
         //list
         listView = findViewById(R.id.alllist_listview);
         adapter = new CursorAdapter(this, cursor) {

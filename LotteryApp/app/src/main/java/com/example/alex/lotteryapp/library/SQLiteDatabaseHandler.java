@@ -45,6 +45,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_ADDRESS_TABLE);
+        initAllAward(db);
     }
 
     // Upgrading database
@@ -91,23 +92,31 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      */
 
     public ArrayList<Map<String, String>> getItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Map<String, String>> datas = new ArrayList<>();
         Map<String, String> data;
-        Cursor cursor;
+        Cursor cursor = null;
         ArrayList<String> array = getTypes();
         for (int i = 0; i < array.size(); i++) {
-            cursor = this.getReadableDatabase().rawQuery("SELECT  * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + array.get(i) + "'", null);
+            cursor = db.rawQuery("SELECT  * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + array.get(i) + "'", null);
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 data = new HashMap<>();
                 data.put(KEY_TYPE, cursor.getString(1));
                 data.put(KEY_GIFT, cursor.getString(2));
-                data.put("number", cursor.getCount() + "");
+                int total = cursor.getCount();
+                cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + cursor.getString(1) + "' AND " + KEY_WINNER + " IS NOT NULL", null);
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    data.put("number", cursor.getCount() + "/" + total + "");
+                } else {
+                    data.put("number", 0 + "/" + total + "");
+                }
                 datas.add(data);
-                cursor.close();
             }
-
         }
+        cursor.close();
+        db.close();
         // return user
         return datas;
     }
@@ -145,6 +154,53 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         return datas;
     }
 
+    /**
+     * Getting user data from database
+     */
+
+    public ArrayList<ArrayList<String>> getAllWinnerNames() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<ArrayList<String>> datas = new ArrayList<>();
+
+        String selectQuery = "SELECT  DISTINCT " + KEY_TYPE + " FROM " + TABLE_ITEM;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        ArrayList<String> types = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            types.add(cursor.getString(0));
+        }
+        ArrayList<String> data;
+        for (String type : types) {
+            data = new ArrayList<>();
+            selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NOT NULL";
+            cursor = db.rawQuery(selectQuery, null);
+            while (cursor.moveToNext()) {
+                data.add(cursor.getString(0));
+            }
+            datas.add(data);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
+    public ArrayList<String> getWinnerNames(String type) {
+        ArrayList<String> datas = new ArrayList<>();
+        String selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NOT NULL";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        while (cursor.moveToNext()) {
+            datas.add(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
 
     public Cursor getUserInfo() {
         String selectQuery = "SELECT  * FROM " + TABLE_ITEM + " ORDER BY " + KEY_TYPE + " ASC";
@@ -195,15 +251,109 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+
+    public void initAllAward(SQLiteDatabase db) {
+        //頭獎
+        ContentValues values = new ContentValues();
+        values.put(KEY_TYPE, "頭獎");
+        values.put(KEY_GIFT, "30萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //二獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "二獎");
+        values.put(KEY_GIFT, "6萬");
+        for (int i = 0; i < 4; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "三獎");
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "四獎");
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 12; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "五獎");
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 20; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "六獎");
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 25; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+    }
+
+    public void resetAllAward() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        resetTables(db);
+        //頭獎
+        ContentValues values = new ContentValues();
+        values.put(KEY_TYPE, "頭獎");
+        values.put(KEY_GIFT, "30萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //二獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "二獎");
+        values.put(KEY_GIFT, "6萬");
+        for (int i = 0; i < 4; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "三獎");
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "四獎");
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 12; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "五獎");
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 20; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values = new ContentValues();
+        values.put(KEY_TYPE, "六獎");
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 25; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        db.close();
+    }
+
     /**
      * Re crate database
      * Delete all tables and create them again
      */
-    public void resetTables() {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void resetTables(SQLiteDatabase db) {
         // Delete All Rows
         db.delete(TABLE_ITEM, null, null);
-        db.close();
     }
 
 

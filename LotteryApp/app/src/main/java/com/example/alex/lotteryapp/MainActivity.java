@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button main_lottery, main_setting, main_status;
+    private Button main_lottery, main_setting;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_lottery:
-                startActivity(new Intent(MainActivity.this, RollBarActivity.class));
+                startActivity(new Intent(MainActivity.this, AnimationActivity.class));
                 break;
 
             case R.id.main_setting:

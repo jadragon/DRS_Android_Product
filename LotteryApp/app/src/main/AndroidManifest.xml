@@ -26,7 +26,8 @@
             android:screenOrientation="landscape"/>
         <activity
             android:name=".RollBarActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:launchMode="singleInstance" />
         <activity android:name=".AnimationActivity"
             android:screenOrientation="landscape"/>
     </application>
