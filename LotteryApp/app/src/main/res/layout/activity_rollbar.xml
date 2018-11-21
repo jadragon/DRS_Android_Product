@@ -117,20 +117,17 @@
             android:text="獎項:"
             android:textColor="@color/white"
             android:textSize="50sp" />
+
+        <com.example.alex.lotteryapp.library.AutoVerticalTextView
+            android:id="@+id/txt_left"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:text="剩餘名額:"
+            android:textColor="@color/white"
+            android:textSize="50sp" />
     </FrameLayout>
-
-
-    <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="20dp"
-        android:background="@color/orange"
-        android:padding="10dp"
-        android:text="回上一頁"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
 
     <View
         android:id="@+id/ball"

@@ -99,7 +99,8 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onPause() {
         super.onPause();
-        thread.interrupt();
+        if (thread != null)
+            thread.interrupt();
         mediaPlayer.reset();
         mediaPlayer.release();
         start = true;
@@ -158,6 +159,27 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
                             public void run() {
                                 Intent intent = new Intent(AnimationActivity.this, RollBarActivity.class);
                                 intent.putExtra("type", types[typePosition]);
+                                switch (typePosition) {
+                                    case 0:
+                                        intent.putExtra("load", 8000);
+                                        break;
+                                    case 1:
+                                        intent.putExtra("load", 6000);
+                                        break;
+                                    case 2:
+                                        intent.putExtra("load", 5000);
+                                        break;
+                                    case 3:
+                                        intent.putExtra("load", 3000);
+                                        break;
+                                    case 4:
+                                        intent.putExtra("load", 1500);
+                                        break;
+                                    case 5:
+                                        intent.putExtra("load", 1000);
+                                        break;
+                                }
+
                                 startActivityForResult(intent, typePosition);
                             }
                         });

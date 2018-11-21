@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class RollBarActivity extends AppCompatActivity {
-    private TextView txt_award;
+    private TextView txt_award, txt_left;
     private TextView switcher1, switcher2, switcher3;
     private Wheel wheel1, wheel2, wheel3;
     private Thread tread;
@@ -26,12 +25,13 @@ public class RollBarActivity extends AppCompatActivity {
     public static final Random RANDOM = new Random();
     private SQLiteDatabaseHandler db;
     private View bar1, bar2, ball;
-    private Button back;
     private int bar1_visible_height, bar2_visible_height, limit_top, limit_bottom;
     private int status_height;
 
     private ArrayList<String> left_awardlist;
     private String award_type = "";
+    boolean back = true;
+    private static int LoadingTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,11 @@ public class RollBarActivity extends AppCompatActivity {
 
     private void initAwardType() {
         award_type = getIntent().getStringExtra("type");
+        LoadingTime = getIntent().getIntExtra("load", 2000);
         txt_award = findViewById(R.id.txt_award);
         txt_award.setText("獎項:" + db.getGift(award_type));
+        txt_left = findViewById(R.id.txt_left);
+        txt_left.setText("剩餘名額" + db.getLeftWinners(award_type));
         refreshData();
     }
 
@@ -68,7 +71,7 @@ public class RollBarActivity extends AppCompatActivity {
         int machine_height = screen_width / 5 * 2;
 
         int ball_lenth = screen_width / 7;
-        int hole_lenth = screen_width / 8;
+        int hole_lenth = screen_width / 12;
 
         int bar_width = screen_width / 16;
         int bar_marginRight = screen_width / 16;
@@ -96,7 +99,7 @@ public class RollBarActivity extends AppCompatActivity {
         //拉桿洞
         params = findViewById(R.id.hole).getLayoutParams();
         params.width = hole_lenth;
-        params.height = hole_lenth;
+        params.height = hole_lenth * 2;
 
         //拉桿
         bar1 = findViewById(R.id.bar1);
@@ -125,9 +128,13 @@ public class RollBarActivity extends AppCompatActivity {
         switcher2.setText(7 + "");
         switcher3.setText(7 + "");
         //獎項
-        txt_award.getLayoutParams().height = main_height / 9;
-        ((FrameLayout.LayoutParams) txt_award.getLayoutParams()).setMargins(screen_width / 7 * 2, paddingTop + (main_height - machine_height) / 2, 0, 0);
-
+        params = txt_award.getLayoutParams();
+        params.height = main_height / 9;
+        ((FrameLayout.LayoutParams) params).setMargins(screen_width / 7 * 2, paddingTop + (main_height - machine_height) / 2, 0, 0);
+        //獎項
+        params = txt_left.getLayoutParams();
+        params.height = main_height / 18;
+        ((FrameLayout.LayoutParams) params).setMargins(0, paddingTop + (main_height - machine_height) / 2 + main_height / 18, screen_width / 7 * 2, 0);
     }
 
 
@@ -143,7 +150,15 @@ public class RollBarActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:// 按下圖片時
                         lastX = (int) event.getRawX();//获取触摸事件触摸位置的原始X坐标
                         lastY = (int) event.getRawY();
-
+                        if (wheel1 != null) {
+                            wheel1.stopWheel();
+                            wheel2.stopWheel();
+                            wheel3.stopWheel();
+                        }
+                        if (tread != null) {
+                            tread.interrupt();
+                        }
+                        break;
                     case MotionEvent.ACTION_MOVE:// 移動圖片時
                         int dy = (int) event.getRawY() - lastY;
 
@@ -205,13 +220,7 @@ public class RollBarActivity extends AppCompatActivity {
                 return true;
             }
         });
-        back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RollBarActivity.this.finish();
-            }
-        });
+
     }
 
     private void startRoll() {
@@ -219,15 +228,8 @@ public class RollBarActivity extends AppCompatActivity {
             Toast.makeText(RollBarActivity.this, "此獎項已額滿", Toast.LENGTH_SHORT).show();
             return;
         }
-        back.setVisibility(View.INVISIBLE);
-        if (wheel1 != null) {
-            wheel1.stopWheel();
-            wheel2.stopWheel();
-            wheel3.stopWheel();
-        }
-        if (tread != null) {
-            tread.interrupt();
-        }
+        back = false;
+
         wheel1 = new Wheel(new Wheel.WheelListener() {
             @Override
             public void newImage(final int img) {
@@ -269,18 +271,28 @@ public class RollBarActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(LoadingTime);
                     wheel1.stopWheel();
                     wheel2.stopWheel();
                     wheel3.stopWheel();
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            db.updateUserInfo(left_awardlist.get(0), switcher1.getText().toString() + switcher2.getText().toString() + switcher3.getText().toString());
-                            Toast.makeText(RollBarActivity.this, "得獎人員:" + switcher1.getText().toString() + switcher2.getText().toString() + switcher3.getText().toString(), Toast.LENGTH_SHORT).show();
+                            ArrayList<String> currentWinner = db.getCurrentWinners();
+                            int number = randomInt();
+                            while (currentWinner.indexOf(number + "") != -1) {
+                                number = randomInt();
+                            }
+                            db.updateUserInfo(left_awardlist.get(0), number + "");
+                            String nowWinner = String.format("%03d", number);
+                            switcher1.setText(nowWinner.charAt(0) + "");
+                            switcher2.setText(nowWinner.charAt(1) + "");
+                            switcher3.setText(nowWinner.charAt(2) + "");
+
+                            txt_left.setText("剩餘名額" + db.getLeftWinners(award_type));
                             refreshData();
-                            back.setVisibility(View.VISIBLE);
+                            back = true;
                         }
                     });
                 } catch (InterruptedException e) {
@@ -295,6 +307,9 @@ public class RollBarActivity extends AppCompatActivity {
         return lower + (long) (RANDOM.nextDouble() * (upper - lower));
     }
 
+    public static int randomInt() {
+        return RANDOM.nextInt(999);
+    }
 
     private void refreshData() {
         left_awardlist = db.getItems(award_type);
@@ -303,5 +318,8 @@ public class RollBarActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (back) {
+            RollBarActivity.this.finish();
+        }
     }
 }

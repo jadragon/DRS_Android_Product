@@ -50,7 +50,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="30萬/1位"
@@ -87,7 +87,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="6萬/4位"
@@ -124,7 +124,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="5萬/6位"
@@ -161,7 +161,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="3萬/12位"
@@ -198,7 +198,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="2萬/20位"
@@ -235,7 +235,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="1萬2/25位"
@@ -272,7 +272,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/black"
                         android:padding="10dp"
                         android:text="8千"

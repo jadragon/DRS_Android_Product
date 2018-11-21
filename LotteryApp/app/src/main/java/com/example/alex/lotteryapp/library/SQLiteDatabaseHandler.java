@@ -91,6 +91,41 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Getting user data from database
      */
 
+    public ArrayList<ArrayList<String>> getExcelData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<ArrayList<String>> datas = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT  DISTINCT " + KEY_TYPE + " FROM " + TABLE_ITEM, null);
+        while (cursor.moveToNext()) {
+            types.add(cursor.getString(0));
+        }
+        ArrayList<String> data;
+        ArrayList<String> winners;
+        for (String type : types) {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "'", null);
+            data = new ArrayList<>();
+            cursor.moveToFirst();
+            data.add(cursor.getString(1));
+            data.add(cursor.getString(2));
+            winners = new ArrayList<>();
+            winners.add(cursor.getString(3));
+            while (cursor.moveToNext()) {
+                winners.add(cursor.getString(3));
+            }
+            data.add(winners + "");
+            datas.add(data);
+        }
+
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
     public ArrayList<Map<String, String>> getItems() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Map<String, String>> datas = new ArrayList<>();
@@ -98,7 +133,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = null;
         ArrayList<String> array = getTypes();
         for (int i = 0; i < array.size(); i++) {
-            cursor = db.rawQuery("SELECT  * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + array.get(i) + "'", null);
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + array.get(i) + "'", null);
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 data = new HashMap<>();
@@ -188,6 +223,25 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Getting user data from database
      */
 
+    public ArrayList<String> getCurrentWinners() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> data = new ArrayList<>();
+
+        String selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_WINNER + " IS NOT NULL";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        while (cursor.moveToNext()) {
+            data.add(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return data;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
     public ArrayList<String> getWinnerNames(String type) {
         ArrayList<String> datas = new ArrayList<>();
         String selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NOT NULL";
@@ -200,6 +254,21 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.close();
         // return user
         return datas;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
+    public int getLeftWinners(String type) {
+        String selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NULL";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        db.close();
+        // return user
+        return count;
     }
 
     public Cursor getUserInfo() {
