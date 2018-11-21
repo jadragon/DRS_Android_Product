@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +21,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,54 +40,66 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.VisibleRegion;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
+import tw.com.lccnet.app.designateddriving.API.RestaurantApi;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
-    private View view, ad_info;
+    private View view;
     private TextView toolbar_txt_title;
     private Toolbar toolbar_main;
-    private SupportMapFragment mapFragment;
     private ActionBarDrawerToggle actionBarDrawerToggle_main;
     private GoogleMap mgooglemap;
     private double mLatitude, mLongitude;
-    String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    // 声明一个集合，在后面的代码中用来存储用户拒绝授权的权
-    List<String> mPermissionList = new ArrayList<>();
-    private GlobalVariable gv;
+    private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    // 聲明一個集合，在後面的代碼中用來存儲用戶拒絕授權的權
+    private List<String> mPermissionList = new ArrayList<>();
     private DisplayMetrics dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        gv = (GlobalVariable) getApplicationContext();
         dm = getResources().getDisplayMetrics();
+        initThread();
         checkPermission();
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
         initToolbar();
         initButton();
         initADToast();
     }
 
     private void checkPermission() {
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(MapsActivity.this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permissions[i]);
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permission);
             }
         }
-        if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
-            if (LocationUtils.isGpsEnabled(this)) {
-                LocationUtils.register(this, 5000, 10, new LocationUtils.OnLocationChangeListener() {
+        if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
+            checkLocation();
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
+
+
+        } else {//請求權限方法
+            String[] permissions = mPermissionList.toArray(new String[0]);//將List轉為數組
+            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
+        }
+    }
+
+    private void checkLocation() {
+        if (
+                LocationUtils.register(getApplicationContext(), 5000, 10, new LocationUtils.OnLocationChangeListener() {
                     @Override
                     public void getLastKnownLocation(Location location) {
                         mLatitude = location.getLatitude();
@@ -102,13 +115,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onStatusChanged(String provider, int status, Bundle extras) {
 
                     }
-                });
-            } else {
-                LocationUtils.openGpsSettings(this);
-            }
-        } else {//请求权限方法
-            String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
-            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
+                })) {
+
+        } else {
+            Toast.makeText(this, "GPS初始化失敗", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -131,7 +141,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean ToastAgain = true;
 
     private void initADToast() {
-        ad_info = findViewById(R.id.ad_info);
+        View ad_info = findViewById(R.id.ad_info);
         ad_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,22 +185,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         actionBarDrawerToggle_main = new ActionBarDrawerToggle(this, drawerLayout_main, R.string.app_open, R.string.app_close);
         drawerLayout_main.addDrawerListener(actionBarDrawerToggle_main);
         actionBarDrawerToggle_main.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //取得toolbar寬度
         toolbar_main.post(new Runnable() {
             @Override
             public void run() {
-                mgooglemap.setPadding(0, (int) (toolbar_main.getHeight() + 10 * dm.density), 0, 0);
+                if (mgooglemap != null)
+                    mgooglemap.setPadding(0, (int) (toolbar_main.getHeight() + 10 * dm.density), 0, 0);
             }
         });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (actionBarDrawerToggle_main.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return false;
+        return actionBarDrawerToggle_main.onOptionsItemSelected(item);
     }
 
     @Override
@@ -213,22 +221,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void initGoogleMap() {
         mgooglemap.setMyLocationEnabled(true);//取得當前位置按鈕
-/*
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);//高精度
-        criteria.setAltitudeRequired(false);//无海拔要求
-        criteria.setBearingRequired(false);//无方位要求
-        criteria.setCostAllowed(true);//允许产生资费
-        criteria.setPowerRequirement(Criteria.POWER_LOW);//低功耗
-        // 获取最佳服务对象
-        LocationManager locationManager = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
-        String provider = locationManager.getBestProvider(criteria, true);
-        Location location = ((LocationManager) getSystemService(Context.LOCATION_SERVICE)).getLastKnownLocation(provider);
-        */
-        // mLatitude = gv.getmLatitude();
-        //  mLongitude = gv.getmLongitude();
-        //mLatitude = 25.016633;
-        //  mLongitude = 121.300367;
         LatLng latlng = new LatLng(mLatitude, mLongitude);
         showAddress(latlng);
         MarkerOptions markerOpt = new MarkerOptions();
@@ -313,6 +305,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_ALL_PERMISSION) {
 
             for (int i = 0; i < grantResults.length; i++) {
@@ -328,39 +321,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             }
-            initGoogleMap();
+            checkLocation();
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void checkCurrentRange(GoogleMap map) {
-        VisibleRegion visibleRegion = map.getProjection()
-                .getVisibleRegion();
-
-        Point x = map.getProjection().toScreenLocation(
-                visibleRegion.farRight);
-
-        Point y = map.getProjection().toScreenLocation(
-                visibleRegion.nearLeft);
-
-        Point centerPoint = new Point(x.x / 2, y.y / 2);
-
-        LatLng centerFromPoint = map.getProjection().fromScreenLocation(
-                centerPoint);
-        Log.e("MapFragment: ", "Center From camera: Long: " + centerFromPoint.longitude
-                + " Lat" + centerFromPoint.latitude);
-
-        Log.e("Punto x", "x:" + x.x + "y:" + x.y);
-        Log.e("Punto y", "y:" + y.x + "y:" + y.y);
-
-        Log.e("MapFragment: ", "Center From Point: Long: "
-                + centerFromPoint.longitude + " Lat"
-                + centerFromPoint.latitude);
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocationUtils.unregister();
+        System.exit(0);
     }
 
     public static Bitmap createDrawableFromView(Context context, View view) {
@@ -381,4 +355,65 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return bitmap;
     }
+
+
+    private int what = 0;
+    //宣告特約工人的經紀人
+    private Handler mThreadHandler;
+    //宣告特約工人
+    private HandlerThread mThread;
+    private Handler handler;
+
+    private void initThread() {
+        //
+        handler = new Handler(Looper.getMainLooper());
+        mThread = new HandlerThread("name");
+
+        //讓Worker待命，等待其工作 (開啟Thread)
+
+        mThread.start();
+
+        //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
+
+        mThreadHandler = new Handler(mThread.getLooper());
+
+
+        sendAPI();
+    }
+
+    public void sendAPI() {
+        what = 0;
+        mThreadHandler.postDelayed(a1, 5000);
+
+
+    }
+
+    private JSONObject json;
+    //api 1
+    private Runnable a1 = new Runnable() {
+
+        public void run() {
+            json = RestaurantApi.store_type();
+            if (what == 0) {
+                //初始化面
+                handler.post(u1);
+            }
+        }
+    };
+    //Ui Thread 1
+    private Runnable u1 = new Runnable() {
+        public void run() {
+            Toast.makeText(MapsActivity.this, json + "", Toast.LENGTH_SHORT).show();
+            mThreadHandler.postDelayed(a1, 5000);
+        }
+    };
+    //Ui Thread 2
+    private Runnable u2 = new Runnable() {
+
+        public void run() {
+
+        }
+    };
+
+
 }

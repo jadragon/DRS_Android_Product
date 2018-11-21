@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 /**
  * author: Blankj
  * blog : http://blankj.com
@@ -30,6 +32,7 @@ public class LocationUtils {
     private static OnLocationChangeListener mListener;
     private static MyLocationListener myLocationListener;
     private static LocationManager mLocationManager;
+    private static String PROVIDER;
 
     public LocationUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -42,7 +45,7 @@ public class LocationUtils {
      * {@code false}: 否
      */
     public static boolean isGpsEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -53,7 +56,7 @@ public class LocationUtils {
      * {@code false}: 否
      */
     public static boolean isLocationEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -101,23 +104,42 @@ public class LocationUtils {
      * @return {@code true}: 初始化成功
      * {@code false}: 初始化失敗
      */
+
     @SuppressLint("MissingPermission")
     public static boolean register(Context context, long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled(context)) {
             Toast.makeText(context, "無法定位，請打開定位服務", Toast.LENGTH_SHORT).show();
             return false;
         }
-        String provider = mLocationManager.getBestProvider(getCriteria(), true);
-        Location location = mLocationManager.getLastKnownLocation(provider);
+        //String provider = mLocationManager.getBestProvider(getCriteria(), true);
+        // Location location = mLocationManager.getLastKnownLocation(provider);
+        Location location = getLastKnownLocation(context);
         if (location != null) listener.getLastKnownLocation(location);
         if (myLocationListener == null) myLocationListener = new MyLocationListener();
-        mLocationManager.requestLocationUpdates(provider, minTime, minDistance, myLocationListener);
+        mLocationManager.requestLocationUpdates(PROVIDER, minTime, minDistance, myLocationListener);
         return true;
     }
 
+    private static Location getLastKnownLocation(Context context) {
+        mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            @SuppressLint("MissingPermission") Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+                PROVIDER = provider;
+            }
+        }
+        return bestLocation;
+    }
 
     /**
      * 註銷

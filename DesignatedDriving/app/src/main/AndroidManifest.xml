@@ -56,9 +56,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"/>
 
-        </activity>
 
         <service
             android:name=".GpsService"
@@ -72,9 +71,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Regist1Activity" />
-        <activity android:name=".Regist2Activity">
-
-        </activity>
+        <activity android:name=".Regist2Activity" />
     </application>
 
 </manifest>
