@@ -1,31 +1,76 @@
 package com.example.alex.eip_product;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+
+import android.widget.Toast;
 
 import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
+import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
-public class SoapTestAcitivity extends AppCompatActivity {
+import db.OrderDatabase;
 
-    private EditText test_text;
-    private Button send;
+public class SoapTestAcitivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Button send, count1, count2, count3, count4;
     private ProgressDialog progressDialog;
     private HandlerThread handlerThread;
     private Handler mHandler, UiHandler;
+    private OrderDatabase db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_soap_test);
+        db = new OrderDatabase(this);
+        count1 = findViewById(R.id.count1);
+        count2 = findViewById(R.id.count2);
+        count3 = findViewById(R.id.count3);
+        count4 = findViewById(R.id.count4);
+        send = findViewById(R.id.send);
+        initHandler();
+        send.setOnClickListener(this);
+        count1.setOnClickListener(this);
+        count2.setOnClickListener(this);
+        count3.setOnClickListener(this);
+        count4.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.send:
+                progressDialog = ProgressDialog.show(SoapTestAcitivity.this, "讀取資料中", "請稍後", true);
+                mHandler.sendEmptyMessageDelayed(0, 0);
+                break;
+            case R.id.count1:
+                Toast.makeText(this, db.countOrders() + "", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.count2:
+                Toast.makeText(this, db.countOrderDetails() + "", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.count3:
+                Toast.makeText(this, db.countOrderComments() + "", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.count4:
+                Toast.makeText(this, db.countOrderItemComments() + "", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 
     public void initHandler() {
         UiHandler = new Handler(getMainLooper());
@@ -38,41 +83,33 @@ public class SoapTestAcitivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             try {
-                final JSONObject jsonObject = new API_OrderInfo().getOrderInfo();
+                db.resetTables();
+                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo());
+                db.addOrders(map.get("Orders"));
+                db.addOrderDetails(map.get("OrderDetails"));
+                db.addOrderComments(map.get("OrderComments"));
+                db.addOrderItemComments(map.get("OrderItemComments"));
                 UiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("SOAP", jsonObject + "");
                         progressDialog.dismiss();
                     }
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(SoapTestAcitivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
+                Toast.makeText(SoapTestAcitivity.this, "XmlPullParserException存取異常", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(SoapTestAcitivity.this, "IOException存取異常", Toast.LENGTH_SHORT).show();
+            } finally {
+                progressDialog.dismiss();
             }
             return false;
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_soap_test);
-        test_text = findViewById(R.id.test_text);
-        send = findViewById(R.id.send);
-        initHandler();
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressDialog = ProgressDialog.show(SoapTestAcitivity.this, "讀取資料中", "請稍後", true);
-                mHandler.sendEmptyMessageDelayed(0, 0);
-            }
-        });
-    }
-
 /*
     // 摄氏度 转 华氏温度
     public void calculate() {
@@ -124,6 +161,8 @@ public class SoapTestAcitivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
+        db.close();
         super.onDestroy();
     }
+
 }

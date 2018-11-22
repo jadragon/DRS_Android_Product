@@ -4,15 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SoapTestAcitivity"
-    android:orientation="vertical">
-    <EditText
-        android:id="@+id/test_text"
+    android:orientation="vertical"
+    tools:context=".SoapTestAcitivity">
+
+    <Button
+        android:id="@+id/send"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-<Button
-    android:id="@+id/send"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="發送"/>
+        android:layout_height="wrap_content"
+        android:text="發送" />
+
+    <Button
+        android:id="@+id/count1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="計算1" />
+
+    <Button
+        android:id="@+id/count2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="計算2" />
+
+    <Button
+        android:id="@+id/count3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="計算3" />
+
+    <Button
+        android:id="@+id/count4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="計算4" />
 </LinearLayout>
