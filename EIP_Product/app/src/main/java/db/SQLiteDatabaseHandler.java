@@ -16,13 +16,13 @@ import com.example.alex.eip_product.R;
 import java.util.ArrayList;
 
 public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
-    Context context;
+    private  Context context;
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "android_common";
+    private static final String DATABASE_NAME = "EIP_DATABASE";
 
 
     // Insepect table name

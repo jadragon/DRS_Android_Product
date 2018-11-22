@@ -1,7 +1,12 @@
 package com.example.alex.eip_product;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,17 +15,47 @@ import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
 public class SoapTestAcitivity extends AppCompatActivity {
 
-    private String TAG = "Soap";
     private EditText test_text;
     private Button send;
-    private SoapPrimitive resultString;
+    private ProgressDialog progressDialog;
+    private HandlerThread handlerThread;
+    private Handler mHandler, UiHandler;
+
+    public void initHandler() {
+        UiHandler = new Handler(getMainLooper());
+        handlerThread = new HandlerThread("camera");
+        handlerThread.start();
+        mHandler = new Handler(handlerThread.getLooper(), mCallback);
+    }
+
+    Handler.Callback mCallback = new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            try {
+                final JSONObject jsonObject = new API_OrderInfo().getOrderInfo();
+                UiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("SOAP", jsonObject + "");
+                        progressDialog.dismiss();
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,34 +63,16 @@ public class SoapTestAcitivity extends AppCompatActivity {
         setContentView(R.layout.activity_soap_test);
         test_text = findViewById(R.id.test_text);
         send = findViewById(R.id.send);
+        initHandler();
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            final JSONObject jsonObject=new API_OrderInfo().getOrderInfo();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    test_text.setText(jsonObject+"");
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (XmlPullParserException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
+                progressDialog = ProgressDialog.show(SoapTestAcitivity.this, "讀取資料中", "請稍後", true);
+                mHandler.sendEmptyMessageDelayed(0, 0);
             }
         });
-
     }
+
 /*
     // 摄氏度 转 华氏温度
     public void calculate() {
@@ -103,4 +120,10 @@ public class SoapTestAcitivity extends AppCompatActivity {
         }
     }
     */
+
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
 }
