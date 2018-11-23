@@ -16,47 +16,40 @@ import com.example.alex.eip_product.R;
 import com.example.alex.eip_product.fragment.Fragment_inspect_content;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+
+import db.OrderDatabase;
+
+import static db.OrderDatabase.KEY_PONumber;
+import static db.OrderDatabase.KEY_VendorName;
 
 public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.RecycleHolder> {
     private ArrayList<Map<String, String>> list;
     private Context ctx;
     private GlobalVariable gv;
 
+    /*
+import static db.OrderDatabase.KEY_Area;
+import static db.OrderDatabase.KEY_CheckMan;
+import static db.OrderDatabase.KEY_Notes;
+import static db.OrderDatabase.KEY_OrderComments;
+import static db.OrderDatabase.KEY_OrderDetails;
+import static db.OrderDatabase.KEY_OrderItemComments;
+import static db.OrderDatabase.KEY_PONumber;
+import static db.OrderDatabase.KEY_POVersion;
+import static db.OrderDatabase.KEY_Phone;
+import static db.OrderDatabase.KEY_PlanCheckDate;
+import static db.OrderDatabase.KEY_SalesMan;
+import static db.OrderDatabase.KEY_Shipping;
+import static db.OrderDatabase.KEY_VendorCode;
+import static db.OrderDatabase.KEY_VendorName;
+*/
     public CompanyListAdapter(Context ctx) {
         this.ctx = ctx;
         gv = (GlobalVariable) ctx.getApplicationContext();
-        initList();
-    }
-
-    private void initList() {
-        list = new ArrayList<>();
-        Map<String, String> map = new HashMap<>();
-        map.put("title", "鑫力來");
-        map.put("company", "驗貨人員1");
-        list.add(map);
-        map = new HashMap<>();
-        map.put("title", "勝萬");
-        map.put("company", "驗貨人員1");
-        list.add(map);
-        map = new HashMap<>();
-        map.put("title", "澳邦");
-        map.put("company", "");
-        list.add(map);
-        map = new HashMap<>();
-        map.put("title", "強生");
-        map.put("company", "");
-        list.add(map);
-        map = new HashMap<>();
-        map.put("title", "忠縣順生");
-        map.put("company", "驗貨人員1");
-        list.add(map);
-        map = new HashMap<>();
-        map.put("title", "華氏");
-        map.put("company", "");
-        list.add(map);
-
+        OrderDatabase db = new OrderDatabase(ctx);
+        list = db.getOrdersByDate(gv.getCurrent_date());
+        db.close();
     }
 
     @Override
@@ -67,14 +60,16 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
 
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
-        holder.title.setText(list.get(position).get("title"));
+        holder.title.setText(list.get(position).get(KEY_VendorName));
+
+        /*
         if (list.get(position).get("company").equals("")) {
             holder.company.setVisibility(View.INVISIBLE);
         } else {
             holder.company.setVisibility(View.VISIBLE);
             holder.company.setText(list.get(position).get("company"));
         }
-
+*/
     }
 
     @Override
@@ -99,12 +94,23 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
                 fragment_inspect_content = new Fragment_inspect_content();
             }
             Bundle bundle = new Bundle();
-            bundle.putString("name", list.get(getAdapterPosition()).get("title"));
+            bundle.putString("name", list.get(getAdapterPosition()).get(KEY_VendorName));
             bundle.putString("date", gv.getCurrent_date());
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (Map<String, String> map : list) {
+                arrayList.add(map.get(KEY_PONumber));
+            }
+            bundle.putStringArrayList(KEY_PONumber, arrayList);
             fragment_inspect_content.setArguments(bundle);
             ((MainActivity) ctx).switchFrament(fragment_inspect_content, "inspect_content");
             // ctx.startActivity(new Intent(ctx, InsepectOrderActivity.class));
         }
     }
 
+    public void setFilter() {
+        OrderDatabase db = new OrderDatabase(ctx);
+        list = db.getOrdersByDate(gv.getCurrent_date());
+        db.close();
+        notifyDataSetChanged();
+    }
 }

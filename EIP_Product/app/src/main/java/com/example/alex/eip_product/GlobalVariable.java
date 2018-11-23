@@ -19,7 +19,8 @@ public class GlobalVariable extends Application {
         int month = c.get(Calendar.MONTH);
         int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        return year + "/" + (month + 1) + "/" + dayOfMonth + "(" + getDayOfWeek(dayOfWeek) + ")";
+        return year + "/" + (month + 1) + "/" + dayOfMonth;
+                //+ "(" + getDayOfWeek(dayOfWeek) + ")";
     }
 
     public Object getCurrent_date(int type) {

@@ -16,16 +16,18 @@ import com.example.alex.eip_product.adapter.CompanyListAdapter;
 import java.util.Calendar;
 import java.util.Date;
 
+
 /**
  * Created by user on 2017/5/30.
  */
 
-public class Fragment_company extends Fragment {
+public class Fragment_company extends Fragment implements View.OnClickListener {
     private View v;
     private RecyclerView recyclerview;
     private CompanyListAdapter companyListAdapter;
     private TextView title, prepage, nextpage;
     private GlobalVariable gv;
+
 
     @Nullable
     @Override
@@ -40,32 +42,15 @@ public class Fragment_company extends Fragment {
 
     private void initButton() {
         prepage = v.findViewById(R.id.company_prepage);
-        prepage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime((Date) gv.getCurrent_date(0));
-                cal.add(Calendar.DATE, -1);
-                gv.setCurrent_date(cal.getTime());
-                title.setText(gv.getCurrent_date());
-            }
-        });
+        prepage.setOnClickListener(this);
         nextpage = v.findViewById(R.id.company_nextpage);
-        nextpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime((Date) gv.getCurrent_date(0));
-                cal.add(Calendar.DATE, +1);
-                gv.setCurrent_date(cal.getTime());
-                title.setText(gv.getCurrent_date());
-            }
-        });
+        nextpage.setOnClickListener(this);
     }
 
     private void initTextView() {
         title = v.findViewById(R.id.company_txt_title);
-        title.setText(getArguments().getString("date"));
+        // title.setText(getArguments().getString("date"));
+        title.setText(gv.getCurrent_date());
 
     }
 
@@ -79,7 +64,30 @@ public class Fragment_company extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            title.setText(getArguments().getString("date"));
+            title.setText(gv.getCurrent_date());
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.company_prepage:
+                Calendar cal = Calendar.getInstance();
+                cal.setTime((Date) gv.getCurrent_date(0));
+                cal.add(Calendar.DATE, -1);
+                gv.setCurrent_date(cal.getTime());
+                title.setText(gv.getCurrent_date());
+                companyListAdapter.setFilter();
+                break;
+            case R.id.company_nextpage:
+                cal = Calendar.getInstance();
+                cal.setTime((Date) gv.getCurrent_date(0));
+                cal.add(Calendar.DATE, +1);
+                gv.setCurrent_date(cal.getTime());
+                title.setText(gv.getCurrent_date());
+                companyListAdapter.setFilter();
+                break;
         }
     }
 }

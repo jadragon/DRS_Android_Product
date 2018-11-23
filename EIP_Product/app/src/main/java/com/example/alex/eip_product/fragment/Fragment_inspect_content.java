@@ -1,16 +1,18 @@
 package com.example.alex.eip_product.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.example.alex.eip_product.InsepectOrderActivity;
 import com.example.alex.eip_product.R;
+
+import static db.OrderDatabase.KEY_PONumber;
 
 /**
  * Created by user on 2017/5/30.
@@ -18,12 +20,15 @@ import com.example.alex.eip_product.R;
 
 public class Fragment_inspect_content extends Fragment {
     private View v;
-    private TextView title, company_name, wirte_txt_inspect1, wirte_txt_inspect2;
+    private TextView title, company_name;
+    private Bundle bundle;
+    private TableLayout tableLayout;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_inspect_content, container, false);
+        bundle = getArguments();
         initTextView();
         return v;
     }
@@ -31,40 +36,26 @@ public class Fragment_inspect_content extends Fragment {
     private void initTextView() {
         //標題
         title = v.findViewById(R.id.inspect_content_txt_title);
-        title.setText(getArguments().getString("date") + "驗貨內容");
+        title.setText(bundle.getString("date") + "驗貨內容");
         //廠商名稱
         company_name = v.findViewById(R.id.company_name);
         company_name.setText(getArguments().getString("name"));
-        //填寫資料
-        wirte_txt_inspect1 = v.findViewById(R.id.wirte_txt_inspect1);
-        wirte_txt_inspect2 = v.findViewById(R.id.wirte_txt_inspect2);
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = null;
-                switch (view.getId()) {
-                    case R.id.wirte_txt_inspect1:
-                        intent = new Intent(getContext(), InsepectOrderActivity.class);
-                        getContext().startActivity(intent);
-                        break;
-                    case R.id.wirte_txt_inspect2:
-                        intent = new Intent(getContext(), InsepectOrderActivity.class);
-                        getContext().startActivity(intent);
-                        break;
-                }
-            }
-        };
-        wirte_txt_inspect1.setOnClickListener(clickListener);
-        wirte_txt_inspect2.setOnClickListener(clickListener);
-
+        tableLayout = v.findViewById(R.id.inspect_content_tableLayout);
+        View view;
+        for (String number : bundle.getStringArrayList(KEY_PONumber)) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.item_inspect_content, null);
+            ((TextView) view.findViewWithTag("PONumber")).setText(number);
+            tableLayout.addView(view);
+        }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            title.setText(getArguments().getString("date") + "驗貨內容");
+            title.setText(bundle.getString("date") + "驗貨內容");
         }
     }
+
 
 }

@@ -26,6 +26,7 @@ public class Fragment_calendar extends Fragment {
     private CalendarView calendarView;
     private GlobalVariable gv;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,9 +60,9 @@ public class Fragment_calendar extends Fragment {
                 if (fragment_company == null) {
                     fragment_company = new Fragment_company();
                 }
-                Bundle bundle = new Bundle();
-                bundle.putString("date", gv.getCurrent_date());
-                fragment_company.setArguments(bundle);
+                //  Bundle bundle = new Bundle();
+                //bundle.putString("date", gv.getCurrent_date());
+                // fragment_company.setArguments(bundle);
                 mainActivity.switchFrament(fragment_company, "company");
             }
         });
@@ -74,5 +75,6 @@ public class Fragment_calendar extends Fragment {
             calendarView.setDate((long) gv.getCurrent_date(1));
         }
     }
+
 
 }

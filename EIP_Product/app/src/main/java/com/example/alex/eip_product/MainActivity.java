@@ -1,55 +1,64 @@
 package com.example.alex.eip_product;
 
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
+import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.fragment.Fragment_home;
 
+import org.json.JSONException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+import db.OrderDatabase;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView home, back;
-    FragmentManager fragmentManager;
-
+    private FragmentManager fragmentManager;
+    private Button update;
+    private ProgressDialog progressDialog;
+    private HandlerThread handlerThread;
+    private Handler mHandler, UiHandler;
+    private OrderDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        db = new OrderDatabase(this);
+        initHandler();
         initButton();
         initFragment();
         // initRecylcerView();
     }
 
     private void initButton() {
+        update = findViewById(R.id.update_btn);
+        update.setOnClickListener(this);
         home = findViewById(R.id.home_btn);
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {//回首頁
-                for (int i = 0; i < fragmentManager.getFragments().size() - 1; i++) {
-                    fragmentManager.popBackStack();
-                }
-            }
-        });
-
+        home.setOnClickListener(this);
         back = findViewById(R.id.back_btn);
-        back.setOnClickListener(new View.OnClickListener() {//回上一頁
-            @Override
-            public void onClick(View v) {
-                fragmentManager.popBackStack();
-            }
-        });//回上一頁
+        back.setOnClickListener(this);
     }
 
     private void initFragment() {
@@ -59,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
             public void onBackStackChanged() {//監聽fragment返回事件
                 if (fragmentManager.findFragmentById(R.id.fragment_content).getTag().equals("home")) {//判斷當前fragment的tag是否為home
                     home.setVisibility(View.INVISIBLE);
+                    update.setVisibility(View.VISIBLE);
                     back.setVisibility(View.INVISIBLE);
                 } else {
                     home.setVisibility(View.VISIBLE);
+                    update.setVisibility(View.INVISIBLE);
                     back.setVisibility(View.VISIBLE);
                 }
             }
@@ -70,6 +81,46 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.fragment_content, fragment_home, "home").commit();
     }
+
+    public void initHandler() {
+        UiHandler = new Handler(getMainLooper());
+        handlerThread = new HandlerThread("soap");
+        handlerThread.start();
+        mHandler = new Handler(handlerThread.getLooper(), mCallback);
+    }
+
+    Handler.Callback mCallback = new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            try {
+                db.resetTables();
+                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo());
+                db.addOrders(map.get("Orders"));
+                db.addOrderDetails(map.get("OrderDetails"));
+                db.addOrderComments(map.get("OrderComments"));
+                db.addOrderItemComments(map.get("OrderItemComments"));
+                UiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "XmlPullParserException存取異常", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "IOException存取異常", Toast.LENGTH_SHORT).show();
+            } finally {
+                progressDialog.dismiss();
+            }
+            return false;
+        }
+    };
 
     /**
      * 切换Fragment
@@ -118,5 +169,30 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        db.close();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.update_btn:
+                progressDialog = ProgressDialog.show(MainActivity.this, "讀取資料中", "請稍後", true);
+                mHandler.sendEmptyMessageDelayed(0, 0);
+                break;
+            case R.id.home_btn:
+                for (int i = 0; i < fragmentManager.getFragments().size() - 1; i++) {
+                    fragmentManager.popBackStack();
+                }
+                break;
+            case R.id.back_btn:
+                fragmentManager.popBackStack();
+                break;
+        }
     }
 }

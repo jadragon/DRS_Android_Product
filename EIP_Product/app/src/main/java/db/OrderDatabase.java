@@ -121,29 +121,9 @@ public class OrderDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /*
-        public void addOrders(String PONumber, String POVersion, String PlanCheckDate, String VendorCode,
-                              String VendorName, String Area, String Notes, String Shipping,
-                              String SalesMan, String Phone, String CheckMan, String OrderDetails,
-                              String OrderComments, String OrderItemComments) {
-            ContentValues values = new ContentValues();
-            values.put(KEY_PONumber, PONumber);
-            values.put(KEY_POVersion, POVersion);
-            values.put(KEY_PlanCheckDate, PlanCheckDate);
-            values.put(KEY_VendorName, VendorCode);
-            values.put(KEY_VendorCode, VendorName);
-            values.put(KEY_Area, Area);
-            values.put(KEY_Notes, Notes);
-            values.put(KEY_Shipping, Shipping);
-            values.put(KEY_SalesMan, SalesMan);
-            values.put(KEY_Phone, Phone);
-            values.put(KEY_CheckMan, CheckMan);
-            values.put(KEY_OrderDetails, OrderDetails);
-            values.put(KEY_OrderComments, OrderComments);
-            values.put(KEY_OrderItemComments, OrderItemComments);
-            this.getWritableDatabase().insert(TABLE_Orders, null, values);
-        }
-    */
+    /**
+     * Add
+     */
     public void addOrders(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
@@ -186,6 +166,39 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
         db.endTransaction(); // 处理完成
         db.close();
+    }
+
+    /**
+     * Search
+     */
+    public ArrayList<Map<String, String>> getOrdersByDate(String date) {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode, null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            map = new HashMap<>();
+            map.put(KEY_PONumber, cursor.getString(1));
+            map.put(KEY_POVersion, cursor.getString(2));
+            map.put(KEY_PlanCheckDate, cursor.getString(3));
+            map.put(KEY_VendorCode, cursor.getString(4));
+            map.put(KEY_VendorName, cursor.getString(5));
+            map.put(KEY_Area, cursor.getString(6));
+            map.put(KEY_Notes, cursor.getString(7));
+            map.put(KEY_Shipping, cursor.getString(8));
+            map.put(KEY_SalesMan, cursor.getString(9));
+            map.put(KEY_Phone, cursor.getString(10));
+            map.put(KEY_CheckMan, cursor.getString(11));
+            map.put(KEY_OrderDetails, cursor.getString(12));
+            map.put(KEY_OrderComments, cursor.getString(13));
+            map.put(KEY_OrderItemComments, cursor.getString(14));
+            datas.add(map);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
     }
 
     public ArrayList<String> getTypes() {
@@ -243,20 +256,10 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return count;
     }
 
-    public ArrayList<String> getWinnerNames(String ponumber) {
-        ArrayList<String> datas = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + ponumber + "' AND " + KEY_Comment + " IS NOT NULL";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        while (cursor.moveToNext()) {
-            datas.add(cursor.getString(0));
-        }
-        cursor.close();
-        db.close();
-        // return user
-        return datas;
-    }
 
+    /**
+     * Update
+     */
     public void updateUserInfo(String id, String area) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -266,6 +269,9 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    /**
+     * Delete
+     */
     public void resetTables() {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
