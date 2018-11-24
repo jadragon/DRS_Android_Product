@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Regist2Activity">
+
     <include
         layout="@layout/include_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,17 +27,44 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="姓名"
+            android:textColor="@color/gray1"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/register2_edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="姓名(中文,英文12字)"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:singleLine="true"
+            android:textColorHint="@color/gray2"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="密碼"
             android:textColor="@color/gray1"
             android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/register2_edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:hint="請輸入六位數以上密碼"
+            android:inputType="textPassword"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:singleLine="true"
             android:textColorHint="@color/gray2"
             android:textSize="15sp" />
 
@@ -52,24 +81,50 @@
             android:textColor="@color/gray1"
             android:textSize="15sp" />
 
+
         <EditText
+            android:id="@+id/register2_edit_repassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:inputType="textPassword"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:singleLine="true"
             android:textColorHint="@color/gray2"
             android:textSize="15sp" />
-
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/gray1" />
 
+        <RadioGroup
+            android:id="@+id/register2_rg_sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="男性"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="女性"
+                android:textSize="15sp" />
+        </RadioGroup>
+
 
         <Button
-            android:id="@+id/send"
+            android:id="@+id/register2_btn_send"
             android:layout_width="150dp"
             android:layout_height="70dp"
             android:layout_gravity="center"

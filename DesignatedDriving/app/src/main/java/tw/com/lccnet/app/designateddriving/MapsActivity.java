@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import tw.com.lccnet.app.designateddriving.API.RestaurantApi;
+import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -70,7 +70,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         dm = getResources().getDisplayMetrics();
-        initThread();
+        //initThread();
         checkPermission();
         initToolbar();
         initButton();
@@ -89,7 +89,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .findFragmentById(R.id.map);
             assert mapFragment != null;
             mapFragment.getMapAsync(this);
-
 
         } else {//請求權限方法
             String[] permissions = mPermissionList.toArray(new String[0]);//將List轉為數組
@@ -185,7 +184,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         actionBarDrawerToggle_main = new ActionBarDrawerToggle(this, drawerLayout_main, R.string.app_open, R.string.app_close);
         drawerLayout_main.addDrawerListener(actionBarDrawerToggle_main);
         actionBarDrawerToggle_main.syncState();
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //取得toolbar寬度
         toolbar_main.post(new Runnable() {
             @Override
@@ -393,7 +392,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Runnable a1 = new Runnable() {
 
         public void run() {
-            json = RestaurantApi.store_type();
+          //  json = CustomerApi.store_type();
             if (what == 0) {
                 //初始化面
                 handler.post(u1);

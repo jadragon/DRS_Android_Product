@@ -1,6 +1,6 @@
 package tw.com.lccnet.app.designateddriving.API;
 
 public interface APISetting {
-    String DOMAIN = "http://judd.sunrens.com/";
-    String sOrder = "SpoHka@_/PGcS36XYH2yllA==";
+    String DOMAIN = "http://api.ntgo.com.tw/";
+    String ntgo = "UfcMH5UVjzPiyFehwsux4w==";
 }
