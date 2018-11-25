@@ -1,8 +1,8 @@
 package tw.com.lccnet.app.designateddriving;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -71,7 +71,7 @@ public class Regist1Activity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_btn_next:
-                if (TextUtils.isEmpty(phone.getText())) {
+                if (TextUtils.isEmpty(phone.getText()) || !phone.getText().toString().matches("09[0-9]{8}")) {
                     phone.setError("請輸入電話號碼");
                 } else if (TextUtils.isEmpty(vcode.getText())) {
                     vcode.setError("請輸入驗證碼");
@@ -100,24 +100,24 @@ public class Regist1Activity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (jsonObject != null && AnalyzeUtil.checkSuccess(jsonObject)) {
                                 try {
                                     phone.setEnabled(false);
                                     gvcode_str = jsonObject.getString("Data");
-                                    Toast.makeText(Regist1Activity.this, gvcode_str, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Regist1Activity.this, "驗證碼已寄出", Toast.LENGTH_SHORT).show();
                                     Log.e("gvcode", gvcode_str);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             }
-                            Toast.makeText(Regist1Activity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
                 break;
             case R.id.register_btn_agree:
-
+                Intent intent = new Intent(this, SimpleWebviewActivity.class);
+                intent.putExtra("title", "服務條款");
+                startActivity(intent);
                 break;
         }
     }

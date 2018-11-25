@@ -56,22 +56,34 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"/>
-
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".GpsService"
             android:enabled="true" />
 
-        <activity android:name=".LoginActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Regist1Activity" />
-        <activity android:name=".Regist2Activity" />
+        <activity
+            android:name=".Regist1Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Regist2Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SimpleWebviewActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

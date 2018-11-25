@@ -94,7 +94,7 @@ public class Regist2Activity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (jsonObject!=null&&AnalyzeUtil.checkSuccess(jsonObject)) {
                                 finish();
                             }
                             Toast.makeText(Regist2Activity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
