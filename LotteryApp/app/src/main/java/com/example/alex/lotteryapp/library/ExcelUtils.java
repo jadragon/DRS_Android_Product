@@ -1,6 +1,7 @@
 package com.example.alex.lotteryapp.library;
 
 import android.content.Context;
+
 import com.example.alex.lotteryapp.library.pojo.DataPojo;
 
 import java.io.File;
@@ -41,20 +42,20 @@ public class ExcelUtils {
      */
     public static void format() {
         try {
-            arial14font = new WritableFont(WritableFont.ARIAL, 14, WritableFont.BOLD);
+            arial14font = new WritableFont(WritableFont.ARIAL, 20, WritableFont.BOLD);
             arial14font.setColour(jxl.format.Colour.LIGHT_BLUE);
             arial14format = new WritableCellFormat(arial14font);
             arial14format.setAlignment(jxl.format.Alignment.CENTRE);
             arial14format.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN);
             arial14format.setBackground(jxl.format.Colour.VERY_LIGHT_YELLOW);
 
-            arial10font = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
+            arial10font = new WritableFont(WritableFont.ARIAL, 16, WritableFont.BOLD);
             arial10format = new WritableCellFormat(arial10font);
             arial10format.setAlignment(jxl.format.Alignment.CENTRE);
             arial10format.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN);
             arial10format.setBackground(Colour.GRAY_25);
 
-            arial12font = new WritableFont(WritableFont.ARIAL, 10);
+            arial12font = new WritableFont(WritableFont.ARIAL, 16);
             arial12format = new WritableCellFormat(arial12font);
             arial10format.setAlignment(jxl.format.Alignment.CENTRE);//对齐格式
             arial12format.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN); //设置边框
@@ -79,7 +80,7 @@ public class ExcelUtils {
                 file.createNewFile();
             }
             workbook = Workbook.createWorkbook(file);
-            WritableSheet sheet = workbook.createSheet("第一页", 0);
+            WritableSheet sheet = workbook.createSheet("第一頁", 0);
             //创建标题栏
             sheet.addCell((WritableCell) new Label(0, 0, fileName, arial14format));
             for (int col = 0; col < colName.length; col++) {

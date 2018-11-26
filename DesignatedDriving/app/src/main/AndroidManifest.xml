@@ -83,7 +83,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SimpleWebviewActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".NewsActivity" />
+        <activity android:name=".OrdermealActivity"></activity>
     </application>
 
 </manifest>

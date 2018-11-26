@@ -3,6 +3,7 @@ package tw.com.lccnet.app.designateddriving.Utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -14,6 +15,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +36,32 @@ public class LocationUtils {
     private static MyLocationListener myLocationListener;
     private static LocationManager mLocationManager;
     private static String PROVIDER;
+    private static SharedPreferences settings;
+
+    public static boolean saveData(Context context, Location location) {
+        float latitude = (float) location.getLatitude();
+        float longitude = (float) location.getLongitude();
+        if (latitude != 0 && longitude != 0) {
+            settings = context.getSharedPreferences("user_data", 0);
+            settings.edit()
+                    .putFloat("mLatitude", latitude)
+                    .putFloat("mLongitude", longitude)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    public static LatLng readData(Context context) {
+        settings = context.getSharedPreferences("user_data", 0);
+        double mLatitude = settings.getFloat("mLatitude", 0);
+        double mLongitude = settings.getFloat("mLongitude", 0);
+        if (mLatitude != 0 && mLongitude != 0) {
+            return new LatLng(mLatitude, mLongitude);
+        }
+        return null;
+    }
+
 
     public LocationUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -125,6 +154,12 @@ public class LocationUtils {
 
     private static Location getLastKnownLocation(Context context) {
         mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+       PROVIDER = mLocationManager.getBestProvider(criteria, true);
+        @SuppressLint("MissingPermission")
+        Location location = mLocationManager.getLastKnownLocation(PROVIDER);
+        /*
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
@@ -138,7 +173,9 @@ public class LocationUtils {
                 PROVIDER = provider;
             }
         }
-        return bestLocation;
+        */
+
+        return location;
     }
 
     /**
@@ -185,9 +222,9 @@ public class LocationUtils {
      * @return {@link Address}
      */
     public static Address getAddress(Context context, double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        Geocoder geo = new Geocoder(context.getApplicationContext(), Locale.getDefault());
         try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            List<Address> addresses = geo.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);
         } catch (IOException e) {
             e.printStackTrace();

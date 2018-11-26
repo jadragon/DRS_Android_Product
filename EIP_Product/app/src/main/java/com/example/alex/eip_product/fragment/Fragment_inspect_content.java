@@ -1,5 +1,6 @@
 package com.example.alex.eip_product.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.alex.eip_product.InsepectOrderActivity;
 import com.example.alex.eip_product.R;
 
 import static db.OrderDatabase.KEY_PONumber;
@@ -18,7 +20,7 @@ import static db.OrderDatabase.KEY_PONumber;
  * Created by user on 2017/5/30.
  */
 
-public class Fragment_inspect_content extends Fragment {
+public class Fragment_inspect_content extends Fragment implements View.OnClickListener {
     private View v;
     private TextView title, company_name;
     private Bundle bundle;
@@ -45,6 +47,8 @@ public class Fragment_inspect_content extends Fragment {
         for (String number : bundle.getStringArrayList(KEY_PONumber)) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_inspect_content, null);
             ((TextView) view.findViewWithTag("PONumber")).setText(number);
+            view.findViewWithTag("overview").setOnClickListener(this);
+
             tableLayout.addView(view);
         }
     }
@@ -58,4 +62,8 @@ public class Fragment_inspect_content extends Fragment {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(getContext(), InsepectOrderActivity.class));
+    }
 }

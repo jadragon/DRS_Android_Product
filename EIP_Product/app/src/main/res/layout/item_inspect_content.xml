@@ -34,6 +34,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
+        android:tag="overview"
         android:background="@color/orange"
         android:padding="5dp"
         android:text="@string/inspect_content_title10"

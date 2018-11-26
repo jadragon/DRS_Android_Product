@@ -74,7 +74,7 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
             public void onClick(View view) {
                 //Log.e("Excel", db.getExcelData() + "");
                 exportExcel();
-                Toast.makeText(AllListActivity.this, "輸出成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AllListActivity.this, "成功!\n輸出路徑:\n" + getSDPath() + "/捷豹尾牙抽獎名單/", Toast.LENGTH_LONG).show();
             }
         });
         alllist_btn_reset.setOnClickListener(new View.OnClickListener() {

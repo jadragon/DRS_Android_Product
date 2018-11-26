@@ -175,7 +175,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         ArrayList<Map<String, String>> datas = new ArrayList<>();
         Map<String, String> map;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode +" ORDER BY "+KEY_PONumber+" ASC", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
             map = new HashMap<>();

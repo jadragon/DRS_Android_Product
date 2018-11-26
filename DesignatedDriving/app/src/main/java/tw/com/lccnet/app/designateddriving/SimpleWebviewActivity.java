@@ -23,47 +23,34 @@ public class SimpleWebviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_webview);
-        String title = getIntent().getStringExtra("title");
+        final String title = getIntent().getStringExtra("title");
         initToolbar(title);
         initWebview();
-        switch (title) {
-            case "服務條款":
-                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public JSONObject onTasking(Void... params) {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public JSONObject onTasking(Void... params) {
+
+                switch (title) {
+                    case "服務條款":
                         return CustomerApi.tservice();
-                    }
-
-                    @Override
-                    public void onTaskAfter(JSONObject jsonObject) {
-                        try {
-                            webview.loadDataWithBaseURL(null, jsonObject.getString("Data"), "text/html", "utf-8",
-                                    null);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                break;
-            case "關於我們":
-                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public JSONObject onTasking(Void... params) {
+                    case "關於我們":
                         return CustomerApi.about();
-                    }
+                    case "常見問題":
+                        return CustomerApi.question();
+                }
+                return null;
+            }
 
-                    @Override
-                    public void onTaskAfter(JSONObject jsonObject) {
-                        try {
-                            webview.loadDataWithBaseURL(null, jsonObject.getString("Data"), "text/html", "utf-8",
-                                    null);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                break;
-        }
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                try {
+                    webview.loadDataWithBaseURL(null, jsonObject.getString("Data"), "text/html", "utf-8",
+                            null);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void initToolbar(String title) {
@@ -97,7 +84,7 @@ public class SimpleWebviewActivity extends AppCompatActivity {
         webSettings.setDisplayZoomControls(false);
         webSettings.setBuiltInZoomControls(false);
         //禁用文字缩放
-        webSettings.setTextZoom(300);
+        webSettings.setTextZoom(200);
         //10M缓存，api 18后，系统自动管理。
         webSettings.setAppCacheMaxSize(10 * 1024 * 1024);
         //允许缓存，设置缓存位置

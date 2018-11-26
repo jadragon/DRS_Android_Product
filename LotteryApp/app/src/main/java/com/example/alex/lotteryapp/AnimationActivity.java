@@ -4,25 +4,20 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.alex.lotteryapp.library.SQLiteDatabaseHandler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class AnimationActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback {
     private SurfaceView surfaceView;
     private MediaPlayer mediaPlayer;
-    private int position;
     private View select_menu;
     SQLiteDatabaseHandler db;
     boolean start = true;
@@ -30,7 +25,6 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     private DisplayMetrics dm;
     private String[] types = {"頭獎", "二獎", "三獎", "四獎", "五獎", "六獎"};
     int typePosition;
-    private TextView winner1, winner2, winner3, winner4, winner5, winner6;
     private Thread thread;
 
     @Override
@@ -44,29 +38,9 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initSelectMenu() {
-        select_menu = findViewById(R.id.select_menu);
-        winner1 = findViewById(R.id.winner1);
-        winner2 = findViewById(R.id.winner2);
-        winner3 = findViewById(R.id.winner3);
-        winner4 = findViewById(R.id.winner4);
-        winner5 = findViewById(R.id.winner5);
-        winner6 = findViewById(R.id.winner6);
-        new AsyncTask<Void, Void, ArrayList<ArrayList<String>>>() {
-            @Override
-            protected ArrayList<ArrayList<String>> doInBackground(Void... voids) {
-                return db.getAllWinnerNames();
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<ArrayList<String>> datas) {
-                winner1.setText(datas.get(0) + "");
-                winner2.setText(datas.get(1) + "");
-                winner3.setText(datas.get(2) + "");
-                winner4.setText(datas.get(3) + "");
-                winner5.setText(datas.get(4) + "");
-                winner6.setText(datas.get(5) + "");
-            }
-        }.execute();
+        select_menu = this.findViewById(R.id.select_menu);
+        select_menu.getLayoutParams().height = dm.widthPixels / 16 * 9;
+        findViewById(R.id.inside_layout).getLayoutParams().height = dm.widthPixels / 16 * 7;
         findViewById(R.id.first).setOnClickListener(this);
         findViewById(R.id.secound).setOnClickListener(this);
         findViewById(R.id.third).setOnClickListener(this);
@@ -78,6 +52,7 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     private void initMediaPlay() {
         surfaceView = this.findViewById(R.id.surfaceView);
         surfaceView.getLayoutParams().height = dm.widthPixels / 16 * 9;
+
         // 设置SurfaceView自己不管理的缓冲区
         surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         surfaceView.getHolder().addCallback(this);
@@ -167,20 +142,20 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
                                         intent.putExtra("load", 6000);
                                         break;
                                     case 2:
-                                        intent.putExtra("load", 5000);
+                                        intent.putExtra("load", 6000);
                                         break;
                                     case 3:
-                                        intent.putExtra("load", 3000);
+                                        intent.putExtra("load", 6000);
                                         break;
                                     case 4:
-                                        intent.putExtra("load", 1500);
+                                        intent.putExtra("load", 6000);
                                         break;
                                     case 5:
-                                        intent.putExtra("load", 1000);
+                                        intent.putExtra("load", 6000);
                                         break;
                                 }
 
-                                startActivityForResult(intent, typePosition);
+                                startActivity(intent);
                             }
                         });
                     } catch (InterruptedException e) {
@@ -192,31 +167,6 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 0:
-                winner1.setText(db.getWinnerNames(types[requestCode]) + "");
-                break;
-            case 1:
-                winner2.setText(db.getWinnerNames(types[requestCode]) + "");
-                break;
-            case 2:
-                winner3.setText(db.getWinnerNames(types[requestCode]) + "");
-                break;
-            case 3:
-                winner4.setText(db.getWinnerNames(types[requestCode]) + "");
-                break;
-            case 4:
-                winner5.setText(db.getWinnerNames(types[requestCode]) + "");
-                break;
-            case 5:
-                winner6.setText(db.getWinnerNames(types[requestCode]) + "");
-                break;
-        }
-    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {

@@ -1,6 +1,9 @@
 package com.example.alex.lotteryapp;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,16 +35,58 @@ public class RollBarActivity extends AppCompatActivity {
     private String award_type = "";
     boolean back = true;
     private static int LoadingTime;
+    private MediaPlayer mediaPlayer;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rollbar);
         db = new SQLiteDatabaseHandler(this);
+        initMediaPlay();
         initAwardType();
         initView();
         initListener();
         Log.e("RollBarActivity", "RollBarActivity");
+    }
+
+    private void initMediaPlay() {
+        mediaPlayer = new MediaPlayer();
+        String path = "android.resource://" + getPackageName() + "/" + R.raw.music1;
+        Uri uri = Uri.parse(path);
+        try {
+            // mHandler = new Handler();
+            mediaPlayer.setDataSource(RollBarActivity.this, uri);
+            mediaPlayer.prepare();
+            mediaPlayer.setLooping(true);
+            if (!mediaPlayer.isPlaying()) {
+                mediaPlayer.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        mediaPlayer.start();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        super.onDestroy();
     }
 
     private void initAwardType() {

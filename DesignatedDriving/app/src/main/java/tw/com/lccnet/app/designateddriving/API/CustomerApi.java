@@ -20,6 +20,15 @@ public class CustomerApi implements APISetting {
     private static final String privacy_url = DOMAIN + "main/about/privacy.php";
     private static final String question_url = DOMAIN + "main/about/question.php";
     private static final String contact_url = DOMAIN + "main/about/contact.php";
+    private static final String calculate1_url = DOMAIN + "main/calculate/calculate1.php";
+    private static final String calculate2_url = DOMAIN + "main/calculate/calculate2.php";
+    private static final String calculate3_url = DOMAIN + "main/calculate/calculate3.php";
+    private static final String myCoupon_url = DOMAIN + "main/coupon/myCoupon.php";
+
+    private static final String couponList_url = DOMAIN + "main/coupon/couponList.php";
+    private static final String setCoupon_url = DOMAIN + "main/coupon/setCoupon.php";
+    private static final String news_url = DOMAIN + "main/news/news.php";
+    private static final String ordermeal_url = DOMAIN + "main/other/ordermeal.php";
 
     /**
      * 1.1.1	註冊
@@ -68,6 +77,87 @@ public class CustomerApi implements APISetting {
         params.add(new BasicNameValuePair("ntgo", ntgo));
         params.add(new BasicNameValuePair("mp", mp));
         return jsonParser.getJSONFromUrl(forget_url, params);
+    }
+
+    /**
+     * 費用試算-1.3.1	立即呼叫
+     */
+    public static JSONObject calculate1(String type, String address1, String address2) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("type", type));
+        params.add(new BasicNameValuePair("address1", address1));
+        params.add(new BasicNameValuePair("address2", address2));
+        return jsonParser.getJSONFromUrl(calculate1_url, params);
+    }
+
+    /**
+     * 費用試算-1.3.2	長途代駕
+     */
+    public static JSONObject calculate2(String address1, String address2) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("address1", address1));
+        params.add(new BasicNameValuePair("address2", address2));
+        return jsonParser.getJSONFromUrl(calculate2_url, params);
+    }
+
+    /**
+     * 1.3.1	費用試算-立即呼叫
+     */
+    public static JSONObject calculate3(String type, String minutes) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("type", type));
+        params.add(new BasicNameValuePair("minutes", minutes));
+        return jsonParser.getJSONFromUrl(calculate3_url, params);
+    }
+
+    /**
+     * 1.4.1	我的優惠券
+     */
+    public static JSONObject myCoupon(String token) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(myCoupon_url, params);
+    }
+
+    /**
+     * 1.4.2	搶奪優惠券 – 優惠券列表X
+     */
+    public static JSONObject couponList(String token) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(couponList_url, params);
+    }
+
+    /**
+     * 1.4.3	搶奪優惠券 – 獲取優惠券X
+     */
+    public static JSONObject setCoupon(String token, String mcno) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("mcno", mcno));
+        return jsonParser.getJSONFromUrl(setCoupon_url, params);
+    }
+
+    /**
+     * 1.5.1	最新消息資訊
+     */
+    public static JSONObject news() {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        return jsonParser.getJSONFromUrl(news_url, params);
     }
 
     /**
@@ -131,5 +221,15 @@ public class CustomerApi implements APISetting {
         params.add(new BasicNameValuePair("title", title));
         params.add(new BasicNameValuePair("content", content));
         return jsonParser.getJSONFromUrl(contact_url, params);
+    }
+
+    /**
+     * 1.8.1	點餐送餐
+     */
+    public static JSONObject ordermeal() {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        return jsonParser.getJSONFromUrl(ordermeal_url, params);
     }
 }

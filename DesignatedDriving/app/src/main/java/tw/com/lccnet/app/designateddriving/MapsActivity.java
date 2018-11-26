@@ -2,6 +2,7 @@ package tw.com.lccnet.app.designateddriving;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -53,7 +54,7 @@ import java.util.Random;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 import tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
     private View view;
     private TextView toolbar_txt_title;
@@ -105,13 +106,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LocationUtils.register(getApplicationContext(), 5000, 10, new LocationUtils.OnLocationChangeListener() {
                     @Override
                     public void getLastKnownLocation(Location location) {
-                        mLatitude = location.getLatitude();
-                        mLongitude = location.getLongitude();
+                        LatLng lastPosition = LocationUtils.readData(MapsActivity.this);
+                        if (lastPosition != null) {
+                            mLatitude = lastPosition.latitude;
+                            mLongitude = lastPosition.longitude;
+                        } else {
+                            mLatitude = location.getLatitude();
+                            mLongitude = location.getLongitude();
+                        }
                     }
 
                     @Override
                     public void onLocationChanged(Location location) {
-                        Toast.makeText(MapsActivity.this, "地位更新:緯度:" + location.getLatitude() + "\n經度:" + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                        LocationUtils.saveData(MapsActivity.this, location);
                     }
 
                     @Override
@@ -127,11 +134,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void initButton() {
         Button btn_long_trip = findViewById(R.id.btn_long_trip);
+        btn_long_trip.setOnClickListener(this);
         reShapeButton(btn_long_trip, R.color.orange1);
         Button btn_immediate = findViewById(R.id.btn_immediate);
+        btn_immediate.setOnClickListener(this);
         reShapeButton(btn_immediate, R.color.green);
         Button btn_deliver = findViewById(R.id.btn_deliver);
+        btn_deliver.setOnClickListener(this);
         reShapeButton(btn_deliver, R.color.green1);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_long_trip:
+
+                break;
+            case R.id.btn_immediate:
+
+                break;
+            case R.id.btn_deliver:
+                startActivity(new Intent(this, OrdermealActivity.class));
+                break;
+        }
     }
 
     private void reShapeButton(Button button, int color) {
@@ -220,6 +246,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (item.getItemId()) {
                     case R.id.menu_item1:
                         Toast.makeText(MapsActivity.this, "最新消息", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MapsActivity.this, NewsActivity.class);
+                        intent.putExtra("title", "常見問題");
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item2:
                         Toast.makeText(MapsActivity.this, "活動專區", Toast.LENGTH_SHORT).show();
@@ -229,9 +258,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     case R.id.menu_item4:
                         Toast.makeText(MapsActivity.this, "常見問題", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MapsActivity.this, SimpleWebviewActivity.class);
+                        intent.putExtra("title", "常見問題");
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item5:
-                        Intent intent = new Intent(MapsActivity.this, SimpleWebviewActivity.class);
+                        intent = new Intent(MapsActivity.this, SimpleWebviewActivity.class);
                         intent.putExtra("title", "關於我們");
                         startActivity(intent);
                         return true;
@@ -311,14 +343,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .icon(getMarkerIcon(R.drawable.no_photo, "蔡司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
-
         map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
                 LatLng latLng = map.getCameraPosition().target;
+                showAddress(latLng);
                 // mZoom = map.getCameraPosition().zoom;
                 if (Math.abs(mLatitude - latLng.latitude) > 0.0005 || Math.abs(mLongitude - latLng.longitude) > 0.0005) {
-                    showAddress(latLng);
                 }
             }
         });
@@ -389,7 +420,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         db.close();
         LocationUtils.unregister();
         super.onDestroy();
-      //  System.exit(0);
+        //  System.exit(0);
     }
 
     public static Bitmap createDrawableFromView(Context context, View view) {

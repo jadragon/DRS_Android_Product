@@ -277,6 +277,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/table_header7"
+                            android:singleLine="true"
                             android:textSize="@dimen/table_text_size" />
 
                         <View
@@ -297,6 +298,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header8"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -311,6 +313,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header9"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -325,6 +328,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header10"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -339,6 +343,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header11"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                         </LinearLayout>
@@ -384,6 +389,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:text="@string/table_header14"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -398,6 +404,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:text="@string/table_header15"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
                         </LinearLayout>
 
@@ -420,6 +427,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header16"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -435,6 +443,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header17"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -450,6 +459,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header18"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -465,6 +475,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_header19"
+                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                         </LinearLayout>
@@ -548,6 +559,7 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_footer2"
                                 android:textSize="@dimen/table_text_size" />
 
@@ -575,6 +587,7 @@
                                         android:layout_weight="@dimen/footer3_weight"
                                         android:gravity="center"
                                         android:padding="@dimen/table_padding"
+                                        android:singleLine="true"
                                         android:text="@string/table_footer4"
                                         android:textSize="@dimen/table_text_size" />
 
@@ -583,6 +596,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="@dimen/footer4_weight"
                                         android:gravity="center"
+                                        android:singleLine="true"
                                         android:padding="@dimen/table_padding"
                                         android:text="@string/table_footer5"
                                         android:textSize="@dimen/table_text_size" />
@@ -592,6 +606,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="@dimen/footer5_weight"
+                                        android:singleLine="true"
                                         android:gravity="center"
                                         android:padding="@dimen/table_padding"
                                         android:text="@string/table_footer6"
@@ -611,6 +626,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
+                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
                                     android:text="@string/table_footer7"
                                     android:textSize="@dimen/table_text_size" />
@@ -640,6 +656,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
+                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
                                     android:text="@string/table_footer8"
                                     android:textSize="@dimen/table_text_size" />
@@ -704,6 +721,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
+                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
                                     android:text="@string/table_footer9"
                                     android:textSize="@dimen/table_text_size" />
@@ -733,6 +751,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
+                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
                                     android:text="@string/table_footer8"
                                     android:textSize="@dimen/table_text_size" />
@@ -836,7 +855,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="@dimen/table_padding"
-
+                            android:singleLine="true"
                             android:text="@string/table_footer15"
                             android:textSize="@dimen/table_text_size" />
 
@@ -868,6 +887,7 @@
                             android:gravity="center"
                             android:padding="@dimen/table_padding"
                             android:text="@string/table_footer8"
+                            android:singleLine="true"
                             android:textSize="@dimen/table_text_size" />
 
                         <View
