@@ -8,7 +8,23 @@ import java.util.Date;
 import liabiry.Http.HttpUtils;
 
 public class GlobalVariable extends Application {
+    private String username, pw;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPw() {
+        return pw;
+    }
+
+    public void setPw(String pw) {
+        this.pw = pw;
+    }
 
     private Date current_date;
 
@@ -20,7 +36,7 @@ public class GlobalVariable extends Application {
         int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         return year + "/" + (month + 1) + "/" + dayOfMonth;
-                //+ "(" + getDayOfWeek(dayOfWeek) + ")";
+        //+ "(" + getDayOfWeek(dayOfWeek) + ")";
     }
 
     public Object getCurrent_date(int type) {

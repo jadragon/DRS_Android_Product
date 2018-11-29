@@ -28,6 +28,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
     // table name
     private static final String TABLE_Orders = "Orders";
     private static final String TABLE_OrderDetails = "OrderDetails";
+    private static final String TABLE_CheckFailedReasons = "CheckFailedReasons";
     private static final String TABLE_OrderComments = "OrderComments";
     private static final String TABLE_OrderItemComments = "OrderItemComments";
     //Columns Orders
@@ -43,6 +44,16 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public static final String KEY_SalesMan = "SalesMan";
     public static final String KEY_Phone = "Phone";
     public static final String KEY_CheckMan = "CheckMan";
+    public static final String KEY_HasCompleted = "HasCompleted";
+    public static final String KEY_Inspector = "Inspector";
+    public static final String KEY_InspectorDate = "InspectorDate";
+    public static final String KEY_VendorInspector = "VendorInspector";
+    public static final String KEY_VendorInspectorDate = "VendorInspectorDate";
+    public static final String KEY_FeedbackPerson = "FeedbackPerson";
+    public static final String KEY_FeedbackRecommendations = "FeedbackRecommendations";
+    public static final String KEY_FeedbackDate = "FeedbackDate";
+    public static final String KEY_InspectionNumber = "InspectionNumber";
+
     public static final String KEY_OrderDetails = "OrderDetails";
     public static final String KEY_OrderComments = "OrderComments";
     public static final String KEY_OrderItemComments = "OrderItemComments";
@@ -51,7 +62,24 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public static final String KEY_Item = "Item";
     public static final String KEY_OrderQty = "OrderQty";
     public static final String KEY_Qty = "Qty";
+    public static final String KEY_SampleNumber = "SampleNumber";
     public static final String KEY_Uom = "Uom";
+    public static final String KEY_Size = "Size";
+    public static final String KEY_Functions = "Functions";
+    public static final String KEY_Surface = "Surface";
+    public static final String KEY_Package = "Package";
+    public static final String KEY_CheckPass = "CheckPass";
+    public static final String KEY_Special = "Special";
+    public static final String KEY_Rework = "Rework";
+    public static final String KEY_Reject = "Reject";
+    public static final String KEY_MainMarK = "MainMarK";
+    public static final String KEY_SideMarK = "SideMarK";
+    public static final String KEY_ReCheckDate = "ReCheckDate";
+    public static final String KEY_Remarks = "Remarks";
+    //Columns CheckFailedReasons
+    public static final String KEY_CheckFailedReasons = "CheckFailedReasons";
+    public static final String KEY_ReasonCode = "ReasonCode";
+    public static final String KEY_ReasonDescr = "ReasonDescr";
     //Columns OrderComments
     public static final String KEY_Comment = "Comment";
     //Columns OrderItemComments
@@ -70,9 +98,26 @@ public class OrderDatabase extends SQLiteOpenHelper {
             + KEY_SalesMan + " TEXT,"
             + KEY_Phone + " TEXT,"
             + KEY_CheckMan + " TEXT,"
+            + KEY_HasCompleted + " BOOLEAN,"
+            + KEY_Inspector + " TEXT,"
+            + KEY_InspectorDate + " TEXT,"
+            + KEY_VendorInspector + " BLOB,"
+            + KEY_VendorInspectorDate + " TEXT,"
+            + KEY_FeedbackPerson + " TEXT,"
+            + KEY_FeedbackRecommendations + " TEXT,"
+            + KEY_FeedbackDate + " TEXT,"
+            + KEY_InspectionNumber + " TEXT,"
             + KEY_OrderDetails + " TEXT,"
+            + KEY_CheckFailedReasons + " TEXT,"
             + KEY_OrderComments + " TEXT,"
             + KEY_OrderItemComments + " TEXT" + ")";
+    private static final String CREATE_CheckFailedReasons_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CheckFailedReasons + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_PONumber + " TEXT,"
+            + KEY_POVersion + " TEXT,"
+            + KEY_Item + " TEXT,"
+            + KEY_ReasonCode + " TEXT,"
+            + KEY_ReasonDescr + " TEXT" + ")";
     private static final String CREATE_OrderDetails_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderDetails + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_PONumber + " TEXT,"
@@ -81,7 +126,20 @@ public class OrderDatabase extends SQLiteOpenHelper {
             + KEY_Item + " TEXT,"
             + KEY_OrderQty + " FLOAT,"
             + KEY_Qty + " FLOAT,"
-            + KEY_Uom + " TEXT" + ")";
+            + KEY_SampleNumber + " INTEGER,"
+            + KEY_Uom + " TEXT,"
+            + KEY_Size + " INTEGER,"
+            + KEY_Functions + " INTEGER,"
+            + KEY_Surface + " INTEGER,"
+            + KEY_Package + " INTEGER,"
+            + KEY_CheckPass + " TEXT,"
+            + KEY_Special + " BOOLEAN,"
+            + KEY_Rework + " BOOLEAN,"
+            + KEY_Reject + " BOOLEAN,"
+            + KEY_MainMarK + " BOOLEAN,"
+            + KEY_SideMarK + " BOOLEAN,"
+            + KEY_ReCheckDate + " TEXT,"
+            + KEY_Remarks + " TEXT" + ")";
     private static final String CREATE_OrderComments_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderComments + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_PONumber + " TEXT,"
@@ -105,6 +163,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_Orders_TABLE);
         db.execSQL(CREATE_OrderDetails_TABLE);
+        db.execSQL(CREATE_CheckFailedReasons_TABLE);
         db.execSQL(CREATE_OrderComments_TABLE);
         db.execSQL(CREATE_OrderItemComments_TABLE);
     }
@@ -115,6 +174,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Orders);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderDetails);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CheckFailedReasons);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderComments);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderItemComments);
         // Create tables again
@@ -134,12 +194,21 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.endTransaction(); // 处理完成
         db.close();
     }
-
     public void addOrderDetails(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
         for (ContentValues v : list) {
             db.insert(TABLE_OrderDetails, null, v);
+        }
+        db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
+        db.endTransaction(); // 处理完成
+        db.close();
+    }
+    public void addCheckFailedReasons(List<ContentValues> list) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction(); // 手动设置开始事务
+        for (ContentValues v : list) {
+            db.insert(TABLE_CheckFailedReasons, null, v);
         }
         db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
         db.endTransaction(); // 处理完成
@@ -175,7 +244,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         ArrayList<Map<String, String>> datas = new ArrayList<>();
         Map<String, String> map;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode +" ORDER BY "+KEY_PONumber+" ASC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode + " ORDER BY " + KEY_PONumber + " ASC", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
             map = new HashMap<>();
@@ -190,9 +259,21 @@ public class OrderDatabase extends SQLiteOpenHelper {
             map.put(KEY_SalesMan, cursor.getString(9));
             map.put(KEY_Phone, cursor.getString(10));
             map.put(KEY_CheckMan, cursor.getString(11));
-            map.put(KEY_OrderDetails, cursor.getString(12));
-            map.put(KEY_OrderComments, cursor.getString(13));
-            map.put(KEY_OrderItemComments, cursor.getString(14));
+
+            map.put(KEY_HasCompleted, cursor.getString(12));
+            map.put(KEY_Inspector, cursor.getString(13));
+            map.put(KEY_InspectorDate, cursor.getString(14));
+            map.put(KEY_VendorInspector, cursor.getString(15));
+            map.put(KEY_VendorInspectorDate, cursor.getString(16));
+            map.put(KEY_FeedbackPerson, cursor.getString(17));
+            map.put(KEY_FeedbackRecommendations, cursor.getString(18));
+            map.put(KEY_FeedbackDate, cursor.getString(19));
+            map.put(KEY_InspectionNumber, cursor.getString(20));
+
+            map.put(KEY_OrderDetails, cursor.getString(21));
+            map.put(KEY_CheckFailedReasons, cursor.getString(22));
+            map.put(KEY_OrderComments, cursor.getString(23));
+            map.put(KEY_OrderItemComments, cursor.getString(24));
             datas.add(map);
         }
         cursor.close();
@@ -225,6 +306,17 @@ public class OrderDatabase extends SQLiteOpenHelper {
 
     public int countOrderDetails() {
         String selectQuery = "SELECT * FROM " + TABLE_OrderDetails;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        db.close();
+        // return user
+        return count;
+    }
+
+    public int countCheckFailedReasons() {
+        String selectQuery = "SELECT * FROM " + TABLE_CheckFailedReasons;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         int count = cursor.getCount();

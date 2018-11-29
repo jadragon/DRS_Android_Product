@@ -1,7 +1,6 @@
 package com.example.alex.eip_product.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 import db.OrderDatabase;
 
-import static db.OrderDatabase.KEY_PONumber;
+import static db.OrderDatabase.KEY_CheckMan;
 import static db.OrderDatabase.KEY_VendorName;
 
 public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.RecycleHolder> {
@@ -60,8 +59,13 @@ import static db.OrderDatabase.KEY_VendorName;
 
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
-        holder.title.setText(list.get(position).get(KEY_VendorName));
-
+        holder.VendorName.setText(list.get(position).get(KEY_VendorName));
+        if (list.get(position).get(KEY_CheckMan).equals(gv.getUsername())) {
+            holder.CheckMan.setVisibility(View.VISIBLE);
+            holder.CheckMan.setText(list.get(position).get(KEY_CheckMan));
+        } else {
+            holder.CheckMan.setVisibility(View.INVISIBLE);
+        }
         /*
         if (list.get(position).get("company").equals("")) {
             holder.company.setVisibility(View.INVISIBLE);
@@ -78,12 +82,12 @@ import static db.OrderDatabase.KEY_VendorName;
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView title, company;
+        TextView VendorName, CheckMan;
 
         public RecycleHolder(View view) {
             super(view);
-            title = view.findViewWithTag("title");
-            company = view.findViewWithTag("company");
+            VendorName = view.findViewWithTag("VendorName");
+            CheckMan = view.findViewWithTag("CheckMan");
             itemView.setOnClickListener(this);
         }
 
@@ -93,6 +97,7 @@ import static db.OrderDatabase.KEY_VendorName;
             if (fragment_inspect_content == null) {//判斷Fragment_inspect_content是否已存在
                 fragment_inspect_content = new Fragment_inspect_content();
             }
+            /*
             Bundle bundle = new Bundle();
             bundle.putString("name", list.get(getAdapterPosition()).get(KEY_VendorName));
             bundle.putString("date", gv.getCurrent_date());
@@ -102,6 +107,7 @@ import static db.OrderDatabase.KEY_VendorName;
             }
             bundle.putStringArrayList(KEY_PONumber, arrayList);
             fragment_inspect_content.setArguments(bundle);
+            */
             ((MainActivity) ctx).switchFrament(fragment_inspect_content, "inspect_content");
             // ctx.startActivity(new Intent(ctx, InsepectOrderActivity.class));
         }

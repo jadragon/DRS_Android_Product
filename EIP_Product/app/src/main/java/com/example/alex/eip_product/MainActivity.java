@@ -40,12 +40,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HandlerThread handlerThread;
     private Handler mHandler, UiHandler;
     private OrderDatabase db;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = new OrderDatabase(this);
+        gv = (GlobalVariable) getApplicationContext();
         initHandler();
         initButton();
         initFragment();
@@ -94,15 +96,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public boolean handleMessage(Message msg) {
             try {
                 db.resetTables();
-                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo());
+                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw()));
                 db.addOrders(map.get("Orders"));
                 db.addOrderDetails(map.get("OrderDetails"));
+                db.addOrderDetails(map.get("CheckFailedReasons"));
                 db.addOrderComments(map.get("OrderComments"));
                 db.addOrderItemComments(map.get("OrderItemComments"));
                 UiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 });

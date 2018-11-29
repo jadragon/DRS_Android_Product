@@ -16,7 +16,7 @@ import com.example.alex.eip_product.R;
 import java.util.ArrayList;
 
 public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
-    private  Context context;
+    private Context context;
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;

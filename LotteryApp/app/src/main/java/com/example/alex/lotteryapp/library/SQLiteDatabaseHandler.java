@@ -380,8 +380,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         //二獎
         values = new ContentValues();
         values.put(KEY_TYPE, "二獎");
-        values.put(KEY_GIFT, "6萬");
-        for (int i = 0; i < 4; i++) {
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 5; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
 
@@ -389,21 +389,21 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         values = new ContentValues();
         values.put(KEY_TYPE, "三獎");
         values.put(KEY_GIFT, "5萬");
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 10; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //四獎
         values = new ContentValues();
         values.put(KEY_TYPE, "四獎");
         values.put(KEY_GIFT, "3萬");
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 15; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //五獎
         values = new ContentValues();
         values.put(KEY_TYPE, "五獎");
         values.put(KEY_GIFT, "2萬");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 30; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //六獎

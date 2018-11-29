@@ -5,10 +5,10 @@
     android:paddingTop="1dp">
 
     <TextView
-        android:tag="PONumber"
         android:layout_marginRight="1dp"
         android:background="@android:color/white"
         android:padding="5dp"
+        android:tag="PONumber"
         android:text="SC150309"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -16,6 +16,7 @@
         android:layout_marginRight="1dp"
         android:background="@android:color/white"
         android:padding="5dp"
+        android:tag="POVersion"
         android:text="1"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -23,6 +24,7 @@
         android:layout_marginRight="1dp"
         android:background="@color/light_blue"
         android:padding="5dp"
+        android:tag="HasCompleted"
         android:text="@string/inspect_content_title7"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -30,13 +32,14 @@
         android:layout_marginRight="1dp"
         android:background="@color/light_green"
         android:padding="5dp"
+        android:tag="CanShipping"
         android:text="@string/inspect_content_title7"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:tag="overview"
         android:background="@color/orange"
         android:padding="5dp"
+        android:tag="overview"
         android:text="@string/inspect_content_title10"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 </TableRow>

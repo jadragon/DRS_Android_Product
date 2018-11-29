@@ -84,7 +84,7 @@ public class SoapTestAcitivity extends AppCompatActivity implements View.OnClick
         public boolean handleMessage(Message msg) {
             try {
                 db.resetTables();
-                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo());
+                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo("test", "test123456"));
                 db.addOrders(map.get("Orders"));
                 db.addOrderDetails(map.get("OrderDetails"));
                 db.addOrderComments(map.get("OrderComments"));
