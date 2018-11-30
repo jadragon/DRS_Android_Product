@@ -30,7 +30,7 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_animation);
+        setContentView(R.layout.activity_animation2);
         dm = getResources().getDisplayMetrics();
         db = new SQLiteDatabaseHandler(this);
         initSelectMenu();
@@ -40,13 +40,13 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     private void initSelectMenu() {
         select_menu = this.findViewById(R.id.select_menu);
         select_menu.getLayoutParams().height = dm.widthPixels / 16 * 9;
-        findViewById(R.id.inside_layout).getLayoutParams().height = dm.widthPixels / 16 * 7;
+        // findViewById(R.id.inside_layout).getLayoutParams().height = dm.widthPixels / 16 * 7;
         findViewById(R.id.first).setOnClickListener(this);
         findViewById(R.id.secound).setOnClickListener(this);
         findViewById(R.id.third).setOnClickListener(this);
         findViewById(R.id.fourth).setOnClickListener(this);
         findViewById(R.id.fifth).setOnClickListener(this);
-        findViewById(R.id.sixth).setOnClickListener(this);
+        //    findViewById(R.id.sixth).setOnClickListener(this);
     }
 
     private void initMediaPlay() {
@@ -116,9 +116,6 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
                 case R.id.fifth:
                     typePosition = 4;
                     break;
-                case R.id.sixth:
-                    typePosition = 5;
-                    break;
             }
 
             select_menu.setVisibility(View.INVISIBLE);
@@ -128,30 +125,51 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
                 public void run() {
                     try {
                         Thread.sleep(10000);
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Intent intent = new Intent(AnimationActivity.this, RollBarActivity.class);
-                                intent.putExtra("type", types[typePosition]);
+                                intent.putExtra("stage", typePosition);
                                 switch (typePosition) {
                                     case 0:
-                                        intent.putExtra("load", 8000);
+                                        intent.putExtra("first", 0);
+                                        intent.putExtra("second", 2);
+                                        intent.putExtra("third", 4);
+                                        intent.putExtra("fourth", 4);
+                                        intent.putExtra("fifth", 8);
+                                        intent.putExtra("sixth", 7);
                                         break;
                                     case 1:
-                                        intent.putExtra("load", 6000);
+                                        intent.putExtra("first", 0);
+                                        intent.putExtra("second", 1);
+                                        intent.putExtra("third", 3);
+                                        intent.putExtra("fourth", 4);
+                                        intent.putExtra("fifth", 8);
+                                        intent.putExtra("sixth", 6);
                                         break;
                                     case 2:
-                                        intent.putExtra("load", 6000);
+                                        intent.putExtra("first", 0);
+                                        intent.putExtra("second", 1);
+                                        intent.putExtra("third", 2);
+                                        intent.putExtra("fourth", 4);
+                                        intent.putExtra("fifth", 7);
+                                        intent.putExtra("sixth", 6);
                                         break;
                                     case 3:
-                                        intent.putExtra("load", 6000);
+                                        intent.putExtra("first", 0);
+                                        intent.putExtra("second", 1);
+                                        intent.putExtra("third", 1);
+                                        intent.putExtra("fourth", 3);
+                                        intent.putExtra("fifth", 7);
+                                        intent.putExtra("sixth", 6);
                                         break;
                                     case 4:
-                                        intent.putExtra("load", 6000);
-                                        break;
-                                    case 5:
-                                        intent.putExtra("load", 6000);
+                                        intent.putExtra("first", 1);
+                                        intent.putExtra("second", 0);
+                                        intent.putExtra("third", 0);
+                                        intent.putExtra("fourth", 0);
+                                        intent.putExtra("fifth", 0);
+                                        intent.putExtra("sixth", 0);
                                         break;
                                 }
 
@@ -166,7 +184,6 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
             thread.start();
         }
     }
-
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {

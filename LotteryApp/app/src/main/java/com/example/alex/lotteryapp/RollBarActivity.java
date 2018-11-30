@@ -32,22 +32,33 @@ public class RollBarActivity extends AppCompatActivity {
     private int status_height;
 
     private ArrayList<String> left_awardlist;
-    private String award_type = "";
     boolean back = true;
     private static int LoadingTime;
     private MediaPlayer mediaPlayer;
-    private Handler mHandler;
+    private int award;
+    private int[] stages = {0, 0, 0, 0, 0, 0};
+    private String[] types = {"頭獎", "二獎", "三獎", "四獎", "五獎", "六獎"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rollbar);
         db = new SQLiteDatabaseHandler(this);
+        initStage();
         initMediaPlay();
-        initAwardType();
         initView();
+        initAwardType();
+
         initListener();
-        Log.e("RollBarActivity", "RollBarActivity");
+    }
+
+    private void initStage() {
+        stages[0] = getIntent().getIntExtra("first", 0);
+        stages[1] = getIntent().getIntExtra("second", 0);
+        stages[2] = getIntent().getIntExtra("third", 0);
+        stages[3] = getIntent().getIntExtra("fourth", 0);
+        stages[4] = getIntent().getIntExtra("fifth", 0);
+        stages[5] = getIntent().getIntExtra("sixth", 0);
     }
 
     private void initMediaPlay() {
@@ -90,13 +101,38 @@ public class RollBarActivity extends AppCompatActivity {
     }
 
     private void initAwardType() {
-        award_type = getIntent().getStringExtra("type");
-        LoadingTime = getIntent().getIntExtra("load", 2000);
-        txt_award = findViewById(R.id.txt_award);
-        txt_award.setText("獎項:" + db.getGift(award_type));
-        txt_left = findViewById(R.id.txt_left);
-        txt_left.setText("剩餘名額" + db.getLeftWinners(award_type));
-        refreshData();
+        award = 5;
+        while (award >= 0 && stages[award] <= 0) {
+            award--;
+        }
+        if (award >= 0) {
+            switch (award) {
+                case 0:
+                    LoadingTime = 2000;
+                    break;
+                case 1:
+                    LoadingTime = 1000;
+                    break;
+                case 2:
+                    LoadingTime = 1000;
+                    break;
+                case 3:
+                    LoadingTime = 1000;
+                    break;
+                case 4:
+                    LoadingTime = 1000;
+                    break;
+                case 5:
+                    LoadingTime = 1000;
+                    break;
+            }
+            txt_award.setText("獎項:" + db.getGift(types[award]));
+            txt_left.setText("剩餘名額" + stages[award]);
+            left_awardlist = db.getItems(types[award]);
+        } else {
+            txt_award.setText("本獎次已全數抽完");
+            txt_left.setText("");
+        }
     }
 
     private void initView() {
@@ -125,7 +161,6 @@ public class RollBarActivity extends AppCompatActivity {
         bar2_visible_height = paddingTop + screen_height / 2;
         limit_top = paddingTop + screen_height / 2 - ball_lenth * 3 / 2;
         limit_bottom = paddingTop + screen_height / 2 + ball_lenth * 3 / 2;
-
 
         //螢幕
         ViewGroup.LayoutParams params = findViewById(R.id.screen).getLayoutParams();
@@ -173,15 +208,16 @@ public class RollBarActivity extends AppCompatActivity {
         switcher2.setText(7 + "");
         switcher3.setText(7 + "");
         //獎項
+        txt_award = findViewById(R.id.txt_award);
         params = txt_award.getLayoutParams();
         params.height = main_height / 9;
         ((FrameLayout.LayoutParams) params).setMargins(screen_width / 7 * 2, paddingTop + (main_height - machine_height) / 2, 0, 0);
         //獎項
+        txt_left = findViewById(R.id.txt_left);
         params = txt_left.getLayoutParams();
         params.height = main_height / 18;
         ((FrameLayout.LayoutParams) params).setMargins(0, paddingTop + (main_height - machine_height) / 2 + main_height / 18, screen_width / 7 * 2, 0);
     }
-
 
     private void initListener() {
         ball.setOnTouchListener(new View.OnTouchListener() {
@@ -335,8 +371,8 @@ public class RollBarActivity extends AppCompatActivity {
                             switcher2.setText(nowWinner.charAt(1) + "");
                             switcher3.setText(nowWinner.charAt(2) + "");
 
-                            txt_left.setText("剩餘名額" + db.getLeftWinners(award_type));
-                            refreshData();
+                            stages[award] = --stages[award];
+                            initAwardType();
                             back = true;
                         }
                     });
@@ -355,11 +391,6 @@ public class RollBarActivity extends AppCompatActivity {
     public static int randomInt() {
         return RANDOM.nextInt(999);
     }
-
-    private void refreshData() {
-        left_awardlist = db.getItems(award_type);
-    }
-
 
     @Override
     public void onBackPressed() {
