@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class RollBarActivity extends AppCompatActivity {
-    private TextView txt_award, txt_left;
+    private TextView title, txt_award, txt_left;
     private TextView switcher1, switcher2, switcher3;
     private Wheel wheel1, wheel2, wheel3;
     private Thread tread;
@@ -36,7 +36,7 @@ public class RollBarActivity extends AppCompatActivity {
     private static int LoadingTime;
     private MediaPlayer mediaPlayer;
     private int award;
-    private int[] stages = {0, 0, 0, 0, 0, 0};
+    private int stage;
     private String[] types = {"頭獎", "二獎", "三獎", "四獎", "五獎", "六獎"};
 
     @Override
@@ -44,21 +44,11 @@ public class RollBarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rollbar);
         db = new SQLiteDatabaseHandler(this);
-        initStage();
+        stage = getIntent().getIntExtra("stage", 0);
         initMediaPlay();
         initView();
         initAwardType();
-
         initListener();
-    }
-
-    private void initStage() {
-        stages[0] = getIntent().getIntExtra("first", 0);
-        stages[1] = getIntent().getIntExtra("second", 0);
-        stages[2] = getIntent().getIntExtra("third", 0);
-        stages[3] = getIntent().getIntExtra("fourth", 0);
-        stages[4] = getIntent().getIntExtra("fifth", 0);
-        stages[5] = getIntent().getIntExtra("sixth", 0);
     }
 
     private void initMediaPlay() {
@@ -97,42 +87,52 @@ public class RollBarActivity extends AppCompatActivity {
     protected void onDestroy() {
         mediaPlayer.reset();
         mediaPlayer.release();
+        mediaPlayer = null;
         super.onDestroy();
     }
 
     private void initAwardType() {
         award = 5;
-        while (award >= 0 && stages[award] <= 0) {
-            award--;
-        }
-        if (award >= 0) {
-            switch (award) {
-                case 0:
-                    LoadingTime = 2000;
-                    break;
-                case 1:
-                    LoadingTime = 1000;
-                    break;
-                case 2:
-                    LoadingTime = 1000;
-                    break;
-                case 3:
-                    LoadingTime = 1000;
-                    break;
-                case 4:
-                    LoadingTime = 1000;
-                    break;
-                case 5:
-                    LoadingTime = 1000;
-                    break;
+        left_awardlist = db.getItems(award, stage);
+        while (left_awardlist.size() <= 0) {
+            if (award == 0) {
+                break;
             }
-            txt_award.setText("獎項:" + db.getGift(types[award]));
-            txt_left.setText("剩餘名額" + stages[award]);
-            left_awardlist = db.getItems(types[award]);
-        } else {
-            txt_award.setText("本獎次已全數抽完");
-            txt_left.setText("");
+            award--;
+            left_awardlist = db.getItems(award, stage);
         }
+
+        switch (award) {
+            case 0:
+                LoadingTime = 8000;
+                break;
+            case 1:
+                LoadingTime = 5000;
+                break;
+            case 2:
+                LoadingTime = 5000;
+                break;
+            case 3:
+                LoadingTime = 5000;
+                break;
+            case 4:
+                LoadingTime = 5000;
+                break;
+            case 5:
+                LoadingTime = 5000;
+                break;
+
+        }
+        if (award == 0 && left_awardlist.size() == 0) {
+            title.setText("");
+            txt_award.setText("本階段已抽選完畢");
+            txt_left.setText("");
+        } else {
+            title.setText(types[award]);
+            txt_award.setText("獎項:" + db.getGift(award));
+            txt_left.setText("剩餘名額" + left_awardlist.size());
+        }
+
     }
 
     private void initView() {
@@ -169,6 +169,12 @@ public class RollBarActivity extends AppCompatActivity {
         params = findViewById(R.id.logo).getLayoutParams();
         params.width = logo_width;
         params.height = logo_height;
+
+        //標題
+        title = findViewById(R.id.title);
+        params = title.getLayoutParams();
+        params.height = logo_height / 3;
+        ((FrameLayout.LayoutParams) params).topMargin = paddingTop;
         //機台
         params = findViewById(R.id.machine).getLayoutParams();
         params.height = machine_height;
@@ -370,8 +376,6 @@ public class RollBarActivity extends AppCompatActivity {
                             switcher1.setText(nowWinner.charAt(0) + "");
                             switcher2.setText(nowWinner.charAt(1) + "");
                             switcher3.setText(nowWinner.charAt(2) + "");
-
-                            stages[award] = --stages[award];
                             initAwardType();
                             back = true;
                         }

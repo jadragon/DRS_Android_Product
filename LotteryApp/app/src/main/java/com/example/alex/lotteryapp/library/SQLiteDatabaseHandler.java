@@ -30,15 +30,24 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_ID = "_id";
     public static final String KEY_TYPE = "type";
     public static final String KEY_GIFT = "gift";
+    public static final String KEY_STAGE = "stage";
     public static final String KEY_WINNER = "winner";
     private static final String CREATE_ADDRESS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ITEM + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TYPE + " INTEGER,"
             + KEY_GIFT + " TEXT,"
+            + KEY_STAGE + " TEXT,"
             + KEY_WINNER + " TEXT" + ")";
+    private ArrayList<String> types = new ArrayList<>();
 
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        types.add("頭獎");
+        types.add("二獎");
+        types.add("三獎");
+        types.add("四獎");
+        types.add("五獎");
+        types.add("六獎");
     }
 
     // Creating Tables
@@ -130,33 +139,27 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Map<String, String>> datas = new ArrayList<>();
         Map<String, String> data;
-        Cursor cursor = null;
-        ArrayList<String> array = getTypes();
-        for (int i = 0; i < array.size(); i++) {
-            cursor = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + array.get(i) + "'", null);
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                data = new HashMap<>();
-                data.put(KEY_TYPE, cursor.getString(1));
-                data.put(KEY_GIFT, cursor.getString(2));
-                int total = cursor.getCount();
-                cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + cursor.getString(1) + "' AND " + KEY_WINNER + " IS NOT NULL", null);
-                if (cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    data.put("number", cursor.getCount() + "/" + total + "");
-                } else {
-                    data.put("number", 0 + "/" + total + "");
-                }
-                datas.add(data);
-            }
+        Cursor cursor1 = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " GROUP BY " + KEY_TYPE + " ORDER BY " + KEY_TYPE, null);
+        Cursor cursor2 = null;
+        while (cursor1.moveToNext()) {
+            data = new HashMap<>();
+            data.put(KEY_TYPE, types.get(cursor1.getInt(1)));
+            data.put(KEY_GIFT, cursor1.getString(2));
+            cursor2 = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + "='" + cursor1.getString(1) + "'", null);
+            int total_count = cursor2.getCount();
+            cursor2 = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_WINNER + " IS NOT NULL AND " + KEY_TYPE + "='" + cursor1.getString(1) + "'", null);
+            data.put("number", cursor2.getCount() + "/" + total_count);
+            datas.add(data);
+
         }
-        cursor.close();
+        cursor1.close();
+        cursor2.close();
         db.close();
         // return user
         return datas;
     }
 
-    public String getGift(String type) {
+    public String getGift(int type) {
         String selectQuery = "SELECT " + KEY_GIFT + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -175,9 +178,9 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Getting user data from database
      */
 
-    public ArrayList<String> getItems(String type) {
+    public ArrayList<String> getItems(int type, int stage) {
         ArrayList<String> datas = new ArrayList<>();
-        String selectQuery = "SELECT " + KEY_ID + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NULL";
+        String selectQuery = "SELECT " + KEY_ID + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_STAGE + " = '" + stage + "' AND " + KEY_WINNER + " IS NULL";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         while (cursor.moveToNext()) {
@@ -244,7 +247,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
     public ArrayList<String> getWinnerNames(String type) {
         ArrayList<String> datas = new ArrayList<>();
-        String selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "' AND " + KEY_WINNER + " IS NOT NULL";
+        String selectQuery = "SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + types.indexOf(type) + "' AND " + KEY_WINNER + " IS NOT NULL";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         while (cursor.moveToNext()) {
@@ -320,49 +323,156 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-
     public void initAllAward(SQLiteDatabase db) {
-        //頭獎
-        ContentValues values = new ContentValues();
-        values.put(KEY_TYPE, "頭獎");
-        values.put(KEY_GIFT, "30萬");
-        for (int i = 0; i < 1; i++) {
-            db.insert(TABLE_ITEM, null, values);
-        }
+        /**
+         * Stage1
+         **/
         //二獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "二獎");
-        values.put(KEY_GIFT, "6萬");
-        for (int i = 0; i < 4; i++) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_STAGE, "1");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 2; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
 
         //三獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "三獎");
+        values.put(KEY_TYPE, 2);
         values.put(KEY_GIFT, "5萬");
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 4; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //四獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "四獎");
+        values.put(KEY_TYPE, 3);
         values.put(KEY_GIFT, "3萬");
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 4; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //五獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "五獎");
+        values.put(KEY_TYPE, 4);
         values.put(KEY_GIFT, "2萬");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 8; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //六獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "六獎");
+        values.put(KEY_TYPE, 5);
         values.put(KEY_GIFT, "1萬2");
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 7; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage2
+         **/
+        //二獎
+        values.put(KEY_STAGE, "2");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values.put(KEY_TYPE, 2);
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 3; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values.put(KEY_TYPE, 3);
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 4; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values.put(KEY_TYPE, 4);
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 8; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values.put(KEY_TYPE, 5);
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage3
+         **/
+        //二獎
+        values.put(KEY_STAGE, "3");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values.put(KEY_TYPE, 2);
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 2; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values.put(KEY_TYPE, 3);
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 4; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values.put(KEY_TYPE, 4);
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 7; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values.put(KEY_TYPE, 5);
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage4
+         **/
+        //二獎
+        values.put(KEY_STAGE, "4");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values.put(KEY_TYPE, 2);
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values.put(KEY_TYPE, 3);
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 3; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values.put(KEY_TYPE, 4);
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 7; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values.put(KEY_TYPE, 5);
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage5
+         **/
+        //頭獎
+        values.put(KEY_STAGE, "5");
+        values.put(KEY_TYPE, 0);
+        values.put(KEY_GIFT, "30萬");
+        for (int i = 0; i < 1; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
     }
@@ -370,47 +480,155 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public void resetAllAward() {
         SQLiteDatabase db = this.getReadableDatabase();
         resetTables(db);
-        //頭獎
-        ContentValues values = new ContentValues();
-        values.put(KEY_TYPE, "頭獎");
-        values.put(KEY_GIFT, "30萬");
-        for (int i = 0; i < 1; i++) {
-            db.insert(TABLE_ITEM, null, values);
-        }
+        /**
+         * Stage1
+         **/
         //二獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "二獎");
+        ContentValues values = new ContentValues();
+        values.put(KEY_STAGE, "1");
+        values.put(KEY_TYPE, 1);
         values.put(KEY_GIFT, "10萬");
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
 
         //三獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "三獎");
+        values.put(KEY_TYPE, 2);
         values.put(KEY_GIFT, "5萬");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //四獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "四獎");
+        values.put(KEY_TYPE, 3);
         values.put(KEY_GIFT, "3萬");
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 4; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //五獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "五獎");
+        values.put(KEY_TYPE, 4);
         values.put(KEY_GIFT, "2萬");
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 8; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         //六獎
-        values = new ContentValues();
-        values.put(KEY_TYPE, "六獎");
+        values.put(KEY_TYPE, 5);
         values.put(KEY_GIFT, "1萬2");
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 7; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage2
+         **/
+        //二獎
+        values.put(KEY_STAGE, "2");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values.put(KEY_TYPE, 2);
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 3; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values.put(KEY_TYPE, 3);
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 4; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values.put(KEY_TYPE, 4);
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 8; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values.put(KEY_TYPE, 5);
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage3
+         **/
+        //二獎
+        values.put(KEY_STAGE, "3");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values.put(KEY_TYPE, 2);
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 2; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values.put(KEY_TYPE, 3);
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 4; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values.put(KEY_TYPE, 4);
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 7; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values.put(KEY_TYPE, 5);
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage4
+         **/
+        //二獎
+        values.put(KEY_STAGE, "4");
+        values.put(KEY_TYPE, 1);
+        values.put(KEY_GIFT, "10萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+
+        //三獎
+        values.put(KEY_TYPE, 2);
+        values.put(KEY_GIFT, "5萬");
+        for (int i = 0; i < 1; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //四獎
+        values.put(KEY_TYPE, 3);
+        values.put(KEY_GIFT, "3萬");
+        for (int i = 0; i < 3; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //五獎
+        values.put(KEY_TYPE, 4);
+        values.put(KEY_GIFT, "2萬");
+        for (int i = 0; i < 7; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        //六獎
+        values.put(KEY_TYPE, 5);
+        values.put(KEY_GIFT, "1萬2");
+        for (int i = 0; i < 6; i++) {
+            db.insert(TABLE_ITEM, null, values);
+        }
+        /**
+         * Stage5
+         **/
+        //頭獎
+        values.put(KEY_STAGE, "5");
+        values.put(KEY_TYPE, 0);
+        values.put(KEY_GIFT, "30萬");
+        for (int i = 0; i < 1; i++) {
             db.insert(TABLE_ITEM, null, values);
         }
         db.close();
@@ -424,6 +642,5 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // Delete All Rows
         db.delete(TABLE_ITEM, null, null);
     }
-
 
 }

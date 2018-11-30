@@ -19,12 +19,11 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
     private SurfaceView surfaceView;
     private MediaPlayer mediaPlayer;
     private View select_menu;
-    SQLiteDatabaseHandler db;
-    boolean start = true;
-    boolean back = true;
+    private SQLiteDatabaseHandler db;
+    private boolean start = true;
+    private boolean back = true;
     private DisplayMetrics dm;
-    private String[] types = {"頭獎", "二獎", "三獎", "四獎", "五獎", "六獎"};
-    int typePosition;
+    private int stage;
     private Thread thread;
 
     @Override
@@ -102,19 +101,19 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
             back = false;
             switch (v.getId()) {
                 case R.id.first:
-                    typePosition = 0;
+                    stage = 1;
                     break;
                 case R.id.secound:
-                    typePosition = 1;
+                    stage = 2;
                     break;
                 case R.id.third:
-                    typePosition = 2;
+                    stage = 3;
                     break;
                 case R.id.fourth:
-                    typePosition = 3;
+                    stage = 4;
                     break;
                 case R.id.fifth:
-                    typePosition = 4;
+                    stage = 5;
                     break;
             }
 
@@ -129,50 +128,7 @@ public class AnimationActivity extends AppCompatActivity implements View.OnClick
                             @Override
                             public void run() {
                                 Intent intent = new Intent(AnimationActivity.this, RollBarActivity.class);
-                                intent.putExtra("stage", typePosition);
-                                switch (typePosition) {
-                                    case 0:
-                                        intent.putExtra("first", 0);
-                                        intent.putExtra("second", 2);
-                                        intent.putExtra("third", 4);
-                                        intent.putExtra("fourth", 4);
-                                        intent.putExtra("fifth", 8);
-                                        intent.putExtra("sixth", 7);
-                                        break;
-                                    case 1:
-                                        intent.putExtra("first", 0);
-                                        intent.putExtra("second", 1);
-                                        intent.putExtra("third", 3);
-                                        intent.putExtra("fourth", 4);
-                                        intent.putExtra("fifth", 8);
-                                        intent.putExtra("sixth", 6);
-                                        break;
-                                    case 2:
-                                        intent.putExtra("first", 0);
-                                        intent.putExtra("second", 1);
-                                        intent.putExtra("third", 2);
-                                        intent.putExtra("fourth", 4);
-                                        intent.putExtra("fifth", 7);
-                                        intent.putExtra("sixth", 6);
-                                        break;
-                                    case 3:
-                                        intent.putExtra("first", 0);
-                                        intent.putExtra("second", 1);
-                                        intent.putExtra("third", 1);
-                                        intent.putExtra("fourth", 3);
-                                        intent.putExtra("fifth", 7);
-                                        intent.putExtra("sixth", 6);
-                                        break;
-                                    case 4:
-                                        intent.putExtra("first", 1);
-                                        intent.putExtra("second", 0);
-                                        intent.putExtra("third", 0);
-                                        intent.putExtra("fourth", 0);
-                                        intent.putExtra("fifth", 0);
-                                        intent.putExtra("sixth", 0);
-                                        break;
-                                }
-
+                                intent.putExtra("stage", stage);
                                 startActivity(intent);
                             }
                         });

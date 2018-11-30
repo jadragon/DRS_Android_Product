@@ -21,6 +21,14 @@
             android:layout_height="0dp"
             android:src="@drawable/logo" />
 
+        <com.example.alex.lotteryapp.library.AutoVerticalTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textColor="@color/white"
+            android:textSize="80sp"
+            android:layout_gravity="center_horizontal"/>
+
         <LinearLayout
             android:id="@+id/machine"
             android:layout_width="match_parent"

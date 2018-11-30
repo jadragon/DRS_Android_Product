@@ -36,7 +36,7 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
     TextView type;
     String[] array;
     ArrayList<Map<String, String>> items;
-
+    private String[] types = {"頭獎", "二獎", "三獎", "四獎", "五獎", "六獎"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
