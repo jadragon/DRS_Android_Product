@@ -77,17 +77,24 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name1"
                         android:textSize="@dimen/table_text_size" />
 
                     <TextView
+                        android:id="@+id/SalesMan"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="7"
+                        android:layout_weight="6"
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:gravity="right"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name5"
@@ -106,23 +113,31 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name2"
                         android:textSize="@dimen/table_text_size" />
 
                     <TextView
+                        android:id="@+id/Shipping"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="7"
+                        android:layout_weight="6"
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:gravity="right"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name6"
                         android:textSize="@dimen/table_text_size" />
 
                     <TextView
+                        android:id="@+id/PONumber"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
@@ -135,17 +150,61 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name3"
                         android:textSize="@dimen/table_text_size" />
 
                     <TextView
+                        android:id="@+id/VendorName"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="7"
+                        android:layout_weight="6"
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name8"
+                        android:textSize="@dimen/table_text_size" />
+
+                    <TextView
+                        android:id="@+id/POVersion"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:padding="@dimen/table_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/table_padding"
+                        android:text="@string/title_name4"
+                        android:textSize="@dimen/table_text_size" />
+
+                    <TextView
+                        android:id="@+id/VendorCode"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:gravity="right"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name7"
@@ -158,32 +217,6 @@
                         android:padding="@dimen/table_padding" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:padding="@dimen/table_padding"
-                        android:text="@string/title_name4"
-                        android:textSize="@dimen/table_text_size" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="7"
-                        android:gravity="right"
-                        android:padding="@dimen/table_padding" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:padding="@dimen/table_padding" />
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -276,8 +309,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/table_header7"
                             android:singleLine="true"
+                            android:text="@string/table_header7"
                             android:textSize="@dimen/table_text_size" />
 
                         <View
@@ -297,8 +330,8 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_header8"
-                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -312,8 +345,8 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_header9"
-                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -327,8 +360,8 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_header10"
-                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -342,8 +375,8 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
-                                android:text="@string/table_header11"
                                 android:singleLine="true"
+                                android:text="@string/table_header11"
                                 android:textSize="@dimen/table_text_size" />
 
                         </LinearLayout>
@@ -388,8 +421,8 @@
                                 android:layout_weight="1"
                                 android:background="@android:color/white"
                                 android:gravity="center"
-                                android:text="@string/table_header14"
                                 android:singleLine="true"
+                                android:text="@string/table_header14"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -403,8 +436,8 @@
                                 android:layout_weight="3"
                                 android:background="@android:color/white"
                                 android:gravity="center"
-                                android:text="@string/table_header15"
                                 android:singleLine="true"
+                                android:text="@string/table_header15"
                                 android:textSize="@dimen/table_text_size" />
                         </LinearLayout>
 
@@ -426,8 +459,8 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_header16"
-                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -442,8 +475,8 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_header17"
-                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -458,8 +491,8 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
+                                android:singleLine="true"
                                 android:text="@string/table_header18"
-                                android:singleLine="true"
                                 android:textSize="@dimen/table_text_size" />
 
                             <View
@@ -474,8 +507,8 @@
                                 android:background="@android:color/white"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
-                                android:text="@string/table_header19"
                                 android:singleLine="true"
+                                android:text="@string/table_header19"
                                 android:textSize="@dimen/table_text_size" />
 
                         </LinearLayout>
@@ -569,17 +602,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="14"
                                 android:background="@android:color/white"
-                                android:orientation="vertical"
                                 android:divider="@drawable/divider_black_1dp"
+                                android:orientation="vertical"
                                 android:showDividers="middle">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:background="@color/light_orange"
                                     android:divider="@drawable/divider_black_1dp"
                                     android:orientation="horizontal"
-                                    android:showDividers="middle"
-                                    android:background="@color/light_orange">
+                                    android:showDividers="middle">
 
                                     <TextView
                                         android:layout_width="0dp"
@@ -596,8 +629,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="@dimen/footer4_weight"
                                         android:gravity="center"
-                                        android:singleLine="true"
                                         android:padding="@dimen/table_padding"
+                                        android:singleLine="true"
                                         android:text="@string/table_footer5"
                                         android:textSize="@dimen/table_text_size" />
 
@@ -606,9 +639,9 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="@dimen/footer5_weight"
-                                        android:singleLine="true"
                                         android:gravity="center"
                                         android:padding="@dimen/table_padding"
+                                        android:singleLine="true"
                                         android:text="@string/table_footer6"
                                         android:textSize="@dimen/table_text_size" />
                                 </LinearLayout>
@@ -626,8 +659,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
+                                    android:singleLine="true"
                                     android:text="@string/table_footer7"
                                     android:textSize="@dimen/table_text_size" />
 
@@ -637,6 +670,7 @@
                                     android:background="@android:color/black" />
 
                                 <TextView
+                                    android:id="@+id/Inspector"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
@@ -656,8 +690,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
+                                    android:singleLine="true"
                                     android:text="@string/table_footer8"
                                     android:textSize="@dimen/table_text_size" />
 
@@ -667,6 +701,7 @@
                                     android:background="@android:color/black" />
 
                                 <TextView
+                                    android:id="@+id/InspectorDate"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
@@ -721,8 +756,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
+                                    android:singleLine="true"
                                     android:text="@string/table_footer9"
                                     android:textSize="@dimen/table_text_size" />
 
@@ -732,6 +767,7 @@
                                     android:background="@android:color/black" />
 
                                 <TextView
+                                    android:id="@+id/FeedbackPerson"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
@@ -751,8 +787,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:singleLine="true"
                                     android:padding="@dimen/table_padding"
+                                    android:singleLine="true"
                                     android:text="@string/table_footer8"
                                     android:textSize="@dimen/table_text_size" />
 
@@ -762,6 +798,7 @@
                                     android:background="@android:color/black" />
 
                                 <TextView
+                                    android:id="@+id/FeedbackDate"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
@@ -865,7 +902,7 @@
                             android:background="@android:color/black" />
 
                         <ImageView
-                            android:id="@+id/paintView"
+                            android:id="@+id/VendorInspector"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -886,8 +923,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="@dimen/table_padding"
-                            android:text="@string/table_footer8"
                             android:singleLine="true"
+                            android:text="@string/table_footer8"
                             android:textSize="@dimen/table_text_size" />
 
                         <View
@@ -896,6 +933,7 @@
                             android:background="@android:color/black" />
 
                         <TextView
+                            android:id="@+id/VendorInspectorDate"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -986,18 +1024,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="增加項目"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/kccx_chaxun1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="確認" />
 
         <TextView
             android:layout_width="wrap_content"

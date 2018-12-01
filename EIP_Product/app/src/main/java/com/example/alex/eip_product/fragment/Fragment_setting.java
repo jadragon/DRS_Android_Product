@@ -59,7 +59,7 @@ public class Fragment_setting extends Fragment {
         resources.updateConfiguration(config, dm);
 
         // 保存設置語言的類型
-        PreferenceUtil.commitString("language", language);
+        PreferenceUtil.commitInt("language", language);
     }
 
     private void initLanguageSpinner() {

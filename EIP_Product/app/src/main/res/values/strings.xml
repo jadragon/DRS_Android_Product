@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="login_name">姓名:</string>
+    <string name="login_pass">密碼:</string>
+    <string name="login_button">登入</string>
+    <string name="language_text">語言:</string>
 
     <string name="app_name">驗貨表單系統</string>
     <string name="other">其他</string>
@@ -7,14 +11,14 @@
     <string name="function">功能</string>
     <string name="surface">表面</string>
     <string name="packaging">包裝</string>
-    <string name="title_name1">業務人員：</string>
-    <string name="title_name2">船務人員: </string>
+    <string name="title_name1">業務&#8195;人員：</string>
+    <string name="title_name2">船務&#8195;人員：</string>
     <string name="title_name3">供應商名稱：</string>
     <string name="title_name4">供應商代碼：</string>
-    <string name="title_name5">驗表單號：</string>
-    <string name="title_name6">採購單號：</string>
-    <string name="title_name7">圖面資料：</string>
-
+    <string name="title_name5">驗表&#8195;單號：</string>
+    <string name="title_name6">採購&#8195;單號：</string>
+    <string name="title_name7">圖面&#8195;資料：</string>
+    <string name="title_name8">採購單版本：</string>
 
     <string name="table_header1">序號</string>
     <string name="table_header2">ITEM NO</string>
@@ -56,7 +60,7 @@
     <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
     <string name="table_footer15">供應商檢測人員:</string>
     <string name="table_footer16">船務備註:</string>
-    <string name="language_text">語言:</string>
+
     <string-array name="language">
         <item>繁體中文</item>
         <item>简体中文</item>
@@ -65,9 +69,7 @@
     <string name="table_button2">編輯</string>
     <string name="table_button3">暫</string>
     <string name="table_button4">送出</string>
-    <string name="login_name">姓名:</string>
-    <string name="login_pass">密碼:</string>
-    <string name="login_button">登入</string>
+
     <string name="comfirm_button">確認</string>
     <string name="company_title">驗貨行程</string>
     <string name="commpany_prepage">＜前一頁＞</string>

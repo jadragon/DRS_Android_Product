@@ -71,6 +71,7 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 ((TextView) view.findViewWithTag("CanShipping")).setText("未驗");
                 ((TextView) view.findViewWithTag("overview")).setText("(填寫驗表)");
                 view.findViewWithTag("overview").setOnClickListener(this);
+                view.findViewWithTag("overview").setTag(map.get(KEY_PONumber));
             }
 
             tableLayout.addView(view);
@@ -93,6 +94,8 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(getContext(), InsepectOrderActivity.class));
+        Intent intent = new Intent(getContext(), InsepectOrderActivity.class);
+        intent.putExtra(KEY_PONumber, v.getTag() + "");
+        startActivity(intent);
     }
 }

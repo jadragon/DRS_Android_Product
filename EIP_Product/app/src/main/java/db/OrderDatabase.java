@@ -194,6 +194,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.endTransaction(); // 处理完成
         db.close();
     }
+
     public void addOrderDetails(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
@@ -204,6 +205,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.endTransaction(); // 处理完成
         db.close();
     }
+
     public void addCheckFailedReasons(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
@@ -282,17 +284,168 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return datas;
     }
 
-    public ArrayList<String> getTypes() {
-        ArrayList<String> datas = new ArrayList<>();
-        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT  DISTINCT " + KEY_PONumber + " FROM " + TABLE_Orders, null);
+    public ArrayList<Map<String, String>> getOrdersByDateAndVendorCode(String date, String VendorCode) {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' AND " + KEY_VendorCode + " LIKE '%" + VendorCode + "%' GROUP BY " + KEY_VendorCode + " ORDER BY " + KEY_PONumber + " ASC", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
-            datas.add(cursor.getString(0));
+            map = new HashMap<>();
+            map.put(KEY_PONumber, cursor.getString(1));
+            map.put(KEY_POVersion, cursor.getString(2));
+            map.put(KEY_PlanCheckDate, cursor.getString(3));
+            map.put(KEY_VendorCode, cursor.getString(4));
+            map.put(KEY_VendorName, cursor.getString(5));
+            map.put(KEY_Area, cursor.getString(6));
+            map.put(KEY_Notes, cursor.getString(7));
+            map.put(KEY_Shipping, cursor.getString(8));
+            map.put(KEY_SalesMan, cursor.getString(9));
+            map.put(KEY_Phone, cursor.getString(10));
+            map.put(KEY_CheckMan, cursor.getString(11));
+
+            map.put(KEY_HasCompleted, cursor.getString(12));
+            map.put(KEY_Inspector, cursor.getString(13));
+            map.put(KEY_InspectorDate, cursor.getString(14));
+            map.put(KEY_VendorInspector, cursor.getString(15));
+            map.put(KEY_VendorInspectorDate, cursor.getString(16));
+            map.put(KEY_FeedbackPerson, cursor.getString(17));
+            map.put(KEY_FeedbackRecommendations, cursor.getString(18));
+            map.put(KEY_FeedbackDate, cursor.getString(19));
+            map.put(KEY_InspectionNumber, cursor.getString(20));
+
+            map.put(KEY_OrderDetails, cursor.getString(21));
+            map.put(KEY_CheckFailedReasons, cursor.getString(22));
+            map.put(KEY_OrderComments, cursor.getString(23));
+            map.put(KEY_OrderItemComments, cursor.getString(24));
+            datas.add(map);
         }
         cursor.close();
+        db.close();
         // return user
         return datas;
     }
 
+    /**
+     * Search
+     */
+    public ArrayList<Map<String, String>> getOrdersByPONumber(String PONumber) {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            map = new HashMap<>();
+            map.put(KEY_PONumber, cursor.getString(1));
+            map.put(KEY_POVersion, cursor.getString(2));
+            map.put(KEY_PlanCheckDate, cursor.getString(3));
+            map.put(KEY_VendorCode, cursor.getString(4));
+            map.put(KEY_VendorName, cursor.getString(5));
+            map.put(KEY_Area, cursor.getString(6));
+            map.put(KEY_Notes, cursor.getString(7));
+            map.put(KEY_Shipping, cursor.getString(8));
+            map.put(KEY_SalesMan, cursor.getString(9));
+            map.put(KEY_Phone, cursor.getString(10));
+            map.put(KEY_CheckMan, cursor.getString(11));
+
+            map.put(KEY_HasCompleted, cursor.getString(12));
+            map.put(KEY_Inspector, cursor.getString(13));
+            map.put(KEY_InspectorDate, cursor.getString(14));
+            map.put(KEY_VendorInspector, cursor.getString(15));
+            map.put(KEY_VendorInspectorDate, cursor.getString(16));
+            map.put(KEY_FeedbackPerson, cursor.getString(17));
+            map.put(KEY_FeedbackRecommendations, cursor.getString(18));
+            map.put(KEY_FeedbackDate, cursor.getString(19));
+            map.put(KEY_InspectionNumber, cursor.getString(20));
+
+            map.put(KEY_OrderDetails, cursor.getString(21));
+            map.put(KEY_CheckFailedReasons, cursor.getString(22));
+            map.put(KEY_OrderComments, cursor.getString(23));
+            map.put(KEY_OrderItemComments, cursor.getString(24));
+            datas.add(map);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+    public ArrayList<Map<String, String>> getOrderDetailsByPONumber(String PONumber) {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            map = new HashMap<>();
+            map.put(KEY_PONumber, cursor.getString(1));
+            map.put(KEY_POVersion, cursor.getString(2));
+            map.put(KEY_LineNumber, cursor.getString(3));
+            map.put(KEY_Item, cursor.getString(4));
+            map.put(KEY_OrderQty, cursor.getString(5));
+            map.put(KEY_Qty, cursor.getString(6));
+            map.put(KEY_SampleNumber, cursor.getString(7));
+            map.put(KEY_Uom, cursor.getString(8));
+            map.put(KEY_Size, cursor.getString(9));
+            map.put(KEY_Functions, cursor.getString(10));
+            map.put(KEY_Surface, cursor.getString(11));
+            map.put(KEY_Package, cursor.getString(12));
+            map.put(KEY_CheckPass, cursor.getString(13));
+            map.put(KEY_Special, cursor.getString(14));
+            map.put(KEY_Rework, cursor.getString(15));
+            map.put(KEY_Reject, cursor.getString(16));
+            map.put(KEY_MainMarK, cursor.getString(17));
+            map.put(KEY_SideMarK, cursor.getString(18));
+            map.put(KEY_ReCheckDate, cursor.getString(19));
+            map.put(KEY_Remarks, cursor.getString(20));
+            datas.add(map);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+    public ArrayList<Map<String, String>> getOrderCommentsByPONumber(String PONumber) {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            map = new HashMap<>();
+            map.put(KEY_PONumber, cursor.getString(1));
+            map.put(KEY_POVersion, cursor.getString(2));
+            map.put(KEY_LineNumber, cursor.getString(3));
+            map.put(KEY_Comment, cursor.getString(4));
+            datas.add(map);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+    public ArrayList<Map<String, String>> getOrderItemCommentsByPONumber(String PONumber) {
+        ArrayList<Map<String, String>> datas = new ArrayList<>();
+        Map<String, String> map;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            map = new HashMap<>();
+            map.put(KEY_PONumber, cursor.getString(1));
+            map.put(KEY_POVersion, cursor.getString(2));
+            map.put(KEY_LineNumber, cursor.getString(3));
+            map.put(KEY_ItemNo, cursor.getString(4));
+            map.put(KEY_Comment, cursor.getString(5));
+            datas.add(map);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
     public int countOrders() {
         String selectQuery = "SELECT * FROM " + TABLE_Orders;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -347,7 +500,6 @@ public class OrderDatabase extends SQLiteOpenHelper {
         // return user
         return count;
     }
-
 
     /**
      * Update

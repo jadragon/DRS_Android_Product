@@ -1,10 +1,15 @@
 package com.example.alex.eip_product;
 
 import android.app.Application;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
+import Utils.PreferenceUtil;
 import liabiry.Http.HttpUtils;
 
 public class GlobalVariable extends Application {
@@ -58,9 +63,26 @@ public class GlobalVariable extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initLanguage();
         initImageLoader();
     }
-
+    private void initLanguage() {
+        PreferenceUtil.init(this);
+        // 保存設置語言的類型
+        int language = PreferenceUtil.getInt("language", 0);
+        // 設置應用語言類型
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        if (language == 0) {
+            // 中文繁體
+            config.locale = Locale.TRADITIONAL_CHINESE;
+        } else if (language == 1) {
+            // 中文簡體
+            config.locale = Locale.SIMPLIFIED_CHINESE;
+        }
+        resources.updateConfiguration(config, dm);
+    }
 
     private void initImageLoader() {
         HttpUtils.setContext(getApplicationContext());

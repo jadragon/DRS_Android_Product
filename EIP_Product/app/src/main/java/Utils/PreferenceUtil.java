@@ -25,16 +25,15 @@ public class PreferenceUtil {
         mEditor.commit();
     }
 
-    public static void commitString(String key, int value) {
+    public static void commitString(String key, String value) {
         mEditor = mSharedPreferences.edit();
-        mEditor.putInt(key, value);
+        mEditor.putString(key, value);
         mEditor.commit();
     }
 
     public static String getString(String key, String faillValue) {
         return mSharedPreferences.getString(key, faillValue);
     }
-
 
     public static void commitInt(String key, int value) {
         mEditor = mSharedPreferences.edit();

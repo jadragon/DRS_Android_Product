@@ -16,27 +16,51 @@
         <TextView
             android:id="@+id/company_txt_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="2018/10/09(三)"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:gravity="center"/>
+
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/company_title"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:gravity="center"/>
+
         <TextView
             android:id="@+id/company_prepage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/commpany_prepage"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/company_nextpage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/company_nextpage"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/company_tw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TW" />
+
+        <Button
+            android:id="@+id/company_cn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CN" />
+
+        <Button
+            android:id="@+id/company_vn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VN" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

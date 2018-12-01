@@ -14,20 +14,20 @@
     <string name="surface">表面</string>
         
     <string name="packaging">包装</string>
-    <string name="title_name1">业务人员：</string>
+    <string name="title_name1">业务&#8195;人员：</string>
         
-    <string name="title_name2">船务人员: </string>
+    <string name="title_name2">船务&#8195;人员：</string>
         
     <string name="title_name3">供应商名称：</string>
         
     <string name="title_name4">供应商代码：</string>
         
-    <string name="title_name5">验表单号：</string>
+    <string name="title_name5">验表&#8195;单号：</string>
         
-    <string name="title_name6">采购单号：</string>
+    <string name="title_name6">采购&#8195;单号：</string>
         
-    <string name="title_name7">图面资料：</string>
-
+    <string name="title_name7">图面&#8195;资料：</string>
+    <string name="title_name8">采购单版本：</string>
 
     <string name="table_header1">序号</string>
         

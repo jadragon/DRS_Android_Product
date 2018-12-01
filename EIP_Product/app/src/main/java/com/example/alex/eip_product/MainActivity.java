@@ -2,6 +2,7 @@ package com.example.alex.eip_product;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -17,10 +18,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
+import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
 import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.fragment.Fragment_home;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -29,6 +32,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Utils.PreferenceUtil;
 import db.OrderDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -95,20 +99,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public boolean handleMessage(Message msg) {
             try {
-                db.resetTables();
-                Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw()));
-                db.addOrders(map.get("Orders"));
-                db.addOrderDetails(map.get("OrderDetails"));
-                db.addOrderDetails(map.get("CheckFailedReasons"));
-                db.addOrderComments(map.get("OrderComments"));
-                db.addOrderItemComments(map.get("OrderItemComments"));
-                UiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                });
+                JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                if (AnalyzeUtil.checkSuccess(json)) {
+                    db.resetTables();
+                    Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
+                    db.addOrders(map.get("Orders"));
+                    db.addOrderDetails(map.get("OrderDetails"));
+                    db.addCheckFailedReasons(map.get("CheckFailedReasons"));
+                    db.addOrderComments(map.get("OrderComments"));
+                    db.addOrderItemComments(map.get("OrderItemComments"));
+                    UiHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+                    });
+                } else {
+                    Toast.makeText(MainActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(MainActivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
@@ -138,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             transaction.hide(fragmentList.get(fragmentList.size() - 1)).add(R.id.fragment_content, fragmentto, tag).addToBackStack(tag).commit();
         }
     }
-
 
     /**
      * 迴車鍵離開程式

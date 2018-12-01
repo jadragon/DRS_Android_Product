@@ -104,22 +104,22 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<ArrayList<String>> datas = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT  DISTINCT " + KEY_TYPE + " FROM " + TABLE_ITEM, null);
+        Cursor cursor = db.rawQuery("SELECT  DISTINCT " + KEY_TYPE + " FROM " + TABLE_ITEM + " ORDER BY " + KEY_TYPE + " ASC ", null);
         while (cursor.moveToNext()) {
-            types.add(cursor.getString(0));
+            types.add(this.types.get(cursor.getInt(0)));
         }
         ArrayList<String> data;
         ArrayList<String> winners;
         for (String type : types) {
-            cursor = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + type + "'", null);
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_ITEM + " WHERE " + KEY_TYPE + " = '" + this.types.indexOf(type) + "'", null);
             data = new ArrayList<>();
             cursor.moveToFirst();
             data.add(cursor.getString(1));
             data.add(cursor.getString(2));
             winners = new ArrayList<>();
-            winners.add(cursor.getString(3));
+            winners.add(cursor.getString(4));
             while (cursor.moveToNext()) {
-                winners.add(cursor.getString(3));
+                winners.add(cursor.getString(4));
             }
             data.add(winners + "");
             datas.add(data);

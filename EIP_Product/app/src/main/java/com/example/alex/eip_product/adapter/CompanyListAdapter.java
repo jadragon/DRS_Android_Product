@@ -43,11 +43,11 @@ import static db.OrderDatabase.KEY_Shipping;
 import static db.OrderDatabase.KEY_VendorCode;
 import static db.OrderDatabase.KEY_VendorName;
 */
-    public CompanyListAdapter(Context ctx) {
+    public CompanyListAdapter(Context ctx, String VendorCode) {
         this.ctx = ctx;
         gv = (GlobalVariable) ctx.getApplicationContext();
         OrderDatabase db = new OrderDatabase(ctx);
-        list = db.getOrdersByDate(gv.getCurrent_date());
+        list = db.getOrdersByDateAndVendorCode(gv.getCurrent_date(), VendorCode);
         db.close();
     }
 
@@ -113,9 +113,9 @@ import static db.OrderDatabase.KEY_VendorName;
         }
     }
 
-    public void setFilter() {
+    public void setFilter(String VendorCode) {
         OrderDatabase db = new OrderDatabase(ctx);
-        list = db.getOrdersByDate(gv.getCurrent_date());
+        list = db.getOrdersByDateAndVendorCode(gv.getCurrent_date(), VendorCode);
         db.close();
         notifyDataSetChanged();
     }

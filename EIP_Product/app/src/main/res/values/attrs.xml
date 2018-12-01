@@ -3,7 +3,9 @@
     <declare-styleable name="CustomTheme">
         <attr name="paintViewStyle" format="reference" />
     </declare-styleable>
-
+    <declare-styleable name="CompoundButton">
+        <attr name="android:button" />
+    </declare-styleable>
 
     <!--简单环形进度-->
     <declare-styleable name="SimpleRoundProgress">

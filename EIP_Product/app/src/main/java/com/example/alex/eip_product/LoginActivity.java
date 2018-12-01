@@ -3,11 +3,14 @@ package com.example.alex.eip_product;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +26,10 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import Utils.PreferenceUtil;
 import db.OrderDatabase;
 
 public class LoginActivity extends AppCompatActivity {
@@ -42,6 +47,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         gv = (GlobalVariable) getApplicationContext();
         db = new OrderDatabase(this);
+        if (!PreferenceUtil.getString("username", "").equals("")) {
+            gv.setUsername(PreferenceUtil.getString("username", ""));
+            gv.setPw(PreferenceUtil.getString("pw", ""));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
         initView();
         initListenser();
         initHandler();
@@ -91,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             gv.setUsername(username.getText().toString());
                             gv.setPw(pw.getText().toString());
+                            PreferenceUtil.commitString("username", username.getText().toString());
+                            PreferenceUtil.commitString("pw", pw.getText().toString());
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         }
@@ -120,4 +133,5 @@ public class LoginActivity extends AppCompatActivity {
         db.close();
         super.onDestroy();
     }
+
 }
