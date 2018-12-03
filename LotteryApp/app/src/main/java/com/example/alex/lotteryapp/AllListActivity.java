@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,7 +37,7 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
     TextView type;
     String[] array;
     ArrayList<Map<String, String>> items;
-    private String[] types = {"頭獎", "二獎", "三獎", "四獎", "五獎", "六獎"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,6 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
         items = db.getItems();
         initAdapter();
 
-
     }
 
     private void initAdapter() {
@@ -72,7 +72,7 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
         alllist_btn_export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.e("Excel", db.getExcelData() + "");
+                 Log.e("Excel", db.getExcelData1() + "");
                 exportExcel();
                 Toast.makeText(AllListActivity.this, "成功!\n輸出路徑:\n" + getSDPath() + "/捷豹尾牙抽獎名單/", Toast.LENGTH_LONG).show();
             }
@@ -147,7 +147,6 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
     };
     private static final int REQUEST_ALL_PERMISSION = 0x01;
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -173,16 +172,16 @@ public class AllListActivity extends ToolbarActivity implements AdapterView.OnIt
             ActivityCompat.requestPermissions(AllListActivity.this, permissions, REQUEST_ALL_PERMISSION);
             return;
         }
-        ArrayList<ArrayList<String>> datas = db.getExcelData();
+        ArrayList<ArrayList<ArrayList<String>>> datas = db.getExcelData1();
         if (datas.size() > 0) {
             File file = new File(getSDPath() + "/捷豹尾牙抽獎名單");
             makeDir(file);
             SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
             String filetitle = "捷豹尾牙抽獎名單" + sdFormat.format(new Date());
             String fileName = file.toString() + "/" + filetitle + ".xls";
-            String[] title = {"獎項", "獎品", "得獎人"};
-            ExcelUtils.initExcel(fileName, title);
-            ExcelUtils.writeObjListToExcel(datas, fileName, this);
+
+            ExcelUtils.initExcel(fileName);
+            ExcelUtils.writeObjListToExcel(datas, fileName);
         }
     }
 

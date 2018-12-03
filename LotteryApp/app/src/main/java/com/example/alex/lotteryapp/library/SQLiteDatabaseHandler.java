@@ -135,6 +135,34 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * Getting user data from database
      */
 
+    public ArrayList<ArrayList<ArrayList<String>>> getExcelData1() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<ArrayList<ArrayList<String>>> all_list = new ArrayList<>();
+        ArrayList<ArrayList<String>> arrayLists;
+        ArrayList<String> winners;
+        Cursor cursor = null;
+        for (int j = 1; j < 6; j++) {
+            arrayLists = new ArrayList<>();
+            for (int i = 5; i >=0; i--) {
+                cursor = db.rawQuery("SELECT " + KEY_WINNER + " FROM " + TABLE_ITEM + " WHERE " + KEY_STAGE + " = '" + j + "'" + " AND " + KEY_TYPE + " = '" + i + "'", null);
+                winners = new ArrayList<>();
+                while (cursor.moveToNext()) {
+                    winners.add(cursor.getString(0));
+                }
+                arrayLists.add(winners);
+            }
+            all_list.add(arrayLists);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return all_list;
+    }
+
+    /**
+     * Getting user data from database
+     */
+
     public ArrayList<Map<String, String>> getItems() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Map<String, String>> datas = new ArrayList<>();
