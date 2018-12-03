@@ -14,73 +14,167 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/menu_item5" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="bottom"
+            android:paddingBottom="10dp"
             android:text="試算金額" />
 
         <TextView
+            android:id="@+id/pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="150"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="right"
             android:textColor="@color/red"
-            android:textSize="50dp"
+            android:textSize="35sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="bottom"
-            android:text="元" />
+            android:paddingBottom="10dp"
+            android:text="元&#8195;" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="@color/red"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="公里" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="代駕時段"
+            android:textColor="@color/royal_blue"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="代駕方式"
+            android:textColor="@color/royal_blue"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="horizontal">
 
         <Spinner
             android:id="@+id/sp_time"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_margin="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/button_green2"
-            android:entries="@array/sp_time_array"
-            android:paddingLeft="10dp" />
+            android:background="@drawable/button_green2" />
 
         <Spinner
             android:id="@+id/sp_type"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@drawable/button_green2"
-            android:entries="@array/sp_type_array"
-            android:paddingLeft="10dp" />
+            android:background="@drawable/button_green2" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/calculate_edit1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/calculate_edit2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/calculate_btn"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:background="@drawable/button_green1"
+        android:text="計算"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:text="費用試算相關資訊"
         android:textColor="@color/royal_blue"
         android:textSize="15sp"
         android:textStyle="bold" />
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:text="＊累計里程計費， 超過10公里，每1公里加收50元；
 \n&#8195;行駛超過30公里後，每2公里加收50元(未滿1公里以1公里計算)。
 \n＊不同時段代駕起步價以車輛出發時間為準。
