@@ -14,6 +14,11 @@ public class CustomerApi implements APISetting {
     private static final String gvcode_url = DOMAIN + "main/customer/gvcode.php";
     private static final String login_url = DOMAIN + "main/customer/login.php";
     private static final String forget_url = DOMAIN + "main/customer/forget.php";
+
+    private static final String getBasicData_url = DOMAIN + "main/customer/getBasicData.php";
+    private static final String updateBasicData_url = DOMAIN + "main/customer/updateBasicData.php";
+    private static final String updateBasicPawd_url = DOMAIN + "main/customer/updateBasicPawd.php";
+
     private static final String about_url = DOMAIN + "main/about/about.php";
     private static final String tservice_url = DOMAIN + "main/about/tservice.php";
     private static final String pservice_url = DOMAIN + "main/about/pservice.php";
@@ -78,6 +83,48 @@ public class CustomerApi implements APISetting {
         params.add(new BasicNameValuePair("mp", mp));
         return jsonParser.getJSONFromUrl(forget_url, params);
     }
+
+    /**
+     * 1.2.1	讀取基本資料
+     */
+    public static JSONObject getBasicData(String token) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("token", token));
+        return jsonParser.getJSONFromUrl(getBasicData_url, params);
+    }
+
+    /**
+     * 1.2.2	修改基本資料
+     */
+    public static JSONObject updateBasicData(String token, String uname, String picture, String sex, String birthday, String email, String contact, String cmp) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("uname", uname));
+        params.add(new BasicNameValuePair("picture", picture));
+        params.add(new BasicNameValuePair("sex", sex));
+        params.add(new BasicNameValuePair("birthday", birthday));
+        params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("contact", contact));
+        params.add(new BasicNameValuePair("cmp", cmp));
+        return jsonParser.getJSONFromUrl(updateBasicData_url, params);
+    }
+
+    /**
+     * 1.2.3	修改密碼
+     */
+    public static JSONObject updateBasicPawd(String token, String pawd) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("ntgo", ntgo));
+        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("pawd", pawd));
+        return jsonParser.getJSONFromUrl(updateBasicPawd_url, params);
+    }
+
 
     /**
      * 費用試算-1.3.1	立即呼叫

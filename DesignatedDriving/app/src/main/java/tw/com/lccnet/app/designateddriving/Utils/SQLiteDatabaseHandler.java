@@ -30,6 +30,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_PICTURE = "picture";
     public static final String KEY_SEX = "sex";
     public static final String KEY_BIRTHDAY = "birthday";
+    public static final String KEY_MP = "mp";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_CONTACT = "contact";
     public static final String KEY_CMP = "cmp";

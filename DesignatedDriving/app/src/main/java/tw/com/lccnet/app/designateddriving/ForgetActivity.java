@@ -2,13 +2,10 @@ package tw.com.lccnet.app.designateddriving;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -17,8 +14,9 @@ import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
-public class ForgetActivity extends AppCompatActivity implements View.OnClickListener {
+public class ForgetActivity extends ToolbarActivity implements View.OnClickListener {
     private Button getpassword;
     private EditText phone;
 
@@ -26,7 +24,7 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget);
-        initToolbar("忘記密碼");
+        initToolbar("忘記密碼", true);
         initView();
         initListener();
         initData();
@@ -48,19 +46,6 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
         getpassword.setOnClickListener(this);
     }
 
-    private void initToolbar(String title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(title);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
 
     private void copyPassword(String password) {
         int sdk = android.os.Build.VERSION.SDK_INT;
@@ -78,7 +63,7 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.forget_btn_getpassword:
-                if (TextUtils.isEmpty(phone.getText()) || !phone.getText().toString().matches("09[0-9]{8}")) {
+                if (TextUtils.isEmpty(phone.getText()) || !MatchesUtils.matchPhone(phone.getText().toString())) {
                     phone.setError("請輸入手機號碼");
                 } else {
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {

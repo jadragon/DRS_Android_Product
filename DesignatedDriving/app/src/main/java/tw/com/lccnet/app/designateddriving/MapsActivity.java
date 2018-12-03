@@ -2,7 +2,6 @@ package tw.com.lccnet.app.designateddriving;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -138,10 +137,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         reShapeButton(btn_long_trip, R.color.orange1);
         Button btn_immediate = findViewById(R.id.btn_immediate);
         btn_immediate.setOnClickListener(this);
-        reShapeButton(btn_immediate, R.color.green);
+        reShapeButton(btn_immediate, R.color.royal_blue);
         Button btn_deliver = findViewById(R.id.btn_deliver);
         btn_deliver.setOnClickListener(this);
-        reShapeButton(btn_deliver, R.color.green1);
+        reShapeButton(btn_deliver, R.color.royal_blue_light);
 
     }
 
@@ -224,10 +223,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.header_item1:
-                        Toast.makeText(MapsActivity.this, "我的帳號", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MapsActivity.this, MyAccountActivity.class));
                         break;
                     case R.id.header_item2:
-                        Toast.makeText(MapsActivity.this, "費用試算", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MapsActivity.this, CalculateActivity.class));
                         break;
                     case R.id.header_item3:
                         Toast.makeText(MapsActivity.this, "優惠券", Toast.LENGTH_SHORT).show();
@@ -307,40 +306,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Random random = new Random();
         DecimalFormat df = new DecimalFormat("#.#");
         markerOpt.position(getLatLng(0.002, latlng, 0))
-                .icon(getMarkerIcon(R.drawable.no_photo, "李司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "李司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 30))
-                .icon(getMarkerIcon(R.drawable.no_photo, "王司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "王司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 60))
-                .icon(getMarkerIcon(R.drawable.no_photo, "張司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "張司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 90))
-                .icon(getMarkerIcon(R.drawable.no_photo, "劉司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "劉司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 120))
-                .icon(getMarkerIcon(R.drawable.no_photo, "陳司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "陳司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 150))
-                .icon(getMarkerIcon(R.drawable.no_photo, "楊司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "楊司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 180))
-                .icon(getMarkerIcon(R.drawable.no_photo, "趙司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "趙司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 210))
-                .icon(getMarkerIcon(R.drawable.no_photo, "黃司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "黃司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 240))
-                .icon(getMarkerIcon(R.drawable.no_photo, "周司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "周司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 270))
-                .icon(getMarkerIcon(R.drawable.no_photo, "吳司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "吳司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 300))
-                .icon(getMarkerIcon(R.drawable.no_photo, "林司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "林司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 330))
-                .icon(getMarkerIcon(R.drawable.no_photo, "蔡司機", df.format(5 * random.nextFloat())));
+                .icon(getMarkerIcon(R.drawable.menu_header1, "蔡司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
         map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {

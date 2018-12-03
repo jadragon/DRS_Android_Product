@@ -1,8 +1,6 @@
 package tw.com.lccnet.app.designateddriving;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +16,7 @@ import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 
-public class Regist2Activity extends AppCompatActivity implements View.OnClickListener {
+public class Regist2Activity extends ToolbarActivity implements View.OnClickListener {
     private Button send;
     private EditText name, password, repassword;
     private RadioGroup sex;
@@ -31,7 +29,7 @@ public class Regist2Activity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_regist2);
         phone = getIntent().getStringExtra("phone");
         vcode = getIntent().getStringExtra("vcode");
-        initToolbar("註冊");
+        initToolbar("註冊", true);
         initView();
         initListener();
 
@@ -50,19 +48,6 @@ public class Regist2Activity extends AppCompatActivity implements View.OnClickLi
         send.setOnClickListener(this);
     }
 
-    private void initToolbar(String title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(title);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
 
     @Override
     public void onClick(View view) {
@@ -94,7 +79,7 @@ public class Regist2Activity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (jsonObject!=null&&AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (jsonObject != null && AnalyzeUtil.checkSuccess(jsonObject)) {
                                 finish();
                             }
                             Toast.makeText(Regist2Activity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();

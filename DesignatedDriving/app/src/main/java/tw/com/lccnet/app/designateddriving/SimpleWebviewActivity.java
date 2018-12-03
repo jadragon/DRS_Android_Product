@@ -2,12 +2,9 @@ package tw.com.lccnet.app.designateddriving;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +13,7 @@ import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 
-public class SimpleWebviewActivity extends AppCompatActivity {
+public class SimpleWebviewActivity extends ToolbarActivity {
     private WebView webview;
 
     @Override
@@ -24,7 +21,7 @@ public class SimpleWebviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_webview);
         final String title = getIntent().getStringExtra("title");
-        initToolbar(title);
+        initToolbar(title, true);
         initWebview();
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
@@ -44,7 +41,9 @@ public class SimpleWebviewActivity extends AppCompatActivity {
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
                 try {
-                    webview.loadDataWithBaseURL(null, jsonObject.getString("Data"), "text/html", "utf-8",
+                    String html = jsonObject.getString("Data");
+                    Log.e("html", html);
+                    webview.loadDataWithBaseURL(null, html, "text/html", "utf-8",
                             null);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -53,19 +52,6 @@ public class SimpleWebviewActivity extends AppCompatActivity {
         });
     }
 
-    private void initToolbar(String title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(title);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
 
     private void initWebview() {
         webview = findViewById(R.id.webview);

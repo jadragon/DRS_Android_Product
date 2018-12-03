@@ -2,15 +2,12 @@ package tw.com.lccnet.app.designateddriving;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -20,8 +17,9 @@ import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
-public class Regist1Activity extends AppCompatActivity implements View.OnClickListener {
+public class Regist1Activity extends ToolbarActivity implements View.OnClickListener {
 
     private EditText phone, vcode;
     private Button next, gvcode;
@@ -33,7 +31,7 @@ public class Regist1Activity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist1);
-        initToolbar("註冊");
+        initToolbar("註冊", true);
         initView();
         initListener();
     }
@@ -53,25 +51,12 @@ public class Regist1Activity extends AppCompatActivity implements View.OnClickLi
         agree.setOnClickListener(this);
     }
 
-    private void initToolbar(String title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(title);
-        toolbar.setNavigationIcon(R.drawable.back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_btn_next:
-                if (TextUtils.isEmpty(phone.getText()) || !phone.getText().toString().matches("09[0-9]{8}")) {
+                if (TextUtils.isEmpty(phone.getText()) || !MatchesUtils.matchPhone(phone.getText().toString())) {
                     phone.setError("請輸入電話號碼");
                 } else if (TextUtils.isEmpty(vcode.getText())) {
                     vcode.setError("請輸入驗證碼");

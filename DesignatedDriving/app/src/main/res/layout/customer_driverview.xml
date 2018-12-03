@@ -48,7 +48,7 @@
                     android:layout_weight="3"
                     android:singleLine="true"
                     android:text="4.9"
-                    android:textColor="@color/green"/>
+                    android:textColor="@color/royal_blue" />
             </LinearLayout>
 
             <LinearLayout
@@ -60,7 +60,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/distance" />
+                    android:src="@drawable/menu_item5" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -68,7 +68,7 @@
                     android:layout_weight="3"
                     android:singleLine="true"
                     android:text="0.3km"
-                    android:textColor="@color/green"/>
+                    android:textColor="@color/royal_blue" />
             </LinearLayout>
         </LinearLayout>
 

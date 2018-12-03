@@ -3,8 +3,6 @@ package tw.com.lccnet.app.designateddriving;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +18,12 @@ import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 import tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler;
 
 import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_TOKEN;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends ToolbarActivity implements View.OnClickListener {
     private Button login, register;
     private EditText phone, password;
     private TextView forget;
@@ -65,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             finish();
             return;
         }
-        initToolbar("登入");
+        initToolbar("登入", false);
         initView();
         initListenser();
 
@@ -85,18 +84,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forget.setOnClickListener(this);
     }
 
-    private void initToolbar(String title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(title);
-    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_btn_login:
-                if (TextUtils.isEmpty(phone.getText()) || !phone.getText().toString().matches("09[0-9]{8}")) {
+                if (TextUtils.isEmpty(phone.getText()) || !MatchesUtils.matchPhone(phone.getText().toString())) {
                     phone.setError("請輸入手機號碼");
                 } else if (TextUtils.isEmpty(password.getText())) {
                     password.setError("請輸入密碼");

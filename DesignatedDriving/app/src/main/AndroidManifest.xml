@@ -85,7 +85,10 @@
             android:name=".SimpleWebviewActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".NewsActivity" />
-        <activity android:name=".OrdermealActivity"></activity>
+        <activity android:name=".OrdermealActivity" />
+        <activity android:name=".PersonalActivity" />
+        <activity android:name=".MyAccountActivity" />
+        <activity android:name=".CalculateActivity"></activity>
     </application>
 
 </manifest>

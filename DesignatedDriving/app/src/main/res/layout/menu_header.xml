@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:orientation="vertical">
 
     <FrameLayout
@@ -14,7 +13,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/no_photo" />
+            android:src="@drawable/menu_header1" />
     </FrameLayout>
 
     <LinearLayout
@@ -27,16 +26,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button3"
+            android:background="@drawable/background_green_shawdow"
             android:orientation="vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:layout_margin="5dp">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
                 android:src="@drawable/menu_header1" />
 
             <TextView
@@ -46,7 +49,8 @@
                 android:gravity="center"
                 android:text="我的帳號"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="13sp"/>
         </FrameLayout>
 
         <FrameLayout
@@ -54,16 +58,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button3"
+            android:background="@drawable/background_green_shawdow"
             android:orientation="vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:layout_margin="5dp">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
                 android:src="@drawable/menu_header2" />
 
             <TextView
@@ -73,7 +81,8 @@
                 android:gravity="center"
                 android:text="費用試算"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="13sp"/>
         </FrameLayout>
 
         <FrameLayout
@@ -81,16 +90,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button3"
+            android:background="@drawable/background_green_shawdow"
             android:orientation="vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:layout_margin="5dp">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
                 android:src="@drawable/menu_header3" />
 
             <TextView
@@ -100,7 +113,8 @@
                 android:gravity="center"
                 android:text="優惠券"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="13sp"/>
         </FrameLayout>
     </LinearLayout>
 
