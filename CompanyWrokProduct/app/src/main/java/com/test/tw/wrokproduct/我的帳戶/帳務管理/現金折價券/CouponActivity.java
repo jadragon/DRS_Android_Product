@@ -17,8 +17,8 @@ import library.GetJsonData.BillJsonData;
 
 public class CouponActivity extends ToolbarActivity {
     private RecyclerView recyclerView;
-    private  CouponRecyclerAdapter adapter;
-    private  GlobalVariable gv;
+    private CouponRecyclerAdapter adapter;
+    private GlobalVariable gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

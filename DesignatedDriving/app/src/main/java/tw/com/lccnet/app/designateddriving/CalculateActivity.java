@@ -24,7 +24,7 @@ public class CalculateActivity extends ToolbarActivity {
     private Spinner sp_time, sp_type;
     private EditText calculate_edit1, calculate_edit2;
     private Button calculate_btn;
-    private TextView pay, distance;
+    private TextView pay, distance, notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,6 @@ public class CalculateActivity extends ToolbarActivity {
         initEditText();
         initSpinner();
         initButton();
-
     }
 
     private void initButton() {
@@ -101,6 +100,7 @@ public class CalculateActivity extends ToolbarActivity {
     }
 
     private void initEditText() {
+        notice = findViewById(R.id.notice);
         pay = findViewById(R.id.pay);
         distance = findViewById(R.id.distance);
         calculate_edit1 = findViewById(R.id.calculate_edit1);
@@ -108,19 +108,22 @@ public class CalculateActivity extends ToolbarActivity {
     }
 
     private void initSpinner() {
-        final ArrayAdapter arrayAdapter1 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"07:00~23:59", "00:00~06:59"});
-        final ArrayAdapter arrayAdapter2 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"00:00~06:59"});
-        ArrayAdapter arrayAdapter3 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"立即", "長途", "鐘點"});
+        final ArrayAdapter arrayAdapter1 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"07:00 ~ 23:59", "00:00 ~ 06:59"});
+        final ArrayAdapter arrayAdapter2 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"07:00~19:00"});
+        final ArrayAdapter arrayAdapter3 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"07:00 ~ 21:59", "22:00 ~ 06:59"});
+        ArrayAdapter arrayAdapter4 = new ArrayAdapter<>(this, R.layout.spinner_item, new String[]{"立即", "長途", "鐘點"});
         sp_time = findViewById(R.id.sp_time);
         sp_time.setAdapter(arrayAdapter1);
-
         sp_type = findViewById(R.id.sp_type);
-        sp_type.setAdapter(arrayAdapter3);
+        sp_type.setAdapter(arrayAdapter4);
         sp_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
+                        notice.setText(getResources().getString(R.string.notice1));
+                        calculate_edit1.setText("");
+                        calculate_edit2.setText("");
                         calculate_edit1.setInputType(InputType.TYPE_CLASS_TEXT);
                         calculate_edit1.setHint("請輸入起始地址");
                         calculate_edit2.setVisibility(View.VISIBLE);
@@ -128,6 +131,9 @@ public class CalculateActivity extends ToolbarActivity {
                         sp_time.setAdapter(arrayAdapter1);
                         break;
                     case 1:
+                        notice.setText(getResources().getString(R.string.notice2));
+                        calculate_edit1.setText("");
+                        calculate_edit2.setText("");
                         calculate_edit1.setInputType(InputType.TYPE_CLASS_TEXT);
                         calculate_edit1.setHint("請輸入起始地址");
                         calculate_edit2.setVisibility(View.VISIBLE);
@@ -135,10 +141,13 @@ public class CalculateActivity extends ToolbarActivity {
                         sp_time.setAdapter(arrayAdapter2);
                         break;
                     case 2:
+                        notice.setText(getResources().getString(R.string.notice3));
+                        calculate_edit1.setText("");
+                        calculate_edit2.setText("");
                         calculate_edit1.setInputType(InputType.TYPE_CLASS_NUMBER);
                         calculate_edit1.setHint("請輸入預計時間(單位:分鐘)");
                         calculate_edit2.setVisibility(View.INVISIBLE);
-                        sp_time.setAdapter(arrayAdapter1);
+                        sp_time.setAdapter(arrayAdapter3);
                         break;
                 }
             }

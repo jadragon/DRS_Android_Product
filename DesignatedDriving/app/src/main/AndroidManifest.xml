@@ -88,7 +88,8 @@
         <activity android:name=".OrdermealActivity" />
         <activity android:name=".PersonalActivity" />
         <activity android:name=".MyAccountActivity" />
-        <activity android:name=".CalculateActivity"></activity>
+        <activity android:name=".CalculateActivity" />
+        <activity android:name=".CouponActivity"></activity>
     </application>
 
 </manifest>

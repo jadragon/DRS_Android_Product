@@ -45,14 +45,10 @@ import com.test.tw.wrokproduct.我的帳戶.諮詢管理.幫助中心.HelpCenter
 import com.test.tw.wrokproduct.我的帳戶.諮詢管理.聯絡劦譽.ContactActivity;
 import com.test.tw.wrokproduct.購物車.ShopCartActivity;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import Util.AsyncTaskUtils;
-import Util.IDataCallBack;
 import adapter.listview.CommunityListViewAdapter;
 import adapter.viewpager.CommunityPagerAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;

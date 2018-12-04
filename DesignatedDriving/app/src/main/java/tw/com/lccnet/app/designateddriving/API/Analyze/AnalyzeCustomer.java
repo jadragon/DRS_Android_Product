@@ -2,8 +2,12 @@ package tw.com.lccnet.app.designateddriving.API.Analyze;
 
 import android.content.ContentValues;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_BIRTHDAY;
 import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_CMP;
@@ -63,5 +67,38 @@ public class AnalyzeCustomer {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 1.4.1	我的優惠券
+     */
+    public static List<ContentValues> getMyCoupon(JSONObject json, int type) {
+
+        List<ContentValues> arraylist = new ArrayList<>();
+        try {
+            if (json.getBoolean("Success")) {
+                JSONArray jsonArray = json.getJSONArray("Data");
+                ContentValues cv;
+                JSONObject jsonObject;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    cv = new ContentValues();
+                    cv.put("name", (jsonObject.getString("name")));
+                    cv.put("money", (jsonObject.getString("money")));
+                    cv.put("edate", (jsonObject.getString("edate")));
+                    if (type == 0) {
+                        cv.put("coupon", (jsonObject.getString("coupon")));
+                        cv.put("isuse", (jsonObject.getString("isuse")));
+                        cv.put("utime", (jsonObject.getString("utime")));
+                    } else if (type == 1) {
+                        cv.put("mmno", (jsonObject.getString("mmno")));
+                    }
+                    arraylist.add(cv);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return arraylist;
     }
 }

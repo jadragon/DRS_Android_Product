@@ -229,7 +229,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(new Intent(MapsActivity.this, CalculateActivity.class));
                         break;
                     case R.id.header_item3:
-                        Toast.makeText(MapsActivity.this, "優惠券", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MapsActivity.this, CouponActivity.class));
                         break;
                 }
             }

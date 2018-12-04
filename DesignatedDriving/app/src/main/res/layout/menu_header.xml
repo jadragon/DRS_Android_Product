@@ -28,8 +28,6 @@
             android:layout_weight="1"
             android:background="@drawable/background_green_shawdow"
             android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
             android:paddingBottom="15dp"
             android:layout_margin="5dp">
 
@@ -50,7 +48,8 @@
                 android:text="我的帳號"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/white"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:singleLine="true"/>
         </FrameLayout>
 
         <FrameLayout
@@ -60,8 +59,6 @@
             android:layout_weight="1"
             android:background="@drawable/background_green_shawdow"
             android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
             android:paddingBottom="15dp"
             android:layout_margin="5dp">
 
@@ -82,7 +79,8 @@
                 android:text="費用試算"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/white"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:singleLine="true"/>
         </FrameLayout>
 
         <FrameLayout
@@ -92,8 +90,6 @@
             android:layout_weight="1"
             android:background="@drawable/background_green_shawdow"
             android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
             android:paddingBottom="15dp"
             android:layout_margin="5dp">
 
@@ -111,10 +107,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:gravity="center"
-                android:text="優惠券"
+                android:text="我的優惠券"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/white"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:singleLine="true"/>
         </FrameLayout>
     </LinearLayout>
 

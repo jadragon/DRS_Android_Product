@@ -177,23 +177,22 @@ public class CustomerApi implements APISetting {
     /**
      * 1.4.2	搶奪優惠券 – 優惠券列表X
      */
-    public static JSONObject couponList(String token) {
+    public static JSONObject couponList() {
         List<NameValuePair> params = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
         params.add(new BasicNameValuePair("ntgo", ntgo));
-        params.add(new BasicNameValuePair("token", token));
         return jsonParser.getJSONFromUrl(couponList_url, params);
     }
 
     /**
      * 1.4.3	搶奪優惠券 – 獲取優惠券X
      */
-    public static JSONObject setCoupon(String token, String mcno) {
+    public static JSONObject setCoupon(String token, String mmno) {
         List<NameValuePair> params = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
         params.add(new BasicNameValuePair("ntgo", ntgo));
         params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("mcno", mcno));
+        params.add(new BasicNameValuePair("mmno", mmno));
         return jsonParser.getJSONFromUrl(setCoupon_url, params);
     }
 

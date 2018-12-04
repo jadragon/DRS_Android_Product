@@ -53,6 +53,7 @@
             android:paddingBottom="10dp"
             android:text="元&#8195;" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,7 +76,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="bottom"
+            android:paddingBottom="10dp"
             android:text="公里" />
     </LinearLayout>
 
@@ -172,14 +174,11 @@
 
 
     <TextView
+        android:id="@+id/notice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="＊累計里程計費， 超過10公里，每1公里加收50元；
-\n&#8195;行駛超過30公里後，每2公里加收50元(未滿1公里以1公里計算)。
-\n＊不同時段代駕起步價以車輛出發時間為準。
-\n＊預約時間前抵達客戶位置，從預約時間起算；
-\n&#8195;預約時間後抵達客戶位置，從司機到達時間起算，
-\n&#8195;等候滿20分鐘收50元等候費，之後每分鐘加收5元。"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:textSize="12sp" />
 </LinearLayout>
