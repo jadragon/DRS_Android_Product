@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <!--
      存取網路狀態
@@ -87,9 +88,13 @@
         <activity android:name=".NewsActivity" />
         <activity android:name=".OrdermealActivity" />
         <activity android:name=".PersonalActivity" />
-        <activity android:name=".MyAccountActivity" />
+        <activity android:name=".ListViewActivity" />
         <activity android:name=".CalculateActivity" />
-        <activity android:name=".CouponActivity"></activity>
+        <activity android:name=".CouponActivity" />
+        <activity android:name=".CommonLocationActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ContactMeActivity" />
+        <activity android:name=".CarCheckActivity"></activity>
     </application>
 
 </manifest>

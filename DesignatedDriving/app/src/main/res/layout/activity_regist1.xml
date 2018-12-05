@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="手機號碼"
-            android:textColor="@color/gray1"
+            android:textColor="@color/royal_blue"
             android:textSize="15sp" />
 
         <EditText
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:text="認證碼"
-            android:textColor="@color/gray1"
+            android:textColor="@color/royal_blue"
             android:textSize="15sp" />
 
         <LinearLayout

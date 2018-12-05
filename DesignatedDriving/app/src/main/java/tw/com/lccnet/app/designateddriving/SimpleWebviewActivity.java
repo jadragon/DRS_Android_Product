@@ -30,6 +30,10 @@ public class SimpleWebviewActivity extends ToolbarActivity {
                 switch (title) {
                     case "服務條款":
                         return CustomerApi.tservice();
+                    case "隱私權政策":
+                        return CustomerApi.privacy();
+                    case "服務宗旨":
+                        return CustomerApi.pservice();
                     case "關於我們":
                         return CustomerApi.about();
                     case "常見問題":
@@ -40,18 +44,18 @@ public class SimpleWebviewActivity extends ToolbarActivity {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
+                String html = "";
                 try {
-                    String html = jsonObject.getString("Data");
-                    Log.e("html", html);
+                    html = jsonObject.getString("Data");
                     webview.loadDataWithBaseURL(null, html, "text/html", "utf-8",
                             null);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Log.e("html", html);
             }
         });
     }
-
 
     private void initWebview() {
         webview = findViewById(R.id.webview);

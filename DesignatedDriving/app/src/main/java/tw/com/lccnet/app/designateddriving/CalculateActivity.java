@@ -77,7 +77,7 @@ public class CalculateActivity extends ToolbarActivity {
                                 try {
                                     pay.setText(jsonObject.getJSONObject("Data").getString("pay"));
                                 } catch (JSONException e) {
-                                    pay.setText("");
+                                    pay.setText("0");
                                     e.printStackTrace();
                                 }
                                 try {

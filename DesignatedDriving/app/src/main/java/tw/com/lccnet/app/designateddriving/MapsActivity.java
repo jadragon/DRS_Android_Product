@@ -2,6 +2,7 @@ package tw.com.lccnet.app.designateddriving;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,13 +23,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,6 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import tw.com.lccnet.app.designateddriving.Component.SlideDialog;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 import tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler;
 
@@ -144,17 +151,41 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    private EditText end;
+    private Dialog dialog;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_long_trip:
-
+                startActivity(new Intent(this, CarCheckActivity.class));
                 break;
             case R.id.btn_immediate:
-
+                View view = LayoutInflater.from(this).inflate(R.layout.item_slide_dialog, null);
+                TextView start = view.findViewById(R.id.start);
+                start.setText(toolbar_txt_title.getText().toString());
+                end = view.findViewById(R.id.end);
+                Button confirm = view.findViewById(R.id.confirm);
+                Button cancel = view.findViewById(R.id.cancel);
+                confirm.setOnClickListener(this);
+                cancel.setOnClickListener(this);
+                dialog = new SlideDialog(this);
+                dialog.setContentView(view);
+                dialog.show();
                 break;
             case R.id.btn_deliver:
                 startActivity(new Intent(this, OrdermealActivity.class));
+                break;
+            case R.id.confirm:
+                if (TextUtils.isEmpty(end.getText())) {
+                    end.setError("請輸入目的地");
+                    return;
+                }
+                Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                break;
+            case R.id.cancel:
+                dialog.dismiss();
                 break;
         }
     }
@@ -223,7 +254,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.header_item1:
-                        startActivity(new Intent(MapsActivity.this, MyAccountActivity.class));
+                        Intent intent = new Intent(MapsActivity.this, ListViewActivity.class);
+                        intent.putExtra("type", "account");
+                        startActivity(intent);
                         break;
                     case R.id.header_item2:
                         startActivity(new Intent(MapsActivity.this, CalculateActivity.class));
@@ -244,29 +277,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_item1:
-                        Toast.makeText(MapsActivity.this, "最新消息", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MapsActivity.this, NewsActivity.class);
-                        intent.putExtra("title", "常見問題");
                         startActivity(intent);
                         return true;
                     case R.id.menu_item2:
-                        Toast.makeText(MapsActivity.this, "活動專區", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "我的訂單", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.menu_item3:
-                        Toast.makeText(MapsActivity.this, "服務紀錄", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MapsActivity.this, ListViewActivity.class);
+                        intent.putExtra("type", "about");
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item4:
-                        Toast.makeText(MapsActivity.this, "常見問題", Toast.LENGTH_SHORT).show();
-                        intent = new Intent(MapsActivity.this, SimpleWebviewActivity.class);
-                        intent.putExtra("title", "常見問題");
-                        startActivity(intent);
-                        return true;
-                    case R.id.menu_item5:
-                        intent = new Intent(MapsActivity.this, SimpleWebviewActivity.class);
-                        intent.putExtra("title", "關於我們");
-                        startActivity(intent);
-                        return true;
-                    case R.id.menu_item6:
                         db.resetLoginTables();
                         gv.setToken(null);
                         intent = new Intent(MapsActivity.this, LoginActivity.class);
@@ -361,7 +383,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-
     private void showAddress(LatLng latLng) {
         Address address = LocationUtils.getAddress(this, latLng.latitude, latLng.longitude);
         if (address != null) {
@@ -413,7 +434,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     protected void onDestroy() {
         db.close();
@@ -462,14 +482,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mThreadHandler = new Handler(mThread.getLooper());
 
-
         sendAPI();
     }
 
     public void sendAPI() {
         what = 0;
         mThreadHandler.postDelayed(a1, 5000);
-
 
     }
 
@@ -499,6 +517,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     };
-
 
 }

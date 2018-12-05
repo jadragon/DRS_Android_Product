@@ -11,4 +11,8 @@
     <style name="ItemHeight">
         <item name="android:listPreferredItemHeightSmall">60dp</item>
     </style>
+    <style name="bottomShow" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_show</item>
+        <item name="android:windowExitAnimation">@anim/pop_hidden</item>
+    </style>
 </resources>

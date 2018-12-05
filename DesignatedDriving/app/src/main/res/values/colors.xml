@@ -6,6 +6,7 @@
     <color name="royal_blue">#023f54</color>
     <color name="royal_blue_light">#3c6475</color>
     <color name="red">#ff0000</color>
+    <color name="invisible_red">#64ff0000</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="gray1">#999999</color>

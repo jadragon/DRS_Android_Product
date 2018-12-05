@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="姓名"
-            android:textColor="@color/gray1"
+            android:textColor="@color/royal_blue"
             android:textSize="15sp" />
 
         <EditText
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="密碼"
-            android:textColor="@color/gray1"
+            android:textColor="@color/royal_blue"
             android:textSize="15sp" />
 
         <EditText
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:text="密碼確認"
-            android:textColor="@color/gray1"
+            android:textColor="@color/royal_blue"
             android:textSize="15sp" />
 
 
