@@ -15,6 +15,7 @@ import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
 public class Regist2Activity extends ToolbarActivity implements View.OnClickListener {
     private Button send;
@@ -57,6 +58,8 @@ public class Regist2Activity extends ToolbarActivity implements View.OnClickList
                     name.setError("請輸入姓名");
                 } else if (TextUtils.isEmpty(password.getText())) {
                     password.setError("請輸入密碼");
+                }else if (!MatchesUtils.matchPassword(password.getText().toString())) {
+                    password.setError("密碼為6-12位字母加數字");
                 } else if (!password.getText().toString().equals(repassword.getText().toString())) {
                     repassword.setError("請確認密碼是否正確");
                 } else if (sex.getCheckedRadioButtonId() == -1) {

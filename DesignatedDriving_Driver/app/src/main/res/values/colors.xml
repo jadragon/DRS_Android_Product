@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="royal_blue">#023f54</color>
+    <color name="royal_blue_light">#3c6475</color>
+    <color name="red">#ff0000</color>
+    <color name="invisible_red">#64ff0000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="gray1">#999999</color>
+    <color name="gray2">#cccccc</color>
+    <color name="defalut_gray">#f4f4f4</color>
+    <color name="green">#13b758</color>
+    <color name="invisible">#00000000</color>
+
+    <color name="orange1">#ffc931</color>
+    <color name="orange2">#e89a0f</color>
+    <color name="green1">#8cc63f</color>
+</resources>

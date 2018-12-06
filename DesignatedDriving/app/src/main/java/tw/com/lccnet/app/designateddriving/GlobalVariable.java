@@ -10,6 +10,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import tw.com.lccnet.app.designateddriving.Utils.PreferenceUtils;
+
 public class GlobalVariable extends Application {
 
     private String token;
@@ -17,6 +19,7 @@ public class GlobalVariable extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        PreferenceUtils.init(getApplicationContext());
         initImageLoader();
     }
 

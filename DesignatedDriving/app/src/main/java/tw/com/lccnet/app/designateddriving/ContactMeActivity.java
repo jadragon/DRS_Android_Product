@@ -3,7 +3,6 @@ package tw.com.lccnet.app.designateddriving;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,15 +20,13 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeCustomer;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
-import tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler;
+import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_TOKEN;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_UNAME;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_UNAME;
 
 public class ContactMeActivity extends ToolbarActivity implements View.OnClickListener {
     private TextView uname;

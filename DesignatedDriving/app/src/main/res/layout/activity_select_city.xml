@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SelectCityActivity">
+
+
+    <include
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/gray1"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+
+        <EditText
+            android:id="@+id/add_delivery_edit_zipcode"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="郵遞區號"
+            android:inputType="number"
+            android:paddingLeft="10dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/add_delivery_txt_city"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="請選擇縣市"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/add_delivery_txt_area"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="請選擇鄉鎮市區"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/add_delivery_edit_address"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="地址"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/defalut_gray" />
+
+    <Button
+        android:id="@+id/add_delivery_btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/red"
+        android:text="確認"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+</LinearLayout>

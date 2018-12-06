@@ -13,15 +13,18 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeCustomer;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
-import tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler;
+import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_TOKEN;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_MODIFYDATE;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_TOKEN;
 
 public class LoginActivity extends ToolbarActivity implements View.OnClickListener {
     private Button login, register;
@@ -56,6 +59,7 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
         setContentView(R.layout.activity_login);
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
+        initAddress();
         ContentValues cv = db.getMemberDetail();
         if (cv != null) {
             gv.setToken(cv.getAsString(KEY_TOKEN));
@@ -133,5 +137,28 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
     protected void onDestroy() {
         db.close();
         super.onDestroy();
+    }
+
+    private void initAddress() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return CustomerApi.getAddress("0");
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        ArrayList<ContentValues> datas = AnalyzeUtil.getAddress(jsonObject);
+                        if (datas.size() > 0 && db.getModifydate(datas.get(0).getAsString(KEY_MODIFYDATE)) == 0) {
+                            db.resetAddressTables();
+                            db.addAddressAll(datas);
+                        }
+                    }
+                }
+                Log.e("Address", db.getAddressDetails() + "");
+            }
+        });
     }
 }

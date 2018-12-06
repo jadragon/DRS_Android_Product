@@ -9,15 +9,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_BIRTHDAY;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_CMP;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_CONTACT;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_EMAIL;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_MP;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_PICTURE;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_SEX;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_TOKEN;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_UNAME;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_BIRTHDAY;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_CMP;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_CONTACT;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_EMAIL;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_MP;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_PICTURE;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_SEX;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_TOKEN;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_UNAME;
 
 public class AnalyzeCustomer {
 

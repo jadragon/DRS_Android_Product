@@ -10,6 +10,9 @@ import java.util.List;
 import tw.com.lccnet.app.designateddriving.Http.JSONParser;
 
 public class CustomerApi implements APISetting {
+    private static final String getAddress_url = "https://api.gok1945.com/" + "main/cart/getAddress.php";
+
+
     private static final String register_url = DOMAIN + "main/customer/register.php";
     private static final String gvcode_url = DOMAIN + "main/customer/gvcode.php";
     private static final String login_url = DOMAIN + "main/customer/login.php";
@@ -278,4 +281,17 @@ public class CustomerApi implements APISetting {
         params.add(new BasicNameValuePair("ntgo", ntgo));
         return jsonParser.getJSONFromUrl(ordermeal_url, params);
     }
+
+    /**
+     * 1.3.16	讀取地址
+     */
+    public static JSONObject getAddress(String modifydate) {
+        List<NameValuePair> params = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+        params.add(new BasicNameValuePair("gok", "Dr@_K4y51G2A0w26B8OWkfQ=="));
+        params.add(new BasicNameValuePair("lang", "0"));
+        params.add(new BasicNameValuePair("modifydate", modifydate));
+        return jsonParser.getJSONFromUrl(getAddress_url, params);
+    }
+
 }

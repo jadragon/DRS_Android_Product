@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -25,14 +26,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +40,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,8 +60,9 @@ import java.util.List;
 import java.util.Random;
 
 import tw.com.lccnet.app.designateddriving.Component.SlideDialog;
+import tw.com.lccnet.app.designateddriving.OtherAdapter.PlaceAutocompleteAdapter;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
-import tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler;
+import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
@@ -73,11 +77,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DisplayMetrics dm;
     private SQLiteDatabaseHandler db;
     private GlobalVariable gv;
-
+    private PlaceAutocompleteAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            String FRAGMENTS_TAG = "android:support:fragments";
+            savedInstanceState.remove(FRAGMENTS_TAG);
+        }
         setContentView(R.layout.activity_maps);
+        Log.e("LifeCycle", "onCreate1");
         dm = getResources().getDisplayMetrics();
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
@@ -87,7 +96,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         initButton();
         initADToast();
     }
-
+    private GeoDataClient mGeoDataClient;
     private void checkPermission() {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -96,6 +105,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
             checkLocation();
+            mGeoDataClient = Places.getGeoDataClient(this, null);
+            AutocompleteFilter filter = new AutocompleteFilter.Builder()
+                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                    .build();
+            adapter = new PlaceAutocompleteAdapter(this,  mGeoDataClient, null, filter);
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             assert mapFragment != null;
@@ -163,6 +177,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.btn_immediate:
                 View view = LayoutInflater.from(this).inflate(R.layout.item_slide_dialog, null);
                 TextView start = view.findViewById(R.id.start);
+                AutoCompleteTextView autoCompleteTextView= view.findViewById(R.id.end);
+                autoCompleteTextView.setAdapter(adapter);
                 start.setText(toolbar_txt_title.getText().toString());
                 end = view.findViewById(R.id.end);
                 Button confirm = view.findViewById(R.id.confirm);
@@ -434,13 +450,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        db.close();
-        LocationUtils.unregister();
-        super.onDestroy();
-        //  System.exit(0);
-    }
 
     public static Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -460,6 +469,60 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return bitmap;
     }
+
+    @Override
+    protected void onDestroy() {
+        Log.e("LifeCycle", "onDestroy");
+        db.close();
+        LocationUtils.unregister();
+        super.onDestroy();
+        //  System.exit(0);
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e("LifeCycle", "onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e("LifeCycle", "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.e("LifeCycle", "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.e("LifeCycle", "onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e("LifeCycle", "onStop");
+        super.onStop();
+    }
+
+    @Override
+    public void onCreate( Bundle savedInstanceState, PersistableBundle persistentState) {
+        Log.e("LifeCycle", "onCreate2");
+        super.onCreate(savedInstanceState, persistentState);
+        dm = getResources().getDisplayMetrics();
+        gv = (GlobalVariable) getApplicationContext();
+        db = new SQLiteDatabaseHandler(this);
+        //initThread();
+        checkPermission();
+        initToolbar();
+        initButton();
+        initADToast();
+    }
+
 
     //=====================================================================================================================
     private int what = 0;

@@ -94,7 +94,9 @@
         <activity android:name=".CommonLocationActivity" />
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".ContactMeActivity" />
-        <activity android:name=".CarCheckActivity"></activity>
+        <activity android:name=".CarCheckActivity" />
+        <activity android:name=".SelectCityActivity" />
+        <activity android:name=".CityListActivity"></activity>
     </application>
 
 </manifest>

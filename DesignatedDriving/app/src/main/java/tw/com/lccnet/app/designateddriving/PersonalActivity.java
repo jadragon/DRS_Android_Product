@@ -23,13 +23,13 @@ import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_BIRTHDAY;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_CMP;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_CONTACT;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_EMAIL;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_MP;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_SEX;
-import static tw.com.lccnet.app.designateddriving.Utils.SQLiteDatabaseHandler.KEY_UNAME;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_BIRTHDAY;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_CMP;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_CONTACT;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_EMAIL;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_MP;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_SEX;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_UNAME;
 
 public class PersonalActivity extends ToolbarActivity implements View.OnClickListener {
     private GlobalVariable gv;
