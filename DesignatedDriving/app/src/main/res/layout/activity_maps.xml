@@ -26,14 +26,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/background_shawdow"
-                app:title=" ">
+                android:background="@drawable/background_shawdow">
 
-                <TextView
-                    android:id="@+id/toolbar_txt_title"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
+                    android:layout_marginRight="10dp">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/toolbar_edit_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:enabled="false"
+                        android:singleLine="true"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/toolbar_txt_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="12sp" />
+                </FrameLayout>
             </android.support.v7.widget.Toolbar>
 
             <ImageView

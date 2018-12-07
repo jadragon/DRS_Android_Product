@@ -57,10 +57,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.header_item1:
+
                         break;
                     case R.id.header_item2:
+
                         break;
                     case R.id.header_item3:
+
                         break;
                 }
             }
@@ -81,14 +84,16 @@ public class MainActivity extends AppCompatActivity {
 
                         return true;
                     case R.id.menu_item3:
-
+                        Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item4:
-                        db.resetLoginTables();
-                        gv.setToken(null);
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
+                        return true;
+                    case R.id.menu_item5:
+                        intent = new Intent(MainActivity.this, ListViewActivity.class);
+                        intent.putExtra("type", "about");
                         startActivity(intent);
-                        finish();
                         return true;
                 }
                 return false;

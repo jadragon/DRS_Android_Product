@@ -96,7 +96,8 @@
         <activity android:name=".ContactMeActivity" />
         <activity android:name=".CarCheckActivity" />
         <activity android:name=".SelectCityActivity" />
-        <activity android:name=".CityListActivity"></activity>
+        <activity android:name=".CityListActivity" />
+        <activity android:name=".OrderListActivity"></activity>
     </application>
 
 </manifest>

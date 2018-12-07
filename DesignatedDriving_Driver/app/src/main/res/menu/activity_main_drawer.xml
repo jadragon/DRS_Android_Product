@@ -4,26 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_item1"
-            android:title="最新消息" />
-        <!--   <item
-               android:id="@+id/menu_item2"
-               android:icon="@drawable/menu_item2"
-               android:title="活動專區" />
-                  <item
-               android:id="@+id/menu_item4"
-               android:icon="@drawable/menu_item4"
-               android:title="常見問題" />
-               -->
+            android:title="我的儲值" />
         <item
             android:id="@+id/menu_item2"
-            android:title="我的訂單" />
-
+            android:title="我的評價" />
         <item
             android:id="@+id/menu_item3"
-            android:title="關於我們" />
+            android:title="最新資訊" />
         <item
             android:id="@+id/menu_item4"
-            android:title="登出" />
+            android:title="新手教學" />
+        <item
+            android:id="@+id/menu_item5"
+            android:title="關於我們" />
     </group>
 
 </menu>

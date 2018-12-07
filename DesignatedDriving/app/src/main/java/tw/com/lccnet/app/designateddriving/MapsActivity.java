@@ -24,7 +24,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,16 +35,21 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,8 +58,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -59,14 +69,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
+import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Component.SlideDialog;
 import tw.com.lccnet.app.designateddriving.OtherAdapter.PlaceAutocompleteAdapter;
+import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks, TextWatcher {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
     private View view;
+    private AutoCompleteTextView toolbar_edit_title;
     private TextView toolbar_txt_title;
     private Toolbar toolbar_main;
     private ActionBarDrawerToggle actionBarDrawerToggle_main;
@@ -78,10 +94,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SQLiteDatabaseHandler db;
     private GlobalVariable gv;
     private PlaceAutocompleteAdapter adapter;
+    private GoogleApiClient googleApiClient;
+    private String LOG_TAG = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             String FRAGMENTS_TAG = "android:support:fragments";
             savedInstanceState.remove(FRAGMENTS_TAG);
         }
@@ -96,29 +115,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         initButton();
         initADToast();
     }
-    private GeoDataClient mGeoDataClient;
-    private void checkPermission() {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permission);
-            }
-        }
-        if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
-            checkLocation();
-            mGeoDataClient = Places.getGeoDataClient(this, null);
-            AutocompleteFilter filter = new AutocompleteFilter.Builder()
-                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
-                    .build();
-            adapter = new PlaceAutocompleteAdapter(this,  mGeoDataClient, null, filter);
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            assert mapFragment != null;
-            mapFragment.getMapAsync(this);
 
-        } else {//請求權限方法
-            String[] permissions = mPermissionList.toArray(new String[0]);//將List轉為數組
-            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
-        }
+    private void initButton() {
+        Button btn_long_trip = findViewById(R.id.btn_long_trip);
+        btn_long_trip.setOnClickListener(this);
+        reShapeButton(btn_long_trip, R.color.orange1);
+        Button btn_immediate = findViewById(R.id.btn_immediate);
+        btn_immediate.setOnClickListener(this);
+        reShapeButton(btn_immediate, R.color.royal_blue);
+        Button btn_deliver = findViewById(R.id.btn_deliver);
+        btn_deliver.setOnClickListener(this);
+        reShapeButton(btn_deliver, R.color.royal_blue_light);
+
     }
 
     private void checkLocation() {
@@ -152,21 +160,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void initButton() {
-        Button btn_long_trip = findViewById(R.id.btn_long_trip);
-        btn_long_trip.setOnClickListener(this);
-        reShapeButton(btn_long_trip, R.color.orange1);
-        Button btn_immediate = findViewById(R.id.btn_immediate);
-        btn_immediate.setOnClickListener(this);
-        reShapeButton(btn_immediate, R.color.royal_blue);
-        Button btn_deliver = findViewById(R.id.btn_deliver);
-        btn_deliver.setOnClickListener(this);
-        reShapeButton(btn_deliver, R.color.royal_blue_light);
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+    private static final int GOOGLE_API_CLIENT_ID = 0;
 
+    private void checkPermission() {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permission);
+            }
+        }
+        if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
+            checkLocation();
+            googleApiClient = new GoogleApiClient.Builder(MapsActivity.this)
+                    .addApi(Places.GEO_DATA_API)
+                    .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                    .addConnectionCallbacks(this)
+                    .build();
+            AutocompleteFilter filter = new AutocompleteFilter.Builder()
+                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE)
+                    .setCountry("TW")
+                    .build();
+            adapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1, BOUNDS_MOUNTAIN_VIEW, filter);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
+
+        } else {//請求權限方法
+            String[] permissions = mPermissionList.toArray(new String[0]);//將List轉為數組
+            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
+        }
     }
 
-    private EditText end;
     private Dialog dialog;
+    private AutoCompleteTextView autoCompleteTextView;
+    private TextView start, cost;
 
     @Override
     public void onClick(View v) {
@@ -176,11 +205,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.btn_immediate:
                 View view = LayoutInflater.from(this).inflate(R.layout.item_slide_dialog, null);
-                TextView start = view.findViewById(R.id.start);
-                AutoCompleteTextView autoCompleteTextView= view.findViewById(R.id.end);
+                start = view.findViewById(R.id.start);
+                autoCompleteTextView = view.findViewById(R.id.end);
+                autoCompleteTextView.addTextChangedListener(this);
+                autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
                 autoCompleteTextView.setAdapter(adapter);
-                start.setText(toolbar_txt_title.getText().toString());
-                end = view.findViewById(R.id.end);
+                start.setText(toolbar_edit_title.getText().toString());
+                cost = view.findViewById(R.id.cost);
                 Button confirm = view.findViewById(R.id.confirm);
                 Button cancel = view.findViewById(R.id.cancel);
                 confirm.setOnClickListener(this);
@@ -193,8 +224,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, OrdermealActivity.class));
                 break;
             case R.id.confirm:
-                if (TextUtils.isEmpty(end.getText())) {
-                    end.setError("請輸入目的地");
+                if (TextUtils.isEmpty(autoCompleteTextView.getText())) {
+                    autoCompleteTextView.setError("請輸入目的地");
                     return;
                 }
                 Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
@@ -203,7 +234,125 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.cancel:
                 dialog.dismiss();
                 break;
+            case R.id.toolbar_txt_title:
+                toolbar_txt_title.setVisibility(View.INVISIBLE);
+                toolbar_edit_title.setEnabled(true);
+                toolbar_edit_title.requestFocus();
+                break;
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    private Handler handler = new Handler();
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        handler.removeCallbacks(notifier);
+        handler.postDelayed(notifier, 1000);
+    }
+
+    private Runnable notifier = new Runnable() {
+        @Override
+        public void run() {
+            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                @Override
+                public JSONObject onTasking(Void... params) {
+                    return CustomerApi.calculate1("1", start.getText().toString(), autoCompleteTextView.getText().toString());
+                }
+
+                @Override
+                public void onTaskAfter(JSONObject jsonObject) {
+                    if (jsonObject != null) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            try {
+                                cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                cost.setText("      ");
+                            }
+                        } else {
+                            cost.setText("      ");
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final PlaceAutocompleteAdapter.PlaceAutocomplete item = adapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(LOG_TAG, "Selected: " + item.description);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(googleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.e(LOG_TAG, "Place query did not complete. Error: " +
+                        places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            final Place place = places.get(0);
+            CharSequence attributions = places.getAttributions();
+            if (autoCompleteTextView != null) {
+                autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
+            } else {
+                toolbar_edit_title.setText(Html.fromHtml(place.getAddress().toString()));
+            }
+            if (attributions != null) {
+                if (autoCompleteTextView != null) {
+                    autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
+                } else {
+                    toolbar_edit_title.setText(Html.fromHtml(attributions.toString()));
+                }
+            }
+            toolbar_txt_title.setVisibility(View.VISIBLE);
+            toolbar_edit_title.setEnabled(false);
+        }
+    };
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        adapter.setGoogleApiClient(googleApiClient);
+        Log.i(LOG_TAG, "Google Places API connected.");
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                + connectionResult.getErrorCode());
+
+        Toast.makeText(this,
+                "Google Places API connection failed with error code:" +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        adapter.setGoogleApiClient(null);
+        Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
 
     private void reShapeButton(Button button, int color) {
@@ -254,7 +403,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void initToolbar() {
         //Toolbar 建立
         toolbar_main = findViewById(R.id.toolbar_title);
+        toolbar_edit_title = findViewById(R.id.toolbar_edit_title);
         toolbar_txt_title = findViewById(R.id.toolbar_txt_title);
+        toolbar_txt_title.setOnClickListener(this);
+        toolbar_edit_title.setAdapter(adapter);
+        toolbar_edit_title.setOnItemClickListener(mAutocompleteClickListener);
         setSupportActionBar(toolbar_main);
         DrawerLayout drawerLayout_main = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle_main = new ActionBarDrawerToggle(this, drawerLayout_main, R.string.app_open, R.string.app_close);
@@ -297,7 +450,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(intent);
                         return true;
                     case R.id.menu_item2:
-                        Toast.makeText(MapsActivity.this, "我的訂單", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MapsActivity.this, OrderListActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item3:
                         intent = new Intent(MapsActivity.this, ListViewActivity.class);
@@ -402,7 +556,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void showAddress(LatLng latLng) {
         Address address = LocationUtils.getAddress(this, latLng.latitude, latLng.longitude);
         if (address != null) {
-            toolbar_txt_title.setText(address.getAddressLine(0));
+            toolbar_edit_title.setText(address.getAddressLine(0));
         } else {
             Toast.makeText(this, "取的定位異常", Toast.LENGTH_SHORT).show();
         }
@@ -510,7 +664,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onCreate( Bundle savedInstanceState, PersistableBundle persistentState) {
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         Log.e("LifeCycle", "onCreate2");
         super.onCreate(savedInstanceState, persistentState);
         dm = getResources().getDisplayMetrics();
@@ -530,11 +684,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Handler mThreadHandler;
     //宣告特約工人
     private HandlerThread mThread;
-    private Handler handler;
+    private Handler mhandler;
 
     private void initThread() {
         //
-        handler = new Handler(Looper.getMainLooper());
+        mhandler = new Handler(Looper.getMainLooper());
         mThread = new HandlerThread("name");
 
         //讓Worker待命，等待其工作 (開啟Thread)
@@ -562,7 +716,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //  json = CustomerApi.store_type();
             if (what == 0) {
                 //初始化面
-                handler.post(u1);
+                mhandler.post(u1);
             }
         }
     };
@@ -580,5 +734,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     };
+
 
 }

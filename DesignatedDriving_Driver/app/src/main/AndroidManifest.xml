@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alex.designateddriving_driver">
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:name=".GlobalVariable"
         android:allowBackup="true"
@@ -17,7 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ListViewActivity" />
+        <activity android:name=".ContactMeActivity" />
+        <activity android:name=".SimpleWebviewActivity" />
+        <activity android:name=".NewsActivity" />
     </application>
 
 </manifest>
