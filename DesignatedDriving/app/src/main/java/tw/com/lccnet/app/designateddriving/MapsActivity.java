@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -44,13 +46,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -64,6 +72,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,11 +87,11 @@ import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, TextWatcher {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
+    private static final int AUTO_PLACE_COMPETE_TOOLBAR = 0x02;
+    private static final int AUTO_PLACE_COMPETE_END = 0x03;
     private View view;
-    private AutoCompleteTextView toolbar_edit_title;
     private TextView toolbar_txt_title;
     private Toolbar toolbar_main;
     private ActionBarDrawerToggle actionBarDrawerToggle_main;
@@ -93,9 +102,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DisplayMetrics dm;
     private SQLiteDatabaseHandler db;
     private GlobalVariable gv;
-    private PlaceAutocompleteAdapter adapter;
-    private GoogleApiClient googleApiClient;
-    private String LOG_TAG = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +111,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             savedInstanceState.remove(FRAGMENTS_TAG);
         }
         setContentView(R.layout.activity_maps);
-        Log.e("LifeCycle", "onCreate1");
         dm = getResources().getDisplayMetrics();
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
@@ -114,6 +119,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         initToolbar();
         initButton();
         initADToast();
+
     }
 
     private void initButton() {
@@ -160,10 +166,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
-    private static final int GOOGLE_API_CLIENT_ID = 0;
-
     private void checkPermission() {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -172,6 +174,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
             checkLocation();
+            /*
             googleApiClient = new GoogleApiClient.Builder(MapsActivity.this)
                     .addApi(Places.GEO_DATA_API)
                     .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
@@ -182,6 +185,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .setCountry("TW")
                     .build();
             adapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1, BOUNDS_MOUNTAIN_VIEW, filter);
+            */
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             assert mapFragment != null;
@@ -194,8 +198,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private Dialog dialog;
-    private AutoCompleteTextView autoCompleteTextView;
-    private TextView start, cost;
+    private TextView start, end, cost;
 
     @Override
     public void onClick(View v) {
@@ -206,11 +209,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.btn_immediate:
                 View view = LayoutInflater.from(this).inflate(R.layout.item_slide_dialog, null);
                 start = view.findViewById(R.id.start);
-                autoCompleteTextView = view.findViewById(R.id.end);
-                autoCompleteTextView.addTextChangedListener(this);
-                autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
-                autoCompleteTextView.setAdapter(adapter);
-                start.setText(toolbar_edit_title.getText().toString());
+                end = view.findViewById(R.id.end);
+                end.setOnClickListener(this);
+                //  autoCompleteTextView.addTextChangedListener(this);
+                // autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
+                //autoCompleteTextView.setAdapter(adapter);
+                start.setText(toolbar_txt_title.getText().toString());
                 cost = view.findViewById(R.id.cost);
                 Button confirm = view.findViewById(R.id.confirm);
                 Button cancel = view.findViewById(R.id.cancel);
@@ -224,8 +228,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, OrdermealActivity.class));
                 break;
             case R.id.confirm:
-                if (TextUtils.isEmpty(autoCompleteTextView.getText())) {
-                    autoCompleteTextView.setError("請輸入目的地");
+                if (TextUtils.isEmpty(end.getText())) {
+                    end.setError("請輸入目的地");
                     return;
                 }
                 Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
@@ -235,126 +239,171 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 dialog.dismiss();
                 break;
             case R.id.toolbar_txt_title:
-                toolbar_txt_title.setVisibility(View.INVISIBLE);
-                toolbar_edit_title.setEnabled(true);
-                toolbar_edit_title.requestFocus();
+                try {
+                    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                            //  .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                            .setCountry("TW")
+                            .build();
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setFilter(typeFilter)
+                                    .build(this);
+                    startActivityForResult(intent, AUTO_PLACE_COMPETE_TOOLBAR);
+                } catch (GooglePlayServicesRepairableException e) {
+                    // TODO: Handle the error.
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // TODO: Handle the error.
+                }
+                //startActivityForResult(new Intent(MapsActivity.this, PlaceAutocompleteActivity.class), AUTO_PLACE_COMPETE);
+                break;
+            case R.id.end:
+                try {
+                    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                            //  .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                            .setCountry("TW")
+                            .build();
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setFilter(typeFilter)
+                                    .build(this);
+                    startActivityForResult(intent, AUTO_PLACE_COMPETE_END);
+                } catch (GooglePlayServicesRepairableException e) {
+                    // TODO: Handle the error.
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // TODO: Handle the error.
+                }
                 break;
         }
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void caculateCost() {
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public JSONObject onTasking(Void... params) {
+                return CustomerApi.calculate1("1", start.getText().toString(), end.getText().toString());
+            }
 
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    private Handler handler = new Handler();
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        handler.removeCallbacks(notifier);
-        handler.postDelayed(notifier, 1000);
-    }
-
-    private Runnable notifier = new Runnable() {
-        @Override
-        public void run() {
-            AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                @Override
-                public JSONObject onTasking(Void... params) {
-                    return CustomerApi.calculate1("1", start.getText().toString(), autoCompleteTextView.getText().toString());
-                }
-
-                @Override
-                public void onTaskAfter(JSONObject jsonObject) {
-                    if (jsonObject != null) {
-                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                            try {
-                                cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                cost.setText("      ");
-                            }
-                        } else {
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        try {
+                            cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                             cost.setText("      ");
                         }
+                    } else {
+                        cost.setText("      ");
                     }
                 }
-            });
-        }
-    };
-
-    private AdapterView.OnItemClickListener mAutocompleteClickListener
-            = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final PlaceAutocompleteAdapter.PlaceAutocomplete item = adapter.getItem(position);
-            final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(googleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                        places.getStatus().toString());
-                return;
             }
-            // Selecting the first object buffer.
-            final Place place = places.get(0);
-            CharSequence attributions = places.getAttributions();
-            if (autoCompleteTextView != null) {
-                autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
-            } else {
-                toolbar_edit_title.setText(Html.fromHtml(place.getAddress().toString()));
+        });
+    }
+
+    /*
+        private Handler handler = new Handler();
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            handler.removeCallbacks(notifier);
+            handler.postDelayed(notifier, 1000);
+        }
+
+        private Runnable notifier = new Runnable() {
+            @Override
+            public void run() {
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        return CustomerApi.calculate1("1", start.getText().toString(), autoCompleteTextView.getText().toString());
+                    }
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (jsonObject != null) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                try {
+                                    cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    cost.setText("      ");
+                                }
+                            } else {
+                                cost.setText("      ");
+                            }
+                        }
+                    }
+                });
             }
-            if (attributions != null) {
+        };
+
+        private AdapterView.OnItemClickListener mAutocompleteClickListener
+                = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final PlaceAutocompleteAdapter.PlaceAutocomplete item = adapter.getItem(position);
+                final String placeId = String.valueOf(item.placeId);
+                Log.i(LOG_TAG, "Selected: " + item.description);
+                PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                        .getPlaceById(googleApiClient, placeId);
+                placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+                Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+            }
+        };
+
+        private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+                = new ResultCallback<PlaceBuffer>() {
+            @Override
+            public void onResult(PlaceBuffer places) {
+                if (!places.getStatus().isSuccess()) {
+                    Log.e(LOG_TAG, "Place query did not complete. Error: " +
+                            places.getStatus().toString());
+                    return;
+                }
+                // Selecting the first object buffer.
+                final Place place = places.get(0);
+                CharSequence attributions = places.getAttributions();
                 if (autoCompleteTextView != null) {
                     autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
                 } else {
-                    toolbar_edit_title.setText(Html.fromHtml(attributions.toString()));
+                    toolbar_txt_title.setText(Html.fromHtml(place.getAddress().toString()));
                 }
+                if (attributions != null) {
+                    if (autoCompleteTextView != null) {
+                        autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
+                    } else {
+                        toolbar_txt_title.setText(Html.fromHtml(attributions.toString()));
+                    }
+                }
+                // toolbar_txt_title.setVisibility(View.VISIBLE);
             }
-            toolbar_txt_title.setVisibility(View.VISIBLE);
-            toolbar_edit_title.setEnabled(false);
+        };
+
+        @Override
+        public void onConnected(Bundle bundle) {
+            adapter.setGoogleApiClient(googleApiClient);
+            Log.i(LOG_TAG, "Google Places API connected.");
+
         }
-    };
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        adapter.setGoogleApiClient(googleApiClient);
-        Log.i(LOG_TAG, "Google Places API connected.");
+        @Override
+        public void onConnectionFailed(ConnectionResult connectionResult) {
+            Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                    + connectionResult.getErrorCode());
 
-    }
+            Toast.makeText(this,
+                    "Google Places API connection failed with error code:" +
+                            connectionResult.getErrorCode(),
+                    Toast.LENGTH_LONG).show();
+        }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
-
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        adapter.setGoogleApiClient(null);
-        Log.e(LOG_TAG, "Google Places API connection suspended.");
-    }
-
+        @Override
+        public void onConnectionSuspended(int i) {
+            adapter.setGoogleApiClient(null);
+            Log.e(LOG_TAG, "Google Places API connection suspended.");
+        }
+    */
     private void reShapeButton(Button button, int color) {
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(20);
@@ -403,11 +452,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void initToolbar() {
         //Toolbar 建立
         toolbar_main = findViewById(R.id.toolbar_title);
-        toolbar_edit_title = findViewById(R.id.toolbar_edit_title);
         toolbar_txt_title = findViewById(R.id.toolbar_txt_title);
         toolbar_txt_title.setOnClickListener(this);
-        toolbar_edit_title.setAdapter(adapter);
-        toolbar_edit_title.setOnItemClickListener(mAutocompleteClickListener);
+        // toolbar_txt_title = findViewById(R.id.toolbar_txt_title);
+        //  toolbar_edit_title.setAdapter(adapter);
+        //toolbar_edit_title.setOnItemClickListener(mAutocompleteClickListener);
         setSupportActionBar(toolbar_main);
         DrawerLayout drawerLayout_main = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle_main = new ActionBarDrawerToggle(this, drawerLayout_main, R.string.app_open, R.string.app_close);
@@ -477,8 +526,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return actionBarDrawerToggle_main.onOptionsItemSelected(item);
     }
 
+    private GoogleMap map;
+
     @Override
     public void onMapReady(final GoogleMap map) {
+        this.map = map;
         //DO WHATEVER YOU WANT WITH GOOGLEMAP
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //  map.setTrafficEnabled(true);//交通
@@ -556,7 +608,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void showAddress(LatLng latLng) {
         Address address = LocationUtils.getAddress(this, latLng.latitude, latLng.longitude);
         if (address != null) {
-            toolbar_edit_title.setText(address.getAddressLine(0));
+            toolbar_txt_title.setText(address.getAddressLine(0));
         } else {
             Toast.makeText(this, "取的定位異常", Toast.LENGTH_SHORT).show();
         }
@@ -603,7 +655,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mapFragment.getMapAsync(this);
         }
     }
-
 
     public static Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -663,20 +714,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onStop();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        Log.e("LifeCycle", "onCreate2");
-        super.onCreate(savedInstanceState, persistentState);
-        dm = getResources().getDisplayMetrics();
-        gv = (GlobalVariable) getApplicationContext();
-        db = new SQLiteDatabaseHandler(this);
-        //initThread();
-        checkPermission();
-        initToolbar();
-        initButton();
-        initADToast();
+    public LatLng getLocationFromAddress(String strAddress) {
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+            return p1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AUTO_PLACE_COMPETE_TOOLBAR) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                toolbar_txt_title.setText(place.getAddress());
+                LatLng latLng = getLocationFromAddress(place.getAddress().toString());
+                if (latLng != null)
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i("place", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        } else if (requestCode == AUTO_PLACE_COMPETE_END) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                end.setText(place.getAddress());
+                caculateCost();
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i("place", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
 
     //=====================================================================================================================
     private int what = 0;
@@ -734,6 +827,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     };
-
 
 }
