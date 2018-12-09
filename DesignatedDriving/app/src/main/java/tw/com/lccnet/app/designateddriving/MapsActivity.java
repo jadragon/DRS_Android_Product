@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -190,33 +192,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 break;
             case R.id.btn_immediate:
-                View view = LayoutInflater.from(this).inflate(R.layout.item_slide_dialog, null);
-                start = view.findViewById(R.id.start);
-                end = view.findViewById(R.id.end);
-                end.setOnClickListener(this);
+                dialog = new SlideDialog(this);
+                dialog.setContentView(getLayoutInflater().inflate(R.layout.item_slide_dialog, null));
+                start = dialog.findViewById(R.id.start);
+                end = dialog.findViewById(R.id.end);
+                cost = dialog.findViewById(R.id.cost);
+                Button confirm = dialog.findViewById(R.id.confirm);
+                Button cancel = dialog.findViewById(R.id.cancel);
                 //  autoCompleteTextView.addTextChangedListener(this);
                 // autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
                 //autoCompleteTextView.setAdapter(adapter);
                 start.setText(toolbar_txt_title.getText().toString());
-                cost = view.findViewById(R.id.cost);
-                Button confirm = view.findViewById(R.id.confirm);
-                Button cancel = view.findViewById(R.id.cancel);
+                end.setOnClickListener(this);
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
-                dialog = new SlideDialog(this);
-                dialog.setContentView(view);
+
                 dialog.show();
                 break;
             case R.id.btn_deliver:
                 startActivity(new Intent(this, OrdermealActivity.class));
                 break;
             case R.id.confirm:
+                /*
                 if (TextUtils.isEmpty(end.getText())) {
                     end.setError("請輸入目的地");
                     return;
                 }
-                startActivity(new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class));
+                */
                 dialog.dismiss();
+                dialog = new Dialog(this);
+                dialog.setContentView(R.layout.item_wait_dialog);
+                dialog.findViewById(R.id.cancel).setOnClickListener(this);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
                 break;
             case R.id.cancel:
                 dialog.dismiss();
