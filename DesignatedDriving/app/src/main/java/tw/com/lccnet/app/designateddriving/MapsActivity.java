@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -26,10 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.Html;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,28 +33,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,7 +52,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
@@ -81,7 +66,6 @@ import java.util.Random;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Component.SlideDialog;
-import tw.com.lccnet.app.designateddriving.OtherAdapter.PlaceAutocompleteAdapter;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
@@ -132,7 +116,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Button btn_deliver = findViewById(R.id.btn_deliver);
         btn_deliver.setOnClickListener(this);
         reShapeButton(btn_deliver, R.color.royal_blue_light);
-
     }
 
     private void checkLocation() {
@@ -204,7 +187,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_long_trip:
-                startActivity(new Intent(this, CarCheckActivity.class));
+
                 break;
             case R.id.btn_immediate:
                 View view = LayoutInflater.from(this).inflate(R.layout.item_slide_dialog, null);
@@ -232,7 +215,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     end.setError("請輸入目的地");
                     return;
                 }
-                Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class));
                 dialog.dismiss();
                 break;
             case R.id.cancel:

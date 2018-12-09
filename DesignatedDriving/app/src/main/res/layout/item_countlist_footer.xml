@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/royal_blue" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="總里程數30km，小計1200元"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="總等候時間10min，小計100元"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/royal_blue" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="right"
+        android:text="總計1300元"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="折扣代碼"
+        android:textColor="@color/royal_blue"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/button_green2"
+        android:entries="@array/test_array"
+        android:paddingLeft="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="簽名區:"
+        android:textColor="@color/royal_blue"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/background_shawdow"
+        android:tag="paint" />
+
+    <RadioGroup
+        android:id="@+id/register2_rg_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/male"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="現金付款"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/female"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="信用卡付款"
+            android:textSize="15sp" />
+    </RadioGroup>
+
+
+    <Button
+       android:tag="next"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:background="@drawable/button_green1"
+        android:text="確認"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+</LinearLayout>

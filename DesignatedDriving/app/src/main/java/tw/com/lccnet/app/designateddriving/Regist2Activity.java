@@ -19,7 +19,7 @@ import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
 public class Regist2Activity extends ToolbarActivity implements View.OnClickListener {
     private Button send;
-    private EditText name, password, repassword;
+    private EditText name, password, repassword, register2_edit_rmp;
     private RadioGroup sex;
     private TextView error;
     private String phone, vcode;
@@ -41,6 +41,7 @@ public class Regist2Activity extends ToolbarActivity implements View.OnClickList
         name = findViewById(R.id.register2_edit_name);
         password = findViewById(R.id.register2_edit_password);
         repassword = findViewById(R.id.register2_edit_repassword);
+        register2_edit_rmp = findViewById(R.id.register2_edit_rmp);
         sex = findViewById(R.id.register2_rg_sex);
         error = findViewById(R.id.female);
     }
@@ -58,7 +59,7 @@ public class Regist2Activity extends ToolbarActivity implements View.OnClickList
                     name.setError("請輸入姓名");
                 } else if (TextUtils.isEmpty(password.getText())) {
                     password.setError("請輸入密碼");
-                }else if (!MatchesUtils.matchPassword(password.getText().toString())) {
+                } else if (!MatchesUtils.matchPassword(password.getText().toString())) {
                     password.setError("密碼為6-12位字母加數字");
                 } else if (!password.getText().toString().equals(repassword.getText().toString())) {
                     repassword.setError("請確認密碼是否正確");
@@ -77,7 +78,7 @@ public class Regist2Activity extends ToolbarActivity implements View.OnClickList
                                     sex_num = 2;
                                     break;
                             }
-                            return CustomerApi.register(phone, password.getText().toString(), vcode, name.getText().toString(), sex_num + "");
+                            return CustomerApi.register(phone, password.getText().toString(), vcode, name.getText().toString(), sex_num + "", register2_edit_rmp.getText().toString());
                         }
 
                         @Override

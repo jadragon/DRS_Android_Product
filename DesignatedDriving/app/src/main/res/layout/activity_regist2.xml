@@ -98,7 +98,31 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/gray1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="推薦人電話"
+            android:textColor="@color/royal_blue"
+            android:textSize="15sp" />
 
+
+        <EditText
+            android:id="@+id/register2_edit_rmp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="phone"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:singleLine="true"
+            android:textColorHint="@color/gray2"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray1" />
         <RadioGroup
             android:id="@+id/register2_rg_sex"
             android:layout_width="match_parent"

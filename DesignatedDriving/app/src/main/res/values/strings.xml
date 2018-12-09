@@ -3,6 +3,12 @@
     <string name="app_close">Close</string>
     <string name="app_open">Open</string>
     <string name="title_activity_maps">DesignatedDriving</string>
+    <string-array name="test_array">
+        <item>折價100元</item>
+        <item>折價50元</item>
+        <item>折價200元</item>
+        <item>折價500元</item>
+    </string-array>
     <string-array name="sp_time_array">
         <item>07:00~23:59</item>
         <item>00:00~06:59</item>

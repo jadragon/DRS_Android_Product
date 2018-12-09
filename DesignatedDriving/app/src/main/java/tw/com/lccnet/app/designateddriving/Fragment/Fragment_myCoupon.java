@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
+import tw.com.lccnet.app.designateddriving.GlobalVariable;
 import tw.com.lccnet.app.designateddriving.R;
 import tw.com.lccnet.app.designateddriving.RecyclerAdapter.MyCouponRecyclerAdapter;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
@@ -25,11 +26,13 @@ public class Fragment_myCoupon extends Fragment {
     private View v;
     private MyCouponRecyclerAdapter myCouponRecyclerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private GlobalVariable gv;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_coupon, container, false);
+        gv = (GlobalVariable) getContext().getApplicationContext();
         initSwipeLayout();
         initRecylcerView();
         return v;
@@ -64,7 +67,7 @@ public class Fragment_myCoupon extends Fragment {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                return CustomerApi.myCoupon("OAQiVfqwAHys1cCskXTF9w==");
+                return CustomerApi.myCoupon(gv.getToken());
             }
 
             @Override

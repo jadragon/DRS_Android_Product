@@ -94,11 +94,16 @@
         <activity android:name=".CommonLocationActivity" />
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".ContactMeActivity" />
-        <activity android:name=".CarCheckActivity" />
+        <activity android:name=".CallNow2_CarCheckActivity" />
         <activity android:name=".SelectCityActivity" />
         <activity android:name=".CityListActivity" />
         <activity android:name=".OrderListActivity" />
-        <activity android:name=".PlaceAutocompleteActivity">
+        <activity android:name=".PlaceAutocompleteActivity" />
+        <activity android:name=".CallNow1_DriverInfoActivity" />
+        <activity android:name=".CallNow3_DrivingActivity" />
+        <activity android:name=".CallNow5_CountActivity">
+        </activity>
+        <activity android:name=".CallNow6_EvaluationActivity">
 
         </activity>
     </application>

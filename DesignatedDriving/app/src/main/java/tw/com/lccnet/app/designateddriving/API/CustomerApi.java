@@ -41,7 +41,7 @@ public class CustomerApi implements APISetting {
     /**
      * 1.1.1	註冊
      */
-    public static JSONObject register(String mp, String pawd, String vcode, String uname, String sex) {
+    public static JSONObject register(String mp, String pawd, String vcode, String uname, String sex, String rmp) {
         List<NameValuePair> params = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
         params.add(new BasicNameValuePair("ntgo", ntgo));
@@ -50,6 +50,7 @@ public class CustomerApi implements APISetting {
         params.add(new BasicNameValuePair("vcode", vcode));
         params.add(new BasicNameValuePair("uname", uname));
         params.add(new BasicNameValuePair("sex", sex));
+        params.add(new BasicNameValuePair("rmp", rmp));
         return jsonParser.getJSONFromUrl(register_url, params);
     }
 
