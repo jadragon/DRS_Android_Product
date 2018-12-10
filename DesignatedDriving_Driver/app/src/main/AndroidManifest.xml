@@ -28,8 +28,9 @@
         <activity android:name=".DepositActivity" />
         <activity android:name=".MyDepositActivity" />
         <activity android:name=".StandardFareActivity" />
-        <activity android:name=".OrderListActivity"></activity>
+        <activity android:name=".OrderListActivity" />
         <activity android:name=".MyOrderListActivity" />
+        <activity android:name=".MyEvaluationActivity"></activity>
     </application>
 
 </manifest>

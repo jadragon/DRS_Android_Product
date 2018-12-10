@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_margin10_shawdow"
+    android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingTop="20dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="20dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="林先生"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/star4_2" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="開車開超過，一直超速闖紅燈，完全不在意乘客的安全，你這樣我還不給你差評!?"
+        android:textColor="@color/royal_blue" />
+
+</LinearLayout>

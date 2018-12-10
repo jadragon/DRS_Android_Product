@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MyEvaluationActivity">
+
+    <include
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange1"
+        android:padding="10dp">
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle" />
+
+        <TextView
+            android:id="@+id/myappraise_txt_tscore"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="3.0"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/myappraise_img_tscore"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/star0_2"
+        android:padding="10dp"/>
+
+    <include
+        layout="@layout/include_refresh_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

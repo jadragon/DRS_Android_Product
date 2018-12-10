@@ -102,20 +102,20 @@
                             android:src="@drawable/car7" />
 
                         <tw.com.lccnet.app.designateddriving.Component.CarImageView
-                            android:id="@+id/car10"
+                            android:id="@+id/car8"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:src="@drawable/car10" />
+                            android:src="@drawable/car7" />
                     </LinearLayout>
 
 
                     <tw.com.lccnet.app.designateddriving.Component.CarImageView
-                        android:id="@+id/car8"
+                        android:id="@+id/car11"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:src="@drawable/car8" />
+                        android:src="@drawable/car11" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -131,11 +131,11 @@
                             android:src="@drawable/car9" />
 
                         <tw.com.lccnet.app.designateddriving.Component.CarImageView
-                            android:id="@+id/car11"
+                            android:id="@+id/car10"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:src="@drawable/car11" />
+                            android:src="@drawable/car9" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -192,12 +192,39 @@
                         android:src="@drawable/car15" />
                 </LinearLayout>
 
-                <tw.com.lccnet.app.designateddriving.Component.CarImageView
-                    android:id="@+id/car16"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/car16" />
+                    android:orientation="horizontal">
+
+                    <tw.com.lccnet.app.designateddriving.Component.CarImageView
+                        android:id="@+id/car16"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/car16" />
+
+                    <tw.com.lccnet.app.designateddriving.Component.CarImageView
+                        android:id="@+id/car17"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/car16" />
+                    <tw.com.lccnet.app.designateddriving.Component.CarImageView
+                        android:id="@+id/car18"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/car16" />
+
+                    <tw.com.lccnet.app.designateddriving.Component.CarImageView
+                        android:id="@+id/car19"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/car16" />
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"

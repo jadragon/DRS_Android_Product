@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                         return true;
                     case R.id.menu_item2:
-
+                        intent = new Intent(MainActivity.this, MyEvaluationActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item3:
                         intent = new Intent(MainActivity.this, NewsActivity.class);
