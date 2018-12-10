@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alex.designateddriving_driver">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:name=".GlobalVariable"
         android:allowBackup="true"
@@ -11,18 +13,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
         <activity android:name=".ListViewActivity" />
         <activity android:name=".ContactMeActivity" />
         <activity android:name=".SimpleWebviewActivity" />
         <activity android:name=".NewsActivity" />
+        <activity android:name=".DepositActivity" />
+        <activity android:name=".MyDepositActivity" />
+        <activity android:name=".StandardFareActivity" />
+        <activity android:name=".OrderListActivity"></activity>
+        <activity android:name=".MyOrderListActivity" />
     </application>
 
 </manifest>

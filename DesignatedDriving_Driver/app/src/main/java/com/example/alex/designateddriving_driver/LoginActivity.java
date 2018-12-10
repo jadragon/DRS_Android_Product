@@ -1,26 +1,14 @@
 package com.example.alex.designateddriving_driver;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.alex.designateddriving_driver.API.Analyze.AnalyzeCustomer;
-import com.example.alex.designateddriving_driver.API.Analyze.AnalyzeUtil;
-import com.example.alex.designateddriving_driver.API.CustomerApi;
-import com.example.alex.designateddriving_driver.Utils.AsyncTaskUtils;
-import com.example.alex.designateddriving_driver.Utils.IDataCallBack;
 import com.example.alex.designateddriving_driver.Utils.MatchesUtils;
 import com.example.alex.designateddriving_driver.db.SQLiteDatabaseHandler;
-
-import org.json.JSONObject;
-
-import static com.example.alex.designateddriving_driver.db.SQLiteDatabaseHandler.KEY_TOKEN;
 
 
 public class LoginActivity extends ToolbarActivity implements View.OnClickListener {
@@ -35,6 +23,7 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
         setContentView(R.layout.activity_login);
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
+        /*
         ContentValues cv = db.getMemberDetail();
         if (cv != null) {
             gv.setToken(cv.getAsString(KEY_TOKEN));
@@ -43,6 +32,7 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
             finish();
             return;
         }
+        */
         initToolbar("登入", false);
         initView();
         initListenser();
@@ -68,6 +58,7 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
                 } else if (TextUtils.isEmpty(password.getText())) {
                     password.setError("請輸入密碼");
                 } else {
+                    /*
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
                         public JSONObject onTasking(Void... params) {
@@ -82,13 +73,15 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
                                 ContentValues cv = AnalyzeCustomer.getLogin(jsonObject);
                                 db.addMember(cv);
                                 gv.setToken(cv.getAsString(KEY_TOKEN));
-                                finish();
+
                             }
                             Log.e("login", jsonObject + "");
                             Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
                     });
-
+*/
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 }
 
                 break;

@@ -26,6 +26,10 @@ public class ListViewActivity extends ToolbarActivity {
                 initToolbar("關於我們", true);
                 initlistView2();
                 break;
+            case "rookie":
+                initToolbar("新手教學", true);
+                initlistView3();
+                break;
         }
 
     }
@@ -89,6 +93,30 @@ public class ListViewActivity extends ToolbarActivity {
                     case 6:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://alpha.ntgo.com.tw/index.php"));
                         startActivity(intent);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void initlistView3() {
+        listView = findViewById(R.id.listView);
+        listView.setAdapter(new ArrayAdapter<>(this, R.layout.listview_item, new String[]{"操作說明", "服務流程", "教學影片", "收費標準"}));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+
+                        break;
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+                        startActivity(new Intent(ListViewActivity.this, StandardFareActivity.class));
                         break;
                 }
             }

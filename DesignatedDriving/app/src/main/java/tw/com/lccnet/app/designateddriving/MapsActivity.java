@@ -27,7 +27,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -184,6 +183,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Dialog dialog;
     private TextView start, end, cost;
+    private Thread thread;
 
     @Override
     public void onClick(View v) {
@@ -206,7 +206,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 end.setOnClickListener(this);
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
-
                 dialog.show();
                 break;
             case R.id.btn_deliver:
@@ -226,8 +225,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
+                thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(5000);
+                            dialog.dismiss();
+                            startActivity(new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                thread.start();
                 break;
             case R.id.cancel:
+                if (thread != null)
+                    thread.interrupt();
                 dialog.dismiss();
                 break;
             case R.id.toolbar_txt_title:

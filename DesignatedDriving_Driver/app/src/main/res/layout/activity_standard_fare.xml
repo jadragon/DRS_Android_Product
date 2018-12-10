@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".StandardFareActivity">
+
+    <include
+        layout="@layout/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="立即呼叫"
+                android:textColor="@color/royal_blue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="全時段300元(3公里內)\n07:00~23:59 400元(10公里)\n07:00~23:59 400元(10公里)"
+                android:textColor="@color/red"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. 累計里程計費，超過10公里，每1公里加收50元；行駛超過30公里以後，每2公里加收50元。\n2. 不同時段代駕起步價以車輛出發時間為凖。"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="5dp"
+                android:background="@color/gray2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="鐘點代駕"
+                android:textColor="@color/royal_blue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="07:00 ~ 21:59 每小時300元\n22:00 ~ 06:59 每小時400元"
+                android:textColor="@color/red"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. 此服務需提前三天致電全民代駕客服預約\n2. 計費時間3個小時起，不滿1小時以1小時計費 (超過10分鐘內不計費)\n3. 起點需為同一個區域且為全民代駕服務區域\n4. 需於兩天前支付訂金(總金額之50%)，用戶於一天前取消訂金可全額退費。\n5. 遇用餐時段，需提供餐盒，若無餐盒需給予駕駛餐費$150元/每餐。\n6. 代駕服務產生之額外費用需由車主承擔，例如：過路費，停車費，住宿費，油資等等。"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="5dp"
+                android:background="@color/gray2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="長途代駕"
+                android:textColor="@color/royal_blue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="07:00 ~ 19:00 滿50公里1500元"
+                android:textColor="@color/red"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. 起步價時段，依照實際出發開車時間為準\n2. 累計里程計費，超過50公里，每10公里加收100元，未滿10公里以10公里計算。\n3. 若開車時間滿3小時，需加收超時費100元，之後每小時加收100元\n4. 起點需為全民代駕服務區域。"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

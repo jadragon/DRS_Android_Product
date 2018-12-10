@@ -10,16 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.alex.designateddriving_driver.db.SQLiteDatabaseHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView toolbar_txt_title;
     private Toolbar toolbar_main;
     private ActionBarDrawerToggle actionBarDrawerToggle_main;
     private SQLiteDatabaseHandler db;
     private GlobalVariable gv;
+    private Button deposit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,12 @@ public class MainActivity extends AppCompatActivity {
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
         initToolbar();
+        initButton();
+    }
 
+    private void initButton() {
+        deposit = findViewById(R.id.deposit);
+        deposit.setOnClickListener(this);
     }
 
     protected void initToolbar() {
@@ -57,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.header_item1:
-
+                        startActivity(new Intent(MainActivity.this, PersonalActivity.class));
                         break;
                     case R.id.header_item2:
-
+                        startActivity(new Intent(MainActivity.this, OrderListActivity.class));
                         break;
                     case R.id.header_item3:
-
+                        startActivity(new Intent(MainActivity.this, MyOrderListActivity.class));
                         break;
                 }
             }
@@ -78,17 +85,20 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_item1:
-
+                        Intent intent = new Intent(MainActivity.this, MyDepositActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item2:
 
                         return true;
                     case R.id.menu_item3:
-                        Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+                        intent = new Intent(MainActivity.this, NewsActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.menu_item4:
-
+                        intent = new Intent(MainActivity.this, ListViewActivity.class);
+                        intent.putExtra("type", "rookie");
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item5:
                         intent = new Intent(MainActivity.this, ListViewActivity.class);
@@ -102,4 +112,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.deposit:
+                startActivity(new Intent(MainActivity.this, DepositActivity.class));
+                break;
+        }
+    }
 }
