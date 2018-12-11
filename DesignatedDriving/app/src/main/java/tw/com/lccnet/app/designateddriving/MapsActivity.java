@@ -17,7 +17,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -27,6 +27,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
@@ -65,6 +67,7 @@ import java.util.List;
 import java.util.Random;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
+import tw.com.lccnet.app.designateddriving.API.CallNowApi;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Component.SlideDialog;
 import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
@@ -99,7 +102,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dm = getResources().getDisplayMetrics();
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
-        //initThread();
+        initThread();
         checkPermission();
         initToolbar();
         initButton();
@@ -121,9 +124,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void checkLocation() {
         if (
-                LocationUtils.register(getApplicationContext(), 5000, 10, new LocationUtils.OnLocationChangeListener() {
+                LocationUtils.register(getApplicationContext(), 0, 10, new LocationUtils.OnLocationChangeListener() {
                     @Override
                     public void getLastKnownLocation(Location location) {
+                        mLatitude = location.getLatitude();
+                        mLongitude = location.getLongitude();
+                        /*
                         LatLng lastPosition = LocationUtils.readData(MapsActivity.this);
                         if (lastPosition != null) {
                             mLatitude = lastPosition.latitude;
@@ -132,11 +138,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mLatitude = location.getLatitude();
                             mLongitude = location.getLongitude();
                         }
+                        */
                     }
 
                     @Override
                     public void onLocationChanged(Location location) {
-                        LocationUtils.saveData(MapsActivity.this, location);
+                        mLatitude = location.getLatitude();
+                        mLongitude = location.getLongitude();
+                        LatLng latlng = new LatLng(mLatitude, mLongitude);
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
+                        Toast.makeText(MapsActivity.this, mLatitude + "\n" + mLongitude, Toast.LENGTH_SHORT).show();
+                        //  LocationUtils.saveData(MapsActivity.this, location);
                     }
 
                     @Override
@@ -184,14 +196,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Dialog dialog;
     private TextView start, end, cost;
     private Thread thread;
+    private boolean isSendAgain;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_long_trip:
-
                 break;
             case R.id.btn_immediate:
+                // TODO: Handle the error.
                 dialog = new SlideDialog(this);
                 dialog.setContentView(getLayoutInflater().inflate(R.layout.item_slide_dialog, null));
                 start = dialog.findViewById(R.id.start);
@@ -199,25 +212,60 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 cost = dialog.findViewById(R.id.cost);
                 Button confirm = dialog.findViewById(R.id.confirm);
                 Button cancel = dialog.findViewById(R.id.cancel);
-                //  autoCompleteTextView.addTextChangedListener(this);
-                // autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
+                //autoCompleteTextView.addTextChangedListener(this);
+                //autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
                 //autoCompleteTextView.setAdapter(adapter);
                 start.setText(toolbar_txt_title.getText().toString());
                 end.setOnClickListener(this);
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
                 dialog.show();
+                // TODO: Handle the error.
                 break;
             case R.id.btn_deliver:
                 startActivity(new Intent(this, OrdermealActivity.class));
                 break;
             case R.id.confirm:
-                /*
                 if (TextUtils.isEmpty(end.getText())) {
                     end.setError("請輸入目的地");
                     return;
                 }
-                */
+
+                // TODO: Handle the error.
+                final String endString = end.getText().toString();
+                if (thread != null && thread.isAlive()) {
+                    thread.interrupt();
+                } else {
+                    thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONObject json = CallNowApi.match_start(gv.getToken(), toolbar_txt_title.getText().toString(), "", "", endString, "", "");
+                                if (AnalyzeUtil.checkSuccess(json)) {
+                                    String pono = null;
+                                    try {
+                                        pono = json.getJSONObject("Data").getString("pono");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (pono != null) {
+                                        while (!thread.isInterrupted()) {
+                                            Thread.sleep(3000);
+                                            Message msg = Message.obtain();
+                                            msg.what = 1;
+                                            msg.obj = pono;
+                                            mThreadHandler.sendMessage(msg);
+                                        }
+                                    }
+                                }
+
+                            } catch (InterruptedException e) {
+                                thread.interrupt();
+                            }
+                        }
+                    });
+                    thread.start();
+                }
                 dialog.dismiss();
                 dialog = new Dialog(this);
                 dialog.setContentView(R.layout.item_wait_dialog);
@@ -225,23 +273,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-                thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(5000);
-                            dialog.dismiss();
-                            startActivity(new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                thread.start();
+                // TODO: Handle the error.
                 break;
             case R.id.cancel:
-                if (thread != null)
+                if (thread != null) {
                     thread.interrupt();
+                }
+                // TODO: Handle the error.
                 dialog.dismiss();
                 break;
             case R.id.toolbar_txt_title:
@@ -256,9 +294,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .build(this);
                     startActivityForResult(intent, AUTO_PLACE_COMPETE_TOOLBAR);
                 } catch (GooglePlayServicesRepairableException e) {
-                    // TODO: Handle the error.
                 } catch (GooglePlayServicesNotAvailableException e) {
-                    // TODO: Handle the error.
                 }
                 //startActivityForResult(new Intent(MapsActivity.this, PlaceAutocompleteActivity.class), AUTO_PLACE_COMPETE);
                 break;
@@ -274,9 +310,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .build(this);
                     startActivityForResult(intent, AUTO_PLACE_COMPETE_END);
                 } catch (GooglePlayServicesRepairableException e) {
-                    // TODO: Handle the error.
                 } catch (GooglePlayServicesNotAvailableException e) {
-                    // TODO: Handle the error.
                 }
                 break;
         }
@@ -555,37 +589,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MarkerOptions markerOpt = new MarkerOptions();
         Random random = new Random();
         DecimalFormat df = new DecimalFormat("#.#");
-        markerOpt.position(getLatLng(0.002, latlng, 0))
+        markerOpt.position(getLatLng(0.001, latlng, 0))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "李司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 30))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "王司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002, latlng, 60))
+        markerOpt.position(getLatLng(0.001, latlng, 60))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "張司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 90))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "劉司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002, latlng, 120))
+        markerOpt.position(getLatLng(0.001, latlng, 120))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "陳司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 150))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "楊司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002, latlng, 180))
+        markerOpt.position(getLatLng(0.001, latlng, 180))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "趙司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 210))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "黃司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002, latlng, 240))
+        markerOpt.position(getLatLng(0.001, latlng, 240))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "周司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 270))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "吳司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
-        markerOpt.position(getLatLng(0.002, latlng, 300))
+        markerOpt.position(getLatLng(0.001, latlng, 300))
                 .icon(getMarkerIcon(R.drawable.menu_header1, "林司機", df.format(5 * random.nextFloat())));
         map.addMarker(markerOpt);
         markerOpt.position(getLatLng(0.002, latlng, 330))
@@ -611,6 +645,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+
     private void showAddress(LatLng latLng) {
         Address address = LocationUtils.getAddress(this, latLng.latitude, latLng.longitude);
         if (address != null) {
@@ -634,6 +669,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         ((TextView) view.findViewById(R.id.tv_subtitle)).setText(subtitle);
         return BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, view));
+    }
+
+    private View call_now_view;
+
+    private BitmapDescriptor getCallNowIcon(int imageRes, String title, String subtitle) {
+        if (call_now_view == null) {
+            call_now_view = LayoutInflater.from(this).inflate(R.layout.call_now_car, null);
+        }
+        ((ImageView) call_now_view.findViewById(R.id.img_head)).setImageResource(imageRes);
+        ((TextView) call_now_view.findViewById(R.id.tv_title)).setText(title);
+        ((TextView) call_now_view.findViewById(R.id.tv_subtitle)).setText(subtitle);
+        return BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, call_now_view));
     }
 
     @Override
@@ -674,51 +721,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         view.buildDrawingCache();
         Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
                 view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
-
         return bitmap;
     }
 
     @Override
     protected void onDestroy() {
-        Log.e("LifeCycle", "onDestroy");
         db.close();
         LocationUtils.unregister();
+        mThread.quit();
+        if (thread != null) {
+            thread.interrupt();
+        }
         super.onDestroy();
-        //  System.exit(0);
     }
 
-    @Override
-    protected void onResume() {
-        Log.e("LifeCycle", "onResume");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.e("LifeCycle", "onPause");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStart() {
-        Log.e("LifeCycle", "onStart");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.e("LifeCycle", "onRestart");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.e("LifeCycle", "onStop");
-        super.onStop();
-    }
 
     public LatLng getLocationFromAddress(String strAddress) {
 
@@ -778,59 +796,55 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //=====================================================================================================================
-    private int what = 0;
     //宣告特約工人的經紀人
-    private Handler mThreadHandler;
+    private static Handler mThreadHandler;
     //宣告特約工人
-    private HandlerThread mThread;
-    private Handler mhandler;
+    private static HandlerThread mThread;
 
     private void initThread() {
-        //
-        mhandler = new Handler(Looper.getMainLooper());
         mThread = new HandlerThread("name");
-
         //讓Worker待命，等待其工作 (開啟Thread)
-
         mThread.start();
-
         //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
-
-        mThreadHandler = new Handler(mThread.getLooper());
-
-        sendAPI();
-    }
-
-    public void sendAPI() {
-        what = 0;
-        mThreadHandler.postDelayed(a1, 5000);
-
-    }
-
-    private JSONObject json;
-    //api 1
-    private Runnable a1 = new Runnable() {
-
-        public void run() {
-            //  json = CustomerApi.store_type();
-            if (what == 0) {
-                //初始化面
-                mhandler.post(u1);
+        mThreadHandler = new Handler(mThread.getLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        break;
+                    case 1:
+                        if (msg.obj instanceof JSONObject) {
+                            Toast.makeText(MapsActivity.this, "" + msg.obj, Toast.LENGTH_SHORT).show();
+                        } else if (msg.obj instanceof String) {
+                            Toast.makeText(MapsActivity.this, "" + msg.obj, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case 2:
+                        break;
+                }
             }
-        }
-    };
+        };
+    }
+
+    private Marker call_now_marker;
+    private int sssss = 0;
     //Ui Thread 1
     private Runnable u1 = new Runnable() {
         public void run() {
-            Toast.makeText(MapsActivity.this, json + "", Toast.LENGTH_SHORT).show();
-            mThreadHandler.postDelayed(a1, 5000);
-        }
-    };
-    //Ui Thread 2
-    private Runnable u2 = new Runnable() {
-
-        public void run() {
-
+            if (call_now_marker != null) {
+                call_now_marker.remove();
+            }
+            LatLng latlng = new LatLng(mLatitude, mLongitude);
+            MarkerOptions markerOpt = new MarkerOptions();
+            DecimalFormat df = new DecimalFormat("#.#");
+            Random random = new Random();
+            markerOpt.position(getLatLng(0.002, latlng, 30 * sssss))
+                    .icon(getCallNowIcon(R.drawable.menu_header1, "我的司機", df.format(5 * random.nextFloat())));
+            call_now_marker = map.addMarker(markerOpt);
+            sssss++;
+            if (sssss > 12) {
+                sssss = 0;
+            }
         }
     };
 

@@ -3,7 +3,6 @@ package tw.com.lccnet.app.designateddriving.Utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -15,8 +14,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,9 +32,8 @@ public class LocationUtils {
     private static OnLocationChangeListener mListener;
     private static MyLocationListener myLocationListener;
     private static LocationManager mLocationManager;
-    private static String PROVIDER;
-    private static SharedPreferences settings;
-
+    //  private static SharedPreferences settings;
+/*
     public static boolean saveData(Context context, Location location) {
         float latitude = (float) location.getLatitude();
         float longitude = (float) location.getLongitude();
@@ -61,7 +57,7 @@ public class LocationUtils {
         }
         return null;
     }
-
+*/
 
     public LocationUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -143,23 +139,20 @@ public class LocationUtils {
             Toast.makeText(context, "無法定位，請打開定位服務", Toast.LENGTH_SHORT).show();
             return false;
         }
-        //String provider = mLocationManager.getBestProvider(getCriteria(), true);
-        // Location location = mLocationManager.getLastKnownLocation(provider);
-        Location location = getLastKnownLocation(context);
+        String provider = mLocationManager.getBestProvider(getCriteria(), true);
+        Location location = mLocationManager.getLastKnownLocation(provider);
         if (location != null) listener.getLastKnownLocation(location);
         if (myLocationListener == null) myLocationListener = new MyLocationListener();
-        mLocationManager.requestLocationUpdates(PROVIDER, minTime, minDistance, myLocationListener);
+        mLocationManager.requestLocationUpdates(provider, minTime, minDistance, myLocationListener);
         return true;
     }
-
+  /*
     private static Location getLastKnownLocation(Context context) {
+
         mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-       PROVIDER = mLocationManager.getBestProvider(criteria, true);
         @SuppressLint("MissingPermission")
         Location location = mLocationManager.getLastKnownLocation(PROVIDER);
-        /*
+
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
@@ -173,10 +166,9 @@ public class LocationUtils {
                 PROVIDER = provider;
             }
         }
-        */
-
         return location;
     }
+   */
 
     /**
      * 註銷
@@ -197,19 +189,21 @@ public class LocationUtils {
      * @return {@link Criteria}
      */
     private static Criteria getCriteria() {
-        Criteria criteria = new Criteria();
-        //設置定位精確度 Criteria.ACCURACY_COARSE比較粗略，Criteria.ACCURACY_FINE則比較精細
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        //設置是否要求速度
-        criteria.setSpeedRequired(false);
-        // 設置是否允許運營商收費
-        criteria.setCostAllowed(false);
-        //設置是否需要方位信息
-        criteria.setBearingRequired(false);
-        //設置是否需要海拔信息
-        criteria.setAltitudeRequired(false);
-        // 設置對電源的需求
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        Criteria criteria = new Criteria();//
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);//设置定位精准度
+        criteria.setAltitudeRequired(false);//是否要求海拔
+        criteria.setBearingRequired(true);//是否要求方向
+        criteria.setCostAllowed(true);//是否要求收费
+        criteria.setSpeedRequired(true);//是否要求速度
+        criteria.setPowerRequirement(Criteria.POWER_LOW);//设置相对省电
+        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);//设置方向精确度
+        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);//设置速度精确度
+        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);//设置水平方向精确度
+        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);//设置垂直方向精确度
+// 返回满足条件的，当前设备可用的location provider
+// 当第2个参数为false时，返回当前设备所有provider中最符合条件的那个（但是不一定可用）。
+// 当第2个参数为true时，返回当前设备所有可用的provider中最符合条件的那个。
+        //   String rovider  = mLocationManager.getBestProvider(criteria,true);
         return criteria;
     }
 
@@ -271,8 +265,7 @@ public class LocationUtils {
         return address == null ? "unknown" : address.getAddressLine(0);
     }
 
-    private static class MyLocationListener
-            implements LocationListener {
+    private static class MyLocationListener implements LocationListener {
         /**
          * 當坐標改變時觸發此函數，如果Provider傳進相同的坐標，它就不會被觸發
          *

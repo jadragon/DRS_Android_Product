@@ -23,34 +23,34 @@ public class CallNowApi implements APISetting {
     /**
      * 1.9.1	試算金額
      */
-    public static JSONObject calculate1(String token, String vaddress, Double vlng, Double vlat, String eaddress, Double elng, Double elat) {
+    public static JSONObject calculate1(String token, String vaddress, String vlng, String vlat, String eaddress, String elng, String elat) {
         List<NameValuePair> params = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
         params.add(new BasicNameValuePair("ntgo", ntgo));
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("vaddress", vaddress));
-        params.add(new BasicNameValuePair("vlng", vlng + ""));
-        params.add(new BasicNameValuePair("vlat", vlat + ""));
+        params.add(new BasicNameValuePair("vlng", vlng));
+        params.add(new BasicNameValuePair("vlat", vlat));
         params.add(new BasicNameValuePair("eaddress", eaddress));
-        params.add(new BasicNameValuePair("elng", elng + ""));
-        params.add(new BasicNameValuePair("elat", elat + ""));
+        params.add(new BasicNameValuePair("elng", elng));
+        params.add(new BasicNameValuePair("elat", elat));
         return jsonParser.getJSONFromUrl(calculate1_url, params);
     }
 
     /**
      * 1.9.1	試算金額
      */
-    public static JSONObject match_start(String token, String vaddress, Double vlng, Double vlat, String eaddress, Double elng, Double elat) {
+    public static JSONObject match_start(String token, String vaddress, String vlng, String vlat, String eaddress, String elng, String elat) {
         List<NameValuePair> params = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
         params.add(new BasicNameValuePair("ntgo", ntgo));
         params.add(new BasicNameValuePair("token", token));
         params.add(new BasicNameValuePair("vaddress", vaddress));
-        params.add(new BasicNameValuePair("vlng", vlng + ""));
-        params.add(new BasicNameValuePair("vlat", vlat + ""));
+        params.add(new BasicNameValuePair("vlng", vlng));
+        params.add(new BasicNameValuePair("vlat", vlat));
         params.add(new BasicNameValuePair("eaddress", eaddress));
-        params.add(new BasicNameValuePair("elng", elng + ""));
-        params.add(new BasicNameValuePair("elat", elat + ""));
+        params.add(new BasicNameValuePair("elng", elng));
+        params.add(new BasicNameValuePair("elat", elat));
         return jsonParser.getJSONFromUrl(match_start_url, params);
     }
 
