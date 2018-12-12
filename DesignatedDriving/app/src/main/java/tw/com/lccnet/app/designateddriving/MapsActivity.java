@@ -242,20 +242,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             try {
                                 JSONObject json = CallNowApi.match_start(gv.getToken(), toolbar_txt_title.getText().toString(), "", "", endString, "", "");
                                 if (AnalyzeUtil.checkSuccess(json)) {
-                                    String pono = null;
                                     try {
-                                        pono = json.getJSONObject("Data").getString("pono");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if (pono != null) {
+                                        String pono = json.getJSONObject("Data").getString("pono");
+                                        // String pono = "km5rkbxZ68XRXQ/gYlOStg==";
+                                        Log.e("CallNow1", "訂單成立" + pono);
                                         while (!thread.isInterrupted()) {
                                             Thread.sleep(3000);
+                                            json = CallNowApi.match_driver(gv.getToken(), pono);
                                             Message msg = Message.obtain();
                                             msg.what = 1;
-                                            msg.obj = pono;
-                                            mThreadHandler.sendMessage(msg);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("pono", pono);
+                                            bundle.putString("json", json.toString());
+                                            msg.setData(bundle);
+                                            UiThreadHandler.sendMessage(msg);
                                         }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
 
@@ -797,55 +800,64 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //=====================================================================================================================
     //宣告特約工人的經紀人
-    private static Handler mThreadHandler;
+    public static Handler mThreadHandler;
     //宣告特約工人
-    private static HandlerThread mThread;
+    public static HandlerThread mThread;
+    //UiThread經紀人
+    private static Handler UiThreadHandler;
+    private Marker call_now_marker;
+    private int sssss = 0;
 
     private void initThread() {
-        mThread = new HandlerThread("name");
+        mThread = new HandlerThread("MapsActivity");
         //讓Worker待命，等待其工作 (開啟Thread)
         mThread.start();
         //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
-        mThreadHandler = new Handler(mThread.getLooper()) {
+        UiThreadHandler = new Handler(getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case 0:
+                        if (call_now_marker != null) {
+                            call_now_marker.remove();
+                        }
+                        LatLng latlng = new LatLng(mLatitude, mLongitude);
+                        MarkerOptions markerOpt = new MarkerOptions();
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        Random random = new Random();
+                        markerOpt.position(getLatLng(0.002, latlng, 30 * sssss))
+                                .icon(getCallNowIcon(R.drawable.menu_header1, "我的司機", df.format(5 * random.nextFloat())));
+                        call_now_marker = map.addMarker(markerOpt);
+                        sssss++;
+                        if (sssss > 12) {
+                            sssss = 0;
+                        }
                         break;
                     case 1:
-                        if (msg.obj instanceof JSONObject) {
-                            Toast.makeText(MapsActivity.this, "" + msg.obj, Toast.LENGTH_SHORT).show();
-                        } else if (msg.obj instanceof String) {
-                            Toast.makeText(MapsActivity.this, "" + msg.obj, Toast.LENGTH_SHORT).show();
+                        Bundle bundle = msg.getData();
+                        String pono = bundle.getString("pono", "");
+                        try {
+                            JSONObject json = new JSONObject(bundle.getString("json"));
+                            if (AnalyzeUtil.checkSuccess(json)) {
+                                thread.interrupt();
+                                Intent intent = new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class);
+                                intent.putExtra("pono", pono);
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+                        Toast.makeText(MapsActivity.this, "" + bundle, Toast.LENGTH_SHORT).show();
+
                         break;
                     case 2:
                         break;
                 }
             }
         };
+        mThreadHandler = new Handler(mThread.getLooper());
     }
 
-    private Marker call_now_marker;
-    private int sssss = 0;
-    //Ui Thread 1
-    private Runnable u1 = new Runnable() {
-        public void run() {
-            if (call_now_marker != null) {
-                call_now_marker.remove();
-            }
-            LatLng latlng = new LatLng(mLatitude, mLongitude);
-            MarkerOptions markerOpt = new MarkerOptions();
-            DecimalFormat df = new DecimalFormat("#.#");
-            Random random = new Random();
-            markerOpt.position(getLatLng(0.002, latlng, 30 * sssss))
-                    .icon(getCallNowIcon(R.drawable.menu_header1, "我的司機", df.format(5 * random.nextFloat())));
-            call_now_marker = map.addMarker(markerOpt);
-            sssss++;
-            if (sssss > 12) {
-                sssss = 0;
-            }
-        }
-    };
 
 }
