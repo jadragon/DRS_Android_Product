@@ -8,7 +8,7 @@
     android:showDividers="middle">
 
         <TextView
-            android:tag="line"
+            android:id="@+id/line"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="@dimen/footer3_weight"
@@ -17,7 +17,7 @@
             android:textSize="@dimen/table_text_size" />
 
         <TextView
-            android:tag="number"
+            android:id="@+id/number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="@dimen/footer4_weight"
@@ -26,7 +26,7 @@
             android:textSize="@dimen/table_text_size" />
 
         <TextView
-            android:tag="description"
+            android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="@dimen/footer5_weight"

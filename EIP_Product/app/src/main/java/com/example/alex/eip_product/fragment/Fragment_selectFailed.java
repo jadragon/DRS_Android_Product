@@ -23,7 +23,7 @@ public class Fragment_selectFailed extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_select_failed, container, false);
         recyclerView = v.findViewById(R.id.select_failed_recyclerview);
-        keyWordRecyclerViewAdapter = new KeyWordRecyclerViewAdapter(getContext());
+        keyWordRecyclerViewAdapter = new KeyWordRecyclerViewAdapter(getContext(), true, true, true, true, false, true);
         AutoNewLineLayoutManager autoNewLineLayoutManager = new AutoNewLineLayoutManager(getContext());
         autoNewLineLayoutManager.setDivider(20);
         autoNewLineLayoutManager.setAloneViewType(KeyWordRecyclerViewAdapter.TYPE_HEADER);
@@ -31,8 +31,5 @@ public class Fragment_selectFailed extends Fragment {
         recyclerView.setAdapter(keyWordRecyclerViewAdapter);
         return v;
     }
-
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.example.alex.eip_product.adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,7 +24,7 @@ import static db.OrderDatabase.KEY_CheckMan;
 import static db.OrderDatabase.KEY_VendorName;
 
 public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.RecycleHolder> {
-    private ArrayList<Map<String, String>> list;
+    private ArrayList<ContentValues> list;
     private Context ctx;
     private GlobalVariable gv;
 
@@ -59,10 +60,10 @@ import static db.OrderDatabase.KEY_VendorName;
 
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
-        holder.VendorName.setText(list.get(position).get(KEY_VendorName));
+        holder.VendorName.setText(list.get(position).getAsString(KEY_VendorName));
         if (list.get(position).get(KEY_CheckMan).equals(gv.getUsername())) {
             holder.CheckMan.setVisibility(View.VISIBLE);
-            holder.CheckMan.setText(list.get(position).get(KEY_CheckMan));
+            holder.CheckMan.setText(list.get(position).getAsString(KEY_CheckMan));
         } else {
             holder.CheckMan.setVisibility(View.INVISIBLE);
         }

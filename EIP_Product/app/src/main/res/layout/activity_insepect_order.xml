@@ -63,12 +63,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/pdf_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:text="圖面資料" />
+
                 </FrameLayout>
 
                 <LinearLayout
@@ -202,6 +197,7 @@
                         android:textSize="@dimen/table_text_size" />
 
                     <TextView
+                        android:id="@+id/pdf_view"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -580,7 +576,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@android:color/white"
+                            android:background="@color/light_orange"
                             android:divider="@drawable/divider_black_1dp"
                             android:orientation="horizontal"
                             android:showDividers="middle">
@@ -601,7 +597,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="14"
-                                android:background="@android:color/white"
                                 android:divider="@drawable/divider_black_1dp"
                                 android:orientation="vertical"
                                 android:showDividers="middle">
@@ -609,7 +604,6 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@color/light_orange"
                                     android:divider="@drawable/divider_black_1dp"
                                     android:orientation="horizontal"
                                     android:showDividers="middle">
@@ -675,6 +669,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
+                                    android:textSize="11sp"
                                     android:padding="@dimen/table_padding" />
 
                             </LinearLayout>
@@ -706,6 +701,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
+                                    android:textSize="11sp"
                                     android:padding="@dimen/table_padding" />
 
 
@@ -977,6 +973,7 @@
                         android:padding="@dimen/table_padding" />
 
                     <Button
+                        android:id="@+id/cancel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -985,6 +982,7 @@
                         android:textSize="@dimen/table_text_size" />
 
                     <Button
+                        android:id="@+id/edit"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -993,6 +991,7 @@
                         android:textSize="@dimen/table_text_size" />
 
                     <Button
+                        android:id="@+id/save"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -1001,6 +1000,7 @@
                         android:textSize="@dimen/table_text_size" />
 
                     <Button
+                        android:id="@+id/send"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -1019,25 +1019,5 @@
 
 
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="輸出圖片"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/kccx_chaxun2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="確認" />
-
-
-    </LinearLayout>
 
 </LinearLayout>

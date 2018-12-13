@@ -1,5 +1,6 @@
 package com.example.alex.eip_product;
 
+import android.content.ContentValues;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -45,26 +46,26 @@ public class InspectDetailActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        ArrayList<Map<String, String>> list = db.getOrdersByPONumber(key_ponumber);
-        PONumber.setText(list.get(0).get(KEY_PONumber));
-        POVersion.setText(list.get(0).get(KEY_POVersion));
-        VendorCode.setText(list.get(0).get(KEY_VendorCode));
-        VendorName.setText(list.get(0).get(KEY_VendorName));
-        Notes.setText(list.get(0).get(KEY_Notes));
+        ArrayList<ContentValues> list = db.getOrdersByPONumber(key_ponumber);
+        PONumber.setText(list.get(0).getAsString(KEY_PONumber));
+        POVersion.setText(list.get(0).getAsString(KEY_POVersion));
+        VendorCode.setText(list.get(0).getAsString(KEY_VendorCode));
+        VendorName.setText(list.get(0).getAsString(KEY_VendorName));
+        Notes.setText(list.get(0).getAsString(KEY_Notes));
 
         list = db.getOrderCommentsByPONumber(key_ponumber);
         StringBuilder builder1 = new StringBuilder();
         StringBuilder builder2 = new StringBuilder();
-        for (Map<String, String> map : list) {
-            builder1.append(map.get(KEY_Comment) + "\n");
+        for (ContentValues cv : list) {
+            builder1.append(cv.getAsString(KEY_Comment) + "\n");
         }
         OrderComments.setText(builder1.toString());
 
         list = db.getOrderItemCommentsByPONumber(key_ponumber);
         builder1.delete(0, builder1.length());
-        for (Map<String, String> map : list) {
-            builder1.append(map.get(KEY_ItemNo) + "\n");
-            builder2.append(map.get(KEY_Comment) + "\n");
+        for (ContentValues cv : list) {
+            builder1.append(cv.getAsString(KEY_ItemNo) + "\n");
+            builder2.append(cv.getAsString(KEY_Comment) + "\n");
         }
         ItemNo.setText(builder1.toString());
         OrderItemComments.setText(builder2.toString());

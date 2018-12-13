@@ -31,7 +31,15 @@ public class OrderDatabase extends SQLiteOpenHelper {
     private static final String TABLE_CheckFailedReasons = "CheckFailedReasons";
     private static final String TABLE_OrderComments = "OrderComments";
     private static final String TABLE_OrderItemComments = "OrderItemComments";
+
+    private static final String TABLE_OrdersEdit = "OrdersEdit";
+    private static final String TABLE_OrderDetailsEdit = "OrderDetailsEdit";
+    private static final String TABLE_CheckFailedReasonsEdit = "CheckFailedReasonsEdit";
+    private static final String TABLE_OrderCommentsEdit = "OrderCommentsEdit";
+    private static final String TABLE_OrderItemCommentsEdit = "OrderItemCommentsEdit";
     //Columns Orders
+    public static final String KEY_isOrderUpdate = "isOrderUpdate";
+
     public static final String KEY_ID = "_id";
     public static final String KEY_PONumber = "PONumber";
     public static final String KEY_POVersion = "POVersion";
@@ -84,75 +92,150 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public static final String KEY_Comment = "Comment";
     //Columns OrderItemComments
     public static final String KEY_ItemNo = "ItemNo";
-
+    //Create Table
     private static final String CREATE_Orders_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_Orders + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_PONumber + " TEXT,"
-            + KEY_POVersion + " TEXT,"
-            + KEY_PlanCheckDate + " TEXT,"
-            + KEY_VendorCode + " TEXT,"
-            + KEY_VendorName + " TEXT,"
-            + KEY_Area + " TEXT,"
-            + KEY_Notes + " TEXT,"
-            + KEY_Shipping + " TEXT,"
-            + KEY_SalesMan + " TEXT,"
-            + KEY_Phone + " TEXT,"
-            + KEY_CheckMan + " TEXT,"
-            + KEY_HasCompleted + " BOOLEAN,"
-            + KEY_Inspector + " TEXT,"
-            + KEY_InspectorDate + " TEXT,"
-            + KEY_VendorInspector + " BLOB,"
-            + KEY_VendorInspectorDate + " TEXT,"
-            + KEY_FeedbackPerson + " TEXT,"
-            + KEY_FeedbackRecommendations + " TEXT,"
-            + KEY_FeedbackDate + " TEXT,"
-            + KEY_InspectionNumber + " TEXT,"
-            + KEY_OrderDetails + " TEXT,"
-            + KEY_CheckFailedReasons + " TEXT,"
-            + KEY_OrderComments + " TEXT,"
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_PlanCheckDate + " TEXT" + ","
+            + KEY_VendorCode + " TEXT" + ","
+            + KEY_VendorName + " TEXT" + ","
+            + KEY_Area + " TEXT" + ","
+            + KEY_Notes + " TEXT" + ","
+            + KEY_Shipping + " TEXT" + ","
+            + KEY_SalesMan + " TEXT" + ","
+            + KEY_Phone + " TEXT" + ","
+            + KEY_CheckMan + " TEXT" + ","
+            + KEY_HasCompleted + " BOOLEAN" + ","
+            + KEY_Inspector + " TEXT" + ","
+            + KEY_InspectorDate + " TEXT" + ","
+            + KEY_VendorInspector + " BLOB" + ","
+            + KEY_VendorInspectorDate + " TEXT" + ","
+            + KEY_FeedbackPerson + " TEXT" + ","
+            + KEY_FeedbackRecommendations + " TEXT" + ","
+            + KEY_FeedbackDate + " TEXT" + ","
+            + KEY_InspectionNumber + " TEXT" + ","
+            + KEY_OrderDetails + " TEXT" + ","
+            + KEY_CheckFailedReasons + " TEXT" + ","
+            + KEY_OrderComments + " TEXT" + ","
             + KEY_OrderItemComments + " TEXT" + ")";
     private static final String CREATE_CheckFailedReasons_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CheckFailedReasons + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_PONumber + " TEXT,"
-            + KEY_POVersion + " TEXT,"
-            + KEY_Item + " TEXT,"
-            + KEY_ReasonCode + " TEXT,"
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_Item + " TEXT" + ","
+            + KEY_ReasonCode + " TEXT" + ","
             + KEY_ReasonDescr + " TEXT" + ")";
     private static final String CREATE_OrderDetails_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderDetails + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_PONumber + " TEXT,"
-            + KEY_POVersion + " TEXT,"
-            + KEY_LineNumber + " INTEGER,"
-            + KEY_Item + " TEXT,"
-            + KEY_OrderQty + " FLOAT,"
-            + KEY_Qty + " FLOAT,"
-            + KEY_SampleNumber + " INTEGER,"
-            + KEY_Uom + " TEXT,"
-            + KEY_Size + " INTEGER,"
-            + KEY_Functions + " INTEGER,"
-            + KEY_Surface + " INTEGER,"
-            + KEY_Package + " INTEGER,"
-            + KEY_CheckPass + " TEXT,"
-            + KEY_Special + " BOOLEAN,"
-            + KEY_Rework + " BOOLEAN,"
-            + KEY_Reject + " BOOLEAN,"
-            + KEY_MainMarK + " BOOLEAN,"
-            + KEY_SideMarK + " BOOLEAN,"
-            + KEY_ReCheckDate + " TEXT,"
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_LineNumber + " INTEGER" + ","
+            + KEY_Item + " TEXT" + ","
+            + KEY_OrderQty + " FLOAT" + ","
+            + KEY_Qty + " FLOAT" + ","
+            + KEY_SampleNumber + " INTEGER" + ","
+            + KEY_Uom + " TEXT" + ","
+            + KEY_Size + " INTEGER" + ","
+            + KEY_Functions + " INTEGER" + ","
+            + KEY_Surface + " INTEGER" + ","
+            + KEY_Package + " INTEGER" + ","
+            + KEY_CheckPass + " TEXT" + ","
+            + KEY_Special + " BOOLEAN" + ","
+            + KEY_Rework + " BOOLEAN" + ","
+            + KEY_Reject + " BOOLEAN" + ","
+            + KEY_MainMarK + " BOOLEAN" + ","
+            + KEY_SideMarK + " BOOLEAN" + ","
+            + KEY_ReCheckDate + " TEXT" + ","
             + KEY_Remarks + " TEXT" + ")";
     private static final String CREATE_OrderComments_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderComments + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_PONumber + " TEXT,"
-            + KEY_POVersion + " TEXT,"
-            + KEY_LineNumber + " INTEGER,"
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_LineNumber + " INTEGER" + ","
             + KEY_Comment + " TEXT" + ")";
     private static final String CREATE_OrderItemComments_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderItemComments + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_PONumber + " TEXT,"
-            + KEY_POVersion + " TEXT,"
-            + KEY_LineNumber + " INTEGER,"
-            + KEY_ItemNo + " TEXT,"
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_LineNumber + " INTEGER" + ","
+            + KEY_ItemNo + " TEXT" + ","
             + KEY_Comment + " TEXT" + ")";
+
+    //Create TableEdit
+    private static final String CREATE_OrdersEdit_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrdersEdit + "("
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_PlanCheckDate + " TEXT" + ","
+            + KEY_VendorCode + " TEXT" + ","
+            + KEY_VendorName + " TEXT" + ","
+            + KEY_Area + " TEXT" + ","
+            + KEY_Notes + " TEXT" + ","
+            + KEY_Shipping + " TEXT" + ","
+            + KEY_SalesMan + " TEXT" + ","
+            + KEY_Phone + " TEXT" + ","
+            + KEY_CheckMan + " TEXT" + ","
+            + KEY_HasCompleted + " BOOLEAN" + ","
+            + KEY_Inspector + " TEXT" + ","
+            + KEY_InspectorDate + " TEXT" + ","
+            + KEY_VendorInspector + " BLOB" + ","
+            + KEY_VendorInspectorDate + " TEXT" + ","
+            + KEY_FeedbackPerson + " TEXT" + ","
+            + KEY_FeedbackRecommendations + " TEXT" + ","
+            + KEY_FeedbackDate + " TEXT" + ","
+            + KEY_InspectionNumber + " TEXT" + ","
+            + KEY_OrderDetails + " TEXT" + ","
+            + KEY_CheckFailedReasons + " TEXT" + ","
+            + KEY_OrderComments + " TEXT" + ","
+            + KEY_OrderItemComments + " TEXT" + ","
+            + KEY_isOrderUpdate + " TEXT" + ")";
+    private static final String CREATE_CheckFailedReasonsEdit_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CheckFailedReasonsEdit + "("
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_Item + " TEXT" + ","
+            + KEY_ReasonCode + " TEXT" + ","
+            + KEY_ReasonDescr + " TEXT" + ","
+            + KEY_isOrderUpdate + " TEXT" + ")";
+    private static final String CREATE_OrderDetailsEdit_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderDetailsEdit + "("
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_LineNumber + " INTEGER" + ","
+            + KEY_Item + " TEXT" + ","
+            + KEY_OrderQty + " FLOAT" + ","
+            + KEY_Qty + " FLOAT" + ","
+            + KEY_SampleNumber + " INTEGER" + ","
+            + KEY_Uom + " TEXT" + ","
+            + KEY_Size + " INTEGER" + ","
+            + KEY_Functions + " INTEGER" + ","
+            + KEY_Surface + " INTEGER" + ","
+            + KEY_Package + " INTEGER" + ","
+            + KEY_CheckPass + " TEXT" + ","
+            + KEY_Special + " BOOLEAN" + ","
+            + KEY_Rework + " BOOLEAN" + ","
+            + KEY_Reject + " BOOLEAN" + ","
+            + KEY_MainMarK + " BOOLEAN" + ","
+            + KEY_SideMarK + " BOOLEAN" + ","
+            + KEY_ReCheckDate + " TEXT" + ","
+            + KEY_Remarks + " TEXT" + ","
+            + KEY_isOrderUpdate + " TEXT" + ")";
+    private static final String CREATE_OrderCommentsEdit_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderCommentsEdit + "("
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_LineNumber + " INTEGER" + ","
+            + KEY_Comment + " TEXT" + ","
+            + KEY_isOrderUpdate + " TEXT" + ")";
+    private static final String CREATE_OrderItemCommentsEdit_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OrderItemCommentsEdit + "("
+            + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_PONumber + " TEXT" + ","
+            + KEY_POVersion + " TEXT" + ","
+            + KEY_LineNumber + " INTEGER" + ","
+            + KEY_ItemNo + " TEXT" + ","
+            + KEY_Comment + " TEXT" + ","
+            + KEY_isOrderUpdate + " TEXT" + ")";
 
     public OrderDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -166,6 +249,12 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.execSQL(CREATE_CheckFailedReasons_TABLE);
         db.execSQL(CREATE_OrderComments_TABLE);
         db.execSQL(CREATE_OrderItemComments_TABLE);
+
+        db.execSQL(CREATE_OrdersEdit_TABLE);
+        db.execSQL(CREATE_OrderDetailsEdit_TABLE);
+        db.execSQL(CREATE_CheckFailedReasonsEdit_TABLE);
+        db.execSQL(CREATE_OrderCommentsEdit_TABLE);
+        db.execSQL(CREATE_OrderItemCommentsEdit_TABLE);
     }
 
     // Upgrading database
@@ -177,6 +266,12 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CheckFailedReasons);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderComments);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderItemComments);
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrdersEdit);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderDetailsEdit);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CheckFailedReasonsEdit);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderCommentsEdit);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OrderItemCommentsEdit);
         // Create tables again
         onCreate(db);
     }
@@ -242,41 +337,41 @@ public class OrderDatabase extends SQLiteOpenHelper {
     /**
      * Search
      */
-    public ArrayList<Map<String, String>> getOrdersByDate(String date) {
-        ArrayList<Map<String, String>> datas = new ArrayList<>();
-        Map<String, String> map;
+    public ArrayList<ContentValues> getOrdersByDate(String date) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode + " ORDER BY " + KEY_PONumber + " ASC", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
-            map = new HashMap<>();
-            map.put(KEY_PONumber, cursor.getString(1));
-            map.put(KEY_POVersion, cursor.getString(2));
-            map.put(KEY_PlanCheckDate, cursor.getString(3));
-            map.put(KEY_VendorCode, cursor.getString(4));
-            map.put(KEY_VendorName, cursor.getString(5));
-            map.put(KEY_Area, cursor.getString(6));
-            map.put(KEY_Notes, cursor.getString(7));
-            map.put(KEY_Shipping, cursor.getString(8));
-            map.put(KEY_SalesMan, cursor.getString(9));
-            map.put(KEY_Phone, cursor.getString(10));
-            map.put(KEY_CheckMan, cursor.getString(11));
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_PlanCheckDate, cursor.getString(3));
+            cv.put(KEY_VendorCode, cursor.getString(4));
+            cv.put(KEY_VendorName, cursor.getString(5));
+            cv.put(KEY_Area, cursor.getString(6));
+            cv.put(KEY_Notes, cursor.getString(7));
+            cv.put(KEY_Shipping, cursor.getString(8));
+            cv.put(KEY_SalesMan, cursor.getString(9));
+            cv.put(KEY_Phone, cursor.getString(10));
+            cv.put(KEY_CheckMan, cursor.getString(11));
 
-            map.put(KEY_HasCompleted, cursor.getString(12));
-            map.put(KEY_Inspector, cursor.getString(13));
-            map.put(KEY_InspectorDate, cursor.getString(14));
-            map.put(KEY_VendorInspector, cursor.getString(15));
-            map.put(KEY_VendorInspectorDate, cursor.getString(16));
-            map.put(KEY_FeedbackPerson, cursor.getString(17));
-            map.put(KEY_FeedbackRecommendations, cursor.getString(18));
-            map.put(KEY_FeedbackDate, cursor.getString(19));
-            map.put(KEY_InspectionNumber, cursor.getString(20));
+            cv.put(KEY_HasCompleted, cursor.getString(12));
+            cv.put(KEY_Inspector, cursor.getString(13));
+            cv.put(KEY_InspectorDate, cursor.getString(14));
+            cv.put(KEY_VendorInspector, cursor.getString(15));
+            cv.put(KEY_VendorInspectorDate, cursor.getString(16));
+            cv.put(KEY_FeedbackPerson, cursor.getString(17));
+            cv.put(KEY_FeedbackRecommendations, cursor.getString(18));
+            cv.put(KEY_FeedbackDate, cursor.getString(19));
+            cv.put(KEY_InspectionNumber, cursor.getString(20));
 
-            map.put(KEY_OrderDetails, cursor.getString(21));
-            map.put(KEY_CheckFailedReasons, cursor.getString(22));
-            map.put(KEY_OrderComments, cursor.getString(23));
-            map.put(KEY_OrderItemComments, cursor.getString(24));
-            datas.add(map);
+            cv.put(KEY_OrderDetails, cursor.getString(21));
+            cv.put(KEY_CheckFailedReasons, cursor.getString(22));
+            cv.put(KEY_OrderComments, cursor.getString(23));
+            cv.put(KEY_OrderItemComments, cursor.getString(24));
+            datas.add(cv);
         }
         cursor.close();
         db.close();
@@ -284,41 +379,41 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return datas;
     }
 
-    public ArrayList<Map<String, String>> getOrdersByDateAndVendorCode(String date, String VendorCode) {
-        ArrayList<Map<String, String>> datas = new ArrayList<>();
-        Map<String, String> map;
+    public ArrayList<ContentValues> getOrdersByDateAndVendorCode(String date, String VendorCode) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' AND " + KEY_VendorCode + " LIKE '%" + VendorCode + "%' GROUP BY " + KEY_VendorCode + " ORDER BY " + KEY_PONumber + " ASC", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
-            map = new HashMap<>();
-            map.put(KEY_PONumber, cursor.getString(1));
-            map.put(KEY_POVersion, cursor.getString(2));
-            map.put(KEY_PlanCheckDate, cursor.getString(3));
-            map.put(KEY_VendorCode, cursor.getString(4));
-            map.put(KEY_VendorName, cursor.getString(5));
-            map.put(KEY_Area, cursor.getString(6));
-            map.put(KEY_Notes, cursor.getString(7));
-            map.put(KEY_Shipping, cursor.getString(8));
-            map.put(KEY_SalesMan, cursor.getString(9));
-            map.put(KEY_Phone, cursor.getString(10));
-            map.put(KEY_CheckMan, cursor.getString(11));
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_PlanCheckDate, cursor.getString(3));
+            cv.put(KEY_VendorCode, cursor.getString(4));
+            cv.put(KEY_VendorName, cursor.getString(5));
+            cv.put(KEY_Area, cursor.getString(6));
+            cv.put(KEY_Notes, cursor.getString(7));
+            cv.put(KEY_Shipping, cursor.getString(8));
+            cv.put(KEY_SalesMan, cursor.getString(9));
+            cv.put(KEY_Phone, cursor.getString(10));
+            cv.put(KEY_CheckMan, cursor.getString(11));
 
-            map.put(KEY_HasCompleted, cursor.getString(12));
-            map.put(KEY_Inspector, cursor.getString(13));
-            map.put(KEY_InspectorDate, cursor.getString(14));
-            map.put(KEY_VendorInspector, cursor.getString(15));
-            map.put(KEY_VendorInspectorDate, cursor.getString(16));
-            map.put(KEY_FeedbackPerson, cursor.getString(17));
-            map.put(KEY_FeedbackRecommendations, cursor.getString(18));
-            map.put(KEY_FeedbackDate, cursor.getString(19));
-            map.put(KEY_InspectionNumber, cursor.getString(20));
+            cv.put(KEY_HasCompleted, cursor.getString(12));
+            cv.put(KEY_Inspector, cursor.getString(13));
+            cv.put(KEY_InspectorDate, cursor.getString(14));
+            cv.put(KEY_VendorInspector, cursor.getString(15));
+            cv.put(KEY_VendorInspectorDate, cursor.getString(16));
+            cv.put(KEY_FeedbackPerson, cursor.getString(17));
+            cv.put(KEY_FeedbackRecommendations, cursor.getString(18));
+            cv.put(KEY_FeedbackDate, cursor.getString(19));
+            cv.put(KEY_InspectionNumber, cursor.getString(20));
 
-            map.put(KEY_OrderDetails, cursor.getString(21));
-            map.put(KEY_CheckFailedReasons, cursor.getString(22));
-            map.put(KEY_OrderComments, cursor.getString(23));
-            map.put(KEY_OrderItemComments, cursor.getString(24));
-            datas.add(map);
+            cv.put(KEY_OrderDetails, cursor.getString(21));
+            cv.put(KEY_CheckFailedReasons, cursor.getString(22));
+            cv.put(KEY_OrderComments, cursor.getString(23));
+            cv.put(KEY_OrderItemComments, cursor.getString(24));
+            datas.add(cv);
         }
         cursor.close();
         db.close();
@@ -329,41 +424,41 @@ public class OrderDatabase extends SQLiteOpenHelper {
     /**
      * Search
      */
-    public ArrayList<Map<String, String>> getOrdersByPONumber(String PONumber) {
-        ArrayList<Map<String, String>> datas = new ArrayList<>();
-        Map<String, String> map;
+    public ArrayList<ContentValues> getOrdersByPONumber(String PONumber) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
-            map = new HashMap<>();
-            map.put(KEY_PONumber, cursor.getString(1));
-            map.put(KEY_POVersion, cursor.getString(2));
-            map.put(KEY_PlanCheckDate, cursor.getString(3));
-            map.put(KEY_VendorCode, cursor.getString(4));
-            map.put(KEY_VendorName, cursor.getString(5));
-            map.put(KEY_Area, cursor.getString(6));
-            map.put(KEY_Notes, cursor.getString(7));
-            map.put(KEY_Shipping, cursor.getString(8));
-            map.put(KEY_SalesMan, cursor.getString(9));
-            map.put(KEY_Phone, cursor.getString(10));
-            map.put(KEY_CheckMan, cursor.getString(11));
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_PlanCheckDate, cursor.getString(3));
+            cv.put(KEY_VendorCode, cursor.getString(4));
+            cv.put(KEY_VendorName, cursor.getString(5));
+            cv.put(KEY_Area, cursor.getString(6));
+            cv.put(KEY_Notes, cursor.getString(7));
+            cv.put(KEY_Shipping, cursor.getString(8));
+            cv.put(KEY_SalesMan, cursor.getString(9));
+            cv.put(KEY_Phone, cursor.getString(10));
+            cv.put(KEY_CheckMan, cursor.getString(11));
 
-            map.put(KEY_HasCompleted, cursor.getString(12));
-            map.put(KEY_Inspector, cursor.getString(13));
-            map.put(KEY_InspectorDate, cursor.getString(14));
-            map.put(KEY_VendorInspector, cursor.getString(15));
-            map.put(KEY_VendorInspectorDate, cursor.getString(16));
-            map.put(KEY_FeedbackPerson, cursor.getString(17));
-            map.put(KEY_FeedbackRecommendations, cursor.getString(18));
-            map.put(KEY_FeedbackDate, cursor.getString(19));
-            map.put(KEY_InspectionNumber, cursor.getString(20));
+            cv.put(KEY_HasCompleted, cursor.getString(12));
+            cv.put(KEY_Inspector, cursor.getString(13));
+            cv.put(KEY_InspectorDate, cursor.getString(14));
+            cv.put(KEY_VendorInspector, cursor.getString(15));
+            cv.put(KEY_VendorInspectorDate, cursor.getString(16));
+            cv.put(KEY_FeedbackPerson, cursor.getString(17));
+            cv.put(KEY_FeedbackRecommendations, cursor.getString(18));
+            cv.put(KEY_FeedbackDate, cursor.getString(19));
+            cv.put(KEY_InspectionNumber, cursor.getString(20));
 
-            map.put(KEY_OrderDetails, cursor.getString(21));
-            map.put(KEY_CheckFailedReasons, cursor.getString(22));
-            map.put(KEY_OrderComments, cursor.getString(23));
-            map.put(KEY_OrderItemComments, cursor.getString(24));
-            datas.add(map);
+            cv.put(KEY_OrderDetails, cursor.getString(21));
+            cv.put(KEY_CheckFailedReasons, cursor.getString(22));
+            cv.put(KEY_OrderComments, cursor.getString(23));
+            cv.put(KEY_OrderItemComments, cursor.getString(24));
+            datas.add(cv);
         }
         cursor.close();
         db.close();
@@ -371,54 +466,35 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return datas;
     }
 
-    public ArrayList<Map<String, String>> getOrderDetailsByPONumber(String PONumber) {
-        ArrayList<Map<String, String>> datas = new ArrayList<>();
-        Map<String, String> map;
+    public ArrayList<ContentValues> getOrderDetailsByPONumber(String PONumber) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
-            map = new HashMap<>();
-            map.put(KEY_PONumber, cursor.getString(1));
-            map.put(KEY_POVersion, cursor.getString(2));
-            map.put(KEY_LineNumber, cursor.getString(3));
-            map.put(KEY_Item, cursor.getString(4));
-            map.put(KEY_OrderQty, cursor.getString(5));
-            map.put(KEY_Qty, cursor.getString(6));
-            map.put(KEY_SampleNumber, cursor.getString(7));
-            map.put(KEY_Uom, cursor.getString(8));
-            map.put(KEY_Size, cursor.getString(9));
-            map.put(KEY_Functions, cursor.getString(10));
-            map.put(KEY_Surface, cursor.getString(11));
-            map.put(KEY_Package, cursor.getString(12));
-            map.put(KEY_CheckPass, cursor.getString(13));
-            map.put(KEY_Special, cursor.getString(14));
-            map.put(KEY_Rework, cursor.getString(15));
-            map.put(KEY_Reject, cursor.getString(16));
-            map.put(KEY_MainMarK, cursor.getString(17));
-            map.put(KEY_SideMarK, cursor.getString(18));
-            map.put(KEY_ReCheckDate, cursor.getString(19));
-            map.put(KEY_Remarks, cursor.getString(20));
-            datas.add(map);
-        }
-        cursor.close();
-        db.close();
-        // return user
-        return datas;
-    }
-    public ArrayList<Map<String, String>> getOrderCommentsByPONumber(String PONumber) {
-        ArrayList<Map<String, String>> datas = new ArrayList<>();
-        Map<String, String> map;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-        //" AND " + KEY_Comment + " IS NOT NULL";
-        while (cursor.moveToNext()) {
-            map = new HashMap<>();
-            map.put(KEY_PONumber, cursor.getString(1));
-            map.put(KEY_POVersion, cursor.getString(2));
-            map.put(KEY_LineNumber, cursor.getString(3));
-            map.put(KEY_Comment, cursor.getString(4));
-            datas.add(map);
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_LineNumber, cursor.getString(3));
+            cv.put(KEY_Item, cursor.getString(4));
+            cv.put(KEY_OrderQty, cursor.getString(5));
+            cv.put(KEY_Qty, cursor.getString(6));
+            cv.put(KEY_SampleNumber, cursor.getString(7));
+            cv.put(KEY_Uom, cursor.getString(8));
+            cv.put(KEY_Size, cursor.getString(9));
+            cv.put(KEY_Functions, cursor.getString(10));
+            cv.put(KEY_Surface, cursor.getString(11));
+            cv.put(KEY_Package, cursor.getString(12));
+            cv.put(KEY_CheckPass, cursor.getString(13));
+            cv.put(KEY_Special, cursor.getString(14));
+            cv.put(KEY_Rework, cursor.getString(15));
+            cv.put(KEY_Reject, cursor.getString(16));
+            cv.put(KEY_MainMarK, cursor.getString(17));
+            cv.put(KEY_SideMarK, cursor.getString(18));
+            cv.put(KEY_ReCheckDate, cursor.getString(19));
+            cv.put(KEY_Remarks, cursor.getString(20));
+            datas.add(cv);
         }
         cursor.close();
         db.close();
@@ -426,26 +502,228 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return datas;
     }
 
-    public ArrayList<Map<String, String>> getOrderItemCommentsByPONumber(String PONumber) {
-        ArrayList<Map<String, String>> datas = new ArrayList<>();
-        Map<String, String> map;
+    public ArrayList<ContentValues> getCheckFailedReasonsByPONumber(String PONumber) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasons + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
-            map = new HashMap<>();
-            map.put(KEY_PONumber, cursor.getString(1));
-            map.put(KEY_POVersion, cursor.getString(2));
-            map.put(KEY_LineNumber, cursor.getString(3));
-            map.put(KEY_ItemNo, cursor.getString(4));
-            map.put(KEY_Comment, cursor.getString(5));
-            datas.add(map);
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_Item, cursor.getString(3));
+            cv.put(KEY_ReasonCode, cursor.getString(4));
+            cv.put(KEY_ReasonDescr, cursor.getString(5));
+            datas.add(cv);
         }
         cursor.close();
         db.close();
         // return user
         return datas;
     }
+
+    public ArrayList<ContentValues> getOrderCommentsByPONumber(String PONumber) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_LineNumber, cursor.getString(3));
+            cv.put(KEY_Comment, cursor.getString(4));
+            datas.add(cv);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+    public ArrayList<ContentValues> getOrderItemCommentsByPONumber(String PONumber) {
+        ArrayList<ContentValues> datas = new ArrayList<>();
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        while (cursor.moveToNext()) {
+            cv = new ContentValues();
+            cv.put(KEY_PONumber, cursor.getString(1));
+            cv.put(KEY_POVersion, cursor.getString(2));
+            cv.put(KEY_LineNumber, cursor.getString(3));
+            cv.put(KEY_ItemNo, cursor.getString(4));
+            cv.put(KEY_Comment, cursor.getString(5));
+            datas.add(cv);
+        }
+        cursor.close();
+        db.close();
+        // return user
+        return datas;
+    }
+
+    //SAVE OrderList
+
+    //=========================================================================
+    public void saveOrdersEdit(String PONumber) {
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        if (cursor.getCount() > 0) {
+
+        } else {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            //" AND " + KEY_Comment + " IS NOT NULL";
+            while (cursor.moveToNext()) {
+                cv = new ContentValues();
+                cv.put(KEY_PONumber, cursor.getString(1));
+                cv.put(KEY_POVersion, cursor.getString(2));
+                cv.put(KEY_PlanCheckDate, cursor.getString(3));
+                cv.put(KEY_VendorCode, cursor.getString(4));
+                cv.put(KEY_VendorName, cursor.getString(5));
+                cv.put(KEY_Area, cursor.getString(6));
+                cv.put(KEY_Notes, cursor.getString(7));
+                cv.put(KEY_Shipping, cursor.getString(8));
+                cv.put(KEY_SalesMan, cursor.getString(9));
+                cv.put(KEY_Phone, cursor.getString(10));
+                cv.put(KEY_CheckMan, cursor.getString(11));
+/*
+                cv.put(KEY_HasCompleted, cursor.getString(12));
+                cv.put(KEY_Inspector, cursor.getString(13));
+                cv.put(KEY_InspectorDate, cursor.getString(14));
+                cv.put(KEY_VendorInspector, cursor.getString(15));
+                cv.put(KEY_VendorInspectorDate, cursor.getString(16));
+                cv.put(KEY_FeedbackPerson, cursor.getString(17));
+                cv.put(KEY_FeedbackRecommendations, cursor.getString(18));
+                cv.put(KEY_FeedbackDate, cursor.getString(19));
+                cv.put(KEY_InspectionNumber, cursor.getString(20));
+*/
+                cv.put(KEY_OrderDetails, cursor.getString(21));
+                cv.put(KEY_CheckFailedReasons, cursor.getString(22));
+                cv.put(KEY_OrderComments, cursor.getString(23));
+                cv.put(KEY_OrderItemComments, cursor.getString(24));
+                db.insert(TABLE_OrdersEdit, null, cv);
+            }
+
+        }
+        cursor.close();
+        db.close();
+        // return user
+    }
+
+    public void saveOrderDetailsEdit(String PONumber) {
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        if (cursor.getCount() > 0) {
+
+        } else {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            //" AND " + KEY_Comment + " IS NOT NULL";
+            while (cursor.moveToNext()) {
+                cv = new ContentValues();
+                cv.put(KEY_PONumber, cursor.getString(1));
+                cv.put(KEY_POVersion, cursor.getString(2));
+                cv.put(KEY_LineNumber, cursor.getString(3));
+                cv.put(KEY_Item, cursor.getString(4));
+                cv.put(KEY_OrderQty, cursor.getString(5));
+                cv.put(KEY_Qty, cursor.getString(6));
+                cv.put(KEY_SampleNumber, cursor.getString(7));
+                /*
+                cv.put(KEY_Uom, cursor.getString(8));
+                cv.put(KEY_Size, cursor.getString(9));
+                cv.put(KEY_Functions, cursor.getString(10));
+                cv.put(KEY_Surface, cursor.getString(11));
+                cv.put(KEY_Package, cursor.getString(12));
+                cv.put(KEY_CheckPass, cursor.getString(13));
+                cv.put(KEY_Special, cursor.getString(14));
+                cv.put(KEY_Rework, cursor.getString(15));
+                cv.put(KEY_Reject, cursor.getString(16));
+                cv.put(KEY_MainMarK, cursor.getString(17));
+                cv.put(KEY_SideMarK, cursor.getString(18));
+                cv.put(KEY_ReCheckDate, cursor.getString(19));
+                cv.put(KEY_Remarks, cursor.getString(20));
+*/
+                db.insert(TABLE_OrderDetailsEdit, null, cv);
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public void saveCheckFailedReasonsEdit(String PONumber) {
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        if (cursor.getCount() > 0) {
+
+        } else {
+            /*
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasons + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            //" AND " + KEY_Comment + " IS NOT NULL";
+            while (cursor.moveToNext()) {
+                cv = new ContentValues();
+                cv.put(KEY_PONumber, cursor.getString(1));
+                cv.put(KEY_POVersion, cursor.getString(2));
+                cv.put(KEY_Item, cursor.getString(3));
+                cv.put(KEY_ReasonCode, cursor.getString(4));
+                cv.put(KEY_ReasonDescr, cursor.getString(5));
+                db.insert(TABLE_CheckFailedReasonsEdit, null, cv);
+            }
+            */
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public void saveOrderCommentsEdit(String PONumber) {
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderCommentsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        if (cursor.getCount() > 0) {
+
+        } else {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            //" AND " + KEY_Comment + " IS NOT NULL";
+            while (cursor.moveToNext()) {
+                cv = new ContentValues();
+                cv.put(KEY_PONumber, cursor.getString(1));
+                cv.put(KEY_POVersion, cursor.getString(2));
+                cv.put(KEY_LineNumber, cursor.getString(3));
+                cv.put(KEY_Comment, cursor.getString(4));
+                db.insert(TABLE_OrderCommentsEdit, null, cv);
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public void saveOrderItemCommentsEdit(String PONumber) {
+        ContentValues cv;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemCommentsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        if (cursor.getCount() > 0) {
+
+        } else {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            //" AND " + KEY_Comment + " IS NOT NULL";
+            while (cursor.moveToNext()) {
+                cv = new ContentValues();
+                cv.put(KEY_PONumber, cursor.getString(1));
+                cv.put(KEY_POVersion, cursor.getString(2));
+                cv.put(KEY_LineNumber, cursor.getString(3));
+                cv.put(KEY_ItemNo, cursor.getString(4));
+                cv.put(KEY_Comment, cursor.getString(5));
+                db.insert(TABLE_OrderItemCommentsEdit, null, cv);
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
     public int countOrders() {
         String selectQuery = "SELECT * FROM " + TABLE_Orders;
         SQLiteDatabase db = this.getReadableDatabase();

@@ -67,7 +67,7 @@
     </string-array>
     <string name="table_button1">取消</string>
     <string name="table_button2">編輯</string>
-    <string name="table_button3">暫</string>
+    <string name="table_button3">儲存</string>
     <string name="table_button4">送出</string>
 
     <string name="comfirm_button">確認</string>

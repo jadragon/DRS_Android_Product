@@ -1,5 +1,6 @@
 package com.example.alex.eip_product.fragment;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +35,7 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
     private TextView title, company_name;
     private TableLayout tableLayout;
     private OrderDatabase db;
-    private ArrayList<Map<String, String>> list;
+    private ArrayList<ContentValues> list;
     private GlobalVariable gv;
 
     @Nullable
@@ -55,14 +56,14 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
         title.setText(list.get(0).get(KEY_VendorName) + "驗貨內容");
         //廠商名稱
         company_name = v.findViewById(R.id.company_name);
-        company_name.setText(list.get(0).get(KEY_VendorName));
+        company_name.setText(list.get(0).getAsString(KEY_VendorName));
         tableLayout = v.findViewById(R.id.inspect_content_tableLayout);
         View view;
-        for (Map<String, String> map : list) {
+        for (ContentValues cv : list) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_inspect_content, null);
-            ((TextView) view.findViewWithTag("PONumber")).setText(map.get(KEY_PONumber));
-            ((TextView) view.findViewWithTag("POVersion")).setText(map.get(KEY_POVersion));
-            if (map.get(KEY_HasCompleted).equals("true")) {
+            ((TextView) view.findViewWithTag("PONumber")).setText(cv.getAsString(KEY_PONumber));
+            ((TextView) view.findViewWithTag("POVersion")).setText(cv.getAsString(KEY_POVersion));
+            if (cv.getAsBoolean(KEY_HasCompleted)) {
                 ((TextView) view.findViewWithTag("HasCompleted")).setText("是");
                 ((TextView) view.findViewWithTag("CanShipping")).setText("是");
                 ((TextView) view.findViewWithTag("overview")).setText("(預覽)");
@@ -71,7 +72,7 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 ((TextView) view.findViewWithTag("CanShipping")).setText("未驗");
                 ((TextView) view.findViewWithTag("overview")).setText("(填寫驗表)");
                 view.findViewWithTag("overview").setOnClickListener(this);
-                view.findViewWithTag("overview").setTag(map.get(KEY_PONumber));
+                view.findViewWithTag("overview").setTag(cv.getAsString(KEY_PONumber));
             }
 
             tableLayout.addView(view);

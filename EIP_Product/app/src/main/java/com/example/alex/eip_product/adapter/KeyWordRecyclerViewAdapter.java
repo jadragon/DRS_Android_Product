@@ -32,9 +32,18 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
     private Context ctx;
     private ArrayList<Map<String, String>> list;
     private DisplayMetrics dm;
+    private boolean type1, type2, type3, type4;
+    private boolean item_clickable;
+    private boolean item_addable;
 
-    public KeyWordRecyclerViewAdapter(Context ctx) {
+    public KeyWordRecyclerViewAdapter(Context ctx, boolean type1, boolean type2, boolean type3, boolean type4, boolean item_clickable, boolean item_addable) {
         this.ctx = ctx;
+        this.type1 = type1;
+        this.type2 = type2;
+        this.type3 = type3;
+        this.type4 = type4;
+        this.item_clickable = item_clickable;
+        this.item_addable = item_addable;
         dm = ctx.getResources().getDisplayMetrics();
         /*
         list = new ArrayList<>();
@@ -68,107 +77,134 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
 
     private void initList() {
         list = new ArrayList<>();
-        Map<String, String> map = new HashMap<>();
-        map.put("type", "" + TYPE_HEADER);
-        map.put("description", ctx.getResources().getString(R.string.size));
-        list.add(map);
+        Map<String, String> map;
+        ArrayList<String> arrayList;
+        String[] type;
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
-        ArrayList<String> arrayList = db.getFailedDescription(0);
-        for (int i = 0; i < arrayList.size(); i++) {
+        //type1
+        if (type1) {
+            arrayList = db.getFailedDescription(0);
             map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", arrayList.get(i));
+            map.put("type", "" + TYPE_HEADER);
+            map.put("description", ctx.getResources().getString(R.string.size));
             list.add(map);
+            type = ctx.getResources().getStringArray(R.array.type1);
+            for (int i = 0; i < type.length; i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", type[i]);
+                list.add(map);
+            }
+            //新增
+            for (int i = 0; i < arrayList.size(); i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", arrayList.get(i));
+                list.add(map);
+            }
+            if (item_addable) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_OTHER);
+                map.put("failed_type", "0");
+                map.put("description", ctx.getResources().getString(R.string.other));
+                list.add(map);
+            }
         }
-        String[] type = ctx.getResources().getStringArray(R.array.type1);
-        for (int i = 0; i < type.length; i++) {
+        //type2
+        if (type2) {
+            arrayList = db.getFailedDescription(1);
             map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", type[i]);
+            map.put("type", "" + TYPE_HEADER);
+            map.put("description", ctx.getResources().getString(R.string.function));
             list.add(map);
+            type = ctx.getResources().getStringArray(R.array.type2);
+            for (int i = 0; i < type.length; i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", type[i]);
+                list.add(map);
+            }
+            //新增
+            for (int i = 0; i < arrayList.size(); i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", arrayList.get(i));
+                list.add(map);
+            }
+            if (item_addable) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_OTHER);
+                map.put("failed_type", "1");
+                map.put("description", ctx.getResources().getString(R.string.other));
+                list.add(map);
+            }
         }
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_OTHER);
-        map.put("failed_type", "0");
-        map.put("description",  ctx.getResources().getString(R.string.other));
-        list.add(map);
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_HEADER);
-        map.put("description",  ctx.getResources().getString(R.string.function));
-        list.add(map);
-        arrayList = db.getFailedDescription(1);
-        for (int i = 0; i < arrayList.size(); i++) {
+        //type3
+        if (type3) {
+            arrayList = db.getFailedDescription(2);
             map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", arrayList.get(i));
+            map.put("type", "" + TYPE_HEADER);
+            map.put("description", ctx.getResources().getString(R.string.surface));
             list.add(map);
+            type = ctx.getResources().getStringArray(R.array.type3);
+            for (int i = 0; i < type.length; i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", type[i]);
+                list.add(map);
+            }
+            //新增
+            for (int i = 0; i < arrayList.size(); i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", arrayList.get(i));
+                list.add(map);
+            }
+            if (item_addable) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_OTHER);
+                map.put("failed_type", "2");
+                map.put("description", ctx.getResources().getString(R.string.other));
+                list.add(map);
+            }
         }
-        type = ctx.getResources().getStringArray(R.array.type2);
-        for (int i = 0; i < type.length; i++) {
+        //type4
+        if (type4) {
+            arrayList = db.getFailedDescription(3);
             map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", type[i]);
+            map.put("type", "" + TYPE_HEADER);
+            map.put("description", ctx.getResources().getString(R.string.packaging));
             list.add(map);
+            type = ctx.getResources().getStringArray(R.array.type4);
+            for (int i = 0; i < type.length; i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", type[i]);
+                list.add(map);
+            }
+            //新增
+            for (int i = 0; i < arrayList.size(); i++) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_ITEM);
+                map.put("select", "0");
+                map.put("description", arrayList.get(i));
+                list.add(map);
+            }
+            if (item_addable) {
+                map = new HashMap<>();
+                map.put("type", "" + TYPE_OTHER);
+                map.put("failed_type", "3");
+                map.put("description", ctx.getResources().getString(R.string.other));
+                list.add(map);
+            }
         }
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_OTHER);
-        map.put("failed_type", "1");
-        map.put("description", ctx.getResources().getString(R.string.other));
-        list.add(map);
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_HEADER);
-        map.put("description",  ctx.getResources().getString(R.string.surface));
-        list.add(map);
-        arrayList = db.getFailedDescription(2);
-        for (int i = 0; i < arrayList.size(); i++) {
-            map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", arrayList.get(i));
-            list.add(map);
-        }
-        type = ctx.getResources().getStringArray(R.array.type3);
-        for (int i = 0; i < type.length; i++) {
-            map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", type[i]);
-            list.add(map);
-        }
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_OTHER);
-        map.put("failed_type", "2");
-        map.put("description",  ctx.getResources().getString(R.string.other));
-        list.add(map);
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_HEADER);
-        map.put("description", ctx.getResources().getString(R.string.packaging));
-        list.add(map);
-        arrayList = db.getFailedDescription(3);
-        for (int i = 0; i < arrayList.size(); i++) {
-            map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", arrayList.get(i));
-            list.add(map);
-        }
-        type = ctx.getResources().getStringArray(R.array.type4);
-        for (int i = 0; i < type.length; i++) {
-            map = new HashMap<>();
-            map.put("type", "" + TYPE_ITEM);
-            map.put("select", "0");
-            map.put("description", type[i]);
-            list.add(map);
-        }
-        map = new HashMap<>();
-        map.put("type", "" + TYPE_OTHER);
-        map.put("failed_type", "3");
-        map.put("description",  ctx.getResources().getString(R.string.other));
-        list.add(map);
     }
 
     @Override
@@ -177,8 +213,9 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             TextView textView = new TextView(ctx);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             textView.setTextColor(Color.BLACK);
-            return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView);
+            return new KeyWordRecyclerViewAdapter.RecycleHolder(textView, viewType);
         }
+
         TextView textView = new TextView(ctx);
         textView.setGravity(Gravity.CENTER);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -186,13 +223,22 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         textView.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
         textView.setPadding((int) (20 * dm.density), (int) (10 * dm.density), (int) (20 * dm.density), (int) (10 * dm.density));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        GradientDrawable shape = new GradientDrawable();
-        shape.setCornerRadius(10 * dm.density);
-        shape.setStroke((int) (1 * dm.density), Color.RED);
-        shape.setColor(Color.WHITE);
-        textView.setTextColor(Color.RED);
-        textView.setBackgroundDrawable(shape);
-        return new KeyWordRecyclerViewAdapter.RecycleHolder(ctx, textView);
+        if (viewType == TYPE_ITEM) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setCornerRadius(10 * dm.density);
+            shape.setStroke((int) (1 * dm.density), Color.RED);
+            shape.setColor(Color.WHITE);
+            textView.setTextColor(Color.RED);
+            textView.setBackgroundDrawable(shape);
+        } else if (viewType == TYPE_OTHER) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setCornerRadius(10 * dm.density);
+            shape.setStroke((int) (1 * dm.density), Color.WHITE);
+            shape.setColor(Color.RED);
+            textView.setTextColor(Color.WHITE);
+            textView.setBackgroundDrawable(shape);
+        }
+        return new KeyWordRecyclerViewAdapter.RecycleHolder(textView, viewType);
     }
 
     @Override
@@ -223,19 +269,18 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         return list.size();
     }
 
-
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //  TextView color, size;
         TextView text;
-        Context ctx;
 
-        public RecycleHolder(Context ctx, View view) {
+        public RecycleHolder(View view, int viewType) {
             super(view);
-
-            this.ctx = ctx;
-
             text = (TextView) view;
-            itemView.setOnClickListener(this);
+            if (item_clickable) {
+                itemView.setOnClickListener(this);
+            } else if (item_addable && viewType == TYPE_OTHER) {
+                itemView.setOnClickListener(this);
+            }
         }
 
         @Override
