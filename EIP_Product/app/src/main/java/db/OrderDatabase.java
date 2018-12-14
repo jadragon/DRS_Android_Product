@@ -567,12 +567,21 @@ public class OrderDatabase extends SQLiteOpenHelper {
     //SAVE OrderList
 
     //=========================================================================
-    public void saveOrdersEdit(String PONumber) {
+    public void saveOrdersEditBasic(String PONumber) {
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         if (cursor.getCount() > 0) {
-
+            cursor = db.rawQuery("SELECT " + KEY_PONumber + "," + KEY_POVersion + "," + KEY_PlanCheckDate + "," + KEY_VendorCode + "," +
+                    KEY_VendorName + "," + KEY_Area + "," + KEY_Notes + "," + KEY_Shipping + "," + KEY_SalesMan + "," + KEY_Phone + "," + KEY_CheckMan + "," +
+                    KEY_HasCompleted + "," + KEY_FeedbackPerson + "," + KEY_FeedbackRecommendations + "," + KEY_FeedbackDate + "," + KEY_InspectionNumber + " FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" +
+                    " EXCEPT " +
+                    "SELECT " + KEY_PONumber + "," + KEY_POVersion + "," + KEY_PlanCheckDate + "," + KEY_VendorCode + "," +
+                    KEY_VendorName + "," + KEY_Area + "," + KEY_Notes + "," + KEY_Shipping + "," + KEY_SalesMan + "," + KEY_Phone + "," + KEY_CheckMan + "," +
+                    KEY_HasCompleted + "," + KEY_FeedbackPerson + "," + KEY_FeedbackRecommendations + "," + KEY_FeedbackDate + "," + KEY_InspectionNumber + " FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            if(cursor.getCount()>0){
+                
+            }
         } else {
             cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
             //" AND " + KEY_Comment + " IS NOT NULL";
@@ -589,17 +598,18 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 cv.put(KEY_SalesMan, cursor.getString(9));
                 cv.put(KEY_Phone, cursor.getString(10));
                 cv.put(KEY_CheckMan, cursor.getString(11));
-/*
                 cv.put(KEY_HasCompleted, cursor.getString(12));
+                /*
                 cv.put(KEY_Inspector, cursor.getString(13));
                 cv.put(KEY_InspectorDate, cursor.getString(14));
                 cv.put(KEY_VendorInspector, cursor.getString(15));
                 cv.put(KEY_VendorInspectorDate, cursor.getString(16));
+                */
                 cv.put(KEY_FeedbackPerson, cursor.getString(17));
                 cv.put(KEY_FeedbackRecommendations, cursor.getString(18));
                 cv.put(KEY_FeedbackDate, cursor.getString(19));
                 cv.put(KEY_InspectionNumber, cursor.getString(20));
-*/
+
                 cv.put(KEY_OrderDetails, cursor.getString(21));
                 cv.put(KEY_CheckFailedReasons, cursor.getString(22));
                 cv.put(KEY_OrderComments, cursor.getString(23));
