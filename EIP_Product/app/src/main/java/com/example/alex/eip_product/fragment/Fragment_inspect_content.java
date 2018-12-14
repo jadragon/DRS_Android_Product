@@ -17,7 +17,6 @@ import com.example.alex.eip_product.InsepectOrderActivity;
 import com.example.alex.eip_product.R;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import db.OrderDatabase;
 
@@ -25,6 +24,7 @@ import static db.OrderDatabase.KEY_HasCompleted;
 import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
 import static db.OrderDatabase.KEY_VendorName;
+import static db.OrderDatabase.KEY_isOrderEdit;
 
 /**
  * Created by user on 2017/5/30.
@@ -70,7 +70,11 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
             } else {
                 ((TextView) view.findViewWithTag("HasCompleted")).setText("否");
                 ((TextView) view.findViewWithTag("CanShipping")).setText("未驗");
-                ((TextView) view.findViewWithTag("overview")).setText("(填寫驗表)");
+                if (cv.getAsBoolean(KEY_isOrderEdit)) {
+                    ((TextView) view.findViewWithTag("overview")).setText("(未完成)");
+                } else {
+                    ((TextView) view.findViewWithTag("overview")).setText("(填寫驗表)");
+                }
                 view.findViewWithTag("overview").setOnClickListener(this);
                 view.findViewWithTag("overview").setTag(cv.getAsString(KEY_PONumber));
             }

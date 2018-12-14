@@ -85,8 +85,8 @@ public class SoapTestAcitivity extends AppCompatActivity implements View.OnClick
             try {
                 db.resetTables();
                 Map<String, List<ContentValues>> map = Analyze_Order.getOrders(new API_OrderInfo().getOrderInfo("test", "test123456"));
-                db.addOrders(map.get("Orders"));
-                db.addOrderDetails(map.get("OrderDetails"));
+                db.upDateOrders(map.get("Orders"));
+                db.upDateOrderDetails(map.get("OrderDetails"),Analyze_Order.PONumberNames);
                 db.addOrderComments(map.get("OrderComments"));
                 db.addOrderItemComments(map.get("OrderItemComments"));
                 UiHandler.post(new Runnable() {

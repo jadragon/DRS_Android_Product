@@ -59,6 +59,7 @@ import static db.OrderDatabase.KEY_Comment;
 import static db.OrderDatabase.KEY_ItemNo;
 
 public class Analyze_Order {
+    public static List<String> PONumberNames;
 
     /**
      * 3.1	訂單資訊
@@ -66,6 +67,7 @@ public class Analyze_Order {
     public static Map<String, List<ContentValues>> getOrders(JSONObject json) throws JSONException {
         Map<String, List<ContentValues>> map = new HashMap<>();
         List<ContentValues> list = new ArrayList<>();
+        PONumberNames = new ArrayList<>();
         map.put("Orders", list);
         list = new ArrayList<>();
         map.put(KEY_OrderDetails, list);
@@ -108,6 +110,10 @@ public class Analyze_Order {
                 contentValues.put(KEY_OrderComments, json_obj.getString(KEY_PONumber));
                 contentValues.put(KEY_OrderItemComments, json_obj.getString(KEY_PONumber));
                 map.get("Orders").add(contentValues);
+
+                if (!PONumberNames.equals(json_obj.getString(KEY_PONumber))) {
+                    PONumberNames.add(json_obj.getString(KEY_PONumber));
+                }
                 //----------------------------------
                 jsonInnerArray = json_obj.getJSONArray(KEY_OrderDetails);
                 map.get(KEY_OrderDetails).addAll(getOrderDetails(jsonInnerArray));
@@ -118,6 +124,7 @@ public class Analyze_Order {
                 jsonInnerArray = json_obj.getJSONArray(KEY_OrderItemComments);
                 map.get(KEY_OrderItemComments).addAll(getOrderItemComments(jsonInnerArray));
             }
+
         }
         return map;
     }

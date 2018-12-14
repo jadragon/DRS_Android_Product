@@ -21,7 +21,6 @@ import java.io.OutputStream;
 public class LinePathView extends View {
 
     private Context mContext;
-
     /**
      * 筆畫X座標起點
      */
@@ -242,7 +241,7 @@ public class LinePathView extends View {
      *
      * @return
      */
-    public Bitmap getBitMap(int width,int height) {
+    public Bitmap getBitMap(int width, int height) {
         /*
         setDrawingCacheEnabled(true);
         buildDrawingCache();
@@ -250,8 +249,11 @@ public class LinePathView extends View {
 //        setDrawingCacheEnabled(false);
         return bitmap;
         */
+        if (!isTouched)
+            return null;
+
         Bitmap newBitmap = Bitmap.createScaledBitmap(cachebBitmap, width,
-                height,true);
+                height, true);
         return newBitmap;
     }
 

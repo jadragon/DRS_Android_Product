@@ -1,12 +1,11 @@
 package com.example.alex.eip_product;
 
 import android.content.ContentValues;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import db.OrderDatabase;
 
@@ -17,6 +16,8 @@ import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
 import static db.OrderDatabase.KEY_VendorCode;
 import static db.OrderDatabase.KEY_VendorName;
+import static db.OrderDatabase.TYPE_EDIT;
+import static db.OrderDatabase.TYPE_NORMAL;
 
 public class InspectDetailActivity extends AppCompatActivity {
     private TextView OrderComments, ItemNo, OrderItemComments;
@@ -47,6 +48,7 @@ public class InspectDetailActivity extends AppCompatActivity {
 
     private void initData() {
         ArrayList<ContentValues> list = db.getOrdersByPONumber(key_ponumber);
+
         PONumber.setText(list.get(0).getAsString(KEY_PONumber));
         POVersion.setText(list.get(0).getAsString(KEY_POVersion));
         VendorCode.setText(list.get(0).getAsString(KEY_VendorCode));

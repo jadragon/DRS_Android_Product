@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,41 +18,59 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 import Utils.CommonUtil;
 import db.OrderDatabase;
-import db.SQLiteDatabaseHandler;
 
+import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_FeedbackDate;
 import static db.OrderDatabase.KEY_FeedbackPerson;
+import static db.OrderDatabase.KEY_Functions;
 import static db.OrderDatabase.KEY_Inspector;
 import static db.OrderDatabase.KEY_InspectorDate;
 import static db.OrderDatabase.KEY_Item;
 import static db.OrderDatabase.KEY_LineNumber;
+import static db.OrderDatabase.KEY_MainMarK;
 import static db.OrderDatabase.KEY_OrderQty;
 import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
+import static db.OrderDatabase.KEY_Package;
 import static db.OrderDatabase.KEY_Qty;
+import static db.OrderDatabase.KEY_ReCheckDate;
+import static db.OrderDatabase.KEY_Reject;
+import static db.OrderDatabase.KEY_Remarks;
+import static db.OrderDatabase.KEY_Rework;
 import static db.OrderDatabase.KEY_SalesMan;
 import static db.OrderDatabase.KEY_SampleNumber;
 import static db.OrderDatabase.KEY_Shipping;
+import static db.OrderDatabase.KEY_SideMarK;
+import static db.OrderDatabase.KEY_Size;
+import static db.OrderDatabase.KEY_Special;
+import static db.OrderDatabase.KEY_Surface;
 import static db.OrderDatabase.KEY_Uom;
 import static db.OrderDatabase.KEY_VendorCode;
+import static db.OrderDatabase.KEY_VendorInspector;
 import static db.OrderDatabase.KEY_VendorInspectorDate;
 import static db.OrderDatabase.KEY_VendorName;
+import static db.OrderDatabase.KEY_isOrderEdit;
+import static db.OrderDatabase.TYPE_EDIT;
+import static db.OrderDatabase.TYPE_NORMAL;
 
 public class InsepectOrderActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
     private final static int SELECT_FAIL_REASON = 110;
-    private LinearLayout alltable, courseTable, failed_item_layout;
+    private LinearLayout courseTable, failed_item_layout;
     private Button saveButton, sendButton, editButton, cancelButton;
     private ImageView VendorInspector;
     private TextView title, pdf_view;
@@ -63,6 +83,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
     private String key_ponumber;
     private ArrayList<ContentValues> Orderslist, OrdersDetaillist;
     private GlobalVariable gv;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,23 +124,31 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
     }
 
     private void initData() {
+
         Orderslist = db.getOrdersByPONumber(key_ponumber);
+
         SalesMan.setText(Orderslist.get(0).getAsString(KEY_SalesMan));
         Shipping.setText(Orderslist.get(0).getAsString(KEY_Shipping));
         VendorName.setText(Orderslist.get(0).getAsString(KEY_VendorName));
         VendorCode.setText(Orderslist.get(0).getAsString(KEY_VendorCode));
         PONumber.setText(Orderslist.get(0).getAsString(KEY_PONumber));
         POVersion.setText(Orderslist.get(0).getAsString(KEY_POVersion));
+
         if (!Orderslist.get(0).getAsString(KEY_Inspector).equals("")) {
             Inspector.setText(Orderslist.get(0).getAsString(KEY_Inspector));
             InspectorDate.setText(Orderslist.get(0).getAsString(KEY_InspectorDate));
-        } else {
-            Inspector.setText(gv.getUsername());
-            InspectorDate.setText(new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
+        }
+
+        byte[] bitmapdata = Orderslist.get(0).getAsByteArray(KEY_VendorInspector);
+        if (bitmapdata != null) {
+            bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+            VendorInspector.setImageBitmap(bitmap);
+        }
+        if (!Orderslist.get(0).getAsString(KEY_VendorInspectorDate).equals("")) {
+            VendorInspectorDate.setText(Orderslist.get(0).getAsString(KEY_VendorInspectorDate));
         }
         FeedbackPerson.setText(Orderslist.get(0).getAsString(KEY_FeedbackPerson));
         FeedbackDate.setText(Orderslist.get(0).getAsString(KEY_FeedbackDate));
-        VendorInspectorDate.setText(Orderslist.get(0).getAsString(KEY_VendorInspectorDate));
         OrdersDetaillist = db.getOrderDetailsByPONumber(key_ponumber);
         for (int i = 0; i < OrdersDetaillist.size(); i++) {
             new AddColumTask(i).execute("normal");
@@ -142,7 +171,8 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                             .setPositiveButton("確定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    VendorInspector.setImageBitmap(linePathView.getBitMap(VendorInspector.getWidth(), VendorInspector.getHeight()));
+                                    bitmap = linePathView.getBitMap(VendorInspector.getWidth(), VendorInspector.getHeight());
+                                    VendorInspector.setImageBitmap(bitmap);
                                     dialog.dismiss();
                                 }
                             }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -178,7 +208,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
     }
 
     void findView() {
-        alltable = findViewById(R.id.alltable);
         courseTable = findViewById(R.id.kccx_course_table);
         VendorInspector = findViewById(R.id.VendorInspector);
         title = findViewById(R.id.title);
@@ -213,7 +242,57 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.save:
+                ContentValues cv = new ContentValues();
 
+                byte[] byteArray = null;
+                if (bitmap != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byteArray = stream.toByteArray();
+                } else {
+                    Toast.makeText(InsepectOrderActivity.this, "簽名檔沒簽", Toast.LENGTH_SHORT).show();
+                }
+                cv.put(KEY_VendorInspector, byteArray);
+                if (Inspector.getText().toString().equals("")) {
+                    cv.put(KEY_Inspector, gv.getUsername());
+                } else {
+                    cv.put(KEY_Inspector, Inspector.getText().toString());
+                }
+                String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                cv.put(KEY_InspectorDate, today);
+                cv.put(KEY_VendorInspectorDate, today);
+                cv.put(KEY_isOrderEdit, true);
+                db.saveOrdersEditBasic(Orderslist.get(0).getAsString(KEY_PONumber), cv);
+                ArrayList<ContentValues> arrayList = new ArrayList<>();
+                for (View item : ItemList) {
+                    cv = new ContentValues();
+                    TextView textView = item.findViewById(R.id.row7);
+                    cv.put(KEY_Size, textView.getText().toString());
+                    textView = item.findViewById(R.id.row8);
+                    cv.put(KEY_Functions, textView.getText().toString());
+                    textView = item.findViewById(R.id.row9);
+                    cv.put(KEY_Surface, textView.getText().toString());
+                    textView = item.findViewById(R.id.row10);
+                    cv.put(KEY_Package, textView.getText().toString());
+                    CheckBox checkBox = item.findViewById(R.id.row11);
+                    cv.put(KEY_MainMarK, checkBox.isChecked());
+                    checkBox = item.findViewById(R.id.row12);
+                    cv.put(KEY_SideMarK, checkBox.isChecked());
+                    RadioButton radioButton = item.findViewById(R.id.row13);
+                    cv.put(KEY_CheckPass, radioButton.isChecked());
+                    radioButton = item.findViewById(R.id.row14);
+                    cv.put(KEY_Special, radioButton.isChecked());
+                    radioButton = item.findViewById(R.id.row15);
+                    cv.put(KEY_Rework, radioButton.isChecked());
+                    radioButton = item.findViewById(R.id.row16);
+                    cv.put(KEY_Reject, radioButton.isChecked());
+                    textView = item.findViewById(R.id.row17);
+                    cv.put(KEY_ReCheckDate, textView.getText().toString());
+                    textView = item.findViewById(R.id.row18);
+                    cv.put(KEY_Remarks, textView.getText().toString());
+                    arrayList.add(cv);
+                }
+                db.saveOrderDetailsEdit(Orderslist.get(0).getAsString(KEY_PONumber), arrayList);
                 break;
             case R.id.send:
 
@@ -293,24 +372,52 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                 view.setTag(index);
                 courseTable.addView(view);
                 ItemList.add(view);
-                ((TextView) view.findViewById(R.id.row1)).setText(OrdersDetaillist.get(index).getAsString(KEY_LineNumber));
-                ((TextView) view.findViewById(R.id.row2)).setText(OrdersDetaillist.get(index).getAsString(KEY_Item));
-                ((TextView) view.findViewById(R.id.row3)).setText(OrdersDetaillist.get(index).getAsString(KEY_OrderQty));
-                ((TextView) view.findViewById(R.id.row4)).setText(OrdersDetaillist.get(index).getAsString(KEY_Qty));
-                ((TextView) view.findViewById(R.id.row5)).setText(OrdersDetaillist.get(index).getAsString(KEY_SampleNumber));
-                ((TextView) view.findViewById(R.id.row6)).setText(OrdersDetaillist.get(index).getAsString(KEY_Uom));
+                TextView textView = view.findViewById(R.id.row1);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_LineNumber));
+                textView = view.findViewById(R.id.row2);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_Item));
+                textView = view.findViewById(R.id.row3);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_OrderQty));
+                textView = view.findViewById(R.id.row4);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_Qty));
+                textView = view.findViewById(R.id.row5);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_SampleNumber));
+                textView = view.findViewById(R.id.row6);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_Uom));
                 EditText editText = view.findViewById(R.id.row7);
+                editText.setText(OrdersDetaillist.get(index).getAsString(KEY_Size));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
                 editText.addTextChangedListener(InsepectOrderActivity.this);
                 editText = view.findViewById(R.id.row8);
+                editText.setText(OrdersDetaillist.get(index).getAsString(KEY_Functions));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
                 editText.addTextChangedListener(InsepectOrderActivity.this);
                 editText = view.findViewById(R.id.row9);
+                editText.setText(OrdersDetaillist.get(index).getAsString(KEY_Surface));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
                 editText.addTextChangedListener(InsepectOrderActivity.this);
                 editText = view.findViewById(R.id.row10);
+                editText.setText(OrdersDetaillist.get(index).getAsString(KEY_Package));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
                 editText.addTextChangedListener(InsepectOrderActivity.this);
+
+                CheckBox checkBox = view.findViewById(R.id.row11);
+                checkBox.setChecked(OrdersDetaillist.get(index).getAsBoolean(KEY_MainMarK));
+                checkBox = view.findViewById(R.id.row12);
+                checkBox.setChecked(OrdersDetaillist.get(index).getAsBoolean(KEY_SideMarK));
+                RadioButton radioButton = view.findViewById(R.id.row13);
+                radioButton.setChecked(OrdersDetaillist.get(index).getAsBoolean(KEY_CheckPass));
+                radioButton = view.findViewById(R.id.row14);
+                radioButton.setChecked(OrdersDetaillist.get(index).getAsBoolean(KEY_Special));
+                radioButton = view.findViewById(R.id.row15);
+                radioButton.setChecked(OrdersDetaillist.get(index).getAsBoolean(KEY_Rework));
+                radioButton = view.findViewById(R.id.row16);
+                radioButton.setChecked(OrdersDetaillist.get(index).getAsBoolean(KEY_Reject));
+
+                textView = view.findViewById(R.id.row17);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_ReCheckDate));
+                textView = view.findViewById(R.id.row18);
+                textView.setText(OrdersDetaillist.get(index).getAsString(KEY_Remarks));
 
             } else if (result.equals("item")) {
                 View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
@@ -530,11 +637,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        db.close();
-        super.onDestroy();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -546,4 +648,13 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        if (bitmap != null)
+            bitmap.recycle();
+        db.close();
+        super.onDestroy();
+    }
+
 }

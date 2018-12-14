@@ -2,7 +2,6 @@ package com.example.alex.eip_product;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -11,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Utils.PreferenceUtil;
 import db.OrderDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -103,15 +102,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (AnalyzeUtil.checkSuccess(json)) {
                     db.resetTables();
                     Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
-                    db.addOrders(map.get("Orders"));
-                    db.addOrderDetails(map.get("OrderDetails"));
+                    db.upDateOrders(map.get("Orders"));
+                    db.upDateOrderDetails(map.get("OrderDetails"), Analyze_Order.PONumberNames);
                     db.addCheckFailedReasons(map.get("CheckFailedReasons"));
                     db.addOrderComments(map.get("OrderComments"));
                     db.addOrderItemComments(map.get("OrderItemComments"));
                     UiHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MainActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+                            Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
+                                    "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
                             progressDialog.dismiss();
                         }
                     });

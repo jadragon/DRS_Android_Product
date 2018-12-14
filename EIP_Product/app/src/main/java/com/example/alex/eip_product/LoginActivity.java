@@ -3,14 +3,12 @@ package com.example.alex.eip_product;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +24,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import Utils.PreferenceUtil;
@@ -98,7 +95,11 @@ public class LoginActivity extends AppCompatActivity {
                     UiHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(LoginActivity.this, "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+                            Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
+                                    "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
+
+
                             progressDialog.dismiss();
                             gv.setUsername(username.getText().toString());
                             gv.setPw(pw.getText().toString());
