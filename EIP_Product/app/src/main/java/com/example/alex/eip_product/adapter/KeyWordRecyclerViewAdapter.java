@@ -79,7 +79,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
         list = new ArrayList<>();
         Map<String, String> map;
         ArrayList<String> arrayList;
-        String[] type;
+        String[] type_description, fail_num;
         SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
         //type1
         if (type1) {
@@ -88,12 +88,14 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             map.put("type", "" + TYPE_HEADER);
             map.put("description", ctx.getResources().getString(R.string.size));
             list.add(map);
-            type = ctx.getResources().getStringArray(R.array.type1);
-            for (int i = 0; i < type.length; i++) {
+            fail_num = ctx.getResources().getStringArray(R.array.type1);
+            type_description = ctx.getResources().getStringArray(R.array.type1_description);
+            for (int i = 0; i < type_description.length; i++) {
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
-                map.put("description", type[i]);
+                map.put("fail_num", fail_num[i]);
+                map.put("description", type_description[i]);
                 list.add(map);
             }
             //新增
@@ -101,6 +103,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
+                map.put("fail_num", "A0");
                 map.put("description", arrayList.get(i));
                 list.add(map);
             }
@@ -119,12 +122,14 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             map.put("type", "" + TYPE_HEADER);
             map.put("description", ctx.getResources().getString(R.string.function));
             list.add(map);
-            type = ctx.getResources().getStringArray(R.array.type2);
-            for (int i = 0; i < type.length; i++) {
+            fail_num = ctx.getResources().getStringArray(R.array.type2);
+            type_description = ctx.getResources().getStringArray(R.array.type2_description);
+            for (int i = 0; i < type_description.length; i++) {
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
-                map.put("description", type[i]);
+                map.put("fail_num", fail_num[i]);
+                map.put("description", type_description[i]);
                 list.add(map);
             }
             //新增
@@ -132,6 +137,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
+                map.put("fail_num", "B0");
                 map.put("description", arrayList.get(i));
                 list.add(map);
             }
@@ -150,12 +156,14 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             map.put("type", "" + TYPE_HEADER);
             map.put("description", ctx.getResources().getString(R.string.surface));
             list.add(map);
-            type = ctx.getResources().getStringArray(R.array.type3);
-            for (int i = 0; i < type.length; i++) {
+            fail_num = ctx.getResources().getStringArray(R.array.type3);
+            type_description = ctx.getResources().getStringArray(R.array.type3_description);
+            for (int i = 0; i < type_description.length; i++) {
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
-                map.put("description", type[i]);
+                map.put("fail_num", fail_num[i]);
+                map.put("description", type_description[i]);
                 list.add(map);
             }
             //新增
@@ -163,6 +171,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
+                map.put("fail_num", "C0");
                 map.put("description", arrayList.get(i));
                 list.add(map);
             }
@@ -181,12 +190,14 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             map.put("type", "" + TYPE_HEADER);
             map.put("description", ctx.getResources().getString(R.string.packaging));
             list.add(map);
-            type = ctx.getResources().getStringArray(R.array.type4);
-            for (int i = 0; i < type.length; i++) {
+            fail_num = ctx.getResources().getStringArray(R.array.type4);
+            type_description = ctx.getResources().getStringArray(R.array.type4_description);
+            for (int i = 0; i < type_description.length; i++) {
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
-                map.put("description", type[i]);
+                map.put("fail_num", fail_num[i]);
+                map.put("description", type_description[i]);
                 list.add(map);
             }
             //新增
@@ -194,6 +205,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
                 map = new HashMap<>();
                 map.put("type", "" + TYPE_ITEM);
                 map.put("select", "0");
+                map.put("fail_num", "D0");
                 map.put("description", arrayList.get(i));
                 list.add(map);
             }
@@ -341,6 +353,26 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
             builder.deleteCharAt(0);
         }
         return builder.toString();
+    }
+
+    public ArrayList<String> getSelectFailNums() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).get("type").equals("" + TYPE_ITEM) && list.get(i).get("select").equals("1")) {
+                arrayList.add(list.get(i).get("fail_num"));
+            }
+        }
+        return arrayList;
+    }
+
+    public ArrayList<String> getSelectFailDescription() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).get("type").equals("" + TYPE_ITEM) && list.get(i).get("select").equals("1")) {
+                arrayList.add(list.get(i).get("description"));
+            }
+        }
+        return arrayList;
     }
 
     public void setFilter() {

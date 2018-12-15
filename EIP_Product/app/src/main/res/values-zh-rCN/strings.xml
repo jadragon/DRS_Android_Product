@@ -132,11 +132,45 @@
         <item>语言设定</item>
     </string-array>
     <string-array name="type1">
-        <item>尺寸与图面不符</item>
-        <item>尺寸超过公差</item>
-        <item>孔位cc超过公差</item>
+        <item>A1</item>
+        <item>A2</item>
+        <item>A3</item>
     </string-array>
     <string-array name="type2">
+        <item>B1</item>
+        <item>B2</item>
+        <item>B3</item>
+        <item>B4</item>
+        <item>B5</item>
+        <item>B6</item>
+        <item>B7</item>
+    </string-array>
+    <string-array name="type3">
+        <item>C1</item>
+        <item>C2</item>
+        <item>C3</item>
+        <item>C4</item>
+        <item>C5</item>
+        <item>C6</item>
+        <item>C7</item>
+        <item>C8</item>
+    </string-array>
+    <string-array name="type4">
+        <item>D1</item>
+        <item>D2</item>
+        <item>D3</item>
+        <item>D4</item>
+        <item>D5</item>
+        <item>D6</item>
+        <item>D7</item>
+        <item>D8</item>
+    </string-array>
+    <string-array name="type1_description">
+        <item>尺寸与图面不符</item>
+        <item>尺寸超过公差</item>
+        <item>孔位cc超公差</item>
+    </string-array>
+    <string-array name="type2_description">
         <item>牙型错误</item>
         <item>漏攻牙/崩牙</item>
         <item>牙深不足/歪斜</item>
@@ -145,20 +179,21 @@
         <item>活动性不佳</item>
         <item>机构做动异常</item>
     </string-array>
-    <string-array name="type3">
-        <item>刮伤.撞伤.变形.毛边.麻点.生鏽</item>
-        <item>起泡.亮点.毛刺.沙孔.吐酸.髒污.白斑</item>
+    <string-array name="type3_description">
+        <item>刮伤.撞伤.变形.毛边.麻点.生锈</item>
+        <item>起泡.亮点.毛刺.沙孔.吐酸.脏污.白斑</item>
         <item>烤漆橘皮.流漆.色差.颜色错误.脱落</item>
         <item>电镀色差.颜色错误.脱落</item>
         <item>未过3H硬度测试</item>
         <item>未过24小时中性盐雾测试</item>
         <item>未过48小时中性盐雾测试</item>
+        <item>未过百格测试要求</item>
     </string-array>
-    <string-array name="type4">
-        <item>产品溷装/型号错误</item>
+    <string-array name="type4_description">
+        <item>产品混装/型号错误</item>
         <item>各项配件/螺丝/包装错误.遗漏</item>
         <item>各项配件/螺丝/尺寸错误</item>
-        <item>条码/标籤/贴纸张贴错误.遗漏</item>
+        <item>条码/标签/贴纸张贴错误.遗漏</item>
         <item>产品/外箱/内盒包装数量错误</item>
         <item>正/侧唛/内盒印刷错误</item>
         <item>外箱/内盒/包材尺寸错误</item>

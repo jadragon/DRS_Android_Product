@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import com.example.alex.eip_product.adapter.KeyWordRecyclerViewAdapter;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import Component.AutoNewLineLayoutManager;
 
 public class SelectFailedActivity extends AppCompatActivity {
@@ -29,7 +32,7 @@ public class SelectFailedActivity extends AppCompatActivity {
         type3 = intent.getBooleanExtra("type3", false);
         type4 = intent.getBooleanExtra("type4", false);
 
-        keyWordRecyclerViewAdapter = new KeyWordRecyclerViewAdapter(this, type1, type2, type3, type4,true,false);
+        keyWordRecyclerViewAdapter = new KeyWordRecyclerViewAdapter(this, type1, type2, type3, type4, true, false);
         AutoNewLineLayoutManager autoNewLineLayoutManager = new AutoNewLineLayoutManager(this);
         autoNewLineLayoutManager.setDivider(20);
         autoNewLineLayoutManager.setAloneViewType(KeyWordRecyclerViewAdapter.TYPE_HEADER);
@@ -44,8 +47,8 @@ public class SelectFailedActivity extends AppCompatActivity {
         select_failed_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                intent.putExtra("failed_reason", keyWordRecyclerViewAdapter.getSelectItems());
+                intent.putExtra("ReasonCode", keyWordRecyclerViewAdapter.getSelectFailNums());
+                intent.putExtra("ReasonDescr", keyWordRecyclerViewAdapter.getSelectFailDescription());
                 setResult(110, intent);
                 finish();
             }

@@ -30,6 +30,14 @@ public class Fragment_setting extends Fragment {
     private Spinner spinner;
     private boolean init_Activity = false;
 
+    public static Fragment_setting newInstance(int index) {
+        Fragment_setting f = new Fragment_setting();
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+        return f;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

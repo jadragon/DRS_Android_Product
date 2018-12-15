@@ -18,6 +18,14 @@ public class Fragment_selectFailed extends Fragment {
     RecyclerView recyclerView;
     KeyWordRecyclerViewAdapter keyWordRecyclerViewAdapter;
 
+    public static Fragment_selectFailed newInstance(int index) {
+        Fragment_selectFailed f = new Fragment_selectFailed();
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+        return f;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

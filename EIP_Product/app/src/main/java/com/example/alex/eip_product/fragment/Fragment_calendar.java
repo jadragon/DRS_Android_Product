@@ -26,6 +26,13 @@ public class Fragment_calendar extends Fragment {
     private CalendarView calendarView;
     private GlobalVariable gv;
 
+    public static Fragment_calendar newInstance(int index) {
+        Fragment_calendar f = new Fragment_calendar();
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+        return f;
+    }
 
     @Nullable
     @Override
@@ -75,6 +82,5 @@ public class Fragment_calendar extends Fragment {
             calendarView.setDate((long) gv.getCurrent_date(1));
         }
     }
-
 
 }

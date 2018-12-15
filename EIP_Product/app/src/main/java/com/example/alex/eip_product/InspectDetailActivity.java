@@ -47,15 +47,15 @@ public class InspectDetailActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        ArrayList<ContentValues> list = db.getOrdersByPONumber(key_ponumber);
-
-        PONumber.setText(list.get(0).getAsString(KEY_PONumber));
-        POVersion.setText(list.get(0).getAsString(KEY_POVersion));
-        VendorCode.setText(list.get(0).getAsString(KEY_VendorCode));
-        VendorName.setText(list.get(0).getAsString(KEY_VendorName));
-        Notes.setText(list.get(0).getAsString(KEY_Notes));
-
-        list = db.getOrderCommentsByPONumber(key_ponumber);
+        ContentValues contentValues = db.getOrdersByPONumber(key_ponumber);
+        if (contentValues != null) {
+            PONumber.setText(contentValues.getAsString(KEY_PONumber));
+            POVersion.setText(contentValues.getAsString(KEY_POVersion));
+            VendorCode.setText(contentValues.getAsString(KEY_VendorCode));
+            VendorName.setText(contentValues.getAsString(KEY_VendorName));
+            Notes.setText(contentValues.getAsString(KEY_Notes));
+        }
+        ArrayList<ContentValues> list = db.getOrderCommentsByPONumber(key_ponumber);
         StringBuilder builder1 = new StringBuilder();
         StringBuilder builder2 = new StringBuilder();
         for (ContentValues cv : list) {

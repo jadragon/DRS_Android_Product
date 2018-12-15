@@ -21,6 +21,14 @@ public class Fragment_home extends Fragment {
     private RecyclerView main_recylcerview;
     private MainMenuAdapter mainMenuAdapter;
 
+    public static Fragment_home newInstance(int index) {
+        Fragment_home f = new Fragment_home();
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+        return f;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,8 +41,8 @@ public class Fragment_home extends Fragment {
         main_recylcerview = v.findViewById(R.id.home_recylcerview);
         mainMenuAdapter = new MainMenuAdapter(getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 8);
-      //  int imagewidth = 150;
-       // gridLayoutManager.setSpanCount(getResources().getDisplayMetrics().widthPixels / imagewidth);
+        //  int imagewidth = 150;
+        // gridLayoutManager.setSpanCount(getResources().getDisplayMetrics().widthPixels / imagewidth);
         main_recylcerview.setLayoutManager(gridLayoutManager);
         main_recylcerview.setAdapter(mainMenuAdapter);
     }

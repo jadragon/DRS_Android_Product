@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
@@ -29,7 +30,6 @@ public class OrderDatabase extends SQLiteOpenHelper {
     //Type
     public static int TYPE_NORMAL = 0x01;
     public static int TYPE_EDIT = 0x02;
-
 
     // table name
     private static final String TABLE_Orders = "Orders";
@@ -420,11 +420,11 @@ public class OrderDatabase extends SQLiteOpenHelper {
     /**
      * Search
      */
-    public ArrayList<ContentValues> getOrdersByDate(String date) {
+    public ArrayList<ContentValues> getOrdersByDateAndVendorName(String date, String VendorName) {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PlanCheckDate + " = '" + date + "' GROUP BY " + KEY_VendorCode + " ORDER BY " + KEY_PONumber + " ASC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PlanCheckDate + " = '" + date + "'" + " AND " + KEY_VendorName + " = '" + VendorName + "'" + " ORDER BY " + KEY_PONumber + " ASC", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
             cv = new ContentValues();
@@ -460,11 +460,11 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+
         return datas;
     }
 
-    public ArrayList<ContentValues> getOrdersByDateAndVendorCode(String date, String VendorCode) {
+    public ArrayList<ContentValues> getOrdersByDateAndLikeVendorCode(String date, String VendorCode) {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -504,20 +504,17 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+
         return datas;
     }
 
-    /**
-     * Search
-     */
-    public ArrayList<ContentValues> getOrdersByPONumber(String PONumber) {
-        ArrayList<ContentValues> datas = new ArrayList<>();
-        ContentValues cv;
+    public ContentValues getOrdersByPONumber(String PONumber) {
+        ContentValues cv = null;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
-        while (cursor.moveToNext()) {
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
             cv = new ContentValues();
             cv.put(KEY_PONumber, cursor.getString(1));
             cv.put(KEY_POVersion, cursor.getString(2));
@@ -547,12 +544,11 @@ public class OrderDatabase extends SQLiteOpenHelper {
             cv.put(KEY_OrderItemComments, cursor.getString(24));
             cv.put(KEY_isOrderEdit, cursor.getInt(25) > 0);
             cv.put(KEY_isOrderUpdate, cursor.getInt(26) > 0);
-            datas.add(cv);
         }
+
         cursor.close();
         db.close();
-        // return user
-        return datas;
+        return cv;
     }
 
     public ArrayList<ContentValues> getOrderDetailsByPONumber(String PONumber) {
@@ -587,7 +583,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+
         return datas;
     }
 
@@ -595,7 +591,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasons + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
             cv = new ContentValues();
@@ -608,7 +604,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+
         return datas;
     }
 
@@ -616,7 +612,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderCommentsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
             cv = new ContentValues();
@@ -628,7 +624,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+
         return datas;
     }
 
@@ -636,7 +632,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemCommentsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         //" AND " + KEY_Comment + " IS NOT NULL";
         while (cursor.moveToNext()) {
             cv = new ContentValues();
@@ -649,7 +645,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+
         return datas;
     }
 
@@ -658,8 +654,14 @@ public class OrderDatabase extends SQLiteOpenHelper {
      */
     //=========================================================================
     public void saveOrdersEditBasic(String PONumber, ContentValues edit_cv) {
-        ContentValues cv;
-        SQLiteDatabase db = this.getReadableDatabase();
+        if (edit_cv != null) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            db.update(TABLE_OrdersEdit, edit_cv, KEY_PONumber + " = '" + PONumber + "'", null);
+            Log.e("OrdersEdit", "OrdersEdit儲存成功");
+            db.close();
+        }
+        /*
+          ContentValues cv;
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
 
         if (cursor.getCount() > 0) { //存在修改後的訂單
@@ -688,22 +690,22 @@ public class OrderDatabase extends SQLiteOpenHelper {
                     cv.put(KEY_Phone, cursor.getString(10));
                     cv.put(KEY_CheckMan, cursor.getString(11));
                     cv.put(KEY_HasCompleted, cursor.getString(12));
-                /*
-                cv.put(KEY_Inspector, cursor.getString(13));
-                cv.put(KEY_InspectorDate, cursor.getString(14));
-                cv.put(KEY_VendorInspector, cursor.getString(15));
-                cv.put(KEY_VendorInspectorDate, cursor.getString(16));
-                */
+
+//                cv.put(KEY_Inspector, cursor.getString(13));
+//                cv.put(KEY_InspectorDate, cursor.getString(14));
+//                cv.put(KEY_VendorInspector, cursor.getString(15));
+//                cv.put(KEY_VendorInspectorDate, cursor.getString(16));
+
                     cv.put(KEY_FeedbackPerson, cursor.getString(17));
                     cv.put(KEY_FeedbackRecommendations, cursor.getString(18));
                     cv.put(KEY_FeedbackDate, cursor.getString(19));
                     cv.put(KEY_InspectionNumber, cursor.getString(20));
-                     /*
-                    cv.put(KEY_OrderDetails, cursor.getString(21));
-                    cv.put(KEY_CheckFailedReasons, cursor.getString(22));
-                    cv.put(KEY_OrderComments, cursor.getString(23));
-                    cv.put(KEY_OrderItemComments, cursor.getString(24));
-                    */
+
+//                    cv.put(KEY_OrderDetails, cursor.getString(21));
+//                    cv.put(KEY_CheckFailedReasons, cursor.getString(22));
+//                    cv.put(KEY_OrderComments, cursor.getString(23));
+//                    cv.put(KEY_OrderItemComments, cursor.getString(24));
+
                     //插入驗貨人員修改的資料
                     if (edit_cv != null)
                         cv.putAll(edit_cv);
@@ -757,14 +759,21 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        // return user
+        */
     }
 
     public void saveOrderDetailsEdit(String PONumber, ArrayList<ContentValues> edit_cv) {
-
+        if (edit_cv != null && edit_cv.size() > 0) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            for (int i = 0; i < edit_cv.size(); i++) {
+                //插入驗貨人員修改的資料
+                db.update(TABLE_OrderDetailsEdit, edit_cv.get(i), KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_LineNumber + " = '" + edit_cv.get(i).getAsString(KEY_LineNumber) + "'", null);
+            }
+            Log.e("OrdersEdit", "OrderDetails儲存成功");
+        }
+/*
         ContentValues cv;
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
         if (cursor.getCount() > 0) {
             cursor = db.rawQuery("SELECT " + KEY_PONumber + "," + KEY_POVersion + "," + KEY_LineNumber + "," + KEY_Item + "," +
@@ -785,20 +794,20 @@ public class OrderDatabase extends SQLiteOpenHelper {
                     cv.put(KEY_Qty, cursor.getString(6));
                     cv.put(KEY_SampleNumber, cursor.getString(7));
                     cv.put(KEY_Uom, cursor.getString(8));
-                /*
-                cv.put(KEY_Size, cursor.getString(9));
-                cv.put(KEY_Functions, cursor.getString(10));
-                cv.put(KEY_Surface, cursor.getString(11));
-                cv.put(KEY_Package, cursor.getString(12));
-                cv.put(KEY_CheckPass, cursor.getString(13));
-                cv.put(KEY_Special, cursor.getString(14));
-                cv.put(KEY_Rework, cursor.getString(15));
-                cv.put(KEY_Reject, cursor.getString(16));
-                cv.put(KEY_MainMarK, cursor.getString(17));
-                cv.put(KEY_SideMarK, cursor.getString(18));
-                cv.put(KEY_ReCheckDate, cursor.getString(19));
-                cv.put(KEY_Remarks, cursor.getString(20));
-*/
+
+//                cv.put(KEY_Size, cursor.getString(9));
+//                cv.put(KEY_Functions, cursor.getString(10));
+//                cv.put(KEY_Surface, cursor.getString(11));
+//                cv.put(KEY_Package, cursor.getString(12));
+//                cv.put(KEY_CheckPass, cursor.getString(13));
+//                cv.put(KEY_Special, cursor.getString(14));
+//                cv.put(KEY_Rework, cursor.getString(15));
+//                cv.put(KEY_Reject, cursor.getString(16));
+//                cv.put(KEY_MainMarK, cursor.getString(17));
+//                cv.put(KEY_SideMarK, cursor.getString(18));
+//                cv.put(KEY_ReCheckDate, cursor.getString(19));
+//                cv.put(KEY_Remarks, cursor.getString(20));
+
                     //插入驗貨人員修改的資料
                     if (edit_cv != null && edit_cv.size() > 0)
                         cv.putAll(edit_cv.get(i));
@@ -832,20 +841,20 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 cv.put(KEY_Qty, cursor.getString(6));
                 cv.put(KEY_SampleNumber, cursor.getString(7));
                 cv.put(KEY_Uom, cursor.getString(8));
-                /*
-                cv.put(KEY_Size, cursor.getString(9));
-                cv.put(KEY_Functions, cursor.getString(10));
-                cv.put(KEY_Surface, cursor.getString(11));
-                cv.put(KEY_Package, cursor.getString(12));
-                cv.put(KEY_CheckPass, cursor.getString(13));
-                cv.put(KEY_Special, cursor.getString(14));
-                cv.put(KEY_Rework, cursor.getString(15));
-                cv.put(KEY_Reject, cursor.getString(16));
-                cv.put(KEY_MainMarK, cursor.getString(17));
-                cv.put(KEY_SideMarK, cursor.getString(18));
-                cv.put(KEY_ReCheckDate, cursor.getString(19));
-                cv.put(KEY_Remarks, cursor.getString(20));
-                */
+
+//                cv.put(KEY_Size, cursor.getString(9));
+//                cv.put(KEY_Functions, cursor.getString(10));
+//                cv.put(KEY_Surface, cursor.getString(11));
+//                cv.put(KEY_Package, cursor.getString(12));
+//                cv.put(KEY_CheckPass, cursor.getString(13));
+//                cv.put(KEY_Special, cursor.getString(14));
+//                cv.put(KEY_Rework, cursor.getString(15));
+//                cv.put(KEY_Reject, cursor.getString(16));
+//                cv.put(KEY_MainMarK, cursor.getString(17));
+//                cv.put(KEY_SideMarK, cursor.getString(18));
+//                cv.put(KEY_ReCheckDate, cursor.getString(19));
+//                cv.put(KEY_Remarks, cursor.getString(20));
+
                 //插入驗貨人員修改的資料
                 if (edit_cv != null && edit_cv.size() > 0)
                     cv.putAll(edit_cv.get(i));
@@ -855,76 +864,19 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+        */
     }
 
-    public void saveCheckFailedReasonsEdit(String PONumber) {
-        ContentValues cv;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-        if (cursor.getCount() > 0) {
-
-        } else {
-            /*
-            cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasons + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-            //" AND " + KEY_Comment + " IS NOT NULL";
-            while (cursor.moveToNext()) {
-                cv = new ContentValues();
-                cv.put(KEY_PONumber, cursor.getString(1));
-                cv.put(KEY_POVersion, cursor.getString(2));
-                cv.put(KEY_Item, cursor.getString(3));
-                cv.put(KEY_ReasonCode, cursor.getString(4));
-                cv.put(KEY_ReasonDescr, cursor.getString(5));
-                db.insert(TABLE_CheckFailedReasonsEdit, null, cv);
+    public void saveCheckFailedReasonsEdit(ArrayList<ContentValues> edit_cv) {
+        if (edit_cv != null && edit_cv.size() > 0) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            db.delete(TABLE_CheckFailedReasonsEdit, KEY_PONumber + " = '" + edit_cv.get(0).getAsString(KEY_PONumber) + "'", null);
+            for (int i = 0; i < edit_cv.size(); i++) {
+                //插入驗貨人員修改的資料
+                db.insert(TABLE_CheckFailedReasonsEdit, null, edit_cv.get(i));
             }
-            */
+            Log.e("CheckFailedReasonsEdit", "CheckFailedReasonsEdit儲存成功");
         }
-        cursor.close();
-        db.close();
-    }
-
-    public void saveOrderCommentsEdit(String PONumber) {
-        ContentValues cv;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderCommentsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-        if (cursor.getCount() > 0) {
-
-        } else {
-            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-            //" AND " + KEY_Comment + " IS NOT NULL";
-            while (cursor.moveToNext()) {
-                cv = new ContentValues();
-                cv.put(KEY_PONumber, cursor.getString(1));
-                cv.put(KEY_POVersion, cursor.getString(2));
-                cv.put(KEY_LineNumber, cursor.getString(3));
-                cv.put(KEY_Comment, cursor.getString(4));
-                db.insert(TABLE_OrderCommentsEdit, null, cv);
-            }
-        }
-        cursor.close();
-        db.close();
-    }
-
-    public void saveOrderItemCommentsEdit(String PONumber) {
-        ContentValues cv;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemCommentsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-        if (cursor.getCount() > 0) {
-
-        } else {
-            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderItemComments + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-            //" AND " + KEY_Comment + " IS NOT NULL";
-            while (cursor.moveToNext()) {
-                cv = new ContentValues();
-                cv.put(KEY_PONumber, cursor.getString(1));
-                cv.put(KEY_POVersion, cursor.getString(2));
-                cv.put(KEY_LineNumber, cursor.getString(3));
-                cv.put(KEY_ItemNo, cursor.getString(4));
-                cv.put(KEY_Comment, cursor.getString(5));
-                db.insert(TABLE_OrderItemCommentsEdit, null, cv);
-            }
-        }
-        cursor.close();
-        db.close();
     }
 
     public int countOrders() {
@@ -934,7 +886,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -945,7 +897,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -956,7 +908,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -967,7 +919,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -978,7 +930,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -989,7 +941,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -1000,7 +952,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -1011,7 +963,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -1022,7 +974,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 
@@ -1033,7 +985,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         db.close();
-        // return user
+
         return count;
     }
 

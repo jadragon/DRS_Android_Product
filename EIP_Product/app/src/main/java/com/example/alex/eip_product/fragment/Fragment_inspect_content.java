@@ -37,28 +37,42 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
     private OrderDatabase db;
     private ArrayList<ContentValues> list;
     private GlobalVariable gv;
+    private String VendorName;
+
+    public static Fragment_inspect_content newInstance(int index) {
+        Fragment_inspect_content f = new Fragment_inspect_content();
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+        return f;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_inspect_content, container, false);
         gv = (GlobalVariable) getContext().getApplicationContext();
+        VendorName = getArguments().getString(KEY_VendorName);
         db = new OrderDatabase(getContext());
-        list = db.getOrdersByDate(gv.getCurrent_date());
-        initTextView();
+        initView();
         return v;
     }
 
-    private void initTextView() {
-        //標題
+    private void initView() {
         title = v.findViewById(R.id.inspect_content_txt_title);
-
-        title.setText(list.get(0).get(KEY_VendorName) + "驗貨內容");
-        //廠商名稱
         company_name = v.findViewById(R.id.company_name);
-        company_name.setText(list.get(0).getAsString(KEY_VendorName));
         tableLayout = v.findViewById(R.id.inspect_content_tableLayout);
-        View view;
+    }
+
+    private void initData() {
+        list = db.getOrdersByDateAndVendorName(gv.getCurrent_date(), VendorName);
+        //標題
+        title.setText(VendorName);
+        //廠商名稱
+        company_name.setText(VendorName);
+        tableLayout.removeAllViews();
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_insepect_content_tablelayout_header, null);
+        tableLayout.addView(view);
         for (ContentValues cv : list) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_inspect_content, null);
             ((TextView) view.findViewWithTag("PONumber")).setText(cv.getAsString(KEY_PONumber));
@@ -78,16 +92,20 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 view.findViewWithTag("overview").setOnClickListener(this);
                 view.findViewWithTag("overview").setTag(cv.getAsString(KEY_PONumber));
             }
-
             tableLayout.addView(view);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            title.setText(list.get(0).get(KEY_VendorName) + "驗貨內容");
         }
     }
 
