@@ -1,7 +1,6 @@
 package com.example.alex.eip_product;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +27,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alex.eip_product.pojo.FailItemPojo;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import Utils.CommonUtil;
 import db.OrderDatabase;
 
 import static db.OrderDatabase.KEY_CheckPass;
@@ -71,10 +71,8 @@ import static db.OrderDatabase.KEY_VendorInspector;
 import static db.OrderDatabase.KEY_VendorInspectorDate;
 import static db.OrderDatabase.KEY_VendorName;
 import static db.OrderDatabase.KEY_isOrderEdit;
-import static db.OrderDatabase.TYPE_EDIT;
-import static db.OrderDatabase.TYPE_NORMAL;
 
-public class InsepectOrderActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
+public class InsepectOrderActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
     private final static int SELECT_FAIL_REASON = 110;
     private LinearLayout courseTable, failed_item_layout;
     private Button saveButton, sendButton, editButton, cancelButton;
@@ -88,10 +86,10 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
     private OrderDatabase db;
     private String key_ponumber;
     private ContentValues Orderslist;
-    private ArrayList<ContentValues> OrderDetailslist, CheckFailedReasonslist;
+    private ArrayList<ContentValues> OrderDetailslist;
     private GlobalVariable gv;
     private Bitmap bitmap;
-    private Map<String, FailItemPojo> checkreason = new HashMap<>();
+    private Map<String, FailItemPojo> CheckFailedReasonslist = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +111,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
         VendorInspector = findViewById(R.id.VendorInspector);
         title = findViewById(R.id.title);
         failed_item_layout = findViewById(R.id.failed_item_layout);
-        //
-        View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
-        view.setTag(0);
-        failed_item_layout.addView(view);
-        //
         SalesMan = findViewById(R.id.SalesMan);
         Shipping = findViewById(R.id.Shipping);
         VendorName = findViewById(R.id.VendorName);
@@ -150,7 +143,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
     private void initData() {
         Orderslist = db.getOrdersByPONumber(key_ponumber);
         OrderDetailslist = db.getOrderDetailsByPONumber(key_ponumber);
-        CheckFailedReasonslist = db.getCheckFailedReasonsByPONumber(key_ponumber);
+        CheckFailedReasonslist = db.getCheckFailedReasonsMapByPONumber(key_ponumber);
         /**
          * Orderslist
          */
@@ -187,6 +180,17 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
         /**
          * CheckFailedReasonslist
          */
+
+        if (CheckFailedReasonslist.size() > 0) {
+            new AddColumTask(0).execute("CheckFailedReasons");
+        }
+        /*
+        else {
+            View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
+            view.setTag(0);
+            failed_item_layout.addView(view);
+        }
+*/
         Log.e("CheckFailedReasonslist", CheckFailedReasonslist.size() + "\n" + CheckFailedReasonslist);
     }
 
@@ -249,9 +253,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
          *checkreason
          */
         arrayList = new ArrayList<>();
-        for (String key : checkreason.keySet()) {
-            ArrayList<String> array1 = checkreason.get(key).ReasonCode;
-            ArrayList<String> array2 = checkreason.get(key).ReasonDescr;
+        for (String key : CheckFailedReasonslist.keySet()) {
+            ArrayList<String> array1 = CheckFailedReasonslist.get(key).ReasonCode;
+            ArrayList<String> array2 = CheckFailedReasonslist.get(key).ReasonDescr;
             for (int i = 0; i < array1.size(); i++) {
                 cv = new ContentValues();
                 cv.put(KEY_PONumber, Orderslist.getAsString(KEY_PONumber));
@@ -335,10 +339,12 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
              */
             case R.id.description:
                 Intent intent = new Intent(InsepectOrderActivity.this, SelectFailedActivity.class);
-                int index = (int) view.getTag();
-                View failView = ItemList.get(index);
+                int position = (int) view.getTag();
+                View failView = ItemList.get(position);
+                TextView textView = ((View) view.getParent()).findViewById(R.id.line);
+                int index = Integer.parseInt(textView.getText().toString())-1;
                 intent.putExtra("index", index);
-                TextView textView = failView.findViewById(R.id.row2);
+                textView = failView.findViewById(R.id.row2);
                 intent.putExtra("Item", textView.getText().toString());
                 textView = failView.findViewById(R.id.row7);
                 long number = textView.getText().toString().equals("") ? 0 : Long.parseLong(textView.getText().toString());
@@ -420,82 +426,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
         }
     }
 
-    //監聽品質不良品數Start
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        checkFailItems();
-    }
-
-    private void checkFailItems() {
-        for (View view : ItemList) {
-            int index = (int) view.getTag();
-            EditText editText = view.findViewById(R.id.row7);
-            long number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
-            if (number > 0) {
-                if (index == 0) {
-                    new AddColumTask(index).execute("edit");
-                } else {
-                    if (failed_item_layout.findViewWithTag(index) == null)
-                        new AddColumTask(index).execute("item");
-                }
-            } else {
-                editText = view.findViewById(R.id.row8);
-                number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
-                if (number > 0) {
-
-                    if (index == 0) {
-                        new AddColumTask(index).execute("edit");
-                    } else {
-                        if (failed_item_layout.findViewWithTag(index) == null)
-                            new AddColumTask(index).execute("item");
-                    }
-                } else {
-                    editText = view.findViewById(R.id.row9);
-                    number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
-                    if (number > 0) {
-
-                        if (index == 0) {
-                            new AddColumTask(index).execute("edit");
-                        } else {
-                            if (failed_item_layout.findViewWithTag(index) == null)
-                                new AddColumTask(index).execute("item");
-                        }
-                    } else {
-                        editText = view.findViewById(R.id.row10);
-                        number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
-                        if (number > 0) {
-                            if (index == 0) {
-                                new AddColumTask(index).execute("edit");
-                            } else {
-                                if (failed_item_layout.findViewWithTag(index) == null)
-                                    new AddColumTask(index).execute("item");
-                            }
-                        } else {
-                            if (index == 0) {
-                                new AddColumTask(-1).execute("edit");
-                            } else {
-                                if (failed_item_layout.findViewWithTag(index) != null)
-                                    failed_item_layout.removeView(failed_item_layout.findViewWithTag(index));
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-    }
-
-    //監聽品質不良品數End
 
     public void setAnimation(View view) {
         //闪烁
@@ -507,95 +437,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
         alphaAnimation1.start();
     }
 
-    //save as picture
-    public void savePicture(View v) {
-        //儲存在SD卡
-        /*
-        try {
-            File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "test.png");
-            newFile.getParentFile().mkdirs();
-            try {
-                FileOutputStream out = new FileOutputStream(newFile);
-                Bitmap vBitmap = convertViewToBitmap(v);
-                vBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
-        }
-
-        //儲存在資料庫
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Bitmap vBitmap = CommonUtil.convertViewToBitmap(v);
-        vBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] bitmapByte = baos.toByteArray();
-        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(InsepectOrderActivity.this);
-        db.addImage(bitmapByte);
-        db.close();
-        */
-    }
-
-    public void saveOrderData() {
-        //儲存在SD卡
-        /*
-        try {
-            File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "test.png");
-            newFile.getParentFile().mkdirs();
-            try {
-                FileOutputStream out = new FileOutputStream(newFile);
-                Bitmap vBitmap = convertViewToBitmap(v);
-                vBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
-        }
-
-        //儲存在資料庫
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Bitmap vBitmap = CommonUtil.convertViewToBitmap(v);
-        vBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] bitmapByte = baos.toByteArray();
-        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(InsepectOrderActivity.this);
-        db.addImage(bitmapByte);
-        db.close();
-        */
-    }
-
-    private void toastCheckWIFI() {
-        if (!CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("請確認網路是否為連線狀態?");
-            builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (!CommonUtil.checkWIFI(InsepectOrderActivity.this)) {
-                        toastCheckWIFI();
-                    } else {
-
-                    }
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-
-                }
-            });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
-        } else {
-
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -604,8 +445,8 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
             if (resultCode == 110) {
                 ArrayList<String> fail_numList = data.getStringArrayListExtra("ReasonCode");
                 ArrayList<String> fail_description = data.getStringArrayListExtra("ReasonDescr");
-                checkreason.put(data.getStringExtra("Item"), new FailItemPojo(data.getStringExtra("Item"), fail_numList, fail_description));
-                ((TextView) failed_item_layout.findViewWithTag(data.getIntExtra("index", 0)).findViewById(R.id.description)).setText(fail_numList + "\n" + fail_description);
+                CheckFailedReasonslist.put(data.getStringExtra("Item"), new FailItemPojo(data.getStringExtra("Item"), fail_numList, fail_description));
+                ((TextView) failed_item_layout.getChildAt(data.getIntExtra("index", 0)).findViewById(R.id.description)).setText(fail_numList + "\n" + fail_description);
             }
         }
     }
@@ -623,23 +464,70 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
         super.onDestroy();
     }
 
-    private class FailItemPojo {
-        private String Item;
-        private ArrayList<String> ReasonCode;
-        private ArrayList<String> ReasonDescr;
-
-        public FailItemPojo(String item, ArrayList<String> reasonCode, ArrayList<String> reasonDescr) {
-            Item = item;
-            ReasonCode = reasonCode;
-            ReasonDescr = reasonDescr;
+    private void checkFailItems(View layout, int position) {
+        EditText editText = layout.findViewById(R.id.row7);
+        String Item = ((TextView) layout.findViewById(R.id.row2)).getText().toString();
+        long number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
+        if (number > 0) {
+            if (failed_item_layout.findViewWithTag(Item) == null) {
+                new AddColumTask(failed_item_layout.getChildCount(), position, Item).execute("item");
+            }
+        } else {
+            editText = layout.findViewById(R.id.row8);
+            number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
+            if (number > 0) {
+                if (failed_item_layout.findViewWithTag(Item) == null) {
+                    new AddColumTask(failed_item_layout.getChildCount(), position, Item).execute("item");
+                }
+            } else {
+                editText = layout.findViewById(R.id.row9);
+                number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
+                if (number > 0) {
+                    if (failed_item_layout.findViewWithTag(Item) == null) {
+                        new AddColumTask(failed_item_layout.getChildCount(), position, Item).execute("item");
+                    }
+                } else {
+                    editText = layout.findViewById(R.id.row10);
+                    number = editText.getText().toString().equals("") ? 0 : Long.parseLong(editText.getText().toString());
+                    if (number > 0) {
+                        if (failed_item_layout.findViewWithTag(Item) == null) {
+                            new AddColumTask(failed_item_layout.getChildCount(), position, Item).execute("item");
+                        }
+                    } else {
+                        if (failed_item_layout.findViewWithTag(Item) != null) {
+                            failed_item_layout.removeView(failed_item_layout.findViewWithTag(Item));
+                            ArrayList<String> items = new ArrayList<>();
+                            for (int i = 0; i < failed_item_layout.getChildCount(); i++) {
+                                items.add(((TextView) failed_item_layout.getChildAt(i).findViewById(R.id.number)).getText().toString());
+                            }
+                            for (int i = 0; i < items.size(); i++) {
+                                new AddColumTask(i, position, items.get(i)).execute("edit");
+                            }
+                            CheckFailedReasonslist.remove(Item);
+                        }
+                    }
+                }
+            }
         }
     }
 
+
     private class AddColumTask extends AsyncTask<String, Integer, String> {
-        int index;
+        private int index, position;
+        private String tag;
 
         public AddColumTask(int index) {
             this.index = index;
+        }
+
+        public AddColumTask(String tag) {
+            this.tag = tag;
+        }
+
+        public AddColumTask(int index, int position, String tag) {
+            this.index = index;
+            this.position = position;
+            this.tag = tag;
         }
 
         @Override
@@ -683,19 +571,87 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                 EditText editText = view.findViewById(R.id.row7);
                 editText.setText(OrderDetailslist.get(index).getAsString(KEY_Size));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
-                editText.addTextChangedListener(InsepectOrderActivity.this);
+                final View finalView = view;
+                editText.addTextChangedListener(new TextWatcher() {
+                    View layout = finalView;
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        checkFailItems(layout, index);
+                    }
+                });
                 editText = view.findViewById(R.id.row8);
                 editText.setText(OrderDetailslist.get(index).getAsString(KEY_Functions));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
-                editText.addTextChangedListener(InsepectOrderActivity.this);
+                editText.addTextChangedListener(new TextWatcher() {
+                    View layout = finalView;
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        checkFailItems(layout, index);
+                    }
+                });
                 editText = view.findViewById(R.id.row9);
                 editText.setText(OrderDetailslist.get(index).getAsString(KEY_Surface));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
-                editText.addTextChangedListener(InsepectOrderActivity.this);
+                editText.addTextChangedListener(new TextWatcher() {
+                    View layout = finalView;
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        checkFailItems(layout, index);
+                    }
+                });
                 editText = view.findViewById(R.id.row10);
                 editText.setText(OrderDetailslist.get(index).getAsString(KEY_Package));
                 editText.setOnFocusChangeListener(InsepectOrderActivity.this);
-                editText.addTextChangedListener(InsepectOrderActivity.this);
+                editText.addTextChangedListener(new TextWatcher() {
+                    View layout = finalView;
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        checkFailItems(layout, index);
+                    }
+                });
 
                 CheckBox checkBox = view.findViewById(R.id.row11);
                 checkBox.setChecked(OrderDetailslist.get(index).getAsBoolean(KEY_MainMarK));
@@ -716,41 +672,54 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                 textView.setText(OrderDetailslist.get(index).getAsString(KEY_Remarks));
 
             } else if (result.equals("CheckFailedReasons")) {
-                View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
-                view.setTag(index);
-                TextView textView = view.findViewById(R.id.line);
-                textView.setText(CheckFailedReasonslist.get(index).getAsString(KEY_LineNumber));
-                textView = view.findViewById(R.id.number);
-                textView.setText(CheckFailedReasonslist.get(index).getAsString(KEY_Item));
-                textView.setOnClickListener(InsepectOrderActivity.this);
-                textView = view.findViewById(R.id.description);
-                textView.setOnClickListener(InsepectOrderActivity.this);
-                textView.setTag(index);
-                failed_item_layout.addView(view);
-            } else if (result.equals("item")) {
-                View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
-                view.setTag(index);
-                TextView textView = view.findViewById(R.id.line);
-                textView.setText(OrderDetailslist.get(index).getAsString(KEY_LineNumber));
-                textView = view.findViewById(R.id.number);
-                textView.setText(OrderDetailslist.get(index).getAsString(KEY_Item));
-                textView.setOnClickListener(InsepectOrderActivity.this);
-                textView = view.findViewById(R.id.description);
-                textView.setOnClickListener(InsepectOrderActivity.this);
-                textView.setTag(index);
-                failed_item_layout.addView(view);
-            } else if (result.equals("edit")) {
-                View view = failed_item_layout.findViewWithTag(index);
-                if (view != null) {
+                View view;
+                int i = 0;
+                for (String key : CheckFailedReasonslist.keySet()) {
+                    view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
+                    FailItemPojo failItemPojo = CheckFailedReasonslist.get(key);
+                    view.setTag(key);
                     TextView textView = view.findViewById(R.id.line);
-                    textView.setText(OrderDetailslist.get(index).getAsString(KEY_LineNumber));
+                    textView.setText((i + 1) + "");
                     textView = view.findViewById(R.id.number);
-                    textView.setText(OrderDetailslist.get(index).getAsString(KEY_Item));
+                    textView.setText(key);
                     textView.setOnClickListener(InsepectOrderActivity.this);
                     textView = view.findViewById(R.id.description);
                     textView.setOnClickListener(InsepectOrderActivity.this);
-                    textView.setTag(index);
-                } else {
+                    textView.setText(failItemPojo.ReasonCode + "\n" + failItemPojo.ReasonDescr);
+                    textView.setTag(i);
+                    failed_item_layout.addView(view);
+                    i++;
+                }
+                /*
+
+
+                 */
+            } else if (result.equals("item")) {
+                View view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_fail, null, false);
+                view.setTag(tag);
+                TextView textView = view.findViewById(R.id.line);
+                textView.setText((index + 1) + "");
+                textView = view.findViewById(R.id.number);
+                textView.setText(OrderDetailslist.get(position).getAsString(KEY_Item));
+                textView.setOnClickListener(InsepectOrderActivity.this);
+                textView = view.findViewById(R.id.description);
+                textView.setOnClickListener(InsepectOrderActivity.this);
+                textView.setTag(position);
+                failed_item_layout.addView(view);
+            } else if (result.equals("edit")) {
+                View view = failed_item_layout.getChildAt(index);
+                if (view != null) {
+                    TextView textView = view.findViewById(R.id.line);
+                    textView.setText((index + 1) + "");
+                    textView = view.findViewById(R.id.number);
+                    textView.setText(tag);
+                    textView.setOnClickListener(InsepectOrderActivity.this);
+                    textView = view.findViewById(R.id.description);
+                    textView.setOnClickListener(InsepectOrderActivity.this);
+                    textView.setTag(position);
+
+                } /*
+                else {
                     view = failed_item_layout.findViewWithTag(0);
                     TextView textView = view.findViewById(R.id.line);
                     textView.setText("");
@@ -761,6 +730,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements TextWatc
                     textView.setText("");
                     textView.setOnClickListener(null);
                 }
+                */
             }
         }
 

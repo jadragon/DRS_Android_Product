@@ -593,7 +593,6 @@
                                 android:textSize="@dimen/table_text_size" />
 
                             <LinearLayout
-                                android:id="@+id/failed_item_layout"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="14"
@@ -629,7 +628,6 @@
                                         android:textSize="@dimen/table_text_size" />
 
                                     <TextView
-                                        android:id="@+id/faild_txt_description"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="@dimen/footer5_weight"
@@ -639,6 +637,13 @@
                                         android:text="@string/table_footer6"
                                         android:textSize="@dimen/table_text_size" />
                                 </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/failed_item_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:divider="@drawable/divider_black_1dp"
+                                    android:orientation="vertical"
+                                    android:showDividers="middle"/>
                             </LinearLayout>
 
 

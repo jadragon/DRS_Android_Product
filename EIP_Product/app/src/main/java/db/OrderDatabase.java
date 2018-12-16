@@ -11,12 +11,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
+import com.example.alex.eip_product.pojo.FailItemPojo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDatabase extends SQLiteOpenHelper {
 
@@ -604,8 +606,32 @@ public class OrderDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-
         return datas;
+    }
+
+    public Map<String, FailItemPojo> getCheckFailedReasonsMapByPONumber(String PONumber) {
+        Map<String, FailItemPojo> map = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = db.rawQuery("SELECT " + KEY_Item + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + "GROUP BY " + KEY_Item, null);
+        Cursor cursor2 = null;
+        ArrayList<String> ReasonCode, ReasonDescr;
+        while (cursor1.moveToNext()) {
+            String item = cursor1.getString(0);
+            ReasonCode = new ArrayList<>();
+            ReasonDescr = new ArrayList<>();
+            cursor2 = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
+            while (cursor2.moveToNext()) {
+                ReasonCode.add(cursor2.getString(4));
+                ReasonDescr.add(cursor2.getString(5));
+            }
+            map.put(item, new FailItemPojo(item, ReasonCode, ReasonDescr));
+        }
+
+        cursor1.close();
+        if (cursor2 != null)
+            cursor2.close();
+        db.close();
+        return map;
     }
 
     public ArrayList<ContentValues> getOrderCommentsByPONumber(String PONumber) {

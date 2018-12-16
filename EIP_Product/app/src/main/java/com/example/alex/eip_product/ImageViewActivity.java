@@ -148,29 +148,6 @@ public class ImageViewActivity extends AppCompatActivity {
 
     }
 
-    private void toastCheckWIFI() {
-        if (!CommonUtil.checkWIFI(ImageViewActivity.this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("請確認網路是否為連線狀態?");
-            builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (!CommonUtil.checkWIFI(ImageViewActivity.this)) {
-                        toastCheckWIFI();
-                    }
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -263,4 +240,93 @@ public class ImageViewActivity extends AppCompatActivity {
 
     }
 
+    //save as picture
+    public void savePicture(View v) {
+        //儲存在SD卡
+        /*
+        try {
+            File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "test.png");
+            newFile.getParentFile().mkdirs();
+            try {
+                FileOutputStream out = new FileOutputStream(newFile);
+                Bitmap vBitmap = convertViewToBitmap(v);
+                vBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception x) {
+            x.printStackTrace();
+        }
+
+        //儲存在資料庫
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap vBitmap = CommonUtil.convertViewToBitmap(v);
+        vBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bitmapByte = baos.toByteArray();
+        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(InsepectOrderActivity.this);
+        db.addImage(bitmapByte);
+        db.close();
+        */
+    }
+
+    public void saveOrderData() {
+        //儲存在SD卡
+        /*
+        try {
+            File newFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "test.png");
+            newFile.getParentFile().mkdirs();
+            try {
+                FileOutputStream out = new FileOutputStream(newFile);
+                Bitmap vBitmap = convertViewToBitmap(v);
+                vBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception x) {
+            x.printStackTrace();
+        }
+
+        //儲存在資料庫
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap vBitmap = CommonUtil.convertViewToBitmap(v);
+        vBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bitmapByte = baos.toByteArray();
+        SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(InsepectOrderActivity.this);
+        db.addImage(bitmapByte);
+        db.close();
+        */
+    }
+
+    private void toastCheckWIFI() {
+        if (!CommonUtil.checkWIFI(ImageViewActivity.this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("請確認網路是否為連線狀態?");
+            builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (!CommonUtil.checkWIFI(ImageViewActivity.this)) {
+                        toastCheckWIFI();
+                    } else {
+
+                    }
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        } else {
+
+        }
+    }
 }
