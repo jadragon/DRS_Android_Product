@@ -1,16 +1,23 @@
 package tw.com.lccnet.app.designateddriving;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CallNowApi;
+import tw.com.lccnet.app.designateddriving.RecyclerAdapter.MessageRecyclerAdapter;
 
 public class CallNow1_DriverInfoActivity extends ToolbarActivity {
     private Button next;
@@ -18,6 +25,7 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity {
     private String pono;
     private JSONObject json;
     private TextView ordernum, uname, vaddress, eaddress, distance, opay;
+    private MessageRecyclerAdapter messageRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +35,9 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity {
         pono = getIntent().getStringExtra("pono");
         initToolbar("司機資訊", false);
         initView();
-        initThread();
         initButton();
+        //  initThread();
+
     }
 
     private void initView() {
@@ -38,6 +47,9 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity {
         eaddress = findViewById(R.id.eaddress);
         distance = findViewById(R.id.distance);
         opay = findViewById(R.id.opay);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        messageRecyclerAdapter = new MessageRecyclerAdapter(this);
+        recyclerView.setAdapter(messageRecyclerAdapter);
     }
 
     public void initData(JSONObject json) {
@@ -45,15 +57,35 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity {
             JSONObject order = json.getJSONObject("Data").getJSONObject("order");
             ordernum.setText(order.getString("ordernum"));
             uname.setText(order.getString("uname"));
+//            order.getString("img")
+//            order.getString("mp")
+//            order.getString("score")
             vaddress.setText(order.getString("vaddress"));
             eaddress.setText(order.getString("eaddress"));
             distance.setText(order.getString("distance"));
             opay.setText(order.getString("opay"));
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Map<String, String>> getMessage(JSONObject json) {
+        ArrayList<Map<String, String>> arrayList = new ArrayList<>();
+        try {
+            JSONArray msg = json.getJSONObject("Data").getJSONArray("msg");
+            Map<String, String> map;
+            for (int i = 0; i < msg.length(); i++) {
+                map = new HashMap<>();
+                json = msg.getJSONObject(i);
+                map.put("type", json.getString("type"));
+                map.put("msg", json.getString("msg"));
+                map.put("cdate", json.getString("cdate"));
+                arrayList.add(map);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return arrayList;
     }
 
     private void initThread() {
