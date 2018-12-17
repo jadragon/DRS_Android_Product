@@ -22,8 +22,8 @@ import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_UNAME;
@@ -117,9 +117,7 @@ public class ContactMeActivity extends ToolbarActivity implements View.OnClickLi
 
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
-                        if (jsonObject != null) {
-                            Toast.makeText(ContactMeActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(ContactMeActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;

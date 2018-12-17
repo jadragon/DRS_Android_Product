@@ -13,8 +13,8 @@ import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
 public class Regist2Activity extends ToolbarActivity implements View.OnClickListener {
@@ -83,7 +83,7 @@ public class Regist2Activity extends ToolbarActivity implements View.OnClickList
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (jsonObject != null && AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                 finish();
                             }
                             Toast.makeText(Regist2Activity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();

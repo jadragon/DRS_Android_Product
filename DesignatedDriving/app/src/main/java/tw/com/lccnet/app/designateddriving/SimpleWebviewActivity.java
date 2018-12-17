@@ -10,8 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class SimpleWebviewActivity extends ToolbarActivity {
     private WebView webview;

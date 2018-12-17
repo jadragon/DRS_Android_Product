@@ -10,14 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -47,14 +43,15 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
@@ -65,14 +62,19 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CallNowApi;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Component.SlideDialog;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
+import tw.com.lccnet.app.designateddriving.Utils.WidgetUtils;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
@@ -102,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dm = getResources().getDisplayMetrics();
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
-        initThread();
+        // initThread();
         checkPermission();
         initToolbar();
         initButton();
@@ -113,13 +115,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void initButton() {
         Button btn_long_trip = findViewById(R.id.btn_long_trip);
         btn_long_trip.setOnClickListener(this);
-        reShapeButton(btn_long_trip, R.color.orange1);
+        WidgetUtils.reShapeButton(this, btn_long_trip, R.color.orange1);
         Button btn_immediate = findViewById(R.id.btn_immediate);
         btn_immediate.setOnClickListener(this);
-        reShapeButton(btn_immediate, R.color.royal_blue);
+        WidgetUtils.reShapeButton(this, btn_immediate, R.color.royal_blue);
         Button btn_deliver = findViewById(R.id.btn_deliver);
         btn_deliver.setOnClickListener(this);
-        reShapeButton(btn_deliver, R.color.royal_blue_light);
+        WidgetUtils.reShapeButton(this, btn_deliver, R.color.royal_blue_light);
     }
 
     private void checkLocation() {
@@ -146,8 +148,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mLatitude = location.getLatitude();
                         mLongitude = location.getLongitude();
                         LatLng latlng = new LatLng(mLatitude, mLongitude);
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
-                        Toast.makeText(MapsActivity.this, mLatitude + "\n" + mLongitude, Toast.LENGTH_SHORT).show();
+                        // TODO: 2018/12/17 沒有GoogleServer會出現  CameraUpdateFactory is not initialized
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
                         //  LocationUtils.saveData(MapsActivity.this, location);
                     }
 
@@ -195,8 +197,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Dialog dialog;
     private TextView start, end, cost;
-    private Thread thread;
-    private boolean isSendAgain;
 
     @Override
     public void onClick(View v) {
@@ -204,7 +204,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.btn_long_trip:
                 break;
             case R.id.btn_immediate:
-                // TODO: Handle the error.
+                // TODO: 2018/12/17 執行續待優化
                 dialog = new SlideDialog(this);
                 dialog.setContentView(getLayoutInflater().inflate(R.layout.item_slide_dialog, null));
                 start = dialog.findViewById(R.id.start);
@@ -220,7 +220,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
                 dialog.show();
-                // TODO: Handle the error.
+                // TODO: 2018/12/17 執行續待優化
                 break;
             case R.id.btn_deliver:
                 startActivity(new Intent(this, OrdermealActivity.class));
@@ -230,45 +230,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     end.setError("請輸入目的地");
                     return;
                 }
-
-                // TODO: Handle the error.
+                // TODO: 2018/12/17 執行續待優化
                 final String endString = end.getText().toString();
-                if (thread != null && thread.isAlive()) {
-                    thread.interrupt();
-                } else {
-                    thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                JSONObject json = CallNowApi.match_start(gv.getToken(), toolbar_txt_title.getText().toString(), "", "", endString, "", "");
-                                if (AnalyzeUtil.checkSuccess(json)) {
-                                    try {
-                                        String pono = json.getJSONObject("Data").getString("pono");
-                                        // String pono = "km5rkbxZ68XRXQ/gYlOStg==";
-                                        Log.e("CallNow1", "訂單成立" + pono);
-                                        while (!thread.isInterrupted()) {
-                                            Thread.sleep(3000);
-                                            json = CallNowApi.match_driver(gv.getToken(), pono);
-                                            Message msg = Message.obtain();
-                                            msg.what = 1;
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("pono", pono);
-                                            bundle.putString("json", json.toString());
-                                            msg.setData(bundle);
-                                            UiThreadHandler.sendMessage(msg);
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        return CallNowApi.match_start(gv.getToken(), toolbar_txt_title.getText().toString(), "", "", endString, "", "");
+                    }
 
-                            } catch (InterruptedException e) {
-                                thread.interrupt();
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            try {
+                                final String pono = jsonObject.getJSONObject("Data").getString("pono");
+                                // String pono = "km5rkbxZ68XRXQ/gYlOStg==";
+                                Log.e("CallNow1", "訂單成立" + pono);
+                                scheduledFuture = scheduledThreadPool.scheduleAtFixedRate(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final JSONObject json = CallNowApi.match_driver(gv.getToken(), pono);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (AnalyzeUtil.checkSuccess(json)) {
+                                                    Intent intent = new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class);
+                                                    intent.putExtra("pono", pono);
+                                                    startActivity(intent);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }, 0, 5, TimeUnit.SECONDS);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
-                    });
-                    thread.start();
-                }
+
+                    }
+                });
                 dialog.dismiss();
                 dialog = new Dialog(this);
                 dialog.setContentView(R.layout.item_wait_dialog);
@@ -276,13 +275,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-                // TODO: Handle the error.
+                // TODO: 2018/12/17 執行續待優化
                 break;
             case R.id.cancel:
-                if (thread != null) {
-                    thread.interrupt();
+                if (scheduledFuture.isCancelled()) {
+                    scheduledFuture.cancel(true);
                 }
-                // TODO: Handle the error.
+                // TODO: 2018/12/17 執行續待優化
                 dialog.dismiss();
                 break;
             case R.id.toolbar_txt_title:
@@ -328,19 +327,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        try {
-                            cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            cost.setText("      ");
-                        }
-                    } else {
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    try {
+                        cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                         cost.setText("      ");
                     }
+                } else {
+                    cost.setText("      ");
+                    Toast.makeText(MapsActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
     }
 
@@ -447,12 +446,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e(LOG_TAG, "Google Places API connection suspended.");
         }
     */
-    private void reShapeButton(Button button, int color) {
-        GradientDrawable shape = new GradientDrawable();
-        shape.setCornerRadius(20);
-        shape.setColor(getResources().getColor(color));
-        button.setBackgroundDrawable(shape);
-    }
+
 
     private boolean ToastAgain = true;
 
@@ -574,6 +568,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(final GoogleMap map) {
         this.map = map;
+        MapsInitializer.initialize(MapsActivity.this);
+        map.setMyLocationEnabled(true);
+        if (map.isMyLocationEnabled()) {
+            Location location = map.getMyLocation();
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+            LatLng latlng = new LatLng(mLatitude, mLongitude);
+            CameraUpdate camera = CameraUpdateFactory.newLatLng(latlng);
+            map.animateCamera(camera);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
+        }
         //DO WHATEVER YOU WANT WITH GOOGLEMAP
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //  map.setTrafficEnabled(true);//交通
@@ -733,10 +738,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onDestroy() {
         db.close();
         LocationUtils.unregister();
-        mThread.quit();
-        if (thread != null) {
-            thread.interrupt();
-        }
+        if (scheduledFuture != null)
+            scheduledFuture.cancel(true);
+        scheduledThreadPool.shutdown();
         super.onDestroy();
     }
 
@@ -776,7 +780,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
                 Log.i("place", status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -789,7 +792,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 caculateCost();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
                 Log.i("place", status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -799,6 +801,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //=====================================================================================================================
+    public static ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
+    private ScheduledFuture scheduledFuture;
+    /*
     //宣告特約工人的經紀人
     public static Handler mThreadHandler;
     //宣告特約工人
@@ -808,10 +813,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker call_now_marker;
     private int sssss = 0;
 
-    private void initThread() {
-        mThread = new HandlerThread("MapsActivity");
-        //讓Worker待命，等待其工作 (開啟Thread)
-        mThread.start();
+    // TODO: 2018/12/17 執行續待優化
+    public void initThread() {
+        if (mThread == null) {
+            mThread = new HandlerThread("MapsActivity");
+            //讓Worker待命，等待其工作 (開啟Thread)
+            mThread.start();
+        }
+        if (mThreadHandler == null) {
+            mThreadHandler = new Handler(mThread.getLooper());
+        }
         //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
         UiThreadHandler = new Handler(getMainLooper()) {
             @Override
@@ -856,8 +867,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         };
-        mThreadHandler = new Handler(mThread.getLooper());
-    }
 
+    }
+*/
 
 }

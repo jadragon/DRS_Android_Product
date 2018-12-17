@@ -34,6 +34,7 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="right"
@@ -91,12 +92,12 @@
                         android:src="@drawable/star3_2" />
                 </LinearLayout>
 
-                <ImageView
+                <Button
                     android:id="@+id/mp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:src="@mipmap/phone_call" />
+                    android:background="@mipmap/phone_call" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,6 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="150dp"
+                    android:background="@color/gray2"
                     android:orientation="horizontal"
                     android:padding="20dp">
 
@@ -135,16 +137,13 @@
                         android:src="@drawable/menu_header1" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/royal_blue" />
-
                 <TextView
                     android:id="@+id/vaddress"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:background="@color/gray2"
                     android:gravity="center_vertical"
+                    android:padding="10dp"
                     android:text="起點 桃園縣"
                     android:textColor="@color/black"
                     android:textSize="18sp"
@@ -154,7 +153,9 @@
                     android:id="@+id/eaddress"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:background="@color/gray2"
                     android:gravity="center_vertical"
+                    android:padding="10dp"
                     android:text="終點 台北縣"
                     android:textColor="@color/black"
                     android:textSize="18sp"
@@ -164,7 +165,10 @@
                     android:id="@+id/opay"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/gray2"
                     android:gravity="center"
+                    android:padding="10dp"
                     android:text="總里程數10公里 總計400元"
                     android:textColor="@color/royal_blue"
                     android:textSize="18sp"
@@ -175,9 +179,9 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/background_inner_shawdow"
-                   android:layout_marginBottom="10dp"/>
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -185,7 +189,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/content"
+                        android:id="@+id/edit_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -196,6 +200,7 @@
                         android:textSize="15sp" />
 
                     <Button
+                        android:id="@+id/send"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="bottom"
@@ -207,12 +212,25 @@
         </FrameLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/next"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/red"
-        android:text="司機已到達"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:background="@color/defalut_gray">
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_green2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="等待司機中"
+            android:textColor="@color/royal_blue"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+
 </LinearLayout>

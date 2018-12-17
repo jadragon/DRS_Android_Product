@@ -67,7 +67,7 @@ public class CallNowApi implements APISetting {
     }
 
     /**
-     * 1.9.3	匹配司機(5秒)
+     * 1.9.4	等待司機-司機是否到達狀態、乘客是否放鳥狀態、司機資訊、留言備註 (10秒)
      */
     public static JSONObject wait_driverInfo(String token, String pono) {
         List<NameValuePair> params = new ArrayList<>();

@@ -99,11 +99,12 @@
         <activity android:name=".CityListActivity" />
         <activity android:name=".OrderListActivity" />
         <activity android:name=".PlaceAutocompleteActivity" />
-        <activity android:name=".CallNow1_DriverInfoActivity" >
+        <activity android:name=".CallNow1_DriverInfoActivity">
 
         </activity>
         <activity android:name=".CallNow3_DrivingActivity" />
         <activity android:name=".CallNow5_CountActivity">
+
         </activity>
         <activity android:name=".CallNow6_EvaluationActivity">
 

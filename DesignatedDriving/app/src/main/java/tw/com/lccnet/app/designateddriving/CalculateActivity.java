@@ -17,8 +17,8 @@ import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class CalculateActivity extends ToolbarActivity {
     private Spinner sp_time, sp_type;
@@ -72,23 +72,21 @@ public class CalculateActivity extends ToolbarActivity {
 
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
-                        if (jsonObject != null) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                try {
-                                    pay.setText(jsonObject.getJSONObject("Data").getString("pay"));
-                                } catch (JSONException e) {
-                                    pay.setText("0");
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    distance.setText(jsonObject.getJSONObject("Data").getString("distance"));
-                                } catch (JSONException e) {
-                                    distance.setText("");
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Toast.makeText(CalculateActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            try {
+                                pay.setText(jsonObject.getJSONObject("Data").getString("pay"));
+                            } catch (JSONException e) {
+                                pay.setText("0");
+                                e.printStackTrace();
                             }
+                            try {
+                                distance.setText(jsonObject.getJSONObject("Data").getString("distance"));
+                            } catch (JSONException e) {
+                                distance.setText("");
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(CalculateActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
 
                     }

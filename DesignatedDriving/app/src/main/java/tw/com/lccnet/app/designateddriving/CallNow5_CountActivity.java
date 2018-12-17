@@ -1,6 +1,5 @@
 package tw.com.lccnet.app.designateddriving;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -19,19 +18,6 @@ public class CallNow5_CountActivity extends ToolbarActivity {
         initRecylcerView();
     }
 
-
-    private void initSwipeLayout() {
-
-        swipeRefreshLayout.setColorSchemeColors(Color.RED);
-        //設定刷新動作
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // setFilter();
-            }
-
-        });
-    }
 
     private void initRecylcerView() {
         swipeRefreshLayout = findViewById(R.id.include_swipe_refresh);

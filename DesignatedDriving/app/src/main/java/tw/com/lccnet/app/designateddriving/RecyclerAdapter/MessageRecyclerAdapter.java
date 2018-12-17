@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +92,8 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
     }
 
 
-    public void setFilter(JSONObject json) {
+    public void setFilter(ArrayList<Map<String, String>> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 

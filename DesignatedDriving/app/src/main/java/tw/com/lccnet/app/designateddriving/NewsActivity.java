@@ -11,8 +11,8 @@ import org.json.JSONObject;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.RecyclerAdapter.NewsListAdapter;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class NewsActivity extends ToolbarActivity {
     private NewsListAdapter newsListAdapter;
@@ -42,12 +42,11 @@ public class NewsActivity extends ToolbarActivity {
 
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
-                        if (jsonObject != null) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                newsListAdapter.setFilter(jsonObject);
-                            }
+
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            newsListAdapter.setFilter(jsonObject);
                         } else {
-                            Toast.makeText(NewsActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewsActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -70,12 +69,10 @@ public class NewsActivity extends ToolbarActivity {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        newsListAdapter.setFilter(jsonObject);
-                    }
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    newsListAdapter.setFilter(jsonObject);
                 } else {
-                    Toast.makeText(NewsActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewsActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }

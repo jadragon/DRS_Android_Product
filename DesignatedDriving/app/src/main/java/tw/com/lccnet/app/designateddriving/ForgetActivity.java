@@ -12,8 +12,8 @@ import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
 public class ForgetActivity extends ToolbarActivity implements View.OnClickListener {
@@ -74,7 +74,7 @@ public class ForgetActivity extends ToolbarActivity implements View.OnClickListe
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (jsonObject != null && AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                 Toast.makeText(ForgetActivity.this, "密碼已寄出，請檢查是否收到簡訊", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(ForgetActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();

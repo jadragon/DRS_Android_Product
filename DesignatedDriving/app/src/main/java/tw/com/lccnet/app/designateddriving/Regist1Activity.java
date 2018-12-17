@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
 public class Regist1Activity extends ToolbarActivity implements View.OnClickListener {
@@ -85,7 +85,7 @@ public class Regist1Activity extends ToolbarActivity implements View.OnClickList
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (jsonObject != null && AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                 try {
                                     phone.setEnabled(false);
                                     gvcode_str = jsonObject.getString("Data");

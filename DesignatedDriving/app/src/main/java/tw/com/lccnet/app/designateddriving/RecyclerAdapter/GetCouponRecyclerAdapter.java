@@ -22,8 +22,8 @@ import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.CouponActivity;
 import tw.com.lccnet.app.designateddriving.GlobalVariable;
 import tw.com.lccnet.app.designateddriving.R;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class GetCouponRecyclerAdapter extends RecyclerView.Adapter<GetCouponRecyclerAdapter.RecycleHolder> {
     private Context ctx;
@@ -91,15 +91,12 @@ public class GetCouponRecyclerAdapter extends RecyclerView.Adapter<GetCouponRecy
 
                 @Override
                 public void onTaskAfter(JSONObject jsonObject) {
-                    if (jsonObject != null) {
-                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                            ((CouponActivity) ctx).setFilter();
-                        } else {
-                            Toast.makeText(ctx, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                        }
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        ((CouponActivity) ctx).setFilter();
                     } else {
-                        Toast.makeText(ctx, "連線異常", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
         }

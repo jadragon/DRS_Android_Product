@@ -19,8 +19,8 @@ import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.GlobalVariable;
 import tw.com.lccnet.app.designateddriving.R;
 import tw.com.lccnet.app.designateddriving.RecyclerAdapter.MyCouponRecyclerAdapter;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class Fragment_myCoupon extends Fragment {
     private View v;
@@ -72,12 +72,11 @@ public class Fragment_myCoupon extends Fragment {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        myCouponRecyclerAdapter.setFilter(jsonObject);
-                    }
+
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    myCouponRecyclerAdapter.setFilter(jsonObject);
                 } else {
-                    Toast.makeText(getContext(), "連線異常", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }

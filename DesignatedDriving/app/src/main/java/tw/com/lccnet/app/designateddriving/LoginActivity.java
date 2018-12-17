@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeCustomer;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
@@ -106,7 +106,7 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
 
                         @Override
                         public void onTaskAfter(JSONObject jsonObject) {
-                            if (jsonObject != null && AnalyzeUtil.checkSuccess(jsonObject)) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                 startActivity(new Intent(LoginActivity.this, MapsActivity.class));
                                 db.resetLoginTables();
                                 ContentValues cv = AnalyzeCustomer.getLogin(jsonObject);
@@ -148,7 +148,6 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
                     if (AnalyzeUtil.checkSuccess(jsonObject)) {
                         ArrayList<ContentValues> datas = AnalyzeUtil.getAddress(jsonObject);
                         if (datas.size() > 0 && db.getModifydate(datas.get(0).getAsString(KEY_MODIFYDATE)) == 0) {
@@ -156,7 +155,6 @@ public class LoginActivity extends ToolbarActivity implements View.OnClickListen
                             db.addAddressAll(datas);
                         }
                     }
-                }
                 Log.e("Address", db.getAddressDetails() + "");
             }
         });

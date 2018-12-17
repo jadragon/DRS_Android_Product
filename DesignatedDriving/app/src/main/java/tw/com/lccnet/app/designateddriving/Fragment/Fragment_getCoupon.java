@@ -18,13 +18,14 @@ import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.R;
 import tw.com.lccnet.app.designateddriving.RecyclerAdapter.GetCouponRecyclerAdapter;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class Fragment_getCoupon extends Fragment {
     private View v;
     private GetCouponRecyclerAdapter getCouponRecyclerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,12 +51,10 @@ public class Fragment_getCoupon extends Fragment {
 
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
-                        if (jsonObject != null) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                getCouponRecyclerAdapter.setFilter(jsonObject);
-                            }
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            getCouponRecyclerAdapter.setFilter(jsonObject);
                         } else {
-                            Toast.makeText(getContext(), "連線異常", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -79,7 +78,7 @@ public class Fragment_getCoupon extends Fragment {
 
     }
 
-    public void setFilter(){
+    public void setFilter() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
@@ -88,12 +87,11 @@ public class Fragment_getCoupon extends Fragment {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        getCouponRecyclerAdapter.setFilter(jsonObject);
-                    }
+
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    getCouponRecyclerAdapter.setFilter(jsonObject);
                 } else {
-                    Toast.makeText(getContext(), "連線異常", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }

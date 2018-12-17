@@ -19,8 +19,8 @@ import org.json.JSONObject;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeCustomer;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
 
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_BIRTHDAY;
@@ -82,23 +82,21 @@ public class PersonalActivity extends ToolbarActivity implements View.OnClickLis
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        ContentValues cv = AnalyzeCustomer.getBasicData(jsonObject);
-                        //      cv.getAsString(KEY_PICTURE);
-                        uname.setText(cv.getAsString(KEY_UNAME));
-                        sex.setSelection(cv.getAsInteger(KEY_SEX));
-                        mp.setText(cv.getAsString(KEY_MP));
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    ContentValues cv = AnalyzeCustomer.getBasicData(jsonObject);
+                    //      cv.getAsString(KEY_PICTURE);
+                    uname.setText(cv.getAsString(KEY_UNAME));
+                    sex.setSelection(cv.getAsInteger(KEY_SEX));
+                    mp.setText(cv.getAsString(KEY_MP));
 
-                        dateString = cv.getAsString(KEY_BIRTHDAY);
-                        birthday.setText(dateString);
+                    dateString = cv.getAsString(KEY_BIRTHDAY);
+                    birthday.setText(dateString);
 
-                        email.setText(cv.getAsString(KEY_EMAIL));
-                        contact.setText(cv.getAsString(KEY_CONTACT));
-                        cmp.setText(cv.getAsString(KEY_CMP));
-                    } else {
-                        Toast.makeText(PersonalActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                    }
+                    email.setText(cv.getAsString(KEY_EMAIL));
+                    contact.setText(cv.getAsString(KEY_CONTACT));
+                    cmp.setText(cv.getAsString(KEY_CMP));
+                } else {
+                    Toast.makeText(PersonalActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
 
             }

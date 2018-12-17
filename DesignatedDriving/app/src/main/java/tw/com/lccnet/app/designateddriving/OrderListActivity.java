@@ -11,8 +11,8 @@ import org.json.JSONObject;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
 import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.RecyclerAdapter.OrderListAdapter;
-import tw.com.lccnet.app.designateddriving.Utils.AsyncTaskUtils;
-import tw.com.lccnet.app.designateddriving.Utils.IDataCallBack;
+import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
+import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 
 public class OrderListActivity extends ToolbarActivity {
     private OrderListAdapter orderListAdapter;
@@ -61,12 +61,10 @@ public class OrderListActivity extends ToolbarActivity {
 
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        orderListAdapter.setFilter(jsonObject);
-                    }
+                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    orderListAdapter.setFilter(jsonObject);
                 } else {
-                    Toast.makeText(OrderListActivity.this, "連線異常", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderListActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
