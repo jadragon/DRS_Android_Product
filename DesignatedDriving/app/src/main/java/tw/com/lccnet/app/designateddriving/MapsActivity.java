@@ -14,6 +14,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -104,6 +105,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dm = getResources().getDisplayMetrics();
         gv = (GlobalVariable) getApplicationContext();
         db = new SQLiteDatabaseHandler(this);
+        if (UiThreadHandler == null)
+            UiThreadHandler = new Handler(getMainLooper());
         // initThread();
         checkPermission();
         initToolbar();
@@ -204,7 +207,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.btn_long_trip:
                 break;
             case R.id.btn_immediate:
-                // TODO: 2018/12/17 執行續待優化
                 dialog = new SlideDialog(this);
                 dialog.setContentView(getLayoutInflater().inflate(R.layout.item_slide_dialog, null));
                 start = dialog.findViewById(R.id.start);
@@ -220,7 +222,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
                 dialog.show();
-                // TODO: 2018/12/17 執行續待優化
                 break;
             case R.id.btn_deliver:
                 startActivity(new Intent(this, OrdermealActivity.class));
@@ -243,22 +244,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
                             try {
                                 final String pono = jsonObject.getJSONObject("Data").getString("pono");
-                                // String pono = "km5rkbxZ68XRXQ/gYlOStg==";
                                 Log.e("CallNow1", "訂單成立" + pono);
                                 scheduledFuture = scheduledThreadPool.scheduleAtFixedRate(new Runnable() {
                                     @Override
                                     public void run() {
                                         final JSONObject json = CallNowApi.match_driver(gv.getToken(), pono);
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (AnalyzeUtil.checkSuccess(json)) {
+                                        if (AnalyzeUtil.checkSuccess(json)) {
+                                            scheduledFuture.cancel(true);
+                                            UiThreadHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
                                                     Intent intent = new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class);
                                                     intent.putExtra("pono", pono);
                                                     startActivity(intent);
+                                                    dialog.dismiss();
                                                 }
-                                            }
-                                        });
+                                            });
+                                        }
                                     }
                                 }, 0, 5, TimeUnit.SECONDS);
                             } catch (JSONException e) {
@@ -275,13 +277,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-                // TODO: 2018/12/17 執行續待優化
                 break;
             case R.id.cancel:
-                if (scheduledFuture.isCancelled()) {
+                // TODO: 2018/12/17 執行續待優化
+                if (scheduledFuture != null && scheduledFuture.isCancelled()) {
                     scheduledFuture.cancel(true);
                 }
-                // TODO: 2018/12/17 執行續待優化
                 dialog.dismiss();
                 break;
             case R.id.toolbar_txt_title:
@@ -447,7 +448,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     */
 
-
     private boolean ToastAgain = true;
 
     private void initADToast() {
@@ -570,15 +570,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.map = map;
         MapsInitializer.initialize(MapsActivity.this);
         map.setMyLocationEnabled(true);
-        if (map.isMyLocationEnabled()) {
-            Location location = map.getMyLocation();
-            mLatitude = location.getLatitude();
-            mLongitude = location.getLongitude();
-            LatLng latlng = new LatLng(mLatitude, mLongitude);
-            CameraUpdate camera = CameraUpdateFactory.newLatLng(latlng);
-            map.animateCamera(camera);
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
-        }
         //DO WHATEVER YOU WANT WITH GOOGLEMAP
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //  map.setTrafficEnabled(true);//交通
@@ -652,7 +643,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
 
     private void showAddress(LatLng latLng) {
         Address address = LocationUtils.getAddress(this, latLng.latitude, latLng.longitude);
@@ -744,7 +734,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onDestroy();
     }
 
-
     public LatLng getLocationFromAddress(String strAddress) {
 
         Geocoder coder = new Geocoder(this);
@@ -802,6 +791,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //=====================================================================================================================
     public static ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
+    public static Handler UiThreadHandler;
     private ScheduledFuture scheduledFuture;
     /*
     //宣告特約工人的經紀人
@@ -809,11 +799,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //宣告特約工人
     public static HandlerThread mThread;
     //UiThread經紀人
-    private static Handler UiThreadHandler;
+
     private Marker call_now_marker;
     private int sssss = 0;
-
-    // TODO: 2018/12/17 執行續待優化
     public void initThread() {
         if (mThread == null) {
             mThread = new HandlerThread("MapsActivity");

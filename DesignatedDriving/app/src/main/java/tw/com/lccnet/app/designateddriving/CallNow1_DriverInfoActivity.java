@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,7 +44,7 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
     private String phoneNumber = "";
     private EditText edit_msg;
     private ScheduledFuture scheduledFuture;
-
+    private int size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +82,28 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
         send.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                scheduledFuture.cancel(true);
-                startActivity(new Intent(CallNow1_DriverInfoActivity.this, CallNow2_CarCheckActivity.class));
-                finish();
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        return CallNowApi.wait_chkArrival(gv.getToken(), pono);
+                    }
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            scheduledFuture.cancel(true);
+                            Intent intent = new Intent(CallNow1_DriverInfoActivity.this, CallNow2_CarCheckActivity.class);
+                            intent.putExtra("pono", pono);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
+
                 break;
             case R.id.cancel:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -122,7 +137,7 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
                         dialog.dismiss();
                     }
                 });
-
+                builder.show();
                 break;
             case R.id.mp:
                 if (ContextCompat.checkSelfPermission(CallNow1_DriverInfoActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -189,15 +204,22 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
     public void initData(JSONObject json) {
         try {
             JSONObject order = json.getJSONObject("Data").getJSONObject("order");
-            ordernum.setText(order.getString("ordernum"));
-            uname.setText(order.getString("uname"));
+            if (TextUtils.isEmpty(ordernum.getText()))
+                ordernum.setText("訂單編號:" + order.getString("ordernum"));
+            if (TextUtils.isEmpty(uname.getText()))
+                uname.setText(order.getString("uname"));
 //            order.getString("img")
-            phoneNumber = order.getString("mp");
+            if (phoneNumber.equals(""))
+                phoneNumber = order.getString("mp");
 //            order.getString("score")
-            vaddress.setText(order.getString("vaddress"));
-            eaddress.setText(order.getString("eaddress"));
-            distance.setText(order.getString("distance"));
-            opay.setText(order.getString("opay"));
+            if (TextUtils.isEmpty(vaddress.getText()))
+                vaddress.setText(order.getString("vaddress"));
+            if (TextUtils.isEmpty(eaddress.getText()))
+                eaddress.setText(order.getString("eaddress"));
+            if (TextUtils.isEmpty(distance.getText()))
+                distance.setText(order.getString("distance") + "公里");
+            if (TextUtils.isEmpty(opay.getText()))
+                opay.setText("總計:" + order.getString("opay"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -214,7 +236,7 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
         try {
             JSONArray msg = json.getJSONObject("Data").getJSONArray("msg");
             Map<String, String> map;
-            for (int i = 0; i < msg.length(); i++) {
+            for (int i = msg.length() - 1; i >= 0; i--) {
                 map = new HashMap<>();
                 json = msg.getJSONObject(i);
                 map.put("type", json.getString("type"));
@@ -228,7 +250,6 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
         return arrayList;
     }
 
-
     private volatile JSONObject json;
     /**
      * 取得司機資訊
@@ -238,11 +259,10 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
         public void run() {
             json = CallNowApi.wait_driverInfo(gv.getToken(), pono);
             if (AnalyzeUtil.checkSuccess(json)) {
-                runOnUiThread(u1);
+                MapsActivity.UiThreadHandler.post(u1);
             }
         }
     };
-
 
     Runnable u1 = new Runnable() {
         @Override
@@ -250,8 +270,9 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
             checkAstatusOrAbstatus(json);
             initData(json);
             ArrayList<Map<String, String>> messageList = getMessage(json);
-            if (messageList.size() > 0) {
+            if (messageList.size() > size) {
                 messageRecyclerAdapter.setFilter(messageList);
+                size = messageList.size();
             }
         }
     };
@@ -265,16 +286,17 @@ public class CallNow1_DriverInfoActivity extends ToolbarActivity implements View
         try {
             json = json.getJSONObject("Data");
             //司機到達狀態0未到達1已到達
-            String astatus = json.getString("astatus");
-            if (astatus.equals("1")) {
+            String abstatus = json.getString("abstatus");
+            if (abstatus.equals("1")) {
                 scheduledFuture.cancel(true);
+                // TODO: 2018/12/17 放鳥訊息優化 
                 Toast.makeText(this, "司機說你已離開", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
             //乘客被遺棄狀態0未遺棄1已被遺棄
-            String abstatus = json.getString("abstatus");
-            if (abstatus.equals("1")) {
+            String astatus = json.getString("astatus");
+            if (astatus.equals("1")) {
                 next.setText("司機已到達");
                 next.setEnabled(true);
             }

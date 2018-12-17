@@ -23,6 +23,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
     public MessageRecyclerAdapter(Context ctx) {
         this.ctx = ctx;
         list = new ArrayList<>();
+        /*
         Map<String, String> map;
         for (int i = 0; i < 20; i++) {
             map = new HashMap<>();
@@ -31,6 +32,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
             map.put("cdate", i + "");
             list.add(map);
         }
+        */
     }
 
     @Override
