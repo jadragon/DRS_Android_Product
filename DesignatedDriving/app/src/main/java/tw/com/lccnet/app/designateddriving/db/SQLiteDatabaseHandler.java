@@ -41,10 +41,11 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MEMBER + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TOKEN + " TEXT,"
-            + KEY_PICTURE + " TEXT,"
             + KEY_UNAME + " TEXT,"
+            + KEY_PICTURE + " TEXT,"
             + KEY_SEX + " TEXT,"
             + KEY_BIRTHDAY + " TEXT,"
+            + KEY_MP + " TEXT,"
             + KEY_EMAIL + " TEXT,"
             + KEY_CONTACT + " TEXT,"
             + KEY_CMP + " TEXT" + ")";
@@ -53,13 +54,12 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_ADDRESS = "getAddress";
     // Address Table Columns names
     public static final String KEY_ADDRESS = "address";
-    public static final String KEY_AD_ID = "_id";
     public static final String KEY_CITY = "city";
     public static final String KEY_AREA = "area";
     public static final String KEY_ZIPCODE = "zipcode";
     public static final String KEY_MODIFYDATE = "modifydate";
-    public static final String CREATE_ADDRESS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ADDRESS + "("
-            + KEY_AD_ID + " INTEGER PRIMARY KEY,"
+    private static final String CREATE_ADDRESS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ADDRESS + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_CITY + " TEXT,"
             + KEY_AREA + " TEXT,"
             + KEY_ZIPCODE + " TEXT,"
@@ -96,8 +96,19 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         if (cv != null) {
             SQLiteDatabase db = this.getWritableDatabase();
             // Inserting Row
-            db.insert(TABLE_MEMBER, null, cv);
-            db.close(); // Closing database connection
+            Cursor cursor = db.rawQuery("SELECT " + KEY_ID + " FROM " + TABLE_MEMBER, null);
+            int count = cursor.getCount();
+            if (count > 0) {
+                cursor.moveToFirst();
+                String id = cursor.getString(0);
+                db.update(TABLE_MEMBER, cv, id, null);
+                cursor.close();
+                db.close();
+            } else {
+                db.insert(TABLE_MEMBER, null, cv);
+                cursor.close();
+                db.close(); // Closing database connection
+            }
         } else {
             Toast.makeText(context, "存取資料庫錯誤", Toast.LENGTH_SHORT).show();
         }
@@ -115,13 +126,14 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             ContentValues cv = new ContentValues();
             cv.put(KEY_TOKEN, cursor.getString(1));
-            cv.put(KEY_PICTURE, cursor.getString(2));
-            cv.put(KEY_UNAME, cursor.getString(3));
+            cv.put(KEY_UNAME, cursor.getString(2));
+            cv.put(KEY_PICTURE, cursor.getString(3));
             cv.put(KEY_SEX, cursor.getString(4));
             cv.put(KEY_BIRTHDAY, cursor.getString(5));
-            cv.put(KEY_EMAIL, cursor.getString(6));
-            cv.put(KEY_CONTACT, cursor.getString(7));
-            cv.put(KEY_CMP, cursor.getString(8));
+            cv.put(KEY_MP, cursor.getString(6));
+            cv.put(KEY_EMAIL, cursor.getString(7));
+            cv.put(KEY_CONTACT, cursor.getString(8));
+            cv.put(KEY_CMP, cursor.getString(9));
             return cv;
         }
         cursor.close();

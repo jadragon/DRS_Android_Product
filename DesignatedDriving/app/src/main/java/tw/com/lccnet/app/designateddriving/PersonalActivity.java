@@ -1,9 +1,18 @@
 package tw.com.lccnet.app.designateddriving;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,7 +23,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeCustomer;
 import tw.com.lccnet.app.designateddriving.API.Analyze.AnalyzeUtil;
@@ -22,16 +36,20 @@ import tw.com.lccnet.app.designateddriving.API.CustomerApi;
 import tw.com.lccnet.app.designateddriving.Thread.AsyncTaskUtils;
 import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 import tw.com.lccnet.app.designateddriving.Utils.MatchesUtils;
+import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_BIRTHDAY;
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_CMP;
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_CONTACT;
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_EMAIL;
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_MP;
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_PICTURE;
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_SEX;
 import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_UNAME;
 
 public class PersonalActivity extends ToolbarActivity implements View.OnClickListener {
+    private static final int CAMERA_PERMISSION = 0x10;
+    private static final int WRITE_EXTERNAL_PERMISSION = 0x20;
     private GlobalVariable gv;
     private ImageView picture;
     private TextView mp, birthday;
@@ -47,18 +65,15 @@ public class PersonalActivity extends ToolbarActivity implements View.OnClickLis
         gv = (GlobalVariable) getApplicationContext();
         initToolbar("個人資料", true);
         initView();
-        initSpinner();
+        initJSONData();
         initListener();
-        initData();
     }
 
-    private void initSpinner() {
-        sex.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{"無", "男", "女"}));
-    }
 
-    private void initListener() {
-        birthday.setOnClickListener(this);
-        update.setOnClickListener(this);
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        picture.setImageBitmap(getPhotoData());
     }
 
     private void initView() {
@@ -71,9 +86,25 @@ public class PersonalActivity extends ToolbarActivity implements View.OnClickLis
         contact = findViewById(R.id.contact);
         cmp = findViewById(R.id.cmp);
         update = findViewById(R.id.update);
+        sex.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{"無", "男", "女"}));
     }
 
-    private void initData() {
+    private void initListener() {
+        birthday.setOnClickListener(this);
+        update.setOnClickListener(this);
+        picture.setOnClickListener(this);
+    }
+
+
+    private Bitmap getPhotoData() {
+        String path = Environment.getExternalStorageDirectory() + "/DCIM/Camera/"
+                + "picture.png";
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeFile(path, options);
+    }
+
+    private void initJSONData() {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
@@ -83,18 +114,18 @@ public class PersonalActivity extends ToolbarActivity implements View.OnClickLis
             @Override
             public void onTaskAfter(JSONObject jsonObject) {
                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                    SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(PersonalActivity.this);
                     ContentValues cv = AnalyzeCustomer.getBasicData(jsonObject);
-                    //      cv.getAsString(KEY_PICTURE);
                     uname.setText(cv.getAsString(KEY_UNAME));
                     sex.setSelection(cv.getAsInteger(KEY_SEX));
                     mp.setText(cv.getAsString(KEY_MP));
-
+                    ImageLoader.getInstance().displayImage(cv.getAsString(KEY_PICTURE), picture);
                     dateString = cv.getAsString(KEY_BIRTHDAY);
                     birthday.setText(dateString);
-
                     email.setText(cv.getAsString(KEY_EMAIL));
                     contact.setText(cv.getAsString(KEY_CONTACT));
                     cmp.setText(cv.getAsString(KEY_CMP));
+                    db.addMember(cv);
                 } else {
                     Toast.makeText(PersonalActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
@@ -140,15 +171,76 @@ public class PersonalActivity extends ToolbarActivity implements View.OnClickLis
                 AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                     @Override
                     public JSONObject onTasking(Void... params) {
-                        return CustomerApi.updateBasicData(gv.getToken(), uname.getText().toString(), "", sex.getSelectedItemPosition() + "", birthday.getText().toString(), email.getText().toString(), contact.getText().toString(), cmp.getText().toString());
+                        byte[] data = null;
+                        try {
+                            Bitmap bm = getPhotoData();
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            bm.compress(Bitmap.CompressFormat.PNG, 75, bos);
+                            data = bos.toByteArray();
+                            bos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return CustomerApi.updateBasicData(gv.getToken(), uname.getText().toString(), data, sex.getSelectedItemPosition() + "",
+                                birthday.getText().toString(), email.getText().toString(), contact.getText().toString(), cmp.getText().toString());
                     }
 
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
-
+                        Toast.makeText(PersonalActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                        initJSONData();
                     }
                 });
                 break;
+
+            case R.id.picture:
+                if (ContextCompat.checkSelfPermission(PersonalActivity.this,
+                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(PersonalActivity.this,
+                            new String[]{Manifest.permission.CAMERA},
+                            CAMERA_PERMISSION);
+                } else if (ContextCompat.checkSelfPermission(PersonalActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(PersonalActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            WRITE_EXTERNAL_PERMISSION);
+                } else {
+                    startActivity(new Intent(this, CameraActivity.class));
+                }
+
+
+                break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                //判断是否勾选禁止后不再询问
+                boolean showRequestPermission = ActivityCompat.shouldShowRequestPermissionRationale(PersonalActivity.this, permissions[0]);
+                if (showRequestPermission) {
+                    Toast.makeText(this, "權限尚未申請", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    Toast.makeText(this, "因權限問題，部分功能無法使用", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        } else if (requestCode == WRITE_EXTERNAL_PERMISSION) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                //判断是否勾选禁止后不再询问
+                boolean showRequestPermission = ActivityCompat.shouldShowRequestPermissionRationale(PersonalActivity.this, permissions[0]);
+                if (showRequestPermission) {
+                    Toast.makeText(this, "權限尚未申請", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    Toast.makeText(this, "因權限問題，部分功能無法使用", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        }
+        startActivity(new Intent(this, CameraActivity.class));
     }
 }

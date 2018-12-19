@@ -1,12 +1,19 @@
 package tw.com.lccnet.app.designateddriving.API;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import tw.com.lccnet.app.designateddriving.Http.ImageJSONParser;
 import tw.com.lccnet.app.designateddriving.Http.JSONParser;
 
 public class CustomerApi implements APISetting {
@@ -102,19 +109,25 @@ public class CustomerApi implements APISetting {
     /**
      * 1.2.2	修改基本資料
      */
-    public static JSONObject updateBasicData(String token, String uname, String picture, String sex, String birthday, String email, String contact, String cmp) {
-        List<NameValuePair> params = new ArrayList<>();
-        JSONParser jsonParser = new JSONParser();
-        params.add(new BasicNameValuePair("ntgo", ntgo));
-        params.add(new BasicNameValuePair("token", token));
-        params.add(new BasicNameValuePair("uname", uname));
-        params.add(new BasicNameValuePair("picture", picture));
-        params.add(new BasicNameValuePair("sex", sex));
-        params.add(new BasicNameValuePair("birthday", birthday));
-        params.add(new BasicNameValuePair("email", email));
-        params.add(new BasicNameValuePair("contact", contact));
-        params.add(new BasicNameValuePair("cmp", cmp));
-        return jsonParser.getJSONFromUrl(updateBasicData_url, params);
+    public static JSONObject updateBasicData(String token, String uname, byte[] picture, String sex, String birthday, String email, String contact, String cmp) {
+        ImageJSONParser imageJSONParser = new ImageJSONParser();
+        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+        Charset chars = Charset.forName("UTF-8");
+        ByteArrayBody bab = new ByteArrayBody(picture, 123 + ".PNG");
+        entity.addPart("picture", bab);
+        try {
+            entity.addPart("ntgo", new StringBody(ntgo,chars));
+            entity.addPart("token", new StringBody(token,chars));
+            entity.addPart("uname", new StringBody(uname,chars));
+            entity.addPart("sex", new StringBody(sex,chars));
+            entity.addPart("birthday", new StringBody(birthday,chars));
+            entity.addPart("email", new StringBody(email,chars));
+            entity.addPart("contact", new StringBody(contact,chars));
+            entity.addPart("cmp", new StringBody(cmp,chars));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return imageJSONParser.getJSONFromUrl(updateBasicData_url, entity);
     }
 
     /**

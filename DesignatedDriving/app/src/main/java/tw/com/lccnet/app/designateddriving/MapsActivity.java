@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,7 +45,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,10 +79,16 @@ import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 import tw.com.lccnet.app.designateddriving.Utils.WidgetUtils;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_PICTURE;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
     private static final int AUTO_PLACE_COMPETE_TOOLBAR = 0x02;
     private static final int AUTO_PLACE_COMPETE_END = 0x03;
+    public static ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
+    public static Handler UiThreadHandler;
+    private ScheduledFuture scheduledFuture;
+
     private View view;
     private TextView toolbar_txt_title;
     private Toolbar toolbar_main;
@@ -93,6 +100,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DisplayMetrics dm;
     private SQLiteDatabaseHandler db;
     private GlobalVariable gv;
+    private Button btn_long_trip, btn_immediate, btn_deliver;
+
+    private Dialog dialog;
+    private TextView start, end, cost;
+    private View menu_header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,97 +121,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             UiThreadHandler = new Handler(getMainLooper());
         // initThread();
         checkPermission();
+        initView();
         initToolbar();
-        initButton();
+        initListener();
         initADToast();
 
     }
 
-    private void initButton() {
-        Button btn_long_trip = findViewById(R.id.btn_long_trip);
-        btn_long_trip.setOnClickListener(this);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    private void initData() {
+        String url = db.getMemberDetail().getAsString(KEY_PICTURE);
+        ImageLoader.getInstance().displayImage(url, (ImageView) menu_header.findViewById(R.id.picture));
+
+    }
+
+    private void initView() {
+        btn_long_trip = findViewById(R.id.btn_long_trip);
         WidgetUtils.reShapeButton(this, btn_long_trip, R.color.orange1);
-        Button btn_immediate = findViewById(R.id.btn_immediate);
-        btn_immediate.setOnClickListener(this);
+        btn_immediate = findViewById(R.id.btn_immediate);
         WidgetUtils.reShapeButton(this, btn_immediate, R.color.royal_blue);
-        Button btn_deliver = findViewById(R.id.btn_deliver);
-        btn_deliver.setOnClickListener(this);
+        btn_deliver = findViewById(R.id.btn_deliver);
         WidgetUtils.reShapeButton(this, btn_deliver, R.color.royal_blue_light);
     }
 
-    private void checkLocation() {
-        if (
-                LocationUtils.register(getApplicationContext(), 0, 10, new LocationUtils.OnLocationChangeListener() {
-                    @Override
-                    public void getLastKnownLocation(Location location) {
-                        mLatitude = location.getLatitude();
-                        mLongitude = location.getLongitude();
-                        /*
-                        LatLng lastPosition = LocationUtils.readData(MapsActivity.this);
-                        if (lastPosition != null) {
-                            mLatitude = lastPosition.latitude;
-                            mLongitude = lastPosition.longitude;
-                        } else {
-                            mLatitude = location.getLatitude();
-                            mLongitude = location.getLongitude();
-                        }
-                        */
-                    }
-
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        mLatitude = location.getLatitude();
-                        mLongitude = location.getLongitude();
-                        LatLng latlng = new LatLng(mLatitude, mLongitude);
-                        // TODO: 2018/12/17 沒有GoogleServer會出現  CameraUpdateFactory is not initialized
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
-                        //  LocationUtils.saveData(MapsActivity.this, location);
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                    }
-                })) {
-
-        } else {
-            Toast.makeText(this, "GPS初始化失敗", Toast.LENGTH_SHORT).show();
-        }
+    private void initListener() {
+        btn_deliver.setOnClickListener(this);
+        btn_immediate.setOnClickListener(this);
+        btn_long_trip.setOnClickListener(this);
     }
-
-    private void checkPermission() {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permission);
-            }
-        }
-        if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
-            checkLocation();
-            /*
-            googleApiClient = new GoogleApiClient.Builder(MapsActivity.this)
-                    .addApi(Places.GEO_DATA_API)
-                    .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
-                    .addConnectionCallbacks(this)
-                    .build();
-            AutocompleteFilter filter = new AutocompleteFilter.Builder()
-                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE)
-                    .setCountry("TW")
-                    .build();
-            adapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1, BOUNDS_MOUNTAIN_VIEW, filter);
-            */
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            assert mapFragment != null;
-            mapFragment.getMapAsync(this);
-
-        } else {//請求權限方法
-            String[] permissions = mPermissionList.toArray(new String[0]);//將List轉為數組
-            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
-        }
-    }
-
-    private Dialog dialog;
-    private TextView start, end, cost;
 
     @Override
     public void onClick(View v) {
@@ -319,11 +273,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void caculateCost() {
+    private void checkLocation() {
+        if (
+                LocationUtils.register(getApplicationContext(), 0, 10, new LocationUtils.OnLocationChangeListener() {
+                    @Override
+                    public void getLastKnownLocation(Location location) {
+                        mLatitude = location.getLatitude();
+                        mLongitude = location.getLongitude();
+                    }
+
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        mLatitude = location.getLatitude();
+                        mLongitude = location.getLongitude();
+                        LatLng latlng = new LatLng(mLatitude, mLongitude);
+                        // TODO: 2018/12/17 沒有GoogleServer會出現  CameraUpdateFactory is not initialized
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+                })) {
+
+        } else {
+            Toast.makeText(this, "GPS初始化失敗", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkPermission() {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(MapsActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permission);
+            }
+        }
+        if (mPermissionList.isEmpty()) {//未授予的權限為空，表示都授予了
+            checkLocation();
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
+
+        } else {//請求權限方法
+            String[] permissions = mPermissionList.toArray(new String[0]);//將List轉為數組
+            ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
+        }
+    }
+
+
+    private void caculateCost(final String address1, final String address2, final EditText cost) {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                return CustomerApi.calculate1("1", start.getText().toString(), end.getText().toString());
+                return CustomerApi.calculate1("1", address1, address2);
             }
 
             @Override
@@ -343,110 +345,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
     }
-
-    /*
-        private Handler handler = new Handler();
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            handler.removeCallbacks(notifier);
-            handler.postDelayed(notifier, 1000);
-        }
-
-        private Runnable notifier = new Runnable() {
-            @Override
-            public void run() {
-                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public JSONObject onTasking(Void... params) {
-                        return CustomerApi.calculate1("1", start.getText().toString(), autoCompleteTextView.getText().toString());
-                    }
-
-                    @Override
-                    public void onTaskAfter(JSONObject jsonObject) {
-                        if (jsonObject != null) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                try {
-                                    cost.setText(jsonObject.getJSONObject("Data").getString("pay"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    cost.setText("      ");
-                                }
-                            } else {
-                                cost.setText("      ");
-                            }
-                        }
-                    }
-                });
-            }
-        };
-
-        private AdapterView.OnItemClickListener mAutocompleteClickListener
-                = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final PlaceAutocompleteAdapter.PlaceAutocomplete item = adapter.getItem(position);
-                final String placeId = String.valueOf(item.placeId);
-                Log.i(LOG_TAG, "Selected: " + item.description);
-                PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                        .getPlaceById(googleApiClient, placeId);
-                placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-                Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
-            }
-        };
-
-        private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-                = new ResultCallback<PlaceBuffer>() {
-            @Override
-            public void onResult(PlaceBuffer places) {
-                if (!places.getStatus().isSuccess()) {
-                    Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                            places.getStatus().toString());
-                    return;
-                }
-                // Selecting the first object buffer.
-                final Place place = places.get(0);
-                CharSequence attributions = places.getAttributions();
-                if (autoCompleteTextView != null) {
-                    autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
-                } else {
-                    toolbar_txt_title.setText(Html.fromHtml(place.getAddress().toString()));
-                }
-                if (attributions != null) {
-                    if (autoCompleteTextView != null) {
-                        autoCompleteTextView.setText(Html.fromHtml(place.getAddress().toString()));
-                    } else {
-                        toolbar_txt_title.setText(Html.fromHtml(attributions.toString()));
-                    }
-                }
-                // toolbar_txt_title.setVisibility(View.VISIBLE);
-            }
-        };
-
-        @Override
-        public void onConnected(Bundle bundle) {
-            adapter.setGoogleApiClient(googleApiClient);
-            Log.i(LOG_TAG, "Google Places API connected.");
-
-        }
-
-        @Override
-        public void onConnectionFailed(ConnectionResult connectionResult) {
-            Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                    + connectionResult.getErrorCode());
-
-            Toast.makeText(this,
-                    "Google Places API connection failed with error code:" +
-                            connectionResult.getErrorCode(),
-                    Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onConnectionSuspended(int i) {
-            adapter.setGoogleApiClient(null);
-            Log.e(LOG_TAG, "Google Places API connection suspended.");
-        }
-    */
 
     private boolean ToastAgain = true;
 
@@ -491,9 +389,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toolbar_main = findViewById(R.id.toolbar_title);
         toolbar_txt_title = findViewById(R.id.toolbar_txt_title);
         toolbar_txt_title.setOnClickListener(this);
-        // toolbar_txt_title = findViewById(R.id.toolbar_txt_title);
-        //  toolbar_edit_title.setAdapter(adapter);
-        //toolbar_edit_title.setOnItemClickListener(mAutocompleteClickListener);
         setSupportActionBar(toolbar_main);
         DrawerLayout drawerLayout_main = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle_main = new ActionBarDrawerToggle(this, drawerLayout_main, R.string.app_open, R.string.app_close);
@@ -523,10 +418,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         };
         NavigationView navigation_view = findViewById(R.id.navigation_view);
-        View header = navigation_view.getHeaderView(0);
-        header.findViewById(R.id.header_item1).setOnClickListener(onClickListener);
-        header.findViewById(R.id.header_item2).setOnClickListener(onClickListener);
-        header.findViewById(R.id.header_item3).setOnClickListener(onClickListener);
+        menu_header = navigation_view.getHeaderView(0);
+        menu_header.findViewById(R.id.header_item1).setOnClickListener(onClickListener);
+        menu_header.findViewById(R.id.header_item2).setOnClickListener(onClickListener);
+        menu_header.findViewById(R.id.header_item3).setOnClickListener(onClickListener);
         navigation_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -563,11 +458,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return actionBarDrawerToggle_main.onOptionsItemSelected(item);
     }
 
-    private GoogleMap map;
+    private GoogleMap googleMap;
 
     @Override
-    public void onMapReady(final GoogleMap map) {
-        this.map = map;
+    public void onMapReady(GoogleMap map) {
+        this.googleMap = map;
         MapsInitializer.initialize(MapsActivity.this);
         map.setMyLocationEnabled(true);
         //DO WHATEVER YOU WANT WITH GOOGLEMAP
@@ -628,7 +523,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                LatLng latLng = map.getCameraPosition().target;
+                LatLng latLng = googleMap.getCameraPosition().target;
                 showAddress(latLng);
                 // mZoom = map.getCameraPosition().zoom;
                 if (Math.abs(mLatitude - latLng.latitude) > 0.0005 || Math.abs(mLongitude - latLng.longitude) > 0.0005) {
@@ -639,7 +534,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toolbar_main.post(new Runnable() {
             @Override
             public void run() {
-                map.setPadding(0, (int) (toolbar_main.getHeight() + 10 * dm.density), 0, 0);
+                googleMap.setPadding(0, (int) (toolbar_main.getHeight() + 10 * dm.density), 0, 0);
             }
         });
     }
@@ -669,17 +564,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, view));
     }
 
-    private View call_now_view;
-
-    private BitmapDescriptor getCallNowIcon(int imageRes, String title, String subtitle) {
-        if (call_now_view == null) {
-            call_now_view = LayoutInflater.from(this).inflate(R.layout.call_now_car, null);
-        }
-        ((ImageView) call_now_view.findViewById(R.id.img_head)).setImageResource(imageRes);
-        ((TextView) call_now_view.findViewById(R.id.tv_title)).setText(title);
-        ((TextView) call_now_view.findViewById(R.id.tv_subtitle)).setText(subtitle);
-        return BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, call_now_view));
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -707,6 +591,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    private View call_now_view;
+
+    private BitmapDescriptor getCallNowIcon(int imageRes, String title, String subtitle) {
+        if (call_now_view == null) {
+            call_now_view = LayoutInflater.from(this).inflate(R.layout.call_now_car, null);
+        }
+        ((ImageView) call_now_view.findViewById(R.id.img_head)).setImageResource(imageRes);
+        ((TextView) call_now_view.findViewById(R.id.tv_title)).setText(title);
+        ((TextView) call_now_view.findViewById(R.id.tv_subtitle)).setText(subtitle);
+        return BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, call_now_view));
+    }
+
     public static Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay()
@@ -724,15 +620,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return bitmap;
     }
 
-    @Override
-    protected void onDestroy() {
-        db.close();
-        LocationUtils.unregister();
-        if (scheduledFuture != null)
-            scheduledFuture.cancel(true);
-        scheduledThreadPool.shutdown();
-        super.onDestroy();
-    }
 
     public LatLng getLocationFromAddress(String strAddress) {
 
@@ -758,6 +645,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    protected void onDestroy() {
+        db.close();
+        LocationUtils.unregister();
+        if (scheduledFuture != null)
+            scheduledFuture.cancel(true);
+        scheduledThreadPool.shutdown();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTO_PLACE_COMPETE_TOOLBAR) {
@@ -766,7 +663,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 toolbar_txt_title.setText(place.getAddress());
                 LatLng latLng = getLocationFromAddress(place.getAddress().toString());
                 if (latLng != null)
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.i("place", status.getStatusMessage());
@@ -778,7 +675,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 end.setText(place.getAddress());
-                caculateCost();
+                caculateCost(start.getText().toString(), end.getText().toString(), (EditText) cost);
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.i("place", status.getStatusMessage());
@@ -788,75 +685,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
-    //=====================================================================================================================
-    public static ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
-    public static Handler UiThreadHandler;
-    private ScheduledFuture scheduledFuture;
-    /*
-    //宣告特約工人的經紀人
-    public static Handler mThreadHandler;
-    //宣告特約工人
-    public static HandlerThread mThread;
-    //UiThread經紀人
-
-    private Marker call_now_marker;
-    private int sssss = 0;
-    public void initThread() {
-        if (mThread == null) {
-            mThread = new HandlerThread("MapsActivity");
-            //讓Worker待命，等待其工作 (開啟Thread)
-            mThread.start();
-        }
-        if (mThreadHandler == null) {
-            mThreadHandler = new Handler(mThread.getLooper());
-        }
-        //找到特約工人的經紀人，這樣才能派遣工作 (找到Thread上的Handler)
-        UiThreadHandler = new Handler(getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 0:
-                        if (call_now_marker != null) {
-                            call_now_marker.remove();
-                        }
-                        LatLng latlng = new LatLng(mLatitude, mLongitude);
-                        MarkerOptions markerOpt = new MarkerOptions();
-                        DecimalFormat df = new DecimalFormat("#.#");
-                        Random random = new Random();
-                        markerOpt.position(getLatLng(0.002, latlng, 30 * sssss))
-                                .icon(getCallNowIcon(R.drawable.menu_header1, "我的司機", df.format(5 * random.nextFloat())));
-                        call_now_marker = map.addMarker(markerOpt);
-                        sssss++;
-                        if (sssss > 12) {
-                            sssss = 0;
-                        }
-                        break;
-                    case 1:
-                        Bundle bundle = msg.getData();
-                        String pono = bundle.getString("pono", "");
-                        try {
-                            JSONObject json = new JSONObject(bundle.getString("json"));
-                            if (AnalyzeUtil.checkSuccess(json)) {
-                                thread.interrupt();
-                                Intent intent = new Intent(MapsActivity.this, CallNow1_DriverInfoActivity.class);
-                                intent.putExtra("pono", pono);
-                                startActivity(intent);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Toast.makeText(MapsActivity.this, "" + bundle, Toast.LENGTH_SHORT).show();
-
-                        break;
-                    case 2:
-                        break;
-                }
-            }
-        };
-
-    }
-*/
 
 }
