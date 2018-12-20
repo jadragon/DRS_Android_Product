@@ -20,6 +20,7 @@ public class GlobalVariable extends Application {
     public void onCreate() {
         super.onCreate();
         PreferenceUtils.init(getApplicationContext());
+        PreferenceUtils.commitString("picture",null);
         initImageLoader();
     }
 

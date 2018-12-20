@@ -56,7 +56,7 @@ public class GetCouponRecyclerAdapter extends RecyclerView.Adapter<GetCouponRecy
             e.printStackTrace();
         }
 
-        holder.tag.setText("搶奪優惠券");
+        holder.tag.setText("取得優惠券");
     }
 
 

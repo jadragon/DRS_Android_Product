@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import Component.SimpleRoundProgress;
 import Utils.CommonUtil;
+import Utils.StringUtils;
 import db.ImagePojo;
 import db.SQLiteDatabaseHandler;
 
@@ -79,7 +80,7 @@ public class ImageViewActivity extends AppCompatActivity {
         total_image.setText("目前圖片有:" + arrayList.size() + "張  未上傳");
 
         if (arrayList.size() > 0)
-            image.setImageBitmap(BitmapFactory.decodeByteArray(arrayList.get(0).getImage(), 0, arrayList.get(0).getImage().length));
+            image.setImageBitmap(StringUtils.byteArrayToBitmap(arrayList.get(0).getImage()));
 
 
         update_button = findViewById(R.id.update_button);

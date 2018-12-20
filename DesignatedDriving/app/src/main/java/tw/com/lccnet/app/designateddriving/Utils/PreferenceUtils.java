@@ -6,10 +6,10 @@ import android.content.SharedPreferences;
 public class PreferenceUtils {
     private static SharedPreferences mSharedPreferences = null;
     private static SharedPreferences.Editor mEditor = null;
-
+    private static String PREF_NAME = "customer";
     public static void init(Context context) {
         if (null == mSharedPreferences) {
-            mSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+            mSharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         }
     }
 

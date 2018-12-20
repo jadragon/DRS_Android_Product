@@ -25,6 +25,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
 dependencies {
@@ -41,4 +51,7 @@ dependencies {
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation 'com.google.android.gms:play-services-places:16.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation files('libs/httpcore-4.3.2.jar')
+    implementation files('libs/httpmime-4.3.jar')
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
