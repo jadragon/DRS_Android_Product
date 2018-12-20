@@ -1,6 +1,9 @@
 package tw.com.lccnet.app.designateddriving;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -36,6 +39,7 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
     private GlobalVariable gv;
     private String pono;
     private TextView cmilage, note;
+    private Dialog dialog;
 
     @Override
 
@@ -47,6 +51,7 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
         initToolbar("汽車檢查", true);
         initView();
         scheduledFuture = MapsActivity.scheduledThreadPool.scheduleAtFixedRate(r1, 0, 3, TimeUnit.SECONDS);
+        showProgressDialog();
     }
 
     private void initView() {
@@ -83,6 +88,38 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
         */
     }
 
+    private void showProgressDialog() {
+        if (dialog == null) {
+            dialog = new Dialog(this);
+
+            dialog.setContentView(R.layout.item_wait_dialog);
+            dialog.findViewById(R.id.cancel).setOnClickListener(this);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView textView = dialog.findViewById(R.id.message);
+            dialog.findViewById(R.id.cancel).setVisibility(View.GONE);
+            textView.setText("等待司機檢查車輛");
+            dialog.show();
+        } else {
+            dialog.dismiss();
+            dialog = new Dialog(this);
+            dialog.setContentView(R.layout.item_wait_dialog);
+            dialog.findViewById(R.id.cancel).setOnClickListener(this);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView textView = dialog.findViewById(R.id.message);
+            dialog.findViewById(R.id.cancel).setVisibility(View.GONE);
+            textView.setText("等待司機檢查車輛");
+            dialog.show();
+        }
+    }
+
+    private void hideDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -114,6 +151,7 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
                     @Override
                     public void onTaskAfter(JSONObject jsonObject) {
                         if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                            showProgressDialog();
                             scheduledFuture.cancel(true);
                             scheduledFuture = MapsActivity.scheduledThreadPool.scheduleAtFixedRate(r1, 0, 3, TimeUnit.SECONDS);
                         }
@@ -165,6 +203,7 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
     };
 
     private void initData(JSONObject json) {
+        hideDialog();
         try {
             JSONObject data = json.getJSONObject("Data");
             // TODO: 2018/12/17 解析 car_value

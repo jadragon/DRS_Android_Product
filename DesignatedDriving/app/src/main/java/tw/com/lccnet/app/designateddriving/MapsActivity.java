@@ -86,7 +86,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView toolbar_txt_title;
     private Toolbar toolbar_main;
     private ActionBarDrawerToggle actionBarDrawerToggle_main;
-    private double mLatitude, mLongitude;
     private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     // 聲明一個集合，在後面的代碼中用來存儲用戶拒絕授權的權
     private List<String> mPermissionList = new ArrayList<>();
@@ -132,8 +131,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LocationUtils.register(getApplicationContext(), 0, 10, new LocationUtils.OnLocationChangeListener() {
                     @Override
                     public void getLastKnownLocation(Location location) {
-                        mLatitude = location.getLatitude();
-                        mLongitude = location.getLongitude();
+                        gv.setmLatitude(location.getLatitude());
+                        gv.setmLongitude(location.getLongitude());
                         /*
                         LatLng lastPosition = LocationUtils.readData(MapsActivity.this);
                         if (lastPosition != null) {
@@ -148,9 +147,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     @Override
                     public void onLocationChanged(Location location) {
-                        mLatitude = location.getLatitude();
-                        mLongitude = location.getLongitude();
-                        LatLng latlng = new LatLng(mLatitude, mLongitude);
+                        gv.setmLatitude(location.getLatitude());
+                        gv.setmLongitude(location.getLongitude());
+                        LatLng latlng = new LatLng(gv.getmLatitude(), gv.getmLongitude());
                         // TODO: 2018/12/17 沒有GoogleServer會出現  CameraUpdateFactory is not initialized
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17.0f));
                         //  LocationUtils.saveData(MapsActivity.this, location);
@@ -263,26 +262,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         }
                                     }
                                 }, 0, 5, TimeUnit.SECONDS);
+                                dialog = new Dialog(MapsActivity.this);
+                                dialog.setContentView(R.layout.item_wait_dialog);
+                                dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                            @Override
+                                            public JSONObject onTasking(Void... params) {
+                                                return CallNowApi.cancel_order(gv.getToken(), pono);
+                                            }
+
+                                            @Override
+                                            public void onTaskAfter(JSONObject jsonObject) {
+                                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                    dialog.dismiss();
+                                                }
+                                                Toast.makeText(MapsActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                });
+                                dialog.setCanceledOnTouchOutside(false);
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                dialog.show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }
                 });
                 dialog.dismiss();
-                dialog = new Dialog(this);
-                dialog.setContentView(R.layout.item_wait_dialog);
-                dialog.findViewById(R.id.cancel).setOnClickListener(this);
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
                 break;
             case R.id.cancel:
-                // TODO: 2018/12/17 執行續待優化
-                if (scheduledFuture != null && scheduledFuture.isCancelled()) {
-                    scheduledFuture.cancel(true);
-                }
                 dialog.dismiss();
                 break;
             case R.id.toolbar_txt_title:
@@ -583,7 +595,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setInfoWindowAdapter(adapter);
         */
         map.setMyLocationEnabled(true);//取得當前位置按鈕
-        LatLng latlng = new LatLng(mLatitude, mLongitude);
+        LatLng latlng = new LatLng(gv.getmLatitude(), gv.getmLongitude());
         showAddress(latlng);
         MarkerOptions markerOpt = new MarkerOptions();
         Random random = new Random();
@@ -630,9 +642,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onCameraIdle() {
                 LatLng latLng = map.getCameraPosition().target;
                 showAddress(latLng);
-                // mZoom = map.getCameraPosition().zoom;
-                if (Math.abs(mLatitude - latLng.latitude) > 0.0005 || Math.abs(mLongitude - latLng.longitude) > 0.0005) {
-                }
             }
         });
         //取得toolbar寬度

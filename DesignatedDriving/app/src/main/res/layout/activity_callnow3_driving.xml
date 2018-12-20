@@ -17,10 +17,10 @@
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/ordernum"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="訂單編號:"
             android:textColor="@color/royal_blue"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:focusableInTouchMode="true" />
 
         <ImageView
-            android:id="@+id/picture"
+            android:id="@+id/img"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="5dp"
@@ -51,29 +51,25 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:paddingRight="20dp">
 
                 <TextView
+                    android:id="@+id/uname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="張先生"
                     android:textColor="@color/royal_blue"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/score"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/star3_2" />
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@mipmap/phone_call" />
         </LinearLayout>
 
         <LinearLayout
@@ -88,31 +84,26 @@
                 android:background="@color/royal_blue" />
 
             <TextView
+                android:id="@+id/vaddress"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
-                android:text="起點 桃園縣"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black" />
 
             <TextView
+                android:id="@+id/eaddress"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
-                android:text="終點 台北縣"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black" />
 
             <TextView
+                android:id="@+id/opay"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:text="總里程數10公里 總計400元"
                 android:textColor="@color/royal_blue"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="match_parent"
@@ -120,8 +111,10 @@
                 android:background="@color/royal_blue" />
 
             <Button
+                android:id="@+id/change"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button_green2"
                 android:paddingLeft="20dp"
@@ -130,10 +123,7 @@
                 android:textColor="@color/royal_blue"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>
+
