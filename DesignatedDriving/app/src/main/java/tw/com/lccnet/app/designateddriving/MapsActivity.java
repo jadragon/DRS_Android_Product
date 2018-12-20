@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +79,8 @@ import tw.com.lccnet.app.designateddriving.Utils.LocationUtils;
 import tw.com.lccnet.app.designateddriving.Utils.WidgetUtils;
 import tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler;
 
+import static tw.com.lccnet.app.designateddriving.db.SQLiteDatabaseHandler.KEY_PICTURE;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int REQUEST_ALL_PERMISSION = 0x01;
     private static final int AUTO_PLACE_COMPETE_TOOLBAR = 0x02;
@@ -92,6 +95,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DisplayMetrics dm;
     private SQLiteDatabaseHandler db;
     private GlobalVariable gv;
+    private Button btn_long_trip, btn_immediate, btn_deliver;
+
+    private Dialog dialog;
+    private TextView start, end, cost;
+    private View menu_header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,21 +117,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // initThread();
         checkPermission();
         initToolbar();
-        initButton();
+        initView();
+        initListener();
         initADToast();
 
     }
 
-    private void initButton() {
-        Button btn_long_trip = findViewById(R.id.btn_long_trip);
-        btn_long_trip.setOnClickListener(this);
+    private void initView() {
+        btn_long_trip = findViewById(R.id.btn_long_trip);
         WidgetUtils.reShapeButton(this, btn_long_trip, R.color.orange1);
-        Button btn_immediate = findViewById(R.id.btn_immediate);
-        btn_immediate.setOnClickListener(this);
+        btn_immediate = findViewById(R.id.btn_immediate);
         WidgetUtils.reShapeButton(this, btn_immediate, R.color.royal_blue);
-        Button btn_deliver = findViewById(R.id.btn_deliver);
-        btn_deliver.setOnClickListener(this);
+        btn_deliver = findViewById(R.id.btn_deliver);
         WidgetUtils.reShapeButton(this, btn_deliver, R.color.royal_blue_light);
+    }
+
+    private void initListener() {
+        btn_long_trip.setOnClickListener(this);
+        btn_immediate.setOnClickListener(this);
+        btn_deliver.setOnClickListener(this);
+    }
+
+    private void initData() {
+        String url = db.getMemberDetail().getAsString(KEY_PICTURE);
+        ImageLoader.getInstance().displayImage(url, (ImageView) menu_header.findViewById(R.id.picture));
     }
 
     private void checkLocation() {
@@ -196,9 +213,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(MapsActivity.this, permissions, REQUEST_ALL_PERMISSION);
         }
     }
-
-    private Dialog dialog;
-    private TextView start, end, cost;
 
     @Override
     public void onClick(View v) {
@@ -331,11 +345,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void caculateCost() {
+    private void caculateCost(final String address1, final String address2, final TextView cost) {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
-                return CustomerApi.calculate1("1", start.getText().toString(), end.getText().toString());
+                return CustomerApi.calculate1("1", address1, address2);
             }
 
             @Override
@@ -535,10 +549,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         };
         NavigationView navigation_view = findViewById(R.id.navigation_view);
-        View header = navigation_view.getHeaderView(0);
-        header.findViewById(R.id.header_item1).setOnClickListener(onClickListener);
-        header.findViewById(R.id.header_item2).setOnClickListener(onClickListener);
-        header.findViewById(R.id.header_item3).setOnClickListener(onClickListener);
+        menu_header = navigation_view.getHeaderView(0);
+        menu_header.findViewById(R.id.header_item1).setOnClickListener(onClickListener);
+        menu_header.findViewById(R.id.header_item2).setOnClickListener(onClickListener);
+        menu_header.findViewById(R.id.header_item3).setOnClickListener(onClickListener);
         navigation_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -734,6 +748,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    @Override
     protected void onDestroy() {
         db.close();
         LocationUtils.unregister();
@@ -787,7 +807,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 end.setText(place.getAddress());
-                caculateCost();
+                caculateCost(start.getText().toString(), end.getText().toString(), cost);
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.i("place", status.getStatusMessage());

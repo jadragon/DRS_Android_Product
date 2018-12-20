@@ -26,4 +26,8 @@ public class CallNow5_CountActivity extends ToolbarActivity {
         countListAdapter = new CountListAdapter(this);
         recyclerView.setAdapter(countListAdapter);
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

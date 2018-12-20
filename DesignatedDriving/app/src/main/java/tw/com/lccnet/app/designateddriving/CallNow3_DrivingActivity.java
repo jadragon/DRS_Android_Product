@@ -215,10 +215,6 @@ public class CallNow3_DrivingActivity extends ToolbarActivity implements View.On
         }
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
 
     private JSONObject json;
     Runnable r1 = new Runnable() {
@@ -311,4 +307,9 @@ public class CallNow3_DrivingActivity extends ToolbarActivity implements View.On
             scheduledFuture1.cancel(true);
         super.onDestroy();
     }
+    @Override
+    public void onBackPressed() {
+
+    }
+
 }

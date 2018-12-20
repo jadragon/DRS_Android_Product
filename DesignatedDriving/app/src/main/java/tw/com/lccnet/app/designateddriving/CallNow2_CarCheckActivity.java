@@ -26,12 +26,12 @@ import tw.com.lccnet.app.designateddriving.Thread.IDataCallBack;
 public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.OnClickListener {
 
     private List<CarImageView> list;
-    /*
+
     private int[] image1 = {R.drawable.car1, R.drawable.car2, R.drawable.car3, R.drawable.car4, R.drawable.car5, R.drawable.car6, R.drawable.car7, R.drawable.car7,
             R.drawable.car9, R.drawable.car9, R.drawable.car11, R.drawable.car12, R.drawable.car13, R.drawable.car14, R.drawable.car15, R.drawable.car16, R.drawable.car16, R.drawable.car16, R.drawable.car16};
     private int[] image2 = {R.drawable.car_red1, R.drawable.car_red2, R.drawable.car_red3, R.drawable.car_red4, R.drawable.car_red5, R.drawable.car_red6, R.drawable.car_red7, R.drawable.car_red8,
             R.drawable.car_red9, R.drawable.car_red10, R.drawable.car_red11, R.drawable.car_red12, R.drawable.car_red13, R.drawable.car_red14, R.drawable.car_red15, R.drawable.car_red16, R.drawable.car_red17, R.drawable.car_red18, R.drawable.car_red19};
-  */
+
     private JSONObject json;
     private Button next, recheck;
     private ScheduledFuture scheduledFuture;
@@ -47,7 +47,7 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
         setContentView(R.layout.activity_callnow2_car_check);
         gv = (GlobalVariable) getApplicationContext();
         pono = getIntent().getStringExtra("pono");
-        initToolbar("汽車檢查", true);
+        initToolbar("汽車檢查", false);
         initView();
         scheduledFuture = MapsActivity.scheduledThreadPool.scheduleAtFixedRate(r1, 0, 3, TimeUnit.SECONDS);
         showProgressDialog();
@@ -137,6 +137,7 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
                             Intent intent = new Intent(CallNow2_CarCheckActivity.this, CallNow3_DrivingActivity.class);
                             intent.putExtra("pono", pono);
                             startActivity(intent);
+                            finish();
                         }
                     }
                 });
@@ -207,9 +208,24 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
         try {
             JSONObject data = json.getJSONObject("Data");
             // TODO: 2018/12/17 解析 car_value
-//            data.getString("car_value");
-            cmilage.setText(data.getString("cmilage"));
-            note.setText(data.getString("note"));
+            String[] car_value = data.getString("car_value").split(",");
+            if (car_value.length == list.size()) {
+                CarImageView carImageView;
+                for (int i = 0; i < car_value.length; i++) {
+                    carImageView = list.get(i);
+                    if (car_value[i].equals("1")) {
+                        carImageView.setCheck(true);
+                        carImageView.setBackgroundColor(getResources().getColor(R.color.invisible));
+                        carImageView.setImageResource(image2[i]);
+                    } else {
+                        carImageView.setCheck(false);
+                        carImageView.setBackgroundColor(getResources().getColor(R.color.invisible_red));
+                        carImageView.setImageResource(image1[i]);
+                    }
+                }
+            }
+            cmilage.setText(data.getString("ecmilage"));
+            note.setText(data.getString("dnote"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -221,4 +237,8 @@ public class CallNow2_CarCheckActivity extends ToolbarActivity implements View.O
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

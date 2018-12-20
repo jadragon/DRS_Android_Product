@@ -110,4 +110,7 @@ public class CallNow6_EvaluationActivity extends ToolbarActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 }
