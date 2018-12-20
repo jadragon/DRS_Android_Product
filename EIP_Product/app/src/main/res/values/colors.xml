@@ -12,7 +12,8 @@
     <color name="invisible">#00000000</color>
     //language
     <color name="light_green">#8fb786</color>
-    <color name="light_purple">#919fa6</color>
+    <color name="gray_purple">#919fa6</color>
+    <color name="light_purple">#dde4ff</color>
     <color name="orange">#f59738</color>
 
     <color name="gray1">#cccccc</color>

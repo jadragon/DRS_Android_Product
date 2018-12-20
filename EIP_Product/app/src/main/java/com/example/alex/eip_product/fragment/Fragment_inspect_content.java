@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.alex.eip_product.GlobalVariable;
 import com.example.alex.eip_product.InsepectOrderActivity;
+import com.example.alex.eip_product.PreviewInsepectOrderActivity;
 import com.example.alex.eip_product.R;
 
 import java.util.ArrayList;
@@ -73,24 +74,42 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
         tableLayout.removeAllViews();
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_insepect_content_tablelayout_header, null);
         tableLayout.addView(view);
-        for (ContentValues cv : list) {
+        ContentValues cv;
+        for (int i = 0; i < list.size(); i++) {
+            cv = list.get(i);
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_inspect_content, null);
-            ((TextView) view.findViewWithTag("PONumber")).setText(cv.getAsString(KEY_PONumber));
-            ((TextView) view.findViewWithTag("POVersion")).setText(cv.getAsString(KEY_POVersion));
+            TextView textView = view.findViewWithTag("PONumber");
+            textView.setText(cv.getAsString(KEY_PONumber));
+            textView = view.findViewWithTag("POVersion");
+            textView.setText(cv.getAsString(KEY_POVersion));
             if (cv.getAsBoolean(KEY_HasCompleted)) {
-                ((TextView) view.findViewWithTag("HasCompleted")).setText("是");
-                ((TextView) view.findViewWithTag("CanShipping")).setText("是");
-                ((TextView) view.findViewWithTag("overview")).setText("(預覽)");
+                textView = view.findViewWithTag("HasCompleted");
+                textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
+                textView.setText("是");
+                textView = view.findViewWithTag("CanShipping");
+                textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+                textView.setText("是");
+                textView = view.findViewWithTag("overview");
+                textView.setBackgroundColor(getResources().getColor(R.color.orange));
+                textView.setText("(預覽)");
             } else {
-                ((TextView) view.findViewWithTag("HasCompleted")).setText("否");
-                ((TextView) view.findViewWithTag("CanShipping")).setText("未驗");
+                textView = view.findViewWithTag("HasCompleted");
+                textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
+                textView.setText("否");
+                textView = view.findViewWithTag("CanShipping");
+                textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                textView.setText("未驗");
+
+                textView = view.findViewWithTag("overview");
                 if (cv.getAsBoolean(KEY_isOrderEdit)) {
-                    ((TextView) view.findViewWithTag("overview")).setText("(未完成)");
+                    textView.setText("(未完成)");
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 } else {
-                    ((TextView) view.findViewWithTag("overview")).setText("(填寫驗表)");
+                    textView.setText("(填寫驗表)");
+                    textView.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
-                view.findViewWithTag("overview").setOnClickListener(this);
-                view.findViewWithTag("overview").setTag(cv.getAsString(KEY_PONumber));
+                textView.setOnClickListener(this);
+                textView.setTag(i);
             }
             tableLayout.addView(view);
         }
@@ -117,8 +136,14 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getContext(), InsepectOrderActivity.class);
-        intent.putExtra(KEY_PONumber, v.getTag() + "");
+        int position = (int) v.getTag();
+        Intent intent;
+        if (list.get(position).getAsBoolean(KEY_HasCompleted)) {
+            intent = new Intent(getContext(), PreviewInsepectOrderActivity.class);
+        } else {
+            intent = new Intent(getContext(), InsepectOrderActivity.class);
+        }
+        intent.putExtra(KEY_PONumber, list.get(position).getAsString(KEY_PONumber) + "");
         startActivity(intent);
     }
 }

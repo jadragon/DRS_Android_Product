@@ -48,19 +48,22 @@
             android:id="@+id/company_tw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TW" />
+            android:text="TW"
+            android:background="@color/light_green"/>
 
         <Button
             android:id="@+id/company_cn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CN" />
+            android:text="CN"
+            android:background="@color/gray_purple"/>
 
         <Button
             android:id="@+id/company_vn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VN" />
+            android:text="VN"
+            android:background="@color/light_orange"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

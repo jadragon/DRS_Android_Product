@@ -187,79 +187,83 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
     }
 
     private void saveOrder() {
-        ContentValues cv = new ContentValues();
-
-        byte[] byteArray = null;
-        if (bitmap != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byteArray = stream.toByteArray();
-        } else {
-            Toast.makeText(InsepectOrderActivity.this, "簽名檔沒簽", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        cv.put(KEY_VendorInspector, byteArray);
-        if (Inspector.getText().toString().equals("")) {
-            cv.put(KEY_Inspector, gv.getUsername());
-        } else {
-            cv.put(KEY_Inspector, Inspector.getText().toString());
-        }
-        String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-        cv.put(KEY_InspectorDate, today);
-        cv.put(KEY_VendorInspectorDate, today);
-        cv.put(KEY_isOrderEdit, true);
-        db.saveOrdersEditBasic(Orderslist.getAsString(KEY_PONumber), cv);
-        ArrayList<ContentValues> arrayList = new ArrayList<>();
-        for (View item : ItemList) {
-            cv = new ContentValues();
-            TextView textView = item.findViewById(R.id.row1);
-            cv.put(KEY_LineNumber, textView.getText().toString());
-            textView = item.findViewById(R.id.row7);
-            cv.put(KEY_Size, textView.getText().toString());
-            textView = item.findViewById(R.id.row8);
-            cv.put(KEY_Functions, textView.getText().toString());
-            textView = item.findViewById(R.id.row9);
-            cv.put(KEY_Surface, textView.getText().toString());
-            textView = item.findViewById(R.id.row10);
-            cv.put(KEY_Package, textView.getText().toString());
-            CheckBox checkBox = item.findViewById(R.id.row11);
-            cv.put(KEY_MainMarK, checkBox.isChecked());
-            checkBox = item.findViewById(R.id.row12);
-            cv.put(KEY_SideMarK, checkBox.isChecked());
-            RadioButton radioButton = item.findViewById(R.id.row13);
-            cv.put(KEY_CheckPass, radioButton.isChecked());
-            radioButton = item.findViewById(R.id.row14);
-            cv.put(KEY_Special, radioButton.isChecked());
-            radioButton = item.findViewById(R.id.row15);
-            cv.put(KEY_Rework, radioButton.isChecked());
-            radioButton = item.findViewById(R.id.row16);
-            cv.put(KEY_Reject, radioButton.isChecked());
-            textView = item.findViewById(R.id.row17);
-            cv.put(KEY_ReCheckDate, textView.getText().toString());
-            textView = item.findViewById(R.id.row18);
-            cv.put(KEY_Remarks, textView.getText().toString());
-            arrayList.add(cv);
-        }
-        db.saveOrderDetailsEdit(Orderslist.getAsString(KEY_PONumber), arrayList);
-        /**
-         *checkreason
-         */
-        arrayList = new ArrayList<>();
-        for (String key : CheckFailedReasonslist.keySet()) {
-            ArrayList<String> array1 = CheckFailedReasonslist.get(key).ReasonCode;
-            ArrayList<String> array2 = CheckFailedReasonslist.get(key).ReasonDescr;
-            for (int i = 0; i < array1.size(); i++) {
+        try {
+            ContentValues cv = new ContentValues();
+            byte[] byteArray = null;
+            if (bitmap != null) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArray = stream.toByteArray();
+            } else {
+                Toast.makeText(InsepectOrderActivity.this, "簽名檔沒簽", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            cv.put(KEY_VendorInspector, byteArray);
+            if (Inspector.getText().toString().equals("")) {
+                cv.put(KEY_Inspector, gv.getUsername());
+            } else {
+                cv.put(KEY_Inspector, Inspector.getText().toString());
+            }
+            String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+            cv.put(KEY_InspectorDate, today);
+            cv.put(KEY_VendorInspectorDate, today);
+            cv.put(KEY_isOrderEdit, true);
+            db.saveOrdersEditBasic(Orderslist.getAsString(KEY_PONumber), cv);
+            ArrayList<ContentValues> arrayList = new ArrayList<>();
+            for (View item : ItemList) {
                 cv = new ContentValues();
-                cv.put(KEY_PONumber, Orderslist.getAsString(KEY_PONumber));
-                cv.put(KEY_POVersion, Orderslist.getAsString(KEY_POVersion));
-                cv.put(KEY_Item, CheckFailedReasonslist.get(key).Item);
-                cv.put(KEY_LineNumber, CheckFailedReasonslist.get(key).LineNumber);
-                cv.put(KEY_ReasonCode, array1.get(i));
-                cv.put(KEY_ReasonDescr, array2.get(i));
+                TextView textView = item.findViewById(R.id.row1);
+                cv.put(KEY_LineNumber, textView.getText().toString());
+                textView = item.findViewById(R.id.row7);
+                cv.put(KEY_Size, textView.getText().toString());
+                textView = item.findViewById(R.id.row8);
+                cv.put(KEY_Functions, textView.getText().toString());
+                textView = item.findViewById(R.id.row9);
+                cv.put(KEY_Surface, textView.getText().toString());
+                textView = item.findViewById(R.id.row10);
+                cv.put(KEY_Package, textView.getText().toString());
+                CheckBox checkBox = item.findViewById(R.id.row11);
+                cv.put(KEY_MainMarK, checkBox.isChecked());
+                checkBox = item.findViewById(R.id.row12);
+                cv.put(KEY_SideMarK, checkBox.isChecked());
+                RadioButton radioButton = item.findViewById(R.id.row13);
+                cv.put(KEY_CheckPass, radioButton.isChecked());
+                radioButton = item.findViewById(R.id.row14);
+                cv.put(KEY_Special, radioButton.isChecked());
+                radioButton = item.findViewById(R.id.row15);
+                cv.put(KEY_Rework, radioButton.isChecked());
+                radioButton = item.findViewById(R.id.row16);
+                cv.put(KEY_Reject, radioButton.isChecked());
+                textView = item.findViewById(R.id.row17);
+                cv.put(KEY_ReCheckDate, textView.getText().toString());
+                textView = item.findViewById(R.id.row18);
+                cv.put(KEY_Remarks, textView.getText().toString());
                 arrayList.add(cv);
             }
+            db.saveOrderDetailsEdit(Orderslist.getAsString(KEY_PONumber), arrayList);
+            /**
+             *checkreason
+             */
+            arrayList = new ArrayList<>();
+            for (String key : CheckFailedReasonslist.keySet()) {
+                ArrayList<String> array1 = CheckFailedReasonslist.get(key).ReasonCode;
+                ArrayList<String> array2 = CheckFailedReasonslist.get(key).ReasonDescr;
+                for (int i = 0; i < array1.size(); i++) {
+                    cv = new ContentValues();
+                    cv.put(KEY_PONumber, Orderslist.getAsString(KEY_PONumber));
+                    cv.put(KEY_POVersion, Orderslist.getAsString(KEY_POVersion));
+                    cv.put(KEY_Item, CheckFailedReasonslist.get(key).Item);
+                    cv.put(KEY_LineNumber, CheckFailedReasonslist.get(key).LineNumber);
+                    cv.put(KEY_ReasonCode, array1.get(i));
+                    cv.put(KEY_ReasonDescr, array2.get(i));
+                    arrayList.add(cv);
+                }
+            }
+            db.saveCheckFailedReasonsEdit(arrayList);
+            Toast.makeText(this, "儲存成功", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "儲存失敗", Toast.LENGTH_SHORT).show();
         }
-        db.saveCheckFailedReasonsEdit(arrayList);
     }
 
     private void cancel() {
@@ -420,7 +424,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-
     public void setAnimation(View view) {
         //闪烁
         AlphaAnimation alphaAnimation1 = new AlphaAnimation(0.1f, 1.0f);
@@ -430,7 +433,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         view.setAnimation(alphaAnimation1);
         alphaAnimation1.start();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -457,7 +459,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         db.close();
         super.onDestroy();
     }
-
 
     private void checkFailItems(View layout, int position) {
         EditText editText = layout.findViewById(R.id.row7);
@@ -504,7 +505,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-
     private class AddColumTask extends AsyncTask<String, Integer, String> {
         private int index, position;
         private String tag;
@@ -529,11 +529,10 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             if (result.equals("OrderDetails")) {
                 for (int i = 0; i < OrderDetailslist.size(); i++) {
                     View view = new View(InsepectOrderActivity.this);
-                    params.height = 1;
+                    params.height = (int) dm.density;
                     view.setLayoutParams(params);
                     view.setBackgroundColor(getResources().getColor(android.R.color.black));
                     courseTable.addView(view);
-
 
                     final View item_view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
                     item_view.setTag(i);
@@ -654,7 +653,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     textView = item_view.findViewById(R.id.row18);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_Remarks));
                 }
-
 
             } else if (result.equals("CheckFailedReasons")) {
                 View view;

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="3dp"
         android:layout_weight="@dimen/title1_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:gravity="center"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title2_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:gravity="center"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title3_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:gravity="center"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
@@ -46,7 +46,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title4_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
+        android:inputType="number"
         android:gravity="center"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
@@ -57,7 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title5_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:gravity="center"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
@@ -67,7 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title6_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:gravity="center"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
@@ -78,13 +79,13 @@
         android:layout_weight="@dimen/title7_weight"
         android:orientation="horizontal">
 
-        <EditText
+        <TextView
             android:id="@+id/row7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
-            android:inputType="number"
+            android:background="@color/light_blue"
+            android:gravity="center_vertical"
             android:padding="2.5dp"
             android:text="0"
             android:textSize="@dimen/table_text_size" />
@@ -94,13 +95,13 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <EditText
+        <TextView
             android:id="@+id/row8"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
-            android:inputType="number"
+            android:background="@color/light_blue"
+            android:gravity="center_vertical"
             android:padding="2.5dp"
             android:text="0"
             android:textSize="@dimen/table_text_size" />
@@ -110,13 +111,13 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <EditText
+        <TextView
             android:id="@+id/row9"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
-            android:inputType="number"
+            android:background="@color/light_blue"
+            android:gravity="center_vertical"
             android:padding="2.5dp"
             android:text="0"
             android:textSize="@dimen/table_text_size" />
@@ -126,14 +127,14 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <EditText
+        <TextView
             android:id="@+id/row10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
-            android:inputType="number"
+            android:background="@color/light_blue"
             android:padding="2.5dp"
+            android:gravity="center_vertical"
             android:text="0"
             android:textSize="@dimen/table_text_size" />
 
@@ -143,7 +144,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title8_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:padding="2.5dp">
 
         <CheckBox
@@ -151,14 +152,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:button="@drawable/checkbox_nike" />
+            android:button="@drawable/checkbox_nike"
+            android:enabled="false"/>
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title9_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:padding="2.5dp">
 
         <CheckBox
@@ -166,7 +168,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:button="@drawable/checkbox_nike" />
+            android:button="@drawable/checkbox_nike"
+            android:enabled="false"/>
     </FrameLayout>
 
 
@@ -175,7 +178,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title10_weight"
-        android:background="@color/light_purple"
+        android:background="@color/light_blue"
         android:orientation="horizontal">
 
         <RadioButton
@@ -183,10 +186,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
+            android:background="@color/light_blue"
             android:button="@drawable/radio_nike"
             android:gravity="center"
-            android:padding="2.5dp" />
+            android:padding="2.5dp"
+            android:enabled="false"/>
 
         <View
             android:layout_width="1dp"
@@ -198,10 +202,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
+            android:background="@color/light_blue"
             android:gravity="center"
             android:button="@drawable/radio_nike"
-            android:padding="2.5dp" />
+            android:padding="2.5dp"
+            android:enabled="false"/>
 
         <View
             android:layout_width="1dp"
@@ -213,10 +218,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
+            android:background="@color/light_blue"
             android:gravity="center"
             android:button="@drawable/radio_nike"
-            android:padding="2.5dp" />
+            android:padding="2.5dp"
+            android:enabled="false"/>
 
         <View
             android:layout_width="1dp"
@@ -228,26 +234,27 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/light_purple"
+            android:background="@color/light_blue"
             android:button="@drawable/radio_nike"
             android:gravity="center"
-            android:padding="2.5dp" />
+            android:padding="2.5dp"
+            android:enabled="false"/>
 
     </RadioGroup>
 
 
-    <EditText
+    <TextView
         android:id="@+id/row17"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title11_weight"
-        android:background="@color/light_purple"
-        android:inputType="number"
+        android:background="@color/light_blue"
         android:padding="2.5dp"
+        android:gravity="center_vertical"
         android:textSize="@dimen/table_text_size" />
 
 
-    <EditText
+    <TextView
         android:id="@+id/row18"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -255,6 +262,7 @@
         android:layout_weight="@dimen/title12_weight"
         android:background="@android:color/white"
         android:padding="2.5dp"
+        android:gravity="center_vertical"
         android:textSize="@dimen/table_text_size" />
 
 
