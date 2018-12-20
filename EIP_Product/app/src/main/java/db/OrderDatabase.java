@@ -15,10 +15,16 @@ import android.util.Log;
 import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import Utils.StringUtils;
 
 public class OrderDatabase extends SQLiteOpenHelper {
 
@@ -202,6 +208,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
             + KEY_isOrderUpdate + " BOOLEAN" + ")";
     private static final String CREATE_CheckFailedReasonsEdit_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CheckFailedReasonsEdit + "("
             + KEY_ID + " INTEGER PRIMARY KEY" + ","
+            + KEY_LineNumber + " INTEGER" + ","
             + KEY_PONumber + " TEXT" + ","
             + KEY_POVersion + " TEXT" + ","
             + KEY_Item + " TEXT" + ","
@@ -589,6 +596,76 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return datas;
     }
 
+    public JSONObject getUpdateDataByPONumber(String PONumber) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        JSONObject all_json = new JSONObject();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            try {
+                all_json.put(KEY_PONumber, cursor.getString(1));
+                all_json.put(KEY_POVersion, cursor.getString(2));
+                all_json.put(KEY_Inspector, cursor.getString(13));
+                all_json.put(KEY_InspectorDate, cursor.getString(14));
+                all_json.put(KEY_VendorInspector, StringUtils.encodeTobase64(cursor.getBlob(15)));
+                all_json.put(KEY_VendorInspectorDate, cursor.getString(16));
+                jsonArray = new JSONArray();
+                cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+                while (cursor.moveToNext()) {
+                    jsonObject = new JSONObject();
+                    jsonObject.put(KEY_PONumber, cursor.getString(1));
+                    jsonObject.put(KEY_POVersion, cursor.getString(2));
+                    //   jsonObject.put(KEY_LineNumber, cursor.getString(3));
+                    jsonObject.put(KEY_Item, cursor.getString(4));
+                    //   jsonObject.put(KEY_OrderQty, cursor.getString(5));
+                    //   jsonObject.put(KEY_Qty, cursor.getString(6));
+                    //   jsonObject.put(KEY_SampleNumber, cursor.getString(7));
+                    //   jsonObject.put(KEY_Uom, cursor.getString(8));
+                    jsonObject.put(KEY_Size, cursor.getString(9));
+                    jsonObject.put(KEY_Functions, cursor.getString(10));
+                    jsonObject.put(KEY_Surface, cursor.getString(11));
+                    jsonObject.put(KEY_Package, cursor.getString(12));
+                    jsonObject.put(KEY_CheckPass, cursor.getInt(13) > 0);
+                    jsonObject.put(KEY_Special, cursor.getInt(14) > 0);
+                    jsonObject.put(KEY_Rework, cursor.getInt(15) > 0);
+                    jsonObject.put(KEY_Reject, cursor.getInt(16) > 0);
+                    jsonObject.put(KEY_MainMarK, cursor.getInt(17) > 0);
+                    jsonObject.put(KEY_SideMarK, cursor.getInt(18) > 0);
+                    jsonObject.put(KEY_ReCheckDate, cursor.getString(19));
+                    jsonObject.put(KEY_Remarks, cursor.getString(20));
+                    jsonArray.put(jsonObject);
+                }
+                all_json.put(KEY_OrderDetails, jsonArray);
+
+
+                jsonArray = new JSONArray();
+                cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+                while (cursor.moveToNext()) {
+                    jsonObject = new JSONObject();
+                    jsonObject.put(KEY_PONumber, cursor.getString(2));
+                    jsonObject.put(KEY_POVersion, cursor.getString(3));
+                    jsonObject.put(KEY_Item, cursor.getString(4));
+                    jsonObject.put(KEY_ReasonCode, cursor.getString(5));
+                    jsonObject.put(KEY_ReasonDescr, cursor.getString(6));
+                    jsonArray.put(jsonObject);
+                }
+                all_json.put(KEY_CheckFailedReasons, jsonArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        cursor.close();
+        db.close();
+
+        return all_json;
+    }
+
     public ArrayList<ContentValues> getCheckFailedReasonsByPONumber(String PONumber) {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
@@ -610,21 +687,24 @@ public class OrderDatabase extends SQLiteOpenHelper {
     }
 
     public Map<String, FailItemPojo> getCheckFailedReasonsMapByPONumber(String PONumber) {
-        Map<String, FailItemPojo> map = new HashMap<>();
+        Map<String, FailItemPojo> map = new TreeMap<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor1 = db.rawQuery("SELECT " + KEY_Item + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + "GROUP BY " + KEY_Item, null);
+        Cursor cursor1 = db.rawQuery("SELECT " + KEY_LineNumber + "," + KEY_Item + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + "ORDER BY " + KEY_LineNumber, null);
         Cursor cursor2 = null;
         ArrayList<String> ReasonCode, ReasonDescr;
         while (cursor1.moveToNext()) {
-            String item = cursor1.getString(0);
-            ReasonCode = new ArrayList<>();
-            ReasonDescr = new ArrayList<>();
-            cursor2 = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
-            while (cursor2.moveToNext()) {
-                ReasonCode.add(cursor2.getString(4));
-                ReasonDescr.add(cursor2.getString(5));
+            String LineNumber = cursor1.getString(0);
+            String item = cursor1.getString(1);
+            if (map.get(item) == null) {
+                ReasonCode = new ArrayList<>();
+                ReasonDescr = new ArrayList<>();
+                cursor2 = db.rawQuery("SELECT " + KEY_ReasonCode + "," + KEY_ReasonDescr + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
+                while (cursor2.moveToNext()) {
+                    ReasonCode.add(cursor2.getString(0));
+                    ReasonDescr.add(cursor2.getString(1));
+                }
+                map.put(LineNumber, new FailItemPojo(LineNumber, item, ReasonCode, ReasonDescr));
             }
-            map.put(item, new FailItemPojo(item, ReasonCode, ReasonDescr));
         }
 
         cursor1.close();
@@ -797,100 +877,6 @@ public class OrderDatabase extends SQLiteOpenHelper {
             }
             Log.e("OrdersEdit", "OrderDetails儲存成功");
         }
-/*
-        ContentValues cv;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-        if (cursor.getCount() > 0) {
-            cursor = db.rawQuery("SELECT " + KEY_PONumber + "," + KEY_POVersion + "," + KEY_LineNumber + "," + KEY_Item + "," +
-                    KEY_OrderQty + "," + KEY_Qty + "," + KEY_SampleNumber + "," + KEY_Uom + " FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" +
-                    " EXCEPT " +
-                    "SELECT " + KEY_PONumber + "," + KEY_POVersion + "," + KEY_LineNumber + "," + KEY_Item + "," +
-                    KEY_OrderQty + "," + KEY_Qty + "," + KEY_SampleNumber + "," + KEY_Uom + " FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-            if (cursor.getCount() > 0) {
-                cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-                int i = 0;
-                while (cursor.moveToNext()) {
-                    cv = new ContentValues();
-                    cv.put(KEY_PONumber, cursor.getString(1));
-                    cv.put(KEY_POVersion, cursor.getString(2));
-                    cv.put(KEY_LineNumber, cursor.getString(3));
-                    cv.put(KEY_Item, cursor.getString(4));
-                    cv.put(KEY_OrderQty, cursor.getString(5));
-                    cv.put(KEY_Qty, cursor.getString(6));
-                    cv.put(KEY_SampleNumber, cursor.getString(7));
-                    cv.put(KEY_Uom, cursor.getString(8));
-
-//                cv.put(KEY_Size, cursor.getString(9));
-//                cv.put(KEY_Functions, cursor.getString(10));
-//                cv.put(KEY_Surface, cursor.getString(11));
-//                cv.put(KEY_Package, cursor.getString(12));
-//                cv.put(KEY_CheckPass, cursor.getString(13));
-//                cv.put(KEY_Special, cursor.getString(14));
-//                cv.put(KEY_Rework, cursor.getString(15));
-//                cv.put(KEY_Reject, cursor.getString(16));
-//                cv.put(KEY_MainMarK, cursor.getString(17));
-//                cv.put(KEY_SideMarK, cursor.getString(18));
-//                cv.put(KEY_ReCheckDate, cursor.getString(19));
-//                cv.put(KEY_Remarks, cursor.getString(20));
-
-                    //插入驗貨人員修改的資料
-                    if (edit_cv != null && edit_cv.size() > 0)
-                        cv.putAll(edit_cv.get(i));
-                    //將最新資料做更新
-                    db.update(TABLE_OrderDetailsEdit, cv, KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_LineNumber + " = '" + cursor.getString(3) + "'", null);
-                    i++;
-                }
-            } else {
-                cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-                int i = 0;
-                while (cursor.moveToNext()) {
-                    //插入驗貨人員修改的資料
-                    if (edit_cv != null && edit_cv.size() > 0) {
-                        db.update(TABLE_OrderDetailsEdit, edit_cv.get(i), KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_LineNumber + " = '" + cursor.getString(3) + "'", null);
-                    }
-                    i++;
-                }
-                Toast.makeText(ctx, "資料儲存成功", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-            //" AND " + KEY_Comment + " IS NOT NULL";
-            int i = 0;
-            while (cursor.moveToNext()) {
-                cv = new ContentValues();
-                cv.put(KEY_PONumber, cursor.getString(1));
-                cv.put(KEY_POVersion, cursor.getString(2));
-                cv.put(KEY_LineNumber, cursor.getString(3));
-                cv.put(KEY_Item, cursor.getString(4));
-                cv.put(KEY_OrderQty, cursor.getString(5));
-                cv.put(KEY_Qty, cursor.getString(6));
-                cv.put(KEY_SampleNumber, cursor.getString(7));
-                cv.put(KEY_Uom, cursor.getString(8));
-
-//                cv.put(KEY_Size, cursor.getString(9));
-//                cv.put(KEY_Functions, cursor.getString(10));
-//                cv.put(KEY_Surface, cursor.getString(11));
-//                cv.put(KEY_Package, cursor.getString(12));
-//                cv.put(KEY_CheckPass, cursor.getString(13));
-//                cv.put(KEY_Special, cursor.getString(14));
-//                cv.put(KEY_Rework, cursor.getString(15));
-//                cv.put(KEY_Reject, cursor.getString(16));
-//                cv.put(KEY_MainMarK, cursor.getString(17));
-//                cv.put(KEY_SideMarK, cursor.getString(18));
-//                cv.put(KEY_ReCheckDate, cursor.getString(19));
-//                cv.put(KEY_Remarks, cursor.getString(20));
-
-                //插入驗貨人員修改的資料
-                if (edit_cv != null && edit_cv.size() > 0)
-                    cv.putAll(edit_cv.get(i));
-                db.insert(TABLE_OrderDetailsEdit, null, cv);
-                i++;
-            }
-        }
-        cursor.close();
-        db.close();
-        */
     }
 
     public void saveCheckFailedReasonsEdit(ArrayList<ContentValues> edit_cv) {
