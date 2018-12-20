@@ -26,7 +26,7 @@ import tw.com.lccnet.app.designateddriving.Utils.ImageUtils;
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CameraSurfaceView mCameraSurfaceView;
-    private Button back, albums, button_capture, change_camera, confirm, cancel;
+    private Button back,flash, albums, button_capture, change_camera, confirm, cancel;
     private ImageView prewview_image;
     private LinearLayout show_layout;
     private Bitmap mbitmap;
@@ -51,6 +51,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         change_camera = findViewById(R.id.change_camera);
         albums = findViewById(R.id.albums);
         back = findViewById(R.id.back);
+        flash= findViewById(R.id.flash);
         mCameraSurfaceView = findViewById(R.id.cameraSurfaceView);
         mOrientation = CameraUtils.calculateCameraPreviewOrientation(CameraActivity.this);
         //showview
@@ -67,6 +68,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         cancel.setOnClickListener(this);
         albums.setOnClickListener(this);
         back.setOnClickListener(this);
+        flash.setOnClickListener(this);
     }
 
     @Override
@@ -82,9 +84,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 switchCamera();
                 break;
             case R.id.confirm:
+
                 if (mbitmap != null) {
+
                     String path = Environment.getExternalStorageDirectory() + "/DCIM/Camera/"
-                            +  "picture.png";
+                            + "picture.png";
                     try {
                         FileOutputStream fout = new FileOutputStream(path);
                         BufferedOutputStream bos = new BufferedOutputStream(fout);
@@ -112,6 +116,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 intent.setType("image/*");
                 startActivityForResult(intent, 200);
                 break;
+            case R.id.flash:
+                break;
         }
     }
 
@@ -138,6 +144,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     } else {
                         mbitmap = ImageUtils.getRotatedBitmap(bitmap, mOrientation);
                     }
+                    squareBitmap();
                     prewview_image.setImageBitmap(mbitmap);
                     /*
                     String path = Environment.getExternalStorageDirectory() + "/DCIM/Camera/"
@@ -187,13 +194,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 Uri originalUri = data.getData(); //獲得圖片的uri
                 mbitmap = MediaStore.Images.Media.getBitmap(resolver, originalUri); //顯得到bitmap圖片
                 show_layout.setVisibility(View.VISIBLE);
-                int width = mbitmap.getWidth();
-                int height = mbitmap.getHeight();
-                if (width > height) {
-                    mbitmap = Bitmap.createBitmap(mbitmap, (width - height) / 2, 0, height, height);
-                } else if (width < height) {
-                    mbitmap = Bitmap.createBitmap(mbitmap, 0, (height - width) / 2, width, width);
-                }
+                squareBitmap();
                 prewview_image.setImageBitmap(null);
                 prewview_image.setImageBitmap(mbitmap);
 
@@ -237,5 +238,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         CameraUtils.releaseCamera();
     }
 
-
+    private void squareBitmap() {
+        int width = mbitmap.getWidth();
+        int height = mbitmap.getHeight();
+        if (width > height) {
+            mbitmap = Bitmap.createBitmap(mbitmap, (width - height) / 2, 0, height, height);
+        } else if (width < height) {
+            mbitmap = Bitmap.createBitmap(mbitmap, 0, (height - width) / 2, width, width);
+        }
+    }
 }

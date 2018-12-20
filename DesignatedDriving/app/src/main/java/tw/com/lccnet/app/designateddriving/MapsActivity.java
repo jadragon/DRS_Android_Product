@@ -33,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -321,7 +320,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    private void caculateCost(final String address1, final String address2, final EditText cost) {
+    private void caculateCost(final String address1, final String address2, final TextView cost) {
         AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
             @Override
             public JSONObject onTasking(Void... params) {
@@ -675,7 +674,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 end.setText(place.getAddress());
-                caculateCost(start.getText().toString(), end.getText().toString(), (EditText) cost);
+                caculateCost(start.getText().toString(), end.getText().toString(), (TextView) cost);
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.i("place", status.getStatusMessage());
