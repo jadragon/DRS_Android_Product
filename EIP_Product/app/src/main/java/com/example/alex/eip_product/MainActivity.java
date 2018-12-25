@@ -185,8 +185,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        mHandler.removeCallbacksAndMessages(null);
-        db.close();
         super.onDestroy();
     }
 

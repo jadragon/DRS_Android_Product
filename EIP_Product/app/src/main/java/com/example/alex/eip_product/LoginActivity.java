@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username, pw;
     private GlobalVariable gv;
     private ProgressDialog progressDialog;
-    private HandlerThread handlerThread;
+    public static HandlerThread handlerThread;
     private Handler mHandler, UiHandler;
     private OrderDatabase db;
 
@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
     Handler.Callback mCallback = new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-
             try {
                 JSONObject json = new API_OrderInfo().getOrderInfo(username.getText().toString(), pw.getText().toString());
                 if (AnalyzeUtil.checkSuccess(json)) {
@@ -98,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
                             Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
                                     "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
-
 
                             progressDialog.dismiss();
                             gv.setUsername(username.getText().toString());
@@ -130,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        handlerThread.quit();
         mHandler.removeCallbacksAndMessages(null);
         db.close();
         super.onDestroy();

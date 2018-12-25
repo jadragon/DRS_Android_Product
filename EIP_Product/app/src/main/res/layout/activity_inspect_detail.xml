@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="採購單"
+                android:text="@string/insepectorder"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="供應商名稱："
+                    android:text="@string/title_name3"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="供應商編號："
+                    android:text="@string/title_name4"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="採購單編號："
+                    android:text="@string/ordernumber"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -90,7 +90,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="採購單版本："
+                    android:text="@string/title_name8"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -112,7 +112,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#8195;&#8195;&#8195;備註："
+                    android:text="@string/note"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="注意事項"
+                android:text="@string/notice"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -151,14 +151,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="產品"
+                    android:text="@string/product"
                     android:textSize="25sp" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:text="規格說明"
+                    android:text="@string/specification"
                     android:textSize="25sp" />
             </LinearLayout>
 

@@ -85,27 +85,27 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
             if (cv.getAsBoolean(KEY_HasCompleted)) {
                 textView = view.findViewWithTag("HasCompleted");
                 textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
-                textView.setText("是");
+                textView.setText(getResources().getString(R.string.yes));
                 textView = view.findViewWithTag("CanShipping");
                 textView.setBackgroundColor(getResources().getColor(R.color.light_green));
-                textView.setText("是");
+                textView.setText(getResources().getString(R.string.yes));
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
-                textView.setText("(預覽)");
+                textView.setText(getResources().getString(R.string.preview));
             } else {
                 textView = view.findViewWithTag("HasCompleted");
                 textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
-                textView.setText("否");
+                textView.setText(getResources().getString(R.string.no));
                 textView = view.findViewWithTag("CanShipping");
                 textView.setBackgroundColor(getResources().getColor(android.R.color.white));
-                textView.setText("未驗");
+                textView.setText(getResources().getString(R.string.untest));
 
                 textView = view.findViewWithTag("overview");
                 if (cv.getAsBoolean(KEY_isOrderEdit)) {
-                    textView.setText("(未完成)");
+                    textView.setText(getResources().getString(R.string.undone));
                     textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 } else {
-                    textView.setText("(填寫驗表)");
+                    textView.setText(getResources().getString(R.string.write));
                     textView.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
                 textView.setOnClickListener(this);

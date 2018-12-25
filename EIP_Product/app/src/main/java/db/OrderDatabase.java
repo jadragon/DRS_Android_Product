@@ -611,7 +611,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 all_json.put(KEY_POVersion, cursor.getString(2));
                 all_json.put(KEY_Inspector, cursor.getString(13));
                 all_json.put(KEY_InspectorDate, cursor.getString(14));
-                all_json.put(KEY_VendorInspector, StringUtils.encodeTobase64(cursor.getBlob(15)));
+                all_json.put(KEY_VendorInspector, "data:image/png;base64," + StringUtils.encodeTobase64(cursor.getBlob(15)));
                 all_json.put(KEY_VendorInspectorDate, cursor.getString(16));
                 jsonArray = new JSONArray();
                 cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
@@ -625,10 +625,10 @@ public class OrderDatabase extends SQLiteOpenHelper {
                     //   jsonObject.put(KEY_Qty, cursor.getString(6));
                     //   jsonObject.put(KEY_SampleNumber, cursor.getString(7));
                     //   jsonObject.put(KEY_Uom, cursor.getString(8));
-                    jsonObject.put(KEY_Size, cursor.getString(9));
-                    jsonObject.put(KEY_Functions, cursor.getString(10));
-                    jsonObject.put(KEY_Surface, cursor.getString(11));
-                    jsonObject.put(KEY_Package, cursor.getString(12));
+                    jsonObject.put(KEY_Size, cursor.getInt(9));
+                    jsonObject.put(KEY_Functions, cursor.getInt(10));
+                    jsonObject.put(KEY_Surface, cursor.getInt(11));
+                    jsonObject.put(KEY_Package, cursor.getInt(12));
                     jsonObject.put(KEY_CheckPass, cursor.getInt(13) > 0);
                     jsonObject.put(KEY_Special, cursor.getInt(14) > 0);
                     jsonObject.put(KEY_Rework, cursor.getInt(15) > 0);
@@ -640,7 +640,6 @@ public class OrderDatabase extends SQLiteOpenHelper {
                     jsonArray.put(jsonObject);
                 }
                 all_json.put(KEY_OrderDetails, jsonArray);
-
 
                 jsonArray = new JSONArray();
                 cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
@@ -662,7 +661,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-
+        Log.e("update", all_json + "");
         return all_json;
     }
 

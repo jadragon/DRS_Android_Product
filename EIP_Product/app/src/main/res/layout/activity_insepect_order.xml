@@ -576,16 +576,16 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/light_orange"
+                            android:background="@android:color/white"
                             android:divider="@drawable/divider_black_1dp"
                             android:orientation="horizontal"
                             android:showDividers="middle">
 
                             <TextView
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
                                 android:layout_weight="@dimen/footer2_weight"
-                                android:background="@android:color/white"
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
@@ -596,13 +596,14 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="14"
+                                android:background="@color/light_orange"
                                 android:divider="@drawable/divider_black_1dp"
                                 android:orientation="vertical"
                                 android:showDividers="middle">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="25dp"
                                     android:divider="@drawable/divider_black_1dp"
                                     android:orientation="horizontal"
                                     android:showDividers="middle">
@@ -637,13 +638,14 @@
                                         android:text="@string/table_footer6"
                                         android:textSize="@dimen/table_text_size" />
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:id="@+id/failed_item_layout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:divider="@drawable/divider_black_1dp"
                                     android:orientation="vertical"
-                                    android:showDividers="middle"/>
+                                    android:showDividers="middle" />
                             </LinearLayout>
 
 
@@ -656,7 +658,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="25dp"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
@@ -674,8 +676,8 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:padding="@dimen/table_padding" />
+                                    android:padding="@dimen/table_padding"
+                                    android:textSize="11sp" />
 
                             </LinearLayout>
 
@@ -688,7 +690,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="25dp"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
@@ -706,8 +708,8 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:padding="@dimen/table_padding" />
+                                    android:padding="@dimen/table_padding"
+                                    android:textSize="11sp" />
 
 
                             </LinearLayout>
@@ -721,7 +723,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:divider="@drawable/divider_black_1dp"
                             android:orientation="horizontal"
                             android:showDividers="middle">
@@ -755,7 +757,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="25dp"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
@@ -786,7 +788,7 @@
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="25dp"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
@@ -1019,6 +1021,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="@android:color/black" />
+                <EditText
+                    android:id="@+id/test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </FrameLayout>
 

@@ -5,6 +5,22 @@
     <string name="login_button">登入</string>
     <string name="language_text">語言:</string>
 
+    <string name="nosignin">簽名檔沒簽</string>
+    <string name="savesuccess">儲存成功</string>
+    <string name="savefail">儲存失敗</string>
+    <string name="comfirmcancel">確定要取消驗貨嗎?</string>
+    <string name="notsave">不儲存</string>
+    <string name="saveleft">儲存後離開</string>
+
+
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="preview">(預覽)</string>
+    <string name="untest">未驗</string>
+    <string name="undone">(未完成)</string>
+    <string name="write">(填寫驗表)</string>
+
+
     <string name="app_name">驗貨表單系統</string>
     <string name="other">其他</string>
     <string name="size">尺寸</string>
@@ -86,6 +102,13 @@
     <string name="inspect_content_title9">未驗</string>
     <string name="inspect_content_title10">(預覽)</string>
     <string name="inspect_content_title11">(填寫驗貨表)</string>
+    <string name="insepectorder">採購單</string>
+    <string name="ordernumber">採購單編號：</string>
+    <string name="note">備註：</string>
+    <string name="notice">注意事項</string>
+    <string name="product">產品</string>
+    <string name="specification">規格說明</string>
+    <string name="updatedata">更新資料</string>
     <string-array name="menu_item">
         <item>驗表行程</item>
         <item>不合格原因</item>

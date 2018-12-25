@@ -32,7 +32,7 @@ public class API_OrderInfo extends SoapSetting {
         // request.addProperty("pw", "Test123456");
         request.addProperty("username", username);
         request.addProperty("pw", pw);
-        request.addProperty("order", order);
+        request.addProperty("order", order+"");
 //            创建soap 数据
         return sendAPI(request, NAMESPACE + METHOD_NAME2);
     }

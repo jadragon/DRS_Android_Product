@@ -5,6 +5,31 @@
     <string name="login_button">登入</string>
     <string name="language_text">语言:</string>
 
+
+    <string name="nosignin">签名档没签</string>
+        
+    <string name="savesuccess">储存成功</string>
+        
+    <string name="savefail">储存失败</string>
+        
+    <string name="comfirmcancel">确定要取消验货吗?</string>
+        
+    <string name="notsave">不储存</string>
+        
+    <string name="saveleft">储存后离开</string>
+
+    <string name="yes">是</string>
+        
+    <string name="no">否</string>
+        
+    <string name="preview">(预览)</string>
+        
+    <string name="untest">未验</string>
+        
+    <string name="undone">(未完成)</string>
+        
+    <string name="write">(填写验表)</string>
+
     <string name="app_name">验货表单系统</string>
     <string name="other">其他</string>
     <string name="size">尺寸</string>
@@ -70,31 +95,47 @@
     <string name="table_header20">预定再验货日</string>
         
     <string name="table_header21">备注</string>
-
-
-    <string name="table_footer1">不合格處理</string>
-    <string name="table_footer2">三千檢驗人員載名不合格原因</string>
-    <string name="table_footer3">三千業務回覆後續建議事項</string>
-    <string name="table_footer4">不合格序號</string>
+    <string name="table_footer1">不合格处理</string>
+        
+    <string name="table_footer2">三千检验人员载名不合格原因</string>
+        
+    <string name="table_footer3">三千业务回覆后续建议事项</string>
+        
+    <string name="table_footer4">不合格序号</string>
+        
     <string name="table_footer5">ITEM NO</string>
+        
     <string name="table_footer6">不合格原因</string>
 
-    <string name="table_footer7">檢驗人員:</string>
+        
+    <string name="table_footer7">检验人员:</string>
+        
     <string name="table_footer8">日期</string>
-    <string name="table_footer9">業務人員:</string>
-    <string name="table_footer10">填表說明</string>
-    <string name="table_footer11">＊ 抽樣檢驗標準請依成品檢驗規範程序書要求.</string>
-    <string name="table_footer12">＊ 如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數. </string>
-    <string name="table_footer13">＊ 正側嘜如相符請以V表示；如外鄉成寬高以及毛重與採購單相同則免填，如與採購單不符需另填入通知船務修改資料. </string>
-    <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
-    <string name="table_footer15">供應商檢測人員:</string>
+        
+    <string name="table_footer9">业务人员:</string>
+        
+    <string name="table_footer10">填表说明</string>
+        
+    <string name="table_footer11">＊ 抽样检验标准请依成品检验规范程序书要求.</string>
+        
+    <string name="table_footer12">＊ 如采购总数与出货总数相等,则出货总数免填，如有不符请依实际数据填入出货总数. </string>
+        
+    <string name="table_footer13">＊ 正侧唛如相符请以V表示；如外乡成宽高以及毛重与采购单相同则免填，如与采购单不符需另填入通知船务修改资料. </string>
+        
+    <string name="table_footer14">＊ 出货判定请以V表示，如判定为特采出货或拒收者，三千业务需另回覆后续建议事项，可出货重工则免.</string>
+        
+    <string name="table_footer15">供应商检测人员:</string>
+        
     <string name="table_footer16">船务备注:</string>
 
     <string name="table_button1">取消</string>
+            
         
     <string name="table_button2">编辑</string>
+            
         
     <string name="table_button3">储存</string>
+            
         
     <string name="table_button4">送出</string>
     <string name="comfirm_button">确认</string>
@@ -123,7 +164,18 @@
     <string name="inspect_content_title10">(预览)</string>
         
     <string name="inspect_content_title11">(填写验货表)</string>
-
+    <string name="insepectorder">采购单</string>
+        
+    <string name="ordernumber">采购单编号：</string>
+        
+    <string name="note">备注：</string>
+        
+    <string name="notice">注意事项</string>
+        
+    <string name="product">产品</string>
+        
+    <string name="specification">规格说明</string>
+    <string name="updatedata">更新资料</string>
     <string-array name="menu_item">
         <item>验表行程</item>
                 

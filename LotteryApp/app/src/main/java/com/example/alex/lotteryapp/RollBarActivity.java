@@ -362,17 +362,22 @@ public class RollBarActivity extends AppCompatActivity {
                     wheel1.stopWheel();
                     wheel2.stopWheel();
                     wheel3.stopWheel();
+                    ArrayList<String> currentWinner = db.getCurrentWinners();
                     Thread.sleep(100);
+                    int number;
+                    if (stage != 5) {
+                        number = randomInt();
+                        while (number == 400 || currentWinner.indexOf(number + "") != -1) {
+                            number = randomInt();
+                        }
+                    } else {
+                        number = 400;
+                    }
+                    db.updateUserInfo(left_awardlist.get(0), number + "");
+                    final String nowWinner = String.format("%03d", number);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ArrayList<String> currentWinner = db.getCurrentWinners();
-                            int number = randomInt();
-                            while (currentWinner.indexOf(number + "") != -1) {
-                                number = randomInt();
-                            }
-                            db.updateUserInfo(left_awardlist.get(0), number + "");
-                            String nowWinner = String.format("%03d", number);
                             switcher1.setText(nowWinner.charAt(0) + "");
                             switcher2.setText(nowWinner.charAt(1) + "");
                             switcher3.setText(nowWinner.charAt(2) + "");

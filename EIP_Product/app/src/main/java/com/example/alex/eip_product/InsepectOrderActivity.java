@@ -1,6 +1,7 @@
 package com.example.alex.eip_product;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,19 +24,29 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
+import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
+import Utils.AsyncTaskUtils;
+import Utils.IDataCallBack;
 import Utils.StringUtils;
 import db.OrderDatabase;
 
@@ -91,6 +102,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
     private GlobalVariable gv;
     private Bitmap bitmap;
     private Map<String, FailItemPojo> CheckFailedReasonslist = new TreeMap<>();
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +207,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byteArray = stream.toByteArray();
             } else {
-                Toast.makeText(InsepectOrderActivity.this, "簽名檔沒簽", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InsepectOrderActivity.this, getResources().getString(R.string.nosignin), Toast.LENGTH_SHORT).show();
                 return;
             }
             cv.put(KEY_VendorInspector, byteArray);
@@ -260,31 +272,31 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 }
             }
             db.saveCheckFailedReasonsEdit(arrayList);
-            Toast.makeText(this, "儲存成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.savesuccess), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(this, "儲存失敗", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.savefail), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void cancel() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("取消");
-        builder.setMessage("確定要取消驗貨嗎?");
-        builder.setNegativeButton("不儲存", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.table_button1));
+        builder.setMessage(getResources().getString(R.string.comfirmcancel));
+        builder.setNegativeButton(getResources().getString(R.string.notsave), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 finish();
             }
         });
-        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
         });
-        builder.setPositiveButton("儲存後離開", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.saveleft), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -294,6 +306,8 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         });
         builder.show();
     }
+
+    JSONObject json;
 
     @Override
     public void onClick(View view) {
@@ -315,7 +329,77 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
              * 上傳
              */
             case R.id.send:
-                Log.e("update", db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber)) + "");
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public void onTaskBefore() {
+                        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "上傳檔案中", "請稍後", true);
+                    }
+
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        try {
+                            json = db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber));
+                            return new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), json);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (XmlPullParserException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            progressDialog.dismiss();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        if (jsonObject != null) {
+                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                    @Override
+                                    public void onTaskBefore() {
+                                        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "更新資料中", "請稍後", true);
+                                    }
+
+                                    @Override
+                                    public JSONObject onTasking(Void... params) {
+                                        try {
+                                            return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(InsepectOrderActivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
+                                        } catch (XmlPullParserException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(InsepectOrderActivity.this, "XmlPullParserException存取異常", Toast.LENGTH_SHORT).show();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(InsepectOrderActivity.this, "IOException存取異常", Toast.LENGTH_SHORT).show();
+                                        } finally {
+                                            progressDialog.dismiss();
+                                        }
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public void onTaskAfter(JSONObject jsonObject) {
+                                        if (jsonObject != null) {
+                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                finish();
+                                            }
+                                            Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(InsepectOrderActivity.this, "更新資料失敗", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                            Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(InsepectOrderActivity.this, "上傳異常", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 break;
             /**
              * 編輯
@@ -533,7 +617,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     view.setLayoutParams(params);
                     view.setBackgroundColor(getResources().getColor(android.R.color.black));
                     courseTable.addView(view);
-
                     final View item_view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
                     item_view.setTag(i);
                     courseTable.addView(item_view);
