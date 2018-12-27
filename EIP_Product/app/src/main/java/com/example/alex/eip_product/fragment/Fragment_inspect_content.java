@@ -26,6 +26,7 @@ import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
 import static db.OrderDatabase.KEY_VendorName;
 import static db.OrderDatabase.KEY_isOrderEdit;
+import static db.OrderDatabase.KEY_isOrderUpdate;
 
 /**
  * Created by user on 2017/5/30.
@@ -92,6 +93,17 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
                 textView.setText(getResources().getString(R.string.preview));
+            } else if (cv.getAsBoolean(KEY_isOrderUpdate)) {
+                // TODO: 2018/12/26 多國語言
+                textView = view.findViewWithTag("HasCompleted");
+                textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
+                textView.setText("資料尚未更新");
+                textView = view.findViewWithTag("CanShipping");
+                textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+                textView.setText("資料尚未更新");
+                textView = view.findViewWithTag("overview");
+                textView.setBackgroundColor(getResources().getColor(R.color.orange));
+                textView.setText("資料尚未更新");
             } else {
                 textView = view.findViewWithTag("HasCompleted");
                 textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
@@ -138,7 +150,7 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         int position = (int) v.getTag();
         Intent intent;
-        if (list.get(position).getAsBoolean(KEY_HasCompleted)) {
+        if (list.get(position).getAsBoolean(KEY_HasCompleted) || list.get(position).getAsBoolean(KEY_isOrderUpdate)) {
             intent = new Intent(getContext(), PreviewInsepectOrderActivity.class);
         } else {
             intent = new Intent(getContext(), InsepectOrderActivity.class);

@@ -97,8 +97,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
                             Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
                                     "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
-
-                            progressDialog.dismiss();
                             gv.setUsername(username.getText().toString());
                             gv.setPw(pw.getText().toString());
                             PreferenceUtil.commitString("username", username.getText().toString());

@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,13 +23,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
 import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
+import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
 import org.json.JSONException;
@@ -42,6 +41,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -198,17 +198,17 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         Log.e("CheckFailedReasonslist", CheckFailedReasonslist.size() + "\n" + CheckFailedReasonslist);
     }
 
-    private void saveOrder() {
+    private boolean saveOrder() {
         try {
             ContentValues cv = new ContentValues();
-            byte[] byteArray = null;
+            byte[] byteArray;
             if (bitmap != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byteArray = stream.toByteArray();
             } else {
                 Toast.makeText(InsepectOrderActivity.this, getResources().getString(R.string.nosignin), Toast.LENGTH_SHORT).show();
-                return;
+                return false;
             }
             cv.put(KEY_VendorInspector, byteArray);
             if (Inspector.getText().toString().equals("")) {
@@ -272,14 +272,15 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 }
             }
             db.saveCheckFailedReasonsEdit(arrayList);
-            Toast.makeText(this, getResources().getString(R.string.savesuccess), Toast.LENGTH_SHORT).show();
+            return true;
         } catch (Exception e) {
             Toast.makeText(this, getResources().getString(R.string.savefail), Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
+    // TODO: 2018/12/26 當更新完不再顯示
     private void cancel() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.table_button1));
         builder.setMessage(getResources().getString(R.string.comfirmcancel));
@@ -307,8 +308,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         builder.show();
     }
 
-    JSONObject json;
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -323,83 +322,54 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
              * 儲存
              */
             case R.id.save:
-                saveOrder();
+                if (saveOrder()) {
+                    Toast.makeText(this, getResources().getString(R.string.savesuccess), Toast.LENGTH_SHORT).show();
+                }
                 break;
             /**
              * 上傳
              */
             case R.id.send:
-                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                    @Override
-                    public void onTaskBefore() {
-                        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "上傳檔案中", "請稍後", true);
-                    }
-
-                    @Override
-                    public JSONObject onTasking(Void... params) {
-                        try {
-                            json = db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber));
-                            return new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), json);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (XmlPullParserException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            progressDialog.dismiss();
+                if (saveOrder()) {
+                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                        @Override
+                        public void onTaskBefore() {
+                            progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "上傳檔案中", "請稍後", true);
                         }
-                        return null;
-                    }
 
-                    @Override
-                    public void onTaskAfter(JSONObject jsonObject) {
-                        if (jsonObject != null) {
-                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-                                    @Override
-                                    public void onTaskBefore() {
-                                        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "更新資料中", "請稍後", true);
-                                    }
-
-                                    @Override
-                                    public JSONObject onTasking(Void... params) {
-                                        try {
-                                            return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(InsepectOrderActivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
-                                        } catch (XmlPullParserException e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(InsepectOrderActivity.this, "XmlPullParserException存取異常", Toast.LENGTH_SHORT).show();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(InsepectOrderActivity.this, "IOException存取異常", Toast.LENGTH_SHORT).show();
-                                        } finally {
-                                            progressDialog.dismiss();
-                                        }
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public void onTaskAfter(JSONObject jsonObject) {
-                                        if (jsonObject != null) {
-                                            if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                                finish();
-                                            }
-                                            Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(InsepectOrderActivity.this, "更新資料失敗", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                        // TODO: 2018/12/26 上傳資料 需判斷欄位
+                        @Override
+                        public JSONObject onTasking(Void... params) {
+                            try {
+                                return new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber)));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (XmlPullParserException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
-                            Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(InsepectOrderActivity.this, "上傳異常", Toast.LENGTH_SHORT).show();
+                            return null;
                         }
-                    }
-                });
+
+                        @Override
+                        public void onTaskAfter(JSONObject jsonObject) {
+                            if (jsonObject != null) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    db.updateOrdersEdit(key_ponumber);
+                                    startActivity(getIntent().setClass(InsepectOrderActivity.this, PreviewInsepectOrderActivity.class));
+                                    finish();
+                                    updateData();
+                                }
+                                Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(InsepectOrderActivity.this, "上傳異常", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
                 break;
             /**
              * 編輯
@@ -778,7 +748,77 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 }
             }
         }
-
     }
 
+    // TODO: 2018/12/26 多國語系
+    private void updateData() {
+        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "上傳檔案中", "請稍後", true);
+        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+            @Override
+            public void onTaskBefore() {
+                progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "更新資料中", "請稍後", true);
+            }
+
+            @Override
+            public JSONObject onTasking(Void... params) {
+                try {
+                    return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    progressDialog.dismiss();
+                }
+                return null;
+            }
+
+            @Override
+            public void onTaskAfter(JSONObject jsonObject) {
+                if (jsonObject != null) {
+                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                        db.resetTables();
+                        try {
+                            Map<String, List<ContentValues>> map = Analyze_Order.getOrders(jsonObject);
+                            db.addOrders(map.get("Orders"));
+                            db.addOrderDetails(map.get("OrderDetails"));
+                            db.addCheckFailedReasons(map.get("CheckFailedReasons"));
+                            db.addOrderComments(map.get("OrderComments"));
+                            db.addOrderItemComments(map.get("OrderItemComments"));
+                            Toast.makeText(InsepectOrderActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this);
+                            builder.setTitle("更新資料");
+                            builder.setMessage("請於網路良好區域執行更新動作");
+                            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    Toast.makeText(InsepectOrderActivity.this, "請於首頁畫面做更新動作", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            builder.setPositiveButton("重新更新", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    updateData();
+                                }
+                            });
+                            builder.show();
+                        } finally {
+                            progressDialog.dismiss();
+                        }
+                    } else {
+                        Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                    }
+                    Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(InsepectOrderActivity.this, "更新資料失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }

@@ -1003,12 +1003,12 @@ public class OrderDatabase extends SQLiteOpenHelper {
     /**
      * Update
      */
-    public void updateUserInfo(String id, String area) {
+    public void updateOrdersEdit(String PONumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_Area, area);
+        values.put(KEY_isOrderUpdate, true);
         // Inserting Row
-        db.update(TABLE_Orders, values, KEY_ID + "=" + id, null);
+        db.update(TABLE_OrdersEdit, values, KEY_PONumber + "=" + PONumber, null);
         db.close(); // Closing database connection
     }
 
