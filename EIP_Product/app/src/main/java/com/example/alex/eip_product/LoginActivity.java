@@ -84,27 +84,30 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 JSONObject json = new API_OrderInfo().getOrderInfo(username.getText().toString(), pw.getText().toString());
                 if (AnalyzeUtil.checkSuccess(json)) {
-                    db.resetTables();
                     Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
-                    db.addOrders(map.get("Orders"));
-                    db.addOrderDetails(map.get("OrderDetails"));
-                    db.addCheckFailedReasons(map.get("CheckFailedReasons"));
-                    db.addOrderComments(map.get("OrderComments"));
-                    db.addOrderItemComments(map.get("OrderItemComments"));
-                    UiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(LoginActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
-                            Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
-                                    "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
-                            gv.setUsername(username.getText().toString());
-                            gv.setPw(pw.getText().toString());
-                            PreferenceUtil.commitString("username", username.getText().toString());
-                            PreferenceUtil.commitString("pw", pw.getText().toString());
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    });
+                    if (db.addOrders(map.get("Orders"))) {
+                        db.addOrderDetails(map.get("OrderDetails"));
+                        db.addCheckFailedReasons(map.get("CheckFailedReasons"));
+                        db.addOrderComments(map.get("OrderComments"));
+                        db.addOrderItemComments(map.get("OrderItemComments"));
+                        UiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                                Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
+                                        "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
+                                gv.setUsername(username.getText().toString());
+                                gv.setPw(pw.getText().toString());
+                                PreferenceUtil.commitString("username", username.getText().toString());
+                                PreferenceUtil.commitString("pw", pw.getText().toString());
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            }
+                        });
+                    } else {
+                        // TODO: 2018/12/28 多國語言
+                        Toast.makeText(LoginActivity.this, "請確認所以訂單以上傳，在執行更新動作", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
                 }

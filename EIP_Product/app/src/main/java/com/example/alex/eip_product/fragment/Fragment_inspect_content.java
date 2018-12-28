@@ -93,6 +93,8 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
                 textView.setText(getResources().getString(R.string.preview));
+                textView.setOnClickListener(this);
+                textView.setTag(i);
             } else if (cv.getAsBoolean(KEY_isOrderUpdate)) {
                 // TODO: 2018/12/26 多國語言
                 textView = view.findViewWithTag("HasCompleted");
@@ -104,6 +106,8 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
                 textView.setText("資料尚未更新");
+                textView.setOnClickListener(this);
+                textView.setTag(i);
             } else {
                 textView = view.findViewWithTag("HasCompleted");
                 textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
@@ -111,6 +115,7 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 textView = view.findViewWithTag("CanShipping");
                 textView.setBackgroundColor(getResources().getColor(android.R.color.white));
                 textView.setText(getResources().getString(R.string.untest));
+
 
                 textView = view.findViewWithTag("overview");
                 if (cv.getAsBoolean(KEY_isOrderEdit)) {

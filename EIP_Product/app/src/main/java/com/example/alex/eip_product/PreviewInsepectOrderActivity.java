@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -88,6 +89,10 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
         Orderslist = db.getOrdersByPONumber(key_ponumber);
         OrderDetailslist = db.getOrderDetailsByPONumber(key_ponumber);
         CheckFailedReasonslist = db.getCheckFailedReasonsMapByPONumber(key_ponumber);
+        Log.e("Orderslist", Orderslist + "");
+        Log.e("OrderDetailslist", OrderDetailslist + "");
+        Log.e("CheckFailedReasonslist", CheckFailedReasonslist + "");
+
         /**
          * Orderslist
          */
@@ -226,17 +231,22 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
 
                     CheckBox checkBox = item_view.findViewById(R.id.row11);
                     checkBox.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_MainMarK));
+                    checkBox.setEnabled(false);
                     checkBox = item_view.findViewById(R.id.row12);
                     checkBox.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_SideMarK));
+                    checkBox.setEnabled(false);
                     RadioButton radioButton = item_view.findViewById(R.id.row13);
                     radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_CheckPass));
+                    radioButton.setEnabled(false);
                     radioButton = item_view.findViewById(R.id.row14);
                     radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_Special));
+                    radioButton.setEnabled(false);
                     radioButton = item_view.findViewById(R.id.row15);
                     radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_Rework));
+                    radioButton.setEnabled(false);
                     radioButton = item_view.findViewById(R.id.row16);
                     radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_Reject));
-
+                    radioButton.setEnabled(false);
                     textView = item_view.findViewById(R.id.row17);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_ReCheckDate));
                     textView = item_view.findViewById(R.id.row18);

@@ -100,22 +100,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
                 if (AnalyzeUtil.checkSuccess(json)) {
-                    db.resetTables();
                     Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
-                    db.upDateOrders(map.get("Orders"));
-                    db.upDateOrderDetails(map.get("OrderDetails"), Analyze_Order.PONumberNames);
-                    db.addCheckFailedReasons(map.get("CheckFailedReasons"));
-                    db.addOrderComments(map.get("OrderComments"));
-                    db.addOrderItemComments(map.get("OrderItemComments"));
-                    UiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
-                            Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
-                                    "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
-                            progressDialog.dismiss();
-                        }
-                    });
+                    if (db.addOrders(map.get("Orders"))) {
+                        db.addOrderDetails(map.get("OrderDetails"));
+                        db.addCheckFailedReasons(map.get("CheckFailedReasons"));
+                        db.addOrderComments(map.get("OrderComments"));
+                        db.addOrderItemComments(map.get("OrderItemComments"));
+                        UiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+                                Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
+                                        "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
+                                progressDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        // TODO: 2018/12/28 多國語言
+                        Toast.makeText(MainActivity.this, "請確認所以訂單以上傳，在執行更新動作", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(MainActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
                 }

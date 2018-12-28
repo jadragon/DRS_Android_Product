@@ -331,6 +331,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
              */
             case R.id.send:
                 if (saveOrder()) {
+
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
                         public void onTaskBefore() {
@@ -358,10 +359,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                         public void onTaskAfter(JSONObject jsonObject) {
                             if (jsonObject != null) {
                                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                                    db.updateOrdersEdit(key_ponumber);
+                                    db.updateOrdersUpdate(key_ponumber);
                                     startActivity(getIntent().setClass(InsepectOrderActivity.this, PreviewInsepectOrderActivity.class));
                                     finish();
-                                    updateData();
                                 }
                                 Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             } else {
@@ -369,6 +369,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                             }
                         }
                     });
+
                 }
                 break;
             /**
@@ -779,7 +780,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             public void onTaskAfter(JSONObject jsonObject) {
                 if (jsonObject != null) {
                     if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        db.resetTables();
                         try {
                             Map<String, List<ContentValues>> map = Analyze_Order.getOrders(jsonObject);
                             db.addOrders(map.get("Orders"));

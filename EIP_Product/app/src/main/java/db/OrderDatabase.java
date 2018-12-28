@@ -11,7 +11,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
 import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
@@ -302,44 +304,51 @@ public class OrderDatabase extends SQLiteOpenHelper {
     /**
      * Add
      */
-    public void addOrders(List<ContentValues> list) {
+    public boolean addOrders(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction(); // 手动设置开始事务
-        for (ContentValues v : list) {
-            db.insert(TABLE_Orders, null, v);
-            db.insert(TABLE_OrdersEdit, null, v);
-        }
-        db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
-        db.endTransaction(); // 处理完成
-        db.close();
-    }
-
-    public void upDateOrders(List<ContentValues> list) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction(); // 手动设置开始事务
-        for (ContentValues v : list) {
-            db.insert(TABLE_Orders, null, v);
-            int position = Analyze_Order.PONumberNames.indexOf(v.getAsString(KEY_PONumber));
-            if (position != -1) {
-                if (db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " +
-                        KEY_PONumber + " = '" + v.getAsString(KEY_PONumber) + "'" + " AND " + KEY_HasCompleted + "= 1", null).getCount() > 0 ||
-                        db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " +
-                                KEY_PONumber + " = '" + v.getAsString(KEY_PONumber) + "'" + " AND " + KEY_isOrderEdit + "= 0", null).getCount() > 0) {
-                    db.delete(TABLE_OrdersEdit, KEY_PONumber + " = '" + v.getAsString(KEY_PONumber) + "'", null);
-                    db.insert(TABLE_OrdersEdit, null, v);
-                }
-            } else {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_Orders, null);
+        if (cursor.getCount() <= 0) {
+            db.beginTransaction(); // 手动设置开始事务
+            db.delete(TABLE_Orders, null, null);
+            db.delete(TABLE_OrdersEdit, null, null);
+            for (ContentValues v : list) {
+                db.insert(TABLE_Orders, null, v);
                 db.insert(TABLE_OrdersEdit, null, v);
             }
+            cursor.close();
+            db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
+            db.endTransaction(); // 处理完成
+            db.close();
+        } else {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " +
+                    KEY_isOrderEdit + " = " + 1 + " AND " + KEY_isOrderUpdate + " IS NULL ", null);
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                db.close();
+                return false;
+            } else {
+                db.beginTransaction(); // 手动设置开始事务
+                db.delete(TABLE_Orders, null, null);
+                db.delete(TABLE_OrdersEdit, null, null);
+                for (ContentValues v : list) {
+                    db.insert(TABLE_Orders, null, v);
+                    db.insert(TABLE_OrdersEdit, null, v);
+                }
+                cursor.close();
+                db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
+                db.endTransaction(); // 处理完成
+                db.close();
+            }
         }
-        db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
-        db.endTransaction(); // 处理完成
-        db.close();
+
+        return true;
     }
 
     public void addOrderDetails(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
+        db.delete(TABLE_OrderDetails, null, null);
+        db.delete(TABLE_OrderDetailsEdit, null, null);
         for (ContentValues v : list) {
             db.insert(TABLE_OrderDetails, null, v);
             db.insert(TABLE_OrderDetailsEdit, null, v);
@@ -349,52 +358,15 @@ public class OrderDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void upDateOrderDetails(List<ContentValues> list, List<String> PONumberNames) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction(); // 手动设置开始事务
-        List<Boolean> resetList = new ArrayList<>();
-        for (int i = 0; i < PONumberNames.size(); i++) {
-            resetList.add(i, db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " +
-                    KEY_PONumber + " = '" + PONumberNames.get(i) + "'" + " AND " + KEY_HasCompleted + "= 1", null).getCount() > 0 ||
-                    db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " +
-                            KEY_PONumber + " = '" + PONumberNames.get(i) + "'" + " AND " + KEY_isOrderEdit + "= 0", null).getCount() > 0);
-        }
-        for (ContentValues v : list) {
-            db.insert(TABLE_OrderDetails, null, v);
-            int position = PONumberNames.indexOf(v.getAsString(KEY_PONumber));
-            if (position != -1) {
-                if (resetList.get(position)) {
-                    db.delete(TABLE_OrderDetailsEdit, KEY_PONumber + " = '" + v.getAsString(KEY_PONumber) + "'" + " AND " + KEY_LineNumber + " = '" + v.getAsString(KEY_LineNumber) + "'", null);
-                    db.insert(TABLE_OrderDetailsEdit, null, v);
-                }
-            } else {
-                db.insert(TABLE_OrderDetailsEdit, null, v);
-            }
-        }
-        db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
-        db.endTransaction(); // 处理完成
-        db.close();
-    }
-
     public void addCheckFailedReasons(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
-        boolean resetable = false;
-        if (list.size() > 0) {
-            resetable = db.rawQuery("SELECT * FROM " + TABLE_Orders + " WHERE " + KEY_PONumber + " = '" + list.get(0).getAsString(KEY_PONumber) + "'" + " AND " + KEY_HasCompleted + " = 1 ", null).getCount() > 0;
+        db.delete(TABLE_CheckFailedReasons, null, null);
+        db.delete(TABLE_CheckFailedReasonsEdit, null, null);
+        for (int i = 0; i < list.size(); i++) {
+            db.insert(TABLE_CheckFailedReasons, null, list.get(i));
+            db.insert(TABLE_CheckFailedReasonsEdit, null, list.get(i));
         }
-        if (resetable) {
-            db.delete(TABLE_CheckFailedReasonsEdit, null, null);
-            for (ContentValues v : list) {
-                db.insert(TABLE_CheckFailedReasons, null, v);
-                db.insert(TABLE_CheckFailedReasonsEdit, null, v);
-            }
-        } else {
-            for (ContentValues v : list) {
-                db.insert(TABLE_CheckFailedReasons, null, v);
-            }
-        }
-
         db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
         db.endTransaction(); // 处理完成
         db.close();
@@ -403,6 +375,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public void addOrderComments(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
+        db.delete(TABLE_OrderComments, null, null);
         db.delete(TABLE_OrderCommentsEdit, null, null);
         for (ContentValues v : list) {
             db.insert(TABLE_OrderComments, null, v);
@@ -416,6 +389,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public void addOrderItemComments(List<ContentValues> list) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction(); // 手动设置开始事务
+        db.delete(TABLE_OrderItemComments, null, null);
         db.delete(TABLE_OrderItemCommentsEdit, null, null);
         for (ContentValues v : list) {
             db.insert(TABLE_OrderItemComments, null, v);
@@ -611,7 +585,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 all_json.put(KEY_POVersion, cursor.getString(2));
                 all_json.put(KEY_Inspector, cursor.getString(13));
                 all_json.put(KEY_InspectorDate, cursor.getString(14));
-                all_json.put(KEY_VendorInspector, "data:image/png;base64," + StringUtils.encodeTobase64(cursor.getBlob(15)));
+                all_json.put(KEY_VendorInspector, StringUtils.encodeTobase64(cursor.getBlob(15)));
                 all_json.put(KEY_VendorInspectorDate, cursor.getString(16));
                 jsonArray = new JSONArray();
                 cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
@@ -665,44 +639,51 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return all_json;
     }
 
-    public ArrayList<ContentValues> getCheckFailedReasonsByPONumber(String PONumber) {
-        ArrayList<ContentValues> datas = new ArrayList<>();
-        ContentValues cv;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
-        //" AND " + KEY_Comment + " IS NOT NULL";
-        while (cursor.moveToNext()) {
-            cv = new ContentValues();
-            cv.put(KEY_PONumber, cursor.getString(1));
-            cv.put(KEY_POVersion, cursor.getString(2));
-            cv.put(KEY_Item, cursor.getString(3));
-            cv.put(KEY_ReasonCode, cursor.getString(4));
-            cv.put(KEY_ReasonDescr, cursor.getString(5));
-            datas.add(cv);
-        }
-        cursor.close();
-        db.close();
-        return datas;
-    }
-
     public Map<String, FailItemPojo> getCheckFailedReasonsMapByPONumber(String PONumber) {
         Map<String, FailItemPojo> map = new TreeMap<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor1 = db.rawQuery("SELECT " + KEY_LineNumber + "," + KEY_Item + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + "ORDER BY " + KEY_LineNumber, null);
+        Cursor cursor1 = db.rawQuery("SELECT " + KEY_LineNumber + "," + KEY_Item + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + "AND " + KEY_LineNumber + " IS NOT NULL", null);
         Cursor cursor2 = null;
-        ArrayList<String> ReasonCode, ReasonDescr;
-        while (cursor1.moveToNext()) {
-            String LineNumber = cursor1.getString(0);
-            String item = cursor1.getString(1);
-            if (map.get(item) == null) {
-                ReasonCode = new ArrayList<>();
-                ReasonDescr = new ArrayList<>();
-                cursor2 = db.rawQuery("SELECT " + KEY_ReasonCode + "," + KEY_ReasonDescr + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
-                while (cursor2.moveToNext()) {
-                    ReasonCode.add(cursor2.getString(0));
-                    ReasonDescr.add(cursor2.getString(1));
+        if (cursor1.getCount() > 0) {
+            while (cursor1.moveToNext()) {
+                ArrayList<String> ReasonCode, ReasonDescr;
+                String LineNumber = cursor1.getString(0);
+                String item = cursor1.getString(1);
+                if (map.get(item) == null) {
+                    ReasonCode = new ArrayList<>();
+                    ReasonDescr = new ArrayList<>();
+                    cursor2 = db.rawQuery("SELECT " + KEY_ReasonCode + "," + KEY_ReasonDescr + " FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
+                    while (cursor2.moveToNext()) {
+                        ReasonCode.add(cursor2.getString(0));
+                        ReasonDescr.add(cursor2.getString(1));
+                    }
+
+                    FailItemPojo failItemPojo = new FailItemPojo(LineNumber, item, ReasonCode, ReasonDescr);
+                    map.put(LineNumber, failItemPojo);
                 }
-                map.put(LineNumber, new FailItemPojo(LineNumber, item, ReasonCode, ReasonDescr));
+            }
+        } else {
+            cursor1 = db.rawQuery("SELECT " + KEY_Item + " FROM " + TABLE_CheckFailedReasons + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            while (cursor1.moveToNext()) {
+                ArrayList<String> ReasonCode, ReasonDescr;
+                String item = cursor1.getString(0);
+
+                cursor1 = db.rawQuery("SELECT " + KEY_LineNumber + " FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
+                cursor1.moveToFirst();
+                String LineNumber = cursor1.getString(0);
+
+                if (map.get(item) == null) {
+                    ReasonCode = new ArrayList<>();
+                    ReasonDescr = new ArrayList<>();
+                    cursor2 = db.rawQuery("SELECT " + KEY_ReasonCode + "," + KEY_ReasonDescr + " FROM " + TABLE_CheckFailedReasons + " WHERE " + KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_Item + " = '" + item + "'", null);
+                    while (cursor2.moveToNext()) {
+                        ReasonCode.add(cursor2.getString(0));
+                        ReasonDescr.add(cursor2.getString(1));
+                    }
+
+                    FailItemPojo failItemPojo = new FailItemPojo(LineNumber, item, ReasonCode, ReasonDescr);
+                    map.put(LineNumber, failItemPojo);
+                }
             }
         }
 
@@ -874,6 +855,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 //插入驗貨人員修改的資料
                 db.update(TABLE_OrderDetailsEdit, edit_cv.get(i), KEY_PONumber + " = '" + PONumber + "'" + " AND " + KEY_LineNumber + " = '" + edit_cv.get(i).getAsString(KEY_LineNumber) + "'", null);
             }
+
             Log.e("OrdersEdit", "OrderDetails儲存成功");
         }
     }
@@ -1003,25 +985,13 @@ public class OrderDatabase extends SQLiteOpenHelper {
     /**
      * Update
      */
-    public void updateOrdersEdit(String PONumber) {
+
+    public void updateOrdersUpdate(String PONumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_isOrderUpdate, true);
         // Inserting Row
-        db.update(TABLE_OrdersEdit, values, KEY_PONumber + "=" + PONumber, null);
+        db.update(TABLE_OrdersEdit, values, KEY_PONumber + "='" + PONumber + "'", null);
         db.close(); // Closing database connection
-    }
-
-    /**
-     * Delete
-     */
-    public void resetTables() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Delete All Rows
-        db.delete(TABLE_Orders, null, null);
-        db.delete(TABLE_OrderDetails, null, null);
-        db.delete(TABLE_OrderComments, null, null);
-        db.delete(TABLE_OrderItemComments, null, null);
-        db.close();
     }
 }

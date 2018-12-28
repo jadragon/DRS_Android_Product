@@ -15,11 +15,17 @@ public class StringUtils {
     }
 
     public static String encodeTobase64(byte[] b) {
-        return Base64.encodeToString(b, Base64.DEFAULT);
+        String base64 = Base64.encodeToString(b, Base64.DEFAULT);
+        base64 = base64.replace("+", " ");
+        return base64;
     }
 
     // method for base64 to bitmap
     public static byte[] decodeBase64(String input) {
+        if (input != null) {
+            input = input.replace("data:image/png;base64,", "");
+            input = input.replace(" ", "+");
+        }
         return Base64.decode(input.getBytes(Charset.forName("UTF-8")), Base64.DEFAULT);
     }
 

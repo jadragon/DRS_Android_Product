@@ -152,8 +152,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:button="@drawable/checkbox_nike"
-            android:enabled="false"/>
+            android:button="@drawable/checkbox_nike" />
     </FrameLayout>
 
     <FrameLayout
@@ -168,8 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:button="@drawable/checkbox_nike"
-            android:enabled="false"/>
+            android:button="@drawable/checkbox_nike" />
     </FrameLayout>
 
 
@@ -189,8 +187,7 @@
             android:background="@color/light_blue"
             android:button="@drawable/radio_nike"
             android:gravity="center"
-            android:padding="2.5dp"
-            android:enabled="false"/>
+            android:padding="2.5dp" />
 
         <View
             android:layout_width="1dp"
@@ -205,8 +202,7 @@
             android:background="@color/light_blue"
             android:gravity="center"
             android:button="@drawable/radio_nike"
-            android:padding="2.5dp"
-            android:enabled="false"/>
+            android:padding="2.5dp" />
 
         <View
             android:layout_width="1dp"
@@ -221,8 +217,7 @@
             android:background="@color/light_blue"
             android:gravity="center"
             android:button="@drawable/radio_nike"
-            android:padding="2.5dp"
-            android:enabled="false"/>
+            android:padding="2.5dp" />
 
         <View
             android:layout_width="1dp"
@@ -237,8 +232,7 @@
             android:background="@color/light_blue"
             android:button="@drawable/radio_nike"
             android:gravity="center"
-            android:padding="2.5dp"
-            android:enabled="false"/>
+            android:padding="2.5dp" />
 
     </RadioGroup>
 

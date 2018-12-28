@@ -151,12 +151,12 @@ public class Analyze_Order {
             contentValues.put(KEY_Functions, json_obj.getString(KEY_Functions));
             contentValues.put(KEY_Surface, json_obj.getString(KEY_Surface));
             contentValues.put(KEY_Package, json_obj.getString(KEY_Package));
-            contentValues.put(KEY_CheckPass, json_obj.getString(KEY_CheckPass));
-            contentValues.put(KEY_Special, json_obj.getString(KEY_Special));
-            contentValues.put(KEY_Rework, json_obj.getString(KEY_Rework));
-            contentValues.put(KEY_Reject, json_obj.getString(KEY_Reject));
-            contentValues.put(KEY_MainMarK, json_obj.getString(KEY_MainMarK));
-            contentValues.put(KEY_SideMarK, json_obj.getString(KEY_SideMarK));
+            contentValues.put(KEY_CheckPass, json_obj.getBoolean(KEY_CheckPass));
+            contentValues.put(KEY_Special, json_obj.getBoolean(KEY_Special));
+            contentValues.put(KEY_Rework, json_obj.getBoolean(KEY_Rework));
+            contentValues.put(KEY_Reject, json_obj.getBoolean(KEY_Reject));
+            contentValues.put(KEY_MainMarK, json_obj.getBoolean(KEY_MainMarK));
+            contentValues.put(KEY_SideMarK, json_obj.getBoolean(KEY_SideMarK));
             contentValues.put(KEY_ReCheckDate, json_obj.getString(KEY_ReCheckDate));
             contentValues.put(KEY_Remarks, json_obj.getString(KEY_Remarks));
 
