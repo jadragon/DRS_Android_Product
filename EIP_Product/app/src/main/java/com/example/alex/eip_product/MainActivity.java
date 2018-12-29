@@ -1,7 +1,9 @@
 package com.example.alex.eip_product;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -34,6 +36,8 @@ import java.util.TimerTask;
 
 import db.OrderDatabase;
 
+import static db.OrderDatabase.KEY_PONumber;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView home, back;
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button update;
     private ProgressDialog progressDialog;
     private HandlerThread handlerThread;
-    private Handler mHandler, UiHandler;
+    private Handler mHandler;
     private OrderDatabase db;
     private GlobalVariable gv;
 
@@ -88,15 +92,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initHandler() {
-        UiHandler = new Handler(getMainLooper());
         handlerThread = new HandlerThread("soap");
         handlerThread.start();
-        mHandler = new Handler(handlerThread.getLooper(), mCallback);
+        mHandler = new Handler(handlerThread.getLooper());
     }
 
-    Handler.Callback mCallback = new Handler.Callback() {
+    private Runnable runnable_refresh = new Runnable() {
         @Override
-        public boolean handleMessage(Message msg) {
+        public void run() {
             try {
                 JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
                 if (AnalyzeUtil.checkSuccess(json)) {
@@ -106,35 +109,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         db.addCheckFailedReasons(map.get("CheckFailedReasons"));
                         db.addOrderComments(map.get("OrderComments"));
                         db.addOrderItemComments(map.get("OrderItemComments"));
-                        UiHandler.post(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, getResources().getString(R.string.refresh_success), Toast.LENGTH_SHORT).show();
                                 Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
                                         "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
                                 progressDialog.dismiss();
                             }
                         });
                     } else {
-                        // TODO: 2018/12/28 多國語言
-                        Toast.makeText(MainActivity.this, "請確認所以訂單以上傳，在執行更新動作", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle(getResources().getString(R.string.warning));
+                        builder.setMessage(getResources().getString(R.string.not_update_message));
+                        builder.setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton(getResources().getString(R.string.update), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialogInterface, int i) {
+                                progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.updating), getResources().getString(R.string.wait), true);
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Map<String, JSONObject> map = db.getAllUpdateDataByPONumber();
+                                            for (String key : map.keySet()) {
+                                                new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), map.get(key));
+                                                db.updateOrdersUpdate(key);
+                                            }
+                                            dialogInterface.dismiss();
+                                            mHandler.post(runnable_refresh);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (XmlPullParserException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            progressDialog.dismiss();
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+                        builder.show();
                     }
                 } else {
                     Toast.makeText(MainActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, "XmlPullParserException存取異常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, "IOException存取異常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
             } finally {
                 progressDialog.dismiss();
             }
-            return false;
         }
     };
 
@@ -172,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             };
             if (isExit == false) {
                 isExit = true;
-                Toast.makeText(this, "再按一次後退鍵退出應用程式"
+                Toast.makeText(this, getResources().getString(R.string.close_app)
                         , Toast.LENGTH_SHORT).show();
                 if (!hasTask) {
                     tExit.schedule(task, 2000);
@@ -188,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
+        handlerThread.quit();
+        db.close();
         super.onDestroy();
     }
 
@@ -195,8 +236,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.update_btn:
-                progressDialog = ProgressDialog.show(MainActivity.this, "讀取資料中", "請稍後", true);
-                mHandler.sendEmptyMessageDelayed(0, 0);
+                progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
+                mHandler.post(runnable_refresh);
                 break;
             case R.id.home_btn:
                 for (int i = 0; i < fragmentManager.getFragments().size() - 1; i++) {

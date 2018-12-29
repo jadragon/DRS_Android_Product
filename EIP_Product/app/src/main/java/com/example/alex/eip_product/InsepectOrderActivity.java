@@ -168,19 +168,27 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             PONumber.setText(Orderslist.getAsString(KEY_PONumber));
             POVersion.setText(Orderslist.getAsString(KEY_POVersion));
 
-            if (!Orderslist.getAsString(KEY_Inspector).equals("")) {
+            if (Orderslist.getAsString(KEY_Inspector).equals("")) {
+                Inspector.setText(gv.getUsername());
+            } else {
                 Inspector.setText(Orderslist.getAsString(KEY_Inspector));
-                InspectorDate.setText(Orderslist.getAsString(KEY_InspectorDate));
             }
-
+            String inspectorDate = InspectorDate.getText().toString();
+            String vendorInspectorDate = VendorInspectorDate.getText().toString();
+            if (inspectorDate.equals("") && vendorInspectorDate.equals("")) {
+                String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                InspectorDate.setText(today);
+                VendorInspectorDate.setText(today);
+            } else {
+                InspectorDate.setText(Orderslist.getAsString(KEY_InspectorDate));
+                VendorInspectorDate.setText(Orderslist.getAsString(KEY_VendorInspectorDate));
+            }
             byte[] bitmapdata = Orderslist.getAsByteArray(KEY_VendorInspector);
             if (bitmapdata != null) {
                 bitmap = StringUtils.byteArrayToBitmap(bitmapdata);
                 VendorInspector.setImageBitmap(bitmap);
             }
-            if (!Orderslist.getAsString(KEY_VendorInspectorDate).equals("")) {
-                VendorInspectorDate.setText(Orderslist.getAsString(KEY_VendorInspectorDate));
-            }
+
             FeedbackPerson.setText(Orderslist.getAsString(KEY_FeedbackPerson));
             FeedbackDate.setText(Orderslist.getAsString(KEY_FeedbackDate));
         }
@@ -216,9 +224,17 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             } else {
                 cv.put(KEY_Inspector, Inspector.getText().toString());
             }
-            String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-            cv.put(KEY_InspectorDate, today);
-            cv.put(KEY_VendorInspectorDate, today);
+
+            String inspectorDate = InspectorDate.getText().toString();
+            String vendorInspectorDate = VendorInspectorDate.getText().toString();
+            if (inspectorDate.equals("") && vendorInspectorDate.equals("")) {
+                String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                cv.put(KEY_InspectorDate, today);
+                cv.put(KEY_VendorInspectorDate, today);
+            } else {
+                cv.put(KEY_InspectorDate, inspectorDate);
+                cv.put(KEY_VendorInspectorDate, vendorInspectorDate);
+            }
             cv.put(KEY_isOrderEdit, true);
             db.saveOrdersEditBasic(Orderslist.getAsString(KEY_PONumber), cv);
             ArrayList<ContentValues> arrayList = new ArrayList<>();
@@ -365,7 +381,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                                 }
                                 Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(InsepectOrderActivity.this, "上傳異常", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(InsepectOrderActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -441,14 +457,14 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     final int bitmapwidth = VendorInspector.getWidth();
                     final int bitmapheight = VendorInspector.getHeight();
                     AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this).setView(linePathView)
-                            .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     bitmap = linePathView.getBitMap(VendorInspector.getWidth(), VendorInspector.getHeight());
                                     VendorInspector.setImageBitmap(bitmap);
                                     dialog.dismiss();
                                 }
-                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            }).setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -693,14 +709,23 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     checkBox.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_MainMarK));
                     checkBox = item_view.findViewById(R.id.row12);
                     checkBox.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_SideMarK));
+
+                    boolean CheckPass = OrderDetailslist.get(i).getAsBoolean(KEY_CheckPass);
+                    boolean Special = OrderDetailslist.get(i).getAsBoolean(KEY_Special);
+                    boolean Rework = OrderDetailslist.get(i).getAsBoolean(KEY_Rework);
+                    boolean Reject = OrderDetailslist.get(i).getAsBoolean(KEY_Reject);
                     RadioButton radioButton = item_view.findViewById(R.id.row13);
-                    radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_CheckPass));
+                    if (!(CheckPass & Special & Rework & Reject)) {
+                        radioButton.setChecked(true);
+                    } else {
+                        radioButton.setChecked(CheckPass);
+                    }
                     radioButton = item_view.findViewById(R.id.row14);
-                    radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_Special));
+                    radioButton.setChecked(Special);
                     radioButton = item_view.findViewById(R.id.row15);
-                    radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_Rework));
+                    radioButton.setChecked(Rework);
                     radioButton = item_view.findViewById(R.id.row16);
-                    radioButton.setChecked(OrderDetailslist.get(i).getAsBoolean(KEY_Reject));
+                    radioButton.setChecked(Reject);
 
                     textView = item_view.findViewById(R.id.row17);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_ReCheckDate));
@@ -749,76 +774,5 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 }
             }
         }
-    }
-
-    // TODO: 2018/12/26 多國語系
-    private void updateData() {
-        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "上傳檔案中", "請稍後", true);
-        AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
-            @Override
-            public void onTaskBefore() {
-                progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "更新資料中", "請稍後", true);
-            }
-
-            @Override
-            public JSONObject onTasking(Void... params) {
-                try {
-                    return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    progressDialog.dismiss();
-                }
-                return null;
-            }
-
-            @Override
-            public void onTaskAfter(JSONObject jsonObject) {
-                if (jsonObject != null) {
-                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
-                        try {
-                            Map<String, List<ContentValues>> map = Analyze_Order.getOrders(jsonObject);
-                            db.addOrders(map.get("Orders"));
-                            db.addOrderDetails(map.get("OrderDetails"));
-                            db.addCheckFailedReasons(map.get("CheckFailedReasons"));
-                            db.addOrderComments(map.get("OrderComments"));
-                            db.addOrderItemComments(map.get("OrderItemComments"));
-                            Toast.makeText(InsepectOrderActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this);
-                            builder.setTitle("更新資料");
-                            builder.setMessage("請於網路良好區域執行更新動作");
-                            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                    Toast.makeText(InsepectOrderActivity.this, "請於首頁畫面做更新動作", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            builder.setPositiveButton("重新更新", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                    updateData();
-                                }
-                            });
-                            builder.show();
-                        } finally {
-                            progressDialog.dismiss();
-                        }
-                    } else {
-                        Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                    }
-                    Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(InsepectOrderActivity.this, "更新資料失敗", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 }

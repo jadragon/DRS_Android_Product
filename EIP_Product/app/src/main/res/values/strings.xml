@@ -5,6 +5,9 @@
     <string name="login_button">登入</string>
     <string name="language_text">語言:</string>
 
+    <string name="confirm">確定</string>
+
+
     <string name="nosignin">簽名檔沒簽</string>
     <string name="savesuccess">儲存成功</string>
     <string name="savefail">儲存失敗</string>
@@ -12,6 +15,16 @@
     <string name="notsave">不儲存</string>
     <string name="saveleft">儲存後離開</string>
 
+    <string name="not_update">資料尚未更新</string>
+    <string name="loading_data">讀取資料中</string>
+    <string name="wait">請稍後</string>
+    <string name="login_success">登入成功</string>
+    <string name="exception">存取異常</string>
+    <string name="warning">警告</string>
+    <string name="not_update_message">尚有訂單未上傳，是否要將所有訂單上傳?</string>
+    <string name="update">上傳</string>
+    <string name="refresh_success">更新成功</string>
+    <string name="close_app">再按一次後退鍵退出應用程式</string>
 
     <string name="yes">是</string>
     <string name="no">否</string>
@@ -109,6 +122,7 @@
     <string name="product">產品</string>
     <string name="specification">規格說明</string>
     <string name="updatedata">更新資料</string>
+    <string name="updating">上傳資料中</string>
     <string-array name="menu_item">
         <item>驗表行程</item>
         <item>不合格原因</item>

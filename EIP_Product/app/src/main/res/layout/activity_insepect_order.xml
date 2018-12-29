@@ -941,7 +941,8 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="@dimen/table_padding" />
+                            android:padding="@dimen/table_padding"
+                            android:textSize="@dimen/table_text_size" />
                     </LinearLayout>
 
 

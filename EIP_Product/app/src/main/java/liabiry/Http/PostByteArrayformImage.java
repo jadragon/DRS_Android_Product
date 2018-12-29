@@ -53,7 +53,6 @@ public class PostByteArrayformImage {
                     entity.addPart(nameValuePair.getName(), new StringBody(nameValuePair.getValue()));
                 }
             } catch (UnsupportedEncodingException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             httpPost.setEntity(entity);

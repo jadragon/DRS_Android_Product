@@ -635,8 +635,80 @@ public class OrderDatabase extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-        Log.e("update", all_json + "");
         return all_json;
+    }
+
+    public Map<String, JSONObject> getAllUpdateDataByPONumber() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = db.rawQuery("SELECT " + KEY_PONumber + " FROM " + TABLE_OrdersEdit + " WHERE " +
+                KEY_isOrderEdit + " = " + 1 + " AND " + "(" + KEY_isOrderUpdate + " IS NULL " + " OR " + KEY_isOrderUpdate + " = " + 0 + ")", null);
+        Map<String, JSONObject> map = new TreeMap<>();
+        while (cursor1.moveToNext()) {
+            String PONumber = cursor1.getString(0);
+            JSONObject all_json = new JSONObject();
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_OrdersEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+            JSONArray jsonArray;
+            JSONObject jsonObject;
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                try {
+                    all_json.put(KEY_PONumber, cursor.getString(1));
+                    all_json.put(KEY_POVersion, cursor.getString(2));
+                    all_json.put(KEY_Inspector, cursor.getString(13));
+                    all_json.put(KEY_InspectorDate, cursor.getString(14));
+                    all_json.put(KEY_VendorInspector, StringUtils.encodeTobase64(cursor.getBlob(15)));
+                    all_json.put(KEY_VendorInspectorDate, cursor.getString(16));
+                    jsonArray = new JSONArray();
+                    cursor = db.rawQuery("SELECT * FROM " + TABLE_OrderDetailsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+                    while (cursor.moveToNext()) {
+                        jsonObject = new JSONObject();
+                        jsonObject.put(KEY_PONumber, cursor.getString(1));
+                        jsonObject.put(KEY_POVersion, cursor.getString(2));
+                        //   jsonObject.put(KEY_LineNumber, cursor.getString(3));
+                        jsonObject.put(KEY_Item, cursor.getString(4));
+                        //   jsonObject.put(KEY_OrderQty, cursor.getString(5));
+                        //   jsonObject.put(KEY_Qty, cursor.getString(6));
+                        //   jsonObject.put(KEY_SampleNumber, cursor.getString(7));
+                        //   jsonObject.put(KEY_Uom, cursor.getString(8));
+                        jsonObject.put(KEY_Size, cursor.getInt(9));
+                        jsonObject.put(KEY_Functions, cursor.getInt(10));
+                        jsonObject.put(KEY_Surface, cursor.getInt(11));
+                        jsonObject.put(KEY_Package, cursor.getInt(12));
+                        jsonObject.put(KEY_CheckPass, cursor.getInt(13) > 0);
+                        jsonObject.put(KEY_Special, cursor.getInt(14) > 0);
+                        jsonObject.put(KEY_Rework, cursor.getInt(15) > 0);
+                        jsonObject.put(KEY_Reject, cursor.getInt(16) > 0);
+                        jsonObject.put(KEY_MainMarK, cursor.getInt(17) > 0);
+                        jsonObject.put(KEY_SideMarK, cursor.getInt(18) > 0);
+                        jsonObject.put(KEY_ReCheckDate, cursor.getString(19));
+                        jsonObject.put(KEY_Remarks, cursor.getString(20));
+                        jsonArray.put(jsonObject);
+                    }
+                    all_json.put(KEY_OrderDetails, jsonArray);
+
+                    jsonArray = new JSONArray();
+                    cursor = db.rawQuery("SELECT * FROM " + TABLE_CheckFailedReasonsEdit + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+                    while (cursor.moveToNext()) {
+                        jsonObject = new JSONObject();
+                        jsonObject.put(KEY_PONumber, cursor.getString(2));
+                        jsonObject.put(KEY_POVersion, cursor.getString(3));
+                        jsonObject.put(KEY_Item, cursor.getString(4));
+                        jsonObject.put(KEY_ReasonCode, cursor.getString(5));
+                        jsonObject.put(KEY_ReasonDescr, cursor.getString(6));
+                        jsonArray.put(jsonObject);
+                    }
+                    all_json.put(KEY_CheckFailedReasons, jsonArray);
+                    map.put(PONumber, all_json);
+                    cursor.close();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        cursor1.close();
+        db.close();
+        return map;
     }
 
     public Map<String, FailItemPojo> getCheckFailedReasonsMapByPONumber(String PONumber) {

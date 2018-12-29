@@ -6,6 +6,9 @@
     <string name="language_text">语言:</string>
 
 
+    <string name="confirm">确定</string>
+
+
     <string name="nosignin">签名档没签</string>
         
     <string name="savesuccess">储存成功</string>
@@ -17,6 +20,29 @@
     <string name="notsave">不储存</string>
         
     <string name="saveleft">储存后离开</string>
+
+
+    <string name="not_update">资料尚未更新</string>
+        
+    <string name="loading_data">读取资料中</string>
+        
+    <string name="wait">请稍后</string>
+        
+    <string name="login_success">登入成功</string>
+        
+    <string name="exception">存取异常</string>
+        
+    <string name="warning">警告</string>
+        
+    <string name="not_update_message">尚有订单未上传，是否要将所有订单上传?</string>
+        
+    <string name="update">上传</string>
+        
+    <string name="updating">上传资料中</string>
+        
+    <string name="refresh_success">更新成功</string>
+        
+    <string name="close_app">再按一次后退键退出应用程式</string>
 
     <string name="yes">是</string>
         

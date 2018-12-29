@@ -22,7 +22,9 @@ import android.widget.TextView;
 
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -103,10 +105,17 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
             VendorCode.setText(Orderslist.getAsString(KEY_VendorCode));
             PONumber.setText(Orderslist.getAsString(KEY_PONumber));
             POVersion.setText(Orderslist.getAsString(KEY_POVersion));
+            Inspector.setText(Orderslist.getAsString(KEY_Inspector));
 
-            if (!Orderslist.getAsString(KEY_Inspector).equals("")) {
-                Inspector.setText(Orderslist.getAsString(KEY_Inspector));
+            String inspectorDate = InspectorDate.getText().toString();
+            String vendorInspectorDate = VendorInspectorDate.getText().toString();
+            if (inspectorDate.equals("") && vendorInspectorDate.equals("")) {
+                String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                InspectorDate.setText(today);
+                VendorInspectorDate.setText(today);
+            } else {
                 InspectorDate.setText(Orderslist.getAsString(KEY_InspectorDate));
+                VendorInspectorDate.setText(Orderslist.getAsString(KEY_VendorInspectorDate));
             }
 
             byte[] bitmapdata = Orderslist.getAsByteArray(KEY_VendorInspector);
@@ -114,9 +123,7 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
                 Bitmap bitmap = StringUtils.byteArrayToBitmap(bitmapdata);
                 VendorInspector.setImageBitmap(bitmap);
             }
-            if (!Orderslist.getAsString(KEY_VendorInspectorDate).equals("")) {
-                VendorInspectorDate.setText(Orderslist.getAsString(KEY_VendorInspectorDate));
-            }
+
             FeedbackPerson.setText(Orderslist.getAsString(KEY_FeedbackPerson));
             FeedbackDate.setText(Orderslist.getAsString(KEY_FeedbackDate));
         }

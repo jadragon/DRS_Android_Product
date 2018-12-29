@@ -297,7 +297,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
+            final int position = getAdapterPosition();
             if (KeyWordRecyclerViewAdapter.this.getItemViewType(position) == TYPE_ITEM) {
 
                 if (list.get(position).get("select").equals("0")) {
@@ -328,7 +328,7 @@ public class KeyWordRecyclerViewAdapter extends RecyclerView.Adapter<KeyWordRecy
                     public void onClick(View v) {
                         if (!editText.getText().toString().equals("")) {
                             SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(ctx);
-                            db.addFailTableItem(Integer.parseInt(list.get(getAdapterPosition()).get("failed_type")), editText.getText().toString());
+                            db.addFailTableItem(Integer.parseInt(list.get(position).get("failed_type")), editText.getText().toString());
                             db.close();
                             setFilter();
                             alertDialog.dismiss();

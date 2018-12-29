@@ -24,9 +24,6 @@
             android:name=".InsepectOrderActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ImageViewActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".SelectFailedActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".PDFFromServerActivity" />
@@ -51,8 +48,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InspectDetailActivity" />
-        <activity android:name=".PreviewInsepectOrderActivity"></activity>
+        <activity android:name=".InspectDetailActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".PreviewInsepectOrderActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

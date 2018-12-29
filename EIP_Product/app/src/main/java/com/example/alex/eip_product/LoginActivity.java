@@ -1,7 +1,9 @@
 package com.example.alex.eip_product;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private GlobalVariable gv;
     private ProgressDialog progressDialog;
     public static HandlerThread handlerThread;
-    private Handler mHandler, UiHandler;
+    private Handler mHandler;
     private OrderDatabase db;
 
     @Override
@@ -65,72 +67,64 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = ProgressDialog.show(LoginActivity.this, "讀取資料中", "請稍後", true);
-                mHandler.sendEmptyMessageDelayed(0, 0);
+                progressDialog = ProgressDialog.show(LoginActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
+                mHandler.post(runnable_refresh);
             }
         });
     }
 
     public void initHandler() {
-        UiHandler = new Handler(getMainLooper());
         handlerThread = new HandlerThread("soap");
         handlerThread.start();
-        mHandler = new Handler(handlerThread.getLooper(), mCallback);
+        mHandler = new Handler(handlerThread.getLooper());
     }
 
-    Handler.Callback mCallback = new Handler.Callback() {
+    private Runnable runnable_refresh = new Runnable() {
         @Override
-        public boolean handleMessage(Message msg) {
+        public void run() {
             try {
-                JSONObject json = new API_OrderInfo().getOrderInfo(username.getText().toString(), pw.getText().toString());
+                JSONObject json = new API_OrderInfo().getOrderInfo(username.getText().toString(),pw.getText().toString());
                 if (AnalyzeUtil.checkSuccess(json)) {
                     Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
-                    if (db.addOrders(map.get("Orders"))) {
-                        db.addOrderDetails(map.get("OrderDetails"));
-                        db.addCheckFailedReasons(map.get("CheckFailedReasons"));
-                        db.addOrderComments(map.get("OrderComments"));
-                        db.addOrderItemComments(map.get("OrderItemComments"));
-                        UiHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                                Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
-                                        "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
-                                gv.setUsername(username.getText().toString());
-                                gv.setPw(pw.getText().toString());
-                                PreferenceUtil.commitString("username", username.getText().toString());
-                                PreferenceUtil.commitString("pw", pw.getText().toString());
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
-                            }
-                        });
-                    } else {
-                        // TODO: 2018/12/28 多國語言
-                        Toast.makeText(LoginActivity.this, "請確認所以訂單以上傳，在執行更新動作", Toast.LENGTH_SHORT).show();
-                    }
+                    db.addOrders(map.get("Orders"));
+                    db.addOrderDetails(map.get("OrderDetails"));
+                    db.addCheckFailedReasons(map.get("CheckFailedReasons"));
+                    db.addOrderComments(map.get("OrderComments"));
+                    db.addOrderItemComments(map.get("OrderItemComments"));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                            gv.setUsername(username.getText().toString());
+                            gv.setPw(pw.getText().toString());
+                            PreferenceUtil.commitString("username", username.getText().toString());
+                            PreferenceUtil.commitString("pw", pw.getText().toString());
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    });
+
                 } else {
                     Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, "JSONException存取異常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this,  getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, "XmlPullParserException存取異常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, "IOException存取異常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
             } finally {
                 progressDialog.dismiss();
             }
-            return false;
         }
     };
 
     @Override
     protected void onDestroy() {
         handlerThread.quit();
-        mHandler.removeCallbacksAndMessages(null);
         db.close();
         super.onDestroy();
     }

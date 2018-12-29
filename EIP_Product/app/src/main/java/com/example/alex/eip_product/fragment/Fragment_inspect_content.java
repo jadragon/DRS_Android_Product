@@ -96,16 +96,15 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 textView.setOnClickListener(this);
                 textView.setTag(i);
             } else if (cv.getAsBoolean(KEY_isOrderUpdate)) {
-                // TODO: 2018/12/26 多國語言
                 textView = view.findViewWithTag("HasCompleted");
                 textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
-                textView.setText("資料尚未更新");
+                textView.setText(getResources().getString(R.string.not_update));
                 textView = view.findViewWithTag("CanShipping");
                 textView.setBackgroundColor(getResources().getColor(R.color.light_green));
-                textView.setText("資料尚未更新");
+                textView.setText(getResources().getString(R.string.not_update));
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
-                textView.setText("資料尚未更新");
+                textView.setText(getResources().getString(R.string.not_update));
                 textView.setOnClickListener(this);
                 textView.setTag(i);
             } else {

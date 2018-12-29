@@ -41,13 +41,13 @@
         android:textSize="@dimen/table_text_size" />
 
 
-    <TextView
+    <EditText
         android:id="@+id/row4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title4_weight"
         android:background="@color/light_purple"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:padding="2.5dp"
         android:textSize="@dimen/table_text_size" />
 
