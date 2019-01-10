@@ -202,13 +202,20 @@
         
     <string name="specification">规格说明</string>
     <string name="updatedata">更新资料</string>
-    <string-array name="menu_item">
-        <item>验表行程</item>
-                
-        <item>不合格原因</item>
-                
-        <item>语言设定</item>
-    </string-array>
+    <string name="download_image">下载图片</string>
+    <string name="download_success">下载完成</string>
+        <string name="download_fail">下载失败</string>
+        <string name="download_fail_info">请确保网路稳定以及储存空间是否充足</string>
+        <string name="redownload">重新下载</string>
+    <string name="reupdate">重新更新</string>
+        <string name="downloading">下载档案中...</string>
+        <string-array name="menu_item">
+            <item>验表行程</item>
+                    
+            <item>不合格原因</item>
+                    
+            <item>语言设定</item>
+        </string-array>
     <string-array name="type1">
         <item>A1</item>
         <item>A2</item>

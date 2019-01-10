@@ -18,9 +18,12 @@ import static db.OrderDatabase.KEY_CheckFailedReasons;
 import static db.OrderDatabase.KEY_CheckMan;
 import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_Comment;
+import static db.OrderDatabase.KEY_Extension;
 import static db.OrderDatabase.KEY_FeedbackDate;
 import static db.OrderDatabase.KEY_FeedbackPerson;
 import static db.OrderDatabase.KEY_FeedbackRecommendations;
+import static db.OrderDatabase.KEY_FileName;
+import static db.OrderDatabase.KEY_FilePath;
 import static db.OrderDatabase.KEY_Functions;
 import static db.OrderDatabase.KEY_HasCompleted;
 import static db.OrderDatabase.KEY_InspectionNumber;
@@ -212,6 +215,44 @@ public class Analyze_Order {
             contentValues.put(KEY_ItemNo, json_obj.getString(KEY_ItemNo));
             contentValues.put(KEY_Comment, json_obj.getString(KEY_Comment));
             list.add(contentValues);
+        }
+        return list;
+    }
+
+    public static List<ContentValues> getItemDrawings(JSONObject json) throws JSONException {
+        List<ContentValues> list = new ArrayList<>();
+        if (json.getBoolean("IsSuccess")) {
+            ContentValues contentValues;
+            JSONArray jsonArray = json.getJSONArray("ItemDrawings");
+            JSONObject json_obj;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                contentValues = new ContentValues();
+                json_obj = jsonArray.getJSONObject(i);
+                contentValues.put(KEY_Item, json_obj.getString(KEY_Item));
+                contentValues.put(KEY_FileName, json_obj.getString(KEY_FileName));
+                contentValues.put(KEY_Extension, json_obj.getString(KEY_Extension));
+                list.add(contentValues);
+            }
+        }
+        return list;
+    }
+
+    public static List<ContentValues> getFiles(JSONObject json) throws JSONException {
+        List<ContentValues> list = new ArrayList<>();
+        if (json.getBoolean("IsSuccess")) {
+            ContentValues contentValues;
+            JSONArray jsonArray = json.getJSONArray("Files");
+            JSONObject json_obj;
+            String file_path;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                contentValues = new ContentValues();
+                json_obj = jsonArray.getJSONObject(i);
+                contentValues.put(KEY_FileName, json_obj.getString(KEY_FileName));
+                contentValues.put(KEY_Extension, json_obj.getString(KEY_Extension));
+                file_path = json_obj.getString(KEY_FilePath);
+                contentValues.put(KEY_FilePath, file_path != null ? file_path.replace(" ", "%20") : "");
+                list.add(contentValues);
+            }
         }
         return list;
     }

@@ -73,7 +73,6 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
     private ContentValues Orderslist;
     private ArrayList<ContentValues> OrderDetailslist;
     private Map<String, FailItemPojo> CheckFailedReasonslist = new TreeMap<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,6 +218,15 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_LineNumber));
                     textView = item_view.findViewById(R.id.row2);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_Item));
+                    final int finalI = i;
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(PreviewInsepectOrderActivity.this, PDFFromServerActivity.class);
+                            intent.putExtra("file_name", db.getFileNameByItem(OrderDetailslist.get(finalI).getAsString(KEY_Item)));
+                            startActivity(intent);
+                        }
+                    });
                     textView = item_view.findViewById(R.id.row3);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_OrderQty));
                     textView = item_view.findViewById(R.id.row4);

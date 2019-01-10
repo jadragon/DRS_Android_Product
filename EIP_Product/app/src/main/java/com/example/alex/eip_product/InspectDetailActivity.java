@@ -16,8 +16,7 @@ import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
 import static db.OrderDatabase.KEY_VendorCode;
 import static db.OrderDatabase.KEY_VendorName;
-import static db.OrderDatabase.TYPE_EDIT;
-import static db.OrderDatabase.TYPE_NORMAL;
+
 
 public class InspectDetailActivity extends AppCompatActivity {
     private TextView OrderComments, ItemNo, OrderItemComments;

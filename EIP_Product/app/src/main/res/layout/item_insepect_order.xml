@@ -49,6 +49,7 @@
         android:background="@color/light_purple"
         android:gravity="center_vertical"
         android:padding="2.5dp"
+        android:inputType="number"
         android:textSize="@dimen/table_text_size" />
 
 

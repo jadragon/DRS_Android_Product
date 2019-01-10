@@ -20,7 +20,7 @@ public class SoapSetting {
     //送API
     JSONObject sendAPI(SoapObject request, String SOAP_ACTION) throws IOException, XmlPullParserException, JSONException {
 //            创建soap 数据
-        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
         soapEnvelope.dotNet = true;
         soapEnvelope.setOutputSoapObject(request);
         HttpTransportSE transport = new HttpTransportSE(URL);

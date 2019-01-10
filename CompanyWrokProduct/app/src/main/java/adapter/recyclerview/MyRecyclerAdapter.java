@@ -79,8 +79,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Re
                 layoutParams = new LinearLayout.LayoutParams(real_heigh, dm.widthPixels / 4);
                 layoutParams.setMargins(0, 0, 0, 0);
                 view.setLayoutParams(layoutParams);
-                tv1.setTextColor(ctx.getResources().getColor(R.color.black));
-                tv1.setBackgroundColor(ctx.getResources().getColor(R.color.colorInvisible));
             } else if (type == 2) {
                 real_heigh = (int) ((dm.widthPixels - 25 * dm.density) / (float) 4);
                 layoutParams = new LinearLayout.LayoutParams(real_heigh, real_heigh / 4 * 3);

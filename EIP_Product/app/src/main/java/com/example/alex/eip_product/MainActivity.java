@@ -1,16 +1,22 @@
 package com.example.alex.eip_product;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,26 +29,37 @@ import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
 import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
 import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.fragment.Fragment_home;
+import com.example.alex.eip_product.pojo.AllupdateDataPojo;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Utils.FileUtils;
+import Utils.PreferenceUtil;
 import db.OrderDatabase;
+import liabiry.Http.pojo.TaskInfo;
+import liabiry.Http.pojo.TaskList;
 
 import static db.OrderDatabase.KEY_PONumber;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 0x01;
     private ImageView home, back;
     private FragmentManager fragmentManager;
-    private Button update;
+    private Button update, download;
     private ProgressDialog progressDialog;
     private HandlerThread handlerThread;
     private Handler mHandler;
@@ -68,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         home.setOnClickListener(this);
         back = findViewById(R.id.back_btn);
         back.setOnClickListener(this);
+        download = findViewById(R.id.download_btn);
+        download.setOnClickListener(this);
     }
 
     private void initFragment() {
@@ -78,10 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (fragmentManager.findFragmentById(R.id.fragment_content).getTag().equals("home")) {//判斷當前fragment的tag是否為home
                     home.setVisibility(View.INVISIBLE);
                     update.setVisibility(View.VISIBLE);
+                    download.setVisibility(View.VISIBLE);
                     back.setVisibility(View.INVISIBLE);
                 } else {
                     home.setVisibility(View.VISIBLE);
                     update.setVisibility(View.INVISIBLE);
+                    download.setVisibility(View.INVISIBLE);
                     back.setVisibility(View.VISIBLE);
                 }
             }
@@ -101,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void run() {
             try {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
+                        progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
+                    }
+                });
                 JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
                 if (AnalyzeUtil.checkSuccess(json)) {
                     Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
@@ -109,16 +138,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         db.addCheckFailedReasons(map.get("CheckFailedReasons"));
                         db.addOrderComments(map.get("OrderComments"));
                         db.addOrderItemComments(map.get("OrderItemComments"));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(MainActivity.this, getResources().getString(R.string.refresh_success), Toast.LENGTH_SHORT).show();
-                                Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:" + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments() +
-                                        "\nOrdersEdit:" + db.countOrdersEdit() + "\nOrderDetailsEdit:" + db.countOrderDetailsEdit() + "\nCheckFailedReasonsEdit:" + db.countCheckFailedReasonsEdit() + "\nOrderCommentsEdit:" + db.countOrderCommentsEdit() + "\nOrderItemCommentsEdit:" + db.countOrderItemCommentsEdit());
-                                progressDialog.dismiss();
+                        json = new API_OrderInfo().getItemDrawing(gv.getUsername(), gv.getPw());
+                        if (AnalyzeUtil.checkSuccess(json)) {
+                            db.addItemDrawings(Analyze_Order.getItemDrawings(json));
+                            json = new API_OrderInfo().getDrawingFile(gv.getUsername(), gv.getPw());
+                            if (AnalyzeUtil.checkSuccess(json)) {
+                                db.addFiles(Analyze_Order.getFiles(json));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this, getResources().getString(R.string.refresh_success), Toast.LENGTH_SHORT).show();
+                                        Log.e("Update", "Orders:" + db.countOrders() + "\nOrderDetails:" + db.countOrderDetails() + "\nCheckFailedReasons:"
+                                                + db.countCheckFailedReasons() + "\nOrderComments:" + db.countOrderComments() + "\nOrderItemComments:" + db.countOrderItemComments());
+                                    }
+                                });
                             }
-                        });
+                        }
                     } else {
+                        progressDialog.dismiss();
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle(getResources().getString(R.string.warning));
                         builder.setMessage(getResources().getString(R.string.not_update_message));
@@ -135,13 +172,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
+
                                         try {
-                                            Map<String, JSONObject> map = db.getAllUpdateDataByPONumber();
-                                            for (String key : map.keySet()) {
-                                                new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), map.get(key));
-                                                db.updateOrdersUpdate(key);
+                                            List<AllupdateDataPojo> pojos = db.getAllUpdateDataByPONumber();
+                                            JSONObject json;
+                                            for (AllupdateDataPojo pojo : pojos) {
+                                                json = new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), pojo.getJsonObject() + "");
+                                                if (AnalyzeUtil.checkSuccess(json)) {
+                                                    db.updateOrdersUpdate(pojo.getPONumber());
+                                                } else {
+                                                    Toast.makeText(MainActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
+                                                }
                                             }
-                                            dialogInterface.dismiss();
                                             mHandler.post(runnable_refresh);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -149,9 +191,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             e.printStackTrace();
                                         } catch (IOException e) {
                                             e.printStackTrace();
-                                        } finally {
-                                            progressDialog.dismiss();
                                         }
+
                                     }
                                 });
 
@@ -164,18 +205,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                recheckupdate();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                recheckupdate();
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                recheckupdate();
             } finally {
                 progressDialog.dismiss();
             }
         }
     };
+
+    private void recheckupdate() {
+        progressDialog.dismiss();
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(getResources().getString(R.string.exception));
+        builder.setMessage(getResources().getString(R.string.download_fail_info));
+        builder.setPositiveButton(getResources().getString(R.string.reupdate), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
+                        mHandler.post(runnable_refresh);
+                    }
+                });
+
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
 
     /**
      * 切换Fragment
@@ -236,8 +305,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.update_btn:
-                progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
                 mHandler.post(runnable_refresh);
+                break;
+            case R.id.download_btn:
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    initDownloadDialog();
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            }, REQUEST_WRITE_EXTERNAL_STORAGE);
+                }
+
                 break;
             case R.id.home_btn:
                 for (int i = 0; i < fragmentManager.getFragments().size() - 1; i++) {
@@ -247,6 +327,136 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.back_btn:
                 fragmentManager.popBackStack();
                 break;
+
         }
     }
+
+    private void initDownloadDialog() {
+        List<TaskInfo> dowloadFiles = db.getDowloadFiles();
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMessage(getResources().getString(R.string.downloading));
+        progressDialog.setMax(dowloadFiles.size());
+        progressDialog.setProgress(0);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        mHandler.post(new DownloadRunnable(new TaskList(dowloadFiles, dowloadFiles.size(), 0)));
+    }
+
+    public class DownloadRunnable implements Runnable {
+        private TaskList list;//下载信息JavaBean
+
+        public DownloadRunnable(TaskList list) {
+            this.list = list;
+        }
+
+        /**
+         * Runnable的run方法，进行文件下载
+         */
+        public void run() {
+            try {
+                if (list.getTaskInfos().size() > 0) {
+                    FileUtils fileUtils = new FileUtils();
+                    HttpURLConnection conn;//http连接对象
+                    FileOutputStream f = null;
+                    InputStream in = null;
+                    fileUtils.creatSDDir("EIP");
+                    int len;//每次读取的数组长度
+                    byte[] buffer = new byte[1024 * 8];//流读写的缓冲区
+                    for (int i = 0; i < list.getTaskInfos().size(); i++) {
+                        conn = (HttpURLConnection) new URL(list.getTaskInfos().get(i).getFilePath()).openConnection();
+                        conn.setConnectTimeout(5000);//连接超时时间
+                        conn.setReadTimeout(5000);//读取超时时间
+                        conn.setRequestMethod("GET");//请求类型为GET
+                        conn.connect();//连接
+                        in = conn.getInputStream();
+
+                        //通过文件路径和文件名实例化File
+                        if (fileUtils.isFileExist(list.getTaskInfos().get(i).getFileName() + ".pdf", Integer.parseInt(conn.getHeaderField("content-length")))) {
+                            list.setCompletedLen(i);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.setProgress((int) list.getCompletedLen());
+                                }
+                            });
+                        } else {
+                            File file = fileUtils.creatSDFile(list.getTaskInfos().get(i).getFileName() + ".pdf");
+                            f = new FileOutputStream(file);
+                            //从流读取字节数组到缓冲区
+                            while ((len = in.read(buffer)) > 0) {
+                                f.write(buffer, 0, len);
+                            }
+                            list.setCompletedLen(i);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.setProgress((int) list.getCompletedLen());
+                                }
+                            });
+                        }
+                        conn.disconnect();
+                    }
+                    if (f != null) {
+                        f.flush();
+                        f.close();
+                    }
+                    if (in != null)
+                        in.close();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, getResources().getString(R.string.download_success), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            } catch (IOException e) {
+                Log.e("download", e.toString());
+                e.printStackTrace();
+                progressDialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getResources().getString(R.string.download_fail));
+                builder.setMessage(getResources().getString(R.string.download_fail_info));
+                builder.setPositiveButton(getResources().getString(R.string.redownload), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initDownloadDialog();
+                            }
+                        });
+
+                    }
+                });
+                builder.setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+            } finally {
+                progressDialog.dismiss();
+            }
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            // 相机权限
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initDownloadDialog();
+                }
+                break;
+        }
+    }
+
 }

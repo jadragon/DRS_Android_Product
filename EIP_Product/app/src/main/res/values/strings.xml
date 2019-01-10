@@ -123,6 +123,13 @@
     <string name="specification">規格說明</string>
     <string name="updatedata">更新資料</string>
     <string name="updating">上傳資料中</string>
+    <string name="download_image">下載圖片</string>
+    <string name="download_success">下載完成</string>
+    <string name="download_fail">下載失敗</string>
+    <string name="download_fail_info">請確保網路穩定以及儲存空間是否充足</string>
+    <string name="redownload">重新下載</string>
+    <string name="reupdate">重新更新</string>
+    <string name="downloading">下載檔案中...</string>
     <string-array name="menu_item">
         <item>驗表行程</item>
         <item>不合格原因</item>

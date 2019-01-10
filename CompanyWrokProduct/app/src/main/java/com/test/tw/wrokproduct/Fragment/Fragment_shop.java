@@ -82,8 +82,7 @@ public class Fragment_shop extends Fragment {
             fragmentArrayList.add(fragment_shop_content3);
             fragmentArrayList.add(fragment_shop_content4);
             fragmentArrayList.add(fragment_shop_content5);
-            viewPagerAdapter = new ShopViewPagerAdapter(getChildFragmentManager(), tabtitle, fragmentArrayList);
-            viewPager.setAdapter(viewPagerAdapter);
+
         } else {
             fragmentArrayList = new ArrayList<>();
             fragmentArrayList.add(fragment_shop_content1);

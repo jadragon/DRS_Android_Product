@@ -358,7 +358,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public JSONObject onTasking(Void... params) {
                             try {
-                                return new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber)));
+                                return new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber)).toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } catch (XmlPullParserException e) {
@@ -434,7 +434,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
              * PDF
              */
             case R.id.pdf_view:
-                startActivity(new Intent(InsepectOrderActivity.this, PDFFromServerActivity.class));
+
                 break;
             /**
              * 採購單號
@@ -454,13 +454,13 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     linePathView.clear();
 
                 if (dialog == null) {
-                    final int bitmapwidth = VendorInspector.getWidth();
-                    final int bitmapheight = VendorInspector.getHeight();
+                    final int bitmapwidth = (int) (dm.heightPixels * ((float) VendorInspector.getWidth() / VendorInspector.getHeight()) / 6 * 5);
+                    final int bitmapheight = (int) ((float) dm.heightPixels / 6 * 5);
                     AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this).setView(linePathView)
                             .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    bitmap = linePathView.getBitMap(VendorInspector.getWidth(), VendorInspector.getHeight());
+                                    bitmap = linePathView.getBitMap(bitmapwidth/5, bitmapheight/5);
                                     VendorInspector.setImageBitmap(bitmap);
                                     dialog.dismiss();
                                 }
@@ -474,8 +474,8 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     dialog = builder.create();
                     dialog.show();
                     android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
-                    p.width = (int) (dm.heightPixels * ((float) bitmapwidth / bitmapheight) / 6 * 5);
-                    p.height = (int) ((float) dm.heightPixels / 6 * 5);
+                    p.width = bitmapwidth;
+                    p.height = bitmapheight;
                     dialog.getWindow().setAttributes(p);     //设置生效
                 } else {
                     dialog.show();
@@ -599,6 +599,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
             if (result.equals("OrderDetails")) {
                 for (int i = 0; i < OrderDetailslist.size(); i++) {
+                    final int finalI = i;
                     View view = new View(InsepectOrderActivity.this);
                     params.height = (int) dm.density;
                     view.setLayoutParams(params);
@@ -612,6 +613,14 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_LineNumber));
                     textView = item_view.findViewById(R.id.row2);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_Item));
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(InsepectOrderActivity.this, PDFFromServerActivity.class);
+                            intent.putExtra("file_name", db.getFileNameByItem(OrderDetailslist.get(finalI).getAsString(KEY_Item)));
+                            startActivity(intent);
+                        }
+                    });
                     textView = item_view.findViewById(R.id.row3);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_OrderQty));
                     textView = item_view.findViewById(R.id.row4);
@@ -622,7 +631,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_Uom));
                     EditText editText = item_view.findViewById(R.id.row7);
                     editText.setText(OrderDetailslist.get(i).getAsString(KEY_Size));
-                    final int finalI = i;
                     editText.setOnFocusChangeListener(InsepectOrderActivity.this);
                     editText.addTextChangedListener(new TextWatcher() {
                         View layout = item_view;
