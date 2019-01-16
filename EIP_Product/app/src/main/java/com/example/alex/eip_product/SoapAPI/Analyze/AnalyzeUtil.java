@@ -22,4 +22,13 @@ public class AnalyzeUtil {
         }
         return "伺服器異常";
     }
+
+    public static String getUserPermission(JSONObject json) {
+        try {
+            return json.getString("UserPermission");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "伺服器異常";
+    }
 }

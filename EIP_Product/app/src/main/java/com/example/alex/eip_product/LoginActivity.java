@@ -1,19 +1,13 @@
 package com.example.alex.eip_product;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +25,10 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import Utils.CommonUtil;
 import Utils.PreferenceUtil;
 import db.OrderDatabase;
 
@@ -40,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username, pw;
     private GlobalVariable gv;
     private ProgressDialog progressDialog;
-    public static HandlerThread handlerThread;
-    private Handler mHandler;
     private OrderDatabase db;
 
     @Override
@@ -53,12 +48,12 @@ public class LoginActivity extends AppCompatActivity {
         if (!PreferenceUtil.getString("username", "").equals("")) {
             gv.setUsername(PreferenceUtil.getString("username", ""));
             gv.setPw(PreferenceUtil.getString("pw", ""));
+            gv.setPermission(PreferenceUtil.getString("permission", ""));
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
         initView();
         initListenser();
-        initHandler();
     }
 
     private void initView() {
@@ -72,17 +67,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressDialog = ProgressDialog.show(LoginActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
-                mHandler.post(runnable_refresh);
-
+                MainActivity.getHandler().post(runnable_refresh);
             }
         });
     }
 
-    public void initHandler() {
-        handlerThread = new HandlerThread("soap");
-        handlerThread.start();
-        mHandler = new Handler(handlerThread.getLooper());
-    }
+
 
     private Runnable runnable_refresh = new Runnable() {
         @Override
@@ -90,6 +80,8 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 JSONObject json = new API_OrderInfo().getOrderInfo(username.getText().toString(), pw.getText().toString());
                 if (AnalyzeUtil.checkSuccess(json)) {
+                    //perssion
+                    final String permission = AnalyzeUtil.getUserPermission(json);
                     Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
                     db.addOrders(map.get("Orders"));
                     db.addOrderDetails(map.get("OrderDetails"));
@@ -108,30 +100,32 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_success), Toast.LENGTH_SHORT).show();
                                     gv.setUsername(username.getText().toString());
                                     gv.setPw(pw.getText().toString());
+                                    gv.setPermission(permission);
                                     PreferenceUtil.commitString("username", username.getText().toString());
                                     PreferenceUtil.commitString("pw", pw.getText().toString());
+                                    PreferenceUtil.commitString("permission", permission);
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     finish();
                                 }
                             });
                         } else {
-                            Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
+                            CommonUtil.toastErrorMessage(LoginActivity.this, getResources().getString(R.string.warning), AnalyzeUtil.getMessage(json));
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
+                        CommonUtil.toastErrorMessage(LoginActivity.this, getResources().getString(R.string.warning), AnalyzeUtil.getMessage(json));
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
+                    CommonUtil.toastErrorMessage(LoginActivity.this, getResources().getString(R.string.warning), AnalyzeUtil.getMessage(json));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                CommonUtil.toastErrorMessage(LoginActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                CommonUtil.toastErrorMessage(LoginActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                CommonUtil.toastErrorMessage(LoginActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
             } finally {
                 progressDialog.dismiss();
             }
@@ -140,10 +134,41 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        handlerThread.quit();
-        mHandler.removeCallbacks(null);
         db.close();
         super.onDestroy();
     }
 
+    /**
+     * 迴車鍵離開程式
+     */
+    private static Boolean isExit = false;
+    private static Boolean hasTask = false;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        super.onKeyDown(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Timer tExit = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false;
+                    hasTask = false;
+                }
+            };
+            if (!isExit) {
+                isExit = true;
+                Toast.makeText(this, getResources().getString(R.string.close_app)
+                        , Toast.LENGTH_SHORT).show();
+                if (!hasTask) {
+                    tExit.schedule(task, 2000);
+                }
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return false;
+        }
+        return true;
+    }
 }

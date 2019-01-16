@@ -72,13 +72,14 @@ public class StringUtils {
                 builder.deleteCharAt(builder.length() - 1);
             }
             String mac = builder.toString();
-            Log.d("TEST_BUG", "interfaceName=" + netWork.getName() + ", mac=" + mac);
+          //  Log.d("TEST_BUG", "interfaceName=" + netWork.getName() + ", mac=" + mac);
             // 从路由器上在线设备的MAC地址列表，可以印证设备Wifi的 name 是 wlan0
             if (netWork.getName().equals("wlan0")) {
                 Log.d("TEST_BUG", " interfaceName =" + netWork.getName() + ", mac=" + mac);
                 address = mac;
             }
         }
-        return address;
+      //  return "D0:17:C2:BC:6F:61";
+         return address;
     }
 }

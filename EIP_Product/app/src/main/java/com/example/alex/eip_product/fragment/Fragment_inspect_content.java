@@ -41,13 +41,6 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
     private GlobalVariable gv;
     private String VendorName;
 
-    public static Fragment_inspect_content newInstance(int index) {
-        Fragment_inspect_content f = new Fragment_inspect_content();
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        f.setArguments(args);
-        return f;
-    }
 
     @Nullable
     @Override
@@ -83,7 +76,51 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
             textView.setText(cv.getAsString(KEY_PONumber));
             textView = view.findViewWithTag("POVersion");
             textView.setText(cv.getAsString(KEY_POVersion));
-            if (cv.getAsBoolean(KEY_HasCompleted)) {
+            if (gv.getPermission() != null && gv.getPermission().equals("Edit")) {
+                if (cv.getAsBoolean(KEY_HasCompleted)) {
+                    textView = view.findViewWithTag("HasCompleted");
+                    textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
+                    textView.setText(getResources().getString(R.string.yes));
+                    textView = view.findViewWithTag("CanShipping");
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+                    textView.setText(getResources().getString(R.string.yes));
+                    textView = view.findViewWithTag("overview");
+                    textView.setBackgroundColor(getResources().getColor(R.color.orange));
+                    textView.setText(getResources().getString(R.string.preview));
+                    textView.setOnClickListener(this);
+                    textView.setTag(i);
+                } else if (cv.getAsBoolean(KEY_isOrderUpdate)) {
+                    textView = view.findViewWithTag("HasCompleted");
+                    textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
+                    textView.setText(getResources().getString(R.string.not_update));
+                    textView = view.findViewWithTag("CanShipping");
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+                    textView.setText(getResources().getString(R.string.not_update));
+                    textView = view.findViewWithTag("overview");
+                    textView.setBackgroundColor(getResources().getColor(R.color.orange));
+                    textView.setText(getResources().getString(R.string.not_update));
+                    textView.setOnClickListener(this);
+                    textView.setTag(i);
+                } else {
+                    textView = view.findViewWithTag("HasCompleted");
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
+                    textView.setText(getResources().getString(R.string.no));
+                    textView = view.findViewWithTag("CanShipping");
+                    textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                    textView.setText(getResources().getString(R.string.untest));
+
+                    textView = view.findViewWithTag("overview");
+                    if (cv.getAsBoolean(KEY_isOrderEdit)) {
+                        textView.setText(getResources().getString(R.string.undone));
+                        textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    } else {
+                        textView.setText(getResources().getString(R.string.write));
+                        textView.setBackgroundColor(getResources().getColor(R.color.blue));
+                    }
+                    textView.setOnClickListener(this);
+                    textView.setTag(i);
+                }
+            } else {
                 textView = view.findViewWithTag("HasCompleted");
                 textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
                 textView.setText(getResources().getString(R.string.yes));
@@ -93,37 +130,6 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
                 textView.setText(getResources().getString(R.string.preview));
-                textView.setOnClickListener(this);
-                textView.setTag(i);
-            } else if (cv.getAsBoolean(KEY_isOrderUpdate)) {
-                textView = view.findViewWithTag("HasCompleted");
-                textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
-                textView.setText(getResources().getString(R.string.not_update));
-                textView = view.findViewWithTag("CanShipping");
-                textView.setBackgroundColor(getResources().getColor(R.color.light_green));
-                textView.setText(getResources().getString(R.string.not_update));
-                textView = view.findViewWithTag("overview");
-                textView.setBackgroundColor(getResources().getColor(R.color.orange));
-                textView.setText(getResources().getString(R.string.not_update));
-                textView.setOnClickListener(this);
-                textView.setTag(i);
-            } else {
-                textView = view.findViewWithTag("HasCompleted");
-                textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
-                textView.setText(getResources().getString(R.string.no));
-                textView = view.findViewWithTag("CanShipping");
-                textView.setBackgroundColor(getResources().getColor(android.R.color.white));
-                textView.setText(getResources().getString(R.string.untest));
-
-
-                textView = view.findViewWithTag("overview");
-                if (cv.getAsBoolean(KEY_isOrderEdit)) {
-                    textView.setText(getResources().getString(R.string.undone));
-                    textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                } else {
-                    textView.setText(getResources().getString(R.string.write));
-                    textView.setBackgroundColor(getResources().getColor(R.color.blue));
-                }
                 textView.setOnClickListener(this);
                 textView.setTag(i);
             }
@@ -154,10 +160,14 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         int position = (int) v.getTag();
         Intent intent;
-        if (list.get(position).getAsBoolean(KEY_HasCompleted) || list.get(position).getAsBoolean(KEY_isOrderUpdate)) {
-            intent = new Intent(getContext(), PreviewInsepectOrderActivity.class);
+        if (gv.getPermission() != null && gv.getPermission().equals("Edit")) {
+            if (list.get(position).getAsBoolean(KEY_HasCompleted) || list.get(position).getAsBoolean(KEY_isOrderUpdate)) {
+                intent = new Intent(getContext(), PreviewInsepectOrderActivity.class);
+            } else {
+                intent = new Intent(getContext(), InsepectOrderActivity.class);
+            }
         } else {
-            intent = new Intent(getContext(), InsepectOrderActivity.class);
+            intent = new Intent(getContext(), PreviewInsepectOrderActivity.class);
         }
         intent.putExtra(KEY_PONumber, list.get(position).getAsString(KEY_PONumber) + "");
         startActivity(intent);

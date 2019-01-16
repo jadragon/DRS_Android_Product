@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
-
+<HorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <FrameLayout
-            android:layout_width="match_parent"
+            android:layout_width="2000dp"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -69,6 +69,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:orientation="horizontal">
 
                     <TextView
@@ -96,10 +98,12 @@
                         android:textSize="@dimen/table_text_size" />
 
                     <TextView
+                        android:id="@+id/InspectionNumber"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="@dimen/table_padding" />
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -136,7 +140,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="@dimen/table_padding" />
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -173,7 +178,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:padding="@dimen/table_padding" />
+                        android:padding="@dimen/table_padding"
+                        android:textSize="@dimen/table_text_size"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -196,21 +202,7 @@
                         android:padding="@dimen/table_padding"
                         android:textSize="@dimen/table_text_size" />
 
-                    <TextView
-                        android:id="@+id/pdf_view"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:padding="@dimen/table_padding"
-                        android:text="@string/title_name7"
-                        android:textSize="@dimen/table_text_size" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:padding="@dimen/table_padding" />
                 </LinearLayout>
 
 
@@ -583,7 +575,7 @@
 
                             <TextView
                                 android:layout_width="0dp"
-                                android:layout_height="50dp"
+                                android:layout_height="53dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="@dimen/footer2_weight"
                                 android:gravity="center"
@@ -677,7 +669,7 @@
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
-                                    android:textSize="11sp" />
+                                    android:textSize="@dimen/table_text_size" />
 
                             </LinearLayout>
 
@@ -709,7 +701,7 @@
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
-                                    android:textSize="11sp" />
+                                    android:textSize="@dimen/table_text_size" />
 
 
                             </LinearLayout>
@@ -990,15 +982,6 @@
                         android:textSize="@dimen/table_text_size" />
 
                     <Button
-                        android:id="@+id/edit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@android:color/white"
-                        android:text="@string/table_button2"
-                        android:textSize="@dimen/table_text_size" />
-
-                    <Button
                         android:id="@+id/save"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -1027,5 +1010,7 @@
 
 
     </ScrollView>
+</HorizontalScrollView>
+
 
 </LinearLayout>

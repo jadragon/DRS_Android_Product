@@ -27,16 +27,8 @@ import Utils.PreferenceUtil;
 
 public class Fragment_setting extends Fragment {
     private View v;
-    private Spinner spinner;
     private boolean init_Activity = false;
 
-    public static Fragment_setting newInstance(int index) {
-        Fragment_setting f = new Fragment_setting();
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        f.setArguments(args);
-        return f;
-    }
 
     @Nullable
     @Override
@@ -76,7 +68,7 @@ public class Fragment_setting extends Fragment {
         // 依據上次的語言設置，又一次設置語言
         int index = PreferenceUtil.getInt("language", 0);
         switchLanguage(index);
-        spinner = v.findViewById(R.id.language);
+        Spinner spinner = v.findViewById(R.id.language);
         spinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.language)));
         spinner.setSelection(index);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

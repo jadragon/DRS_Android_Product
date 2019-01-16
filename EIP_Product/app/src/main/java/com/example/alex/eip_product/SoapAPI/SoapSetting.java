@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class SoapSetting {
     private static String URL = "http://www.cesan.com.tw:3001/ws/wsSCG.asmx?WSDL";//訪問地址
+    //private static String URL = "https://scgeiptest.sunchain.com.tw/ws/wsSCG.asmx?WSDL";//訪問地址
     private static String TAG = "SOAP";
 
     //送API
@@ -27,7 +28,7 @@ public class SoapSetting {
 //          soap 协议发送
         transport.call(SOAP_ACTION, soapEnvelope);
 //            soap 请求完成后返回数据并转换成字符串
-        SoapPrimitive  resultString = (SoapPrimitive) soapEnvelope.getResponse();
+        SoapPrimitive resultString = (SoapPrimitive) soapEnvelope.getResponse();
         JSONObject jsonObject = null;
         if (resultString != null) {
             jsonObject = new JSONObject(resultString + "");

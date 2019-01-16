@@ -25,21 +25,12 @@ import db.OrderDatabase;
 
 public class Fragment_company extends Fragment implements View.OnClickListener {
     private View v;
-    private RecyclerView recyclerview;
     private CompanyListAdapter companyListAdapter;
     private TextView title, prepage, nextpage;
     private GlobalVariable gv;
     private Button tw, cn, vn;
     private String VendorCode = "";
     private OrderDatabase db;
-
-    public static Fragment_company newInstance(int index) {
-        Fragment_company f = new Fragment_company();
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        f.setArguments(args);
-        return f;
-    }
 
     @Nullable
     @Override
@@ -60,7 +51,7 @@ public class Fragment_company extends Fragment implements View.OnClickListener {
         cn = v.findViewById(R.id.company_cn);
         vn = v.findViewById(R.id.company_vn);
         //recyclerview
-        recyclerview = v.findViewById(R.id.company_recyclerview);
+        RecyclerView recyclerview = v.findViewById(R.id.company_recyclerview);
         companyListAdapter = new CompanyListAdapter(getContext());
         recyclerview.setAdapter(companyListAdapter);
     }

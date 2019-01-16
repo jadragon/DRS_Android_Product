@@ -48,10 +48,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InspectDetailActivity"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".PreviewInsepectOrderActivity"
-            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".InspectDetailActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".PreviewInsepectOrderActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".ListViewActivity"></activity>
     </application>
 
 </manifest>

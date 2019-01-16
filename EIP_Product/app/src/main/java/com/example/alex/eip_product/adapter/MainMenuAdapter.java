@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.alex.eip_product.MainActivity;
@@ -36,6 +37,18 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.Recycl
 
     @Override
     public void onBindViewHolder(RecycleHolder holder, final int position) {
+
+        switch (position) {
+            case 0:
+                holder.image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.date));
+                break;
+            case 1:
+                holder.image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.fail_reason));
+                break;
+            case 2:
+                holder.image.setImageDrawable(ctx.getResources().getDrawable(R.drawable.setting));
+                break;
+        }
         holder.title.setText(list[position]);
 
     }
@@ -46,10 +59,12 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.Recycl
     }
 
     class RecycleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView title;
+        private ImageView image;
+        private TextView title;
 
         public RecycleHolder(View view) {
             super(view);
+            image = view.findViewWithTag("image");
             title = view.findViewWithTag("title");
             itemView.setOnClickListener(this);
         }

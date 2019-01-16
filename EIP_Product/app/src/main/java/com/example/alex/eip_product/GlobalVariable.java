@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -13,7 +14,7 @@ import Utils.PreferenceUtil;
 import liabiry.Http.HttpUtils;
 
 public class GlobalVariable extends Application {
-    private String username, pw;
+    private String username, pw, permission;
 
     public String getUsername() {
         return username;
@@ -31,16 +32,25 @@ public class GlobalVariable extends Application {
         this.pw = pw;
     }
 
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
     private Date current_date;
 
     public String getCurrent_date() {//取得現在日期名稱
-        Calendar c = Calendar.getInstance();
-        c.setTime(current_date);
+        String date = new SimpleDateFormat("yyyy/MM/dd").format(current_date);
+        /*
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        return year + "/" + (month + 1) + "/" + dayOfMonth;
+        */
+        return date;
         //+ "(" + getDayOfWeek(dayOfWeek) + ")";
     }
 
@@ -66,6 +76,7 @@ public class GlobalVariable extends Application {
         initLanguage();
         initImageLoader();
     }
+
     private void initLanguage() {
         PreferenceUtil.init(this);
         // 保存設置語言的類型

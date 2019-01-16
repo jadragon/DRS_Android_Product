@@ -2,7 +2,7 @@
 
 <resources>
     <dimen name="table_padding">2.5dp</dimen>
-    <dimen name="table_text_size">11sp</dimen>
+    <dimen name="table_text_size">15sp</dimen>
     <dimen name="title1_weight">1</dimen>
     <dimen name="title2_weight">2</dimen>
     <dimen name="title3_weight">1</dimen>

@@ -20,9 +20,11 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +49,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import Utils.AsyncTaskUtils;
+import Utils.CommonUtil;
 import Utils.IDataCallBack;
 import Utils.StringUtils;
 import db.OrderDatabase;
@@ -54,6 +58,7 @@ import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_FeedbackDate;
 import static db.OrderDatabase.KEY_FeedbackPerson;
 import static db.OrderDatabase.KEY_Functions;
+import static db.OrderDatabase.KEY_InspectionNumber;
 import static db.OrderDatabase.KEY_Inspector;
 import static db.OrderDatabase.KEY_InspectorDate;
 import static db.OrderDatabase.KEY_Item;
@@ -87,14 +92,13 @@ import static db.OrderDatabase.KEY_isOrderEdit;
 public class InsepectOrderActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
     private final static int SELECT_FAIL_REASON = 110;
     private LinearLayout courseTable, failed_item_layout;
-    private Button saveButton, sendButton, editButton, cancelButton;
+    private Button saveButton, sendButton, cancelButton;
     private ImageView VendorInspector;
-    private TextView title, pdf_view;
     private DisplayMetrics dm;
     private ArrayList<View> ItemList = new ArrayList<>();
     private LinePathView linePathView;
     private AlertDialog dialog;
-    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, FeedbackPerson, FeedbackDate, VendorInspectorDate;
+    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, InspectionNumber, FeedbackPerson, FeedbackDate, VendorInspectorDate;
     private OrderDatabase db;
     private String key_ponumber;
     private ContentValues Orderslist;
@@ -115,14 +119,13 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         initView();
         initListener();
         initData();
-        setAnimation(title);
+        //   setAnimation(title);
 
     }
 
     private void initView() {
         courseTable = findViewById(R.id.kccx_course_table);
         VendorInspector = findViewById(R.id.VendorInspector);
-        title = findViewById(R.id.title);
         failed_item_layout = findViewById(R.id.failed_item_layout);
         SalesMan = findViewById(R.id.SalesMan);
         Shipping = findViewById(R.id.Shipping);
@@ -132,24 +135,21 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         POVersion = findViewById(R.id.POVersion);
         Inspector = findViewById(R.id.Inspector);
         InspectorDate = findViewById(R.id.InspectorDate);
+        InspectionNumber = findViewById(R.id.InspectionNumber);
         FeedbackPerson = findViewById(R.id.FeedbackPerson);
         FeedbackDate = findViewById(R.id.FeedbackDate);
         VendorInspectorDate = findViewById(R.id.VendorInspectorDate);
 
         saveButton = findViewById(R.id.save);
         sendButton = findViewById(R.id.send);
-        editButton = findViewById(R.id.edit);
         cancelButton = findViewById(R.id.cancel);
-        pdf_view = findViewById(R.id.pdf_view);
     }
 
     private void initListener() {
         PONumber.setOnClickListener(this);
         saveButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
-        editButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
-        pdf_view.setOnClickListener(this);
         VendorInspector.setOnClickListener(this);
     }
 
@@ -167,7 +167,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             VendorCode.setText(Orderslist.getAsString(KEY_VendorCode));
             PONumber.setText(Orderslist.getAsString(KEY_PONumber));
             POVersion.setText(Orderslist.getAsString(KEY_POVersion));
-
+            InspectionNumber.setText(Orderslist.getAsString(KEY_InspectionNumber));
             if (Orderslist.getAsString(KEY_Inspector).equals("")) {
                 Inspector.setText(gv.getUsername());
             } else {
@@ -203,19 +203,109 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         if (CheckFailedReasonslist.size() > 0) {
             new AddColumTask().execute("CheckFailedReasons");
         }
-        Log.e("CheckFailedReasonslist", CheckFailedReasonslist.size() + "\n" + CheckFailedReasonslist);
     }
 
     private boolean saveOrder() {
         try {
-            ContentValues cv = new ContentValues();
+            /**
+             * OrderDetails
+             */
+            int count = 0;
+            ContentValues cv;
+            ArrayList<ContentValues> arrayList1 = new ArrayList<>();
+            for (View item : ItemList) {
+                cv = new ContentValues();
+                TextView textView = item.findViewById(R.id.row1);
+                cv.put(KEY_LineNumber, textView.getText().toString());
+                textView = item.findViewById(R.id.row3);
+                double order_qty = textView.getText().toString().equals("") ? 0 : Double.parseDouble(textView.getText().toString());
+                textView = item.findViewById(R.id.row4);
+                double qty = textView.getText().toString().equals("") ? 0 : Double.parseDouble(textView.getText().toString());
+                if (qty < 0 || qty > order_qty) {
+                    CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.qty_more_than_oderqty));
+                    return false;
+                }
+                cv.put(KEY_Qty, qty);
+                textView = item.findViewById(R.id.row7);
+                int size = Integer.parseInt(textView.getText().toString());
+                cv.put(KEY_Size, size);
+
+                textView = item.findViewById(R.id.row8);
+                int functions = Integer.parseInt(textView.getText().toString());
+                cv.put(KEY_Functions, functions);
+
+                textView = item.findViewById(R.id.row9);
+                int surface = Integer.parseInt(textView.getText().toString());
+                cv.put(KEY_Surface, surface);
+
+                textView = item.findViewById(R.id.row10);
+                int packages = Integer.parseInt(textView.getText().toString());
+                cv.put(KEY_Package, packages);
+                if (size + functions + surface + packages > 0) {
+                    count++;
+                }
+
+                CheckBox checkBox = item.findViewById(R.id.row11);
+                cv.put(KEY_MainMarK, checkBox.isChecked());
+                checkBox = item.findViewById(R.id.row12);
+                cv.put(KEY_SideMarK, checkBox.isChecked());
+                RadioButton radioButton = item.findViewById(R.id.row14);
+                cv.put(KEY_Special, radioButton.isChecked());
+                radioButton = item.findViewById(R.id.row15);
+                cv.put(KEY_Rework, radioButton.isChecked());
+                radioButton = item.findViewById(R.id.row16);
+                cv.put(KEY_Reject, radioButton.isChecked());
+                //合格可出
+                radioButton = item.findViewById(R.id.row13);
+                //預定再驗貨日
+                textView = item.findViewById(R.id.row17);
+                if (!radioButton.isChecked() && textView.getText().toString().equals("")) {
+                    CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.unfill_recheckdate1));
+                    return false;
+                } else if (radioButton.isChecked() && !textView.getText().toString().equals("")) {
+                    CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.unfill_recheckdate2));
+                    return false;
+                }
+                cv.put(KEY_CheckPass, radioButton.isChecked());
+                cv.put(KEY_ReCheckDate, textView.getText().toString());
+                textView = item.findViewById(R.id.row18);
+                cv.put(KEY_Remarks, textView.getText().toString());
+                arrayList1.add(cv);
+            }
+            /**
+             *checkreason
+             */
+            ArrayList<ContentValues> arrayList2 = new ArrayList<>();
+            if (count != CheckFailedReasonslist.keySet().size()) {
+                CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.unfill_recheckdate3));
+                return false;
+            }
+            for (String key : CheckFailedReasonslist.keySet()) {
+                ArrayList<String> array1 = CheckFailedReasonslist.get(key).ReasonCode;
+                ArrayList<String> array2 = CheckFailedReasonslist.get(key).ReasonDescr;
+                for (int i = 0; i < array1.size(); i++) {
+                    cv = new ContentValues();
+                    cv.put(KEY_PONumber, Orderslist.getAsString(KEY_PONumber));
+                    cv.put(KEY_POVersion, Orderslist.getAsString(KEY_POVersion));
+                    cv.put(KEY_Item, CheckFailedReasonslist.get(key).Item);
+                    cv.put(KEY_LineNumber, CheckFailedReasonslist.get(key).LineNumber);
+                    cv.put(KEY_ReasonCode, array1.get(i));
+                    cv.put(KEY_ReasonDescr, array2.get(i));
+                    arrayList2.add(cv);
+                }
+            }
+
+            /**
+             * OrderDetails
+             */
+            cv = new ContentValues();
             byte[] byteArray;
             if (bitmap != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byteArray = stream.toByteArray();
             } else {
-                Toast.makeText(InsepectOrderActivity.this, getResources().getString(R.string.nosignin), Toast.LENGTH_SHORT).show();
+                CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.nosignin));
                 return false;
             }
             cv.put(KEY_VendorInspector, byteArray);
@@ -237,62 +327,14 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             }
             cv.put(KEY_isOrderEdit, true);
             db.saveOrdersEditBasic(Orderslist.getAsString(KEY_PONumber), cv);
-            ArrayList<ContentValues> arrayList = new ArrayList<>();
-            for (View item : ItemList) {
-                cv = new ContentValues();
-                TextView textView = item.findViewById(R.id.row1);
-                cv.put(KEY_LineNumber, textView.getText().toString());
-                textView = item.findViewById(R.id.row7);
-                cv.put(KEY_Size, textView.getText().toString());
-                textView = item.findViewById(R.id.row8);
-                cv.put(KEY_Functions, textView.getText().toString());
-                textView = item.findViewById(R.id.row9);
-                cv.put(KEY_Surface, textView.getText().toString());
-                textView = item.findViewById(R.id.row10);
-                cv.put(KEY_Package, textView.getText().toString());
-                CheckBox checkBox = item.findViewById(R.id.row11);
-                cv.put(KEY_MainMarK, checkBox.isChecked());
-                checkBox = item.findViewById(R.id.row12);
-                cv.put(KEY_SideMarK, checkBox.isChecked());
-                RadioButton radioButton = item.findViewById(R.id.row13);
-                cv.put(KEY_CheckPass, radioButton.isChecked());
-                radioButton = item.findViewById(R.id.row14);
-                cv.put(KEY_Special, radioButton.isChecked());
-                radioButton = item.findViewById(R.id.row15);
-                cv.put(KEY_Rework, radioButton.isChecked());
-                radioButton = item.findViewById(R.id.row16);
-                cv.put(KEY_Reject, radioButton.isChecked());
-                textView = item.findViewById(R.id.row17);
-                cv.put(KEY_ReCheckDate, textView.getText().toString());
-                textView = item.findViewById(R.id.row18);
-                cv.put(KEY_Remarks, textView.getText().toString());
-                arrayList.add(cv);
-            }
-            db.saveOrderDetailsEdit(Orderslist.getAsString(KEY_PONumber), arrayList);
-            /**
-             *checkreason
-             */
-            arrayList = new ArrayList<>();
-            for (String key : CheckFailedReasonslist.keySet()) {
-                ArrayList<String> array1 = CheckFailedReasonslist.get(key).ReasonCode;
-                ArrayList<String> array2 = CheckFailedReasonslist.get(key).ReasonDescr;
-                for (int i = 0; i < array1.size(); i++) {
-                    cv = new ContentValues();
-                    cv.put(KEY_PONumber, Orderslist.getAsString(KEY_PONumber));
-                    cv.put(KEY_POVersion, Orderslist.getAsString(KEY_POVersion));
-                    cv.put(KEY_Item, CheckFailedReasonslist.get(key).Item);
-                    cv.put(KEY_LineNumber, CheckFailedReasonslist.get(key).LineNumber);
-                    cv.put(KEY_ReasonCode, array1.get(i));
-                    cv.put(KEY_ReasonDescr, array2.get(i));
-                    arrayList.add(cv);
-                }
-            }
-            db.saveCheckFailedReasonsEdit(arrayList);
+            db.saveOrderDetailsEdit(Orderslist.getAsString(KEY_PONumber), arrayList1);
+            db.saveCheckFailedReasonsEdit(arrayList2, key_ponumber);
             return true;
         } catch (Exception e) {
-            Toast.makeText(this, getResources().getString(R.string.savefail), Toast.LENGTH_SHORT).show();
+            CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.savefail));
             return false;
         }
+
     }
 
     // TODO: 2018/12/26 當更新完不再顯示
@@ -317,8 +359,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
-                saveOrder();
-                finish();
+                if (saveOrder()) {
+                    finish();
+                }
             }
         });
         builder.show();
@@ -347,11 +390,10 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
              */
             case R.id.send:
                 if (saveOrder()) {
-
                     AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
                         @Override
                         public void onTaskBefore() {
-                            progressDialog = ProgressDialog.show(InsepectOrderActivity.this, "上傳檔案中", "請稍後", true);
+                            progressDialog = ProgressDialog.show(InsepectOrderActivity.this, getResources().getString(R.string.updating), getResources().getString(R.string.wait), true);
                         }
 
                         // TODO: 2018/12/26 上傳資料 需判斷欄位
@@ -376,30 +418,65 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                             if (jsonObject != null) {
                                 if (AnalyzeUtil.checkSuccess(jsonObject)) {
                                     db.updateOrdersUpdate(key_ponumber);
-                                    startActivity(getIntent().setClass(InsepectOrderActivity.this, PreviewInsepectOrderActivity.class));
-                                    finish();
+                                    Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                                    AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                                        @Override
+                                        public void onTaskBefore() {
+                                            progressDialog = ProgressDialog.show(InsepectOrderActivity.this, getResources().getString(R.string.refreshing), getResources().getString(R.string.wait), true);
+                                        }
+
+                                        @Override
+                                        public JSONObject onTasking(Void... params) {
+                                            try {
+                                                return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            } catch (XmlPullParserException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            } finally {
+                                                progressDialog.dismiss();
+                                            }
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public void onTaskAfter(JSONObject jsonObject) {
+                                            try {
+                                                if (jsonObject != null) {
+                                                    if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                                        Map<String, List<ContentValues>> map = Analyze_Order.getOrders(jsonObject, key_ponumber);
+                                                        db.updateOrders(map.get("Orders"), key_ponumber);
+                                                        db.updateOrderDetails(map.get("OrderDetails"), key_ponumber);
+                                                        db.updateCheckFailedReasons(map.get("CheckFailedReasons"), key_ponumber);
+                                                        db.updateOrderComments(map.get("OrderComments"), key_ponumber);
+                                                        db.updateOrderItemComments(map.get("OrderItemComments"), key_ponumber);
+                                                        startActivity(getIntent().setClass(InsepectOrderActivity.this, PreviewInsepectOrderActivity.class));
+                                                        finish();
+                                                    } else {
+                                                        refreash(AnalyzeUtil.getMessage(jsonObject));
+                                                    }
+                                                } else {
+                                                    refreash(null);
+                                                }
+
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                refreash(null);
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.warning), AnalyzeUtil.getMessage(jsonObject));
                                 }
-                                Toast.makeText(InsepectOrderActivity.this, AnalyzeUtil.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(InsepectOrderActivity.this, getResources().getString(R.string.exception), Toast.LENGTH_SHORT).show();
+                                CommonUtil.toastErrorMessage(InsepectOrderActivity.this, getResources().getString(R.string.exception), getResources().getString(R.string.download_fail_info));
                             }
                         }
                     });
 
                 }
-                break;
-            /**
-             * 編輯
-             */
-            case R.id.edit:
-
-                break;
-
-            /**
-             * PDF
-             */
-            case R.id.number:
-                startActivity(new Intent(InsepectOrderActivity.this, PDFFromServerActivity.class));
                 break;
 
             /**
@@ -431,12 +508,6 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 startActivityForResult(intent, SELECT_FAIL_REASON);
                 break;
             /**
-             * PDF
-             */
-            case R.id.pdf_view:
-
-                break;
-            /**
              * 採購單號
              */
             case R.id.PONumber:
@@ -460,7 +531,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                             .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    bitmap = linePathView.getBitMap(bitmapwidth/5, bitmapheight/5);
+                                    bitmap = linePathView.getBitMap(bitmapwidth / 5, bitmapheight / 5);
                                     VendorInspector.setImageBitmap(bitmap);
                                     dialog.dismiss();
                                 }
@@ -518,6 +589,79 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private void refreash(String errormessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this);
+        builder.setTitle(getResources().getString(R.string.refresh_fail));
+        if (errormessage == null) {
+            builder.setMessage(getResources().getString(R.string.download_fail_info));
+        } else {
+            builder.setMessage(errormessage);
+        }
+        builder.setPositiveButton(getResources().getString(R.string.reupdate), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                AsyncTaskUtils.doAsync(new IDataCallBack<JSONObject>() {
+                    @Override
+                    public void onTaskBefore() {
+                        progressDialog = ProgressDialog.show(InsepectOrderActivity.this, getResources().getString(R.string.refreshing), getResources().getString(R.string.wait), true);
+                    }
+
+                    @Override
+                    public JSONObject onTasking(Void... params) {
+                        try {
+                            return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (XmlPullParserException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            progressDialog.dismiss();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void onTaskAfter(JSONObject jsonObject) {
+                        try {
+                            if (jsonObject != null) {
+                                if (AnalyzeUtil.checkSuccess(jsonObject)) {
+                                    Map<String, List<ContentValues>> map = Analyze_Order.getOrders(jsonObject, key_ponumber);
+                                    db.updateOrders(map.get("Orders"), key_ponumber);
+                                    db.updateOrderDetails(map.get("OrderDetails"), key_ponumber);
+                                    db.updateCheckFailedReasons(map.get("CheckFailedReasons"), key_ponumber);
+                                    db.updateOrderComments(map.get("OrderComments"), key_ponumber);
+                                    db.updateOrderItemComments(map.get("OrderItemComments"), key_ponumber);
+                                    startActivity(getIntent().setClass(InsepectOrderActivity.this, PreviewInsepectOrderActivity.class));
+                                    finish();
+                                } else {
+                                    refreash(AnalyzeUtil.getMessage(jsonObject));
+                                }
+                            } else {
+                                refreash(null);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            refreash(null);
+                        }
+                    }
+                });
+
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                finish();
+            }
+        });
+        builder.show();
+    }
+
     @Override
     public void onBackPressed() {
         cancel();
@@ -563,12 +707,14 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     } else {
                         if (failed_item_layout.findViewWithTag(Item) != null) {
                             failed_item_layout.removeView(failed_item_layout.findViewWithTag(Item));
+                            /*
                             ArrayList<String> items = new ArrayList<>();
                             for (int i = 0; i < failed_item_layout.getChildCount(); i++) {
                                 items.add(((TextView) failed_item_layout.getChildAt(i).findViewById(R.id.number)).getText().toString());
                             }
-                            new AddColumTask().execute("reset");
+                            */
                             CheckFailedReasonslist.remove(Item);
+                            new AddColumTask().execute("reset");
                         }
                     }
                 }
@@ -616,8 +762,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(InsepectOrderActivity.this, PDFFromServerActivity.class);
-                            intent.putExtra("file_name", db.getFileNameByItem(OrderDetailslist.get(finalI).getAsString(KEY_Item)));
+                            Intent intent = new Intent(InsepectOrderActivity.this, ListViewActivity.class);
+                            intent.putExtra("PONumber", OrderDetailslist.get(finalI).getAsString(KEY_Item));
+                            //intent.putExtra("PONumber", "0689D-096.DC.28");
                             startActivity(intent);
                         }
                     });
@@ -735,8 +882,44 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     radioButton = item_view.findViewById(R.id.row16);
                     radioButton.setChecked(Reject);
 
-                    textView = item_view.findViewById(R.id.row17);
-                    textView.setText(OrderDetailslist.get(i).getAsString(KEY_ReCheckDate));
+                    final TextView dateView = item_view.findViewById(R.id.row17);
+                    dateView.setText(OrderDetailslist.get(i).getAsString(KEY_ReCheckDate));
+                    dateView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this);
+                                final DatePicker datePicker = new DatePicker(InsepectOrderActivity.this);
+                                if (!dateView.getText().toString().equals("")) {
+                                    Date date = new SimpleDateFormat("yyyy/MM/dd").parse(dateView.getText().toString());
+                                    datePicker.updateDate(date.getYear(), date.getMonth(), date.getDay());
+                                }
+
+                                builder.setView(datePicker);
+                                builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        dateView.setText(datePicker.getYear() + "/" + String.format("%02d", (datePicker.getMonth() + 1)) + "/" + String.format("%02d", datePicker.getDayOfMonth()));
+                                        dialogInterface.dismiss();
+                                    }
+                                }).setNeutralButton(getResources().getString(R.string.clear), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dateView.setText("");
+                                        dialogInterface.dismiss();
+                                    }
+                                }).setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
                     textView = item_view.findViewById(R.id.row18);
                     textView.setText(OrderDetailslist.get(i).getAsString(KEY_Remarks));
                 }

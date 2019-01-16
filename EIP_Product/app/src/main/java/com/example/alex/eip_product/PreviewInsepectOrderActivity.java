@@ -1,5 +1,6 @@
 package com.example.alex.eip_product;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,15 +20,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
+import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
+import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import Utils.AsyncTaskUtils;
+import Utils.CommonUtil;
 import Utils.StringUtils;
 import db.OrderDatabase;
 
@@ -35,6 +48,7 @@ import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_FeedbackDate;
 import static db.OrderDatabase.KEY_FeedbackPerson;
 import static db.OrderDatabase.KEY_Functions;
+import static db.OrderDatabase.KEY_InspectionNumber;
 import static db.OrderDatabase.KEY_Inspector;
 import static db.OrderDatabase.KEY_InspectorDate;
 import static db.OrderDatabase.KEY_Item;
@@ -65,14 +79,14 @@ import static db.OrderDatabase.KEY_VendorName;
 public class PreviewInsepectOrderActivity extends AppCompatActivity implements View.OnClickListener {
     private LinearLayout courseTable, failed_item_layout;
     private ImageView VendorInspector;
-    private TextView title, pdf_view;
-    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, FeedbackPerson, FeedbackDate, VendorInspectorDate;
+    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, InspectionNumber, FeedbackPerson, FeedbackDate, VendorInspectorDate;
     private DisplayMetrics dm;
     private OrderDatabase db;
     private String key_ponumber;
     private ContentValues Orderslist;
     private ArrayList<ContentValues> OrderDetailslist;
     private Map<String, FailItemPojo> CheckFailedReasonslist = new TreeMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +97,7 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
         initView();
         initListener();
         initData();
-        setAnimation(title);
+        //setAnimation(title);
     }
 
     private void initData() {
@@ -105,17 +119,9 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
             PONumber.setText(Orderslist.getAsString(KEY_PONumber));
             POVersion.setText(Orderslist.getAsString(KEY_POVersion));
             Inspector.setText(Orderslist.getAsString(KEY_Inspector));
-
-            String inspectorDate = InspectorDate.getText().toString();
-            String vendorInspectorDate = VendorInspectorDate.getText().toString();
-            if (inspectorDate.equals("") && vendorInspectorDate.equals("")) {
-                String today = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-                InspectorDate.setText(today);
-                VendorInspectorDate.setText(today);
-            } else {
-                InspectorDate.setText(Orderslist.getAsString(KEY_InspectorDate));
-                VendorInspectorDate.setText(Orderslist.getAsString(KEY_VendorInspectorDate));
-            }
+            InspectionNumber.setText(Orderslist.getAsString(KEY_InspectionNumber));
+            InspectorDate.setText(Orderslist.getAsString(KEY_InspectorDate));
+            VendorInspectorDate.setText(Orderslist.getAsString(KEY_VendorInspectorDate));
 
             byte[] bitmapdata = Orderslist.getAsByteArray(KEY_VendorInspector);
             if (bitmapdata != null) {
@@ -137,12 +143,12 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
         if (CheckFailedReasonslist.size() > 0) {
             new AddColumTask().execute("CheckFailedReasons");
         }
+
     }
 
     private void initView() {
         courseTable = findViewById(R.id.kccx_course_table);
         VendorInspector = findViewById(R.id.VendorInspector);
-        title = findViewById(R.id.title);
         failed_item_layout = findViewById(R.id.failed_item_layout);
         SalesMan = findViewById(R.id.SalesMan);
         Shipping = findViewById(R.id.Shipping);
@@ -151,28 +157,20 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
         PONumber = findViewById(R.id.PONumber);
         POVersion = findViewById(R.id.POVersion);
         Inspector = findViewById(R.id.Inspector);
+        InspectionNumber = findViewById(R.id.InspectionNumber);
         InspectorDate = findViewById(R.id.InspectorDate);
         FeedbackPerson = findViewById(R.id.FeedbackPerson);
         FeedbackDate = findViewById(R.id.FeedbackDate);
         VendorInspectorDate = findViewById(R.id.VendorInspectorDate);
-        pdf_view = findViewById(R.id.pdf_view);
     }
 
     private void initListener() {
         PONumber.setOnClickListener(this);
-        pdf_view.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
-            /**
-             * PDF
-             */
-            case R.id.pdf_view:
-                startActivity(new Intent(PreviewInsepectOrderActivity.this, PDFFromServerActivity.class));
-                break;
             /**
              * 採購單號
              */
@@ -222,8 +220,9 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(PreviewInsepectOrderActivity.this, PDFFromServerActivity.class);
-                            intent.putExtra("file_name", db.getFileNameByItem(OrderDetailslist.get(finalI).getAsString(KEY_Item)));
+                            Intent intent = new Intent(PreviewInsepectOrderActivity.this, ListViewActivity.class);
+                             intent.putExtra("PONumber",OrderDetailslist.get(finalI).getAsString(KEY_Item));
+                           // intent.putExtra("PONumber", "0689D-096.DC.28");
                             startActivity(intent);
                         }
                     });

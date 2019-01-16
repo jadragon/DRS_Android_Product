@@ -62,7 +62,6 @@
                     android:background="@android:color/white"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="test01"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -90,7 +89,6 @@
                     android:inputType="textPassword"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="Test123456"
                     android:textSize="20sp" />
             </LinearLayout>
 

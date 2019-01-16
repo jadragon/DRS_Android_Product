@@ -64,7 +64,6 @@ import static db.OrderDatabase.KEY_VendorInspectorDate;
 import static db.OrderDatabase.KEY_VendorName;
 
 public class Analyze_Order {
-    public static List<String> PONumberNames;
 
     /**
      * 3.1	訂單資訊
@@ -72,7 +71,6 @@ public class Analyze_Order {
     public static Map<String, List<ContentValues>> getOrders(JSONObject json) throws JSONException {
         Map<String, List<ContentValues>> map = new HashMap<>();
         List<ContentValues> list = new ArrayList<>();
-        PONumberNames = new ArrayList<>();
         map.put("Orders", list);
         list = new ArrayList<>();
         map.put(KEY_OrderDetails, list);
@@ -115,10 +113,6 @@ public class Analyze_Order {
                 contentValues.put(KEY_OrderComments, json_obj.getString(KEY_PONumber));
                 contentValues.put(KEY_OrderItemComments, json_obj.getString(KEY_PONumber));
                 map.get("Orders").add(contentValues);
-
-                if (!PONumberNames.equals(json_obj.getString(KEY_PONumber))) {
-                    PONumberNames.add(json_obj.getString(KEY_PONumber));
-                }
                 //----------------------------------
                 jsonInnerArray = json_obj.getJSONArray(KEY_OrderDetails);
                 map.get(KEY_OrderDetails).addAll(getOrderDetails(jsonInnerArray));
@@ -134,7 +128,73 @@ public class Analyze_Order {
         return map;
     }
 
-    public static List<ContentValues> getOrderDetails(JSONArray jsonArray) throws JSONException {
+    /**
+     * 3.1	訂單資訊(PONumber)
+     */
+    public static Map<String, List<ContentValues>> getOrders(JSONObject json, String PONumber) throws JSONException {
+        Map<String, List<ContentValues>> map = new HashMap<>();
+        List<ContentValues> list = new ArrayList<>();
+        map.put("Orders", list);
+        list = new ArrayList<>();
+        map.put(KEY_OrderDetails, list);
+        list = new ArrayList<>();
+        map.put(KEY_CheckFailedReasons, list);
+        list = new ArrayList<>();
+        map.put(KEY_OrderComments, list);
+        list = new ArrayList<>();
+        map.put(KEY_OrderItemComments, list);
+        if (json.getBoolean("IsSuccess")) {
+            ContentValues contentValues;
+            JSONArray jsonArray = json.getJSONArray("Orders");
+            JSONArray jsonInnerArray;
+            JSONObject json_obj;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                contentValues = new ContentValues();
+                json_obj = jsonArray.getJSONObject(i);
+                if (json_obj.getString(KEY_PONumber).equals(PONumber)) {
+                    contentValues.put(KEY_PONumber, json_obj.getString(KEY_PONumber));
+                    contentValues.put(KEY_POVersion, json_obj.getString(KEY_POVersion));
+                    contentValues.put(KEY_PlanCheckDate, json_obj.getString(KEY_PlanCheckDate));
+                    contentValues.put(KEY_VendorCode, json_obj.getString(KEY_VendorCode));
+                    contentValues.put(KEY_VendorName, json_obj.getString(KEY_VendorName));
+                    contentValues.put(KEY_Area, json_obj.getString(KEY_Area));
+                    contentValues.put(KEY_Notes, json_obj.getString(KEY_Notes));
+                    contentValues.put(KEY_Shipping, json_obj.getString(KEY_Shipping));
+                    contentValues.put(KEY_SalesMan, json_obj.getString(KEY_SalesMan));
+                    contentValues.put(KEY_Phone, json_obj.getString(KEY_Phone));
+                    contentValues.put(KEY_CheckMan, json_obj.getString(KEY_CheckMan));
+                    contentValues.put(KEY_HasCompleted, json_obj.getString(KEY_HasCompleted));
+                    contentValues.put(KEY_Inspector, json_obj.getString(KEY_Inspector));
+                    contentValues.put(KEY_InspectorDate, json_obj.getString(KEY_InspectorDate));
+                    contentValues.put(KEY_VendorInspector, StringUtils.decodeBase64(json_obj.getString(KEY_VendorInspector)));
+                    contentValues.put(KEY_VendorInspectorDate, json_obj.getString(KEY_VendorInspectorDate));
+                    contentValues.put(KEY_FeedbackPerson, json_obj.getString(KEY_FeedbackPerson));
+                    contentValues.put(KEY_FeedbackRecommendations, json_obj.getString(KEY_FeedbackRecommendations));
+                    contentValues.put(KEY_FeedbackDate, json_obj.getString(KEY_FeedbackDate));
+                    contentValues.put(KEY_InspectionNumber, json_obj.getString(KEY_InspectionNumber));
+                    contentValues.put(KEY_OrderDetails, json_obj.getString(KEY_PONumber));
+                    contentValues.put(KEY_CheckFailedReasons, json_obj.getString(KEY_PONumber));
+                    contentValues.put(KEY_OrderComments, json_obj.getString(KEY_PONumber));
+                    contentValues.put(KEY_OrderItemComments, json_obj.getString(KEY_PONumber));
+                    map.get("Orders").add(contentValues);
+                    //----------------------------------
+                    jsonInnerArray = json_obj.getJSONArray(KEY_OrderDetails);
+                    map.get(KEY_OrderDetails).addAll(getOrderDetails(jsonInnerArray));
+                    jsonInnerArray = json_obj.getJSONArray(KEY_CheckFailedReasons);
+                    map.get(KEY_CheckFailedReasons).addAll(getCheckFailedReasons(jsonInnerArray));
+                    jsonInnerArray = json_obj.getJSONArray(KEY_OrderComments);
+                    map.get(KEY_OrderComments).addAll(getOrderComments(jsonInnerArray));
+                    jsonInnerArray = json_obj.getJSONArray(KEY_OrderItemComments);
+                    map.get(KEY_OrderItemComments).addAll(getOrderItemComments(jsonInnerArray));
+                    break;
+                }
+            }
+
+        }
+        return map;
+    }
+
+    private static List<ContentValues> getOrderDetails(JSONArray jsonArray) throws JSONException {
 
         List<ContentValues> list = new ArrayList<>();
         ContentValues contentValues;
@@ -168,7 +228,7 @@ public class Analyze_Order {
         return list;
     }
 
-    public static List<ContentValues> getCheckFailedReasons(JSONArray jsonArray) throws JSONException {
+    private static List<ContentValues> getCheckFailedReasons(JSONArray jsonArray) throws JSONException {
 
         List<ContentValues> list = new ArrayList<>();
         ContentValues contentValues;
@@ -186,7 +246,7 @@ public class Analyze_Order {
         return list;
     }
 
-    public static List<ContentValues> getOrderComments(JSONArray jsonArray) throws JSONException {
+    private static List<ContentValues> getOrderComments(JSONArray jsonArray) throws JSONException {
         List<ContentValues> list = new ArrayList<>();
         ContentValues contentValues;
         JSONObject json_obj;
@@ -202,7 +262,7 @@ public class Analyze_Order {
         return list;
     }
 
-    public static List<ContentValues> getOrderItemComments(JSONArray jsonArray) throws JSONException {
+    private static List<ContentValues> getOrderItemComments(JSONArray jsonArray) throws JSONException {
         List<ContentValues> list = new ArrayList<>();
         ContentValues contentValues;
         JSONObject json_obj;

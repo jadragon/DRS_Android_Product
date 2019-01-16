@@ -6,7 +6,7 @@
     <string name="language_text">語言:</string>
 
     <string name="confirm">確定</string>
-
+    <string name="clear">清除</string>
 
     <string name="nosignin">簽名檔沒簽</string>
     <string name="savesuccess">儲存成功</string>
@@ -23,7 +23,8 @@
     <string name="warning">警告</string>
     <string name="not_update_message">尚有訂單未上傳，是否要將所有訂單上傳?</string>
     <string name="update">上傳</string>
-    <string name="refresh_success">更新成功</string>
+    <string name="refresh_success">資料更新成功</string>
+    <string name="refresh_fail">資料更新失敗</string>
     <string name="close_app">再按一次後退鍵退出應用程式</string>
 
     <string name="yes">是</string>
@@ -46,7 +47,6 @@
     <string name="title_name4">供應商代碼：</string>
     <string name="title_name5">驗表&#8195;單號：</string>
     <string name="title_name6">採購&#8195;單號：</string>
-    <string name="title_name7">圖面&#8195;資料：</string>
     <string name="title_name8">採購單版本：</string>
 
     <string name="table_header1">序號</string>
@@ -122,6 +122,7 @@
     <string name="product">產品</string>
     <string name="specification">規格說明</string>
     <string name="updatedata">更新資料</string>
+    <string name="refreshing">更新資料中</string>
     <string name="updating">上傳資料中</string>
     <string name="download_image">下載圖片</string>
     <string name="download_success">下載完成</string>
@@ -130,10 +131,16 @@
     <string name="redownload">重新下載</string>
     <string name="reupdate">重新更新</string>
     <string name="downloading">下載檔案中...</string>
+    <string name="logout">登出</string>
+    <string name="logout_success">登出成功</string>
+    <string name="qty_more_than_oderqty">出貨總數不能大於採樣總數</string>
+    <string name="unfill_recheckdate1">不可出貨時，需填寫預定再驗貨日期</string>
+    <string name="unfill_recheckdate2">可出貨時，不需填寫預定再驗貨日期</string>
+    <string name="unfill_recheckdate3">請確認不合格原因是否已填寫</string>
     <string-array name="menu_item">
         <item>驗表行程</item>
         <item>不合格原因</item>
-        <item>語言設定</item>
+        <item>設定</item>
     </string-array>
     <string-array name="type1">
         <item>A1</item>

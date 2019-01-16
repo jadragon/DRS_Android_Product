@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -31,7 +30,6 @@ import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.fragment.Fragment_home;
 import com.example.alex.eip_product.pojo.AllupdateDataPojo;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -47,22 +45,21 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Utils.CommonUtil;
 import Utils.FileUtils;
 import Utils.PreferenceUtil;
 import db.OrderDatabase;
 import liabiry.Http.pojo.TaskInfo;
 import liabiry.Http.pojo.TaskList;
 
-import static db.OrderDatabase.KEY_PONumber;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 0x01;
     private ImageView home, back;
     private FragmentManager fragmentManager;
-    private Button update, download;
+    private Button update, download, logout;
     private ProgressDialog progressDialog;
-    private HandlerThread handlerThread;
-    private Handler mHandler;
+    private static HandlerThread handlerThread;
+    private static Handler mHandler;
     private OrderDatabase db;
     private GlobalVariable gv;
 
@@ -72,9 +69,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         db = new OrderDatabase(this);
         gv = (GlobalVariable) getApplicationContext();
-        initHandler();
+        getHandler();
         initButton();
-        initFragment();
+        if (savedInstanceState == null) {
+            initFragment();
+        }
+
         // initRecylcerView();
     }
 
@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         back.setOnClickListener(this);
         download = findViewById(R.id.download_btn);
         download.setOnClickListener(this);
+        logout = findViewById(R.id.logout_btn);
+        logout.setOnClickListener(this);
+
     }
 
     private void initFragment() {
@@ -98,11 +101,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     home.setVisibility(View.INVISIBLE);
                     update.setVisibility(View.VISIBLE);
                     download.setVisibility(View.VISIBLE);
+                    logout.setVisibility(View.VISIBLE);
                     back.setVisibility(View.INVISIBLE);
                 } else {
                     home.setVisibility(View.VISIBLE);
                     update.setVisibility(View.INVISIBLE);
                     download.setVisibility(View.INVISIBLE);
+                    logout.setVisibility(View.INVISIBLE);
                     back.setVisibility(View.VISIBLE);
                 }
             }
@@ -112,28 +117,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transaction.add(R.id.fragment_content, fragment_home, "home").commit();
     }
 
-    public void initHandler() {
-        handlerThread = new HandlerThread("soap");
-        handlerThread.start();
-        mHandler = new Handler(handlerThread.getLooper());
+    public static Handler getHandler() {
+        if (handlerThread == null) {
+            handlerThread = new HandlerThread("soap");
+            handlerThread.start();
+        }
+        if (mHandler == null) {
+            mHandler = new Handler(handlerThread.getLooper());
+        }
+        return mHandler;
     }
 
     private Runnable runnable_refresh = new Runnable() {
         @Override
         public void run() {
             try {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
-                        progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
-                    }
-                });
-                JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
-                if (AnalyzeUtil.checkSuccess(json)) {
-                    Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
-                    if (db.addOrders(map.get("Orders"))) {
+                if (db.checkOrders()) {
+                    JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                    if (AnalyzeUtil.checkSuccess(json)) {
+                        Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
+                        db.addOrders(map.get("Orders"));
                         db.addOrderDetails(map.get("OrderDetails"));
                         db.addCheckFailedReasons(map.get("CheckFailedReasons"));
                         db.addOrderComments(map.get("OrderComments"));
@@ -154,69 +157,92 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 });
                             }
                         }
+
                     } else {
-                        progressDialog.dismiss();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle(getResources().getString(R.string.warning));
-                        builder.setMessage(getResources().getString(R.string.not_update_message));
-                        builder.setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        builder.setPositiveButton(getResources().getString(R.string.update), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface dialogInterface, int i) {
-                                progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.updating), getResources().getString(R.string.wait), true);
-                                mHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        try {
-                                            List<AllupdateDataPojo> pojos = db.getAllUpdateDataByPONumber();
-                                            JSONObject json;
-                                            for (AllupdateDataPojo pojo : pojos) {
-                                                json = new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), pojo.getJsonObject() + "");
-                                                if (AnalyzeUtil.checkSuccess(json)) {
-                                                    db.updateOrdersUpdate(pojo.getPONumber());
-                                                } else {
-                                                    Toast.makeText(MainActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                            mHandler.post(runnable_refresh);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (XmlPullParserException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                });
-
-                            }
-                        });
-                        builder.show();
+                        CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), AnalyzeUtil.getMessage(json));
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, AnalyzeUtil.getMessage(json), Toast.LENGTH_SHORT).show();
+                    showUpdateDialog();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                recheckupdate();
+                CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
-                recheckupdate();
+                CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
             } catch (IOException e) {
                 e.printStackTrace();
-                recheckupdate();
+                CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
             } finally {
                 progressDialog.dismiss();
             }
         }
     };
+
+    private void showUpdateDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getResources().getString(R.string.warning));
+                builder.setMessage(getResources().getString(R.string.not_update_message));
+                builder.setNegativeButton(getResources().getString(R.string.table_button1), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setPositiveButton(getResources().getString(R.string.update), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialogInterface, int i) {
+                        progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.updating), getResources().getString(R.string.wait), true);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    List<AllupdateDataPojo> pojos = db.getAllUpdateDataByPONumber();
+                                    JSONObject json;
+                                    for (AllupdateDataPojo pojo : pojos) {
+                                        json = new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), pojo.getJsonObject() + "");
+                                        if (AnalyzeUtil.checkSuccess(json)) {
+                                            db.updateOrdersUpdate(pojo.getPONumber());
+                                        } else {
+                                            CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), AnalyzeUtil.getMessage(json));
+                                            return;
+                                        }
+                                    }
+                                    progressDialog.dismiss();
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
+                                        }
+                                    });
+                                    mHandler.post(runnable_refresh);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    progressDialog.dismiss();
+                                    CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
+                                } catch (XmlPullParserException e) {
+                                    e.printStackTrace();
+                                    progressDialog.dismiss();
+                                    CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    progressDialog.dismiss();
+                                    CommonUtil.toastErrorMessage(MainActivity.this, getResources().getString(R.string.warning), getResources().getString(R.string.download_fail_info));
+                                }
+
+                            }
+                        });
+
+                    }
+                });
+                builder.show();
+            }
+        });
+
+    }
 
     private void recheckupdate() {
         progressDialog.dismiss();
@@ -278,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     hasTask = false;
                 }
             };
-            if (isExit == false) {
+            if (!isExit) {
                 isExit = true;
                 Toast.makeText(this, getResources().getString(R.string.close_app)
                         , Toast.LENGTH_SHORT).show();
@@ -296,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        handlerThread.quit();
         db.close();
         super.onDestroy();
     }
@@ -304,7 +329,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.logout_btn:
+                if (db.checkOrders()) {
+                    gv.setUsername(null);
+                    gv.setPw(null);
+                    PreferenceUtil.commitString("username", "");
+                    PreferenceUtil.commitString("pw", "");
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.logout_success), Toast.LENGTH_SHORT).show();
+                } else {
+                    showUpdateDialog();
+                }
+                break;
             case R.id.update_btn:
+                progressDialog = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.wait), true);
                 mHandler.post(runnable_refresh);
                 break;
             case R.id.download_btn:

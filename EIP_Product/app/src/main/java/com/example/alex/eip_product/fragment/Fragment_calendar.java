@@ -21,18 +21,9 @@ import java.util.Date;
  */
 
 public class Fragment_calendar extends Fragment {
-    private Button confirm;
     private View v;
     private CalendarView calendarView;
     private GlobalVariable gv;
-
-    public static Fragment_calendar newInstance(int index) {
-        Fragment_calendar f = new Fragment_calendar();
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        f.setArguments(args);
-        return f;
-    }
 
     @Nullable
     @Override
@@ -58,7 +49,7 @@ public class Fragment_calendar extends Fragment {
     }
 
     private void initButton() {
-        confirm = v.findViewById(R.id.confirm_date);
+        Button confirm = v.findViewById(R.id.confirm_date);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
