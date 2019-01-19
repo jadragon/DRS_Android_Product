@@ -67,17 +67,17 @@
     <string name="surface">表面</string>
         
     <string name="packaging">包装</string>
-    <string name="title_name1">业务&#8195;人员：</string>
+    <string name="title_name1">业 务 人 员 ：</string>
         
-    <string name="title_name2">船务&#8195;人员：</string>
+    <string name="title_name2">船 务 人 员 ：</string>
         
     <string name="title_name3">供应商名称：</string>
         
     <string name="title_name4">供应商代码：</string>
         
-    <string name="title_name5">验表&#8195;单号：</string>
+    <string name="title_name5">验 表 单 号 ：</string>
         
-    <string name="title_name6">采购&#8195;单号：</string>
+    <string name="title_name6">采购单号码：</string>
         
     <string name="title_name8">采购单版本：</string>
 
@@ -85,7 +85,7 @@
         
     <string name="table_header2">ITEM NO</string>
         
-    <string name="table_header3">采样总数</string>
+    <string name="table_header3">采购总数</string>
         
     <string name="table_header4">出货总数</string>
         
@@ -124,7 +124,7 @@
     <string name="table_header21">备注</string>
     <string name="table_footer1">不合格处理</string>
         
-    <string name="table_footer2">三千检验人员载名不合格原因</string>
+    <string name="table_footer2">三千检验人员载明不合格原因</string>
         
     <string name="table_footer3">三千业务回覆后续建议事项</string>
         
@@ -135,25 +135,24 @@
     <string name="table_footer6">不合格原因</string>
 
         
-    <string name="table_footer7">检验人员:</string>
+    <string name="table_footer7">检验人员</string>
         
     <string name="table_footer8">日期</string>
         
-    <string name="table_footer9">业务人员:</string>
+    <string name="table_footer9">业务人员</string>
         
     <string name="table_footer10">填表说明</string>
-        
     <string name="table_footer11">＊ 抽样检验标准请依成品检验规范程序书要求.</string>
         
-    <string name="table_footer12">＊ 如采购总数与出货总数相等,则出货总数免填，如有不符请依实际数据填入出货总数. </string>
+    <string name="table_footer12">＊ 如采购总数与出货总数相等,则出货总数免填，如有不符请依实际数据填入出货总数.</string>
         
-    <string name="table_footer13">＊ 正侧唛如相符请以V表示；如外乡成宽高以及毛重与采购单相同则免填，如与采购单不符需另填入通知船务修改资料. </string>
+    <string name="table_footer13">＊ 正侧唛如相符请以V表示；如与采购单不符需另填入通知船务修改资料.</string>
         
-    <string name="table_footer14">＊ 出货判定请以V表示，如判定为特采出货或拒收者，三千业务需另回覆后续建议事项，可出货重工则免.</string>
+    <string name="table_footer14">＊ 出货判定请以V表示，如判定为特采出货或拒收者，三千业务需另回覆后续建议事项，可出货或重工则免.</string>
         
-    <string name="table_footer15">供应商检测人员:</string>
+    <string name="table_footer15">供应商检验人员</string>
         
-    <string name="table_footer16">船务备注:</string>
+    <string name="table_footer16">船务备注</string>
 
     <string name="table_button1">取消</string>
             

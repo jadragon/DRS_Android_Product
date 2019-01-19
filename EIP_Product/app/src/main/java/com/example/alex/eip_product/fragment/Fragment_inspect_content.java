@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,14 @@ import java.util.ArrayList;
 
 import db.OrderDatabase;
 
+import static db.OrderDatabase.KEY_CheckMan;
+import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_HasCompleted;
 import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
+import static db.OrderDatabase.KEY_Reject;
+import static db.OrderDatabase.KEY_Rework;
+import static db.OrderDatabase.KEY_Special;
 import static db.OrderDatabase.KEY_VendorName;
 import static db.OrderDatabase.KEY_isOrderEdit;
 import static db.OrderDatabase.KEY_isOrderUpdate;
@@ -40,7 +46,6 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
     private ArrayList<ContentValues> list;
     private GlobalVariable gv;
     private String VendorName;
-
 
     @Nullable
     @Override
@@ -68,9 +73,11 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
         tableLayout.removeAllViews();
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_insepect_content_tablelayout_header, null);
         tableLayout.addView(view);
-        ContentValues cv;
+        ContentValues cv, cv_checkpass;
+
         for (int i = 0; i < list.size(); i++) {
             cv = list.get(i);
+            cv_checkpass = db.getOrderDetailsCountByPONumber(list.get(i).getAsString(KEY_PONumber));
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_inspect_content, null);
             TextView textView = view.findViewWithTag("PONumber");
             textView.setText(cv.getAsString(KEY_PONumber));
@@ -81,9 +88,23 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                     textView = view.findViewWithTag("HasCompleted");
                     textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
                     textView.setText(getResources().getString(R.string.yes));
-                    textView = view.findViewWithTag("CanShipping");
+
+                    textView = view.findViewWithTag("CheckPass");
+                    textView.setText(cv_checkpass.getAsString(KEY_CheckPass));
                     textView.setBackgroundColor(getResources().getColor(R.color.light_green));
-                    textView.setText(getResources().getString(R.string.yes));
+
+                    textView = view.findViewWithTag("Special");
+                    textView.setText(cv_checkpass.getAsString(KEY_Special));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Rework");
+                    textView.setText(cv_checkpass.getAsString(KEY_Rework));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Reject");
+                    textView.setText(cv_checkpass.getAsString(KEY_Reject));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
                     textView = view.findViewWithTag("overview");
                     textView.setBackgroundColor(getResources().getColor(R.color.orange));
                     textView.setText(getResources().getString(R.string.preview));
@@ -93,48 +114,130 @@ public class Fragment_inspect_content extends Fragment implements View.OnClickLi
                     textView = view.findViewWithTag("HasCompleted");
                     textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
                     textView.setText(getResources().getString(R.string.not_update));
-                    textView = view.findViewWithTag("CanShipping");
+
+                    textView = view.findViewWithTag("CheckPass");
+                    textView.setText(cv_checkpass.getAsString(KEY_CheckPass));
                     textView.setBackgroundColor(getResources().getColor(R.color.light_green));
-                    textView.setText(getResources().getString(R.string.not_update));
+
+                    textView = view.findViewWithTag("Special");
+                    textView.setText(cv_checkpass.getAsString(KEY_Special));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Rework");
+                    textView.setText(cv_checkpass.getAsString(KEY_Rework));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Reject");
+                    textView.setText(cv_checkpass.getAsString(KEY_Reject));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
                     textView = view.findViewWithTag("overview");
                     textView.setBackgroundColor(getResources().getColor(R.color.orange));
                     textView.setText(getResources().getString(R.string.not_update));
                     textView.setOnClickListener(this);
                     textView.setTag(i);
                 } else {
+
                     textView = view.findViewWithTag("HasCompleted");
                     textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
                     textView.setText(getResources().getString(R.string.no));
-                    textView = view.findViewWithTag("CanShipping");
-                    textView.setBackgroundColor(getResources().getColor(android.R.color.white));
-                    textView.setText(getResources().getString(R.string.untest));
 
-                    textView = view.findViewWithTag("overview");
                     if (cv.getAsBoolean(KEY_isOrderEdit)) {
+                        textView = view.findViewWithTag("CheckPass");
+                        textView.setText(cv_checkpass.getAsString(KEY_CheckPass));
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+
+                        textView = view.findViewWithTag("Special");
+                        textView.setText(cv_checkpass.getAsString(KEY_Special));
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+
+                        textView = view.findViewWithTag("Rework");
+                        textView.setText(cv_checkpass.getAsString(KEY_Rework));
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+
+                        textView = view.findViewWithTag("Reject");
+                        textView.setText(cv_checkpass.getAsString(KEY_Reject));
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+
+                        textView = view.findViewWithTag("overview");
                         textView.setText(getResources().getString(R.string.undone));
                         textView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                     } else {
+                        textView = view.findViewWithTag("CheckPass");
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                        textView.setText(getResources().getString(R.string.untest));
+
+                        textView = view.findViewWithTag("Special");
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                        textView.setText(getResources().getString(R.string.untest));
+
+                        textView = view.findViewWithTag("Rework");
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                        textView.setText(getResources().getString(R.string.untest));
+
+                        textView = view.findViewWithTag("Reject");
+                        textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                        textView.setText(getResources().getString(R.string.untest));
+
+                        textView = view.findViewWithTag("overview");
                         textView.setText(getResources().getString(R.string.write));
                         textView.setBackgroundColor(getResources().getColor(R.color.blue));
                     }
                     textView.setOnClickListener(this);
                     textView.setTag(i);
                 }
+                tableLayout.addView(view);
             } else {
-                textView = view.findViewWithTag("HasCompleted");
-                textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
-                textView.setText(getResources().getString(R.string.yes));
-                textView = view.findViewWithTag("CanShipping");
-                textView.setBackgroundColor(getResources().getColor(R.color.light_green));
-                textView.setText(getResources().getString(R.string.yes));
+                if (cv.getAsBoolean(KEY_HasCompleted)) {
+                    textView = view.findViewWithTag("HasCompleted");
+                    textView.setBackgroundColor(getResources().getColor(R.color.gray_purple));
+                    textView.setText(getResources().getString(R.string.yes));
+
+                    textView = view.findViewWithTag("CheckPass");
+                    textView.setText(cv_checkpass.getAsString(KEY_CheckPass));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Special");
+                    textView.setText(cv_checkpass.getAsString(KEY_Special));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Rework");
+                    textView.setText(cv_checkpass.getAsString(KEY_Rework));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
+                    textView = view.findViewWithTag("Reject");
+                    textView.setText(cv_checkpass.getAsString(KEY_Reject));
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_green));
+                } else {
+                    textView = view.findViewWithTag("HasCompleted");
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_orange));
+                    textView.setText(getResources().getString(R.string.no));
+
+                    textView = view.findViewWithTag("CheckPass");
+                    textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                    textView.setText(getResources().getString(R.string.untest));
+
+                    textView = view.findViewWithTag("Special");
+                    textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                    textView.setText(getResources().getString(R.string.untest));
+
+                    textView = view.findViewWithTag("Rework");
+                    textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                    textView.setText(getResources().getString(R.string.untest));
+
+                    textView = view.findViewWithTag("Reject");
+                    textView.setBackgroundColor(getResources().getColor(android.R.color.white));
+                    textView.setText(getResources().getString(R.string.untest));
+                }
                 textView = view.findViewWithTag("overview");
                 textView.setBackgroundColor(getResources().getColor(R.color.orange));
                 textView.setText(getResources().getString(R.string.preview));
                 textView.setOnClickListener(this);
                 textView.setTag(i);
+                tableLayout.addView(view);
             }
-            tableLayout.addView(view);
         }
+
     }
 
     @Override

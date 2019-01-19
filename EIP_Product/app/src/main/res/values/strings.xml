@@ -41,17 +41,17 @@
     <string name="function">功能</string>
     <string name="surface">表面</string>
     <string name="packaging">包裝</string>
-    <string name="title_name1">業務&#8195;人員：</string>
-    <string name="title_name2">船務&#8195;人員：</string>
+    <string name="title_name1">業 務 人 員 ：</string>
+    <string name="title_name2">船 務 人 員 ：</string>
     <string name="title_name3">供應商名稱：</string>
     <string name="title_name4">供應商代碼：</string>
-    <string name="title_name5">驗表&#8195;單號：</string>
-    <string name="title_name6">採購&#8195;單號：</string>
+    <string name="title_name5">驗 表 單 號 ：</string>
+    <string name="title_name6">採購單號碼：</string>
     <string name="title_name8">採購單版本：</string>
 
     <string name="table_header1">序號</string>
     <string name="table_header2">ITEM NO</string>
-    <string name="table_header3">採樣總數</string>
+    <string name="table_header3">採購總數</string>
     <string name="table_header4">出貨總數</string>
     <string name="table_header5">抽樣數</string>
     <string name="table_header6">單位</string>
@@ -73,22 +73,22 @@
 
 
     <string name="table_footer1">不合格處理</string>
-    <string name="table_footer2">三千檢驗人員載名不合格原因</string>
+    <string name="table_footer2">三千檢驗人員載明不合格原因</string>
     <string name="table_footer3">三千業務回覆後續建議事項</string>
     <string name="table_footer4">不合格序號</string>
     <string name="table_footer5">ITEM NO</string>
     <string name="table_footer6">不合格原因</string>
 
-    <string name="table_footer7">檢驗人員:</string>
+    <string name="table_footer7">檢驗人員</string>
     <string name="table_footer8">日期</string>
-    <string name="table_footer9">業務人員:</string>
+    <string name="table_footer9">業務人員</string>
     <string name="table_footer10">填表說明</string>
     <string name="table_footer11">＊ 抽樣檢驗標準請依成品檢驗規範程序書要求.</string>
-    <string name="table_footer12">＊ 如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數. </string>
-    <string name="table_footer13">＊ 正側嘜如相符請以V表示；如外鄉成寬高以及毛重與採購單相同則免填，如與採購單不符需另填入通知船務修改資料. </string>
-    <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨重工則免.</string>
-    <string name="table_footer15">供應商檢測人員:</string>
-    <string name="table_footer16">船務備註:</string>
+    <string name="table_footer12">＊ 如採購總數與出貨總數相等,則出貨總數免填，如有不符請依實際數據填入出貨總數.</string>
+    <string name="table_footer13">＊ 正側嘜如相符請以V表示；如與採購單不符需另填入通知船務修改資料.</string>
+    <string name="table_footer14">＊ 出貨判定請以V表示，如判定為特採出貨或拒收者，三千業務需另回覆後續建議事項，可出貨或重工則免.</string>
+    <string name="table_footer15">供應商檢驗人員</string>
+    <string name="table_footer16">船務備註</string>
 
     <string-array name="language">
         <item>繁體中文</item>

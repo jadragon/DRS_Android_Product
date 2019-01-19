@@ -84,7 +84,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="5"
-                    android:stretchColumns="0,4"
+                    android:stretchColumns="0,7"
                     android:background="@android:color/white">
 
                     <!-- 2個欄位 -->
@@ -119,7 +119,25 @@
                             android:layout_marginRight="1dp"
                             android:background="@android:color/white"
                             android:padding="5dp"
-                            android:text="@string/inspect_content_title5"
+                            android:text="@string/table_header16"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/table_header17"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/table_header18"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                        <TextView
+                            android:layout_marginRight="1dp"
+                            android:background="@android:color/white"
+                            android:padding="5dp"
+                            android:text="@string/table_header19"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <TextView

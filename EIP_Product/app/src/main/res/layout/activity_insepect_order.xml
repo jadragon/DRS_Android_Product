@@ -40,7 +40,8 @@
                             android:layout_marginRight="50dp"
                             android:text="Sunchain"
                             android:textSize="70sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -51,7 +52,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Sun Chain Trading Co.,Ltd."
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"/>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -59,7 +61,8 @@
                                 android:text="11F,No 53,Minquan W.Road,Taipei 10452,Tawiain
                                               \nT:886-2-2592-7733/F:886-2-2592-7300
                                               \nwww.sunchain.com.tw"
-                                android:textSize="7sp" />
+                                android:textSize="7sp"
+                                android:textColor="@android:color/black"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -78,7 +81,8 @@
                         android:layout_height="match_parent"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name1"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/SalesMan"
@@ -86,7 +90,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="6"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -95,7 +100,8 @@
                         android:gravity="right"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name5"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/InspectionNumber"
@@ -103,7 +109,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size"/>
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -116,7 +123,8 @@
                         android:layout_height="match_parent"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name2"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/Shipping"
@@ -124,7 +132,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="6"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -133,7 +142,8 @@
                         android:gravity="right"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name6"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/PONumber"
@@ -141,7 +151,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size"/>
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -154,7 +165,8 @@
                         android:layout_height="match_parent"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name3"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/VendorName"
@@ -162,7 +174,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="6"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -171,7 +184,8 @@
                         android:gravity="right"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name8"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/POVersion"
@@ -179,7 +193,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size"/>
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -192,7 +207,8 @@
                         android:layout_height="match_parent"
                         android:padding="@dimen/table_padding"
                         android:text="@string/title_name4"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/VendorCode"
@@ -200,7 +216,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="6"
                         android:padding="@dimen/table_padding"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
 
                 </LinearLayout>
@@ -230,7 +247,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header1"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
 
                     <TextView
@@ -241,18 +259,19 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header2"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-
                         android:layout_weight="@dimen/title3_weight"
                         android:background="@android:color/white"
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header3"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -263,7 +282,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header4"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
 
                     <TextView
@@ -274,7 +294,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header5"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -284,7 +305,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header6"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -299,7 +321,8 @@
                             android:gravity="center"
                             android:singleLine="true"
                             android:text="@string/table_header7"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -320,7 +343,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header8"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -335,7 +359,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header9"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -350,7 +375,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header10"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -365,7 +391,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header11"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -380,7 +407,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header12"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -390,7 +418,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header13"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -411,7 +440,8 @@
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@string/table_header14"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -426,7 +456,8 @@
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@string/table_header15"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
                         </LinearLayout>
 
                         <View
@@ -449,7 +480,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header16"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -465,7 +497,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header17"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -481,7 +514,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header18"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <View
                                 android:layout_width="1dp"
@@ -497,7 +531,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_header19"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -510,7 +545,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header20"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
 
                     <TextView
@@ -521,7 +557,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_header21"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
 
                 </LinearLayout>
@@ -556,7 +593,8 @@
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_footer1"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
 
                     <LinearLayout
@@ -582,7 +620,8 @@
                                 android:padding="@dimen/table_padding"
                                 android:singleLine="true"
                                 android:text="@string/table_footer2"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -608,7 +647,8 @@
                                         android:padding="@dimen/table_padding"
                                         android:singleLine="true"
                                         android:text="@string/table_footer4"
-                                        android:textSize="@dimen/table_text_size" />
+                                        android:textSize="@dimen/table_text_size"
+                                        android:textColor="@android:color/black"/>
 
                                     <TextView
                                         android:layout_width="0dp"
@@ -618,7 +658,8 @@
                                         android:padding="@dimen/table_padding"
                                         android:singleLine="true"
                                         android:text="@string/table_footer5"
-                                        android:textSize="@dimen/table_text_size" />
+                                        android:textSize="@dimen/table_text_size"
+                                        android:textColor="@android:color/black"/>
 
                                     <TextView
                                         android:layout_width="0dp"
@@ -628,7 +669,8 @@
                                         android:padding="@dimen/table_padding"
                                         android:singleLine="true"
                                         android:text="@string/table_footer6"
-                                        android:textSize="@dimen/table_text_size" />
+                                        android:textSize="@dimen/table_text_size"
+                                        android:textColor="@android:color/black"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -655,7 +697,8 @@
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
                                     android:text="@string/table_footer7"
-                                    android:textSize="@dimen/table_text_size" />
+                                    android:textSize="@dimen/table_text_size"
+                                    android:textColor="@android:color/black"/>
 
                                 <View
                                     android:layout_width="match_parent"
@@ -669,7 +712,8 @@
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
-                                    android:textSize="@dimen/table_text_size" />
+                                    android:textSize="@dimen/table_text_size"
+                                    android:textColor="@android:color/black"/>
 
                             </LinearLayout>
 
@@ -687,7 +731,8 @@
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
                                     android:text="@string/table_footer8"
-                                    android:textSize="@dimen/table_text_size" />
+                                    android:textSize="@dimen/table_text_size"
+                                    android:textColor="@android:color/black"/>
 
                                 <View
                                     android:layout_width="match_parent"
@@ -701,7 +746,8 @@
                                     android:layout_weight="1"
                                     android:gravity="center"
                                     android:padding="@dimen/table_padding"
-                                    android:textSize="@dimen/table_text_size" />
+                                    android:textSize="@dimen/table_text_size"
+                                    android:textColor="@android:color/black"/>
 
 
                             </LinearLayout>
@@ -728,7 +774,8 @@
                                 android:gravity="center"
                                 android:padding="@dimen/table_padding"
                                 android:text="@string/table_footer3"
-                                android:textSize="@dimen/table_text_size" />
+                                android:textSize="@dimen/table_text_size"
+                                android:textColor="@android:color/black"/>
 
                             <TextView
                                 android:layout_width="0dp"
@@ -736,7 +783,8 @@
                                 android:layout_weight="14"
                                 android:background="@android:color/white"
                                 android:gravity="center"
-                                android:padding="@dimen/table_padding" />
+                                android:padding="@dimen/table_padding"
+                                android:textColor="@android:color/black"/>
 
 
                             <LinearLayout
@@ -754,7 +802,8 @@
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
                                     android:text="@string/table_footer9"
-                                    android:textSize="@dimen/table_text_size" />
+                                    android:textSize="@dimen/table_text_size"
+                                    android:textColor="@android:color/black" />
 
                                 <View
                                     android:layout_width="match_parent"
@@ -767,7 +816,8 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="@dimen/table_padding" />
+                                    android:padding="@dimen/table_padding"
+                                    android:textColor="@android:color/black"/>
 
                             </LinearLayout>
 
@@ -785,7 +835,8 @@
                                     android:padding="@dimen/table_padding"
                                     android:singleLine="true"
                                     android:text="@string/table_footer8"
-                                    android:textSize="@dimen/table_text_size" />
+                                    android:textSize="@dimen/table_text_size"
+                                    android:textColor="@android:color/black"/>
 
                                 <View
                                     android:layout_width="match_parent"
@@ -798,7 +849,8 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:padding="@dimen/table_padding" />
+                                    android:padding="@dimen/table_padding"
+                                    android:textColor="@android:color/black"/>
 
 
                             </LinearLayout>
@@ -828,12 +880,13 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="1.001"
                         android:background="@android:color/white"
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
-                        android:text="@string/table_footer7"
-                        android:textSize="@dimen/table_text_size" />
+                        android:text="@string/table_footer10"
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -847,7 +900,8 @@
                             android:background="@android:color/white"
                             android:padding="@dimen/table_padding"
                             android:text="@string/table_footer11"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -855,7 +909,8 @@
                             android:background="@android:color/white"
                             android:padding="@dimen/table_padding"
                             android:text="@string/table_footer12"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -863,7 +918,8 @@
                             android:background="@android:color/white"
                             android:padding="@dimen/table_padding"
                             android:text="@string/table_footer13"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -871,7 +927,8 @@
                             android:background="@android:color/white"
                             android:padding="@dimen/table_padding"
                             android:text="@string/table_footer14"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
                     </LinearLayout>
 
 
@@ -889,7 +946,8 @@
                             android:padding="@dimen/table_padding"
                             android:singleLine="true"
                             android:text="@string/table_footer15"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -920,7 +978,8 @@
                             android:padding="@dimen/table_padding"
                             android:singleLine="true"
                             android:text="@string/table_footer8"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -934,7 +993,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:padding="@dimen/table_padding"
-                            android:textSize="@dimen/table_text_size" />
+                            android:textSize="@dimen/table_text_size"
+                            android:textColor="@android:color/black"/>
                     </LinearLayout>
 
 
@@ -958,19 +1018,21 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="1.002"
                         android:background="@android:color/white"
                         android:gravity="center"
                         android:padding="@dimen/table_padding"
                         android:text="@string/table_footer16"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="18"
+                        android:layout_weight="19"
                         android:background="@android:color/white"
-                        android:padding="@dimen/table_padding" />
+                        android:padding="@dimen/table_padding"
+                        android:textColor="@android:color/black"/>
 
                     <Button
                         android:id="@+id/cancel"
@@ -979,7 +1041,8 @@
                         android:layout_weight="1"
                         android:background="@android:color/white"
                         android:text="@string/table_button1"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <Button
                         android:id="@+id/save"
@@ -988,7 +1051,8 @@
                         android:layout_weight="1"
                         android:background="@android:color/white"
                         android:text="@string/table_button3"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                     <Button
                         android:id="@+id/send"
@@ -997,7 +1061,8 @@
                         android:layout_weight="1"
                         android:background="@android:color/white"
                         android:text="@string/table_button4"
-                        android:textSize="@dimen/table_text_size" />
+                        android:textSize="@dimen/table_text_size"
+                        android:textColor="@android:color/black"/>
 
                 </LinearLayout>
 

@@ -23,7 +23,8 @@
                 android:gravity="center"
                 android:text="@string/insepectorder"
                 android:textSize="40sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,13 +36,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title_name3"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:id="@+id/VendorName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <LinearLayout
@@ -54,13 +57,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title_name4"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:id="@+id/VendorCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <LinearLayout
@@ -73,13 +78,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ordernumber"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:id="@+id/PONumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <LinearLayout
@@ -92,13 +99,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title_name8"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:id="@+id/POVersion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <LinearLayout
@@ -114,13 +123,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/note"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:id="@+id/Notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <TextView
@@ -129,13 +140,15 @@
                 android:gravity="center"
                 android:text="@string/notice"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:id="@+id/OrderComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textColor="@android:color/black"/>
 
             <View
                 android:layout_width="match_parent"
@@ -152,14 +165,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/product"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:text="@string/specification"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
 
@@ -178,14 +193,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
 
                 <TextView
                     android:id="@+id/OrderItemComments"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
         </LinearLayout>
 

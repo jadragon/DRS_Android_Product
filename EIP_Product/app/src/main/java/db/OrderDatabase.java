@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -461,6 +462,25 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return cv;
     }
 
+    public ContentValues getOrderDetailsCountByPONumber(String PONumber) {
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + "SUM" + "(" + KEY_CheckPass + ")" + "," + "SUM" + "(" + KEY_Special + ")" + "," + "SUM" + "(" + KEY_Rework + ")" + "," + "SUM" + "(" + KEY_Reject + ")"
+                + " FROM " + TABLE_OrderDetails + " WHERE " + KEY_PONumber + " = '" + PONumber + "'", null);
+        //" AND " + KEY_Comment + " IS NOT NULL";
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            cv.put(KEY_CheckPass, cursor.getInt(0));
+            cv.put(KEY_Special, cursor.getInt(1));
+            cv.put(KEY_Rework, cursor.getInt(2));
+            cv.put(KEY_Reject, cursor.getInt(3));
+        }
+        cursor.close();
+        db.close();
+
+        return cv;
+    }
+
     public ArrayList<ContentValues> getOrderDetailsByPONumber(String PONumber) {
         ArrayList<ContentValues> datas = new ArrayList<>();
         ContentValues cv;
@@ -829,7 +849,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         return list;
     }
 
-    public  List<String>  getFileNameByItem(String item) {
+    public List<String> getFileNameByItem(String item) {
         SQLiteDatabase db = this.getReadableDatabase();
         /*
         Cursor cursor = db.rawQuery("SELECT " + KEY_FilePath + " FROM "

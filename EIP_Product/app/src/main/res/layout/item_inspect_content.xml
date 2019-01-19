@@ -33,10 +33,31 @@
         android:layout_marginRight="1dp"
         android:background="@color/light_green"
         android:padding="5dp"
-        android:tag="CanShipping"
+        android:tag="CheckPass"
         android:text="@string/inspect_content_title7"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:layout_marginRight="1dp"
+        android:background="@color/light_green"
+        android:padding="5dp"
+        android:tag="Special"
+        android:text="@string/inspect_content_title7"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:layout_marginRight="1dp"
+        android:background="@color/light_green"
+        android:padding="5dp"
+        android:tag="Rework"
+        android:text="@string/inspect_content_title7"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:layout_marginRight="1dp"
+        android:background="@color/light_green"
+        android:padding="5dp"
+        android:tag="Reject"
+        android:text="@string/inspect_content_title7"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
     <TextView
         android:background="@color/orange"
         android:padding="5dp"
