@@ -133,7 +133,7 @@
     <string name="downloading">下載檔案中...</string>
     <string name="logout">登出</string>
     <string name="logout_success">登出成功</string>
-    <string name="qty_more_than_oderqty">出貨總數不能大於採樣總數</string>
+    <string name="qty_more_than_oderqty">出貨總數不能大於採購總數</string>
     <string name="unfill_recheckdate1">不可出貨時，需填寫預定再驗貨日期</string>
     <string name="unfill_recheckdate2">可出貨時，不需填寫預定再驗貨日期</string>
     <string name="unfill_recheckdate3">請確認不合格原因是否已填寫</string>
