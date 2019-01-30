@@ -4,11 +4,11 @@
     <dimen name="table_padding">2.5dp</dimen>
     <dimen name="table_text_size">15sp</dimen>
     <dimen name="title1_weight">1</dimen>
-    <dimen name="title2_weight">2</dimen>
+    <dimen name="title2_weight">3</dimen>
     <dimen name="title3_weight">1</dimen>
     <dimen name="title4_weight">1</dimen>
-    <dimen name="title5_weight">2</dimen>
-    <dimen name="title6_weight">2</dimen>
+    <dimen name="title5_weight">1</dimen>
+    <dimen name="title6_weight">1</dimen>
     <dimen name="title7_weight">4</dimen>
     <dimen name="title8_weight">1</dimen>
     <dimen name="title9_weight">1</dimen>
@@ -19,8 +19,8 @@
     <dimen name="footer1_weight">1</dimen>
     <dimen name="footer2_weight">4</dimen>
     <dimen name="footer3_weight">2</dimen>
-    <dimen name="footer4_weight">2</dimen>
-    <dimen name="footer5_weight">10</dimen>
+    <dimen name="footer4_weight">3</dimen>
+    <dimen name="footer5_weight">8</dimen>
     <dimen name="footer6_weight">2</dimen>
     <dimen name="footer7_weight">2</dimen>
 </resources>

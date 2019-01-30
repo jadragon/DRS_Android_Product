@@ -29,7 +29,7 @@ public class Fragment_setting extends Fragment {
     private View v;
     private boolean init_Activity = false;
 
-
+    //開發DEV    客戶測試UAT     客戶正式PRD
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

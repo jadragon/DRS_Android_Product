@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void run() {
             try {
                 if (db.checkOrders()) {
-                    JSONObject json = new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                    JSONObject json = API_OrderInfo.getOrderInfo(gv.getUsername(), gv.getPw());
                     if (AnalyzeUtil.checkSuccess(json)) {
                         Map<String, List<ContentValues>> map = Analyze_Order.getOrders(json);
                         db.addOrders(map.get("Orders"));
@@ -141,10 +141,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         db.addCheckFailedReasons(map.get("CheckFailedReasons"));
                         db.addOrderComments(map.get("OrderComments"));
                         db.addOrderItemComments(map.get("OrderItemComments"));
-                        json = new API_OrderInfo().getItemDrawing(gv.getUsername(), gv.getPw());
+                        json = API_OrderInfo.getItemDrawing(gv.getUsername(), gv.getPw());
                         if (AnalyzeUtil.checkSuccess(json)) {
                             db.addItemDrawings(Analyze_Order.getItemDrawings(json));
-                            json = new API_OrderInfo().getDrawingFile(gv.getUsername(), gv.getPw());
+                            json = API_OrderInfo.getDrawingFile(gv.getUsername(), gv.getPw());
                             if (AnalyzeUtil.checkSuccess(json)) {
                                 db.addFiles(Analyze_Order.getFiles(json));
                                 runOnUiThread(new Runnable() {
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     List<AllupdateDataPojo> pojos = db.getAllUpdateDataByPONumber();
                                     JSONObject json;
                                     for (AllupdateDataPojo pojo : pojos) {
-                                        json = new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), pojo.getJsonObject() + "");
+                                        json = API_OrderInfo.updateCheckOrder(gv.getUsername(), gv.getPw(), pojo.getJsonObject() + "");
                                         if (AnalyzeUtil.checkSuccess(json)) {
                                             db.updateOrdersUpdate(pojo.getPONumber());
                                         } else {
@@ -348,12 +348,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.download_btn:
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) {
+                        == PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) {
                     initDownloadDialog();
                 } else {
                     ActivityCompat.requestPermissions(MainActivity.this,
                             new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
                             }, REQUEST_WRITE_EXTERNAL_STORAGE);
                 }
 

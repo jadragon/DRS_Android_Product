@@ -1,6 +1,5 @@
 package com.example.alex.eip_product;
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,38 +14,25 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.CheckBox;
-import android.widget.EditText;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
-import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
-import com.example.alex.eip_product.SoapAPI.Analyze.Analyze_Order;
 import com.example.alex.eip_product.pojo.FailItemPojo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import Utils.AsyncTaskUtils;
-import Utils.CommonUtil;
 import Utils.StringUtils;
 import db.OrderDatabase;
 
 import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_FeedbackDate;
 import static db.OrderDatabase.KEY_FeedbackPerson;
+import static db.OrderDatabase.KEY_FeedbackRecommendations;
 import static db.OrderDatabase.KEY_Functions;
 import static db.OrderDatabase.KEY_InspectionNumber;
 import static db.OrderDatabase.KEY_Inspector;
@@ -54,6 +40,7 @@ import static db.OrderDatabase.KEY_InspectorDate;
 import static db.OrderDatabase.KEY_Item;
 import static db.OrderDatabase.KEY_LineNumber;
 import static db.OrderDatabase.KEY_MainMarK;
+import static db.OrderDatabase.KEY_Notes;
 import static db.OrderDatabase.KEY_OrderQty;
 import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
@@ -79,8 +66,7 @@ import static db.OrderDatabase.KEY_VendorName;
 public class PreviewInsepectOrderActivity extends AppCompatActivity implements View.OnClickListener {
     private LinearLayout courseTable, failed_item_layout;
     private ImageView VendorInspector;
-    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, InspectionNumber, FeedbackPerson, FeedbackDate, VendorInspectorDate;
-    private DisplayMetrics dm;
+    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, InspectionNumber, FeedbackPerson, FeedbackDate, FeedbackRecommendations, VendorInspectorDate, Notes;
     private OrderDatabase db;
     private String key_ponumber;
     private ContentValues Orderslist;
@@ -91,7 +77,6 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         key_ponumber = getIntent().getStringExtra(KEY_PONumber);
-        dm = getResources().getDisplayMetrics();
         db = new OrderDatabase(this);
         setContentView(R.layout.activity_preview_insepect_order);
         initView();
@@ -128,9 +113,10 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
                 Bitmap bitmap = StringUtils.byteArrayToBitmap(bitmapdata);
                 VendorInspector.setImageBitmap(bitmap);
             }
-
+            FeedbackRecommendations.setText(Orderslist.getAsString(KEY_FeedbackRecommendations));
             FeedbackPerson.setText(Orderslist.getAsString(KEY_FeedbackPerson));
             FeedbackDate.setText(Orderslist.getAsString(KEY_FeedbackDate));
+            Notes.setText(Orderslist.getAsString(KEY_Notes));
         }
         /**
          * OrderDetailslist
@@ -161,7 +147,10 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
         InspectorDate = findViewById(R.id.InspectorDate);
         FeedbackPerson = findViewById(R.id.FeedbackPerson);
         FeedbackDate = findViewById(R.id.FeedbackDate);
+        FeedbackRecommendations = findViewById(R.id.FeedbackRecommendations);
+
         VendorInspectorDate = findViewById(R.id.VendorInspectorDate);
+        Notes = findViewById(R.id.Notes);
     }
 
     private void initListener() {
@@ -202,14 +191,8 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
 
         @Override
         protected void onPostExecute(String result) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
             if (result.equals("OrderDetails")) {
                 for (int i = 0; i < OrderDetailslist.size(); i++) {
-                    View view = new View(PreviewInsepectOrderActivity.this);
-                    params.height = (int) dm.density;
-                    view.setLayoutParams(params);
-                    view.setBackgroundColor(getResources().getColor(android.R.color.black));
-                    courseTable.addView(view);
                     View item_view = LayoutInflater.from(PreviewInsepectOrderActivity.this).inflate(R.layout.item_preview_insepect, null, false);
                     courseTable.addView(item_view);
                     TextView textView = item_view.findViewById(R.id.row1);
@@ -221,8 +204,8 @@ public class PreviewInsepectOrderActivity extends AppCompatActivity implements V
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(PreviewInsepectOrderActivity.this, ListViewActivity.class);
-                             intent.putExtra("PONumber",OrderDetailslist.get(finalI).getAsString(KEY_Item));
-                           // intent.putExtra("PONumber", "0689D-096.DC.28");
+                            intent.putExtra("PONumber", OrderDetailslist.get(finalI).getAsString(KEY_Item));
+                            // intent.putExtra("PONumber", "0689D-096.DC.28");
                             startActivity(intent);
                         }
                     });

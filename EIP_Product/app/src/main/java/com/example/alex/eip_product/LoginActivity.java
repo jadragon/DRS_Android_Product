@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -78,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                JSONObject json = new API_OrderInfo().getOrderInfo(username.getText().toString(), pw.getText().toString());
+                JSONObject json = API_OrderInfo.getOrderInfo(username.getText().toString(), pw.getText().toString());
                 if (AnalyzeUtil.checkSuccess(json)) {
                     //perssion
                     final String permission = AnalyzeUtil.getUserPermission(json);
@@ -88,10 +86,10 @@ public class LoginActivity extends AppCompatActivity {
                     db.addCheckFailedReasons(map.get("CheckFailedReasons"));
                     db.addOrderComments(map.get("OrderComments"));
                     db.addOrderItemComments(map.get("OrderItemComments"));
-                    json = new API_OrderInfo().getItemDrawing(username.getText().toString(), pw.getText().toString());
+                    json = API_OrderInfo.getItemDrawing(username.getText().toString(), pw.getText().toString());
                     if (AnalyzeUtil.checkSuccess(json)) {
                         db.addItemDrawings(Analyze_Order.getItemDrawings(json));
-                        json = new API_OrderInfo().getDrawingFile(username.getText().toString(), pw.getText().toString());
+                        json = API_OrderInfo.getDrawingFile(username.getText().toString(), pw.getText().toString());
                         if (AnalyzeUtil.checkSuccess(json)) {
                             db.addFiles(Analyze_Order.getFiles(json));
                             runOnUiThread(new Runnable() {

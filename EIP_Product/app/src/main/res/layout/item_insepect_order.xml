@@ -2,34 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/black"
     android:divider="@drawable/divider_black_1dp"
     android:orientation="horizontal"
-    android:showDividers="middle">
-
+    android:showDividers="middle"
+    android:background="@color/light_purple">
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
     <TextView
         android:id="@+id/row1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
         android:layout_weight="@dimen/title1_weight"
         android:background="@color/light_purple"
         android:gravity="center"
         android:padding="2.5dp"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
 
     <TextView
         android:id="@+id/row2"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="@dimen/title2_weight"
         android:background="@color/light_purple"
         android:gravity="center"
         android:padding="2.5dp"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:layout_gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
 
     <TextView
@@ -40,8 +43,8 @@
         android:background="@color/light_purple"
         android:gravity="center"
         android:padding="2.5dp"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
 
     <EditText
@@ -51,10 +54,10 @@
         android:layout_weight="@dimen/title4_weight"
         android:background="@color/light_purple"
         android:gravity="center_vertical"
-        android:padding="2.5dp"
         android:inputType="numberDecimal"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:padding="2.5dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
 
     <TextView
@@ -65,8 +68,8 @@
         android:background="@color/light_purple"
         android:gravity="center"
         android:padding="2.5dp"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
     <TextView
         android:id="@+id/row6"
@@ -76,8 +79,8 @@
         android:background="@color/light_purple"
         android:gravity="center"
         android:padding="2.5dp"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -94,8 +97,8 @@
             android:inputType="number"
             android:padding="2.5dp"
             android:text="0"
-            android:textSize="@dimen/table_text_size"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/table_text_size" />
 
         <View
             android:layout_width="1dp"
@@ -111,8 +114,8 @@
             android:inputType="number"
             android:padding="2.5dp"
             android:text="0"
-            android:textSize="@dimen/table_text_size"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/table_text_size" />
 
         <View
             android:layout_width="1dp"
@@ -128,8 +131,8 @@
             android:inputType="number"
             android:padding="2.5dp"
             android:text="0"
-            android:textSize="@dimen/table_text_size"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/table_text_size" />
 
         <View
             android:layout_width="1dp"
@@ -145,8 +148,8 @@
             android:inputType="number"
             android:padding="2.5dp"
             android:text="0"
-            android:textSize="@dimen/table_text_size"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/table_text_size" />
 
     </LinearLayout>
 
@@ -210,8 +213,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/light_purple"
-            android:gravity="center"
             android:button="@drawable/radio_nike"
+            android:gravity="center"
             android:padding="2.5dp" />
 
         <View
@@ -225,8 +228,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/light_purple"
-            android:gravity="center"
             android:button="@drawable/radio_nike"
+            android:gravity="center"
             android:padding="2.5dp" />
 
         <View
@@ -253,23 +256,25 @@
         android:layout_height="match_parent"
         android:layout_weight="@dimen/title11_weight"
         android:background="@color/light_purple"
-        android:inputType="number"
-        android:padding="2.5dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:padding="2.5dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
 
     <EditText
         android:id="@+id/row18"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="3dp"
         android:layout_weight="@dimen/title12_weight"
-        android:background="@android:color/white"
+        android:background="@color/light_purple"
         android:padding="2.5dp"
-        android:textSize="@dimen/table_text_size"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/table_text_size" />
 
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
 
 </LinearLayout>

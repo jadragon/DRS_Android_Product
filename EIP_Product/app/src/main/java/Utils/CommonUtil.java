@@ -9,20 +9,8 @@ import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
-import android.widget.Toast;
-
-import com.example.alex.eip_product.MainActivity;
 import com.example.alex.eip_product.R;
-import com.example.alex.eip_product.SoapAPI.API_OrderInfo;
-import com.example.alex.eip_product.SoapAPI.Analyze.AnalyzeUtil;
-import com.example.alex.eip_product.pojo.AllupdateDataPojo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.List;
 
 public class CommonUtil {
     public static Bitmap convertViewToBitmap(View view) {

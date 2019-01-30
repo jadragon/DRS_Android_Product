@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="DEV.190120.01"
+            android:text="UAT.190126.01"
             android:textColor="@android:color/black"
             android:textSize="23sp" />
     </LinearLayout>

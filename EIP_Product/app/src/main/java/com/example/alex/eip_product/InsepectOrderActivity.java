@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ import db.OrderDatabase;
 import static db.OrderDatabase.KEY_CheckPass;
 import static db.OrderDatabase.KEY_FeedbackDate;
 import static db.OrderDatabase.KEY_FeedbackPerson;
+import static db.OrderDatabase.KEY_FeedbackRecommendations;
 import static db.OrderDatabase.KEY_Functions;
 import static db.OrderDatabase.KEY_InspectionNumber;
 import static db.OrderDatabase.KEY_Inspector;
@@ -64,6 +66,7 @@ import static db.OrderDatabase.KEY_InspectorDate;
 import static db.OrderDatabase.KEY_Item;
 import static db.OrderDatabase.KEY_LineNumber;
 import static db.OrderDatabase.KEY_MainMarK;
+import static db.OrderDatabase.KEY_Notes;
 import static db.OrderDatabase.KEY_OrderQty;
 import static db.OrderDatabase.KEY_PONumber;
 import static db.OrderDatabase.KEY_POVersion;
@@ -98,7 +101,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
     private ArrayList<View> ItemList = new ArrayList<>();
     private LinePathView linePathView;
     private AlertDialog dialog;
-    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, InspectionNumber, FeedbackPerson, FeedbackDate, VendorInspectorDate;
+    private TextView SalesMan, Shipping, VendorName, VendorCode, PONumber, POVersion, Inspector, InspectorDate, InspectionNumber, FeedbackPerson, FeedbackDate, FeedbackRecommendations, VendorInspectorDate, Notes;
     private OrderDatabase db;
     private String key_ponumber;
     private ContentValues Orderslist;
@@ -137,8 +140,11 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
         InspectorDate = findViewById(R.id.InspectorDate);
         InspectionNumber = findViewById(R.id.InspectionNumber);
         FeedbackPerson = findViewById(R.id.FeedbackPerson);
+        FeedbackRecommendations = findViewById(R.id.FeedbackRecommendations);
+
         FeedbackDate = findViewById(R.id.FeedbackDate);
         VendorInspectorDate = findViewById(R.id.VendorInspectorDate);
+        Notes = findViewById(R.id.Notes);
 
         saveButton = findViewById(R.id.save);
         sendButton = findViewById(R.id.send);
@@ -188,9 +194,10 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                 bitmap = StringUtils.byteArrayToBitmap(bitmapdata);
                 VendorInspector.setImageBitmap(bitmap);
             }
-
+            FeedbackRecommendations.setText(Orderslist.getAsString(KEY_FeedbackRecommendations));
             FeedbackPerson.setText(Orderslist.getAsString(KEY_FeedbackPerson));
             FeedbackDate.setText(Orderslist.getAsString(KEY_FeedbackDate));
+            Notes.setText(Orderslist.getAsString(KEY_Notes));
         }
         /**
          * OrderDetailslist
@@ -400,7 +407,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public JSONObject onTasking(Void... params) {
                             try {
-                                return new API_OrderInfo().updateCheckOrder(gv.getUsername(), gv.getPw(), db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber)).toString());
+                                return API_OrderInfo.updateCheckOrder(gv.getUsername(), gv.getPw(), db.getUpdateDataByPONumber(Orderslist.getAsString(KEY_PONumber)).toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } catch (XmlPullParserException e) {
@@ -428,7 +435,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                                         @Override
                                         public JSONObject onTasking(Void... params) {
                                             try {
-                                                return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                                                return API_OrderInfo.getOrderInfo(gv.getUsername(), gv.getPw());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             } catch (XmlPullParserException e) {
@@ -525,8 +532,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     linePathView.clear();
 
                 if (dialog == null) {
-                    final int bitmapwidth = (int) (dm.heightPixels * ((float) VendorInspector.getWidth() / VendorInspector.getHeight()) / 6 * 5);
-                    final int bitmapheight = (int) ((float) dm.heightPixels / 6 * 5);
+                    final int bitmapheight = (int) (dm.heightPixels / 6f * 5);
+                    final int bitmapwidth = (int) (bitmapheight * ((float) VendorInspector.getWidth() / VendorInspector.getHeight()));
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(InsepectOrderActivity.this).setView(linePathView)
                             .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
                                 @Override
@@ -547,6 +555,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
                     p.width = bitmapwidth;
                     p.height = bitmapheight;
+                    // p.height = (int) (bitmapheight + 50 * dm.density);
                     dialog.getWindow().setAttributes(p);     //设置生效
                 } else {
                     dialog.show();
@@ -610,7 +619,7 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public JSONObject onTasking(Void... params) {
                         try {
-                            return new API_OrderInfo().getOrderInfo(gv.getUsername(), gv.getPw());
+                            return API_OrderInfo.getOrderInfo(gv.getUsername(), gv.getPw());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (XmlPullParserException e) {
@@ -742,15 +751,9 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
 
         @Override
         protected void onPostExecute(String result) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
             if (result.equals("OrderDetails")) {
                 for (int i = 0; i < OrderDetailslist.size(); i++) {
                     final int finalI = i;
-                    View view = new View(InsepectOrderActivity.this);
-                    params.height = (int) dm.density;
-                    view.setLayoutParams(params);
-                    view.setBackgroundColor(getResources().getColor(android.R.color.black));
-                    courseTable.addView(view);
                     final View item_view = LayoutInflater.from(InsepectOrderActivity.this).inflate(R.layout.item_insepect_order, null, false);
                     item_view.setTag(i);
                     courseTable.addView(item_view);
@@ -892,7 +895,10 @@ public class InsepectOrderActivity extends AppCompatActivity implements View.OnC
                                 final DatePicker datePicker = new DatePicker(InsepectOrderActivity.this);
                                 if (!dateView.getText().toString().equals("")) {
                                     Date date = new SimpleDateFormat("yyyy/MM/dd").parse(dateView.getText().toString());
-                                    datePicker.updateDate(date.getYear(), date.getMonth(), date.getDay());
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.setTime(date);
+                                    calendar.get(Calendar.YEAR);
+                                    datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                                 }
 
                                 builder.setView(datePicker);
